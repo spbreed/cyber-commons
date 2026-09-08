@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C1.9 — Machine-speed containment and fleet revocation | Cyber Commons</title><meta name="description" content=""><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Agentic Evaluation and Red Teaming</div><div class="sid">C1.9</div><h1>Machine-speed containment and fleet revocation</h1><div class="badges"><span class="badge t">C1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM01</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Model Access</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C1.9.mp4</code></span></div></div><div class="sec"><h2>The lab</h2><p class="sub">Zero-trust runtime gatekeepers and dynamic token revocation that isolate a fleet at machine speed.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/response/fleet-kill-switch-test/scripts/fleet_kill_switch_test.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C1.9 · Machine-speed containment and fleet revocation</h1>
+<p><strong>Function C — Red Teaming and Security Research with AI → Agentic Evaluation and Red Teaming</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C1.8.html">C1.8 · Defensive deception and threshold failures</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>SPIFFE</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Zero-trust runtime gatekeepers and dynamic token revocation that isolate a compromised fleet in one action, at machine speed.</p>
+<p><strong>Why a security engineer needs it.</strong> A fleet completes thousands of actions inside one approval cycle, so containment must be pre-authorised. The property that decides whether it worked is revocation versus termination — terminated agents with valid tokens keep their persistence.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>An agent fleet completes thousands of actions inside one human approval cycle, so containment is pre-authorised or it is too late. Terminating the agents while their tokens stay valid moves the incident rather than ending it.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The fleet is CyberTravels' four agents, and the detail that matters is R9: third-party access ended only when the third party revoked its keys, not when the agents were stopped.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   an agent at machine speed vs a human approval cycle
+
+   approval cycle: 8 min  -&gt;  ~2,400 further agent actions
+   automated stop:          -&gt;  ~60
+
+   one revocation, at the gateway, reaching the whole fleet
+     terminate processes   -&gt; tokens still valid -&gt; persistence remains
+     REVOKE credentials    -&gt; persistence ends       &lt;- the property that counts
+</code></pre>
+<p>Containment against a swarm is a race the defender starts behind. An agent fleet
+operating at machine speed completes thousands of actions inside a human
+approval cycle, so the containment has to be <strong>pre-authorised and automated</strong>:
+zero-trust runtime gatekeepers, and dynamic token revocation that isolates the
+fleet in one action.</p>
+<p>The detail that decides whether containment worked is revocation versus
+termination. Terminating agents while their bearer tokens stay valid leaves the
+persistence in place and moves the incident rather than ending it — which is the
+Moltbook lesson, 770,000 agents behind one missing policy.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The skill exercises a fleet kill switch against CyberTravels' agents and checks the property that matters — that revoked credentials, not just terminated processes, are what ends the persistence.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/fleet-kill-switch-test/SKILL.md"><code>skills/response/fleet-kill-switch-test/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: fleet-kill-switch-test
+description: &gt;-
+  Test a fleet-wide stop for what it leaves behind — valid tokens, destroyed
+  evidence, and the runs that should have been preserved — and measure how long
+  the whole thing takes. Use before relying on a kill switch, and after
+  designing one.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>Terminating the agents leaves every token valid</h1>
+<p>A fleet kill switch usually terminates workloads. Termination does not revoke
+credentials, so every token the fleet held stays valid until it expires — up to
+seventy-two hours of an attacker being able to act as agents that no longer
+exist. And a kill that does not preserve first destroys the evidence for the
+incident that triggered it.</p>
+<h2>When to use this</h2>
+<p>Before a kill switch is relied on, after it is built, and once a year as a
+rehearsal.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Terminate only, and count what stays valid.</strong> Tokens, sessions,
+outstanding delegated grants. This is the baseline failure and it is invisible
+in a design review.</p>
+<p><strong>2 — Terminate and revoke together, and re-count.</strong> Zero is the target. If
+revocation is a separate runbook step performed by a different team, it will not
+happen at speed.</p>
+<p><strong>3 — Check evidence preservation.</strong> Kill with and without preservation, then
+attempt the reconstruction. A kill switch that destroys the run records is a
+containment that ends the investigation.</p>
+<p><strong>4 — Test selectivity.</strong> Stop one agent, one class, the whole fleet. A switch
+with only the last setting will not be used until it is far too late, which is
+the same as not having one.</p>
+<p><strong>5 — Measure the time.</strong> Decision to last agent stopped and last token revoked.
+Set a target and report against it; an untimed rehearsal is a demonstration.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/fleet_kill_switch_test.py"><code>scripts/fleet_kill_switch_test.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
+terminate and revoke  : 8 agents stopped, 0 tokens still valid
+
+In the source incident, third-party access ended when the third party
+revoked its keys - not when the agents stopped. Stopping the process is
+the visible half of containment and the smaller one.
+terminate first   terminate -&gt; revoke credentials                           reconstructable=False
+preserve first    snapshot state and transcripts -&gt; terminate -&gt; revoke credentialsreconstructable=True
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;fleet&quot;: {&quot;agents&quot;: 0, &quot;tokens&quot;: 0},
+  &quot;terminate_only&quot;: {&quot;tokens_valid_after&quot;: 0, &quot;max_validity_hours&quot;: 0},
+  &quot;terminate_and_revoke&quot;: {&quot;tokens_valid_after&quot;: 0},
+  &quot;preservation&quot;: {&quot;preserved&quot;: true, &quot;reconstructable&quot;: true},
+  &quot;selectivity&quot;: [{&quot;scope&quot;: &quot;one|class|fleet&quot;, &quot;supported&quot;: true}],
+  &quot;timing&quot;: {&quot;target_minutes&quot;: 0.0, &quot;measured_minutes&quot;: 0.0}
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Terminating without revoking.</strong> The credentials outlive the workloads.</li>
+<li><strong>Killing before preserving.</strong> The incident becomes unreconstructable.</li>
+<li><strong>A fleet-only switch.</strong> Nobody uses it until the whole estate is on fire.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
+terminate and revoke  : 8 agents stopped, 0 tokens still valid
+
+In the source incident, third-party access ended when the third party
+revoked its keys - not when the agents stopped. Stopping the process is
+the visible half of containment and the smaller one.
+terminate first   terminate -&gt; revoke credentials                           reconstructable=False
+preserve first    snapshot state and transcripts -&gt; terminate -&gt; revoke credentialsreconstructable=True
+
+The ordering is the whole design. Terminating first is faster by seconds
+and costs the investigation everything, which is the trade nobody makes
+deliberately at three in the morning.
+quarter  ran    minutes  condition
+Q1       yes        4.2  full fleet, clean conditions
+Q2       yes        4.9  full fleet, one region degraded
+Q3       no           -  not run - no window agreed
+Q4       yes        6.8  partial failure: revocation API throttled
+
+tests run: 3 of 4   target: under 5 min
+over target: 1  (6.8)
+
+The quarter that was not run is the finding, and the quarter that ran
+long is the second one: under partial failure the revocation half is
+what slows down, which is the half that matters.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The kill switch selects the whole fleet in one action and the run shows persistence surviving termination but not revocation, so the control is judged on what the tokens can still do afterwards.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Time how long it takes to revoke every credential one class of agent holds. If the answer is 'we would terminate the processes', you have not tested containment, only restart.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.10.html">C1.10 · Forensic replay and control architecture</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C1.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.9.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><p class="sub toolslab">Tools used</p><div class="chips"><span>SPIFFE</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.9.ipynb</code></p></div><div class="pager"><a href="C1.8.html"><span class="k">← Previous</span><span class="t">C1.8 · Defensive deception and threshold failures</span></a><a class="next" href="C1.10.html"><span class="k">Next →</span><span class="t">C1.10 · Forensic replay and control architecture</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

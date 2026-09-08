@@ -3,11 +3,11 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**136 lessons across 15 chapters.** Most are reading lessons — the idea, the
+**134 lessons across 14 chapters.** Most are reading lessons — the idea, the
 diagram, the control, and what it looks like in one running system — and then
-they **run a skill**. 133 of the 136 do, and the code is not in the notebook:
+they **run a skill**. 131 of the 134 do, and the code is not in the notebook:
 the lesson shows the `SKILL.md` as prose and runs that skill's own script from
-[`skills/`](skills/). Every one of the 136 is executed in CI before it ships,
+[`skills/`](skills/). Every one of the 134 is executed in CI before it ships,
 and so is every skill. No licence, no vendor, no paid model account.
 
 🌐 **[Live site](https://spbreed.github.io/cyber-commons/)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md)
@@ -106,12 +106,12 @@ lesson** that meets CyberTravels and asks its own question of it.
 
 | Function | The question it asks of CyberTravels | Chapters | Lessons |
 |---|---|---|---|
-| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [0](curriculum/track-a0.md) Running the commons · [1](curriculum/track-a1.md) CyberTravels' architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 39 |
-| **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b2.md) The AI SDLC pipeline, before and after deploy | 15 |
-| **C · Red Teaming and Security Research with AI** | can we break it before somebody else does | [5](curriculum/track-c1.md) Red teaming with AI · [6](curriculum/track-c2.md) Security research with AI | 15 |
-| **D · The Agentic SOC** | would we see it happening, and could we stop it | [7](curriculum/track-d1.md) Detection · [8](curriculum/track-d2.md) Response | 21 |
-| **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [9](curriculum/track-e1.md) The governance framework · [10](curriculum/track-e2.md) The governance platform · [11](curriculum/track-e3.md) Running the programme | 30 |
-| | | **12 chapters** | **120** |
+| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [0](curriculum/track-a0.md) Running the commons · [1](curriculum/track-a1.md) Architecture and every risk · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 40 |
+| **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b2.md) The AI SDLC pipeline, and agentic pentesting | 20 |
+| **C · Agentic Evaluation and Red Teaming** | can we break it before somebody else does | [5](curriculum/track-c1.md) One red-team lifecycle, end to end | 12 |
+| **D · The Agentic SOC** | would we see it happening, and could we stop it | [6](curriculum/track-d1.md) Discover · [7](curriculum/track-d2.md) Detect · [8](curriculum/track-d3.md) Understand · [9](curriculum/track-d4.md) Respond · [10](curriculum/track-d5.md) Recover and root cause | 31 |
+| **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [11](curriculum/track-e1.md) Risk and control · [12](curriculum/track-e2.md) Regulatory and compliance · [13](curriculum/track-e3.md) Running the programme | 31 |
+| | | **14 chapters** | **134** |
 
 Nobody takes all of it. Everyone takes the **common spine** first — twenty
 lessons, in order, that carry the vocabulary the rest runs on. Then the chapters
@@ -143,7 +143,7 @@ only one produces a practitioner who gets surprised.
 
 ## Why you can trust the output
 
-**Every one of the 136 notebooks has been run twice — here, and again on Kaggle
+**Every one of the 134 notebooks has been run twice — here, and again on Kaggle
 on a different machine — and printed exactly the same bytes.**
 
 That second run is the claim worth making, because a kernel that prints nothing
@@ -236,13 +236,13 @@ refuses to read a credential file inside the repo. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 136 sessions, 12 chapters
+site/data/curriculum.json   source of truth: 134 sessions, 14 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: A1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
 skills/                     138 agent skills, plus _runtime/ — the one shared library
-labs/notebooks/             136 generated notebooks + execution and Kaggle evidence
+labs/notebooks/             134 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_{lessons,skills,secrets,determinism,register} · kaggle_*

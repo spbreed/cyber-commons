@@ -784,7 +784,7 @@ Phase 1, which is the property that turns a pipeline into something that
 improves.
 
 The bonus framing is deliberate: a reference implementation is a **starting
-point you evaluate**, not a product you trust. C2.6 gave you the tools;
+point you evaluate**, not a product you trust. B2.1 gave you the harness;
 this is where you point them at someone else's pipeline.
 """,
  "steps": [

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C1.3 — Attacking evaluation itself | Cyber Commons</title><meta name="description" content="Eval gaming, sandbagging, contamination and judge manipulation as test cases."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Red Teaming with AI</div><div class="sid">C1.3</div><h1>Attacking evaluation itself</h1><div class="badges"><span class="badge t">C1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM01</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Model Access</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>If the eval can be fooled, the assurance is theatre.</p></div><div class="ctrl"><div class="lab">Control</div><p>Eval gaming, sandbagging, contamination and judge manipulation as test cases.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Game the B2.19 scoring harness deliberately, then close the hole you used.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/redteam/eval-corpus-integrity-check/scripts/eval_corpus_integrity_check.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C1.3 · Attacking evaluation itself</h1>
-<p><strong>Function C — Red Teaming and Security Research with AI → Red Teaming with AI</strong></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C1.2.html">C1.2 · Red-teaming an agent: designing the campaign</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C1.3 — Cognitive vulnerability and elicitation scaling | Cyber Commons</title><meta name="description" content=""><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Agentic Evaluation and Red Teaming</div><div class="sid">C1.3</div><h1>Cognitive vulnerability and elicitation scaling</h1><div class="badges"><span class="badge t">C1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM01</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Model Access</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C1.3.mp4</code></span></div></div><div class="sec"><h2>The lab</h2><p class="sub">Cross-prompt attention degradation and jailbreaks that strip safety while retaining tool use, scored on reproduction.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/research/technique-reproducibility-test/scripts/technique_reproducibility_test.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C1.3 · Cognitive vulnerability and elicitation scaling</h1>
+<p><strong>Function C — Red Teaming and Security Research with AI → Agentic Evaluation and Red Teaming</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C1.2.html">C1.2 · Weaponizing the ingestion path</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,138 +11,136 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Cyber Commons eval harness, Kimi K2, Claude Haiku 4.5</td>
+<td>Inspect</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Game the B2.19 scoring harness deliberately, then close the hole you used.</p>
-<p><strong>Why a security engineer needs it.</strong> If the eval can be fooled, the assurance is theatre. The control it builds is: eval gaming, sandbagging, contamination and judge manipulation as test cases.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Your evaluation is a control, and controls get attacked. A benchmark with a leaked key, a skewed class balance or a scorer that can be satisfied without solving anything is a control that reports itself green forever.</p>
+<p><strong>What it covers.</strong> Elicitation techniques that scale — cross-prompt attention degradation, context crowding — that strip safety while retaining tool use, measured on reproduction rather than on a transcript.</p>
+<p><strong>Why a security engineer needs it.</strong> A jailbreak that reproduces once is an anecdote; one with a measured success rate across attempts and seeds is a finding. The retained-tool-use combination is the one that turns a bypass into an incident.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>A jailbreak that strips safety and leaves tool use intact is the dangerous combination, because a model that cannot act is a curiosity and one that can is an incident. And it only counts if it reproduces across attempts, not in one screenshot.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The benchmark that says CyberTravels' review harness scores 0.9 is itself a control, and it gets attacked. A leaked key or a loose matcher makes it report green forever.</p>
+<p><strong>At CyberTravels.</strong> The target is CyberTravels' advisor, and the dangerous outcome is a jailbreak that keeps the booking and refund tools while shedding the policy that governed them.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   the benchmark is a control, so attack it
+<pre><code>   one transcript              a technique
 
-   leaked key      -&gt; the score is a training metric
-   skewed classes  -&gt; a constant answer scores 0.875
-   loose matching  -&gt; wrong answers match on basename
-   gameable oracle -&gt; satisfied without solving anything
+   works once  -&gt; anecdote     run N times, vary seed and wording
+                                        |
+                                        v
+                               reproduction rate = 0.0 .. 1.0
+                               with a denominator
 
-   an unattacked evaluation reports itself green forever
+   the dangerous shape: safety stripped, tool use RETAINED.
+   a jailbreak that cannot act is a curiosity; one that can is an incident.
 </code></pre>
-<p>If you can make a harness score well without being good, so can the vendor whose
-benchmark you are reading — and so can your own team, without meaning to.</p>
-<p>Three exploits work on almost every published security-harness result:</p>
-<ol>
-<li><strong>Report conformance as quality.</strong> Schema validity is ~100% by construction
-   with structured output. It measures nothing about correctness (B2.19).</li>
-<li><strong>Exploit class imbalance.</strong> If 80% of a corpus is one CWE, always guessing
-   that CWE scores 0.8 with no capability at all.</li>
-<li><strong>Exploit basename collisions.</strong> If the matcher compares bare filenames and
-   the corpus reuses <code>1.py</code> across directories, scores become partly random —
-   and random noise on a leaderboard looks like a small improvement.</li>
-</ol>
-<p>Red-teaming evaluation means running these three against your own numbers before
-someone else does.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Before believing an evaluation, score a harness with no capability at all. The skill does exactly that against the skewed corpus, then rebalances and re-scores — and separately checks whether the matcher rewards answers naming the wrong directory.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/redteam/eval-corpus-integrity-check/SKILL.md"><code>skills/redteam/eval-corpus-integrity-check/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: eval-corpus-integrity-check
+<p>Elicitation is the model-layer attack: not a single clever prompt, but a
+<strong>technique that scales</strong>. Cross-prompt attention degradation, context-window
+crowding and instruction-hierarchy confusion all strip a model's safety
+behaviour while leaving its tool-use capability intact — which is the dangerous
+combination, because a jailbroken model that cannot act is a curiosity and one
+that can is an incident.</p>
+<p>Research here is judged on reproducibility, not on a single transcript. A
+jailbreak that works once is an anecdote; one that reproduces across attempts,
+seeds and minor rewordings is a finding with a measurable success rate.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The skill runs a candidate elicitation technique against CyberTravels' advisor repeatedly and reports the share of attempts that reproduced — the difference between a finding and a lucky transcript.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/technique-reproducibility-test/SKILL.md"><code>skills/research/technique-reproducibility-test/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: technique-reproducibility-test
 description: &gt;-
-  Attack an evaluation rather than a system: score a deliberately
-  zero-capability harness against the corpus and see what the corpus alone
-  awards it, then rebalance and re-score. Use before trusting any benchmark
-  number, your own included.
+  Run a technique enough times to say whether it reproduces, and compute the
+  sample size a before-and-after comparison actually needed before claiming a
+  control worked. Use when a jailbreak &quot;works&quot;, or when a fix is declared
+  effective from a handful of trials.
 allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>Score the null harness first</h1>
-<p>An evaluation is a claim about a system, and it is only as good as the corpus
-underneath it. The cheapest way to find out is to score a harness that has no
-capability at all — one that answers from the corpus's own skew. A high score
-there is a measurement of the corpus, and every number derived from it inherits
-the problem.</p>
+<h1>One success is an anecdote; the interval is the result</h1>
+<p>Model-layer research is statistical whether or not anybody does the statistics.
+A technique that succeeds once may not reproduce; a control that appears to
+help at n=20 has an interval overlapping the baseline. Both errors are avoided
+by the same discipline — report a rate with an interval, and compute the sample
+size before running the comparison.</p>
 <h2>When to use this</h2>
-<p>Before publishing an evaluation, before believing one, and whenever a benchmark
-result is surprisingly good.</p>
+<p>Any claim about model behaviour: a technique that works, a control that helps, a
+model that is safer than another.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Build the null harness.</strong> No analysis: answer with whatever the corpus's
-majority class is. It should be trivial to write, and writing it takes minutes.</p>
-<p><strong>2 — Score it against the corpus as it stands.</strong> Record conformance and
-accuracy separately — a null harness usually conforms perfectly, which is itself
-worth knowing about conformance as a metric.</p>
-<p><strong>3 — Rebalance and re-score.</strong> Equalise the classes and run the same null
-harness. The drop is the portion of the original score that came from skew
-rather than capability.</p>
-<p><strong>4 — Check the matcher, not just the corpus.</strong> Score answers that name the
-wrong directory. If they still score, the matcher is measuring string similarity
-rather than correctness, and it will flatter every harness equally.</p>
-<p><strong>5 — Report the null score alongside every real one.</strong> A harness scoring 0.85
-against a null of 0.85 has demonstrated nothing, and that comparison is the only
-honest way to read the number.</p>
+<p><strong>1 — Define success mechanically.</strong> A string, a state, a check — something a
+script decides. "The model complied" judged by reading is not reproducible
+between two people.</p>
+<p><strong>2 — Run enough trials to produce a rate, and hold the conditions fixed.</strong>
+Same model version, same temperature, same prompt. Record the version: a rate
+without one is unrepeatable by construction.</p>
+<p><strong>3 — Classify the technique honestly.</strong> Not reproduced, flaky, or reproducible.
+Flaky is a real and common answer and it deserves the word rather than a
+rounded-up rate.</p>
+<p><strong>4 — Compute the required sample size before comparing.</strong> From the baseline
+rate, the effect you would care about, and the power you want. Then run that
+many. Doing this afterwards produces the number that makes the result you got
+look significant.</p>
+<p><strong>5 — Report intervals, and say when they overlap.</strong> Show the same true effect
+at n=20, n=100 and n=1000 if you need to make the point: the effect did not
+change, the ability to see it did.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/eval_corpus_integrity_check.py"><code>scripts/eval_corpus_integrity_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/technique_reproducibility_test.py"><code>scripts/technique_reproducibility_test.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>class balance: Counter({'CWE-89': 32, 'CWE-78': 3, 'CWE-22': 3, 'CWE-798': 2})
-the null harness, scored on the skewed corpus:
-   conformance      1.00   ← quotable as '100%'
-   expert accuracy  0.90
+<pre><code>technique              rate              ci95  verdict
+------------------------------------------------------------
+direct override       0.055    (0.023, 0.087)  flaky
+context reframe       0.395    (0.327, 0.463)  flaky
+task nesting          0.660    (0.594, 0.726)  reproducible
 
-Zero capability. Both numbers look like a working product.
-same null harness:
-   skewed corpus (80% CWE-89)   conformance 1.00  expert accuracy 0.90
+'It worked' is true for all three. Only one is reproducible.
+     n            before             after  conclusion
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;corpus&quot;: {&quot;n&quot;: 0, &quot;skew&quot;: 0.0, &quot;classes&quot;: {&quot;str&quot;: 0}},
-  &quot;null_harness&quot;: {&quot;conformance&quot;: 0.0, &quot;accuracy_skewed&quot;: 0.0, &quot;accuracy_balanced&quot;: 0.0},
-  &quot;matcher&quot;: {&quot;kind&quot;: &quot;str&quot;, &quot;wrong_directory_scores&quot;: 0.0},
-  &quot;verdict&quot;: {&quot;score_from_skew&quot;: 0.0, &quot;score_from_capability&quot;: 0.0}
+  &quot;success_criterion&quot;: &quot;str&quot;,
+  &quot;conditions&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;, &quot;temperature&quot;: 0.0},
+  &quot;techniques&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;trials&quot;: 0, &quot;rate&quot;: 0.0, &quot;interval&quot;: [0.0, 0.0],
+                  &quot;verdict&quot;: &quot;not reproduced|flaky|reproducible&quot;}],
+  &quot;comparison&quot;: {&quot;before&quot;: 0.0, &quot;after&quot;: 0.0, &quot;n&quot;: 0, &quot;required_n&quot;: 0, &quot;separated&quot;: false}
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Reporting accuracy without the null baseline.</strong> It is unreadable without
-  one.</li>
-<li><strong>Conflating conformance with accuracy.</strong> The null harness conforms.</li>
-<li><strong>Trusting a matcher that has never been attacked.</strong> Try to fool it before you
-  publish with it.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>class balance: Counter({&#x27;CWE-89&#x27;: 32, &#x27;CWE-78&#x27;: 3, &#x27;CWE-22&#x27;: 3, &#x27;CWE-798&#x27;: 2})
-the null harness, scored on the skewed corpus:
-   conformance      1.00   ← quotable as &#x27;100%&#x27;
-   expert accuracy  0.90
+<li><strong>Reporting a rate with no model version.</strong> Nobody can repeat it.</li>
+<li><strong>Computing the sample size afterwards.</strong> That is choosing the number that
+  fits.</li>
+<li><strong>Rounding flaky up to works.</strong> It is the finding, not a rough edge.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>technique              rate              ci95  verdict
+------------------------------------------------------------
+direct override       0.055    (0.023, 0.087)  flaky
+context reframe       0.395    (0.327, 0.463)  flaky
+task nesting          0.660    (0.594, 0.726)  reproducible
 
-Zero capability. Both numbers look like a working product.
-same null harness:
-   skewed corpus (80% CWE-89)   conformance 1.00  expert accuracy 0.90
-   balanced corpus              conformance 1.00  expert accuracy 0.62
+&#x27;It worked&#x27; is true for all three. Only one is reproducible.
+     n            before             after  conclusion
+--------------------------------------------------------------------
+    20    (0.385, 0.815)    (0.281, 0.719)  NOT demonstrated
+   100    (0.557, 0.743)    (0.463, 0.657)  NOT demonstrated
+  1000    (0.579, 0.639)     (0.45, 0.512)  improvement holds
 
-Balancing the corpus removed most of the fake score. Nothing about the
-harness changed.
-path_key (parent + filename)       expert accuracy 0.25
-basename only (the bug)            expert accuracy 1.00
+The true effect is identical in all three rows. Only sample size changed.
+At n=20 you would report a 23% reduction you cannot support.
+effect you want to detect          n required
+-----------------------------------------------
+62% → 10%                                   7
+62% → 31%                                  20
+62% → 48%                                  98
+62% → 58%                                1153
 
-Every answer names the wrong file. The basename matcher scores them
-as correct, because the corpus reuses numeric filenames across directories.
-audit of the skewed benchmark with a basename matcher:
-   majority_class_share                   0.8
-   score_of_always_guessing_majority      0.9
-   reported_expert_accuracy               0.9
-   lift_over_trivial_baseline             0.0
-   matcher_collisions                     0
-   conformance_reported_as_quality        False
+Detecting a halving is cheap. Detecting a 14-point move is not, and
+detecting a 4-point move is a research project in itself.
 
-audit of the balanced benchmark with path_key:
-   majority_class_share                   0.25
-   score_of_always_guessing_majority      0.62
-   reported_expert_accuracy               0.62
-   lift_over_trivial_baseline             0.0
-   matcher_collisions                     0
-   conformance_reported_as_quality        True
+re-run at the computed n=98: before (0.548, 0.738), after (0.473, 0.669), overlap=True
+task nesting, after provenance mitigation
+   before  0.60 (95% CI (0.385, 0.815), n=20)
+   after   0.50 (95% CI (0.281, 0.719), n=20)
+   verdict no demonstrated change — intervals overlap
 
-The null harness has ~zero lift over the trivial baseline, which is the
-only honest way to describe it.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>On the skewed corpus the zero-capability harness scores conformance 1.00 and expert accuracy around 0.85. Balancing the corpus drops expert accuracy to roughly 0.25. Answers naming the wrong directory score near zero under <code>path_key</code> and near 1.00 under a basename matcher. The audit reports the majority-class share, the trivial baseline, the matcher collisions, and near-zero lift.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Run the audit against a benchmark result your organisation relies on. Two questions decide it: what does always guessing the majority class score, and does the matcher collide? Most published numbers answer neither.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.4.html">C1.4 · Reporting agentic findings</a></strong></p>
+task nesting, after provenance mitigation
+   before  0.61 (95% CI (0.579, 0.639), n=1000)
+   after   0.48 (95% CI (0.45, 0.512), n=1000)
+   verdict reduction demonstrated</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The technique reproduces on a measurable fraction of attempts rather than all or none, and the report is that rate with its denominator, not the single best transcript.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take any jailbreak you have seen shared as a screenshot and run it twenty times. The reproduction rate is the finding; the screenshot was marketing.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.4.html">C1.4 · Establishing telemetry and detecting the actor</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C1.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.3.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>You reproduce an inflated score, then patch the harness so the same trick fails.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Cyber Commons eval harness</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.3.ipynb</code></p></div><div class="pager"><a href="C1.2.html"><span class="k">← Previous</span><span class="t">C1.2 · Red-teaming an agent: designing the campaign</span></a><a class="next" href="C1.4.html"><span class="k">Next →</span><span class="t">C1.4 · Reporting agentic findings</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>You reproduce an inflated score, then patch the harness so the same trick fails.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Inspect</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.3.ipynb</code></p></div><div class="pager"><a href="C1.2.html"><span class="k">← Previous</span><span class="t">C1.2 · Weaponizing the ingestion path</span></a><a class="next" href="C1.4.html"><span class="k">Next →</span><span class="t">C1.4 · Establishing telemetry and detecting the actor</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

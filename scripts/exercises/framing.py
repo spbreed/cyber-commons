@@ -2425,35 +2425,20 @@ BRIDGES: dict[str, dict[str, str]] = {
 },
 
 "C1": {
- "gained": "An offensive loop you can run inside a scope enforced below the "
-           "model, a red-team campaign that reports a rate with a sample size "
-           "across all three surfaces, an attack on your own evaluation, and a "
-           "report an engineer can act on.",
- "gap": "Every number in this chapter came out of one harness, on one day, run "
-        "by you. Nothing in it separates what the model did from what your "
-        "scaffolding did, and nothing survives you leaving.",
- "next": "Chapter C2 is the discipline that fixes both: reproducibility, "
-         "benchmark critique, and the handover that turns a finding into "
-         "somebody else's control. Next → C2.1, what research means in a CISO "
-         "org.",
+ "gained": "You can carry an agentic finding the whole distance: reach a "
+           "supply-chain or elicitation surface, weaponise an ingestion path, "
+           "prove a technique reproduces, turn it into gateway telemetry and a "
+           "deployable detection, triage and contain a swarm at machine speed, "
+           "replay the run for forensics, and hand it over as a governed policy "
+           "with an eval case that fails on the old build.",
+ "gap": "Every finding here is one you generated. Nothing tells you whether the "
+        "estate as a whole is watched — how many agents exist, who owns them, "
+        "and whether anyone would see the next one happening in production.",
+ "next": "Function D is the operational half — the SOC that detects an actor "
+         "acting a thousand times an hour and stops it, in five phases. "
+         "Next \u2192 D1.0, what an agentic SOC means.",
 },
 
-"C2": {
- "gained": "Research that reproduces — model effect separated from harness "
-           "effect, benchmarks checked for a floor, a leaked key and a loose "
-           "matcher — a handover that ends in a control with an eval case that "
-           "fails on the old build, and three real incidents worked end to end: "
-           "an agent swarm, a platform that shipped its database open, and the "
-           "default that made the third one ordinary.",
- "gap": "You can now produce a finding, prove it, and hand it over. You still "
-        "cannot see it happen in production: nothing here tells you that the "
-        "class you closed is being attempted right now, by whom, or how fast — "
-        "and the register you just built assigned twelve controls to a function "
-        "you have not read yet.",
- "next": "Function D is the operational half — detecting an actor that acts a "
-         "thousand times an hour, and stopping it — five chapters, one per "
-         "phase. Next → D1.0, what an agentic SOC means.",
-},
 
 # Function D's five chapter bridges live in framing_new.py. The two that used to
 # sit here described a two-chapter Function D and were already dead —
@@ -2522,3 +2507,9 @@ for _k, _v in {**_NEW_DIAGRAMS, **_PEN_DIAGRAMS}.items():
     assert _k not in DIAGRAMS, f"{_k} already has a diagram"
     DIAGRAMS[_k] = _v
 BRIDGES.update(_NEW_BRIDGES)
+
+
+# Function C rebuild — override the ids the old C track used.
+from .framing_c import HOOKS as _C_HOOKS, DIAGRAMS as _C_DIAGRAMS  # noqa: E402
+HOOKS.update(_C_HOOKS)
+DIAGRAMS.update(_C_DIAGRAMS)

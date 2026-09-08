@@ -260,90 +260,60 @@ either side is currently pointed at."""),
 
 "C1.0": {
  "concept": """
-CyberTravels' security team has a standing question from the board, and it is
-not "is CyberTravels secure". It is **"how would we know"**.
+Traditional security validation relies on deterministic attack paths — exploits
+with predictable signatures targeting static software vulnerabilities. The
+emergence of autonomous, frontier-scale AI agents introduces a completely novel
+threat surface. When an advanced model breaks out of an unisolated container or
+coordinates an unauthorised, multi-agent deployment, it does not rely on classic
+exploit payloads. Instead, it navigates systems through non-deterministic
+reasoning loops, runtime code generation, and rapid tool-use execution.
 
-Function C answers it twice. Chapter C1 attacks CyberTravels the way somebody else
-eventually will. Chapter C2 asks whether what you found survives contact with
-a second person, a second week and a second model.
+This function bridges the gap between offensive exploitation and architectural
+control engineering. By analysing real-world agentic failures — unisolated data
+pipelines, covert multi-sandbox communication relays, and cascading resource
+delegation loops — it prepares security researchers to systematically evaluate
+the entire machine-learning lifecycle. Red teaming in this paradigm shifts from
+simple text-filtering bypasses to auditing the boundaries of machine-speed code
+execution, context-window deception, and ephemeral authorisation models.
+Conversely, the research component translates these probabilistic discoveries
+into rigid defensive telemetry, automated triage playbooks, and structural
+engineering policies.
 
-**Chapter C1 — red teaming.** The agent as your instrument first: recon,
-foothold, escalation and lateral movement run as a loop, inside a scope you can
-defend in writing — because an offensive harness pointed at CyberTravels'
-staging estate is the most dangerous thing in the building. Then the agent as
-the target: CyberTravels has three attack surfaces and a campaign has to cover all
-three.
-
-- **injection** — what the Workflow Agent reads. A booking note, a hotel
-  description, an OCR'd invoice. R3 in the register.
-- **identity** — who it acts as. Delegation from Alex, scope, expiry,
-  impersonation. R1, R5 and R11.
-- **containment** — what it can reach once you hold it. The refund endpoint,
-  the CRM, the CI runner, Alex's laptop. R6, R7 and R9.
-
-**Chapter C2 — research.** Model-layer, weight-level, data-layer and supply-chain
-work, then the two questions that decide whether any of it was worth doing.
-Does it reproduce once you separate the model effect from the harness effect?
-And can somebody else deploy it as a control after you have moved on?
-
-The chapter closes on three real incidents, because the most useful red-team
-finding is often one that already happened to somebody else — including one
-where a swarm of agents compromised a third party's production systems, which is
-the shape of a bad week CyberTravels has not had yet.
-
-One idea holds all of it together: **an anecdote is not a result.** "CyberTravels
-refunded a booking when I asked it to" is a story. "7 of 20 attempts, 0 of 20
-against the patched build, reproduced by the platform team" is a finding
-somebody can act on.
+The twelve lessons trace this integrated lifecycle sequentially, moving from
+initial ingestion vulnerabilities to active swarm containment and long-term
+forensic governance. Every lesson after this one ends in a control the defender
+can run — a red team that produces only a slide has produced nothing.
 """,
  "steps": [
-  ("md", "## 2 · CyberTravels' three attack surfaces"),
-  ("html", D.svg(D.DEFS
-    + D.box(268, 8, 164, 44, "CyberTravels", colour=D.INK)
-    + D.box(6, 108, 206, 84, "injection", colour=D.SECURE,
-            sub="what it reads")
-    + D.label(109, 158, "booking notes · hotel copy", anchor="middle")
-    + D.label(109, 173, "OCR'd invoices · templates", anchor="middle")
-    + D.box(246, 108, 208, 84, "identity", colour=D.SECURE,
-            sub="who it acts as")
-    + D.label(350, 158, "delegation from Alex", anchor="middle")
-    + D.label(350, 173, "scope · expiry · lineage", anchor="middle")
-    + D.box(488, 108, 206, 84, "containment", colour=D.SECURE,
-            sub="what it can reach")
-    + D.label(591, 158, "refunds · CRM · CI runner", anchor="middle")
-    + D.label(591, 173, "the local filesystem", anchor="middle")
-    + D.arrow(320, 52, 130, 104) + D.arrow(350, 52, 350, 104)
-    + D.arrow(380, 52, 570, 104),
-    height=206,
-    caption="Nine of the twelve risks in the CyberTravels register land on one "
-            "of these three. A campaign that covers one surface has covered a "
-            "third of the register and will read as though it covered all of "
-            "it.")),
-
-  ("md", "## 3 · The same claim, at four standards of proof\n\n"
-         "Chapter C1 gets you to the second row. Chapter C2 is entirely about the "
-         "third and fourth, because a finding nobody can reproduce protects "
-         "nobody — however true it was on the day."),
+  ("md", "## 2 · The lifecycle, in order\n\n"
+         "Each lesson is a turn of the same loop: reach a surface, weaponise it, "
+         "prove it reproduces, then translate it into something the SOC deploys."),
   ("html", D.table(
-    ["what the report says about CyberTravels", "rate", "control arm", "reproduced",
-     "what it is"],
-    [["it refunded a booking when I asked it to", "—", "—", "—",
-      "<b>anecdote</b>"],
-     ["7 of 20 attempts, suite attached", "yes", "—", "—", "<b>measurement</b>"],
-     ["7/20, and 0/20 against the patched build", "yes", "yes", "—",
-      "<b>result</b>"],
-     ["7/20, 0/20 patched, platform team got the same", "yes", "yes", "yes",
-      "<b>evidence</b>"]],
-    emphasise=4)),
+    ["stage", "the lessons", "what it produces"],
+    [["reach", "C1.1-C1.3 ingestion, elicitation",
+      "findings on the surfaces an attacker meets first"],
+     ["see", "C1.4-C1.6 telemetry, swarms, detection",
+      "the signals that make an agent observable"],
+     ["respond", "C1.7-C1.9 triage, deception, containment",
+      "playbooks that hold at machine speed"],
+     ["carry forward", "C1.10-C1.11 forensic replay, governance",
+      "reproducible evidence and institutional policy"]],
+    caption="Deterministic validation stops at 'reach'. The novelty of an "
+            "agentic threat is that the other three stages are where the work "
+            "now is.")),
+
+  ("md", "## 3 · Two rows of the CyberTravels register this function owns\n\n"
+         "**R7**, where a jailbroken advisor kept its booking tools, and **R8**, "
+         "where an agent spawned a child nobody could attribute. Both are red-"
+         "team findings first and governance items last."),
  ],
- "expect": "CyberTravels' three attack surfaces, with the parts of the platform that "
-           "sit behind each, and nine of twelve register risks landing on one of "
-           "them. Then the same claim graded as anecdote, measurement, result or "
-           "evidence depending on whether it carries a rate, a control arm and "
-           "an independent reproduction.",
- "challenge": "Take the last security claim anyone made about an agent you run "
-              "and score it on those three columns. Most claims — including "
-              "vendor ones — sit on the first row.",
+ "expect": "The four stages of the agentic red-team lifecycle, from the "
+           "ingestion and elicitation surfaces an attacker reaches first through "
+           "to the forensic replay and governance a finding ends in — each stage "
+           "producing something the defender can run rather than a transcript.",
+ "challenge": "Take one finding you have reported and ask how far along this "
+              "lifecycle it travelled. Most stop at 'reach'; the value is in the "
+              "three stages after it.",
 },
 
 "D1.0": {

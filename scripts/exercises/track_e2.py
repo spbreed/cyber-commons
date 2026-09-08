@@ -202,8 +202,8 @@ Three obligations attach, and the third is the one that bites:
 - **Erasure** — and this reaches into traces, eval corpora, fine-tuning sets and
   backups.
 
-The capability that makes erasure possible is the same one C2.4 built for poison
-removal: per-record hashes. Without them you cannot locate the record, so you
+The capability that makes erasure possible is the same one C1.2 built for
+ingestion provenance: per-record hashes. Without them you cannot locate the record, so you
 cannot delete it.
 """,
  "steps": [

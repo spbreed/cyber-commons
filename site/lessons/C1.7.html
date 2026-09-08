@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C1.7 — Triaging the non-deterministic swarm | Cyber Commons</title><meta name="description" content=""><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Agentic Evaluation and Red Teaming</div><div class="sid">C1.7</div><h1>Triaging the non-deterministic swarm</h1><div class="badges"><span class="badge t">C1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM01</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Model Access</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C1.7.mp4</code></span></div></div><div class="sec"><h2>The lab</h2><p class="sub">Multi-threaded delegation graphs and triage loops defended against deceptive self-correction.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/secops/detection-triage/scripts/detection_triage.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C1.7 · Triaging the non-deterministic swarm</h1>
+<p><strong>Function C — Red Teaming and Security Research with AI → Agentic Evaluation and Red Teaming</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C1.6.html">C1.6 · High-concurrency detection engineering</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>TheHive</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Triaging a multi-threaded delegation graph with a loop, defended against deceptive self-correction by a severity floor and a stable-seeded closure sample.</p>
+<p><strong>Why a security engineer needs it.</strong> An agent scoring evidence only on support confirms its first theory and closes the wrong case silently. The floor and the sample are what keep an automated loop's false-negative rate visible.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The delegation graph is multi-threaded and the agents self-correct deceptively: a loop that scores evidence only on support confirms its first theory and closes the wrong case at machine speed, silently.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The alerts are CyberTravels', and the deceptive branch is the refund incident: the loop confirms 'the Workflow Agent did it' and never reaches the vendor tool description that actually did.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   the loop triages a fleet of alerts
+
+   evidence supports theory-1  -&gt; confirm
+   evidence supports nothing   -&gt; an agent scoring SUPPORT reads noise
+                                   and confirms theory-1 anyway  &lt;- deceptive
+   the control:
+     may close                        yes
+     may close SILENTLY               no  (sampled to a human)
+     may close ABOVE the floor        no  (high/critical -&gt; escalate)
+</code></pre>
+<p>When the swarm has fired, triage is where a non-deterministic actor defeats a
+human queue. The delegation graph is multi-threaded and the agents
+<strong>self-correct deceptively</strong> — an investigating loop that scores evidence only
+on support will confirm its first theory and close the wrong case at machine
+speed.</p>
+<p>Triaging the swarm means running the triage as a loop with a floor: the loop may
+close, but not silently, and never above a severity it is not allowed to
+conclude on its own. The skill is knowing which signals the loop may believe.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The skill runs an agentic triage loop over CyberTravels' alerts, samples what it auto-closed with a stable seed, and enforces a severity floor no automatic closure may cross.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/secops/detection-triage/SKILL.md"><code>skills/secops/detection-triage/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: detection-triage
+description: &gt;-
+  Triage security alerts with the context needed to reach a defensible verdict,
+  and sample what is auto-closed so the closing rule stays honest. Use when
+  working an alert queue, deciding whether an alert is a true positive, tuning
+  a noisy detection, or designing automated alert handling.
+allowed-tools: Read, Grep, Bash
+</code></pre>
+<h1>Alert triage with context</h1>
+<p>An analyst reading an alert in isolation is guessing. The verdict comes from
+the alert <strong>plus</strong> the context that makes it normal or abnormal, and most
+triage automation fails because it automated the guess instead of the context.</p>
+<h2>When to use this</h2>
+<p>Working an alert queue, building an auto-close rule, or reviewing why a
+detection produces verdicts nobody trusts.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Gather the context before judging.</strong> For every alert, assemble:</p>
+<ul>
+<li><strong>asset</strong> — what it is, who owns it, how exposed it is</li>
+<li><strong>identity</strong> — human or workload, and its normal behaviour</li>
+<li><strong>history</strong> — has this fired before on this asset, and how was it resolved</li>
+<li><strong>change</strong> — was there a deploy, a migration, a new agent, in the window</li>
+<li><strong>peers</strong> — did the same thing fire elsewhere at the same time</li>
+</ul>
+<p>A verdict issued without <code>history</code> will re-litigate a decision the team already
+made, which is the most common way triage automation loses trust.</p>
+<p><strong>2 — Reach a verdict, with the reason.</strong> One of <code>true_positive</code>,
+<code>false_positive</code>, <code>benign_true_positive</code> (it really happened and it is fine),
+or <code>needs_human</code>. Record which context field decided it. "Benign true positive"
+is a distinct category and collapsing it into false-positive corrupts every
+tuning decision made from the data afterwards.</p>
+<p><strong>3 — Attach confidence, and let it gate automation.</strong> Only high-confidence
+verdicts may auto-close. Everything else queues.</p>
+<p><strong>4 — Sample the auto-closed.</strong> Automation that closes alerts must be audited
+by re-opening a fraction of them for human review. This is the control that
+catches a closing rule that has quietly started closing real incidents.</p>
+<p>Seed the sampler from something <strong>stable</strong> — a checksum of the alert id, never
+<code>hash()</code>, which Python randomises per process. A sampling rule that picks a
+different subset every run cannot be audited, because you cannot tell whether a
+change in findings came from the rule or from the dice.</p>
+<p><strong>5 — Feed tuning from verdicts, not volume.</strong> A detection is noisy if its
+false-positive rate is high, not if it fires often. Rank tuning candidates by
+<code>false_positive_rate × volume</code>, with a full tiebreak so the list is stable
+between runs.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/detection_triage.py"><code>scripts/detection_triage.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>BARE ALERT (what most SOCs receive):
+   patch-agent read /vault/.env
+   rotator-agent read /vault/.env
+   → identical. An analyst cannot tell these apart.
+
+ENRICHED ALERT:
+   actor        patch-agent
+   on behalf of dana@corp
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;triaged&quot;: [
+    {&quot;alert_id&quot;: &quot;str&quot;, &quot;verdict&quot;: &quot;true_positive|false_positive|benign_true_positive|needs_human&quot;,
+     &quot;deciding_context&quot;: &quot;asset|identity|history|change|peers&quot;,
+     &quot;reason&quot;: &quot;str&quot;, &quot;confidence&quot;: 0.0,
+     &quot;auto_closed&quot;: false, &quot;sampled_for_review&quot;: false}
+  ],
+  &quot;sampling&quot;: {&quot;rate&quot;: 0.0, &quot;seed_source&quot;: &quot;str&quot;, &quot;reviewed&quot;: 0, &quot;disagreements&quot;: 0},
+  &quot;tuning&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;fp_rate&quot;: 0.0, &quot;volume&quot;: 0, &quot;priority&quot;: 0.0}]
+}
+</code></pre>
+<p><code>disagreements</code> is the number that matters: it is the measured error rate of
+the automation, and it belongs in every report about it.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Auto-closing without sampling.</strong> The rule then has no error bar and no way
+  to acquire one.</li>
+<li><strong>Seeding the sampler from <code>hash()</code>.</strong> Non-reproducible sampling is not a
+  control.</li>
+<li><strong>Folding benign-true-positive into false-positive.</strong> It teaches the tuner to
+  suppress a working detection.</li>
+<li><strong>Removing <code>needs_human</code>.</strong> Forced verdicts under uncertainty are how a queue
+  becomes an incident.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>BARE ALERT (what most SOCs receive):
+   patch-agent read /vault/.env
+   rotator-agent read /vault/.env
+   → identical. An analyst cannot tell these apart.
+
+ENRICHED ALERT:
+   actor        patch-agent
+   on behalf of dana@corp
+   chain        dana@corp → orchestrator → patch-agent
+   scopes held  [&#x27;repo:read&#x27;, &#x27;repo:write&#x27;]
+   verdict      ANOMALY — no secrets scope
+
+   actor        rotator-agent
+   on behalf of ops@corp
+   chain        ops@corp → scheduler → rotator-agent
+   scopes held  [&#x27;secrets:read&#x27;, &#x27;secrets:write&#x27;]
+   verdict      EXPECTED — this agent rotates secrets
+
+agent           no context    with context      truth
+--------------------------------------------------------
+patch-agent     escalate      escalate             tp
+rotator-agent   escalate      close                fp
+
+Without scopes, both escalate → the rotator generates a false positive
+every single night, and within a month the rule is tuned off.
+acting identity     which agent — not the human whose token it borrowed
+principal           who the action was for
+delegation chain    who caused the task; where to look for the trigger
+scopes held         THE decisive field — is this action within its remit?
+tool + target       what it did
+session/trace id    so the analyst can pull the whole run (D1.3)
+
+patch-agent     ESCALATE (outside remit)
+                dana@corp → orchestrator → patch-agent  scopes=[&#x27;repo:read&#x27;, &#x27;repo:write&#x27;]
+rotator-agent   close (within remit)
+                ops@corp → scheduler → rotator-agent  scopes=[&#x27;secrets:read&#x27;, &#x27;secrets:write&#x27;]
+conformance: 0 problem(s)
+   A-1  true_positive        auto_closed=False sampled=False
+   A-2  benign_true_positive auto_closed=True  sampled=False
+   A-3  true_positive        auto_closed=False sampled=False
+   A-4  benign_true_positive auto_closed=True  sampled=True
+   A-5  true_positive        auto_closed=False sampled=False
+   A-6  benign_true_positive auto_closed=True  sampled=True
+
+auto-closed 3, of which 2 sampled back for human review
+
+`benign_true_positive` is its own verdict. Folding it into false-positive
+would teach the tuner to suppress a detection that is working exactly as
+designed - the read really happened, it was simply within remit.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The loop matches ground truth on the routine alerts, the severity floor converts every high closure into an escalation, and the closure sample routes a fraction to a human so the false-negative rate is measured rather than assumed.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Ask your SOC whether anyone checks, when an incident is confirmed, whether an earlier alert about it was auto-closed. If not, your loop's error rate is invisible.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.8.html">C1.8 · Defensive deception and threshold failures</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.7.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><p class="sub toolslab">Tools used</p><div class="chips"><span>TheHive</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.7.ipynb</code></p></div><div class="pager"><a href="C1.6.html"><span class="k">← Previous</span><span class="t">C1.6 · High-concurrency detection engineering</span></a><a class="next" href="C1.8.html"><span class="k">Next →</span><span class="t">C1.8 · Defensive deception and threshold failures</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

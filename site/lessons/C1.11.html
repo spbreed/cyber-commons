@@ -1,0 +1,157 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C1.11 — Institutional governance and compliance | Cyber Commons</title><meta name="description" content=""><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Agentic Evaluation and Red Teaming</div><div class="sid">C1.11</div><h1>Institutional governance and compliance</h1><div class="badges"><span class="badge t">C1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM01</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Model Access</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C1.11.mp4</code></span></div></div><div class="sec"><h2>The lab</h2><p class="sub">Findings translated into engineering policies, change-surface patches and reporting timelines.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/research/finding-to-control-handover/scripts/finding_to_control_handover.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C1.11 · Institutional governance and compliance</h1>
+<p><strong>Function C — Red Teaming and Security Research with AI → Agentic Evaluation and Red Teaming</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C1.10.html">C1.10 · Forensic replay and control architecture</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>NIST AI RMF</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Turning a non-deterministic finding into institutional capital: a policy diff, an owner, and an evaluation case that fails on the old build.</p>
+<p><strong>Why a security engineer needs it.</strong> A finding in a notebook changes nothing and regresses unseen. The handover with a regression test attached is what makes the fix verifiable and gives the research a reporting timeline the organisation can be held to.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>A non-deterministic finding that stays in a notebook changes nothing. Translated into a policy diff, an owner and an eval case that fails on the old build, it becomes something the organisation carries forward and cannot silently regress.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The finding is CyberTravels' indirect-injection refund, and the handover is the policy clause it changes, the owner who holds it, and the eval case that fails on the pre-fix build.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   a finding leaves as three things, or it does not leave
+
+   finding ---&gt; control (what is now enforced)
+           ---&gt; owner   (who holds it)
+           ---&gt; eval    (fails on the old build, passes on the fixed one)
+
+   missing any one:  a promise, not a control, and it regresses unseen.
+   present all three: institutional capital, with a reporting timeline.
+</code></pre>
+<p>The lifecycle ends where it becomes institutional. A non-deterministic security
+finding that stays in a researcher's notebook changes nothing; translated into a
+<strong>structural engineering policy, a change-surface patch and a reporting
+timeline</strong>, it becomes something the organisation carries forward.</p>
+<p>Governance here is the handover: every finding leaves with the control it
+becomes, the owner who holds that control, and an evaluation case that fails on
+the old build and passes on the fixed one — so the finding cannot silently
+regress, and the research has produced institutional capital rather than a
+report.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The skill turns a CyberTravels finding into a handover: the control it becomes, its owner, and an eval case that fails on the old build — so the fix is verifiable and cannot regress unseen.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/finding-to-control-handover/SKILL.md"><code>skills/research/finding-to-control-handover/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: finding-to-control-handover
+description: &gt;-
+  Convert a research finding into the three artefacts that outlive it — an eval
+  case, a control and a detection — and verify the eval fails on the old build
+  and passes on the new one. Use when closing a finding, or when research output
+  is not reaching the teams that own the fix.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>Three artefacts, three owners, or the finding is a memory</h1>
+<p>The handover is the whole value of a research function. A finding produces an
+<strong>eval case</strong> (so the class is measured from now on), a <strong>control</strong> (so it stops
+happening), and a <strong>detection</strong> (so you see it when the control is off). Each
+has a different owner, and a handover missing one of them silently reopens.</p>
+<h2>When to use this</h2>
+<p>At the close of every finding worth having found, and when planning what a
+research team's output should be.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Write the eval case first.</strong> It is the artefact that keeps the class
+measured after everyone has moved on. Verify it fails on the current build —
+that is what makes it a test rather than a hope.</p>
+<p><strong>2 — Specify the control at the enforcement point.</strong> Which mechanism, where it
+binds. Then check the case passes with it in place, and check the principal's
+own path still works, because a control that also blocks legitimate use is an
+outage with a security justification.</p>
+<p><strong>3 — Write the detection for the control being off.</strong> Not for the payload — the
+payload changes. The detection fires when the condition the control prevents
+occurs, which is what you need when somebody disables it for a demo.</p>
+<p><strong>4 — Name an owner per artefact.</strong> Eval to whoever runs the suite, control to
+the platform team, detection to the SOC. An artefact with no owner is the one
+that will not exist in six months.</p>
+<p><strong>5 — Record coverage.</strong> How many source-and-privilege combinations the control
+covers, and which it does not. Partial coverage is fine; unstated partial
+coverage is how the next finding is a surprise.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/finding_to_control_handover.py"><code>scripts/finding_to_control_handover.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>1 · eval case (build FIRST)   asserts a privileged tool refuses source != principal
+2 · preventive control        provenance check in the tool dispatcher
+3 · detection                 alert when a privileged tool is invoked with a data source
+4 · accepted risk             only if 2 and 3 are not shipping this quarter
+eval case on the OLD build: False   (must be False)
+eval case on the NEW build: True   (must be True)
+
+12 privileged/source combinations blocked, and the principal path still works.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;finding&quot;: {&quot;class&quot;: &quot;str&quot;},
+  &quot;eval_case&quot;: {&quot;description&quot;: &quot;str&quot;, &quot;old_build&quot;: false, &quot;new_build&quot;: true, &quot;owner&quot;: &quot;str&quot;},
+  &quot;control&quot;: {&quot;mechanism&quot;: &quot;str&quot;, &quot;point&quot;: &quot;str&quot;, &quot;principal_path_ok&quot;: true, &quot;owner&quot;: &quot;str&quot;},
+  &quot;detection&quot;: {&quot;fires_on&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str&quot;},
+  &quot;coverage&quot;: {&quot;combinations&quot;: 0, &quot;covered&quot;: 0, &quot;gaps&quot;: [&quot;str&quot;]}
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>A detection for the payload.</strong> It will be the next payload.</li>
+<li><strong>No owner.</strong> The artefact does not survive the quarter.</li>
+<li><strong>Not checking the principal path.</strong> The control gets rolled back and the
+  finding reopens.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>1 · eval case (build FIRST)   asserts a privileged tool refuses source != principal
+2 · preventive control        provenance check in the tool dispatcher
+3 · detection                 alert when a privileged tool is invoked with a data source
+4 · accepted risk             only if 2 and 3 are not shipping this quarter
+eval case on the OLD build: False   (must be False)
+eval case on the NEW build: True   (must be True)
+
+12 privileged/source combinations blocked, and the principal path still works.
+control: blocked
+
+detections on the OLD build (control absent):
+   [critical] approve_pr ← pull-request-diff  → revoke the agent&#x27;s token and audit its recent actions
+   [critical] approve_pr ← commit-message  → revoke the agent&#x27;s token and audit its recent actions
+   [critical] approve_pr ← tool-result  → revoke the agent&#x27;s token and audit its recent actions
+
+same detection on the NEW build:
+   [info] approve_pr ← pull-request-diff  blocked=True
+   [info] approve_pr ← commit-message  blocked=True
+   → the detection still fires, at info severity. That is coverage evidence
+     for E1.7, not noise: it proves the control is exercised in production.
+finding                INJ-06
+eval_fails_on_old      True
+eval_passes_on_new     True
+proof_of_fix_valid     True
+control_shipped        True
+detection_shipped      True
+may_close              True
+
+same finding with nothing shipped: may_close=False
+→ then it needs artefact 4: a written accepted risk with an owner and a date.
+artefact                 durability  what it buys
+--------------------------------------------------------------------------
+chat thread                       0  gone at the next retention sweep
+slide deck                        1  survives; nobody re-runs it
+written repro card                2  someone else can reproduce it
+detection rule                    3  fires if the precondition recurs
+regression case in CI             4  fails the build when the finding returns
+control + eval case               5  prevents it AND proves it stays prevented
+
+findings this year        : 8
+durability score          : 20 of 40
+still holding by themselves: 3 - diff-borne approval, token widening at hop 3, metadata reachable in staging
+
+Five of eight findings landed somewhere that stops protecting you the
+moment the author leaves. The count that goes in the board pack is the
+first number; the one that is true is the third.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The finding leaves with a named control, an owner and an eval case that fails on the unfixed build, and a finding missing any of the three is flagged as not yet handed over.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take your last red-team finding and write the eval case that would fail if it regressed. If you cannot, the fix is a promise, not a control.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
+<p><strong>What you can do now.</strong> You can carry an agentic finding the whole distance: reach a supply-chain or elicitation surface, weaponise an ingestion path, prove a technique reproduces, turn it into gateway telemetry and a deployable detection, triage and contain a swarm at machine speed, replay the run for forensics, and hand it over as a governed policy with an eval case that fails on the old build.</p>
+<p><strong>What you still cannot do.</strong> Every finding here is one you generated. Nothing tells you whether the estate as a whole is watched — how many agents exist, who owns them, and whether anyone would see the next one happening in production.</p>
+<p><strong>Function D is the operational half — the SOC that detects an actor acting a thousand times an hour and stops it, in five phases. Next → D1.0, what an agentic SOC means.</strong></p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.0.html">D1.0 · Start here — the agentic SOC, and the stack that runs it</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C1.11.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.11.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><p class="sub toolslab">Tools used</p><div class="chips"><span>NIST AI RMF</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.11.ipynb</code></p></div><div class="pager"><a href="C1.10.html"><span class="k">← Previous</span><span class="t">C1.10 · Forensic replay and control architecture</span></a><a class="next" href="D1.0.html"><span class="k">Next →</span><span class="t">D1.0 · Start here — the agentic SOC, and the stack that runs it</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

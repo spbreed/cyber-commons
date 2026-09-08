@@ -78,7 +78,7 @@ needs ~40GB RAM. If your laptop has 16GB, use the small variants
 (`llama3.2:3b`, `glm-4-9b`, `qwen2.5:7b`) — every lab's *mechanics* work on a
 small model.
 
-The six model-facing lessons were run against two sizes on 4 CPUs with no GPU,
+The seven model-facing lessons were run against two sizes on 4 CPUs with no GPU,
 on weights pulled from Kaggle Models. Each calls the model from inside its
 **skill's own script** — there is no adapter in a lesson — so what is tested
 here is the same file `scripts/test_skills.py` runs offline.
@@ -181,7 +181,7 @@ limits — they move):
 
 - **OpenRouter** — aggregates many providers; some open models are exposed with
   a `:free` suffix on a shared rate limit. One key, many models — handy for the
-  C2.6 multi-backbone benchmarking lab.
+  detection-rule scoring labs (C1.6, D2.4), which run one candidate set across backbones.
 - **Groq / Cerebras** — very fast inference for Llama-family models on a free
   developer tier.
 - **Together AI** — free credits and some always-free open endpoints.
@@ -223,9 +223,9 @@ litellm --config labs/shared/litellm.config.yaml   # routes llama/glm/kimi behin
 | Harness loops, tool use (B2.1) | **Kimi K2** | built for agentic tool sequences |
 | Offensive planning (C1) | **Kimi K2** or GLM-4.6 | multi-step planning |
 | Guardrails / classification | **Llama Guard** | purpose-built, and cheap at volume |
-| SOC triage (D1) | **GLM-4.6** or Llama 3.3 | cheap, high volume |
-| Exploit chaining, research (B2.9, C2) | **Kimi K2** | multi-file adversarial reasoning |
-| Multi-backbone benchmarking (C2.6) | **all three** | separating model effects from harness effects *is* the lab |
+| SOC triage (D3) | **GLM-4.6** or Llama 3.3 | cheap, high volume |
+| Exploit chaining (B2.9), research (C1) | **Kimi K2** | multi-file adversarial reasoning |
+| Multi-backbone rule scoring (C1.6, D2.4) | **all three** | separating model effects from harness effects *is* the lab |
 | Anything, on a laptop with no GPU | **Qwen2.5-7B-Instruct** | the size the acceptance criteria were established at |
 
 For most of these lessons the difference a larger model makes is smaller than

@@ -1045,3 +1045,8 @@ for _k, _v in _NEW.items():
     assert _k not in ABOUT, f"{_k} already has an entry"
     ABOUT[_k] = _v
 
+
+
+# Function C rebuild.
+from .framing_c import ABOUT as _C_ABOUT  # noqa: E402
+ABOUT.update(_C_ABOUT)

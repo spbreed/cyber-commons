@@ -667,3 +667,8 @@ for _k, _v in _NEW.items():
     assert _k not in GROUNDING, f"{_k} already has an entry"
     GROUNDING[_k] = _v
 
+
+
+# Function C rebuild.
+from .framing_c import GROUNDING as _C_GROUND  # noqa: E402
+GROUNDING.update(_C_GROUND)

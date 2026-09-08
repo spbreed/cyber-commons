@@ -469,7 +469,7 @@ not.
       "attack-suite results become detections directly"],
      ["your drift monitor (D1.2)", "<b>80%</b>",
       "baseline changes are leading indicators"],
-     ["vendor advisories", "50%", "useful for the supply chain (C2.5)"],
+     ["vendor advisories", "50%", "useful for the supply chain (C1.1)"],
      ["commercial feed", "30%",
       "generic indicators; little agent-specific content yet"]],
     emphasise=1,
