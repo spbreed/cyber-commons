@@ -71,8 +71,8 @@ month."""),
               "lessons behind it. If the count is one, that is your next gap.",
 },
 
-# ---------------------------------------------------------------- D1.5
-"D1.5": {
+# ---------------------------------------------------------------- D3.10
+"D3.10": {
  "concept": """
 A detection encodes a behaviour somebody already understood. Hunting goes the
 other way: you state a hypothesis about behaviour that *would* be suspicious,
@@ -109,8 +109,8 @@ many."""),
               "precision is near the base rate, you have described normal work.",
 },
 
-# ---------------------------------------------------------------- D2.4
-"D2.4": {
+# ---------------------------------------------------------------- D2.5
+"D2.5": {
  "concept": """
 The fastest source of a good detection is an incident you have just had. The
 trap is that **every candidate rule catches the incident** — that is how it was

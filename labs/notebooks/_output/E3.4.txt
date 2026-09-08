@@ -3,9 +3,9 @@ seam                        owner                           lesson
 AppSec ↔ Platform           platform-security               A3.1
 Identity ↔ SecOps           on-call SRE, pre-authorised     A3.6
 GRC ↔ Engineering           ⚠ NOBODY                        E3.2
-SOC ↔ Data                  ⚠ NOBODY                        D1.1
+SOC ↔ Data                  ⚠ NOBODY                        D1.3
 CISO office ↔ Legal         legal, on IR notification       E2.6
-AppSec ↔ SOC                detection engineering           D2.1
+AppSec ↔ SOC                detection engineering           D2.2
 
 2/6 seams have no named owner:
    who decides an autonomy rung?

@@ -3,12 +3,12 @@ INC-2026-114 · detected by customer complaint after 194 minutes
 control what it would have caught                 status
 A2.6    provenance marking at ingress             absent
 A3.1    default-deny on the tool call             present-but-scoped-wrong
-D2.3    detection on refund without approval      absent
-D1.4    drift monitor on vendor tool descriptions absent
+D2.4    detection on refund without approval      absent
+D1.2    drift monitor on vendor tool descriptions absent
 D4.4    stop authority within the refund window   present
 
 first absent control in the chain: A2.6 — provenance marking at ingress
-contributing: D2.3, D1.4
+contributing: D2.4, D1.2
 
 candidate root cause statements
    REJECT  the on-call engineer missed the alert

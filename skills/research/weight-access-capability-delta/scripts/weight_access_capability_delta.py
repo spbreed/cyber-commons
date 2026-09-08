@@ -37,13 +37,13 @@ for rate in (0.005, 0.05):
 REPLACEMENTS = {
  "rate limiting":            ("A2.7 choke point / A3.6 runtime levers",
                               "bound attempts per identity per window"),
- "abuse monitoring":         ("D2.1 detection for agents",
+ "abuse monitoring":         ("D2.2 detection for agents",
                               "your telemetry is the only signal now"),
  "refusal behaviour":        ("A3.5 tool policy + C1.2 provenance",
                               "do not rely on the model refusing; refuse at the tool"),
  "immutable logging":        ("A2.5 act chains + D5.1 replay",
                               "you own retention and integrity"),
- "model version stability":  ("D1.4 drift monitoring",
+ "model version stability":  ("D1.2 drift monitoring",
                               "you now own upgrades AND their behavioural changes"),
 }
 print(f"{'provider control lost':26s}{'your replacement':44s}")

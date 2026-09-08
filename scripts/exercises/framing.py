@@ -395,34 +395,41 @@ HOOKS: dict[str, str] = {
  "identity, asset and history context a human analyst would have pulled without "
  "noticing they pulled it.",
 
-"D2.3":
+"D2.4":
  "An agent can write and tune a detection far faster than you can, which means "
  "it can also ship a confident, wrong rule into production far faster than you "
  "can. The validation discipline is the whole of the value.",
 
-"D2.1":
+"D2.2":
  "Writing a detection for an agent means writing one where machine-speed "
  "behaviour is normal and the baseline has no human rhythm in it at all. Every "
  "heuristic that relies on tiredness, working hours or typing speed is gone.",
 
+"D1.3":
+ "The agent holds a person's authority and acts in their name, so conventional "
+ "UEBA reads it as that person behaving strangely at 03:00. Find it on "
+ "behaviour instead, and you inherit its trace — which contains the reasoning, "
+ "and whatever was in the context window when it ran.",
+
 "D1.1":
- "You cannot detect on telemetry that was never emitted. Prompts, tool calls, "
- "decisions and identities are the four things an agent has to emit to be "
- "observable at all — and none of them appear in a standard application log.",
+ "Four security products already watch the estate and every one of them was "
+ "bought for a person on a host. Score them against what an agent actually "
+ "does and four of its nine ordinary actions are seen by nothing at all — not "
+ "seen badly, not alerted on late, simply outside the field of view.",
+
+"D2.1":
+ "The lake gets designed twice: once on a whiteboard where everything is "
+ "indexed, and once when the invoice arrives and retention is cut across the "
+ "board. The second design is the one that runs, and it is made by somebody "
+ "who does not know which source a forensic replay needs.",
 
 "D1.2":
- "The agent holds a human's authority and acts under a human's name. "
- "Conventional UEBA reads that as the human behaving strangely, and the entire "
- "attribution question — was this a person or their agent — has no field to "
- "answer it.",
-
-"D1.4":
  "Nothing was attacked. The model was upgraded, a prompt was edited, a tool "
  "changed its output format — and the behaviour of the system moved. Drift is "
  "the failure mode with no adversary, and it is far more common than the ones "
  "with one.",
 
-"D1.3":
+"D3.9":
  "Two intel questions, not one: how adversaries are using AI, and who is coming "
  "for the AI you run. Most programmes track the first because it is written "
  "about, and the second is the one that reaches your estate.",
@@ -650,7 +657,7 @@ HOOKS: dict[str, str] = {
  "to six of them reasoned about telling a human; none did. One wrote \"we can "
  "notify? no user\". The gap was not alignment — it was that no tool existed.",
 
-"D2.5":
+"D2.6":
  "Every detector in this chapter needs a threshold, and every threshold is a "
  "trade. A canary needs neither: nothing legitimate has any reason to touch it, "
  "so its false-positive rate is zero by construction rather than by tuning.",
@@ -661,7 +668,7 @@ HOOKS: dict[str, str] = {
  "finding can be cited alone, type every control, and give each one an owner "
  "who will test it.",
 
-"D2.2":
+"D2.3":
  "The escape, the poisoned cache entry and the silently expired exemption all "
  "look like normal operation from inside the workload. These are detections "
  "whose subject is the platform running the agent, and not one of them reads "
@@ -1600,7 +1607,7 @@ DIAGRAMS: dict[str, str] = {
    most bad triage is missing context, not a weak model
 """,
 
-"D2.3": """
+"D2.4": """
    agent writes rule --> test corpus --> tuned rule --> production
                               ^
                        +------+-------+
@@ -1612,7 +1619,7 @@ DIAGRAMS: dict[str, str] = {
    the speed is real. so is the speed of shipping a wrong rule.
 """,
 
-"D2.1": """
+"D2.2": """
    human baseline                agent baseline
    +-------------------+         +----------------------+
    | works 9-6         |         | works always         |
@@ -1624,31 +1631,62 @@ DIAGRAMS: dict[str, str] = {
    sequences, a spike in distinct destinations
 """,
 
-"D1.1": """
-   what an agent must emit to be observable at all
+"D1.3": """
+   1 · WHO IS ACTING?              2 · WHAT YOU THEN HOLD
 
-   +------------+  +-------------+  +-----------+  +------------+
-   |  prompts   |  | tool calls  |  | decisions |  | identities |
-   +------------+  +-------------+  +-----------+  +------------+
-        |               |                |              |
-        +---------------+----------------+--------------+
-                                v
-                   none of this is in an application log
-                   retention is expensive and the cost is real
+   the log says                    +----------------------------+
+   +------------------+            | prompts     tool calls     |
+   | user: dana@corp  |            | decisions   identities     |
+   | action: deploy   |            +----------------------------+
+   +------------------+                       |
+           |                        none of it is in an
+   UEBA: "dana, strangely"          application log, and the
+           |                        prompts carry whatever was
+   the missing field is not         in the context window
+   "suspicious" - it is
+   "actor_type", recoverable                  v
+   from behaviour alone:            retention is decided per
+   regularity, rate, continuity     FIELD, not per record
+
+   find the actor first. its trace is what you then have to keep.
+""",
+
+"D1.1": """
+   what already watches the estate      what an agent does
+
+   EDR    Wazuh agent          -----> writes a file        ##
+   CNAPP  Falco + Trivy        -----> spawns a child       ##
+   EDR    (partial)            -----> opens TLS to a model ..
+   CSPM   Prowler              -----> assumes an IAM role  ..
+   DLP    regex + FIM          -----> exfil to allowed SaaS ..
+
+                                      reads a customer record
+                                      puts it in a prompt
+                                      calls a vendor MCP tool     <- NOTHING
+                                      issues a refund
+
+   the four uncovered rows are not badly tuned. no sensor class
+   is in the path. they all happen inside the reasoning loop, or
+   behind an API the host never observes.
+""",
+
+"D2.1": """
+   the queries decide the tier. nothing else does.
+
+   triage      "what did this agent do in the last hour"   seconds -> HOT
+   scope       "everything this identity touched, 90d"     seconds -> HOT
+   hunt        "unexplained tool use over a fortnight"     minutes -> WARM
+   forensics   "reproduce one run, any time in a year"     hours   -> COLD
+   (none)      nothing reads it                            never   -> DROP
+
+   agent prompts: the largest source, read by ONE query, which can wait
+
+     priced hot   ->  the line that gets cut when the bill arrives
+                      and D5.1 has nothing left to replay from
+     tiered cold  ->  survives at ~1% of the hot cost
 """,
 
 "D1.2": """
-   the log says                    the truth is
-   +--------------------+          +---------------------------+
-   | user: dana@corp    |          | dana's agent, acting for  |
-   | action: deploy     |          | dana, at 03:14            |
-   +--------------------+          +---------------------------+
-
-   UEBA reads this as dana behaving strangely.
-   the missing field is not "suspicious" - it is "actor_type"
-""",
-
-"D1.4": """
    nothing was attacked
 
    model upgraded ----+
@@ -1659,7 +1697,7 @@ DIAGRAMS: dict[str, str] = {
    the control: a fixed probe suite, run on every change
 """,
 
-"D1.3": """
+"D3.9": """
    two intel questions, only one of which is well covered
 
    how adversaries use AI        who is coming for the AI you run
@@ -2173,7 +2211,7 @@ DIAGRAMS: dict[str, str] = {
    without it:     notice -> post to the peer channel -> nobody reads it
 """,
 
-"D2.5": """
+"D2.6": """
    tuned detector                     deception
 
    threshold ---> TP and FP           canary ---> any touch is a hit
@@ -2203,7 +2241,7 @@ DIAGRAMS: dict[str, str] = {
    filed apart, three teams each fix a third and the surface remains
 """,
 
-"D2.2": """
+"D2.3": """
    subject of the detection = the platform, not the workload
 
    escape primitives      ptrace non-child . LD_PRELOAD . /proc/self/mem

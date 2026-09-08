@@ -13,9 +13,9 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 | [B2](track-b2.md) | The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy | 15 | B — Application Security with an AI SDLC |
 | [C1](track-c1.md) | Red Teaming with AI | 5 | C — Red Teaming and Security Research with AI |
 | [C2](track-c2.md) | Security Research with AI | 10 | C — Red Teaming and Security Research with AI |
-| [D1](track-d1.md) | Discover — Making the Actor Visible | 6 | D — The Agentic SOC |
-| [D2](track-d2.md) | Detect — From Visible to an Alert | 5 | D — The Agentic SOC |
-| [D3](track-d3.md) | Investigate — From an Alert to a Conclusion | 8 | D — The Agentic SOC |
+| [D1](track-d1.md) | Discover — the Sensors, and the Agent-Shaped Hole in Them | 4 | D — The Agentic SOC |
+| [D2](track-d2.md) | Detect — the Lake, and Rules Mapped to MITRE | 6 | D — The Agentic SOC |
+| [D3](track-d3.md) | Understand — Correlation, Intel and the Hunt | 10 | D — The Agentic SOC |
 | [D4](track-d4.md) | Respond — From a Conclusion to the Actor Stopped | 5 | D — The Agentic SOC |
 | [D5](track-d5.md) | Recover and Root Cause — From Stopped to Back at Target | 6 | D — The Agentic SOC |
 | [E1](track-e1.md) | Building the Governance Framework — Risk and Control | 14 | E — AI Governance for Agentic Systems |

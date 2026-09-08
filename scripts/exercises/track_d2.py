@@ -246,7 +246,7 @@ as done six weeks later.
      ["approval settings", "<b>no</b>", "a toggle in an admin UI"],
      ["egress allowlist", "sometimes", "depends whether it is IaC or a console"]],
     emphasise=1,
-    caption="The same surfaces D1.4 watches for drift. There they were the "
+    caption="The same surfaces D1.2 watches for drift. There they were the "
             "things that change without anyone deciding; here they are the "
             "things you change on purpose, after an incident — and four of "
             "seven still leave no record that you did.")),

@@ -192,7 +192,7 @@ REGISTER = [
   "Field-level masking at ingestion, redaction in memory before storage, "
   "auto-expiry of anything holding PII, and encrypted access-controlled "
   "storage.",
-  "D1.1, E2.5, A2.7"),
+  "D1.3, E2.5, A2.7"),
  ("R11", "No identity lineage",
   "Six people on Alex's team invoke CyberTravels daily. Every log line says "
   "“CyberTravels”. When the refunds are questioned, nobody can say who "
@@ -424,7 +424,7 @@ GROUNDING: dict[str, str] = {
          "evaluate.",
 
 # ---- B2 · the harness ----------------------------------------------------
-"D2.5": "A canary credential in CyberTravels' environment and a honeypot task in "
+"D2.6": "A canary credential in CyberTravels' environment and a honeypot task in "
          "the benchmark: two detectors with no threshold to tune, because "
          "nothing legitimate has any reason to touch either.",
 
@@ -483,24 +483,37 @@ GROUNDING: dict[str, str] = {
 "D3.3": "An alert saying `cybertravels-svc listed all customer records` is "
         "untriageable without knowing whether that is its job. Most bad triage "
         "at CyberTravels is missing context, not a weak model.",
-"D2.3": "An agent can write and tune a detection for CyberTravels' behaviour far "
+"D2.4": "An agent can write and tune a detection for CyberTravels' behaviour far "
         "faster than the detection engineer can — including a confident, wrong "
         "one, shipped to production.",
-"D2.1": "Writing a detection where the subject is CyberTravels means writing one "
+"D2.2": "Writing a detection where the subject is CyberTravels means writing one "
         "where 1,400 actions an hour is normal and every heuristic that relies "
         "on human rhythm is gone.",
-"D1.1": "You cannot detect on what CyberTravels never emitted. Prompts, tool calls, "
-        "decisions and identities are the four things missing from every "
-        "application log CyberTravels has. R10, R11.",
-"D1.2": "CyberTravels acts under Alex's authority and in Alex's name. Conventional "
-        "UEBA reads that as Alex behaving strangely at 3am. R11.",
-"D1.4": "Nothing was attacked. The model provider upgraded, Alex edited a "
+"D1.3": "CyberTravels acts under Alex's authority and in Alex's name, so "
+        "conventional UEBA reads it as Alex behaving strangely at 3am. Score it "
+        "on behaviour instead and it is unmistakable — and then you are holding "
+        "its trace, which carries prompts, tool calls, decisions and identities "
+        "that appear in no application log CyberTravels has. R10, R11.",
+
+"D1.1": "CyberTravels bought all four before it shipped an agent, and all four "
+        "still work. What none of them is in the path of is the Workflow Agent "
+        "reading a booking through the internal API, putting it in a prompt, "
+        "calling the vendor MCP server and issuing the refund — which is the "
+        "entire incident, start to finish, invisible to the estate's whole "
+        "security stack.",
+
+"D2.1": "The six sources are CyberTravels' own, and the one that decides the "
+        "lesson is its agent prompts: 23% of the volume, read by exactly one "
+        "query, and the first thing an infrastructure review proposes deleting. "
+        "Delete it and D5.1 cannot replay the refund incident at all.",
+
+"D1.2": "Nothing was attacked. The model provider upgraded, Alex edited a "
         "prompt, the tool manifest changed — and CyberTravels' baseline moved "
         "underneath every detection built on it.",
-"D1.3": "Two intel questions for CyberTravels: how adversaries use agents, and "
+"D3.9": "Two intel questions for CyberTravels: how adversaries use agents, and "
         "who is coming for CyberTravels. The second is the one that reaches the "
         "booking API.",
-"D2.2": "Detections whose subject is the platform CyberTravels runs on, not the "
+"D2.3": "Detections whose subject is the platform CyberTravels runs on, not the "
         "agents themselves — the escape, the poisoned package cache, the credential loose "
         "on the internet, the guardrail still switched off after the demo.",
 "D3.8": "Four agents, thousands of runs. Coordination between runs that should "

@@ -1,8 +1,8 @@
 {
  "generated_by": "scripts/test_skills.py",
  "note": "Each row is one skill: whether its frontmatter and output contract parse, and whether its own script runs to completion in a stripped environment and prints something. A script that runs and prints nothing counts as a failure.",
- "skills": 132,
- "executed": 132,
+ "skills": 134,
+ "executed": 134,
  "without_script": 0,
  "problems": [],
  "results": [
@@ -12,7 +12,7 @@
    "contract": true,
    "script": true,
    "lines": 39,
-   "seconds": 0.05
+   "seconds": 0.08
   },
   {
    "skill": "appsec/appsec-exploit-validate",
@@ -20,7 +20,7 @@
    "contract": true,
    "script": true,
    "lines": 66,
-   "seconds": 0.06
+   "seconds": 0.08
   },
   {
    "skill": "appsec/appsec-triage-report",
@@ -28,7 +28,7 @@
    "contract": true,
    "script": true,
    "lines": 81,
-   "seconds": 0.06
+   "seconds": 0.1
   },
   {
    "skill": "appsec/appsec-vuln-audit",
@@ -36,7 +36,7 @@
    "contract": true,
    "script": true,
    "lines": 82,
-   "seconds": 0.06
+   "seconds": 0.14
   },
   {
    "skill": "appsec/coding-agent-hardening",
@@ -44,7 +44,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/context-window-sizing",
@@ -52,7 +52,7 @@
    "contract": true,
    "script": true,
    "lines": 57,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "appsec/dead-code-ast-reachability",
@@ -60,7 +60,7 @@
    "contract": true,
    "script": true,
    "lines": 154,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "appsec/dynamic-exploitation-probe",
@@ -68,7 +68,7 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.03
+   "seconds": 0.07
   },
   {
    "skill": "appsec/exploit-replica-isolation-check",
@@ -76,7 +76,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/finding-dedup-and-verification",
@@ -84,7 +84,7 @@
    "contract": true,
    "script": true,
    "lines": 41,
-   "seconds": 0.04
+   "seconds": 0.05
   },
   {
    "skill": "appsec/fix-promotion-gate",
@@ -100,7 +100,7 @@
    "contract": true,
    "script": true,
    "lines": 44,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/patch-validation-harness",
@@ -108,7 +108,7 @@
    "contract": true,
    "script": true,
    "lines": 60,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/reference-pipeline-scoring",
@@ -116,7 +116,7 @@
    "contract": true,
    "script": true,
    "lines": 50,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "appsec/sast-model-pass",
@@ -124,7 +124,7 @@
    "contract": true,
    "script": true,
    "lines": 50,
-   "seconds": 0.05
+   "seconds": 0.07
   },
   {
    "skill": "appsec/sast-semgrep-deterministic",
@@ -132,7 +132,7 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "appsec/sdlc-control-placement",
@@ -156,7 +156,7 @@
    "contract": true,
    "script": true,
    "lines": 119,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "architecture/agentic-architecture-map",
@@ -164,7 +164,7 @@
    "contract": true,
    "script": true,
    "lines": 70,
-   "seconds": 0.05
+   "seconds": 0.07
   },
   {
    "skill": "architecture/blast-radius-review",
@@ -228,7 +228,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "attestation/input-injection-screening-verifier",
@@ -252,7 +252,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "attestation/sandbox-egress-verifier",
@@ -268,7 +268,7 @@
    "contract": true,
    "script": true,
    "lines": 21,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "detection/agent-platform-detections",
@@ -276,7 +276,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/agent-telemetry-hunt",
@@ -308,7 +308,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.08
+   "seconds": 0.04
   },
   {
    "skill": "detection/behavioural-drift-monitor",
@@ -324,7 +324,7 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "detection/detection-rule-deployability",
@@ -332,7 +332,7 @@
    "contract": true,
    "script": true,
    "lines": 55,
-   "seconds": 0.06
+   "seconds": 0.08
   },
   {
    "skill": "detection/detection-rule-synthesis",
@@ -351,6 +351,22 @@
    "seconds": 0.01
   },
   {
+   "skill": "detection/sensor-coverage-matrix",
+   "parses": true,
+   "contract": true,
+   "script": true,
+   "lines": 38,
+   "seconds": 0.01
+  },
+  {
+   "skill": "detection/telemetry-tiering-cost",
+   "parses": true,
+   "contract": true,
+   "script": true,
+   "lines": 39,
+   "seconds": 0.01
+  },
+  {
    "skill": "detection/threat-intel-to-rules",
    "parses": true,
    "contract": true,
@@ -364,7 +380,7 @@
    "contract": true,
    "script": true,
    "lines": 76,
-   "seconds": 0.07
+   "seconds": 0.06
   },
   {
    "skill": "grc/agent-lifecycle-governance",
@@ -412,7 +428,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.05
+   "seconds": 0.04
   },
   {
    "skill": "grc/model-risk-validation-scope",
@@ -580,7 +596,7 @@
    "contract": true,
    "script": true,
    "lines": 47,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "redteam/eval-corpus-integrity-check",
@@ -596,7 +612,7 @@
    "contract": true,
    "script": true,
    "lines": 72,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "regulatory/assurance-conversation-prep",
@@ -740,7 +756,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "research/training-data-provenance-manifest",
@@ -916,7 +932,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "secops/investigation-admission-rules",

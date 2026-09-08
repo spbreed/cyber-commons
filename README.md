@@ -3,11 +3,11 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**131 lessons across 15 chapters.** Most are reading lessons — the idea, the
+**132 lessons across 15 chapters.** Most are reading lessons — the idea, the
 diagram, the control, and what it looks like in one running system — and then
-they **run a skill**. 128 of the 120 do, and the code is not in the notebook:
+they **run a skill**. 129 of the 132 do, and the code is not in the notebook:
 the lesson shows the `SKILL.md` as prose and runs that skill's own script from
-[`skills/`](skills/). Every one of the 131 is executed in CI before it ships,
+[`skills/`](skills/). Every one of the 132 is executed in CI before it ships,
 and so is every skill. No licence, no vendor, no paid model account.
 
 🌐 **[Live site](https://spbreed.github.io/cyber-commons/)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md)
@@ -66,7 +66,7 @@ python3 scripts/check_skills.py --check   # parses, names, tools, contracts, rou
 
 Each declares an **output contract**, which is what makes a skill checkable
 rather than aspirational. Every skill lesson embeds its skill verbatim at build
-time — so the lesson can never drift from the skill — and every one of the 132 carries
+time — so the lesson can never drift from the skill — and every one of the 134 carries
 a script the lesson runs. Several build the contract shape from the data they
 just produced and validate it, then show what the contract *cannot* see: **an
 empty result conforms perfectly.** Conformance is a statement about the
@@ -120,7 +120,7 @@ in the seams.
 
 > **Spine:** A0.1 → A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 →
 > A2.3 → A2.4 → A3.1 → A3.2 → A3.5 → **B2.0** → **B2.1** → B2.3 → **D1.0** →
-> D1.1 → **E1.0** → E1.10
+> D1.3 → **E1.0** → E1.10
 
 Two chapters carry a single artefact end to end:
 
@@ -143,7 +143,7 @@ only one produces a practitioner who gets surprised.
 
 ## Why you can trust the output
 
-**Every one of the 131 notebooks has been run twice — here, and again on Kaggle
+**Every one of the 132 notebooks has been run twice — here, and again on Kaggle
 on a different machine — and printed exactly the same bytes.**
 
 That second run is the claim worth making, because a kernel that prints nothing
@@ -236,13 +236,13 @@ refuses to read a credential file inside the repo. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 131 sessions, 12 chapters
+site/data/curriculum.json   source of truth: 132 sessions, 12 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: A1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
-skills/                     132 agent skills, plus _runtime/ — the one shared library
-labs/notebooks/             131 generated notebooks + execution and Kaggle evidence
+skills/                     134 agent skills, plus _runtime/ — the one shared library
+labs/notebooks/             132 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_{lessons,skills,secrets,determinism,register} · kaggle_*

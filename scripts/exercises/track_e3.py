@@ -307,13 +307,13 @@ The last lesson, and the one that reframes everything before it.
 
 You will not prevent every agentic failure. The systems are non-deterministic,
 the attack surface is novel, and the change surface bypasses your change process
-(D1.4). A programme judged on prevention is judged on something it cannot
+(D1.2). A programme judged on prevention is judged on something it cannot
 deliver, and it will report success right up until the first real incident.
 
 Judge it on three capabilities instead, each independently testable, none of
 them prevention:
 
-- **Notice** — drift and detections fire when behaviour changes (D2.1, D1.4).
+- **Notice** — drift and detections fire when behaviour changes (D2.2, D1.2).
 - **Stop** — a tested mechanism halts it, measured in seconds (D4.4).
 - **Recover** — the run is replayable and the scope is knowable (D3.7, D5.1).
 

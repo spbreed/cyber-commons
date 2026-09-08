@@ -191,7 +191,7 @@ window is a disclosure, and the trace is a record.**
 
 When an agent reads a customer record to do its job, that record enters the
 model's context. If the trace is retained — and it usually is, for forensics
-(D1.1) — then personal data now exists in a system that was never in the privacy
+(D1.3) — then personal data now exists in a system that was never in the privacy
 review, with a retention period nobody set, in a place the erasure process does
 not reach.
 

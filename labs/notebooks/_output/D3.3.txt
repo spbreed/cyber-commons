@@ -28,7 +28,7 @@ principal           who the action was for
 delegation chain    who caused the task; where to look for the trigger
 scopes held         THE decisive field — is this action within its remit?
 tool + target       what it did
-session/trace id    so the analyst can pull the whole run (D1.1)
+session/trace id    so the analyst can pull the whole run (D1.3)
 
 patch-agent     ESCALATE (outside remit)
                 dana@corp → orchestrator → patch-agent  scopes=['repo:read', 'repo:write']

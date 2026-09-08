@@ -1,0 +1,21 @@
+corpus: 40 agent runs, 6 of them labelled anomalous
+
+hypothesis                       matched  tp  fp  precision  recall
+tool outside declared scope            3   3   0       1.00    0.50
+run outside working hours             14   2  12       0.14    0.33
+volume above task ceiling              2   2   0       1.00    0.33
+
+   tool outside declared scope     -> promote
+   run outside working hours       -> tune
+   volume above task ceiling       -> promote
+
+The working-hours hypothesis is the one to stop on. It matched 14 runs
+to find 2, because 12 of the matches are the overnight batch doing
+exactly its job. Precision 0.14. That is a tune, not a finding, and
+shipping it would add 12 alerts a night to a queue for 2 real events.
+
+Note what recall is NOT saying here. No hypothesis reaches 1.00 and none
+should: a hunt is one hypothesis about one behaviour, and these six
+anomalies are not one behaviour. Recall against every anomaly in the corpus
+is the wrong denominator - recall against the behaviour the hypothesis
+describes is the right one, and that is why each hypothesis is scored alone.

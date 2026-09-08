@@ -1,33 +1,38 @@
-full record (everything the harness saw):
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
-    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
-    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
-sensitive content found in the trace:
-   step 1  result   payment card
+the sensor estate, as bought
+  EDR    Wazuh agent            process, file and network activity on a host
+  DLP    regex + Wazuh FIM      sensitive content leaving a monitored channel
+  CSPM   Prowler / ScoutSuite   cloud configuration, evaluated periodically
+  CNAPP  Falco + Trivy          container runtime syscalls and image contents
 
-Nobody put a card number in the trace deliberately. The agent read a
-source file, and the file contained a test fixture with a real-shaped PAN.
-The trace is now in scope for PCI, and it is in your SIEM for 400 days.
-field       days  sensitivity  rationale
---------------------------------------------------------------------------
-n            400          low  cheap, high forensic value
-tool         400          low  cheap, high forensic value
-target       400          low  path only, no contents
-verifier     400          low  what the harness believed — the key forensic field
-ok           400          low  
-prompt        30         high  may contain anything the task included
-result         7         high  tool output — the highest-risk field
+coverage of what the agents actually do  (## full  .. partial  blank none)
 
-after 1 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
+  action                                          EDR    DLP    CSPM   CNAPP
+  write a file into the agent workdir             ##                   ##   
+  open an outbound TLS session to a model API     ..                   ..   
+  read a customer record through an internal API                            
+  place 900 tokens of that record in a prompt                               
+  call a vendor MCP tool                                                    
+  issue a refund through the payments API                                   
+  assume a wider IAM role                                       ..          
+  spawn a child agent process                     ##                   ##   
+  exfiltrate to an allowed SaaS domain            ..     ..            ..   
 
-after 14 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result_sha256': 'b0e3ecafa7e7a9a0'}
+per-sensor coverage of the agent's day
+  EDR     3.0 / 9   33%
+  DLP     0.5 / 9   6%
+  CSPM    0.5 / 9   6%
+  CNAPP   3.0 / 9   33%
 
-after 90 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt_sha256': '60d7bceb0de1a7bd', 'result_sha256': 'b0e3ecafa7e7a9a0'}
-sensitive content after 90 days: none
-can still answer 'what did it do and what did the harness believe?': True
+  best single sensor   EDR
+  all four combined    3.5 / 9   39%
 
-The hash is retained, so if the original is recovered from a backup you
-can still prove it is the same content the agent saw.
+4 of 9 actions are seen by NO sensor class:
+  - read a customer record through an internal API
+  - place 900 tokens of that record in a prompt
+  - call a vendor MCP tool
+  - issue a refund through the payments API
+
+note what they have in common: every one of them happens inside the
+agent's reasoning loop or behind an API the host never observes.
+buying a fifth product of the same four kinds does not move this column.
+D1.3 is the source that does, and D2.1 is where it has to land.

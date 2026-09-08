@@ -232,7 +232,7 @@ call (A3.1), arriving at a database.
      ["a default that is open until closed",
       "A3.1 — default-deny, applied to data rather than tools"],
      ["a schema check no application test expresses",
-      "D2.2 — detections whose subject is the platform"],
+      "D2.3 — detections whose subject is the platform"],
      ["73% of generated apps carrying at least one issue",
       "A3.11 — securing the developers' coding agents"]],
     caption="Every row is a control that already exists in this curriculum. The "

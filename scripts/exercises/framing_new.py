@@ -14,13 +14,13 @@ HOOKS: dict[str, str] = {
  "four different questions, and picking the wrong one is how a real finding "
  "becomes a paragraph nobody actions.",
 
-"D1.5":
+"D3.10":
  "The alert queue has been quiet for a fortnight and nobody believes it. "
  "Hunting is the pass that finds what no rule was written for — and the "
  "hypothesis that feels most obviously right is usually a description of "
  "the overnight batch doing its job.",
 
-"D2.4":
+"D2.5":
  "You have just reconstructed an incident and the rule almost writes itself. "
  "That is the problem: every rule you could write catches the incident, "
  "because you wrote it from the incident. What decides whether it ships is "
@@ -94,7 +94,7 @@ DIAGRAMS: dict[str, str] = {
    it frustrates, a function it belongs to, an obligation it discharges
 """,
 
-"D1.5": """
+"D3.10": """
    DETECTION                          HUNTING
 
    behaviour  ->  rule  ->  alert     hypothesis
@@ -112,7 +112,7 @@ DIAGRAMS: dict[str, str] = {
    fourteen runs to find two, because twelve are the nightly batch
 """,
 
-"D2.4": """
+"D2.5": """
    incident trace
         |
         v
@@ -190,8 +190,8 @@ DIAGRAMS: dict[str, str] = {
 
    A2.6  provenance at ingress           absent   <- first absent = ROOT
    A3.1  default-deny on the tool call   wrong scope
-   D2.1  detection: refund w/o approval  absent   <- contributing
-   D1.4  drift on vendor tool descs      absent   <- contributing
+   D2.2  detection: refund w/o approval  absent   <- contributing
+   D1.2  drift on vendor tool descs      absent   <- contributing
    D4.4  stop authority in the window    PRESENT  <- and never reached
 
    a control that exists but is never reached is not a mitigating factor.
@@ -278,39 +278,39 @@ BRIDGES: dict[str, dict[str, str]] = {
 # Each one closes on the interval the chapter shortened and names the next one.
 
 "D1": {
- "gained": "You can shorten discover: agent telemetry onboarded as a real log "
-           "source, agents told apart from the humans whose authority they "
-           "hold, intel that has to become a rule to count, drift caught "
-           "without a code change, and a hunt that reports precision rather "
-           "than anecdotes.",
- "gap": "Everything you found is a finding in a notebook. Nothing built here "
-        "fires on its own tomorrow, so the detect interval is exactly where it "
-        "was — and a hunt that is never promoted is a quarter spent proving "
-        "something once.",
- "next": "Chapter D2 shortens detect: detections for the two subjects that "
-         "matter, the loop that writes them, and the benign corpus that "
-         "decides whether any of them ship.",
+ "gained": "You can measure the discover interval instead of assuming it: four "
+           "sensor classes scored against what an agent actually does, drift "
+           "caught without a code change, and — as a bonus — the agents nobody "
+           "registered found on behaviour, with their traces kept per field.",
+ "gap": "Four of the nine ordinary agent actions are seen by nothing you own, "
+        "and the source that would see them lands nowhere. Everything here is a "
+        "finding in a notebook; the detect interval is exactly where it was.",
+ "next": "Chapter D2 builds the place it lands and the rules that read it: the "
+         "lake, tiered by the queries the SOC runs, and detections mapped to "
+         "ATT&CK and ATLAS.",
 },
 
 "D2": {
- "gained": "You can shorten detect for both subjects — what an agent does to "
-           "your estate and what happens to the platform running it — write "
-           "rules with a loop, score them against traffic that is not the "
-           "incident, and run the one detector that needs no threshold at all.",
+ "gained": "You can shorten detect: a lake tiered by the queries that read it "
+           "rather than by whoever holds the invoice, detections for both "
+           "subjects — the agent and the platform running it — each carrying a "
+           "MITRE technique, rules scored against traffic that is not the "
+           "incident, and the one detector that needs no threshold at all.",
  "gap": "A detection fires. It does not investigate. Understanding still costs "
         "an analyst's reading speed, and the obvious fix — hand an agent broad "
         "read across the estate — is frequently what the incident was.",
  "next": "Chapter D3 shortens understand, and spends part of it deliberately: "
-         "admission rules before anything runs, plans that survive "
-         "contradiction, and scope that follows the delegation graph.",
+         "admission rules before anything runs, scope along the delegation "
+         "graph, then intel and the hunt for what no rule covers.",
 },
 
 "D3": {
  "gained": "You can end the understand interval honestly: the investigator "
            "bounded before it starts, an alert carrying the fields agent triage "
            "needs, a trace where the first theory was abandoned in the open, "
-           "scope walked along the delegation graph, and coordination that only "
-           "exists in the population.",
+           "scope walked along the delegation graph, coordination that exists "
+           "only in the population, third-party intel that had to become a rule "
+           "to count, and a hunt scored on precision.",
  "gap": "You know what happened and you have not stopped it. Every lever you "
         "might pull is still chosen in the moment by whoever is awake, so the "
         "contain interval is whatever that person's night is like.",

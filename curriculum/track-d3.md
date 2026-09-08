@@ -1,15 +1,15 @@
-# Track D3 — Investigate — From an Alert to a Conclusion
+# Track D3 — Understand — Correlation, Intel and the Hunt
 
 **Function D · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Job titles:** Incident Responder, SOC Analyst, DFIR Lead
+**Job titles:** Incident Responder, SOC Analyst, DFIR Lead, Threat Hunter, Threat Intelligence Analyst
 
-**What changes:** An investigation an agent can run: bounded before it starts, given the fields an agent alert needs, willing to abandon its first theory in the open, scoped along the delegation graph, and finally widened to the population. 8 lessons.
+**What changes:** Understanding what happened and who is doing it: an investigation bounded before it starts, a trace where the first theory was abandoned in the open, scope along the delegation graph, correlation across the population, third-party intel that names the tactic, and a hunt for what no rule covers. 10 lessons.
 
 **Autonomy focus:** The investigating agent runs at L2.5 — broad read, bounded per investigation class, every refusal logged with its query.
 
-**Deliverable:** One agentic incident scoped end to end, with the abandoned branch still visible in the trace.
+**Deliverable:** One agentic incident understood end to end, plus one scored hunt with its hypothesis and population stated up front.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
@@ -204,5 +204,51 @@ python3 fleet_graph.py --signatures vocab,pivot,role
 ```
 
 *Expect:* Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.
+
+---
+
+### D3.9 — Third-party threat intelligence, and the tactics it names
+
+- **Risk** — Unsourced confidence in synthesis loops.
+- **Control** — Provenance discipline; refuse claims without a source.
+- **Lab** — Build a synthesis loop that must cite or abstain.
+- **Tools** — `MISP`, `OpenCTI`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Build a synthesis loop that must cite or abstain.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D3.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D3.9   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/d1-soc/intel
+docker compose up -d opencti
+python3 synthesise.py --topic 'agentic malware' --require-source --model $MODEL
+python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch confidence appear from nowhere
+```
+
+*Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
+
+---
+
+### D3.10 — Hunting in agent telemetry
+
+- **Risk** — Everything not covered by a rule is invisible, and the rules were written against last quarter's agent behaviour.
+- **Control** — A standing hunt over agent traces, hypothesis-first, whose confirmed findings graduate into detections rather than staying in a notebook.
+- **Lab** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
+- **Tools** — `OpenTelemetry`
+
+**Run it** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D3.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D3.10   # run it headless and check it
+```
+
+*Expect:* Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
 
 ---

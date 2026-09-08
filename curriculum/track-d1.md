@@ -1,21 +1,21 @@
-# Track D1 — Discover — Making the Actor Visible
+# Track D1 — Discover — the Sensors, and the Agent-Shaped Hole in Them
 
 **Function D · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Job titles:** SOC Analyst, Threat Hunter, Threat Intelligence Analyst, Security Data Engineer
+**Job titles:** SOC Analyst, Security Engineer, Cloud Security Engineer, Security Data Engineer
 
-**What changes:** What the SOC can see, before there is anything to see it in: agent telemetry onboarded deliberately, agents told apart from the humans they act for, intel that has to become a rule, drift that arrives without a code change, and a hunt that reports precision. 6 lessons.
+**What changes:** What already watches the estate — EDR, DLP, CSPM, CNAPP — what each sees when the actor is an agent, the drift that arrives without a code change, and a bonus on finding the agents nobody registered. 4 lessons.
 
-**Autonomy focus:** You watch an L2.5 fleet with a stack tuned for the tempo of a person, and the gap gets measured rather than asserted.
+**Autonomy focus:** You watch an L2.5 fleet with four products bought for L0 humans, and the uncovered column gets named rather than assumed.
 
-**Deliverable:** One hunt, scored: a stated hypothesis, the population it ran over, what it caught and what it cost.
+**Deliverable:** A sensor coverage matrix for your own estate, with the agent actions no sensor class covers listed by name.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### D1.0 — Start here — what an agentic SOC means
+### D1.0 — Start here — the agentic SOC, and the stack that runs it
 
 - **Risk** — A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.
 - **Control** — Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.
@@ -33,85 +33,16 @@ python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
 
 ---
 
-### D1.1 — Agent telemetry as a log source
+### D1.1 — The sensor estate — EDR, DLP, CSPM and CNAPP against an agent
 
-- **Risk** — Prompts, traces, tool calls and approvals never reach the SIEM.
-- **Control** — Onboard agent telemetry deliberately; decide retention.
-- **Lab** — Ship OTEL agent traces into OpenSearch and query them.
-- **Tools** — `OpenTelemetry`, `OpenSearch`
-
-**Run it** — Ship OTEL agent traces into OpenSearch and query them.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-docker compose up -d opensearch otel-collector
-OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 python3 ../m0-agent-loop/loop.py --task fix-tests
-curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply_patch"}}}' | jq '.hits.total'
-```
-
-*Expect:* Prompts, tool calls, decisions and spend queryable alongside your other log sources.
+- **Risk** — Four products are bought, the estate is assumed covered, and the agent's whole working day falls between them.
+- **Control** — A coverage matrix computed per sensor and per agent action, with the uncovered actions named rather than counted.
+- **Lab** — Score four sensor classes against nine real agent actions and read the column none of them covers.
+- **Tools** — `Wazuh`, `Prowler`, `Falco`
 
 ---
 
-### D1.2 — Distinguishing agent from human
-
-- **Risk** — Your earliest Shadow Autonomy signal is invisible.
-- **Control** — Behavioural signatures separating agent from inherited human.
-- **Lab** — Build the classifier on timing, sequencing and volume features.
-- **Tools** — `OpenSearch`
-- **Open-weight models** — `Llama 3.3`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Build the classifier on timing, sequencing and volume features.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl
-python3 agent_vs_human.py --classify live.jsonl
-```
-
-*Expect:* A working classifier — your earliest Shadow Autonomy signal.
-
----
-
-### D1.3 — Threat intelligence that becomes a detection
-
-- **Risk** — Unsourced confidence in synthesis loops.
-- **Control** — Provenance discipline; refuse claims without a source.
-- **Lab** — Build a synthesis loop that must cite or abstain.
-- **Tools** — `MISP`, `OpenCTI`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Build a synthesis loop that must cite or abstain.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc/intel
-docker compose up -d opencti
-python3 synthesise.py --topic 'agentic malware' --require-source --model $MODEL
-python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch confidence appear from nowhere
-```
-
-*Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
-
----
-
-### D1.4 — Drift monitoring — behaviour that changes without a code change
+### D1.2 — Drift monitoring — behaviour that changes without a code change
 
 - **Risk** — A detection that worked last month is silently degraded.
 - **Control** — Watch model updates, prompt changes, index refreshes, tool versions.
@@ -124,8 +55,8 @@ python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch co
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it
+jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
@@ -138,22 +69,27 @@ python3 drift_report.py
 
 ---
 
-### D1.5 — Hunting in agent telemetry
+### D1.3 — Bonus — finding the agents, and keeping what they emit
 
-- **Risk** — Everything not covered by a rule is invisible, and the rules were written against last quarter's agent behaviour.
-- **Control** — A standing hunt over agent traces, hypothesis-first, whose confirmed findings graduate into detections rather than staying in a notebook.
-- **Lab** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
-- **Tools** — `OpenTelemetry`
+- **Risk** — Prompts, traces, tool calls and approvals never reach the SIEM.
+- **Control** — Onboard agent telemetry deliberately; decide retention.
+- **Lab** — Ship OTEL agent traces into OpenSearch and query them.
+- **Tools** — `OpenTelemetry`, `OpenSearch`
 
-**Run it** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
+**Run it** — Ship OTEL agent traces into OpenSearch and query them.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.5   # run it headless and check it
+jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/d1-soc
+python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl
+python3 agent_vs_human.py --classify live.jsonl
 ```
 
-*Expect:* Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
+*Expect:* A working classifier — your earliest Shadow Autonomy signal.
 
 ---
 

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.1 — Agent telemetry as a log source | Cyber Commons</title><meta name="description" content="Onboard agent telemetry deliberately; decide retention."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Discover — Making the Actor Visible</div><div class="sid">D1.1</div><h1>Agent telemetry as a log source</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Prompts, traces, tool calls and approvals never reach the SIEM.</p></div><div class="ctrl"><div class="lab">Control</div><p>Onboard agent telemetry deliberately; decide retention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Ship OTEL agent traces into OpenSearch and query them.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/agent-telemetry-retention/scripts/agent_telemetry_retention.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.1 · Agent telemetry as a log source</h1>
-<p><strong>Function D — The Agentic SOC → Discover — Making the Actor Visible</strong></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.0.html">D1.0 · Start here — what an agentic SOC means</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.1 — The sensor estate — EDR, DLP, CSPM and CNAPP against an agent | Cyber Commons</title><meta name="description" content="A coverage matrix computed per sensor and per agent action, with the uncovered actions named rather than counted."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Discover — the Sensors, and the Agent-Shaped Hole in Them</div><div class="sid">D1.1</div><h1>The sensor estate — EDR, DLP, CSPM and CNAPP against an agent</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Four products are bought, the estate is assumed covered, and the agent&#x27;s whole working day falls between them.</p></div><div class="ctrl"><div class="lab">Control</div><p>A coverage matrix computed per sensor and per agent action, with the uncovered actions named rather than counted.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Score four sensor classes against nine real agent actions and read the column none of them covers.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/sensor-coverage-matrix/scripts/sensor_coverage_matrix.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent</h1>
+<p><strong>Function D — The Agentic SOC → Discover — the Sensors, and the Agent-Shaped Hole in Them</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.0.html">D1.0 · Start here — the agentic SOC, and the stack that runs it</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,171 +11,192 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>OpenTelemetry, OpenSearch</td>
+<td>Wazuh, Prowler, Falco</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Ship OTEL agent traces into OpenSearch and query them.</p>
-<p><strong>Why a security engineer needs it.</strong> Prompts, traces, tool calls and approvals never reach the SIEM. The control it builds is: onboard agent telemetry deliberately; decide retention.</p>
+<p><strong>What it covers.</strong> Scoring the four sensor classes an estate already owns — EDR, DLP, CSPM, CNAPP — against nine things an agent does in an ordinary day, and reading the actions no class sees at all.</p>
+<p><strong>Why a security engineer needs it.</strong> "We already have visibility" is the most common answer to an agent detection roadmap and it is answerable with a matrix rather than an opinion. The distinction that makes it honest is visibility rather than alerting: a sensor that is not in the path cannot be tuned into one that is, so the uncovered rows are an architecture finding and not a backlog item.</p>
 <p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>You cannot detect on telemetry that was never emitted. Prompts, tool calls, decisions and identities are the four things an agent has to emit to be observable at all — and none of them appear in a standard application log.</p>
+<p>Four security products already watch the estate and every one of them was bought for a person on a host. Score them against what an agent actually does and four of its nine ordinary actions are seen by nothing at all — not seen badly, not alerted on late, simply outside the field of view.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> You cannot detect on what CyberTravels never emitted. Prompts, tool calls, decisions and identities are the four things missing from every application log CyberTravels has. R10, R11.</p>
+<p><strong>At CyberTravels.</strong> CyberTravels bought all four before it shipped an agent, and all four still work. What none of them is in the path of is the Workflow Agent reading a booking through the internal API, putting it in a prompt, calling the vendor MCP server and issuing the refund — which is the entire incident, start to finish, invisible to the estate's whole security stack.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   what an agent must emit to be observable at all
+<pre><code>   what already watches the estate      what an agent does
 
-   +------------+  +-------------+  +-----------+  +------------+
-   |  prompts   |  | tool calls  |  | decisions |  | identities |
-   +------------+  +-------------+  +-----------+  +------------+
-        |               |                |              |
-        +---------------+----------------+--------------+
-                                v
-                   none of this is in an application log
-                   retention is expensive and the cost is real
+   EDR    Wazuh agent          -----&gt; writes a file        ##
+   CNAPP  Falco + Trivy        -----&gt; spawns a child       ##
+   EDR    (partial)            -----&gt; opens TLS to a model ..
+   CSPM   Prowler              -----&gt; assumes an IAM role  ..
+   DLP    regex + FIM          -----&gt; exfil to allowed SaaS ..
+
+                                      reads a customer record
+                                      puts it in a prompt
+                                      calls a vendor MCP tool     &lt;- NOTHING
+                                      issues a refund
+
+   the four uncovered rows are not badly tuned. no sensor class
+   is in the path. they all happen inside the reasoning loop, or
+   behind an API the host never observes.
 </code></pre>
-<p>Agent telemetry has a property no other log source has: it contains the
-<strong>reasoning</strong>, not just the action. The trace records what the agent was trying
-to do, what it considered, and what the verifier said.</p>
-<p>That is enormously useful for investigation and it is a retention and privacy
-problem, because reasoning traces contain whatever was in the context window —
-which routinely includes customer data, source code and secrets that were read
-legitimately.</p>
-<p>So retention has to be decided <strong>per field</strong>, not per record:</p>
+<p>Nobody starts an agentic SOC from nothing. Four classes of sensor are already
+deployed, already paid for, and already producing alerts:</p>
 <table>
 <thead>
 <tr>
-<th>Field</th>
-<th>Forensic value</th>
-<th>Sensitivity</th>
+<th>class</th>
+<th>what it watches</th>
+<th>open-source reference</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>timestamps, tool, target</td>
-<td>high</td>
-<td>low</td>
+<td><strong>EDR</strong></td>
+<td>processes, files and network on a host</td>
+<td>Wazuh agent</td>
 </tr>
 <tr>
-<td>verifier detail</td>
-<td>high</td>
-<td>low</td>
+<td><strong>DLP</strong></td>
+<td>sensitive content leaving a monitored channel</td>
+<td>regex + file integrity monitoring</td>
 </tr>
 <tr>
-<td>acting identity + chain</td>
-<td>high</td>
-<td>low</td>
+<td><strong>CSPM</strong></td>
+<td>cloud configuration, evaluated on a schedule</td>
+<td>Prowler, ScoutSuite</td>
 </tr>
 <tr>
-<td>model prompts</td>
-<td>medium</td>
-<td><strong>high</strong></td>
-</tr>
-<tr>
-<td>tool results</td>
-<td>high</td>
-<td><strong>high</strong></td>
+<td><strong>CNAPP</strong></td>
+<td>container runtime and image contents</td>
+<td>Falco, Trivy</td>
 </tr>
 </tbody>
 </table>
-<p>The first three are cheap and should be kept long. The last two are where the
-retention conversation actually is.</p>
+<p>All four work. The question is not whether they are good — it is <strong>which parts
+of an agent's working day they are in the path of at all.</strong></p>
+<p>That is a matrix, and it is worth building before a roadmap rather than after,
+because the answer decides whether the next quarter is spent tuning or spent
+building a source that does not exist yet.</p>
+<p>The distinction that makes the matrix honest is <strong>visibility, not alerting</strong>.
+"Would this fire" is a tuning question. "Is this sensor in the path" is a fact
+about architecture, and a sensor that is not in the path cannot be tuned into
+one that is.</p>
+<p>Read the uncovered rows rather than the percentage. If they are arbitrary, tune.
+If they share a property — every one inside the reasoning loop, or behind an API
+the host never observes — then a fifth product of the same four kinds will not
+move them.</p>
 <blockquote>
-<p><strong>Anchor → D1.0.</strong> Every interval in D1.0's table is measured on telemetry, so this lesson sets the floor for all five: on data that was never emitted, discover does not take a long time — it never completes. The retention decision is the same argument, backwards: it fixes how far into the past an investigation is allowed to reach.</p>
+<p><strong>Anchor → D1.0.</strong> Discover has a floor, and this lesson measures it. Four of the nine actions have no sensor in their path at all, so for those the interval is not long — it is undefined, and no amount of tuning the four products you own changes that.</p>
 </blockquote></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The run record contains a payment-card pattern, in a source file the agent read legitimately. The skill scans every field, then sets retention per field so timestamps and verdicts survive for 400 days and prompts do not survive 30.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-telemetry-retention/SKILL.md"><code>skills/detection/agent-telemetry-retention/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: agent-telemetry-retention
+<p>The skill scores four sensor classes against nine things CyberTravels' agents do in an ordinary day, takes the union per row rather than summing the columns, and prints the actions no class sees at all.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/sensor-coverage-matrix/SKILL.md"><code>skills/detection/sensor-coverage-matrix/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: sensor-coverage-matrix
 description: &gt;-
-  Scan an agent's run record for sensitive content it read legitimately, then
-  set retention per field rather than per record so the investigable parts
-  survive and the prompts do not. Use when agent telemetry is being kept,
-  discarded, or argued about with privacy.
+  Score the sensor classes an estate already owns — EDR, DLP, CSPM, CNAPP —
+  against what an agent actually does, and name the actions no sensor sees. Use
+  before buying detection tooling for an agent estate, or when someone claims
+  the estate is already covered.
 allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>The agent read a card number because you asked it to</h1>
-<p>An agent run record is the richest telemetry in the estate and the most
-dangerous to keep whole. The content it read — source files, tickets, documents
-— lands in the record, so the record inherits every classification the source
-had. Per-record retention forces a choice between losing the investigation and
-keeping the data; per-field does not.</p>
+<h1>Coverage is a column, not a percentage</h1>
+<p>Every estate that runs agents already owns four classes of sensor, bought for
+people and hosts. The question is not whether they work — they do, at what they
+were built for — but which parts of an agent's working day are inside their
+field of view at all.</p>
+<p>Answer it as a matrix and one number falls out that no product page will give
+you: the actions seen by <strong>nothing</strong>.</p>
 <h2>When to use this</h2>
-<p>Before agent telemetry is retained at scale, and whenever a retention policy is
-being written by someone who has not read a run record.</p>
+<p>Before a detection roadmap, before a tooling purchase, and any time "we already
+have visibility" is offered as an answer about an agent estate.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Read one full record.</strong> Every step, every field. This is the step people
-skip, and it is where the payment-card pattern in a legitimately-read source
-file turns up.</p>
-<p><strong>2 — Scan for sensitive patterns across all fields.</strong> Card numbers, keys,
-personal data, health terms. Record which field carried each hit — prompts and
-tool results are the usual answer.</p>
-<p><strong>3 — Classify fields by investigative value.</strong> Timestamps, tool name, target
-and verifier verdict answer most investigation questions. Prompts and raw tool
-output answer few and carry most of the risk.</p>
-<p><strong>4 — Set retention per field.</strong> Long for the structural fields, short for the
-content ones. Then age a record and check what an investigation could still do
-with it — that check is what makes the policy defensible.</p>
-<p><strong>5 — State what is lost.</strong> A short prompt retention means you cannot re-derive
-motivation after that window. Say so, rather than discovering it in an incident.</p>
-<h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_telemetry_retention.py"><code>scripts/agent_telemetry_retention.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
-<p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>full record (everything the harness saw):
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
-    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
-    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
-sensitive content found in the trace:
-   step 1  result   payment card
+<p><strong>1 — List the sensor classes you own, with the product behind each.</strong> Naming
+the product keeps the conversation checkable. The open-source references are
+Wazuh for EDR, regex plus file integrity monitoring for the DLP that most teams
+actually have, Prowler or ScoutSuite for CSPM, and Falco plus Trivy for CNAPP.</p>
+<p><strong>2 — List what the agents do, not what you fear.</strong> An ordinary day: files
+written, an outbound session to a model API, a customer record read through an
+internal API, tokens placed in a prompt, a vendor tool called, money moved, a
+role assumed, a child process spawned.</p>
+<p><strong>3 — Score each cell as full, partial or none — on visibility, not alerting.</strong>
+"Would this sensor alert" is a tuning question and comes later. "Is this sensor
+in the path" is a fact about architecture, and it is the one that decides
+whether tuning is even possible.</p>
+<p><strong>4 — Read the uncovered rows, and read what they have in common.</strong> If the
+uncovered set is arbitrary, tune. If it is coherent — every action inside the
+reasoning loop, or behind an API the host never observes — then a fifth product
+of the same four kinds will not move it, and the answer is a new source rather
+than a better rule.</p>
+<h2>What it prints</h2>
+<pre><code>per-sensor coverage of the agent's day
+  EDR     3.0 / 9   33%
+  DLP     0.5 / 9   6%
+  CSPM    0.5 / 9   6%
+  CNAPP   3.0 / 9   33%
 
-Nobody put a card number in the trace deliberately. The agent read a
+  best single sensor   EDR
+  all four combined    3.5 / 9   39%
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code>
+executes it on every build, so this block cannot drift from what the skill
+actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;record&quot;: {&quot;steps&quot;: 0, &quot;fields&quot;: [&quot;str&quot;]},
-  &quot;scan&quot;: [{&quot;pattern&quot;: &quot;str&quot;, &quot;field&quot;: &quot;str&quot;, &quot;legitimate_source&quot;: &quot;str&quot;}],
-  &quot;retention&quot;: [{&quot;field&quot;: &quot;str&quot;, &quot;days&quot;: 0, &quot;investigative_value&quot;: &quot;high|low&quot;}],
-  &quot;aged_record&quot;: {&quot;age_days&quot;: 0, &quot;questions_still_answerable&quot;: [&quot;str&quot;], &quot;lost&quot;: [&quot;str&quot;]}
+  &quot;sensors&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;product&quot;: &quot;str&quot;, &quot;sees&quot;: &quot;str&quot;}],
+  &quot;actions&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;coverage&quot;: {&quot;EDR&quot;: &quot;full|partial|none&quot;}}],
+  &quot;per_sensor&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;score&quot;: 0.0, &quot;of&quot;: 0}],
+  &quot;combined&quot;: {&quot;score&quot;: 0.0, &quot;of&quot;: 0},
+  &quot;uncovered&quot;: [&quot;str&quot;]
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Retaining or discarding whole records.</strong> Both answers are wrong.</li>
-<li><strong>Scanning prompts only.</strong> Tool results carry the same content.</li>
-<li><strong>Not stating what the short windows lose.</strong> That is the trade being made.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>full record (everything the harness saw):
-    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result&#x27;: &#x27;def charge(card_number, amount):  # card_number = 4111111111111111&#x27;}
-    {&#x27;n&#x27;: 2, &#x27;tool&#x27;: &#x27;search_code&#x27;, &#x27;target&#x27;: &#x27;charge(&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;find callers of charge()&#x27;, &#x27;result&#x27;: &#x27;api/checkout.py:88 charge(user.card, total)&#x27;}
-    {&#x27;n&#x27;: 3, &#x27;tool&#x27;: &#x27;write_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;tests pass&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;apply the fix&#x27;, &#x27;result&#x27;: &#x27;patch applied&#x27;}
-sensitive content found in the trace:
-   step 1  result   payment card
+<li><strong>Scoring alerting rather than visibility.</strong> A sensor that is not in the path
+  cannot be tuned into one that is.</li>
+<li><strong>Summing the columns.</strong> Four sensors covering the same three actions is
+  still three actions; take the union per row, which is what the script does.</li>
+<li><strong>Reporting the combined percentage alone.</strong> 39% sounds like a tuning problem.
+  The four named rows are the finding.</li>
+<li><strong>Treating a partial as a full.</strong> Seeing a TLS session open is not seeing what
+  crossed it.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the sensor estate, as bought
+  EDR    Wazuh agent            process, file and network activity on a host
+  DLP    regex + Wazuh FIM      sensitive content leaving a monitored channel
+  CSPM   Prowler / ScoutSuite   cloud configuration, evaluated periodically
+  CNAPP  Falco + Trivy          container runtime syscalls and image contents
 
-Nobody put a card number in the trace deliberately. The agent read a
-source file, and the file contained a test fixture with a real-shaped PAN.
-The trace is now in scope for PCI, and it is in your SIEM for 400 days.
-field       days  sensitivity  rationale
---------------------------------------------------------------------------
-n            400          low  cheap, high forensic value
-tool         400          low  cheap, high forensic value
-target       400          low  path only, no contents
-verifier     400          low  what the harness believed — the key forensic field
-ok           400          low  
-prompt        30         high  may contain anything the task included
-result         7         high  tool output — the highest-risk field
+coverage of what the agents actually do  (## full  .. partial  blank none)
 
-after 1 days — step 1 record:
-    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result&#x27;: &#x27;def charge(card_number, amount):  # card_number = 4111111111111111&#x27;}
+  action                                          EDR    DLP    CSPM   CNAPP
+  write a file into the agent workdir             ##                   ##   
+  open an outbound TLS session to a model API     ..                   ..   
+  read a customer record through an internal API                            
+  place 900 tokens of that record in a prompt                               
+  call a vendor MCP tool                                                    
+  issue a refund through the payments API                                   
+  assume a wider IAM role                                       ..          
+  spawn a child agent process                     ##                   ##   
+  exfiltrate to an allowed SaaS domain            ..     ..            ..   
 
-after 14 days — step 1 record:
-    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result_sha256&#x27;: &#x27;b0e3ecafa7e7a9a0&#x27;}
+per-sensor coverage of the agent&#x27;s day
+  EDR     3.0 / 9   33%
+  DLP     0.5 / 9   6%
+  CSPM    0.5 / 9   6%
+  CNAPP   3.0 / 9   33%
 
-after 90 days — step 1 record:
-    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt_sha256&#x27;: &#x27;60d7bceb0de1a7bd&#x27;, &#x27;result_sha256&#x27;: &#x27;b0e3ecafa7e7a9a0&#x27;}
-sensitive content after 90 days: none
-can still answer &#x27;what did it do and what did the harness believe?&#x27;: True
+  best single sensor   EDR
+  all four combined    3.5 / 9   39%
 
-The hash is retained, so if the original is recovered from a backup you
-can still prove it is the same content the agent saw.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The full record contains a payment-card pattern found in a source file the agent read legitimately. Per-field retention keeps timestamps, tool, target and verifier for 400 days while dropping prompts at 30 days and tool results at 7, replacing them with hashes. After 90 days no sensitive content remains and the record can still answer what the agent did and what the harness believed.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Check the retention period on your agent traces. If it is the same as your firewall logs, one of those two numbers was chosen without anyone looking at what the traces contain.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Distinguishing agent from human</a></strong></p>
+4 of 9 actions are seen by NO sensor class:
+  - read a customer record through an internal API
+  - place 900 tokens of that record in a prompt
+  - call a vendor MCP tool
+  - issue a refund through the payments API
+
+note what they have in common: every one of them happens inside the
+agent&#x27;s reasoning loop or behind an API the host never observes.
+buying a fifth product of the same four kinds does not move this column.
+D1.3 is the source that does, and D2.1 is where it has to land.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>EDR and CNAPP each cover about a third of the agent's day, DLP and CSPM almost none of it, and all four combined still leave four of the nine actions seen by nothing: reading a customer record through an internal API, placing it in a prompt, calling a vendor MCP tool, and issuing a refund. Those four share a property, and it is the argument for D1.3 and D2.1 rather than for a fifth product.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Build the same matrix for your estate with your own actions in the rows. The number that matters is not the percentage — it is whether the uncovered rows have something in common.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Drift monitoring — behaviour that changes without a code change</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Prompts, tool calls, decisions and spend queryable alongside your other log sources.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.1.ipynb</code></p></div><div class="pager"><a href="D1.0.html"><span class="k">← Previous</span><span class="t">D1.0 · Start here — what an agentic SOC means</span></a><a class="next" href="D1.2.html"><span class="k">Next →</span><span class="t">D1.2 · Distinguishing agent from human</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><p class="sub toolslab">Tools used</p><div class="chips"><span>Wazuh</span><span>Prowler</span><span>Falco</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.1.ipynb</code></p></div><div class="pager"><a href="D1.0.html"><span class="k">← Previous</span><span class="t">D1.0 · Start here — the agentic SOC, and the stack that runs it</span></a><a class="next" href="D1.2.html"><span class="k">Next →</span><span class="t">D1.2 · Drift monitoring — behaviour that changes without a code change</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

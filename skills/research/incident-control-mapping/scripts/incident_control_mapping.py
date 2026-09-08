@@ -18,7 +18,7 @@ REGISTER = [
  ("C1.1",  "out-of-band telemetry capture",         "P/D", "AU-9",  "A2.8"),
  ("C1.2",  "hash-chained WORM transcript store",    "P",   "AU-10", "A2.8"),
  ("C1.3",  "logging-plane isolation",               "P",   "SC-39", "A2.8"),
- ("C1.4",  "escape detection",                      "D",   "SI-7",  "D2.2"),
+ ("C1.4",  "escape detection",                      "D",   "SI-7",  "D2.3"),
  ("C2.1",  "per-run namespace isolation",           "P",   "SC-4",  "A3.8"),
  ("C2.2",  "immutable / write-once artifact cache", "P",   "AC-4",  "A3.8"),
  ("C2.3",  "covert channel analysis",               "D",   "SC-31", "D3.8"),
@@ -26,18 +26,18 @@ REGISTER = [
  ("C3.1",  "parser sandboxing",                     "P",   "SI-3",  "A3.2"),
  ("C3.2",  "credential removal from workers",       "P",   "AC-6",  "A2.4"),
  ("C3.3",  "micro-segmentation, default-deny egress","P",  "SC-7",  "A3.3"),
- ("C3.4",  "dataset and upload content scanning",   "D",   "SI-10", "D2.2"),
- ("C4.1",  "secret scanning, automated revocation", "D/C", "IA-5",  "D2.2"),
+ ("C3.4",  "dataset and upload content scanning",   "D",   "SI-10", "D2.3"),
+ ("C4.1",  "secret scanning, automated revocation", "D/C", "IA-5",  "D2.3"),
  ("C4.2",  "short-lived workload credentials",      "P",   "IA-5",  "A2.4"),
  ("C4.3",  "scope minimisation",                    "P",   "AC-6",  "A2.3"),
- ("C4.4",  "credential canaries",                   "D",   "SI-4",  "D2.5"),
+ ("C4.4",  "credential canaries",                   "D",   "SI-4",  "D2.6"),
  ("C5.1",  "artifact signing verified at pull",     "P",   "SR-11", "A3.8"),
  ("C5.2",  "provenance attestation",                "P",   "SR-4",  "A3.8"),
  ("C5.3",  "admin-plane separation, JIT elevation", "P/D", "AC-6",  "A3.8"),
- ("C5.4",  "cache integrity diffing",               "D",   "SI-7",  "D2.2"),
+ ("C5.4",  "cache integrity diffing",               "D",   "SI-7",  "D2.3"),
  ("C6.1",  "control-exemption gate",                "P",   "CM-3",  "A3.9"),
  ("C6.2",  "mandatory blast-radius caps",           "P",   "RA-3",  "A3.9"),
- ("C6.3",  "continuous exemption-state monitoring", "D/C", "CA-7",  "D2.2"),
+ ("C6.3",  "continuous exemption-state monitoring", "D/C", "CA-7",  "D2.3"),
  ("C6.4",  "exemption register at launch approval", "P",   "PM-9",  "A3.9"),
  ("C7.1",  "authenticated principal hierarchy",     "P",   "IA-9",  "A2.6"),
  ("C7.2",  "channel separation",                    "P",   "AC-3",  "A2.6"),
@@ -53,7 +53,7 @@ REGISTER = [
  ("C9.4",  "mandatory HITL checkpoint on discovery","P",   "AC-3",  "A3.10"),
  ("C10.1", "cheat-surface red team",                "P",   "SA-11", "C1.2"),
  ("C10.2", "explicit abstain affordance",           "P",   "SA-8",  "A3.10"),
- ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "D2.5"),
+ ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "D2.6"),
  ("C10.4", "scorer integrity separation",           "P",   "SC-7",  "A3.8"),
 ]
 
@@ -95,7 +95,7 @@ for f in sorted(by_fn):
     print(f"{f:10s}{by_fn[f]:>9}  {FUNCTION[f]}")
 
 print()
-new = {"A2.8", "A3.8", "A3.9", "A3.10", "D2.5", "C1.2", "D2.2", "D3.8", "D4.5"}
+new = {"A2.8", "A3.8", "A3.9", "A3.10", "D2.6", "C1.2", "D2.3", "D3.8", "D4.5"}
 existing = sorted({c[4] for c in REGISTER} - new)
 print(f"controls landing on lessons that already existed: "
       f"{sum(1 for c in REGISTER if c[4] in existing)}")

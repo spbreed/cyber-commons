@@ -20,8 +20,8 @@ INCIDENT = {
 CHAIN = [
     ("A2.6", "provenance marking at ingress",            "absent"),
     ("A3.1", "default-deny on the tool call",            "present-but-scoped-wrong"),
-    ("D2.3", "detection on refund without approval",     "absent"),
-    ("D1.4", "drift monitor on vendor tool descriptions", "absent"),
+    ("D2.4", "detection on refund without approval",     "absent"),
+    ("D1.2", "drift monitor on vendor tool descriptions", "absent"),
     ("D4.4", "stop authority within the refund window",  "present"),
 ]
 
@@ -78,4 +78,4 @@ print("factor - it is evidence that the detection in front of it was the gap.")
 
 assert len(accepted) == 1
 assert report["root_control"] == "A2.6"
-assert "D2.3" in report["contributing"]
+assert "D2.4" in report["contributing"]

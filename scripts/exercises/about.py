@@ -619,7 +619,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.3": """
+"D2.4": """
 **What it covers.** Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 
 **Why a security engineer needs it.** Coverage gaps nobody mapped. The control it builds is: detection-as-code with agents inside the CI loop.
@@ -627,7 +627,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.1": """
+"D2.2": """
 **What it covers.** Write five detections for agent misbehaviour and fire each one.
 
 **Why a security engineer needs it.** Scope drift, unusual tool sequencing, off-hours autonomous action. The control it builds is: detections whose subject is a non-human principal.
@@ -635,23 +635,31 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.1": """
-**What it covers.** Ship OTEL agent traces into OpenSearch and query them.
+"D1.3": """
+**What it covers.** Two halves of one job: scoring actors on timing, sequencing and volume to find the agents that are in no registry, then deciding per-field retention on the traces you inherit once you keep them.
 
-**Why a security engineer needs it.** Prompts, traces, tool calls and approvals never reach the SIEM. The control it builds is: onboard agent telemetry deliberately; decide retention.
+**Why a security engineer needs it.** Shadow autonomy is invisible to a stack that reads an agent as the person whose credential it holds, and the threshold that finds it is set by cost rather than accuracy — a flagged human costs half an analyst-hour, a missed agent costs forty. The trace you then hold is the most useful log source you have and the most sensitive, because it carries the reasoning and whatever was in the context window.
+
+This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
+""",
+
+"D1.1": """
+**What it covers.** Scoring the four sensor classes an estate already owns — EDR, DLP, CSPM, CNAPP — against nine things an agent does in an ordinary day, and reading the actions no class sees at all.
+
+**Why a security engineer needs it.** "We already have visibility" is the most common answer to an agent detection roadmap and it is answerable with a matrix rather than an opinion. The distinction that makes it honest is visibility rather than alerting: a sensor that is not in the path cannot be tuned into one that is, so the uncovered rows are an architecture finding and not a backlog item.
+
+This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
+""",
+
+"D2.1": """
+**What it covers.** Deriving a storage tier for each telemetry source from the fastest query that reads it, and pricing that against indexing everything hot.
+
+**Why a security engineer needs it.** The lake is designed twice — once on a whiteboard and once when the invoice arrives — and the second design is made by somebody with no information about what the SOC asks. Deriving the tier from the queries collapses that into one decision, and it is what keeps agent prompts alive: they are the biggest source, read by one query that can wait hours, and the first line cut when nobody has priced them properly.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
 "D1.2": """
-**What it covers.** Build the classifier on timing, sequencing and volume features.
-
-**Why a security engineer needs it.** Your earliest Shadow Autonomy signal is invisible. The control it builds is: behavioural signatures separating agent from inherited human.
-
-This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
-""",
-
-"D1.4": """
 **What it covers.** Change the model underneath and catch the detection regression.
 
 **Why a security engineer needs it.** A detection that worked last month is silently degraded. The control it builds is: watch model updates, prompt changes, index refreshes, tool versions.
@@ -659,7 +667,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.3": """
+"D3.9": """
 **What it covers.** Build a synthesis loop that must cite or abstain.
 
 **Why a security engineer needs it.** Unsourced confidence in synthesis loops. The control it builds is: provenance discipline; refuse claims without a source.
@@ -667,7 +675,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.2": """
+"D2.3": """
 **What it covers.** Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
 
 **Why a security engineer needs it.** Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside. The control it builds is: named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
@@ -683,7 +691,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.5": """
+"D2.6": """
 **What it covers.** Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
 
 **Why a security engineer needs it.** Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned. The control it builds is: canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).

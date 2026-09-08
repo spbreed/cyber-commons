@@ -189,7 +189,7 @@
    "name": "Escape detection",
    "type": "D",
    "nist": "SI-7",
-   "lesson": "D2.2"
+   "lesson": "D2.3"
   },
   {
    "id": "C2.1",
@@ -245,14 +245,14 @@
    "name": "Dataset and upload content scanning",
    "type": "D",
    "nist": "SI-10",
-   "lesson": "D2.2"
+   "lesson": "D2.3"
   },
   {
    "id": "C4.1",
    "name": "Secret scanning with automated revocation",
    "type": "D/C",
    "nist": "IA-5",
-   "lesson": "D2.2"
+   "lesson": "D2.3"
   },
   {
    "id": "C4.2",
@@ -273,7 +273,7 @@
    "name": "Credential canaries",
    "type": "D",
    "nist": "SI-4",
-   "lesson": "D2.5"
+   "lesson": "D2.6"
   },
   {
    "id": "C5.1",
@@ -301,7 +301,7 @@
    "name": "Cache integrity diffing",
    "type": "D",
    "nist": "SI-7",
-   "lesson": "D2.2"
+   "lesson": "D2.3"
   },
   {
    "id": "C6.1",
@@ -322,7 +322,7 @@
    "name": "Continuous exemption-state monitoring",
    "type": "D/C",
    "nist": "CA-7",
-   "lesson": "D2.2"
+   "lesson": "D2.3"
   },
   {
    "id": "C6.4",
@@ -434,7 +434,7 @@
    "name": "Honeypot and canary tasks",
    "type": "D",
    "nist": "RA-5",
-   "lesson": "D2.5"
+   "lesson": "D2.6"
   },
   {
    "id": "C10.4",

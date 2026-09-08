@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.0 — Start here — what an agentic SOC means | Cyber Commons</title><meta name="description" content="Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Discover — Making the Actor Visible</div><div class="sid">D1.0</div><h1>Start here — what an agentic SOC means</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.</p></div><div class="ctrl"><div class="lab">Control</div><p>Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put one agent trace and one human session side by side and list what separates them.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.0 · Start here — what an agentic SOC means</h1>
-<p><strong>Function D — The Agentic SOC → Discover — Making the Actor Visible</strong></p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.0 — Start here — the agentic SOC, and the stack that runs it | Cyber Commons</title><meta name="description" content="Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Discover — the Sensors, and the Agent-Shaped Hole in Them</div><div class="sid">D1.0</div><h1>Start here — the agentic SOC, and the stack that runs it</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.</p></div><div class="ctrl"><div class="lab">Control</div><p>Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put one agent trace and one human session side by side and list what separates them.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.0 · Start here — the agentic SOC, and the stack that runs it</h1>
+<p><strong>Function D — The Agentic SOC → Discover — the Sensors, and the Agent-Shaped Hole in Them</strong></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.10.html">C2.10 · Case study — the Supabase pattern: open until closed</a></strong>.</p>
 <table>
 <thead>
@@ -94,37 +94,137 @@ control that stopped it being back at target:</p>
 </table>
 <p>Every lesson in this function shortens one of those five, or spends one
 deliberately to buy something else — and each says which, in a line under its
-own concept. That is the whole structure, and it is worth stating plainly
-because the intervals are where the numbers live. CyberTravels' detection
-interval is 194 minutes against a 15-minute target. Its manual containment
+own concept. The intervals are where the numbers live: CyberTravels' detection
+interval is 194 minutes against a 15-minute target, and its manual containment
 runbook finishes in 34 minutes against a measured breakout time of 29. Neither
 of those is an opinion about tooling.</p>
-<p><strong>Chapter D1 — discover.</strong> Telemetry as a real log source, because you cannot
-detect on what was never emitted; agent told from human when both hold Alex's
-authority; intel that has to become a rule; drift, the failure with no adversary
-at all; and a hunt for behaviour no rule was written for.</p>
-<p><strong>Chapter D2 — detect.</strong> Detections for two subjects that are not the same
-subject — what an agent does to your estate, and what happens to the platform
-running it — plus the loop that writes rules, the benign corpus that decides
-whether they ship, and the one detector that needs no threshold.</p>
-<p><strong>Chapter D3 — investigate.</strong> An investigation an agent can run: bounded before
-it starts, given the fields an agent alert needs, willing to abandon its first
-theory in the open, scoped along the delegation graph, and finally widened from
-one run to the population.</p>
-<p><strong>Chapter D4 — respond.</strong> A response whose blast radius is known before it
-fires. Actions classified on reversibility and radius, tiers derived from that
-rather than from their author, containment timed against the attacker, and a
-fleet stop that revokes as well as terminates.</p>
-<p><strong>Chapter D5 — recover and root cause.</strong> A run you can reproduce, a root cause
-that names a control rather than a person, the fix put at the layer it belongs
-in, the indicators re-measured to see which actually came back — and a
-regulatory clock that started before anyone knew.</p>
+<h3>The stack that runs it</h3>
+<p>Nothing in this function needs a product you do not have. Every phase below has
+a working open-source reference, and the lessons are written against these
+rather than against a vendor's diagram — so you can build the whole thing and
+find out what it does not cover, which is the part that matters.</p>
+<table>
+<thead>
+<tr>
+<th>phase</th>
+<th>what has to exist</th>
+<th>open source that does it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>discover</strong></td>
+<td>endpoint and workload sensing</td>
+<td><strong>Wazuh</strong> (agent, manager, indexer)</td>
+</tr>
+<tr>
+<td></td>
+<td>cloud posture, on a schedule</td>
+<td><strong>Prowler</strong>, <strong>ScoutSuite</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>container runtime and image contents</td>
+<td><strong>Falco</strong>, <strong>Trivy</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>sensitive content in motion</td>
+<td>regex plus Wazuh file integrity monitoring</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>agent</strong> traces — prompts, tools, decisions</td>
+<td><strong>OpenTelemetry</strong>, instrumented at the gateway</td>
+</tr>
+<tr>
+<td><strong>detect</strong></td>
+<td>somewhere for all of it to land</td>
+<td><strong>OpenSearch</strong> (or the Wazuh indexer)</td>
+</tr>
+<tr>
+<td></td>
+<td>rules, portable and reviewable</td>
+<td><strong>Sigma</strong>, mapped to <strong>ATT&amp;CK</strong> and <strong>ATLAS</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>deception with no threshold</td>
+<td>canary tokens and honeypot tasks you write</td>
+</tr>
+<tr>
+<td><strong>understand</strong></td>
+<td>third-party intelligence</td>
+<td><strong>MISP</strong>, <strong>OpenCTI</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>correlation and hunting</td>
+<td>notebooks over the lake</td>
+</tr>
+<tr>
+<td></td>
+<td>case management</td>
+<td><strong>TheHive</strong>, enrichment via <strong>Cortex</strong></td>
+</tr>
+<tr>
+<td><strong>respond</strong></td>
+<td>orchestration and runbooks</td>
+<td><strong>Shuffle</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>revocation</td>
+<td>your own IdP and gateway, driven from the runbook</td>
+</tr>
+<tr>
+<td><strong>recover</strong></td>
+<td>host and memory forensics</td>
+<td><strong>Velociraptor</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>run replay</td>
+<td>the harness from B2.1, pinned per D5.1</td>
+</tr>
+</tbody>
+</table>
+<p>Two honest notes about that table.</p>
+<p><strong>The DLP row is the weakest.</strong> There is no open-source DLP with the maturity of
+the other three, which is why the row names a pattern rather than a product —
+and why D1.1 scores DLP at almost no coverage of an agent's day. That is a real
+finding about the market, not a gap in the reading.</p>
+<p><strong>The agent-telemetry row does not exist in any of the products.</strong> Wazuh will
+tell you a process wrote a file. Nothing in the list tells you which prompt
+caused it. That row is instrumentation you write, it lands in the lake D2.1
+designs, and its absence is what D1.1 measures.</p>
+<h3>The five chapters</h3>
+<p><strong>D1 — discover.</strong> The four sensor classes you already own, scored against what
+an agent actually does; drift, the failure with no adversary at all; and a bonus
+on finding the agents nobody registered and keeping what they emit.</p>
+<p><strong>D2 — detect.</strong> The lake every rule is written against, then detections for two
+subjects that are not the same subject — the agent, and the platform running it
+— mapped to ATT&amp;CK and ATLAS, plus the loop that writes rules, the benign corpus
+that decides whether they ship, and the one detector that needs no threshold.</p>
+<p><strong>D3 — understand.</strong> An investigation an agent can run: bounded before it
+starts, given the fields an agent alert needs, willing to abandon its first
+theory in the open, scoped along the delegation graph, widened to the
+population — and then the two proactive halves, third-party intelligence that
+has to become a rule and a hunt for behaviour no rule covers.</p>
+<p><strong>D4 — respond.</strong> A response whose blast radius is known before it fires.
+Actions classified on reversibility and radius, tiers derived from that rather
+than from their author, containment timed against the attacker, and a fleet stop
+that revokes as well as terminates.</p>
+<p><strong>D5 — recover and root cause.</strong> A run you can reproduce, a root cause that
+names a control rather than a person, the fix put at the layer it belongs in,
+the indicators re-measured to see which actually came back — and a regulatory
+clock that started before anyone knew.</p>
 <p>Two rows of the CyberTravels register are this function's whole reason to exist:
 <strong>R9</strong>, where holding one agent reaches CRM, payroll and the cloud resource
 manager, and <strong>R10</strong>, where passport numbers are in the logs that would have
 told you.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">signal, over one hour</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">Alex</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">CyberTravels&#x27; Workflow Agent</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">ratio</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">actions taken</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">12</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1,400</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">117×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">distinct resources touched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">5</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">260</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">52×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">median gap between calls</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">180s</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2s</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1/90×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">sessions</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">96</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">96×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">typo / retry events</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">—</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Every detection, baseline and playbook CyberTravels owns was tuned against the second column.</div></div><div class="nbmd"><h2>3 · Why a volume rule is not the answer</h2>
-<p>The obvious rule does fire. The problem is <em>when</em> — which is the one thing a table cannot show you, so this part is worth running.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what the SOC needs</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">is it in an application log?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">which lesson gets it</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the prompt that motivated the action</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.1</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the tool call, with arguments</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.1</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the decision, and what it was based on</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D5.1</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which agent acted</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.2</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which human it acted for</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A2.7 · D1.2</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the HTTP request the tool made</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">already there</td></tr></tbody></table>
+<p>The obvious rule does fire. The problem is <em>when</em> — which is the one thing a table cannot show you, so this part is worth running.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what the SOC needs</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">is it in an application log?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">which lesson gets it</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the prompt that motivated the action</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the tool call, with arguments</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the decision, and what it was based on</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D5.1</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which agent acted</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which human it acted for</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A2.7 · D1.3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the HTTP request the tool made</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">already there</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Five of six do not exist yet. R10 in the register is the sixth one's twin problem — the log you do have is full of passport numbers.</div></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
 <p>Alex and CyberTravels' Workflow Agent, over the same hour. The skill measures the five signals that separate them, then runs the existing volume rule against the agent's run — where it fires 154 seconds in and stays silent for the remaining fifty-seven minutes.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-tempo-baseline/SKILL.md"><code>skills/detection/agent-tempo-baseline/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: agent-tempo-baseline
@@ -201,6 +301,6 @@ Chapter 8 is about detections that fire on shape rather than volume.
 Chapter 9 is about who can pull the stop lever without asking.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Five behavioural signals for Alex and for CyberTravels' Workflow Agent over the same hour, with ratios in the hundreds. The volume rule tuned for human tempo does fire — 154 seconds into a sixty-minute run, leaving 3,446 seconds unmonitored. Five of the six things an agentic SOC needs are not in any application log.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8 and it is a telemetry problem rather than a detection one.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · Agent telemetry as a log source</a></strong></p>
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.0.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.0.ipynb</code></p></div><div class="pager"><a href="C2.10.html"><span class="k">← Previous</span><span class="t">C2.10 · Case study — the Supabase pattern: open until closed</span></a><a class="next" href="D1.1.html"><span class="k">Next →</span><span class="t">D1.1 · Agent telemetry as a log source</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.0.ipynb</code></p></div><div class="pager"><a href="C2.10.html"><span class="k">← Previous</span><span class="t">C2.10 · Case study — the Supabase pattern: open until closed</span></a><a class="next" href="D1.1.html"><span class="k">Next →</span><span class="t">D1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

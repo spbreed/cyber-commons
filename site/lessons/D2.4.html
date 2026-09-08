@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.4 — Rules generated from an incident — and the benign corpus that decides them | Cyber Commons</title><meta name="description" content="Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Detect — From Visible to an Alert</div><div class="sid">D2.4</div><h1>Rules generated from an incident — and the benign corpus that decides them</h1><div class="badges"><span class="badge t">D2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A rule generated from one incident matches that incident and nothing else, or matches everything and buries the queue.</p></div><div class="ctrl"><div class="lab">Control</div><p>Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/detection-rule-synthesis/scripts/detection_rule_synthesis.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.4 · Rules generated from an incident — and the benign corpus that decides them</h1>
-<p><strong>Function D — The Agentic SOC → Detect — From Visible to an Alert</strong></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Agent-assisted detection engineering — written by a loop, shipped by a human</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.4 — Agent-assisted detection engineering — written by a loop, shipped by a human | Cyber Commons</title><meta name="description" content="Detection-as-code with agents inside the CI loop."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Detect — the Lake, and Rules Mapped to MITRE</div><div class="sid">D2.4</div><h1>Agent-assisted detection engineering — written by a loop, shipped by a human</h1><div class="badges"><span class="badge t">D2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Coverage gaps nobody mapped.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detection-as-code with agents inside the CI loop.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate and unit-test Sigma rules in CI; map coverage to ATT&amp;CK.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/detection-rule-deployability/scripts/detection_rule_deployability.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human</h1>
+<p><strong>Function D — The Agentic SOC → Detect — the Lake, and Rules Mapped to MITRE</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Detections whose subject is the agent platform</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,134 +11,157 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Sigma</td>
+<td>Sigma, Wazuh, Kimi K2, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Generating a detection rule from a reconstructed incident, and measuring it against benign traffic before it ships.</p>
-<p><strong>Why a security engineer needs it.</strong> An incident is the richest source of a good rule and the easiest source of a bad one, because every candidate you write from it catches it. The property that decides deployability is the false-positive rate on traffic that is not the incident — which means a benign corpus containing the hard cases, not unrelated noise.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>You have just reconstructed an incident and the rule almost writes itself. That is the problem: every rule you could write catches the incident, because you wrote it from the incident. What decides whether it ships is the traffic it fires on when nothing is wrong.</p>
+<p><strong>What it covers.</strong> Generate and unit-test Sigma rules in CI; map coverage to ATT&amp;CK.</p>
+<p><strong>Why a security engineer needs it.</strong> Coverage gaps nobody mapped. The control it builds is: detection-as-code with agents inside the CI loop.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>An agent can write and tune a detection far faster than you can, which means it can also ship a confident, wrong rule into production far faster than you can. The validation discipline is the whole of the value.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The incident is CyberTravels': the Workflow Agent issued a refund against a booking nobody asked it to touch. The benign corpus is the hard one on purpose — CyberTravels processes eighteen legitimate refunds in the same window, and a rule that cannot tell them apart is a rule that alerts on the business.</p>
+<p><strong>At CyberTravels.</strong> An agent can write and tune a detection for CyberTravels' behaviour far faster than the detection engineer can — including a confident, wrong one, shipped to production.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   incident trace
-        |
-        v
-   +----------------------+     every candidate catches the incident,
-   | candidate rules      |     so that cannot be the selection test
-   |   any refund         |
-   |   refund w/o approval|
-   |   refund on BK-772   |
-   +----------+-----------+
-              |
-              v
-       benign corpus  (must contain LEGITIMATE refunds)
-              |
-      +-------+--------+---------------+
-      v                v               v
-   21% FP           0% FP           0% FP
-   buries the       generalises     matches this
-   queue            AND quiet       incident only
-   REJECT           SHIP            REJECT
+<pre><code>   agent writes rule --&gt; test corpus --&gt; tuned rule --&gt; production
+                              ^
+                       +------+-------+
+                       | true positives from history |
+                       | benign traffic that must    |
+                       |   NOT fire                  |
+                       +-----------------------------+
+
+   the speed is real. so is the speed of shipping a wrong rule.
 </code></pre>
-<p>The fastest source of a good detection is an incident you have just had. The
-trap is that <strong>every candidate rule catches the incident</strong> — that is how it was
-generated — so catching it cannot be the property you select on.</p>
-<p>What separates a rule worth deploying is what it does to traffic that is not the
-incident. That means a benign corpus containing the hard cases: for a refund
-rule, legitimate refunds. A corpus of unrelated traffic proves nothing, because
-the naive rule looks clean against it.</p>
+<p>Using an agent to write detections is genuinely effective: it produces candidate
+rules quickly, across more log sources than a human would attempt.</p>
+<p>What it cannot supply is the judgement that decides whether a rule ships, because
+that judgement depends on a cost the telemetry does not contain: <strong>analyst
+trust</strong>. A rule with 5% precision is not 5% useful — it is negatively useful,
+because it spends attention that the good rules need.</p>
+<p>So the workflow is: the agent generates candidates, and a scoring step against
+real historical telemetry decides which survive. The scoring step is the job, and
+it is the part teams skip.</p>
 <blockquote>
-<p><strong>Anchor → D1.0.</strong> The fastest route to a rule, and the one most likely to lengthen every other interval instead. A rule that fires on 21% of benign traffic spends the attention the rest of the queue needs, so the benign corpus is what decides, not the incident.</p>
-</blockquote></div><div class="nbmd"><h2>3 · Write the bad candidates on purpose</h2>
-<p>Two rules are worth writing precisely because they will be rejected.</p>
-<p>The <strong>naive generalisation</strong> takes the tool that appeared in the incident:
-<code>any refund</code>. The <strong>over-fitted</strong> one takes the identifier: <code>refund on BK-772</code>.
-Both catch the incident. One buries the queue and the other is worthless
-tomorrow, and seeing them scored beside the good rule is what makes the good
-rule a choice rather than an assumption.</p></div><div class="nbmd"><h2>4 · Generate, then measure before shipping</h2>
-<p>Three candidates, one benign corpus, one number each. A rule with no measured false-positive rate is a guess with syntax.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/detection-rule-synthesis/SKILL.md"><code>skills/detection/detection-rule-synthesis/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: detection-rule-synthesis
+<p><strong>Anchor → D1.0.</strong> This shortens the gap between <em>a rule is needed</em> and <em>a rule exists</em>, which is a real interval and not the one that matters most. What it cannot shorten is the decision to ship, because the cost that decides it — analyst trust — is not in the telemetry.</p>
+</blockquote></div><div class="nbmd"><h2>3 · Where it breaks — every rule 'works'</h2>
+<p>All five detect something. R1 has perfect recall on http traffic and would put 301 alerts a day in the queue. R4 has 100% precision on nothing useful. The deployable set is decided by a threshold nobody writes down.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
+<p>Every candidate rule detects something. The skill replays each against real history and scores the third property nobody checks — firing volume — so a rule that produces 301 alerts for one true positive is rejected with its numbers rather than with an adjective.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/detection-rule-deployability/SKILL.md"><code>skills/detection/detection-rule-deployability/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: detection-rule-deployability
 description: &gt;-
-  Generate a detection rule from an incident trace and score it against benign
-  traffic before it ships. Use after an incident is reconstructed, when turning
-  a hunt finding into a standing detection, or when a proposed rule has no
-  measured false-positive rate.
+  Score candidate detection rules on precision, recall and firing volume, and
+  reject the ones no analyst could work regardless of how well they detect. Use
+  when authoring detections with or without a model, or when a rule is proposed
+  because it caught the incident.
 allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>The incident tells you what to write; the benign corpus tells you whether to ship it</h1>
-<p>The fastest source of a good detection is an incident you have just had. The
-trap is that <strong>every candidate rule catches the incident</strong> — that is how it was
-generated — so catching it cannot be the property you select on.</p>
-<p>What separates a rule worth deploying is what it does to traffic that is <em>not</em>
-the incident.</p>
+<h1>A rule that fires 301 times for one true positive is not a detection</h1>
+<p>Every candidate rule detects something. Deployability is a different property
+and it is arithmetic: precision, recall, and how many times the rule fires per
+day against real history. A rule failing on the third is rejected however good
+the first two look, because it will be muted within a week.</p>
 <h2>When to use this</h2>
-<p>Immediately after reconstruction, while the trace is still loaded, and again
-whenever a hunt hypothesis is promoted. Do not use it to write coverage from
-scratch: a rule generated from no incident has nothing to generalise from.</p>
-<h2>Step-by-step</h2>
-<p><strong>1 — Take the reconstructed trace, not the alert.</strong> The alert is one event;
-the rule needs the sequence around it.</p>
-<p><strong>2 — Write more than one candidate, deliberately including a bad one.</strong> The
-naive generalisation ("the tool that appeared") and the over-fitted one ("this
-booking id") are both worth writing, because seeing them scored is the lesson.</p>
-<p><strong>3 — Assemble a benign corpus that contains the hard cases.</strong> Legitimate
-refunds, not just unrelated traffic. A corpus with no near-misses proves
-nothing.</p>
-<p><strong>4 — Score every candidate on the benign corpus and record the rate.</strong> Not a
-verdict, a number.</p>
-<p><strong>5 — Ship the one that generalises and stays quiet, and say why the others
-were rejected.</strong> The rejected candidates are the evidence that the shipped one
-was chosen rather than assumed.</p>
+<p>Authoring detections, reviewing a model's proposed rules, and any time a rule is
+proposed on the strength of catching one incident.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Replay each candidate against real history.</strong> Not a sample chosen to
+contain the incident — the actual period, including the quiet parts.</p>
+<p><strong>2 — Compute precision, recall and volume.</strong> Volume is the one people omit and
+the one that decides whether the rule survives contact with an analyst.</p>
+<p><strong>3 — Set a deployability bar before you look at the results.</strong> Precision floor,
+recall floor, and a maximum firings per day. Setting it afterwards means setting
+it around the rule you like.</p>
+<p><strong>4 — Reject the broad rules explicitly, with their numbers.</strong> "Rejected: 301
+firings for 1 true positive" is a sentence the author can act on; "too noisy" is
+not.</p>
+<p><strong>5 — Look at what survived, and what it depends on.</strong> A high-precision rule
+usually depends on a specific field being populated. Record that dependency —
+it is the thing that will silently break the rule later.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — a three-step incident and an 84-run benign corpus, in
-<a href="scripts/detection_rule_synthesis.py"><code>scripts/detection_rule_synthesis.py</code></a>.</p>
-<p><strong>Output</strong> — a real run:</p>
-<pre><code>candidate rule                          fires on   FP  FP rate  verdict
-any refund                                  True   18     21%  REJECT — buries the queue
-refund with no approval in the run          True    0      0%  ship
-refund on BK-772                            True    0      0%  REJECT — matches this incident only
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/detection_rule_deployability.py"><code>scripts/detection_rule_deployability.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>history: 522 events, 2 true positives
+rule                                 alerts   prec  recall  alerts/TP
+----------------------------------------------------------------------
+R1 any http_get by an agent             301  0.003   0.500      301.0
+R2 http_get to a non-github host          1  1.000   0.500        1.0
+R3 link-local address                     1  1.000   0.500        1.0
+R4 any failed action                     20  0.000   0.000        inf
+R5 credential path OR link-local          2  1.000   1.000        1.0
 </code></pre>
-<p>All three catch the incident. Only one is a detection.</p>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;benign_runs&quot;: 0,
-  &quot;candidates&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;catches_incident&quot;: true,
-                  &quot;false_positives&quot;: 0, &quot;fp_rate&quot;: 0.0,
-                  &quot;verdict&quot;: &quot;ship|REJECT&quot;}]
+  &quot;history&quot;: {&quot;events&quot;: 0, &quot;period_days&quot;: 0, &quot;true_positives&quot;: 0},
+  &quot;candidates&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;fires&quot;: 0, &quot;tp&quot;: 0, &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0,
+                  &quot;per_day&quot;: 0.0, &quot;verdict&quot;: &quot;deploy|reject&quot;, &quot;why&quot;: &quot;str&quot;}],
+  &quot;bar&quot;: {&quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0, &quot;max_per_day&quot;: 0},
+  &quot;dependencies&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;requires_field&quot;: &quot;str&quot;}]
 }
 </code></pre>
-<h2>Common edge cases</h2>
-<ul>
-<li><strong>The over-fitted rule scores perfectly.</strong> Zero false positives and zero
-  future value. Test for a literal identifier in the rule body.</li>
-<li><strong>The benign corpus is too easy.</strong> If it contains no legitimate refunds, the
-  naive rule looks shippable.</li>
-<li><strong>The incident is the only positive.</strong> One true positive cannot establish
-  recall; the rule's recall is unknown until it runs.</li>
-</ul>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Selecting on "does it catch the incident".</strong> Every candidate does.</li>
-<li><strong>Shipping without a false-positive number.</strong> That is a guess with syntax.</li>
-<li><strong>Never writing the bad candidates.</strong> Then nothing shows the good one is good.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>incident: 3 steps · benign corpus: 84 runs
+<li><strong>Replaying against a period chosen to contain the incident.</strong> Volume becomes
+  meaningless.</li>
+<li><strong>Setting the bar after seeing the results.</strong> That is choosing a winner.</li>
+<li><strong>Deploying a rule with an unrecorded field dependency.</strong> It fails silently
+  when the field stops being populated.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-candidate rule                          fires on   FP  FP rate  verdict
-any refund                                  True   18     21%  REJECT — buries the queue
-refund with no approval in the run          True    0      0%  ship
-refund on BK-772                            True    0      0%  REJECT — matches this incident only
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
-All three rules catch the incident. That is the trap: catching the thing
-that already happened is the one property every candidate has, so it
-cannot be the property you select on.
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-&#x27;any refund&#x27; fires on 18 legitimate refunds - a 21% false-positive
-rate, and refunds are the business. &#x27;refund on BK-772&#x27; is perfect on this
-corpus and worthless tomorrow, because the booking id will be different.
-Only the sequence rule generalises AND stays quiet.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>All three candidates catch the incident; only the sequence rule ships. The naive rule fires on 18 legitimate refunds — a 21% false-positive rate on a business that runs on refunds.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Add a benign run that the shipped rule fires on. If you cannot construct one, your corpus is too easy.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.5.html">D2.5 · Honeypots, canaries and deception — the detector with no threshold</a></strong></p>
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+history: 522 events, 2 true positives
+rule                                 alerts   prec  recall  alerts/TP
+----------------------------------------------------------------------
+R1 any http_get by an agent             301  0.003   0.500      301.0
+R2 http_get to a non-github host          1  1.000   0.500        1.0
+R3 link-local address                     1  1.000   0.500        1.0
+R4 any failed action                     20  0.000   0.000        inf
+R5 credential path OR link-local          2  1.000   1.000        1.0
+REJECT  R1 any http_get by an agent
+          · 301.0 alerts per true positive (budget 5)
+DEPLOY  R2 http_get to a non-github host
+DEPLOY  R3 link-local address
+REJECT  R4 any failed action
+          · no true positives
+          · inf alerts per true positive (budget 5)
+          · recall 0.0 below 0.5
+DEPLOY  R5 credential path OR link-local
+generated               5
+shipped                 3
+shipped_rules           [&#x27;R2 http_get to a non-github host&#x27;, &#x27;R3 link-local address&#x27;, &#x27;R5 credential path OR link-local&#x27;]
+queue_impact_per_day    4
+coverage                1.0
+
+The agent generated 5 rules in seconds. Scoring them against 521 real
+events took milliseconds and rejected 3. That scoring step is the job —
+without it, R1 ships and the SOC stops reading agent alerts within a week.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Write the detection condition for: a non-human identity listing mo...
+
+answer:
+   actor.type == &#x27;service_account&#x27;
+   and count_distinct(event.bucket, window=&#x27;5m&#x27;) &gt; 20
+   and not cidr_match(source.ip, actor.baseline_cidr)
+
+property checked : expresses a threshold
+held on replay       : True
+
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>All five rules detect something. R1 fires 301 times for 1 true positive; R5 fires twice for 2 true positives with perfect precision and recall. The deployability check rejects the broad rules and the failed-action rule, shipping only the precise ones with a small daily queue impact.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Set your own alerts-per-true-positive budget and apply it to the rules already in production. Most SOCs discover that several long-standing rules would not pass the bar they would set today.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.5.html">D2.5 · Rules generated from an incident — and the benign corpus that decides them</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.4.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.4.ipynb</code></p></div><div class="pager"><a href="D2.3.html"><span class="k">← Previous</span><span class="t">D2.3 · Agent-assisted detection engineering — written by a loop, shipped by a human</span></a><a class="next" href="D2.5.html"><span class="k">Next →</span><span class="t">D2.5 · Honeypots, canaries and deception — the detector with no threshold</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span><span>Wazuh</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.4.ipynb</code></p></div><div class="pager"><a href="D2.3.html"><span class="k">← Previous</span><span class="t">D2.3 · Detections whose subject is the agent platform</span></a><a class="next" href="D2.5.html"><span class="k">Next →</span><span class="t">D2.5 · Rules generated from an incident — and the benign corpus that decides them</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

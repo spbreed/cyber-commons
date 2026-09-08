@@ -44,32 +44,32 @@ ANCHORS: dict[str, str] = {
 # ==========================================================================
 
 # ---- D1 · discover — the interval before anything is visible --------------
-"D1.1":
- "**Anchor → D1.0.** Every interval in D1.0's table is measured on telemetry, "
- "so this lesson sets the floor for all five: on data that was never emitted, "
- "discover does not take a long time — it never completes. The retention "
- "decision is the same argument, backwards: it fixes how far into the past an "
- "investigation is allowed to reach.",
-
-"D1.2":
- "**Anchor → D1.0.** For an agent nobody registered, behaviour is the only "
- "clock running. Regularity, rate and continuity are what start the discover "
- "interval at all — and the error analysis is the honest part, because a "
- "classifier that is confidently wrong starts it on the wrong actor.",
-
 "D1.3":
+ "**Anchor → D1.0.** Both halves set the floor for all five intervals. An agent "
+ "nobody registered has no clock running but its own behaviour, and on data that "
+ "was never emitted discover does not take a long time — it never completes. "
+ "The retention decision is the same argument backwards: it fixes how far into "
+ "the past an investigation is allowed to reach.",
+
+"D3.9":
  "**Anchor → D1.0.** Intelligence shortens the *detect* interval before the "
  "incident rather than during it, and only by becoming a rule. That is why the "
  "single measure is detections produced: a narrative about adversary trends "
  "moves no interval, however well written.",
 
-"D1.4":
+"D1.1":
+ "**Anchor → D1.0.** Discover has a floor, and this lesson measures it. Four "
+ "of the nine actions have no sensor in their path at all, so for those the "
+ "interval is not long — it is undefined, and no amount of tuning the four "
+ "products you own changes that.",
+
+"D1.2":
  "**Anchor → D1.0.** Drift lengthens every interval at once, silently. The "
  "model was upgraded, a prompt was edited, and the control is now unevidenced "
  "against behaviour that no longer exists — so the discover clock restarts "
  "without anybody starting it.",
 
-"D1.5":
+"D3.10":
  "**Anchor → D1.0.** Hunting is the only pass that shortens discover for "
  "behaviour no rule was written for, and it spends real time to do it. Hence "
  "the scoring: a hypothesis matching fourteen runs to find two, because twelve "
@@ -77,31 +77,37 @@ ANCHORS: dict[str, str] = {
 
 # ---- D2 · detect — from visible to an alert -------------------------------
 "D2.1":
+ "**Anchor → D1.0.** Detect is bounded below by what the lake can answer and "
+ "how fast. A source tiered cold cannot serve a seconds-deep triage query "
+ "however good the rule above it is — and a source deleted for cost sets that "
+ "interval to infinity for everything that reads it.",
+
+"D2.2":
  "**Anchor → D1.0.** This is the detect interval for the agent itself, and the "
  "classic baselines leave it at infinity. Two countries in an hour is an "
  "incident for a person and multi-region routine for an agent; three hundred "
  "file reads a minute is an incident for a person and idle for an agent; "
  "03:00 is suspicious for a person and meaningless for an agent.",
 
-"D2.2":
+"D2.3":
  "**Anchor → D1.0.** A different subject is a different clock. Workload-layer "
  "detection does not fire late on a platform compromise — it does not fire at "
  "all, which is why these are separate rules, on separate data, with separate "
  "owners.",
 
-"D2.3":
+"D2.4":
  "**Anchor → D1.0.** This shortens the gap between *a rule is needed* and *a "
  "rule exists*, which is a real interval and not the one that matters most. "
  "What it cannot shorten is the decision to ship, because the cost that "
  "decides it — analyst trust — is not in the telemetry.",
 
-"D2.4":
+"D2.5":
  "**Anchor → D1.0.** The fastest route to a rule, and the one most likely to "
  "lengthen every other interval instead. A rule that fires on 21% of benign "
  "traffic spends the attention the rest of the queue needs, so the benign "
  "corpus is what decides, not the incident.",
 
-"D2.5":
+"D2.6":
  "**Anchor → D1.0.** The only detector whose interval is the moment of touch. "
  "Every other one in the chapter trades detect time against false positives "
  "through a threshold; a canary has no threshold to trade, because nothing "

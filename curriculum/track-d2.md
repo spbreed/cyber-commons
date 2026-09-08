@@ -1,21 +1,30 @@
-# Track D2 — Detect — From Visible to an Alert
+# Track D2 — Detect — the Lake, and Rules Mapped to MITRE
 
 **Function D · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
 **Job titles:** Detection Engineer, SOC Engineer, Security Data Engineer
 
-**What changes:** Detections for two different subjects — what an agent does to your estate, and what happens to the platform running it — plus the loop that writes rules, the corpus that decides whether they ship, and the one detector that needs no threshold. 5 lessons.
+**What changes:** The lake the rules are written against, then detections for two different subjects — the agent and the platform running it — mapped to ATT&CK and ATLAS, plus the loop that writes rules, the corpus that decides whether they ship, and the one detector that needs no threshold. 6 lessons.
 
 **Autonomy focus:** Rules are written at L3 and shipped by a human, because the cost that decides deployment is analyst trust and the telemetry does not contain it.
 
-**Deliverable:** A detection pack for agent behaviour, every rule carrying a measured false-positive rate on benign traffic.
+**Deliverable:** A detection pack for agent behaviour, every rule carrying a MITRE technique and a measured false-positive rate.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### D2.1 — Detections whose subject is the agent
+### D2.1 — The detection data lake — where agent telemetry lands
+
+- **Risk** — Everything is indexed hot because nobody priced it, so retention is cut across the board and the traces go first.
+- **Control** — A tiering decision per source, driven by the queries the SOC actually runs, with the cost of each tier stated.
+- **Lab** — Tier six sources against the queries that need them and compare the bill with index-everything.
+- **Tools** — `OpenSearch`, `OpenTelemetry`
+
+---
+
+### D2.2 — Detections whose subject is the agent — mapped to ATT&CK and ATLAS
 
 - **Risk** — Scope drift, unusual tool sequencing, off-hours autonomous action.
 - **Control** — Detections whose subject is a non-human principal.
@@ -26,8 +35,8 @@
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it
+jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc/detections
@@ -39,7 +48,7 @@ cd labs/d1-soc/detections
 
 ---
 
-### D2.2 — Detections whose subject is the agent platform
+### D2.3 — Detections whose subject is the agent platform
 
 - **Risk** — Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.
 - **Control** — Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
@@ -50,8 +59,8 @@ cd labs/d1-soc/detections
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it
+jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 falco --rules agent-escape.yaml --validate
@@ -63,7 +72,7 @@ gitleaks detect --redact --report-format sarif
 
 ---
 
-### D2.3 — Agent-assisted detection engineering — written by a loop, shipped by a human
+### D2.4 — Agent-assisted detection engineering — written by a loop, shipped by a human
 
 - **Risk** — Coverage gaps nobody mapped.
 - **Control** — Detection-as-code with agents inside the CI loop.
@@ -76,8 +85,8 @@ gitleaks detect --redact --report-format sarif
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it
+jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 pip install sigma-cli && cd labs/d1-soc/detections
@@ -90,7 +99,7 @@ python3 coverage.py --map-to attack
 
 ---
 
-### D2.4 — Rules generated from an incident — and the benign corpus that decides them
+### D2.5 — Rules generated from an incident — and the benign corpus that decides them
 
 - **Risk** — A rule generated from one incident matches that incident and nothing else, or matches everything and buries the queue.
 - **Control** — Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess.
@@ -101,15 +110,15 @@ python3 coverage.py --map-to attack
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
+jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
 ```
 
 *Expect:* Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
 
 ---
 
-### D2.5 — Honeypots, canaries and deception — the detector with no threshold
+### D2.6 — Honeypots, canaries and deception — the detector with no threshold
 
 - **Risk** — Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.
 - **Control** — Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
@@ -122,8 +131,8 @@ python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
+jupyter notebook labs/notebooks/D2.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.6   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 python3 canary.py --place worker-env,docs,artifact-metadata

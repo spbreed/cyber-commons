@@ -1231,15 +1231,15 @@
         {
           "id": "D1",
           "chapter": 7,
-          "title": "Discover — Making the Actor Visible",
-          "titles": "SOC Analyst, Threat Hunter, Threat Intelligence Analyst, Security Data Engineer",
-          "changes": "What the SOC can see, before there is anything to see it in: agent telemetry onboarded deliberately, agents told apart from the humans they act for, intel that has to become a rule, drift that arrives without a code change, and a hunt that reports precision. 6 lessons.",
-          "autonomy": "You watch an L2.5 fleet with a stack tuned for the tempo of a person, and the gap gets measured rather than asserted.",
-          "deliverable": "One hunt, scored: a stated hypothesis, the population it ran over, what it caught and what it cost.",
+          "title": "Discover — the Sensors, and the Agent-Shaped Hole in Them",
+          "titles": "SOC Analyst, Security Engineer, Cloud Security Engineer, Security Data Engineer",
+          "changes": "What already watches the estate — EDR, DLP, CSPM, CNAPP — what each sees when the actor is an agent, the drift that arrives without a code change, and a bonus on finding the agents nobody registered. 4 lessons.",
+          "autonomy": "You watch an L2.5 fleet with four products bought for L0 humans, and the uncovered column gets named rather than assumed.",
+          "deliverable": "A sensor coverage matrix for your own estate, with the agent actions no sensor class covers listed by name.",
           "sessions": [
             {
               "id": "D1.0",
-              "title": "Start here — what an agentic SOC means",
+              "title": "Start here — the agentic SOC, and the stack that runs it",
               "kind": "introduction",
               "summary": "Function D operates at two speeds. Agents as the instrument: triage, detection engineering and reconstruction done by a loop you supervise. Agents as the actor: an adversary that does not get tired, does not slow down, and leaves a trace that looks nothing like a person's.",
               "risk": "A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.",
@@ -1250,54 +1250,21 @@
             },
             {
               "id": "D1.1",
-              "title": "Agent telemetry as a log source",
-              "summary": "What agents must emit — prompts, tool calls, decisions, identities — to be observable at all. Schema, retention and honest pipeline cost.",
-              "risk": "Prompts, traces, tool calls and approvals never reach the SIEM.",
-              "control": "Onboard agent telemetry deliberately; decide retention.",
-              "lab": "Ship OTEL agent traces into OpenSearch and query them.",
+              "title": "The sensor estate — EDR, DLP, CSPM and CNAPP against an agent",
+              "summary": "The four controls that already watch your estate, what each one sees when the actor is an agent, and the coverage this leaves.",
+              "risk": "Four products are bought, the estate is assumed covered, and the agent's whole working day falls between them.",
+              "control": "A coverage matrix computed per sensor and per agent action, with the uncovered actions named rather than counted.",
+              "lab": "Score four sensor classes against nine real agent actions and read the column none of them covers.",
               "tools": [
-                "OpenTelemetry",
-                "OpenSearch"
+                "Wazuh",
+                "Prowler",
+                "Falco"
               ],
-              "models": []
+              "open_weight": [],
+              "frontier": []
             },
             {
               "id": "D1.2",
-              "title": "Distinguishing agent from human",
-              "summary": "Attribution when a machine acts carrying a human's authority. Signals, tagging strategy, and why this breaks conventional UEBA.",
-              "risk": "Your earliest Shadow Autonomy signal is invisible.",
-              "control": "Behavioural signatures separating agent from inherited human.",
-              "lab": "Build the classifier on timing, sequencing and volume features.",
-              "tools": [
-                "OpenSearch"
-              ],
-              "open_weight": [
-                "Llama 3.3"
-              ],
-              "frontier": [
-                "Claude Haiku 4.5"
-              ]
-            },
-            {
-              "id": "D1.3",
-              "title": "Threat intelligence that becomes a detection",
-              "summary": "Track adversary use of AI and threats aimed at your AI systems. Sources, tagging, and feeding intel usefully into detection.",
-              "risk": "Unsourced confidence in synthesis loops.",
-              "control": "Provenance discipline; refuse claims without a source.",
-              "lab": "Build a synthesis loop that must cite or abstain.",
-              "tools": [
-                "MISP",
-                "OpenCTI"
-              ],
-              "open_weight": [
-                "GLM-4.6"
-              ],
-              "frontier": [
-                "Claude Haiku 4.5"
-              ]
-            },
-            {
-              "id": "D1.4",
               "title": "Drift monitoring — behaviour that changes without a code change",
               "summary": "Detect behavioural change across model updates, prompt edits and tool changes. Baselines, thresholds and what to do when drift is legitimate.",
               "risk": "A detection that worked last month is silently degraded.",
@@ -1314,14 +1281,15 @@
               ]
             },
             {
-              "id": "D1.5",
-              "title": "Hunting in agent telemetry",
-              "summary": "Hunting is the pass that finds what no rule was written for. Over agent telemetry the hypothesis is different from the endpoint version: not 'has malware run' but 'has an agent done something its purpose does not explain'. Build the hypothesis, run it over a trace corpus, and decide whether the result becomes a detection.",
-              "risk": "Everything not covered by a rule is invisible, and the rules were written against last quarter's agent behaviour.",
-              "control": "A standing hunt over agent traces, hypothesis-first, whose confirmed findings graduate into detections rather than staying in a notebook.",
-              "lab": "Run three hypotheses over a labelled trace corpus and score what each one catches and misses.",
+              "id": "D1.3",
+              "title": "Bonus — finding the agents, and keeping what they emit",
+              "summary": "What agents must emit — prompts, tool calls, decisions, identities — to be observable at all. Schema, retention and honest pipeline cost.",
+              "risk": "Prompts, traces, tool calls and approvals never reach the SIEM.",
+              "control": "Onboard agent telemetry deliberately; decide retention.",
+              "lab": "Ship OTEL agent traces into OpenSearch and query them.",
               "tools": [
-                "OpenTelemetry"
+                "OpenTelemetry",
+                "OpenSearch"
               ],
               "models": []
             }
@@ -1330,15 +1298,29 @@
         {
           "id": "D2",
           "chapter": 8,
-          "title": "Detect — From Visible to an Alert",
+          "title": "Detect — the Lake, and Rules Mapped to MITRE",
           "titles": "Detection Engineer, SOC Engineer, Security Data Engineer",
-          "changes": "Detections for two different subjects — what an agent does to your estate, and what happens to the platform running it — plus the loop that writes rules, the corpus that decides whether they ship, and the one detector that needs no threshold. 5 lessons.",
+          "changes": "The lake the rules are written against, then detections for two different subjects — the agent and the platform running it — mapped to ATT&CK and ATLAS, plus the loop that writes rules, the corpus that decides whether they ship, and the one detector that needs no threshold. 6 lessons.",
           "autonomy": "Rules are written at L3 and shipped by a human, because the cost that decides deployment is analyst trust and the telemetry does not contain it.",
-          "deliverable": "A detection pack for agent behaviour, every rule carrying a measured false-positive rate on benign traffic.",
+          "deliverable": "A detection pack for agent behaviour, every rule carrying a MITRE technique and a measured false-positive rate.",
           "sessions": [
             {
               "id": "D2.1",
-              "title": "Detections whose subject is the agent",
+              "title": "The detection data lake — where agent telemetry lands",
+              "summary": "Choosing what to index, what to keep cold and what never to collect, and paying for it with a number rather than a policy.",
+              "risk": "Everything is indexed hot because nobody priced it, so retention is cut across the board and the traces go first.",
+              "control": "A tiering decision per source, driven by the queries the SOC actually runs, with the cost of each tier stated.",
+              "lab": "Tier six sources against the queries that need them and compare the bill with index-everything.",
+              "tools": [
+                "OpenSearch",
+                "OpenTelemetry"
+              ],
+              "open_weight": [],
+              "frontier": []
+            },
+            {
+              "id": "D2.2",
+              "title": "Detections whose subject is the agent — mapped to ATT&CK and ATLAS",
               "summary": "Write detections where the subject is an agent rather than a user. Behavioural baselines for non-human actors with legitimate machine-speed behaviour.",
               "risk": "Scope drift, unusual tool sequencing, off-hours autonomous action.",
               "control": "Detections whose subject is a non-human principal.",
@@ -1350,7 +1332,7 @@
               "models": []
             },
             {
-              "id": "D2.2",
+              "id": "D2.3",
               "title": "Detections whose subject is the agent platform",
               "kind": "control",
               "summary": "Not detections for what an agent does to your estate — detections for what happens to the platform running it: escape primitives, a cache that no longer matches its manifest, a credential loose on the internet, a control that is off and should not be.",
@@ -1366,7 +1348,7 @@
               "mitigates": "C1.4 SI-7 · C3.4 SI-10 · C4.1 IA-5 · C5.4 SI-7 · C6.3 CA-7"
             },
             {
-              "id": "D2.3",
+              "id": "D2.4",
               "title": "Agent-assisted detection engineering — written by a loop, shipped by a human",
               "summary": "Use agents to write, test and tune detections far faster. Validation discipline that stops confident-but-wrong rules reaching production.",
               "risk": "Coverage gaps nobody mapped.",
@@ -1384,7 +1366,7 @@
               ]
             },
             {
-              "id": "D2.4",
+              "id": "D2.5",
               "title": "Rules generated from an incident — and the benign corpus that decides them",
               "summary": "The fastest source of a good rule is an incident you just had. Take a reconstructed trace, extract the behaviour that generalises, emit a rule, and — the part everyone skips — test it against traffic that should NOT fire it before shipping.",
               "risk": "A rule generated from one incident matches that incident and nothing else, or matches everything and buries the queue.",
@@ -1396,7 +1378,7 @@
               "models": []
             },
             {
-              "id": "D2.5",
+              "id": "D2.6",
               "title": "Honeypots, canaries and deception — the detector with no threshold",
               "kind": "control",
               "summary": "Two deception controls with a property nothing else in this chapter has: a false-positive rate of zero by construction. A canary credential nobody legitimate will ever use, and a benchmark task whose shortcut is instrumented rather than functional.",
@@ -1420,11 +1402,11 @@
         {
           "id": "D3",
           "chapter": 9,
-          "title": "Investigate — From an Alert to a Conclusion",
-          "titles": "Incident Responder, SOC Analyst, DFIR Lead",
-          "changes": "An investigation an agent can run: bounded before it starts, given the fields an agent alert needs, willing to abandon its first theory in the open, scoped along the delegation graph, and finally widened to the population. 8 lessons.",
+          "title": "Understand — Correlation, Intel and the Hunt",
+          "titles": "Incident Responder, SOC Analyst, DFIR Lead, Threat Hunter, Threat Intelligence Analyst",
+          "changes": "Understanding what happened and who is doing it: an investigation bounded before it starts, a trace where the first theory was abandoned in the open, scope along the delegation graph, correlation across the population, third-party intel that names the tactic, and a hunt for what no rule covers. 10 lessons.",
           "autonomy": "The investigating agent runs at L2.5 — broad read, bounded per investigation class, every refusal logged with its query.",
-          "deliverable": "One agentic incident scoped end to end, with the abandoned branch still visible in the trace.",
+          "deliverable": "One agentic incident understood end to end, plus one scored hunt with its hypothesis and population stated up front.",
           "sessions": [
             {
               "id": "D3.1",
@@ -1548,6 +1530,36 @@
               ],
               "models": [],
               "mitigates": "C2.3 SC-31 · C2.4 SI-4 · C7.4 AU-2 · C8.1 SI-4 · C8.4 SI-4 · C9.2 IR-3 · C9.3 SI-4"
+            },
+            {
+              "id": "D3.9",
+              "title": "Third-party threat intelligence, and the tactics it names",
+              "summary": "Track adversary use of AI and threats aimed at your AI systems. Sources, tagging, and feeding intel usefully into detection.",
+              "risk": "Unsourced confidence in synthesis loops.",
+              "control": "Provenance discipline; refuse claims without a source.",
+              "lab": "Build a synthesis loop that must cite or abstain.",
+              "tools": [
+                "MISP",
+                "OpenCTI"
+              ],
+              "open_weight": [
+                "GLM-4.6"
+              ],
+              "frontier": [
+                "Claude Haiku 4.5"
+              ]
+            },
+            {
+              "id": "D3.10",
+              "title": "Hunting in agent telemetry",
+              "summary": "Hunting is the pass that finds what no rule was written for. Over agent telemetry the hypothesis is different from the endpoint version: not 'has malware run' but 'has an agent done something its purpose does not explain'. Build the hypothesis, run it over a trace corpus, and decide whether the result becomes a detection.",
+              "risk": "Everything not covered by a rule is invisible, and the rules were written against last quarter's agent behaviour.",
+              "control": "A standing hunt over agent traces, hypothesis-first, whose confirmed findings graduate into detections rather than staying in a notebook.",
+              "lab": "Run three hypotheses over a labelled trace corpus and score what each one catches and misses.",
+              "tools": [
+                "OpenTelemetry"
+              ],
+              "models": []
             }
           ]
         },
@@ -1613,7 +1625,7 @@
               "id": "D4.5",
               "title": "The fleet kill switch",
               "kind": "control",
-              "summary": "D2.2 contained one agent. This stops all of them: one control that terminates every agent matching a selector, revokes their credentials in the same action, preserves state first, and runs on a path a compromised fleet cannot interfere with.",
+              "summary": "D2.3 contained one agent. This stops all of them: one control that terminates every agent matching a selector, revokes their credentials in the same action, preserves state first, and runs on a path a compromised fleet cannot interfere with.",
               "risk": "Terminating agents while their tokens stay valid leaves the persistence in place. In the incident, third-party access ended when the third party revoked keys — not when the agents stopped.",
               "control": "A tested kill path independent of the agent execution path, snapshot before terminate, revocation in the same action, a measured activation target and named authority to pull it (C8.3).",
               "lab": "Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.",

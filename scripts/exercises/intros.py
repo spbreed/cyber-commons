@@ -380,36 +380,74 @@ control that stopped it being back at target:
 
 Every lesson in this function shortens one of those five, or spends one
 deliberately to buy something else — and each says which, in a line under its
-own concept. That is the whole structure, and it is worth stating plainly
-because the intervals are where the numbers live. CyberTravels' detection
-interval is 194 minutes against a 15-minute target. Its manual containment
+own concept. The intervals are where the numbers live: CyberTravels' detection
+interval is 194 minutes against a 15-minute target, and its manual containment
 runbook finishes in 34 minutes against a measured breakout time of 29. Neither
 of those is an opinion about tooling.
 
-**Chapter D1 — discover.** Telemetry as a real log source, because you cannot
-detect on what was never emitted; agent told from human when both hold Alex's
-authority; intel that has to become a rule; drift, the failure with no adversary
-at all; and a hunt for behaviour no rule was written for.
+### The stack that runs it
 
-**Chapter D2 — detect.** Detections for two subjects that are not the same
-subject — what an agent does to your estate, and what happens to the platform
-running it — plus the loop that writes rules, the benign corpus that decides
-whether they ship, and the one detector that needs no threshold.
+Nothing in this function needs a product you do not have. Every phase below has
+a working open-source reference, and the lessons are written against these
+rather than against a vendor's diagram — so you can build the whole thing and
+find out what it does not cover, which is the part that matters.
 
-**Chapter D3 — investigate.** An investigation an agent can run: bounded before
-it starts, given the fields an agent alert needs, willing to abandon its first
-theory in the open, scoped along the delegation graph, and finally widened from
-one run to the population.
+| phase | what has to exist | open source that does it |
+|---|---|---|
+| **discover** | endpoint and workload sensing | **Wazuh** (agent, manager, indexer) |
+| | cloud posture, on a schedule | **Prowler**, **ScoutSuite** |
+| | container runtime and image contents | **Falco**, **Trivy** |
+| | sensitive content in motion | regex plus Wazuh file integrity monitoring |
+| | **agent** traces — prompts, tools, decisions | **OpenTelemetry**, instrumented at the gateway |
+| **detect** | somewhere for all of it to land | **OpenSearch** (or the Wazuh indexer) |
+| | rules, portable and reviewable | **Sigma**, mapped to **ATT&CK** and **ATLAS** |
+| | deception with no threshold | canary tokens and honeypot tasks you write |
+| **understand** | third-party intelligence | **MISP**, **OpenCTI** |
+| | correlation and hunting | notebooks over the lake |
+| | case management | **TheHive**, enrichment via **Cortex** |
+| **respond** | orchestration and runbooks | **Shuffle** |
+| | revocation | your own IdP and gateway, driven from the runbook |
+| **recover** | host and memory forensics | **Velociraptor** |
+| | run replay | the harness from B2.1, pinned per D5.1 |
 
-**Chapter D4 — respond.** A response whose blast radius is known before it
-fires. Actions classified on reversibility and radius, tiers derived from that
-rather than from their author, containment timed against the attacker, and a
-fleet stop that revokes as well as terminates.
+Two honest notes about that table.
 
-**Chapter D5 — recover and root cause.** A run you can reproduce, a root cause
-that names a control rather than a person, the fix put at the layer it belongs
-in, the indicators re-measured to see which actually came back — and a
-regulatory clock that started before anyone knew.
+**The DLP row is the weakest.** There is no open-source DLP with the maturity of
+the other three, which is why the row names a pattern rather than a product —
+and why D1.1 scores DLP at almost no coverage of an agent's day. That is a real
+finding about the market, not a gap in the reading.
+
+**The agent-telemetry row does not exist in any of the products.** Wazuh will
+tell you a process wrote a file. Nothing in the list tells you which prompt
+caused it. That row is instrumentation you write, it lands in the lake D2.1
+designs, and its absence is what D1.1 measures.
+
+### The five chapters
+
+**D1 — discover.** The four sensor classes you already own, scored against what
+an agent actually does; drift, the failure with no adversary at all; and a bonus
+on finding the agents nobody registered and keeping what they emit.
+
+**D2 — detect.** The lake every rule is written against, then detections for two
+subjects that are not the same subject — the agent, and the platform running it
+— mapped to ATT&CK and ATLAS, plus the loop that writes rules, the benign corpus
+that decides whether they ship, and the one detector that needs no threshold.
+
+**D3 — understand.** An investigation an agent can run: bounded before it
+starts, given the fields an agent alert needs, willing to abandon its first
+theory in the open, scoped along the delegation graph, widened to the
+population — and then the two proactive halves, third-party intelligence that
+has to become a rule and a hunt for behaviour no rule covers.
+
+**D4 — respond.** A response whose blast radius is known before it fires.
+Actions classified on reversibility and radius, tiers derived from that rather
+than from their author, containment timed against the attacker, and a fleet stop
+that revokes as well as terminates.
+
+**D5 — recover and root cause.** A run you can reproduce, a root cause that
+names a control rather than a person, the fix put at the layer it belongs in,
+the indicators re-measured to see which actually came back — and a regulatory
+clock that started before anyone knew.
 
 Two rows of the CyberTravels register are this function's whole reason to exist:
 **R9**, where holding one agent reaches CRM, payroll and the cloud resource
@@ -436,11 +474,11 @@ told you.
   ("md", "## 4 · What CyberTravels has to emit before any of this works"),
   ("html", D.table(
     ["what the SOC needs", "is it in an application log?", "which lesson gets it"],
-    [["the prompt that motivated the action", "<b>no</b>", "D1.1"],
-     ["the tool call, with arguments", "<b>no</b>", "D1.1"],
+    [["the prompt that motivated the action", "<b>no</b>", "D1.3"],
+     ["the tool call, with arguments", "<b>no</b>", "D1.3"],
      ["the decision, and what it was based on", "<b>no</b>", "D5.1"],
-     ["which agent acted", "<b>no</b>", "D1.2"],
-     ["which human it acted for", "<b>no</b>", "A2.7 · D1.2"],
+     ["which agent acted", "<b>no</b>", "D1.3"],
+     ["which human it acted for", "<b>no</b>", "A2.7 · D1.3"],
      ["the HTTP request the tool made", "yes", "already there"]],
     emphasise=1,
     caption="Five of six do not exist yet. R10 in the register is the sixth "

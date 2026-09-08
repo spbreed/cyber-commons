@@ -14,13 +14,13 @@ ABOUT: dict[str, str] = {
 **Why a security engineer needs it.** These get used interchangeably and they are not interchangeable. A threat id in a risk register and a NIST function in a vulnerability report are both category errors, and both produce findings the receiving audience cannot act on. The lookup also runs the direction an auditor actually asks in: not "what does this lesson map to" but "show me every lesson that addresses human oversight".
 """,
 
-"D1.5": """
+"D3.10": """
 **What it covers.** Hypothesis-first hunting over agent telemetry: stating a falsifiable hypothesis, naming the population before running it, scoring what it caught against what it missed, and deciding to promote, tune or discard.
 
 **Why a security engineer needs it.** Detections encode behaviour somebody already understood. Everything outside them is invisible, and the agent behaviour worth catching is usually behaviour nobody had thought to write a rule for. The discipline is in the scoring: the hypothesis that feels most obviously right is often a description of normal work, and shipping it costs a quarter of everyone's attention.
 """,
 
-"D2.4": """
+"D2.5": """
 **What it covers.** Generating a detection rule from a reconstructed incident, and measuring it against benign traffic before it ships.
 
 **Why a security engineer needs it.** An incident is the richest source of a good rule and the easiest source of a bad one, because every candidate you write from it catches it. The property that decides deployability is the false-positive rate on traffic that is not the incident — which means a benign corpus containing the hard cases, not unrelated noise.
@@ -84,13 +84,13 @@ CYBERTRAVELS: dict[str, str] = {
         "control. A framework with one lesson behind it is a thin spot in "
         "CyberTravels' defence, stated in the regulator's own vocabulary.",
 
-"D1.5": "The corpus is CyberTravels' agent runs — the Workflow Agent and the "
+"D3.10": "The corpus is CyberTravels' agent runs — the Workflow Agent and the "
         "RAG Advisor, forty runs across a fortnight. The overnight batch that "
         "wrecks the working-hours hypothesis is CyberTravels' own nightly "
         "reconciliation, which is exactly the kind of legitimate oddity that "
         "makes an obvious hunt useless in a real estate.",
 
-"D2.4": "The incident is CyberTravels': the Workflow Agent issued a refund "
+"D2.5": "The incident is CyberTravels': the Workflow Agent issued a refund "
         "against a booking nobody asked it to touch. The benign corpus is the "
         "hard one on purpose — CyberTravels processes eighteen legitimate "
         "refunds in the same window, and a rule that cannot tell them apart "
