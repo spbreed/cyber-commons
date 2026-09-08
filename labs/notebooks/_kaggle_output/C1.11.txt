@@ -1,0 +1,46 @@
+1 · eval case (build FIRST)   asserts a privileged tool refuses source != principal
+2 · preventive control        provenance check in the tool dispatcher
+3 · detection                 alert when a privileged tool is invoked with a data source
+4 · accepted risk             only if 2 and 3 are not shipping this quarter
+eval case on the OLD build: False   (must be False)
+eval case on the NEW build: True   (must be True)
+
+12 privileged/source combinations blocked, and the principal path still works.
+control: blocked
+
+detections on the OLD build (control absent):
+   [critical] approve_pr ← pull-request-diff  → revoke the agent's token and audit its recent actions
+   [critical] approve_pr ← commit-message  → revoke the agent's token and audit its recent actions
+   [critical] approve_pr ← tool-result  → revoke the agent's token and audit its recent actions
+
+same detection on the NEW build:
+   [info] approve_pr ← pull-request-diff  blocked=True
+   [info] approve_pr ← commit-message  blocked=True
+   → the detection still fires, at info severity. That is coverage evidence
+     for E1.7, not noise: it proves the control is exercised in production.
+finding                INJ-06
+eval_fails_on_old      True
+eval_passes_on_new     True
+proof_of_fix_valid     True
+control_shipped        True
+detection_shipped      True
+may_close              True
+
+same finding with nothing shipped: may_close=False
+→ then it needs artefact 4: a written accepted risk with an owner and a date.
+artefact                 durability  what it buys
+--------------------------------------------------------------------------
+chat thread                       0  gone at the next retention sweep
+slide deck                        1  survives; nobody re-runs it
+written repro card                2  someone else can reproduce it
+detection rule                    3  fires if the precondition recurs
+regression case in CI             4  fails the build when the finding returns
+control + eval case               5  prevents it AND proves it stays prevented
+
+findings this year        : 8
+durability score          : 20 of 40
+still holding by themselves: 3 - diff-borne approval, token widening at hop 3, metadata reachable in staging
+
+Five of eight findings landed somewhere that stops protecting you the
+moment the author leaves. The count that goes in the board pack is the
+first number; the one that is true is the third.

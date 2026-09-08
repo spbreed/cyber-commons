@@ -1,0 +1,57 @@
+the bug is on line 22
+whole file             839 chars   29 lines
+±2 line window         207 chars    5 lines
+±6 line window         432 chars   13 lines
+strategy            sink   concat  source  intent  decidable
+----------------------------------------------------------------
+whole file          True   True    True    True    True
+±2 line window      True   True    False   False   False
+±6 line window      True   True    True    True    True
+
+The ±2 window has the sink and the concatenation but not the signature,
+so you cannot tell whether owner is user-controlled — which is the
+difference between critical and won't-fix.
+def list_reports(conn, owner, limit=DEFAULT_LIMIT):
+    """Called from GET /reports?owner=... — owner is user-controlled."""
+    key = _cache_key("reports", owner, limit)
+    if key in CACHE:
+        return CACHE[key]
+    rows = conn.execute("SELECT * FROM reports WHERE owner = '" + owner + "' LIMIT " + str(limit))
+    out = [_format_row(r) for r in rows]
+    CACHE[key] = out
+    return out
+
+
+394 chars (47% of the file), decidable=True
+strategy              chars   share  decidable  noise fns
+----------------------------------------------------------
+whole file              839    100%       True          4
+±2 line window          207     25%      False          0
+±6 line window          432     52%       True          1
+path slice              394     47%       True          0
+
+smallest decidable context: path slice (47% of the file, 0 unrelated functions)
+vs whole file: 53% smaller, 4→0 unrelated functions
+
+what each slice costs, in the only unit that matters
+   slice               decidable  unrelated fns  what the model does with it
+   whole file          True       4              reviews whatever survived truncation; you cannot tell which parts
+   ±2 line window      False      0              cannot see the signature, so it GUESSES whether owner is tainted
+   ±6 line window      True       1              decidable, and carrying one function the defect does not depend on
+   path slice          True       0              decidable, nothing unrelated - the answer is checkable
+
+The undecidable slice is the expensive one, and not because it is wrong -
+because it is UNANSWERABLE and the model answers anyway. Asked whether a
+value is user-controlled without being shown where it comes from, it
+produces a confident verdict from the only thing it has, which is the
+shape of the line. That is where a false positive comes from.
+
+B2.3 is the worked case. Given the function, its signature and the caller's
+authority, the model pass found a real missing-authorisation defect and
+quoted a line that exists. Given a slice it could not decide, it returned
+CWE-89 at 0.71 confidence quoting a concatenation that is not in the file.
+Same model, same prompt, different slice.
+
+So the rule is not 'send less'. It is: find the smallest slice in which the
+defect is DECIDABLE, and only then make it smaller. Cutting below that line
+does not save money, it buys false positives at a discount.
