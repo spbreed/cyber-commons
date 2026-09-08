@@ -542,8 +542,9 @@ TRACKS = {
           "An AppSec pipeline that runs before and after deploy, and the harness "
           "that measures whether it works."),
     "C": ("AI red teaming",
-          "Authorised, scoped offensive capability against your own estate — plus "
-          "security research with AI."),
+          "One authorised, scoped offensive lifecycle against your own estate — "
+          "from ingestion and elicitation to containment, forensics and "
+          "governance."),
     "D": ("Agentic SOC",
           "Detection and response when the analyst is directing agents rather "
           "than reading alerts one at a time."),
