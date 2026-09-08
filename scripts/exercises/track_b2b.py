@@ -7,21 +7,21 @@
        12 dynamic exploitation (DAST)                              → B2.8
        13 exploit chaining                                         → B2.9
     Phase 5 · Governance & Reporting
-       15 severity calibration, triaging and reporting             → B2.10
-       14 remediation engineering, promoted to a merge request     → B2.11
+       15 severity calibration, triaging and reporting             → B2.15
+       14 remediation engineering, promoted to a merge request     → B2.16
 
 Remediation follows reporting rather than preceding it: it is the first stage
 that touches the codebase, and fixing in rule-severity order means fixing the
-top of a queue B2.10 has just shown to be sorted wrongly.
+top of a queue B2.15 has just shown to be sorted wrongly.
 
     Cross-cutting
-       context engineering for the pipeline                        → B2.12
+       context engineering for the pipeline                        → B2.17
        injection in your own pipeline                              → A1.9
        securing the developers' coding agents                      → A3.11
-       attesting control intent for agents and MCP servers         → B2.13
+       attesting control intent for agents and MCP servers         → B2.18
 
     Bonus
-       Google Mantis — the pipeline in production                  → B2.14
+       Google Mantis — the pipeline in production                  → B2.19
 """
 
 PIPELINE_NOTE = """
@@ -329,14 +329,14 @@ This is the stage that most often changes what gets fixed first.
               "top of the severity-sorted queue.",
 },
 
-"B2.11": {
+"B2.16": {
  "concept": """
 **Stage 14 — Remediation engineering.** Generate the fix, prove it, and only
 then ask anybody to look at it.
 
 This stage comes after triage on purpose. Remediation is the first stage that
 *touches* the codebase, and touching it in the wrong order is expensive: fixing
-by rule severity means fixing the finding at the top of a queue that B2.10 has
+by rule severity means fixing the finding at the top of a queue that B2.15 has
 just told you is sorted wrongly. Calibrate first, then remediate, and the fix
 you write first is the one that matters most.
 
@@ -434,7 +434,7 @@ for."""),
               "belongs in your secure coding standard, not in the pipeline.",
 },
 
-"B2.10": {
+"B2.15": {
  "concept": """
 **Stage 15 — Severity calibration and reporting.** The pipeline's output, and
 the stage where its credibility is won or lost.
@@ -491,7 +491,7 @@ quarter's budget.
               "usually the ones people have been arguing about.",
 },
 
-"B2.12": {
+"B2.17": {
  "concept": """
 Cross-cutting, and it applies to every stage that calls a model.
 
@@ -627,12 +627,12 @@ goal is the strongest containment a developer does not notice.
               "yesterday.",
 },
 
-"B2.13": {
+"B2.18": {
  "concept": """
 Everything the pipeline has done so far assumed one thing about the code it was
 reading: that its **control flow is in the code**. A call graph exists, entry
 points can be enumerated, and a path from a source to a sink either exists or
-does not. Every stage from B2.3 to B2.12 stands on that assumption.
+does not. Every stage from B2.3 to B2.17 stands on that assumption.
 
 An agentic system breaks it. The control flow is decided at runtime, by a model,
 from text that is not in your repository. Point the same pipeline at
@@ -758,7 +758,7 @@ artefact rather than in a footnote.
               "ones nobody has started.",
 },
 
-"B2.14": {
+"B2.19": {
  "concept": """
 **Bonus.** You have now built all fifteen stages. This lesson looks at a real
 implementation of the same pipeline — **[Google Mantis](https://github.com/google/mantis)**

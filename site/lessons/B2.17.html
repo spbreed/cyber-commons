@@ -1,0 +1,187 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.17 — Context engineering — cutting the false positives | Cyber Commons</title><meta name="description" content="Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.17</div><h1>Context engineering — cutting the false positives</h1><div class="badges"><span class="badge t">B2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM05</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Attack Staging</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.17.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The model is given the repository and asked to be thorough, so the relevant line falls out of the window.</p></div><div class="ctrl"><div class="lab">Control</div><p>Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compare four context strategies against one bug and measure which are decidable and at what size.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.17.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.17.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/context-window-sizing/scripts/context_window_sizing.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.17 · Context engineering — cutting the false positives</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.16.html">B2.16 · Remediation engineering — proven in a sandbox before the merge request</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>tree-sitter, GLM-4.6, Llama 3.3, Claude Haiku 4.5</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Compare four context strategies against one bug and measure which are decidable and at what size.</p>
+<p><strong>Why a security engineer needs it.</strong> The model is given the repository and asked to be thorough, so the relevant line falls out of the window. The control it builds is: slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Give an agent more context and it gets better, until it gets worse. The cliff is real, it arrives earlier than anyone expects, and past it you are paying more per token for a worse answer.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> Give the review agent CyberTravels' whole repository and it gets worse, not better. The cliff arrives earlier than anyone expects and you pay more per token for it.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   accuracy
+     ^
+     |          .-----.
+     |        .'       `.
+     |      .'           `.       &lt;- the cliff
+     |    .'               `--....
+     |  .'
+     +--------------------------------&gt; context tokens
+        too little        enough      too much
+
+   past the peak you pay more per token for a worse answer
+</code></pre>
+<p>Cross-cutting, and it applies to every stage that calls a model.</p>
+<p>The instinct when a model gets something wrong is to give it more context. That
+is usually backwards, and the reason is easiest to see if you stop counting
+tokens and start counting <strong>false positives</strong>.</p>
+<p>To decide whether code is vulnerable, a model needs exactly three things: the
+<strong>sink</strong>, the <strong>source</strong>, and the <strong>path</strong> between them. Give it less than that
+and the question is not hard — it is <em>unanswerable</em>, and a model asked an
+unanswerable question does not say so. It answers from the only thing it has,
+which is the shape of the line, and a confident verdict derived from the shape
+of a line is precisely what a false positive is.</p>
+<p>Give it more than that and nothing improves: a repository dumped into a prompt
+produces a review of whatever survived truncation, and you cannot tell which
+parts those were.</p>
+<p>So context engineering is mostly <strong>subtraction</strong>, with one thing you must never
+subtract: the <strong>enclosing signature</strong>, because that is where the source lives.
+The identical concatenation is critical inside an HTTP handler and irrelevant
+inside a migration script that takes a constant — and B2.5 has already shown you
+the same line being a <code>sev 9</code> in one place and a deletion candidate in another.</p>
+<p>B2.3 is the worked case, and it is worth reading as a context result rather than
+a model result. Given a function, its signature and the caller's authority, the
+model pass found a real missing-authorisation defect and quoted a line that
+exists. Given a slice it could not decide, the same model returned CWE-89 at
+0.71 confidence quoting a concatenation that is not in the file. Same model,
+same prompt, different slice.</p></div><div class="nbmd"><h2>3 · The measurement, as a skill</h2>
+<p>One SQL injection, four candidate slices. The skill reports for each one whether the defect is <strong>decidable</strong> in it — sink, source and path all present — how much unrelated code it carries, and what the model does with it.</p>
+<p>The ordering to watch: the smallest slice is not the best one, and the largest is not either.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/context-window-sizing/SKILL.md"><code>skills/appsec/context-window-sizing/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: context-window-sizing
+description: &gt;-
+  Find the smallest slice of a file in which a defect is actually decidable, and
+  measure what larger windows add in unrelated code. Use when tuning what a
+  model is shown per finding, when analysis costs too much, or when a model
+  keeps missing a bug that is on the line you gave it.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>Decidable, then small — in that order</h1>
+<p>Context engineering for an analysis pipeline is not "send less". It is finding
+the slice in which the question can be answered at all, and only then making it
+smaller. A ±2-line window around the bug is cheap and <strong>not decidable</strong>: it
+lacks the signature, so nothing in it says where the value came from.</p>
+<h2>When to use this</h2>
+<p>When designing what a pipeline sends per finding, and whenever cost per finding
+is the constraint.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Define decidability for the defect class.</strong> For injection: the sink, the
+value's origin, and any sanitiser between them. Write it down before slicing, or
+you will judge slices by how they look.</p>
+<p><strong>2 — Build the candidate slices.</strong> The whole file, a fixed window around the
+line, a wider window, and a <strong>path slice</strong> — the enclosing function plus the
+definitions it depends on. Measure each in characters.</p>
+<p><strong>3 — Mark each slice decidable or not,</strong> against step 1. Cheap and undecidable
+is the trap: it looks like a saving and it produces confident answers about
+information that is not there.</p>
+<p><strong>4 — Count unrelated content in the decidable ones.</strong> Functions, constants and
+imports the defect does not depend on. This is what a bigger window costs, in
+tokens and in the model's attention.</p>
+<p><strong>5 — Pick the smallest decidable slice, and say what it excluded.</strong> The
+exclusion list is what somebody re-reads when the pipeline misses something.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/context_window_sizing.py"><code>scripts/context_window_sizing.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>the bug is on line 22
+whole file             839 chars   29 lines
+±2 line window         207 chars    5 lines
+±6 line window         432 chars   13 lines
+strategy            sink   concat  source  intent  decidable
+----------------------------------------------------------------
+whole file          True   True    True    True    True
+±2 line window      True   True    False   False   False
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;decidability&quot;: {&quot;requires&quot;: [&quot;str&quot;]},
+  &quot;slices&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;chars&quot;: 0, &quot;decidable&quot;: false, &quot;unrelated_units&quot;: 0}],
+  &quot;chosen&quot;: {&quot;name&quot;: &quot;str&quot;, &quot;chars&quot;: 0, &quot;unrelated_units&quot;: 0},
+  &quot;excluded&quot;: [&quot;str&quot;]
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Optimising size first.</strong> An undecidable slice is not cheap; it is wrong at a
+  lower price.</li>
+<li><strong>Judging slices by eye.</strong> Write the decidability requirement down first.</li>
+<li><strong>Ignoring unrelated content</strong> in a decidable slice. It is the cost you can
+  actually remove.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the bug is on line 22
+whole file             839 chars   29 lines
+±2 line window         207 chars    5 lines
+±6 line window         432 chars   13 lines
+strategy            sink   concat  source  intent  decidable
+----------------------------------------------------------------
+whole file          True   True    True    True    True
+±2 line window      True   True    False   False   False
+±6 line window      True   True    True    True    True
+
+The ±2 window has the sink and the concatenation but not the signature,
+so you cannot tell whether owner is user-controlled — which is the
+difference between critical and won&#x27;t-fix.
+def list_reports(conn, owner, limit=DEFAULT_LIMIT):
+    &quot;&quot;&quot;Called from GET /reports?owner=... — owner is user-controlled.&quot;&quot;&quot;
+    key = _cache_key(&quot;reports&quot;, owner, limit)
+    if key in CACHE:
+        return CACHE[key]
+    rows = conn.execute(&quot;SELECT * FROM reports WHERE owner = &#x27;&quot; + owner + &quot;&#x27; LIMIT &quot; + str(limit))
+    out = [_format_row(r) for r in rows]
+    CACHE[key] = out
+    return out
+
+
+394 chars (47% of the file), decidable=True
+strategy              chars   share  decidable  noise fns
+----------------------------------------------------------
+whole file              839    100%       True          4
+±2 line window          207     25%      False          0
+±6 line window          432     52%       True          1
+path slice              394     47%       True          0
+
+smallest decidable context: path slice (47% of the file, 0 unrelated functions)
+vs whole file: 53% smaller, 4→0 unrelated functions
+
+what each slice costs, in the only unit that matters
+   slice               decidable  unrelated fns  what the model does with it
+   whole file          True       4              reviews whatever survived truncation; you cannot tell which parts
+   ±2 line window      False      0              cannot see the signature, so it GUESSES whether owner is tainted
+   ±6 line window      True       1              decidable, and carrying one function the defect does not depend on
+   path slice          True       0              decidable, nothing unrelated - the answer is checkable
+
+The undecidable slice is the expensive one, and not because it is wrong -
+because it is UNANSWERABLE and the model answers anyway. Asked whether a
+value is user-controlled without being shown where it comes from, it
+produces a confident verdict from the only thing it has, which is the
+shape of the line. That is where a false positive comes from.
+
+B2.3 is the worked case. Given the function, its signature and the caller&#x27;s
+authority, the model pass found a real missing-authorisation defect and
+quoted a line that exists. Given a slice it could not decide, it returned
+CWE-89 at 0.71 confidence quoting a concatenation that is not in the file.
+Same model, same prompt, different slice.
+
+So the rule is not &#x27;send less&#x27;. It is: find the smallest slice in which the
+defect is DECIDABLE, and only then make it smaller. Cutting below that line
+does not save money, it buys false positives at a discount.</code></pre></div><div class="nbmd"><h2>4 · The rule, in one line</h2>
+<p><strong>Find the smallest slice in which the defect is decidable, and only then make
+it smaller.</strong></p>
+<p>Cutting below that line does not save money. It buys false positives at a
+discount, and you pay for them again in triage.</p></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is the cheapest and is not decidable — it has the sink and the concatenation but not the signature, so whether the value is user-controlled is unanswerable from it, and a model asked anyway answers from the shape of the line. The ±6 window and the whole file are decidable and carry unrelated functions. The path slice is the smallest decidable context, about 53% smaller than the whole file with zero unrelated functions.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Apply the path-slice rule where the source is three functions away from the sink. That is the case where text windows break down entirely and the call graph the threat model derives (B2.2) earns its keep — a ±N window can never contain a source that is in another file.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.18.html">B2.18 · Agentic AI in the pipeline — attesting control intent for agents and MCP servers</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.17.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.17.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>tree-sitter</span><span>GLM-4.6</span><span>Llama 3.3</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.17.ipynb</code></p></div><div class="pager"><a href="B2.16.html"><span class="k">← Previous</span><span class="t">B2.16 · Remediation engineering — proven in a sandbox before the merge request</span></a><a class="next" href="B2.18.html"><span class="k">Next →</span><span class="t">B2.18 · Agentic AI in the pipeline — attesting control intent for agents and MCP servers</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

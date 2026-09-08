@@ -270,17 +270,17 @@ HOOKS: dict[str, str] = {
  "engineer's afternoon. Chained, they read a file that ends the conversation "
  "about severity. Chains are where automated analysis earns its keep.",
 
-"B2.11":
+"B2.16":
  "A patch that passes the tests and changes the behaviour is not a fix, it is a "
  "second incident with a pull request attached. Remediation is the stage where "
  "the pipeline stops finding things and starts touching them.",
 
-"B2.10":
+"B2.15":
  "CVSS scores the vulnerability. Your engineers are asking about this system, "
  "with this data, behind this control, and the number that answers them is not "
  "the one on the badge.",
 
-"B2.12":
+"B2.17":
  "Give an agent more context and it gets better, until it gets worse. The cliff "
  "is real, it arrives earlier than anyone expects, and past it you are paying "
  "more per token for a worse answer.",
@@ -296,14 +296,14 @@ HOOKS: dict[str, str] = {
  "cloud credential, and whatever MCP servers were convenient. It is the "
  "highest-privilege agent in most organisations and the least governed.",
 
-"B2.13":
+"B2.18":
  "Point this pipeline at an agentic system and four of its stages quietly stop "
  "meaning anything: there is no call graph, the sink is a tool schema, the "
  "source is retrieved text, and the dependency is somebody else's running "
  "process. A green scan over an agent repository is a true statement about the "
  "Python and says nothing about what the agent will do.",
 
-"B2.14":
+"B2.19":
  "Somebody has already built this pipeline and published what happened. Reading "
  "it is worth an afternoon; adopting it without scoring it against a held-out "
  "key is how a reference implementation becomes a dependency you cannot "
@@ -315,7 +315,7 @@ HOOKS: dict[str, str] = {
  "sentence and one a defender can act on — which is a rate, a sample size, and "
  "somebody else reproducing it.",
 
-"C1.1":
+"B2.10":
  "An offensive harness reads only hostile input, by definition: every byte comes "
  "from a system you are attacking. It is the most dangerous agent in the "
  "building, and the thing that makes running it professional is that scope stops "
@@ -1153,7 +1153,7 @@ DIAGRAMS: dict[str, str] = {
                                       |
    blind to: the identity it gets     |   blind to: the commit, until after
                                       |
-      B2.2 - B2.7                     |      B2.8 - B2.13, and Function D
+      B2.2 - B2.7                     |      B2.8 - B2.18, and Function D
 
    the gap is not a tool you are missing. it is the line itself:
    nothing on the left can see a runtime fact, and nothing on the
@@ -1328,7 +1328,7 @@ DIAGRAMS: dict[str, str] = {
    severity is a property of the chain, not of the link
 """,
 
-"B2.11": """
+"B2.16": """
    patch                    what has to be true
    +----------------+       +-----------------------------+
    | fixes the bug  |  and  | behaviour unchanged         |
@@ -1340,7 +1340,7 @@ DIAGRAMS: dict[str, str] = {
    a second incident with a pull request attached
 """,
 
-"B2.10": """
+"B2.15": """
    CVSS 9.8                    your system
    +----------------+          +---------------------------+
    | network        |          | internal only             |
@@ -1353,7 +1353,7 @@ DIAGRAMS: dict[str, str] = {
    confirmed-by-exploitation beats both
 """,
 
-"B2.12": """
+"B2.17": """
    accuracy
      ^
      |          .-----.
@@ -1393,7 +1393,7 @@ DIAGRAMS: dict[str, str] = {
    governed by: whatever the engineer clicked
 """,
 
-"B2.13": """
+"B2.18": """
    claim                          attestation
    "we enforce least privilege"   subject: deployment_id @ digest
             |                     predicate: per-control verdicts + evidence
@@ -1407,7 +1407,7 @@ DIAGRAMS: dict[str, str] = {
    +------------------------------------------------+
 """,
 
-"B2.14": """
+"B2.19": """
    published pipeline            your pipeline
    +------------------+          +------------------+
    | stages 1..15     |  map ->  | stages 1..15     |
@@ -1438,7 +1438,7 @@ DIAGRAMS: dict[str, str] = {
    "and another team got the same" -> evidence
 """,
 
-"C1.1": """
+"B2.10": """
    recon --> hypothesis --> test --> escalate --> report
         (the loop has not changed; who runs each turn has)
 
@@ -2512,11 +2512,13 @@ BRIDGES: dict[str, dict[str, str]] = {
 from .framing_new import HOOKS as _NEW_HOOKS          # noqa: E402
 from .framing_new import DIAGRAMS as _NEW_DIAGRAMS    # noqa: E402
 from .framing_new import BRIDGES as _NEW_BRIDGES      # noqa: E402
+from .framing_pentest import HOOKS as _PEN_HOOKS      # noqa: E402
+from .framing_pentest import DIAGRAMS as _PEN_DIAGRAMS  # noqa: E402
 
-for _k, _v in _NEW_HOOKS.items():
+for _k, _v in {**_NEW_HOOKS, **_PEN_HOOKS}.items():
     assert _k not in HOOKS, f"{_k} already has a hook"
     HOOKS[_k] = _v
-for _k, _v in _NEW_DIAGRAMS.items():
+for _k, _v in {**_NEW_DIAGRAMS, **_PEN_DIAGRAMS}.items():
     assert _k not in DIAGRAMS, f"{_k} already has a diagram"
     DIAGRAMS[_k] = _v
 BRIDGES.update(_NEW_BRIDGES)

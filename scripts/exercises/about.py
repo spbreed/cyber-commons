@@ -228,7 +228,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 "A2.8": """
 **What it covers.** Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
 
-**Why a security engineer needs it.** An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls. The control it builds is: out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
+**Why a security engineer needs it.** An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls. The control it builds is: out-of-band capture (B2.10), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
@@ -417,7 +417,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.11": """
+"B2.16": """
 **What it covers.** Validate four candidate patches on three axes and show which of them only made the scanner green.
 
 **Why a security engineer needs it.** A patch that silences the scanner is indistinguishable from a patch that fixes the bug. The control it builds is: stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
@@ -425,7 +425,31 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.10": """
+"B2.11": """
+**What it covers.** A white-box engagement: enumerating real paths from entry point to sink, naming the authorisation predicate on each, and separating reachable sinks from present ones.
+
+**Why a security engineer needs it.** Full source produces the most useless report in security — every sink that exists, with no statement about reachability or entitlement. Two distinctions fix it, and the second, that authentication is not authorisation, is the shape of every BOLA finding.
+""",
+
+"B2.12": """
+**What it covers.** A black-box engagement: splitting an external probe's claims into what the evidence entails and what it merely suggests, and refusing a severity on the second kind.
+
+**Why a security engineer needs it.** A model with only status codes and headers narrates a confident architecture, and an inference with a CVSS score beside it reads as a finding to everyone downstream. Provenance per claim is the whole discipline, and the open questions it produces tell you which mode to run next.
+""",
+
+"B2.13": """
+**What it covers.** A grey-box engagement: filling a roles-by-objects-by-verbs matrix from one credential per role, flagging design mismatches, and ranking the untested cells by blast radius.
+
+**Why a security engineer needs it.** This is the mode that can actually find broken object-level authorisation, and the one most often reported wrong — because authorisation lives in cells, not endpoints, and touching every endpoint leaves most cells untested.
+""",
+
+"B2.14": """
+**What it covers.** The controls an offensive agent runs inside — zero retention, sandboxing, egress control, secret management, human in the loop, deterministic guardrails and SOC notification — enforced as a preflight that can refuse.
+
+**Why a security engineer needs it.** The offensive agent is the most capable and least supervised thing in the estate, and its traffic is indistinguishable from an attack by design. Six of the seven controls block the engagement because their absence is invisible until it has already cost something.
+""",
+
+"B2.15": """
 **What it covers.** Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.
 
 **Why a security engineer needs it.** Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing. The control it builds is: stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.
@@ -433,7 +457,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.12": """
+"B2.17": """
 **What it covers.** Compare four context strategies against one bug and measure which are decidable and at what size.
 
 **Why a security engineer needs it.** The model is given the repository and asked to be thorough, so the relevant line falls out of the window. The control it builds is: slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.
@@ -449,7 +473,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.13": """
+"B2.18": """
 **What it covers.** Why the pipeline you have just built stops working on
 agentic systems — no call graph, a sink that is a tool schema, a source that is
 retrieved text, a dependency that is a third party's running process — and the
@@ -467,7 +491,7 @@ built so that it cannot overclaim, and two of the five controls are capped at
 PARTIAL by construction.
 """,
 
-"B2.14": """
+"B2.19": """
 **What it covers.** Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.
 
 **Why a security engineer needs it.** A reference implementation is adopted as a product, and its outputs are trusted without an eval. The control it builds is: map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.
@@ -483,7 +507,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is an **orientation** lesson. It has no code — it exists so the chapters after it are read in the right order.
 """,
 
-"C1.1": """
+"B2.10": """
 **What it covers.** Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
 
 **Why a security engineer needs it.** Payload suggestions instead of attack chains — and an offensive loop with no hard scope enforcement, which is an incident with a project plan. The control it builds is: full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.
@@ -500,7 +524,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 """,
 
 "C1.3": """
-**What it covers.** Game the B2.14 scoring harness deliberately, then close the hole you used.
+**What it covers.** Game the B2.19 scoring harness deliberately, then close the hole you used.
 
 **Why a security engineer needs it.** If the eval can be fooled, the assurance is theatre. The control it builds is: eval gaming, sandbagging, contamination and judge manipulation as test cases.
 
@@ -812,7 +836,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 """,
 
 "E1.5": """
-**What it covers.** Take the B2.14 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
+**What it covers.** Take the B2.19 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 
 **Why a security engineer needs it.** Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy. The control it builds is: read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
 

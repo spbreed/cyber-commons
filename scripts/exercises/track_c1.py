@@ -1,7 +1,7 @@
 """C1 — The Pentester / Red Teamer. Five sessions.
 
     C1.0  what AI security research means, and the standard of proof it holds to
-    C1.1  the offensive workflow, and the containment that makes it lawful
+    B2.10  the offensive workflow, and the containment that makes it lawful
     C1.2  red-teaming an agent: one campaign across all three surfaces
     C1.3  attacking evaluation itself
     C1.4  reporting agentic findings so they get fixed
@@ -25,76 +25,6 @@ MODEL_NOTE = """
 from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
-
-"C1.1": {
- "concept": """
-Penetration testing has always been a loop: **recon → hypothesis → test →
-escalate → report.** What has changed is who runs each turn.
-
-**Manual (still the baseline).** A human runs `nmap`, reads the output, forms a
-hypothesis, tries it. Slow, and the quality is entirely the tester's.
-
-**Scripted.** The recon is automated — Nuclei templates, a Burp scan. The
-hypothesis and the escalation are still human. This is where most teams are.
-
-**Semi-autonomous.** An open-weight model reads the recon output and *proposes*
-which findings are worth chasing and what to try next. The human approves each
-action. The gain is triage speed on a large surface: 400 findings ranked in
-minutes rather than a day.
-
-**Autonomous.** The model proposes and the harness executes, within a
-pre-approved scope and tool set, verifying its own results. This is real and it
-works, and it is also where the engagement becomes a safety problem — because an
-agent that has not understood the scope will happily test something outside it
-at machine speed.
-
-The professional obligations do not change with autonomy. They get harder,
-because scope enforcement can no longer live in the tester's attention — it has
-to live in the harness, and then underneath the harness in the network.
-
-That second half is why containment belongs in this lesson rather than in a
-later one. An offensive harness has a property no other agent has: **everything
-it reads is hostile by design.** Banner strings, error bodies, file contents —
-all of it comes from a system you are attacking, which may itself already be
-attacker-controlled. Containment there protects three parties at once: the
-client (scope and rate limits, so you do not break their production), everyone
-else (egress control, so a compromised harness cannot pivot outward), and you
-(findings and client data must not leave by a route the agent chooses).
-""",
- "steps": [
-("md", "## 2 · Demo — the four generations on the same recon output\n\n"
-         "Realistic scan output from an authorised engagement against hosts you "
-         "own. The question at every generation is the same: what do I chase first?"),
-("md", "## 3 · Where it breaks — generation 4, and the scope problem\n\n"
-         "The model's top-ranked item is correct. Its reasoning on F-06 is also "
-         "correct — *out of scope, do not touch*. Now make it autonomous and "
-         "remove the human from the loop. What stops it acting on a finding it "
-         "has correctly identified as out of scope?\n\n"
-         "Nothing in the model. Its judgement about scope is a *proposal*, on the "
-         "decision plane, exactly like everything else it produces."),
-
-  ("md", "## 5 · The control — and the layer underneath it\\n\\n"
-         "The scope check above lives in the harness, which is one process away "
-         "from the loop it constrains. On an engagement a single control is a "
-         "single point of failure, and the failure is a professional incident. "
-         "The same rule therefore gets restated where the agent cannot reach it: "
-         "the sandbox's own request path."),
-  *skill_steps('redteam/offensive-agent-containment',
-               "## 2 · The procedure, as a skill\n\nModel triage beats severity sorting on CyberTravels' findings and correctly calls the partner CDN out of scope — and can be argued into calling it critical. The skill runs both, then re-runs with scope enforced outside the model, where the persuaded model still proposes the call and nothing acts on it."),
-],
- "expect": "Severity sorting puts 2 of 3 exploitable findings in the top 3; model "
-           "triage puts 3 of 3, and correctly reasons that the partner CDN is out "
-           "of scope. With the model adversarially convinced that the "
-           "out-of-scope host is critical, the unenforced harness acts on it and "
-           "the enforced harness refuses. Underneath the harness the sandbox "
-           "refuses three requests for three different reasons — rate limit, "
-           "engagement boundary, and cloud metadata — without consulting the model "
-           "at all.",
- "challenge": "Write your engagement scope as a data structure your harness reads, "
-              "not as a paragraph in a PDF. Then ask what your current tooling "
-              "would do if a target redirected to a host you were not authorised "
-              "to touch.",
-},
 
 "C1.2": {
  "concept": """
@@ -162,7 +92,7 @@ benchmark you are reading — and so can your own team, without meaning to.
 Three exploits work on almost every published security-harness result:
 
 1. **Report conformance as quality.** Schema validity is ~100% by construction
-   with structured output. It measures nothing about correctness (B2.14).
+   with structured output. It measures nothing about correctness (B2.19).
 2. **Exploit class imbalance.** If 80% of a corpus is one CWE, always guessing
    that CWE scores 0.8 with no capability at all.
 3. **Exploit basename collisions.** If the matcher compares bare filenames and

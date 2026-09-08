@@ -8,10 +8,10 @@ Curriculum source of truth: `site/data/curriculum.json` + `curriculum/labs.json`
 -> regenerate docs with `python3 scripts/build_curriculum.py`. The website
 (`site/`, deployed to GitHub Pages) renders the same JSON.
 
-## Lab B2.10 / E1.5 — the evaluation harness (this file's original scope)
+## Lab B2.15 / E1.5 — the evaluation harness (this file's original scope)
 
 The sections below document the eval harness, which is now ONE chapter of the
-curriculum (build it in B2.10, read it as audit evidence in E1.5, attack it in
+curriculum (build it in B2.15, read it as audit evidence in E1.5, attack it in
 C1.6). Its implementation stays at the repo root; entrypoint `scripts/vulnbench.sh`.
 
 ## Purpose

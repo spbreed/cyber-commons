@@ -24,7 +24,7 @@ none, so it is taught where the money actually goes: the audit agent in B2.3
 decides where to run the model pass, and B2.5 decides what is worth
 reproducing.
 
-Phases 4 and 5 continue in track_b1b.py, and B2.14 closes the track with Google
+Phases 4 and 5 continue in track_b1b.py, and B2.19 closes the track with Google
 Mantis as a bonus: a real implementation of this pipeline, mapped stage by stage
 onto what you built.
 """
@@ -531,7 +531,7 @@ effort on three copies of the same claim.
          "Now check each surviving claim against the code. Three checks, all "
          "mechanical, none requiring judgement."),
   *skill_steps('appsec/finding-dedup-and-verification',
-               "## 2 · The stage, as a skill\n\nEight raw findings, five defects, three survivors. The queue is B2.3's, and the file is B2.3's: `cybertravels/tools/bookings_api.py`, read off disk. The CWE-89 is where Semgrep put it and the CWE-639 on `get_booking` is the hypothesis the model pass emitted, arriving here to be checked rather than believed. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than by a line number, and then rejects the survivors whose symbols are not in the file — because a finding about `os.system` in a file that never imports `os` should die here rather than in a maintainer's inbox.\n\nWatch what survives that it should not: a CWE-89 on `list_my_bookings`, whose query is parameterised and scoped to the session. Neither stage rejects it, and neither is meant to. These two remove what is provably duplicated and provably absent; judging a claim about code that genuinely exists is triage, and that is B2.10."),
+               "## 2 · The stage, as a skill\n\nEight raw findings, five defects, three survivors. The queue is B2.3's, and the file is B2.3's: `cybertravels/tools/bookings_api.py`, read off disk. The CWE-89 is where Semgrep put it and the CWE-639 on `get_booking` is the hypothesis the model pass emitted, arriving here to be checked rather than believed. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than by a line number, and then rejects the survivors whose symbols are not in the file — because a finding about `os.system` in a file that never imports `os` should die here rather than in a maintainer's inbox.\n\nWatch what survives that it should not: a CWE-89 on `list_my_bookings`, whose query is parameterised and scoped to the session. Neither stage rejects it, and neither is meant to. These two remove what is provably duplicated and provably absent; judging a claim about code that genuinely exists is triage, and that is B2.15."),
 ],
  "expect": "Eight raw findings collapse to five distinct defects, with the "
            "CWE-943 alias merging into CWE-89 and the taint result kept over grep "

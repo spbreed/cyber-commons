@@ -33,32 +33,6 @@ python3 scripts/run_notebooks.py --session C1.0   # run it headless and check it
 
 ---
 
-### C1.1 — The agentic offensive workflow, and containing it
-
-- **Risk** — Payload suggestions instead of attack chains — and an offensive loop with no hard scope enforcement, which is an incident with a project plan.
-- **Control** — Full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.
-- **Lab** — Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
-- **Tools** — `CAI`, `Metasploit`, `Firecracker`
-- **Open-weight models** — `Kimi K2`, `GLM-4.6`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/c1-redteam
-./airgap.sh up   # isolated docker network, no default route
-./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com
-```
-
-*Expect:* Severity sorting puts 2 of 3 exploitable findings in the top 3; model triage puts 3 of 3, and correctly reasons that the partner CDN is out of scope. With the model adversarially convinced that the out-of-scope host is critical, the unenforced harness acts on it and the enforced harness refuses. Underneath the harness the sandbox refuses three requests for three different reasons — rate limit, engagement boundary, and cloud metadata — without consulting the model at all.
-
----
-
 ### C1.2 — Red-teaming an agent: designing the campaign
 
 - **Risk** — A red-team result nobody can act on, because "it worked once" is not a rate.
@@ -89,12 +63,12 @@ python3 campaign.py --report --include-benign-controls
 
 - **Risk** — If the eval can be fooled, the assurance is theatre.
 - **Control** — Eval gaming, sandbagging, contamination and judge manipulation as test cases.
-- **Lab** — Game the B2.14 scoring harness deliberately, then close the hole you used.
+- **Lab** — Game the B2.19 scoring harness deliberately, then close the hole you used.
 - **Tools** — `Cyber Commons eval harness`
 - **Open-weight models** — `Kimi K2`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Game the B2.14 scoring harness deliberately, then close the hole you used.
+**Run it** — Game the B2.19 scoring harness deliberately, then close the hole you used.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

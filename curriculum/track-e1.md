@@ -132,10 +132,10 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 
 - **Risk** — Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.
 - **Control** — Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
-- **Lab** — Take the B2.14 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
+- **Lab** — Take the B2.19 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 - **Tools** — `Cyber Commons eval harness`, `OSCAL`
 
-**Run it** — Take the B2.14 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
+**Run it** — Take the B2.19 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

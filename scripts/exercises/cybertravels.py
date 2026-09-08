@@ -152,7 +152,7 @@ REGISTER = [
   "engine.",
   "Scan MCP client and server configs before install, SBOM and hash validation, "
   "run third-party MCP servers jailed, and audit their behaviour continuously.",
-  "C2.5, A3.8, B2.13"),
+  "C2.5, A3.8, B2.18"),
  ("R5", "Insecure protocols and authentication",
   "CyberTravels talks over a WebSocket using long-lived bearer tokens held in "
   "plaintext. One compromised endpoint gives an attacker the whole session.",
@@ -172,14 +172,14 @@ REGISTER = [
   "secrets.",
   "Protected branches needing two human reviewers, no self-approval, "
   "pre-deploy SAST and DAST, signed commits and reproducible builds.",
-  "A3.11, B2.11, A3.6"),
+  "A3.11, B2.16, A3.6"),
  ("R8", "Uncontrolled AI-generated code",
   "A single pull request touches 100+ files. Alex approves without reading "
   "every diff. Hidden inside is an IDOR that exposes card details by booking "
   "ID.",
   "Cap pull-request size per agent, anomaly diff scanning, a second reviewer "
   "and fuzzing on sensitive APIs, and a sandboxed staging environment.",
-  "B2.5, B2.11, B2.10"),
+  "B2.5, B2.16, B2.15"),
  ("R9", "Lateral movement and blast radius",
   "An attacker who reaches CyberTravels moves on into CRM, payroll and the cloud "
   "resource manager — all reachable through interconnected workflows.",
@@ -213,9 +213,9 @@ REGISTER = [
 FAMILIES = [
  ("Prompt injection and instruction hijacking", "R3", "A1.2 · A1.3 · A2.6"),
  ("Identity and authorisation", "R1, R5, R11", "A2.1 · A2.3 · A2.4 · A2.7"),
- ("Software supply chain and execution", "R4", "C2.5 · A3.8 · B2.13"),
+ ("Software supply chain and execution", "R4", "C2.5 · A3.8 · B2.18"),
  ("Local filesystem manipulation", "R6", "A3.2 · A3.11"),
- ("Code and CI/CD pipeline", "R7, R8", "B2.11 · A3.11 · B2.5"),
+ ("Code and CI/CD pipeline", "R7, R8", "B2.16 · A3.11 · B2.5"),
  ("RAG misconfiguration and data exposure", "R12", "A1.4 · E1.3"),
 ]
 
@@ -402,23 +402,43 @@ GROUNDING: dict[str, str] = {
 "B2.9": "Verbose errors, an open redirect and a path traversal are each low on "
          "their own. Chained against CyberTravels they read a config file and end the "
          "conversation about severity. R9.",
-"B2.11": "The Coding Agent's fix must not break booking behaviour. A patch that "
+"B2.16": "The Coding Agent's fix must not break booking behaviour. A patch that "
          "passes the tests and changes what travellers experience is a second "
          "incident with a pull request attached. R8.",
-"B2.10": "CVSS scores the vulnerability. CyberTravels' engineers are asking "
+"B2.11": "The tree is CyberTravels', and the path that matters is the refund "
+        "one: handler to svc.refund to the payments sink, authenticated by a "
+        "session at every hop and checked for ownership at none. That is the "
+        "refund incident stated as a finding before it happened.",
+
+"B2.12": "The target is CyberTravels from outside, and the claim the mode cannot "
+         "reach is the one that matters — whether the refund endpoint accepts a "
+         "booking it does not own. One account can only ask the question; "
+         "answering it is a grey-box test.",
+
+"B2.13": "The matrix is CyberTravels' three roles against its objects, and the "
+         "two highest-cost untested cells are both on the audit log — the "
+         "records a regulator asks for first, and the ones no request in the "
+         "engagement ever touched.",
+
+"B2.14": "The two configurations are CyberTravels' own: a scoped Q3 external "
+         "engagement that clears the preflight, and a quick-look-before-the-board "
+         "run that is refused for four missing controls. The refusal is the "
+         "deliverable.",
+
+"B2.15": "CVSS scores the vulnerability. CyberTravels' engineers are asking "
          "about this booking API, with card data, behind this gateway — and the "
          "number that answers them is not on the badge.",
-"B2.12": "Give the review agent CyberTravels' whole repository and it gets worse, "
+"B2.17": "Give the review agent CyberTravels' whole repository and it gets worse, "
          "not better. The cliff arrives earlier than anyone expects and you pay "
          "more per token for it.",
 "A3.11": "The Coding Agent on Alex's laptop holds repository write, a cloud "
          "credential and whatever MCP servers were convenient. It is the "
          "highest-privilege agent at CyberTravels and the least governed. R6, "
          "R7.",
-"B2.13": "“CyberTravels enforces least privilege” is true of some "
+"B2.18": "“CyberTravels enforces least privilege” is true of some "
          "deployment at some time. An attestation is what binds it to the one "
          "running now — and refuses to claim more than it can show.",
-"B2.14": "Somebody else has already built this pipeline and published what "
+"B2.19": "Somebody else has already built this pipeline and published what "
          "happened. Adopting it without scoring it against a held-out key is how "
          "a reference implementation becomes a dependency CyberTravels cannot "
          "evaluate.",
@@ -431,7 +451,7 @@ GROUNDING: dict[str, str] = {
 # ---- C1 · red teaming ----------------------------------------------------
 "C1.0": "The board asked whether CyberTravels is secure. This function answers the "
         "only version of that question anyone can act on: how would we know.",
-"C1.1": "An offensive loop pointed at CyberTravels' staging estate is the most "
+"B2.10": "An offensive loop pointed at CyberTravels' staging estate is the most "
         "dangerous thing in the building — and the engagement scope has to be "
         "enforced below the model, because everything the harness reads comes "
         "from the system it is attacking.",

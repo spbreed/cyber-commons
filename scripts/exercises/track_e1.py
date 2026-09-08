@@ -249,7 +249,7 @@ supervisor asking "show me".
 Evaluation output is the strongest audit evidence an AI programme can produce,
 and it only works if you present the right number.
 
-B2.14 established the distinction; this lesson turns it into evidence:
+B2.19 established the distinction; this lesson turns it into evidence:
 
 - **Conformance** — schema validity. ~100% by construction. A build-health
   signal, not a quality claim.

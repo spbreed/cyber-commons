@@ -85,10 +85,10 @@ here is the same file `scripts/test_skills.py` runs offline.
 
 | | reached the model | acceptance property held |
 |---|---|---|
-| Qwen2.5-**1.5B**-Instruct | 6/6 | **3/6** — B2.3, B2.11 and C1.1 fail |
+| Qwen2.5-**1.5B**-Instruct | 6/6 | **3/6** — B2.3, B2.16 and B2.10 fail |
 | Qwen2.5-**7B**-Instruct | 6/6 | **6/6** |
 
-At 1.5B: B2.11 hands back the SQL injection unfixed, C1.1 ranks TLS 1.0 above an
+At 1.5B: B2.16 hands back the SQL injection unfixed, B2.10 ranks TLS 1.0 above an
 unauthenticated endpoint, and B2.3 answers `MISSING` for both the unauthorised
 function and the already-authorised one — it cannot tell them apart, which is
 the entire job of that stage. All three clear at 7B. So **7B is the floor for
@@ -96,7 +96,7 @@ the acceptance criteria**; below it the lessons still run and still teach, but
 three of them will not hit their numbers.
 
 The exception is the one worth reading: **B2.1 holds at 1.5B**, on the same SQL
-task B2.11 fails at that size — because it asks for one line and checks the
+task B2.16 fails at that size — because it asks for one line and checks the
 answer with an independent verifier, rather than asking for a corrected function
 and trusting what comes back. That is the chapter's argument, measured.
 

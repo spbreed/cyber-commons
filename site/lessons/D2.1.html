@@ -90,10 +90,10 @@ cutting them removes the only thing D5.1 can replay a run from.</p>
 <p>The skill tiers six CyberTravels sources by the fastest query that reads each, prices hot against tiered, and names the source that would have been cut.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/telemetry-tiering-cost/SKILL.md"><code>skills/detection/telemetry-tiering-cost/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: telemetry-tiering-cost
 description: &gt;-
-  Tier each telemetry source by the fastest query that reads it, then price hot
-  against tiered. Use when designing a detection data lake, when a SIEM bill
-  forces a retention cut, or when agent traces are about to be dropped for
-  costing too much.
+  Choose hot, warm or cold storage for each log source from the fastest SOC
+  query that reads it, and price the result. Use when designing a detection
+  data lake, when a SIEM bill forces a retention cut, or when agent traces are
+  about to be deleted for costing too much.
 allowed-tools: Read, Grep, Glob
 </code></pre>
 <h1>The queries decide the tier, not the retention policy</h1>
@@ -121,7 +121,7 @@ decision turns on the ratios.</p>
 the headline and the protection is the point: the biggest, cheapest-to-cut
 source is usually agent prompts, and it is the only thing a forensic replay can
 run against.</p>
-<h2>What it prints</h2>
+<h2>Example</h2>
 <pre><code>  index everything hot   $    18,993 / month
   tiered by query        $    13,398 / month
   difference             $     5,595 / month  (29%)

@@ -153,7 +153,7 @@ python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it
 ### A2.8 — An audit trail the workload cannot forge
 
 - **Risk** — An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls.
-- **Control** — Out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
+- **Control** — Out-of-band capture (B2.10), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
 - **Lab** — Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
 - **Tools** — `Falco`, `Tetragon`, `Sigstore`
 

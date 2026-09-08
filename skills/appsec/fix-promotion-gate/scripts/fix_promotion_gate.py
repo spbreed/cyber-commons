@@ -2,7 +2,7 @@
 """Promote four candidate patches from the sandbox replica through QA to a merge request, and count how many CI alone would have merged.
 
 This is the executable half of the `fix-promotion-gate` skill. The four
-candidates are the ones from B2.11's confirmed SQL injection in CyberTravels'
+candidates are the ones from B2.16's confirmed SQL injection in CyberTravels'
 booking service: one real fix, one that changes behaviour, one that only moves
 the pattern, and one that closes the bug by deleting the feature.
 

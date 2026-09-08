@@ -46,7 +46,7 @@ from collections import Counter
 c = Counter(v[0] for v in MANTIS.values())
 print(f"\ncoverage: {dict(c)}")
 print(f"→ Mantis is a strong Phase 3 stage-7 implementation with a stage-1 loop.")
-print(f"  Phases 4 and 5 remain yours, which is exactly what B2.6-B2.10 built.")
+print(f"  Phases 4 and 5 remain yours, which is exactly what B2.6-B2.15 built.")
 
 import json
 

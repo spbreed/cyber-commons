@@ -238,7 +238,7 @@ same file that runs offline in CI:
 
 | | reached the model | acceptance property held |
 |---|---|---|
-| **Qwen2.5-1.5B-Instruct** | 7/7 | **5/7** — B2.9, C1.1 failed |
+| **Qwen2.5-1.5B-Instruct** | 7/7 | **5/7** — B2.9, B2.10 failed |
 | **Qwen2.5-7B-Instruct** | 7/7 | **7/7** |
 
 That split is the point, and it is why the summary reports two numbers rather
@@ -254,13 +254,13 @@ The two 1.5B failures are honest and specific:
   concatenation straight back, inside a code fence. It did not fix the bug it
   was asked to fix, which is a **capability** failure: the model, not the
   harness.
-- **C1.1** asks for pentest findings ranked by severity and expects the
+- **B2.10** asks for pentest findings ranked by severity and expects the
   unauthenticated endpoint first. The model put TLS 1.0 first and the
   unauthenticated `/v1/users` endpoint second. A judgement failure, and a
   defensible-sounding one, which is what makes it worth showing.
 
 Both clear at 7B: B2.9 returns `q = "SELECT * FROM orders WHERE ref = %s"` with
-the parameter bound, and C1.1 ranks the unauthenticated endpoint first.
+the parameter bound, and B2.10 ranks the unauthenticated endpoint first.
 Re-running 1.5B afterwards reproduced exactly the same two failures, so this is
 a size effect and not run-to-run variance.
 
@@ -284,7 +284,7 @@ prompt-engineering aside.
 The lessons are not broken and the harness is not broken: **the mechanics run
 on a 1.5B model, and two of the seven acceptance properties need roughly 7B.**
 MODELS.md has always claimed the first half and promised that a lab needing a
-bigger model would say so — B2.9 and C1.1 are the named cases.
+bigger model would say so — B2.9 and B2.10 are the named cases.
 
 Cost of establishing it: a 1.1 GB and a 4.7 GB download from Kaggle Models,
 CPU-only, about 5 s and 12 s per lesson respectively. No GPU, no API credit,

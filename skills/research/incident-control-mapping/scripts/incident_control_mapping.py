@@ -15,7 +15,7 @@ kernel with the internet switched off.
 # an illustration.
 REGISTER = [
  # id      name                                     type   NIST     owning lesson
- ("C1.1",  "out-of-band telemetry capture",         "P/D", "AU-9",  "A2.8"),
+ ("B2.10",  "out-of-band telemetry capture",         "P/D", "AU-9",  "A2.8"),
  ("C1.2",  "hash-chained WORM transcript store",    "P",   "AU-10", "A2.8"),
  ("C1.3",  "logging-plane isolation",               "P",   "SC-39", "A2.8"),
  ("C1.4",  "escape detection",                      "D",   "SI-7",  "D2.3"),

@@ -1,57 +1,58 @@
-the bug is on line 22
-whole file             839 chars   29 lines
-±2 line window         207 chars    5 lines
-±6 line window         432 chars   13 lines
-strategy            sink   concat  source  intent  decidable
-----------------------------------------------------------------
-whole file          True   True    True    True    True
-±2 line window      True   True    False   False   False
-±6 line window      True   True    True    True    True
+what a black-box engagement may look at
 
-The ±2 window has the sink and the concatenation but not the signature,
-so you cannot tell whether owner is user-controlled — which is the
-difference between critical and won't-fix.
-def list_reports(conn, owner, limit=DEFAULT_LIMIT):
-    """Called from GET /reports?owner=... — owner is user-controlled."""
-    key = _cache_key("reports", owner, limit)
-    if key in CACHE:
-        return CACHE[key]
-    rows = conn.execute("SELECT * FROM reports WHERE owner = '" + owner + "' LIMIT " + str(limit))
-    out = [_format_row(r) for r in rows]
-    CACHE[key] = out
-    return out
+  DNS and certificate transparency     names that exist
+  TLS handshake                        the terminator, and its config
+  HTTP status, headers, body           what the app chose to return
+  error strings                        occasionally a stack, usually a template
+  response timing                      a signal, and a noisy one
+  public artefacts (JS, sitemaps)      routes the front end knows about
+  the scope document                   what you are permitted to touch
 
+OBSERVED — the evidence entails the claim  (5)
 
-394 chars (47% of the file), decidable=True
-strategy              chars   share  decidable  noise fns
-----------------------------------------------------------
-whole file              839    100%       True          4
-±2 line window          207     25%      False          0
-±6 line window          432     52%       True          1
-path slice              394     47%       True          0
+  + host api.cybertravels.example resolves and serves TLS 1.3
+      because: handshake completed, cert chain read
+  + /bookings/{id} exists
+      because: 200 on a known id, 404 on a random one
+  + an admin surface exists at /admin
+      because: 302 to a login form, distinct from the 404 template
+  + rate limiting is applied per IP
+      because: 429 after 61 requests in 60s from one address
+  + passport numbers are returned by /profile
+      because: observed in a response to our own account
 
-smallest decidable context: path slice (47% of the file, 0 unrelated functions)
-vs whole file: 53% smaller, 4→0 unrelated functions
+INFERRED — the evidence is consistent with the claim, and with others  (7)
 
-what each slice costs, in the only unit that matters
-   slice               decidable  unrelated fns  what the model does with it
-   whole file          True       4              reviews whatever survived truncation; you cannot tell which parts
-   ±2 line window      False      0              cannot see the signature, so it GUESSES whether owner is tainted
-   ±6 line window      True       1              decidable, and carrying one function the defect does not depend on
-   path slice          True       0              decidable, nothing unrelated - the answer is checkable
+  ? /bookings/{id} returns another tenant's booking
+      from:    404 on a random id
+  ? the app runs on Django
+      from:    X-Frame-Options and a csrftoken cookie name
+  ? the database is PostgreSQL
+      from:    an error string containing 'duplicate key value'
+  ? rate limiting is NOT applied per account
+      from:    not tested; no second address available
+  ? refunds are processed synchronously
+      from:    response time 1.9s vs 120ms on reads
+  ? the refund endpoint accepts a booking id it does not own
+      from:    not tested; would require a second account
+  ? a vendor MCP server is in the request path
+      from:    a Server header naming a proxy
 
-The undecidable slice is the expensive one, and not because it is wrong -
-because it is UNANSWERABLE and the model answers anyway. Asked whether a
-value is user-controlled without being shown where it comes from, it
-produces a confident verdict from the only thing it has, which is the
-shape of the line. That is where a false positive comes from.
+why each inference fails, in one line:
+  another tenant's booking  — a 404 on a random id is what CORRECT
+                              authorisation also looks like
+  Django / PostgreSQL       — headers and error strings are copied,
+                              proxied and templated by other stacks
+  no per-account rate limit — untested is not disproved
+  synchronous refunds       — latency has a dozen other causes
+  vendor MCP in the path    — a Server header names a hop, not a role
+  refund accepts foreign id — the finding that MATTERS, and this mode
+                              cannot reach it with one account
 
-B2.3 is the worked case. Given the function, its signature and the caller's
-authority, the model pass found a real missing-authorisation defect and
-quoted a line that exists. Given a slice it could not decide, it returned
-CWE-89 at 0.71 confidence quoting a concatenation that is not in the file.
-Same model, same prompt, different slice.
+report: 5 findings, 7 open questions
+no severity is attached to anything in the second list. an inference
+with a CVSS score beside it reads as a finding to everyone downstream,
+and the person who has to retract it is not the person who wrote it.
 
-So the rule is not 'send less'. It is: find the smallest slice in which the
-defect is DECIDABLE, and only then make it smaller. Cutting below that line
-does not save money, it buys false positives at a discount.
+the last open question is the one to escalate: it needs a second
+credential, which makes it a grey-box test, not a better black-box one.

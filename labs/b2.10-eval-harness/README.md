@@ -1,6 +1,6 @@
-# Lab B2.10 / E1.5 — evaluating a security harness
+# Lab B2.15 / E1.5 — evaluating a security harness
 
-**Chapters:** [B2.10](../../curriculum/track-b2.md) (build the eval) ·
+**Chapters:** [B2.15](../../curriculum/track-b2.md) (build the eval) ·
 [E1.5](../../curriculum/track-e1.md) (read it as audit evidence) ·
 [C1.6](../../curriculum/track-c1.md) (attack it)
 

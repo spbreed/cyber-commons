@@ -252,7 +252,68 @@ python3 replay.py --trace run.json --assert-identical
 
 ---
 
-### B2.10 — Severity calibration, triaging and reporting
+### B2.10 — Agentic penetration testing — the loop, and who runs each turn
+
+- **Risk** — Payload suggestions instead of attack chains — and an offensive loop with no hard scope enforcement, which is an incident with a project plan.
+- **Control** — Full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.
+- **Lab** — Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
+- **Tools** — `CAI`, `Metasploit`, `Firecracker`
+- **Open-weight models** — `Kimi K2`, `GLM-4.6`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/c1-redteam
+./airgap.sh up   # isolated docker network, no default route
+./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com
+```
+
+*Expect:* Severity sorting puts 2 of 3 exploitable findings in the top 3; model triage puts 3 of 3, and correctly reasons that the partner CDN is out of scope. With the model adversarially convinced that the out-of-scope host is critical, the unenforced harness acts on it and the enforced harness refuses. Underneath the harness the sandbox refuses three requests for three different reasons — rate limit, engagement boundary, and cloud metadata — without consulting the model at all.
+
+---
+
+### B2.11 — White-box agentic pentest — the source, and what it lets you prove
+
+- **Risk** — Full source produces a finding list nobody can act on, because presence is reported where reachability was needed.
+- **Control** — Every candidate carries the path that reaches it and the authorisation predicate on that path; unreachable sinks are reported as unreachable rather than dropped.
+- **Lab** — Enumerate paths from four entry points in the CyberTravels tree and separate reachable sinks from present ones.
+- **Tools** — `Semgrep`
+
+---
+
+### B2.12 — Black-box agentic pentest — inference, and refusing to report it as fact
+
+- **Risk** — An agent narrates a confident architecture from status codes, and the report is fiction that reads like findings.
+- **Control** — Every claim is labelled observed or inferred, with the evidence that supports it, and inferences never carry a severity.
+- **Lab** — Score twelve claims from an external probe run and see which survive the observed/inferred split.
+- **Tools** — `Nuclei`
+
+---
+
+### B2.13 — Grey-box agentic pentest — one credential per role, and the matrix it fills
+
+- **Risk** — Object-level authorisation is assumed correct because the endpoint list was covered, and BOLA lives in the cells nobody enumerated.
+- **Control** — A roles-by-objects-by-verbs matrix with every cell marked tested, assumed or unreachable, and the assumed cells ranked by blast radius.
+- **Lab** — Fill the matrix for CyberTravels with three roles and find the untested cells that matter.
+- **Tools** — `OpenAPI`
+
+---
+
+### B2.14 — Bonus — testing safely: the controls an offensive agent runs inside
+
+- **Risk** — The offensive agent is the least supervised and most capable thing in the estate, and its own traffic looks exactly like an attack.
+- **Control** — A preflight that refuses to start the engagement until every control is present, and tells the SOC what to expect.
+- **Lab** — Run the preflight against two engagement configurations and read why one of them cannot start.
+
+---
+
+### B2.15 — Severity calibration, triaging and reporting
 
 - **Risk** — Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing.
 - **Control** — Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.
@@ -265,15 +326,15 @@ python3 replay.py --trace run.json --assert-identical
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it
+jupyter notebook labs/notebooks/B2.15.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.15   # run it headless and check it
 ```
 
 *Expect:* Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely.
 
 ---
 
-### B2.11 — Remediation engineering — proven in a sandbox before the merge request
+### B2.16 — Remediation engineering — proven in a sandbox before the merge request
 
 - **Risk** — A patch that silences the scanner is indistinguishable from a patch that fixes the bug.
 - **Control** — Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
@@ -286,8 +347,8 @@ python3 scripts/run_notebooks.py --session B2.10   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it
+jupyter notebook labs/notebooks/B2.16.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.16   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b2-harness
@@ -299,7 +360,7 @@ python3 domain_harness.py --domain pentest --require-signed-scope
 
 ---
 
-### B2.12 — Context engineering — cutting the false positives
+### B2.17 — Context engineering — cutting the false positives
 
 - **Risk** — The model is given the repository and asked to be thorough, so the relevant line falls out of the window.
 - **Control** — Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.
@@ -312,15 +373,15 @@ python3 domain_harness.py --domain pentest --require-signed-scope
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it
+jupyter notebook labs/notebooks/B2.17.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.17   # run it headless and check it
 ```
 
 *Expect:* The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.
 
 ---
 
-### B2.13 — Agentic AI in the pipeline — attesting control intent for agents and MCP servers
+### B2.18 — Agentic AI in the pipeline — attesting control intent for agents and MCP servers
 
 - **Risk** — Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.
 - **Control** — Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.
@@ -333,8 +394,8 @@ python3 scripts/run_notebooks.py --session B2.12   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it
+jupyter notebook labs/notebooks/B2.18.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.18   # run it headless and check it
 
 # --- the full variant, against real repositories ---
 python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json
@@ -344,7 +405,7 @@ python3 labs/attestation/control_intent.py --corpus /path/to/clones --out result
 
 ---
 
-### B2.14 — Bonus — Google Mantis, the pipeline in production
+### B2.19 — Bonus — Google Mantis, the pipeline in production
 
 - **Risk** — A reference implementation is adopted as a product, and its outputs are trusted without an eval.
 - **Control** — Map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.
@@ -357,8 +418,8 @@ python3 labs/attestation/control_intent.py --corpus /path/to/clones --out result
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it
+jupyter notebook labs/notebooks/B2.18.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.18   # run it headless and check it
 ```
 
 *Expect:* The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.

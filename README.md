@@ -3,11 +3,11 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**132 lessons across 15 chapters.** Most are reading lessons — the idea, the
+**136 lessons across 15 chapters.** Most are reading lessons — the idea, the
 diagram, the control, and what it looks like in one running system — and then
-they **run a skill**. 129 of the 132 do, and the code is not in the notebook:
+they **run a skill**. 133 of the 136 do, and the code is not in the notebook:
 the lesson shows the `SKILL.md` as prose and runs that skill's own script from
-[`skills/`](skills/). Every one of the 132 is executed in CI before it ships,
+[`skills/`](skills/). Every one of the 136 is executed in CI before it ships,
 and so is every skill. No licence, no vendor, no paid model account.
 
 🌐 **[Live site](https://spbreed.github.io/cyber-commons/)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md)
@@ -66,7 +66,7 @@ python3 scripts/check_skills.py --check   # parses, names, tools, contracts, rou
 
 Each declares an **output contract**, which is what makes a skill checkable
 rather than aspirational. Every skill lesson embeds its skill verbatim at build
-time — so the lesson can never drift from the skill — and every one of the 134 carries
+time — so the lesson can never drift from the skill — and every one of the 138 carries
 a script the lesson runs. Several build the contract shape from the data they
 just produced and validate it, then show what the contract *cannot* see: **an
 empty result conforms perfectly.** Conformance is a statement about the
@@ -90,7 +90,7 @@ removed, and a script that runs and prints nothing counts as a failure.
 | [`redteam/`](skills/redteam) · [`research/`](skills/research) | 14 — campaigns, reproducibility, corpus integrity, supply chain, published incidents |
 | [`detection/`](skills/detection) · [`response/`](skills/response) · [`secops/`](skills/secops) | 21 — agent tempo, drift, fleet correlation, canaries, containment, stop authority |
 | [`grc/`](skills/grc) · [`regulatory/`](skills/regulatory) · [`programme/`](skills/programme) | 27 — tiering, control mapping, obligations, disclosure, sequencing, metrics |
-| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 13 — turn a control claim into a signed statement bound to one deployment ([B2.13](labs/notebooks/B2.13.ipynb), run against 10 real OSS agent/MCP repos) |
+| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 13 — turn a control claim into a signed statement bound to one deployment ([B2.18](labs/notebooks/B2.18.ipynb), run against 10 real OSS agent/MCP repos) |
 
 ## The programme
 
@@ -132,8 +132,8 @@ Two chapters carry a single artefact end to end:
   and A3 are those controls.
 - **[B2](curriculum/track-b2.md)** is the AI SDLC itself — a five-phase,
   fifteen-stage agentic AppSec pipeline built over seventeen sessions, attested in
-  [B2.13](labs/notebooks/B2.13.ipynb) and closed in
-  [B2.14](labs/notebooks/B2.14.ipynb) by scoring Google's Mantis against a
+  [B2.18](labs/notebooks/B2.18.ipynb) and closed in
+  [B2.19](labs/notebooks/B2.19.ipynb) by scoring Google's Mantis against a
   held-out key — a reference implementation is something you evaluate, not
   something you trust.
 
@@ -143,7 +143,7 @@ only one produces a practitioner who gets surprised.
 
 ## Why you can trust the output
 
-**Every one of the 132 notebooks has been run twice — here, and again on Kaggle
+**Every one of the 136 notebooks has been run twice — here, and again on Kaggle
 on a different machine — and printed exactly the same bytes.**
 
 That second run is the claim worth making, because a kernel that prints nothing
@@ -236,13 +236,13 @@ refuses to read a credential file inside the repo. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 132 sessions, 12 chapters
+site/data/curriculum.json   source of truth: 136 sessions, 12 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: A1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
-skills/                     134 agent skills, plus _runtime/ — the one shared library
-labs/notebooks/             132 generated notebooks + execution and Kaggle evidence
+skills/                     138 agent skills, plus _runtime/ — the one shared library
+labs/notebooks/             136 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_{lessons,skills,secrets,determinism,register} · kaggle_*

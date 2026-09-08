@@ -2,7 +2,7 @@
 
 The descriptions below arrive in CyberTravels' context window at connect time.
 They are not in this repository in the real system, and the server can change
-one after review — which is the rug-pull B2.13 is about.
+one after review — which is the rug-pull B2.18 is about.
 """
 
 TOOLS = [
