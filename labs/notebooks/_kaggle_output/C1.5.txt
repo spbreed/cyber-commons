@@ -46,4 +46,4 @@ register rows implicated: 9  (R2, R3, R4, R5, R7, R8, R9, R10, R11)
 Read the incident as a story about an AI lab and it is a curiosity. Read
 it as a list of preconditions and eight of nine are already sitting in a
 travel company's booking platform. The ninth is a scaling decision
-somebody will make for good reasons on an ordinary Tuesday.
+somebody will make for good reasons, as routine engineering work.
