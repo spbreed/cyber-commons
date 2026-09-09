@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Trace one artefact across three functions and find the consumer who never received it.</p>
 <p><strong>Why a security engineer needs it.</strong> The handoffs fail, not the functions: privacy assessment into control design, legal position into system prompt, MRM validation into security evidence. The control it builds is: joint runbooks for the seams — one artefact, many consumers, one owner.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The functions work and the handoffs leak, and both sides are usually right about their own scope.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Write a joint runbook per seam: one artefact, one owner, named consumers.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Seams with an owned artefact. An indicator with two consumers and no owner gets computed twice, differently.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The seams are where this function fails: privacy assessment into control design, legal position into system prompt, MRM validation into deployment approval. Each handoff has two owners, which usually means none.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The privacy assessment said what CyberTravels may retain; the log design never received it. That handoff has two owners, which means none. R10.</p>

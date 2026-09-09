@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.</p>
 <p><strong>Why a security engineer needs it.</strong> A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed. The control it builds is: stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A static finding is a hypothesis, and hypotheses get argued about in triage meetings instead of fixed.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Generate and run an actual exploit against the sandbox, so each finding is confirmed or dropped.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Findings confirmed by execution versus refuted. Both are useful answers; only one of them is a ticket.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A finding becomes a fact the moment something other than a model says so. Driving the running application is how you get that second opinion — and the oracle you choose is what makes it worth having.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> A finding becomes a fact when something other than a model says so — here, a request to the replica's booking endpoint that returns another traveller's card details.</p>

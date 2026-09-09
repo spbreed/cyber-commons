@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.</p>
 <p><strong>Why a security engineer needs it.</strong> Payload suggestions instead of attack chains — and an offensive loop with no hard scope enforcement, which is an incident with a project plan. The control it builds is: full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An offensive loop with no hard scope boundary tests something you were not authorised to touch, at machine speed.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Give the loop full target context, and enforce scope at the network layer rather than by asking the model to respect it.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Findings ranked against a severity-sorted baseline, and the number of out-of-scope requests the enforcement refused.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An offensive harness reads only hostile input, by definition: every byte comes from a system you are attacking. It is the most dangerous agent in the building, and the thing that makes running it professional is that scope stops living in the tester's attention.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> An offensive loop pointed at CyberTravels' staging estate is the most dangerous thing in the building — and the engagement scope has to be enforced below the model, because everything the harness reads comes from the system it is attacking.</p>

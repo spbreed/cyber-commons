@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Pass a fabricated claim through a schema check and then through a ground-truth verifier.</p>
 <p><strong>Why a security engineer needs it.</strong> An unverified claim becomes a shared premise, and a peer message is trusted more than a document it is no safer than. The control it builds is: schema validation plus an independent verifier before any claim propagates.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An unverified claim becomes a shared premise, and a peer's message gets trusted more than a document it is no safer than.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Schema validation plus an independent verifier before any claim propagates.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Results that passed both checks, as a share of results acted on.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A tool result re-enters the context as a fact. So does a peer's message. A schema check proves the shape is right and says nothing at all about whether the claim inside it is true.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The payments API returns <code>{"status":"refunded"}</code>. That is a valid shape and it is not evidence the money moved, and the advisor's hotel recommendation is the same problem in prose. R2.</p>

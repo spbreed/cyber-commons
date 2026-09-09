@@ -37,7 +37,7 @@ and a dataset re-pulled on every train can change under a name that never did.
   ("md", "## 3 · Where it breaks — the trusted name that was never verified"),
   ("md", "## 4 · The control — assess on mutability, not on popularity"),
   *skill_steps('research/agent-supply-chain-assessment',
-               "## 2 · The procedure, as a skill\n\nThe skill scores each component CyberTravels pulls in on whether it can change without notice, and separates the pinned artefacts from the ones a registry can replace on a Tuesday."),
+               "## 2 · The procedure, as a skill\n\nThe skill scores each component CyberTravels pulls in on whether it can change without notice, and separates the pinned artefacts from the ones a registry can replace at any time."),
 ],
  "expect": "The pinned libraries score low-risk, the hosted model and the "
            "re-pulled dataset score high because neither can be pinned, and the "

@@ -142,5 +142,5 @@ print()
 print("Read the incident as a story about an AI lab and it is a curiosity. Read")
 print("it as a list of preconditions and eight of nine are already sitting in a")
 print("travel company's booking platform. The ninth is a scaling decision")
-print("somebody will make for good reasons on an ordinary Tuesday.")
+print("somebody will make for good reasons, as routine engineering work.")
 assert len(present) == 8 and len(covered) == 9

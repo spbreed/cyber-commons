@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Hypothesis-first hunting over agent telemetry: stating a falsifiable hypothesis, naming the population before running it, scoring what it caught against what it missed, and deciding to promote, tune or discard.</p>
-<p><strong>Why a security engineer needs it.</strong> Detections encode behaviour somebody already understood. Everything outside them is invisible, and the agent behaviour worth catching is usually behaviour nobody had thought to write a rule for. The discipline is in the scoring: the hypothesis that feels most obviously right is often a description of normal work, and shipping it costs a quarter of everyone's attention.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> Detections encode behaviour somebody already understood. Everything outside them is invisible, and the agent behaviour worth catching is usually behaviour nobody had thought to write a rule for. The discipline is in the scoring: the hypothesis that feels most obviously right is often a description of normal work, and shipping it costs a quarter of everyone's attention.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Everything not covered by a rule is invisible, and the rules were written against behaviour somebody already understood.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>State a falsifiable hypothesis, name the population before running it, then promote, tune or discard.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Precision of the hunt: a hypothesis matching fourteen runs to find two, because twelve are the nightly batch, has bought nothing.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The alert queue has been quiet for a fortnight and nobody believes it. Hunting is the pass that finds what no rule was written for — and the hypothesis that feels most obviously right is usually a description of the overnight batch doing its job.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The corpus is CyberTravels' agent runs — the Workflow Agent and the RAG Advisor, forty runs across a fortnight. The overnight batch that wrecks the working-hours hypothesis is CyberTravels' own nightly reconciliation, which is exactly the kind of legitimate oddity that makes an obvious hunt useless in a real estate.</p>

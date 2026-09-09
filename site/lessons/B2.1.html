@@ -25,7 +25,29 @@ still standing once the model is the component you cannot trust. A harness whose
 verifier is the model agreeing with itself does not fail loudly — it succeeds
 incorrectly and files a clean trace.</p>
 <p>This is a <strong>mechanism</strong> lesson, and it is short on purpose: three examples of
-harnesses you already run, then one loop of about twenty lines, executed twice.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+harnesses you already run, then one loop of about twenty lines, executed twice.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds quietly and wrongly.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Build an independent verifier, and a budget that stops the loop when it cannot pass.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Agreement rate between the verifier and held-out ground truth, and the number of loops stopped by budget rather than by success.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A model on its own is a text generator. Wrap it in a loop with tools and it reviews CyberTravels' pull requests; wrap it badly and it reviews them and tells you it found nothing. Every part of that wrapper is a security decision, and nobody else in the building is going to notice that the verifier is a shape check.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Alex is building the reviewer that reads CyberTravels' pull requests. Its verifier is the part that decides whether it found anything, and a verifier that asks the model whether it is happy reports a clean review of a vulnerable diff.</p>

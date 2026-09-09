@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Route actions by reversibility and measure how many reach a human under each policy.</p>
 <p><strong>Why a security engineer needs it.</strong> An approval queue at volume approves everything, and the risk register still records it as a control. The control it builds is: approval reserved for irreversible actions only, with machine-generated content labelled as such.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An approval queue at volume approves everything, and the risk register still records it as a control.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Reserve approval for irreversible actions only, and label machine-generated content as such.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Approvals per reviewer per hour, and the share of them that are genuinely irreversible actions.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Approval works for the rare and irreversible and fails for everything else. The design question is not whether to have a human in the loop — it is how few decisions you can put in front of them, so that each one gets read.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Approval is right for a $5,000 refund and wrong for a hotel search. The design question for CyberTravels is not whether to have a human in the loop but how few decisions reach them, so each one gets read. R2.</p>

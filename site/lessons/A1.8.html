@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Execute model-authored code and enumerate what the process could touch.</p>
 <p><strong>Why a security engineer needs it.</strong> Model-authored code runs with the runtime's privileges — reaching the filesystem, the network and any credential in the environment. The control it builds is: sandboxed execution (A3.2) and egress control (A3.3).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Model-authored code runs with the runtime's privileges, reaching the filesystem, the network and every credential mounted there.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Execute in an isolate with no ambient credentials and no default network, and control egress underneath it.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Share of code-executing runs inside an isolate, and the number of credentials visible from within one — target zero.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Asking a model to write code is safe. Running the code it wrote is the part that is not, and most agent frameworks ship the second one enabled with the same process privileges as the framework itself.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The Coding Agent writes a patch and the runtime executes it. On Alex's laptop that process can read <code>~/.aws</code>, the HR folder and the roadmap directory, because nothing said otherwise. R6.</p>

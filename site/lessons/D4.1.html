@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> The remediation policy: classifying every response action on reversibility and blast radius, and deriving each runbook's automation tier from that rather than from its author.</p>
-<p><strong>Why a security engineer needs it.</strong> If tiers are chosen per runbook, the blast radius of your incident response is unknown until it fires. Two properties of the action decide it, and reversibility outranks radius — which is why deleting one agent's workdir is manual while forcing human-in-the-loop across the whole estate is not.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> If tiers are chosen per runbook, the blast radius of your incident response is unknown until it fires. Two properties of the action decide it, and reversibility outranks radius — which is why deleting one agent's workdir is manual while forcing human-in-the-loop across the whole estate is not.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Automation scope decided per runbook means the blast radius of your response is unknown until the response fires.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Classify every action on reversibility and blast radius, and derive the tier from those two properties.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Actions with a tier derived from policy rather than chosen by an author — and reversibility outranking radius, which is the policy.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Every runbook in the drawer picked its own automation tier, chosen by whoever wrote it on the day. So the blast radius of your incident response is unknown until the response fires, which is the worst moment to find out.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The nine actions are CyberTravels' actual response levers, from throttling one agent to rotating the estate's root CA. The pair worth reading together is deleting a single agent's working directory — manual, because there is no undo — against forcing human-in-the-loop on every agent in the estate, which is one flag.</p>

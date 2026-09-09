@@ -27,7 +27,29 @@ analysis over the set of tools an identity holds, and an attestation that never
 claims PASS on a control it cannot evidence.</p>
 <p>This is a <strong>control</strong> lesson, and its discipline is refusal: the analyser is
 built so that it cannot overclaim, and two of the five controls are capped at
-PARTIAL by construction.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+PARTIAL by construction.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Control claims live in a spreadsheet and are never bound to a deployment, so nobody can say which build they describe.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Scope every skill to one deployment identifier and emit a signed attestation whose predicate names what was checked.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Deployments with a verifiable attestation, and claims in the spreadsheet with no attestation behind them.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Point this pipeline at an agentic system and four of its stages quietly stop meaning anything: there is no call graph, the sink is a tool schema, the source is retrieved text, and the dependency is somebody else's running process. A green scan over an agent repository is a true statement about the Python and says nothing about what the agent will do.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> “CyberTravels enforces least privilege” is true of some deployment at some time. An attestation is what binds it to the one running now — and refuses to claim more than it can show.</p>

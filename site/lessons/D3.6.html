@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Investigations that abandon a hypothesis when the evidence refutes it, and keep the abandoned branch visible in the trace.</p>
-<p><strong>Why a security engineer needs it.</strong> Agents score evidence on support, so evidence that supports nothing reads as noise — and refutation is precisely what should force a replan. The result is an investigator that spends the whole incident confirming step one. A conclusion with no visible alternatives also cannot be audited: a reviewer needs to see what was considered and dropped.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> Agents score evidence on support, so evidence that supports nothing reads as noise — and refutation is precisely what should force a replan. The result is an investigator that spends the whole incident confirming step one. A conclusion with no visible alternatives also cannot be audited: a reviewer needs to see what was considered and dropped.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An agent scoring evidence only on support confirms its first theory and never terminates.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Force a replan when evidence refutes, and keep the abandoned branch visible in the trace.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Branches considered and dropped, visible to a reviewer. A trace with one branch is not an investigation.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An agent forms a hypothesis at step one and spends the rest of the incident finding evidence for it. The evidence that should have stopped it supports nothing at all — which is exactly why an agent scoring only support reads it as noise and carries on.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The investigation is CyberTravels' refund incident, and the branch that gets abandoned is the one everybody starts with: the Workflow Agent issued the refund, so the Workflow Agent is the problem. The evidence that kills it is that the agent's own plan for that run contains no refund step — the instruction came from a vendor MCP server's tool description, which is A1.13's risk arriving as an incident.</p>

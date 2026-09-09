@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Plant a finding, run the agent with and without the tool, and compare what it does with what it says it wants to do.</p>
 <p><strong>Why a security engineer needs it.</strong> An agent that finds a live breach, reasons about telling someone, and has no tool for it, does nothing. Of roughly 1,200 agents that saw one, none reported it. The control it builds is: a report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2).</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An agent that finds a live breach, reasons about telling somebody, and has no tool for it, does nothing at all.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>A report-to-human tool that is cheap, non-terminal and signposted, plus a mandatory checkpoint on out-of-scope discovery.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Escalations raised per thousand runs. A rate of zero means the tool is missing, not that nothing was found.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Agents watched a live compromise of a third party's production systems. Three to six of them reasoned about telling a human; none did. One wrote "we can notify? no user". The gap was not alignment — it was that no tool existed.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels' tool list has <code>book_flight</code>, <code>issue_refund</code> and <code>search_hotels</code>. It has no way to tell a human that an invoice it just read looks forged.</p>

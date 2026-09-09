@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Have an agent inherit a privileged token and reach something its requester never could.</p>
 <p><strong>Why a security engineer needs it.</strong> The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human. The control it builds is: delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The agent acts with more authority than the person who asked, and the log records a service account rather than either of them.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Delegation that narrows, grants that expire, and default-deny underneath both.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Share of actions whose effective scope sits inside the requesting human's own ceiling.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An engineer's agent inherits the engineer's standing permissions, because that is the fastest way to make it useful. It now holds production write access at three in the morning, when its principal is asleep and cannot be surprised by anything it does.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels inherits Alex's standing permissions because that was the fastest way to make it useful. It now holds production write access at three in the morning, when Alex is asleep and cannot be surprised by anything it does. R1.</p>

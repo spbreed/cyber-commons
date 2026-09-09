@@ -142,8 +142,9 @@ question is the same: **what, other than the model, decided that this worked?**"
 Stage 5 is the one everybody claims to do and almost nobody re-runs.
 
 A threat model produced in a workshop describes the system as it was on the day
-of the workshop. It is stale the moment an entry point is added, and adding an
-entry point is a Tuesday. So this stage does not *write* a threat model — it
+of the workshop. It is stale the moment an entry point is added, and entry
+points get added in the course of ordinary work, without anyone calling it a
+change to the threat model. So this stage does not *write* a threat model — it
 **derives** one, from evidence the estate already holds, and the useful artefact
 is the diff between two runs.
 
@@ -221,8 +222,8 @@ confuse with each other.
 **The deterministic half is a real scanner with real rules.** Semgrep, CodeQL,
 OpenGrep. Parse the code to a graph, ask a rule a question about it, and get
 the same answer every time. That repeatability is what lets you gate a merge on
-it — a probabilistic check cannot block a build, because the same commit would
-pass on Tuesday and fail on Wednesday.
+it — a probabilistic check cannot block a build, because the same commit can
+pass on one run and fail on the next.
 
 Its limit is not accuracy. On the file below Semgrep's precision is **1.00 at
 every ruleset width**; it does not report bugs that are not there. Its limit is
@@ -352,8 +353,8 @@ IDOR in seven** — it is right when it speaks and it stays quiet about six of
 every seven real defects. The best recall is **six in ten**, four times as many,
 from a system reasoning about the class.
 
-Three things follow, and the third is the one that changes what you do on
-Monday.
+Three things follow, and the third is the one that changes how you build the
+pipeline.
 
 **Precision is the easy half.** A detector that reports nothing is perfectly
 precise. Any access-control tool that leads with its precision number is leading

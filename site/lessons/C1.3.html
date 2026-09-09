@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Elicitation techniques that scale — cross-prompt attention degradation, context crowding — that strip safety while retaining tool use, measured on reproduction rather than on a transcript.</p>
-<p><strong>Why a security engineer needs it.</strong> A jailbreak that reproduces once is an anecdote; one with a measured success rate across attempts and seeds is a finding. The retained-tool-use combination is the one that turns a bypass into an incident.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> A jailbreak that reproduces once is an anecdote; one with a measured success rate across attempts and seeds is a finding. The retained-tool-use combination is the one that turns a bypass into an incident.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A jailbreak that strips safety while leaving tool use intact is the combination that turns a bypass into an incident.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Run the technique many times, varying seed and wording, rather than keeping the transcript that worked.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Reproduction rate across attempts, with its denominator. A screenshot has no denominator, which is why it is not a finding.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A jailbreak that strips safety and leaves tool use intact is the dangerous combination, because a model that cannot act is a curiosity and one that can is an incident. And it only counts if it reproduces across attempts, not in one screenshot.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The target is CyberTravels' advisor, and the dangerous outcome is a jailbreak that keeps the booking and refund tools while shedding the policy that governed them.</p>

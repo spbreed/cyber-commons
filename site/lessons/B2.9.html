@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Chain individually-medium findings into a critical path and show the severity the chain earns.</p>
 <p><strong>Why a security engineer needs it.</strong> Three medium findings are triaged as three mediums, and nobody notices they compose. The control it builds is: stage 13: combine validated findings into multi-step sequences and score the chain, not the links.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Three medium findings are triaged as three mediums, and nobody notices they compose into a critical.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Combine validated findings into multi-step sequences where one's effect satisfies another's precondition.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Chains discovered, and the severity of the chain against the highest severity of its links — the difference is what individual triage missed.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Three medium findings, each correctly scored, each individually not worth an engineer's afternoon. Chained, they read a file that ends the conversation about severity. Chains are where automated analysis earns its keep.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Verbose errors, an open redirect and a path traversal are each low on their own. Chained against CyberTravels they read a config file and end the conversation about severity. R9.</p>

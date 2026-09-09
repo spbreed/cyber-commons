@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Turn an architecture map into a ranked threat model, then diff it after one entry point is added.</p>
 <p><strong>Why a security engineer needs it.</strong> Threat models are written once, by hand, against a system that has since changed. The control it builds is: stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Threat models are written once, by hand, against a system that has changed since.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Derive assets, entry points and attack vectors mechanically from the map the estate already holds.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>The diff between two runs. A threat model that produces no diff when the estate changed is not being derived.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A threat model produced in a workshop describes the system as it was on the day of the workshop, and it is derived from the code alone — so two deployments of the same repository, one behind a private load balancer with no egress and one on the internet with a wildcard trust policy, get the same model. It is wrong about both.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The threat model that said “CyberTravels answers questions” is still on file. Deriving it from the architecture on every release is what would have caught the refund endpoint appearing.</p>
@@ -42,8 +64,9 @@
 </code></pre>
 <p>Stage 5 is the one everybody claims to do and almost nobody re-runs.</p>
 <p>A threat model produced in a workshop describes the system as it was on the day
-of the workshop. It is stale the moment an entry point is added, and adding an
-entry point is a Tuesday. So this stage does not <em>write</em> a threat model — it
+of the workshop. It is stale the moment an entry point is added, and entry
+points get added in the course of ordinary work, without anyone calling it a
+change to the threat model. So this stage does not <em>write</em> a threat model — it
 <strong>derives</strong> one, from evidence the estate already holds, and the useful artefact
 is the diff between two runs.</p>
 <p><strong>STRIDE</strong> gives six questions. Against an agentic system each has a shape a

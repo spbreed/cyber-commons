@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Build a call graph from entry points and partition findings into reachable, unreachable and unknown.</p>
 <p><strong>Why a security engineer needs it.</strong> A finding in dead code costs the same to triage as one on the login path. The control it builds is: stage 10: decide whether an external caller can actually reach the sink before anyone is paged.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A finding in dead code costs exactly as much to triage as one on the login path.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Decide whether an external caller can actually reach the sink before anyone is paged.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Share of findings with a reachable path from a real entry point — and the triage hours the unreachable ones would have cost.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The finding is real and the code is dead — a true positive about the code and a false positive about the risk. Telling those apart needs a call graph, a call graph needs the syntax tree, and the tree's own blind spot is the third bucket everyone collapses into the second.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The finding is real and nothing in CyberTravels' booking service calls the function it landed in. The syntax tree can prove that for three of them, and for the nightly ledger job it cannot — which is the finding, not a gap in the report.</p>

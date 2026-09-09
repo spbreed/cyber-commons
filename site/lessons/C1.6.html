@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Detection engineering for runtime-objective anomalies at high concurrency, choosing rules by the queue volume they add rather than by recall alone.</p>
-<p><strong>Why a security engineer needs it.</strong> A rule that fires on everything is worse than none, because it spends the attention the good rules need. Deployability is a measured property — firing volume against real history — not a matter of taste.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> A rule that fires on everything is worse than none, because it spends the attention the good rules need. Deployability is a measured property — firing volume against real history — not a matter of taste.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A rule that flags an unauthorised runtime objective is worth a great deal; the same rule firing on everything is worth less than nothing.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Generate candidates, then score each against real history on the one property that decides deployability — firing volume.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Alerts added to the queue per true positive. A rule at 301 to 1 is rejected with the number attached, not with an adjective.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A rule that flags an unauthorised runtime objective before compromise is worth a great deal, and the same rule firing on everything is worth less than nothing. Which one you built is decided by the volume it adds to the queue, not by its recall.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The anomaly is a CyberTravels agent pursuing an objective its task never set, and the rules are scored against CyberTravels' own history so the queue cost is real.</p>

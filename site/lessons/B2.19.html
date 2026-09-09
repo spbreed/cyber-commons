@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.</p>
 <p><strong>Why a security engineer needs it.</strong> A reference implementation is adopted as a product, and its outputs are trusted without an eval. The control it builds is: map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A reference implementation gets adopted as a product and its outputs trusted without an evaluation.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Map its stages onto the pipeline you built, then score it against your own held-out key.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Its accuracy on your key, not its accuracy on its own — which is the only comparison that transfers.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Somebody has already built this pipeline and published what happened. Reading it is worth an afternoon; adopting it without scoring it against a held-out key is how a reference implementation becomes a dependency you cannot evaluate.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Somebody else has already built this pipeline and published what happened. Adopting it without scoring it against a held-out key is how a reference implementation becomes a dependency CyberTravels cannot evaluate.</p>

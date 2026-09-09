@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.</p>
 <p><strong>Why a security engineer needs it.</strong> Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed. The control it builds is: per-hop attribution written to an append-only store outside the agent's reach.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Per-hop attribution written to an append-only store outside the agent's reach.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Actions with a complete chain. The share below 1.00 is precisely the part of the estate you cannot audit.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A trace that records tool calls is not evidence. Evidence answers who asked, which agent acted, what authority it held, and what input made it act — and an auditor will ask all four in that order.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The four fields an auditor will ask about that $5,000 refund: which traveller, which agent, under what authority, and what text made it act. CyberTravels currently records the third and a version of the second. R11.</p>

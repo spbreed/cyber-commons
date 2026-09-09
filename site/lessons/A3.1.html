@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.</p>
 <p><strong>Why a security engineer needs it.</strong> Allow-by-default authorization is defeated by any argument the model can be persuaded to produce. The control it builds is: policy evaluated per call on (identity, tool, arguments, resource), denying unless a rule permits.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Allow-by-default authorization is defeated by any argument the model can be persuaded to produce.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Evaluate policy per call on identity, tool, arguments and resource, denying unless a rule permits.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Calls denied by policy, and the share of tools reachable with no matching rule at all.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Identity has already failed. Something untrusted is in the context and the agent has decided to call a tool. The tool call is the last place a decision can still be made on facts rather than intent — this SPIFFE ID, this tool, this resource, this verb — and a policy written one notch vaguer than that cannot express the distinction the attack turns on.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The last place a decision about that refund rests on facts rather than on intent. Identity has already failed, an injected instruction is in the context, and the tool call is where CyberTravels can still say no. R1, R3.</p>
@@ -50,7 +72,7 @@ until it is exploited.</p>
 detail and it is the entire control, because it changes what a mistake costs.
 Under allow-by-default, a permission somebody forgot to restrict is available to
 an attacker. Under deny-by-default, a permission somebody forgot to grant is a
-broken feature — which someone reports on Monday morning, loudly, and which
+broken feature — which someone reports the next working day, loudly, and which
 harms nobody.</p>
 <p>The policy takes four inputs and all four matter:</p>
 <ul>

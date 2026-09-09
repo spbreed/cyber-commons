@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Write the delegated-authority policy.</p>
 <p><strong>Why a security engineer needs it.</strong> A per-tool review queue becomes a bottleneck and then a bypass. The control it builds is: a policy on delegated authority instead of tool-by-tool approval.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A per-tool review queue becomes a bottleneck and then a bypass, within about a quarter.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Govern the autonomy level instead: four rungs, each with its own conditions.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>What an agent may do without asking, as a function of measured containment rather than of which vendor supplied the tool.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An approved-tools list grows until it is a list of everything, at which point it governs nothing. Autonomy levels and conditions still work at a thousand agents, because they attach to behaviour rather than to product names.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels will not stop at four agents. An approved-tools list stops governing at about forty; autonomy levels with conditions attach to behaviour and keep working.</p>

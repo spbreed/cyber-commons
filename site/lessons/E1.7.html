@@ -17,10 +17,32 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Automate one evidence package on a schedule.</p>
 <p><strong>Why a security engineer needs it.</strong> Automating judgment instead of evidence collection. The control it builds is: agent-assisted evidence collection, drift detection, exception tracking.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Point-in-time assurance describes a system that no longer exists by the time anyone reads it.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Re-run the evidence collection inside a freshness window derived from how fast the thing actually changes.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Controls currently evidenced — passing and in window — rather than controls that once passed. The number drops, and it is the first honest one.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A control that is verified annually is a control you know about once a year. Continuous verification is the only version of assurance that keeps up with a system whose behaviour changes between tests.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> A control verified once a year on a system whose prompt changed on Tuesday. Continuous verification is the only version of assurance that keeps up with CyberTravels.</p>
+<p><strong>At CyberTravels.</strong> A control verified once a year on a system whose prompt was edited last week. Continuous verification is the only version of assurance that keeps up with CyberTravels.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   annual                          continuous
    +-------------+                 +-------------------------+

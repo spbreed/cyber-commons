@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Separate the three identities and show a downstream service authorising on the agent while attributing to the human.</p>
 <p><strong>Why a security engineer needs it.</strong> A shared service account answers 'what ran' and destroys 'for whom' — so no later control can be conditioned on the caller. The control it builds is: a distinct identity per workload, carrying the human principal alongside it, asserted on every call.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A shared service account answers "what ran" and destroys "for whom", so no later control can be conditioned on the caller.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>One identity per workload, carrying the human principal alongside it, asserted on every call.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Workloads holding a distinct identity, as a share of the fleet.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Three identities are present every time an agent acts: the person who asked, the workload that runs, and the agent instance doing the work. Collapse any two of them and you lose the ability to answer the only question that matters after an incident.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Three identities are present whenever CyberTravels books a flight: the traveller who asked, the workload the agent runs as, and which of the four agents is acting. CyberTravels collapses all three into <code>cybertravels-svc</code>, which is R11.</p>

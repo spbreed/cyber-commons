@@ -589,9 +589,9 @@ GROUNDING: dict[str, str] = {
         "(budgets, scopes, approvals) and what bounds what it produces (the "
         "hotel recommendation). They fail differently and are tested "
         "differently.",
-"E1.7": "A control verified once a year on a system whose prompt changed on "
-        "Tuesday. Continuous verification is the only version of assurance that "
-        "keeps up with CyberTravels.",
+"E1.7": "A control verified once a year on a system whose prompt was edited "
+        "last week. Continuous verification is the only version of assurance "
+        "that keeps up with CyberTravels.",
 "E1.8": "CyberTravels inherited its model vendor's decisions, its OCR library's, "
         "and a third-party MCP server's. R4.",
 "E1.9": "CyberTravels was approved once and has changed continuously since — a tool "

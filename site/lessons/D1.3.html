@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Two halves of one job: scoring actors on timing, sequencing and volume to find the agents that are in no registry, then deciding per-field retention on the traces you inherit once you keep them.</p>
 <p><strong>Why a security engineer needs it.</strong> Shadow autonomy is invisible to a stack that reads an agent as the person whose credential it holds, and the threshold that finds it is set by cost rather than accuracy — a flagged human costs half an analyst-hour, a missed agent costs forty. The trace you then hold is the most useful log source you have and the most sensitive, because it carries the reasoning and whatever was in the context window.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An agent nobody registered acts under a person's credential, and conventional analytics read it as that person behaving oddly.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Score actors on regularity, rate and continuity, then decide per-field retention on the traces you inherit.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Unregistered actors surfaced, and the threshold chosen by expected cost — a flagged human costs half an analyst-hour, a missed agent costs forty.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The agent holds a person's authority and acts in their name, so conventional UEBA reads it as that person behaving strangely at 03:00. Find it on behaviour instead, and you inherit its trace — which contains the reasoning, and whatever was in the context window when it ran.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels acts under Alex's authority and in Alex's name, so conventional UEBA reads it as Alex behaving strangely at 3am. Score it on behaviour instead and it is unmistakable — and then you are holding its trace, which carries prompts, tool calls, decisions and identities that appear in no application log CyberTravels has. R10, R11.</p>

@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Deduplicate findings across three analysis tracks, then verify each against the AST and drop the ones that reference code that is not there.</p>
 <p><strong>Why a security engineer needs it.</strong> Parallel analysis tracks report the same bug three times, and some of those bugs do not exist. The control it builds is: stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Consolidate overlapping findings, then cross-reference each against syntax and call graph.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Findings before and after consolidation, and how many survived verification. Both numbers, not just the smaller one.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Three analysers found the same defect and reported it four times, in three vocabularies, at two severities. A queue that inflates by 3x is not a queue — it is a landfill with a ticket number.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Three analysers found the same booking-handler defect four times. The queue Alex will actually read is the deduplicated one.</p>

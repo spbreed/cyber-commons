@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Send one poisoned inter-agent message and watch it propagate through the topology.</p>
 <p><strong>Why a security engineer needs it.</strong> One compromised agent steers every agent downstream of it, because a peer's message is treated as a colleague's instruction rather than as input. The control it builds is: message validation and provenance on the inter-agent channel (A3.5), and per-agent identity (A2.1).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>One compromised agent steers every agent downstream of it, because a peer's message is trusted the way a colleague's would be.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Validate and mark provenance on the inter-agent channel, on top of per-agent identity.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Peer messages carrying a verified sender identity, as a share of messages acted on.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A planner asks a worker for a summary. The worker returns text containing an instruction, and the planner follows it — because a message from a peer arrives carrying more trust than a document ever would, and nothing in the channel says otherwise.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The Workflow Agent asks the RAG Advisor for a hotel summary. The reply contains an instruction, and the Workflow Agent follows it — because a message from a peer arrives carrying more trust than a document ever would. R3.</p>

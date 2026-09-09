@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> JSON-wrapping the model-gateway trace so an agent is observable at all, then scoring actors on behaviour to tell agent tool calls from human activity.</p>
-<p><strong>Why a security engineer needs it.</strong> This is the function's pivot: the offensive finding becomes defensive telemetry. The agents you most need to find are the ones in no registry, and the gateway logs none of the fields that would reveal them until you add them.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> This is the function's pivot: the offensive finding becomes defensive telemetry. The agents you most need to find are the ones in no registry, and the gateway logs none of the fields that would reveal them until you add them.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>To catch the actor you have just played, you have to be able to see it — and the model gateway logs none of the fields that would distinguish an agent from a person.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Wrap the gateway trace with identity, tool and arguments, then score actors on behaviour rather than on what they claim to be.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Threshold chosen by expected cost rather than accuracy, and the unregistered actors it surfaces.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>To catch the actor you just played you have to see it, and an agent's tool calls arrive through a gateway that logs none of the fields telling an agent from a person. This is where the offensive finding becomes defensive telemetry.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The gateway is CyberTravels', and the actor to find is the Workflow Agent acting under Alex's credential at a tempo no person types — invisible until the trace carries the acting identity.</p>

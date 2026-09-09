@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Replay an agent run for a regulator-grade record.</p>
 <p><strong>Why a security engineer needs it.</strong> Non-determinism as an evidentiary problem. The control it builds is: log at design time what replay will need.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Miss one of the four runtime constants and you can describe what happened but never demonstrate it.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Log at design time what a replay will need: prompts, tool results, model version, sampling.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Runs that reproduce identically. The model version is the field most often missing and the one that invalidates the rest.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Forensics on a non-deterministic actor asks a question classical forensics never had to: not just what it did, but what it saw and what it decided. If the context was not recorded, the decision cannot be reconstructed at all.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Not just what the agent did, but what it saw and what it decided. If the booking note that triggered the refund was not recorded, the decision cannot be reconstructed at all. R11.</p>

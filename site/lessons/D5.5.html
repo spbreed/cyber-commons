@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Turning a root cause record into a policy diff, with the incident's measured numbers as the reason, and naming what the diff does not fix.</p>
-<p><strong>Why a security engineer needs it.</strong> Most incidents change what is deployed and leave what is <em>allowed</em> untouched, so the next system built under the same policy reproduces the conditions. A diff can be argued with; a postmortem paragraph cannot. And an indicator that no policy change can fix is an engineering item — saying so in the proposal is what stops it falling between two functions.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> Most incidents change what is deployed and leave what is <em>allowed</em> untouched, so the next system built under the same policy reproduces the conditions. A diff can be argued with; a postmortem paragraph cannot. And an indicator that no policy change can fix is an engineering item — saying so in the proposal is what stops it falling between two functions.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Most incidents change what is deployed and leave what is allowed untouched, so the next system reproduces the conditions.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>State the change as a policy diff with the incident's numbers as the reason, and name what the diff does not fix.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Clauses changed, and the indicators no policy change can fix — which are engineering items, named so they do not fall between functions.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The incident produced a fix to what is deployed and no change at all to what is allowed. So the next system built under the same policy reproduces the same conditions, and the postmortem sits in a folder being correct.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The diff is against CyberTravels' policy, and the expensive line is the one that says a tool call without provenance is refused rather than recorded. That will break CyberTravels' vendor integrations, which is precisely the review that should happen before it ships.</p>

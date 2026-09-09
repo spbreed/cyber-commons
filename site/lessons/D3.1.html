@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Run a triage loop over Wazuh alerts and supervise by exception.</p>
 <p><strong>Why a security engineer needs it.</strong> Supervising by re-reading everything the loop did. The control it builds is: know what the loop must escalate and sample the rest.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Supervising a loop by re-reading everything it did is not supervision, and a loop that closes a true positive does so silently.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Decide what the loop may conclude, what it may do unsupervised, and which sample of its closures a human reads.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Alerts escalated versus closed against ground truth, and the severity floor no automatic closure may cross.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The queue does not go away; it changes shape. Instead of triaging alerts you are supervising something that triages alerts, which is a different skill with a different quality bar and a much worse failure mode: confident, fast, and wrong at volume.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The analyst on CyberTravels' alerts stops triaging and starts supervising something that triages — which is a different skill, with a worse failure mode: confident, fast, and wrong at volume.</p>

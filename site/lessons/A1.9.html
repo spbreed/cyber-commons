@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Fire four realistic payloads at the review harness and compare keyword filtering against provenance.</p>
 <p><strong>Why a security engineer needs it.</strong> The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself. The control it builds is: instruction/data provenance: content the pipeline read may never drive a state-changing tool.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The pipeline reads attacker-controlled content and then acts on it — a confused deputy you built yourself.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>One provenance rule: content the pipeline read may never drive a state-changing tool.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>State-changing calls whose selecting input came from read content. The target is zero, and the count is the finding.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An agent that reads attacker-controlled content and then acts is a confused deputy, and reading it is the whole job — you cannot decline. A comment in a diff is the cheapest way anyone will ever find to instruct the tooling that reviews it.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Whatever reviews the Coding Agent's pull requests reads CyberTravels' own code — and that code is whatever the Coding Agent wrote. A comment in a diff is the cheapest way anyone will find to instruct the reviewer. R7.</p>

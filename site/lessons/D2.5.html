@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Generating a detection rule from a reconstructed incident, and measuring it against benign traffic before it ships.</p>
-<p><strong>Why a security engineer needs it.</strong> An incident is the richest source of a good rule and the easiest source of a bad one, because every candidate you write from it catches it. The property that decides deployability is the false-positive rate on traffic that is not the incident — which means a benign corpus containing the hard cases, not unrelated noise.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> An incident is the richest source of a good rule and the easiest source of a bad one, because every candidate you write from it catches it. The property that decides deployability is the false-positive rate on traffic that is not the incident — which means a benign corpus containing the hard cases, not unrelated noise.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Every candidate rule catches the incident it was generated from, so catching it cannot be the test.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Score candidates against a benign corpus containing the hard cases — for a refund rule, legitimate refunds.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>False-positive rate on benign traffic: 21% buries the queue, 0% with generalisation ships, 0% matching only this incident is useless.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>You have just reconstructed an incident and the rule almost writes itself. That is the problem: every rule you could write catches the incident, because you wrote it from the incident. What decides whether it ships is the traffic it fires on when nothing is wrong.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The incident is CyberTravels': the Workflow Agent issued a refund against a booking nobody asked it to touch. The benign corpus is the hard one on purpose — CyberTravels processes eighteen legitimate refunds in the same window, and a rule that cannot tell them apart is a rule that alerts on the business.</p>

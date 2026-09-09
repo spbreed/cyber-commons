@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> A black-box engagement: splitting an external probe's claims into what the evidence entails and what it merely suggests, and refusing a severity on the second kind.</p>
-<p><strong>Why a security engineer needs it.</strong> A model with only status codes and headers narrates a confident architecture, and an inference with a CVSS score beside it reads as a finding to everyone downstream. Provenance per claim is the whole discipline, and the open questions it produces tell you which mode to run next.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> A model with only status codes and headers narrates a confident architecture, and an inference with a CVSS score beside it reads as a finding to everyone downstream. Provenance per claim is the whole discipline, and the open questions it produces tell you which mode to run next.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An agent narrates a confident architecture from status codes, and the report is fiction that reads like findings.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Label every claim observed or inferred, keep the evidence beside it, and attach no severity to an inference.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Findings versus open questions — five and seven on the sample run — and what each open question would need to resolve it.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>From outside, an agent will tell you the target runs Django on PostgreSQL with asynchronous refunds, in fluent prose, from a cookie name and a stack trace. Some of that is entailed by the evidence and most of it is a guess, and the report does not say which until you make it.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The target is CyberTravels from outside, and the claim the mode cannot reach is the one that matters — whether the refund endpoint accepts a booking it does not own. One account can only ask the question; answering it is a grey-box test.</p>

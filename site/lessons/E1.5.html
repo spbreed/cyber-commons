@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Take the B2.19 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.</p>
 <p><strong>Why a security engineer needs it.</strong> Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy. The control it builds is: read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A vendor's best-of-k demo is not assurance, and schema conformance is not accuracy.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Report accuracy against a held-out key, with the sample size and an expiry.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>An eval result read as an indicator: sample size is the denominator, the pass bar is the target, the expiry stops it ageing into a claim.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An eval result is the closest thing this field has to evidence, and most eval results are unusable as evidence: no provenance, no retention, and no way to reproduce the run they came from.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The eval that says CyberTravels recommends real hotels 94% of the time is the closest thing to evidence here — and unusable as evidence without provenance, retention and a way to reproduce the run. R2.</p>

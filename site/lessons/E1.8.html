@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Run a real AIBOM against a vendor model artefact.</p>
 <p><strong>Why a security engineer needs it.</strong> Vendor AI features enabled by default; sub-processor chains you never mapped. The control it builds is: questions that actually discriminate between vendors.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>For a hosted model the estate holds no source to measure, so there is nothing to compute an indicator from.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Assess each component on whether it can change without telling you, and accept an attestation with an expiry where it can.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Third-party controls carrying an unexpired attestation. It is a weaker instrument than a measurement, and worth scoring as one.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Your model vendor, your hosting, your adapters and your MCP servers are all somebody else's risk decisions, inherited. Diligence questions that produce real answers are specific; the generic questionnaire produces a filing.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels inherited its model vendor's decisions, its OCR library's, and a third-party MCP server's. R4.</p>
@@ -39,7 +61,8 @@ nobody's assessment form asks:</p>
 </blockquote>
 <p>For a library the answer is no — you pin a version. For a hosted model the
 answer is usually yes, and it changes the risk rating, because every control you
-tested was tested against behaviour the vendor can replace on a Tuesday.</p>
+tested was tested against behaviour the vendor can replace at any time, without
+telling you and without a version number changing.</p>
 <p>Three artefact classes, with genuinely different maturity:</p>
 <ul>
 <li><strong>Libraries</strong> — signing, version pinning, download signals. Mature.</li>

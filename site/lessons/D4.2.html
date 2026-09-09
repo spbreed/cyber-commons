@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> The three runbook tiers — fully automated, human in the loop, manual — timed against one incident, with the cost of acting on a bad signal beside the time to contain.</p>
-<p><strong>Why a security engineer needs it.</strong> "Automate everything" and "keep a human in it" are both asserted constantly and neither is a position. The tiers trade time against the cost of being wrong, and the right trade depends on the detection's measured false-positive rate. Against a 29-minute breakout time, a manual tier that contains in 34 minutes is a risk decision — just an unstated one.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> "Automate everything" and "keep a human in it" are both asserted constantly and neither is a position. The tiers trade time against the cost of being wrong, and the right trade depends on the detection's measured false-positive rate. Against a 29-minute breakout time, a manual tier that contains in 34 minutes is a risk decision — just an unstated one.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>"Automate everything" and "keep a human in it" are both asserted constantly and neither is a position.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Time all three tiers against one incident, with the cost of acting on a bad signal beside the time to contain.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>14 seconds at 8 errors per hundred, against 2,072 seconds at 0.2, against a measured breakout of 1,740. The manual tier is a risk decision, not the safe one.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Fully automated contains in fourteen seconds and is wrong eight times in a hundred. Manual is almost never wrong and takes thirty-four minutes, against a breakout time of twenty-nine. Neither of those is the safe option; they fail differently.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The incident is CyberTravels' runaway Workflow Agent, and the numbers are its containment ladder from A3.9 timed three ways. Manual takes thirty-four minutes against a breakout time of twenty-nine, which for CyberTravels means the refunds have already moved before anybody has decided anything.</p>

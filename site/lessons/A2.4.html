@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Issue a scoped grant, use it, then replay it after expiry and after the task closed.</p>
 <p><strong>Why a security engineer needs it.</strong> Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives. The control it builds is: short-lived, purpose-bound grants issued per task and expiring with it.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Permanent scope makes every injection a successful one, because the authority is already there when the attacker arrives.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Short-lived, purpose-bound grants issued per task and expiring with it.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Median grant lifetime, and the amount of standing scope removed.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Standing authority means a successful injection always finds a live credential waiting. Just-in-time authority means the attacker has to arrive during the ninety seconds the grant exists, and be doing the one task it was scoped to.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Standing payments scope means a successful injection always finds a live refund credential. Just-in-time means the attacker has to arrive during the ninety seconds a specific booking is being settled. R1, R5.</p>

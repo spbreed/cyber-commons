@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> The root cause record: walking the control chain, marking each control present, absent or present-but-wrong, and testing whether the resulting statement names a control rather than a person.</p>
-<p><strong>Why a security engineer needs it.</strong> Incidents that close with a narrative recur, because nothing in a narrative can be built or measured. Naming the control makes the finding actionable and gives the next stage something to verify. The test is mechanical on purpose — "the engineer missed the alert" is true, and it is not a root cause.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> Incidents that close with a narrative recur, because nothing in a narrative can be built or measured. Naming the control makes the finding actionable and gives the next stage something to verify. The test is mechanical on purpose — "the engineer missed the alert" is true, and it is not a root cause.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An incident that closes with a narrative recurs, because nothing in a narrative can be built or measured.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Walk the control chain, mark each present, absent or present-but-wrong, and test that the statement names a control.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>A mechanical test: does the root cause name a control? "The engineer missed the alert" is true and fails it.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The postmortem says the on-call engineer missed the alert. It is true, it is useless, and it will be true again next quarter about somebody else. A root cause names a control, or it names nothing that can be built.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The control chain is CyberTravels': provenance at ingress (A2.6), default-deny on the tool call (A3.1), the detection that should have caught a refund without an approval, and the stop authority that existed and was never reached. The first absent one is the root cause; the stop lever nobody pulled is evidence about the detection in front of it.</p>

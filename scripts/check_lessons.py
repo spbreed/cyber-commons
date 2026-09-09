@@ -1,7 +1,12 @@
 #!/usr/bin/env python3
 """Check every lesson against the authoring contract in LESSON_DESIGN.md.
 
-Seven rules, and each one exists because breaking it made a lesson worse:
+Rules, each one here because breaking it made a lesson worse:
+
+0. **Day 0, Day 1, Day 2.** Every lesson says why it is worth doing, how it is
+   done, and what number tells you it worked. Readers reported that they could
+   not tell what the commons was for until somebody explained it; this is that
+   explanation, on every page.
 
 1. **One concept, three parts.** Every lesson carries a `hook`, a `diagram` and
    a `concept`. The hook is brief — a paragraph, not an essay — because a hook
@@ -59,6 +64,7 @@ NB = ROOT / "labs" / "notebooks"
 from exercises import EXERCISES  # noqa: E402
 from exercises.anchors import ANCHORS  # noqa: E402
 from exercises.cybertravels import GROUNDING  # noqa: E402
+from exercises.days import DAYS, FUNCTION_DAYS  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 
 # Functions D and E are long arguments rather than collections, and each is told
@@ -110,6 +116,13 @@ def main() -> int:
         if ex is None:
             problems.append(f"{sid}: no exercise")
             continue
+
+        # 0 — why, how, and the number that says it worked
+        day = DAYS.get(sid)
+        if not day or len(day) != 3 or not all(x and x.strip() for x in day):
+            problems.append(f"{sid}: no Day 0/1/2 — say why this is worth "
+                            f"doing, how it is done, and what number tells you "
+                            f"it worked; add one to scripts/exercises/days.py")
 
         # 1 — one concept, three parts, grounded in the running system
         if not GROUNDING.get(sid, "").strip():
@@ -163,6 +176,15 @@ def main() -> int:
                 and not any(w in body for w in FAILURE_WORDS)):
             happy_path_only.append(sid)
 
+    # Every function says who it is for and what its three days are, because
+    # the homepage and each function introduction render from this.
+    for fn in sorted({f["id"] for f in CUR["functions"]}):
+        entry = FUNCTION_DAYS.get(fn)
+        if not entry or not all(entry.get(k, "").strip()
+                                for k in ("who", "day0", "day1", "day2")):
+            problems.append(f"function {fn}: needs who / day0 / day1 / day2 in "
+                            f"scripts/exercises/days.py")
+
     # An anchor naming a lesson that does not exist is a rename nobody finished.
     for orphan in sorted(set(ANCHORS) - seen_anchors):
         problems.append(f"{orphan}: anchor defined for a lesson that is not in "
@@ -197,7 +219,8 @@ def main() -> int:
     for p in problems:
         print(f"  FAIL  {p}")
     print(f"\n{total} lessons · {len(problems)} problem(s) · "
-          f"{len(BRIDGES)} chapter bridges · {len(seen_anchors)} anchored "
+          f"{len(BRIDGES)} bridges · {len(DAYS)} with Day 0/1/2 · "
+          f"{len(seen_anchors)} anchored "
           f"({', '.join(f'{f}→{o}' for f, o in sorted(ANCHOR_ORIGIN.items()))})")
     print(f"{len(happy_path_only)} lesson(s) show only a happy path: "
           f"{', '.join(happy_path_only) or 'none'}")

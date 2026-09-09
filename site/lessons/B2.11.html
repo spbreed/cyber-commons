@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> A white-box engagement: enumerating real paths from entry point to sink, naming the authorisation predicate on each, and separating reachable sinks from present ones.</p>
-<p><strong>Why a security engineer needs it.</strong> Full source produces the most useless report in security — every sink that exists, with no statement about reachability or entitlement. Two distinctions fix it, and the second, that authentication is not authorisation, is the shape of every BOLA finding.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> Full source produces the most useless report in security — every sink that exists, with no statement about reachability or entitlement. Two distinctions fix it, and the second, that authentication is not authorisation, is the shape of every BOLA finding.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Full source produces a finding list nobody can act on, because presence is reported where reachability was needed.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Enumerate paths from real entry points to sinks, and classify the predicate on each hop as authentication or authorisation.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Sinks reachable from an entry point, and how many of those carry only an authentication check. Three of five, on CyberTravels.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>You were handed the whole repository, and the report is a list of four hundred sinks nobody will read. The two facts that turn it into findings are which sinks a request can actually reach, and which of those check that the caller owns the thing — not merely that they are logged in.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The tree is CyberTravels', and the path that matters is the refund one: handler to svc.refund to the payments sink, authenticated by a session at every hop and checked for ownership at none. That is the refund incident stated as a finding before it happened.</p>

@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Run a looping agent against each ceiling and record which one fires first.</p>
 <p><strong>Why a security engineer needs it.</strong> Without a ceiling the loop runs until an external system stops it, and the failure mode is denial of service against yourself. The control it builds is: ceilings bound to the loop, with the run terminating rather than degrading when one is hit.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Without a ceiling the loop runs until an external system stops it, and the failure is denial of service to everything sharing the quota.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Ceilings bound to the loop, terminating the run rather than letting it degrade.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Runs terminated by their own ceiling, and spend per run at the 95th percentile.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A budget is what makes "autonomous" a bounded word. Without one, the honest description of the worst case is "until someone notices", and nobody signs off on that when it is written down.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> What makes “CyberTravels runs autonomously” a bounded sentence: a ceiling on tokens, wall clock, spend and, above all, on how many refunds one run may issue. R1.</p>

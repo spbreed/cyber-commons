@@ -25,7 +25,29 @@ neither vulnerable nor safe — it is not counted. The control it builds is:
 reconcile in both directions, then read the constant pool of anything that was
 never declared.</p>
 <p>This is a <strong>tooling</strong> lesson: it uses a real compiled Java class and recovers its
-strings, classes and capabilities without the source.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+strings, classes and capabilities without the source.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Reconcile the SBOM against what is actually on disk, then recover strings, imports and egress from the binaries it missed.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Artefacts on disk that appear in the SBOM. The gap is the finding, and it is usually not zero.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The dependency report is clean and it is correct. It is also a statement about a manifest, and the jar the booking provider dropped into <code>lib/</code> is in no manifest — so it has no identifier, so it has no advisory, so it was counted as neither vulnerable nor safe. It was counted as nothing.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The booking provider's integration bundle drops a jar into CyberTravels' image. It is in no manifest, so the weekly dependency report has been silently excluding it, and it carries a hardcoded telemetry endpoint and its own licence key. R5.</p>
@@ -298,7 +320,7 @@ traveller PII" and the one sentence you cannot evidence takes the rest of the
 report down with it.</p>
 <p><code>AES/ECB</code> is worth its own line, and it is the kind of thing this step finds by
 accident: ECB mode leaks structure across blocks, so whatever this is
-protecting, it is protecting it badly.</p></div><div class="nbmd"><h2>7 · What to do with it on Monday</h2>
+protecting, it is protecting it badly.</p></div><div class="nbmd"><h2>7 · What to do with it first</h2>
 <p>Three moves, in cost order:</p>
 <ol>
 <li><strong>Count your undeclared artefacts.</strong> Diff the SBOM against the built image.

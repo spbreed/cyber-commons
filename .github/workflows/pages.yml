@@ -86,6 +86,13 @@ jobs:
       - name: Check the incident control register
         run: python3 scripts/check_register.py --check
 
+      # A reader outside your head cannot resolve an idiom or a weekday used to
+      # mean "at any time". This is the rule-decidable half of the reading pass
+      # in scripts/judge_content.py, which needs a model and a key and so does
+      # not run here.
+      - name: Check the prose for phrasing a reader must decode
+        run: python3 scripts/check_clarity.py --check
+
       - name: Install the diagram renderers
         run: sudo apt-get update -qq && sudo apt-get install -y -qq graphviz plantuml
 

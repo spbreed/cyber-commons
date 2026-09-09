@@ -16,8 +16,30 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Change a prompt and show the control evidence going stale in real time.</p>
-<p><strong>Why a security engineer needs it.</strong> An annual review certifies nothing about a system that changed on Tuesday. The control it builds is: continuous assurance; control effectiveness redefined for probabilistic systems.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> An annual review certifies nothing about a system that changed the week after it was reviewed. The control it builds is: continuous assurance; control effectiveness redefined for probabilistic systems.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A control tested six months ago is not passing — it is unevidenced, and most tooling cannot represent that third state.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Turn a framework control into something computable, with a denominator and a target written before the measurement.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>The unit itself: a key control indicator. Everything else in this function produces one, feeds one, or reports one.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>You tested the control in March and signed the assertion. The prompt changed in April, the model in May, and the tool scope in June. The assertion is still on file and has not described anything real since the day it was written.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The control test that passed in March described a CyberTravels with no payments scope, no repository access and no vector store. Nothing about it was wrong; everything about it is stale.</p>

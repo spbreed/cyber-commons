@@ -199,7 +199,7 @@ report down with it.
 accident: ECB mode leaks structure across blocks, so whatever this is
 protecting, it is protecting it badly."""),
 
-  ("md", """## 6 · What to do with it on Monday
+  ("md", """## 6 · What to do with it first
 
 Three moves, in cost order:
 
@@ -600,7 +600,7 @@ goal is the strongest containment a developer does not notice.
     emphasise=1,
     caption="The first four ship today and cost nothing anyone will complain "
             "about. The last two are the ones people propose in meetings, and "
-            "they are uninstalled by Friday — a control that gets turned off is "
+            "they are uninstalled within the week — a control that gets turned off is "
             "worth less than a weaker one that stays on.")),
 
   ("md", "## 6 · The audit, as a skill an agent runs on itself\n\n"

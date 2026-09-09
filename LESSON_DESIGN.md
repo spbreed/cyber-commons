@@ -171,7 +171,56 @@ that is not there, a sequencing rule the lesson argues against, table cells with
 the wrong values in them. Write the anchor, then read it against the concept it
 will sit under. That pass is the review; the gate is only the reminder to do it.
 
-## 7 · Chapters are cited by id, never by number
+## 7 · Every lesson answers Day 0, Day 1 and Day 2
+
+Readers kept reporting the same thing: *I could not tell what this was for
+until somebody explained it.* The material was right; the missing part was the
+question a practitioner asks before reading anything.
+
+So every lesson carries three lines in `DAYS`
+(`scripts/exercises/days.py`), rendered as a table directly under "What this
+lesson is":
+
+| | |
+|---|---|
+| **Day 0 — why** | what goes wrong if you do nothing, in this lesson's terms |
+| **Day 1 — how** | the concrete thing you build or run |
+| **Day 2 — measure** | the number that tells you it worked |
+
+Day 2 is the one that is easy to fake and the only one a sceptical reader
+believes. Where a lesson produces a real number — a recall score, a
+false-positive rate, a coverage fraction, an interval in minutes — Day 2 names
+it. Where it does not, Day 2 says what you count instead and does not pretend.
+"Nothing yet, honestly" is an acceptable Day 2 for an introduction; a vague one
+is not.
+
+`FUNCTION_DAYS` carries the same three at function scale, plus **who** the
+function is for in job titles. It renders twice: in the function's own
+introduction lesson, and as the homepage's "How to use this" section, generated
+from the same data so the homepage cannot advertise a curriculum the lessons do
+not deliver.
+
+`check_lessons.py` requires all three on every lesson and all four keys on every
+function.
+
+## 8 · Prose a reader can resolve alone
+
+Two passes, because clarity splits into a part a rule can decide and a part it
+cannot.
+
+`check_clarity.py` runs in CI and is deliberately narrow: no weekday used as a
+stand-in for "at any time", and no culture-specific idiom from a curated list.
+It exists because six lessons said a vendor could change a model "on a Tuesday"
+and a reader reported it as a mention of Tuesday out of nowhere — which was
+exactly right, since the day carried no meaning.
+
+`judge_content.py` is the reading pass, and it needs a model, a key and the
+network, so nothing in CI depends on it. It reports only five categories —
+undefined term, unexplained idiom, ambiguous referent, unsupported claim,
+missing step — because a judge asked for "feedback" returns opinions about tone
+that drown the findings you can act on.
+
+## 9 · Chapters are cited by id, never by number
 
 Prose says **Chapter D3**, not "Chapter 9". The number in `curriculum.json` is
 an ordinal, it is rendered on no page, and a reader who meets "Chapter 11" has

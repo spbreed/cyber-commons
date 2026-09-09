@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> A grey-box engagement: filling a roles-by-objects-by-verbs matrix from one credential per role, flagging design mismatches, and ranking the untested cells by blast radius.</p>
-<p><strong>Why a security engineer needs it.</strong> This is the mode that can actually find broken object-level authorisation, and the one most often reported wrong — because authorisation lives in cells, not endpoints, and touching every endpoint leaves most cells untested.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> This is the mode that can actually find broken object-level authorisation, and the one most often reported wrong — because authorisation lives in cells, not endpoints, and touching every endpoint leaves most cells untested.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Object-level authorisation is assumed correct because the endpoint list was covered, and broken object access lives in the cells nobody enumerated.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Fill a roles-by-objects-by-verbs matrix from one credential per role, and mark every cell tested, mismatched or untested.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Cell coverage, not endpoint coverage: 12 of 30 cells on the sample, with two mismatches and the two highest-cost cells never tested.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The engagement touched every endpoint and called itself complete. Authorisation does not live in endpoints — it lives in cells, one per role per object per verb — and the two that would have mattered here were never sent a single request.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The matrix is CyberTravels' three roles against its objects, and the two highest-cost untested cells are both on the audit log — the records a regulator asks for first, and the ones no request in the engagement ever touched.</p>

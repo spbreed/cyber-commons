@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Re-measuring the key control indicators an incident moved, after the fix, and reporting which were actually restored.</p>
-<p><strong>Why a security engineer needs it.</strong> A closed ticket is not evidence that a control came back. Automating the re-measurement is what makes it happen on every fix rather than the memorable ones — and it routinely finds that an indicator improved without reaching target, which reads as "done" in every system that does not check.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> A closed ticket is not evidence that a control came back. Automating the re-measurement is what makes it happen on every fix rather than the memorable ones — and it routinely finds that an indicator improved without reaching target, which reads as "done" in every system that does not check.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A closed ticket is not evidence that a control came back.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Re-measure the indicators the incident moved, automatically, on every fix rather than the memorable ones.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Indicators restored to target versus merely improved. Detection went from 194 minutes to 118 against a 15-minute target, which every system that does not re-measure records as done.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The ticket is closed and the incident is marked remediated. Re-measure the indicators it moved and two of them never came back — including the detection time, which improved from 194 minutes to 118 and is still eight times its target.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The six indicators are CyberTravels' own, and two of them do not come back: refunds carrying an approval, and the time to detect a scope breach. CyberTravels' detection went from 194 minutes to 118 against a fifteen-minute target — a real improvement that would still let the same incident run for two hours.</p>

@@ -51,7 +51,7 @@ Default-deny then means the absence of a rule is a refusal. That sounds like a
 detail and it is the entire control, because it changes what a mistake costs.
 Under allow-by-default, a permission somebody forgot to restrict is available to
 an attacker. Under deny-by-default, a permission somebody forgot to grant is a
-broken feature — which someone reports on Monday morning, loudly, and which
+broken feature — which someone reports the next working day, loudly, and which
 harms nobody.
 
 The policy takes four inputs and all four matter:

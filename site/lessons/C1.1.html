@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Auditing a model platform's ingress filters — dependency-squatting, malicious uploads to a hub, poisoned datasets — by assessing each component on whether it can change without notice.</p>
-<p><strong>Why a security engineer needs it.</strong> The supply chain is the surface an attacker reaches before the model, and popularity is not provenance: a hosted model or a re-pulled dataset can change under a name that never did, invalidating every control you tested against it.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> The supply chain is the surface an attacker reaches before the model, and popularity is not provenance: a hosted model or a re-pulled dataset can change under a name that never did, invalidating every control you tested against it.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The first surface an attacker reaches is the hub the model came from, and a squatted name is accepted because it looked right.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Assess each component on whether it can change without telling you, rather than on how popular it is.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Components with a pinned digest, as a share of what the pipeline pulls at train or deploy time.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The first surface an attacker reaches is not the model — it is the hub the model was downloaded from. A squatted package name and a poisoned dataset both land before a single prompt is sent, and the platform accepted them because the name looked right.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The components are CyberTravels' own — the model its advisor calls, the packages its coding agent installs, the templates indexed into its vector store — and the one with no pinned digest is the route in.</p>
@@ -41,7 +63,7 @@ accepts, what it verifies, and what it takes on trust because the name looked
 right. The research discipline is to assess a component on whether it can
 <strong>change without telling you</strong> — a pinned library cannot, a hosted model can,
 and a dataset re-pulled on every train can change under a name that never did.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill scores each component CyberTravels pulls in on whether it can change without notice, and separates the pinned artefacts from the ones a registry can replace on a Tuesday.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/agent-supply-chain-assessment/SKILL.md"><code>skills/research/agent-supply-chain-assessment/SKILL.md</code></a></h3>
+<p>The skill scores each component CyberTravels pulls in on whether it can change without notice, and separates the pinned artefacts from the ones a registry can replace at any time.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/agent-supply-chain-assessment/SKILL.md"><code>skills/research/agent-supply-chain-assessment/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: agent-supply-chain-assessment
 description: &gt;-
   Score new packages and MCP connectors for typosquatting and ordinary

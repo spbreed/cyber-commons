@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Have two agents share a credential, then try to work out which one made the call.</p>
 <p><strong>Why a security engineer needs it.</strong> Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them. The control it builds is: per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>You cannot say which agent acted, so you cannot revoke one without stopping all of them.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Per-workload identity with attestation, and a lifecycle that can revoke a single agent.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Agents with an attested, individually revocable identity, as a share of the fleet.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Four agents share one service account. The audit log answers "what happened" perfectly and cannot answer "which one" at all — and neither can the downstream service that was deciding whether to trust the caller.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> All four agents share one service account, <code>cybertravels-svc</code>. The payments API can see that CyberTravels called it and cannot see which of the four — so the refund and the itinerary lookup are indistinguishable to the thing deciding whether to trust the caller. R11.</p>

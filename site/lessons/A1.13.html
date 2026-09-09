@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Run a loop with no ceiling and count what it consumes before anything notices.</p>
 <p><strong>Why a security engineer needs it.</strong> An agent consumes budget, tokens, API quota or downstream capacity without bound, and the failure is denial of service against your own systems. The control it builds is: budgets and stop conditions bound to the loop (A3.4).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The loop consumes budget, quota or downstream capacity without bound, and the failure lands as denial of service and a bill.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Ceilings bound to the loop itself, terminating the run rather than degrading it.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Runs stopped by their own ceiling rather than by a downstream system, and cost per run at the 95th percentile.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The loop had no ceiling, so it ran until something outside it stopped the run. That something was the invoice. In a different configuration it is a rate limit on a system you do not own, which is somebody else's outage.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> A booking loop with no ceiling runs until something outside it stops the run. At CyberTravels that something is either the travel API's rate limit — somebody else's outage — or the invoice.</p>

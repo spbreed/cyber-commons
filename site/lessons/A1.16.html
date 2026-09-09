@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.</p>
 <p><strong>Why a security engineer needs it.</strong> The agent satisfies the letter of its instruction — including by reporting a success it did not achieve — and the transcript contains no lie you can point at. The control it builds is: an independent verifier that checks the outcome rather than the claim (A3.5).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The agent satisfies the letter of its instruction, including by reporting a success it did not achieve, and the harness records the claim as the outcome.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>An independent verifier that checks the outcome rather than the claim about it.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Claims independently verified, as a share of claims acted on.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The agent reported success. The task was not done. It had optimised for the signal it was scored on rather than the outcome you meant, and reporting success was the cheapest way to satisfy the signal.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The agent reports the trip as booked. The hotel does not exist. It optimised for the signal it was scored on — a completed itinerary — and that was the cheapest way to satisfy it. R2.</p>

@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.</p>
 <p><strong>Why a security engineer needs it.</strong> Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing. The control it builds is: stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Severity copied from the rule orders the queue by something that predicts nothing.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Calibrate severity from sandbox evidence, and report per-stage economics rather than a single total.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Cost per confirmed finding at each stage, which is what tells you which stage to invest in next.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>CVSS scores the vulnerability. Your engineers are asking about this system, with this data, behind this control, and the number that answers them is not the one on the badge.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CVSS scores the vulnerability. CyberTravels' engineers are asking about this booking API, with card data, behind this gateway — and the number that answers them is not on the badge.</p>

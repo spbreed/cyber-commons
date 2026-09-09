@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Scope a multi-agent incident end to end.</p>
 <p><strong>Why a security engineer needs it.</strong> The initiating agent is not the acting one. The control it builds is: reconstruct the action chain across all three planes.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The agent that touched the resource is usually the last actor in a chain, and the earlier ones had more authority, not less.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Scope along the delegation graph rather than the host list.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Resources found by walking the graph versus by scoping the acting agent alone. The undercount grows with delegation depth.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The agent acted for eleven minutes on delegated credentials at machine speed. Scoping that means reconstructing blast radius from identity and egress logs, because asking what it touched is not a question anyone can answer from memory.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Eleven minutes of CyberTravels on delegated credentials. What it touched is not answerable from memory — it comes out of the identity and egress logs, if they exist. R9.</p>

@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.</p>
 <p><strong>Why a security engineer needs it.</strong> Dynamic testing is run against staging, so a destructive probe becomes an incident. The control it builds is: stage 11: replicate the application in an isolated, disposable runtime with no path to production.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Dynamic testing run against staging turns a destructive probe into an incident.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Replicate the application in an isolated, disposable runtime with no path to production.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Probes executed in the sandbox, and connections from it to anything production — where the second number must be zero.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>You cannot exploit a finding to confirm it without somewhere safe to do it. The replica is that place, and the fidelity you give it decides which findings you are able to confirm at all.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> You cannot confirm the IDOR by exploiting it in production. The replica is where the booking API can be attacked safely, and its fidelity decides which findings are confirmable at all.</p>

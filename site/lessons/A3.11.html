@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Measure the default agent's blast radius and reachable credentials, then rank controls by friction.</p>
 <p><strong>Why a security engineer needs it.</strong> The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment. The control it builds is: the strongest containment a developer does not notice: credential deny-lists and workspace confinement first.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The IDE agent holds git credentials, cloud credentials and a shell, in an environment nobody manages.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Credential deny-lists and workspace confinement first — the strongest containment a developer does not notice.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Developer agents with confinement applied, and the credentials still reachable from inside the workspace.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The coding agent on an engineer's laptop holds repository write access, a cloud credential, and whatever MCP servers were convenient. It is the highest-privilege agent in most organisations and the least governed.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The Coding Agent on Alex's laptop holds repository write, a cloud credential and whatever MCP servers were convenient. It is the highest-privilege agent at CyberTravels and the least governed. R6, R7.</p>
@@ -51,7 +73,7 @@ reading code from the internet.</p>
 tolerance</strong>. A containment scheme that adds friction to the inner loop is
 disabled within a week, and a disabled control protects nothing. So the design
 goal is the strongest containment a developer does not notice.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">control</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">friction</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what developers actually experience</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">deny-list credential paths</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">workspace confinement</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the agent sees the open repo only. Occasionally annoying for monorepo hops.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">egress allowlist</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">package registries and your VCS. Breaks the odd curl in a generated script.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">gate &lt;code&gt;git_push&lt;/code&gt;</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.4</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">one confirmation before code leaves the machine. Noticed, usually accepted.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">gate every write</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.9</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>confirmation per file write. Abandoned within a week, every time.</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no shell at all</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1.0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>removes the inner loop. Nobody will use the agent.</b></td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">The first four ship today and cost nothing anyone will complain about. The last two are the ones people propose in meetings, and they are uninstalled by Friday — a control that gets turned off is worth less than a weaker one that stays on.</div></div><div class="nbmd"><h2>3 · The audit, as a skill an agent runs on itself</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The first four ship today and cost nothing anyone will complain about. The last two are the ones people propose in meetings, and they are uninstalled within the week — a control that gets turned off is worth less than a weaker one that stays on.</div></div><div class="nbmd"><h2>3 · The audit, as a skill an agent runs on itself</h2>
 <p>Everything in this lesson is a review someone has to remember to do. Written as a skill, it is a review that fires whenever an agent opens a repository — including this one.</p>
 <p>The skill's central instruction is easy to miss and decides the outcome: <strong>rate an injection finding by what the allowlist permits, not by the text of the injection.</strong> The payload is the attacker's choice and costs nothing to change; the allowlist is yours.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/coding-agent-hardening/SKILL.md"><code>skills/appsec/coding-agent-hardening/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: coding-agent-hardening

@@ -17,7 +17,33 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Place the five functions of the commons on one diagram and find where your own work sits.</p>
 <p><strong>Why a security engineer needs it.</strong> Without a shared architecture, "secure the agent" has no referent, and every control argument is really an argument about two different systems. The control it builds is: one picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.</p>
-<p>This is an <strong>orientation</strong> lesson. It has no code — it exists so the chapters after it are read in the right order.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is an <strong>orientation</strong> lesson. It has no code — it exists so the chapters after it are read in the right order.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>"Secure the agent" has no referent until the system is drawn, so every control argument is really an argument about the picture.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Read the three chapters in order: the architecture and its risks, then identity and ingress, then runtime and the gateway.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Nothing yet, honestly. This chapter produces the component map every later count in the commons is taken against.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>Who this function is for, and what it is worth</h2>
+<p><strong>Who.</strong> Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship.</p>
+<p><strong>Day 0 — why you would do this.</strong> You are about to build, review or approve an agentic system. Before any control is worth choosing you need the picture: which components exist, what each one can reach, and which risks attach to each. Choose controls before you can name the risks and you will buy the ones that are easy to buy. This function is the reason the other four have something to point at.</p>
+<p><strong>Day 1 — how you do it.</strong> Draw the architecture, then close the two controls that shut the most risks — knowing who is calling, and marking what came in from outside — then the runtime layer that still holds after identity has been defeated: default-deny on the tool call, sandboxing, egress control, budgets and an approval path that survives volume.</p>
+<p><strong>Day 2 — how you know it worked.</strong> The register in A1.18 is the scorecard. Count the risks that have a named owning control, the agents with an attested identity rather than a shared key, and the share of tool calls that a default-deny policy actually adjudicated. A risk with no control is the backlog, in the same units as everything else.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Two teams argue for an hour about whether an agent is safe, and discover at the end that one of them meant the model and the other meant the loop calling the tools. Neither was wrong. They were describing different components of a system nobody had drawn.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels is the system. Everything after this lesson names one of its boxes.</p>

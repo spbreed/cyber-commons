@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Locking the deterministic runtime constants — prompts, tool results, model version, seed — so a complex agentic exploit path reproduces inside a forensic lab.</p>
-<p><strong>Why a security engineer needs it.</strong> A finding is only as good as its reproduction, and the model version is the constant teams miss and the one that silently invalidates the rest. A run you cannot reproduce is a story.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> A finding is only as good as its reproduction, and the model version is the constant teams miss and the one that silently invalidates the rest. A run you cannot reproduce is a story.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A finding is only as good as its reproduction, and the constant teams miss is the model version — which silently invalidates every other constant.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Lock the four runtime constants — prompts, tool results, model version and seed — and replay inside an isolated lab.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Runs that reproduce identically. A run you cannot reproduce is a story, and stories do not survive being disputed.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A finding is only reproducible if the run is. Miss one of the four constants — usually the model version — and you can describe the exploit but never demonstrate it, which is the moment your conclusion stops being defensible.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The run is the CyberTravels refund incident, and the field missing most often is the advisor's model version — upgraded by the provider between the incident and the replay.</p>

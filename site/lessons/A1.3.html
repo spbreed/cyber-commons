@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Poison one retrieved document and watch the agent act on it with the user's authority.</p>
 <p><strong>Why a security engineer needs it.</strong> Anyone who can write into a corpus the agent reads can steer it, using the victim's authority rather than their own. Nobody is phished and no credential leaks. The control it builds is: provenance marking at ingress (A2.6), and a rule that untrusted spans may not select a tool (A3.1).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Anyone who can write into a corpus the agent reads can steer it, using the victim's authority rather than their own.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Mark provenance at ingress, and forbid untrusted spans from selecting a tool.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Share of retrieved spans carrying an origin tag, and the count that reached a tool selector anyway.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Nobody phished anyone. A sentence sat in a ticket the agent was asked to summarise, and the agent did what the sentence said — using the authority of the person who asked for the summary. Anyone who can write into a corpus your agent reads can steer your agent.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Nobody types anything. The sentence sits in a hotel description the RAG Advisor retrieved, or in an OCR'd invoice the File System Agent read, and the Workflow Agent acts on it holding the traveller's authority. R3, and the harder half of it.</p>

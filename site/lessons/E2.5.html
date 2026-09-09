@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Run PII redaction inside the trust boundary with Presidio before anything crosses out.</p>
 <p><strong>Why a security engineer needs it.</strong> Deletion when the data is in weights, not a database. The control it builds is: lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The context window is a disclosure and the trace is a record, so personal data lands in a system nobody reviewed.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Fix lawful basis, retention on the trace itself, and an erasure path that reaches it.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Paths rather than outcomes: where inference ran, what retrieval touched, how long a trace was kept. All three are computable.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Prompts, context, logs and training runs are all places personal data ends up, and none of them looks like a database to the people who designed the privacy programme. Lawful basis, minimisation and retention apply to all four.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Passport numbers reach CyberTravels' prompts, its context window, its vector store and its logs. None of those looks like a database to the privacy programme. R10, R12.</p>

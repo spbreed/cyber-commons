@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Scoring the four sensor classes an estate already owns — EDR, DLP, CSPM, CNAPP — against nine things an agent does in an ordinary day, and reading the actions no class sees at all.</p>
 <p><strong>Why a security engineer needs it.</strong> "We already have visibility" is the most common answer to an agent detection roadmap and it is answerable with a matrix rather than an opinion. The distinction that makes it honest is visibility rather than alerting: a sensor that is not in the path cannot be tuned into one that is, so the uncovered rows are an architecture finding and not a backlog item.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Four products are bought, the estate is assumed covered, and the agent's whole working day falls between them.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Score each sensor class on visibility rather than alerting, per agent action, and read the rows nothing covers.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Four of nine ordinary agent actions seen by no sensor class at all. That column is an architecture finding, not a tuning backlog.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Four security products already watch the estate and every one of them was bought for a person on a host. Score them against what an agent actually does and four of its nine ordinary actions are seen by nothing at all — not seen badly, not alerted on late, simply outside the field of view.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels bought all four before it shipped an agent, and all four still work. What none of them is in the path of is the Workflow Agent reading a booking through the internal API, putting it in a prompt, calling the vendor MCP server and issuing the refund — which is the entire incident, start to finish, invisible to the estate's whole security stack.</p>

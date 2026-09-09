@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Data-layer payloads that exploit a parser to reach code execution during automated embedding generation, and the provenance manifest that makes such a run traceable.</p>
-<p><strong>Why a security engineer needs it.</strong> The embedding pipeline is code, and the host it runs on is usually more privileged than the one serving traffic. A record that is data to the model and an exploit to the decoder runs there, and nothing traces it unless the ingestion was manifested.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> The embedding pipeline is code, and the host it runs on is usually more privileged than the one serving traffic. A record that is data to the model and an exploit to the decoder runs there, and nothing traces it unless the ingestion was manifested.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A dataset is parsed before it is embedded, and a crafted record reaches code execution on the indexing host — which usually has more access than the serving one.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Treat the embedding pipeline as an attack surface and build a provenance manifest: source, parser and digest per record.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Ingested records with a verifiable origin. The ones without are the route a payload rides in on.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A dataset is not passive: it is parsed, decoded and embedded, and every step is a parser with a threat model. A crafted record reaches code execution on the indexing host — which usually has more access than the box serving traffic.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The pipeline is CyberTravels' RAG ingestion: vendor PDFs and images through OCR and a decoder, on the indexing host that can reach the backend APIs. A crafted invoice is the payload.</p>

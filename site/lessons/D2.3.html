@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.</p>
 <p><strong>Why a security engineer needs it.</strong> Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside. The control it builds is: named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Platform-layer compromise is invisible to workload-layer detection — not detected late, not detected at all.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Write detections whose subject is the platform: escape primitives, poisoned cache entries, silently expired exemptions.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Platform events caught by named primitives versus by a generic anomaly score, which is the comparison that shows why they are separate rules.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside the workload. These are detections whose subject is the platform running the agent, and not one of them reads the agent's own logs.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Detections whose subject is the platform CyberTravels runs on, not the agents themselves — the escape, the poisoned package cache, the credential loose on the internet, the guardrail still switched off after the demo.</p>

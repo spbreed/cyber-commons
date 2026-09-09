@@ -17,7 +17,33 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Put one agent trace and one human session side by side and list what separates them.</p>
 <p><strong>Why a security engineer needs it.</strong> A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session. The control it builds is: agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.</p>
-<p>This is an <strong>orientation</strong> lesson. It has no code — it exists so the chapters after it are read in the right order.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is an <strong>orientation</strong> lesson. It has no code — it exists so the chapters after it are read in the right order.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour, reports nothing and means nothing.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Learn the five intervals and the open-source stack that measures them, before building anything.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>The five intervals themselves — discover, detect, understand, contain, recover. Every later lesson moves one of them.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>Who this function is for, and what it is worth</h2>
+<p><strong>Who.</strong> SOC analysts, detection engineers, incident responders, threat hunters and DFIR leads — running a SOC that now has agents in it, and agents watching it.</p>
+<p><strong>Day 0 — why you would do this.</strong> Your SOC was tuned for people. One hour of an agent is roughly 1,400 tool calls across 260 resources; one hour of a person is twelve actions. Every threshold, baseline and playbook you own was set against the second number, and four of the nine things an agent does in an ordinary day are seen by none of the four sensor classes you already bought.</p>
+<p><strong>Day 1 — how you do it.</strong> Build it in five phases, on open source you can run: discover with the sensors you have plus agent telemetry that no product emits, detect against a lake tiered by the queries you actually run with rules mapped to MITRE, understand with bounded investigation and correlation across the fleet, respond with tiers derived from reversibility, and recover with replay, root cause and a policy diff.</p>
+<p><strong>Day 2 — how you know it worked.</strong> Five intervals, one per phase, and all five are numbers: time to discover, to detect, to understand, to contain, and to recover to target. CyberTravels' detection interval is 194 minutes against a 15-minute target and its manual containment finishes in 34 minutes against a 29-minute breakout. Every lesson says which interval it shortens, or which one it spends on purpose.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An hour of an agent is 1,400 actions across 260 resources in 96 sessions. An hour of a person is twelve actions. Every detection, baseline and playbook you own was tuned against the second number.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels' SOC was built for people. One hour of the Workflow Agent is 1,400 tool calls; one hour of Alex is twelve.</p>

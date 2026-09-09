@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.</p>
 <p><strong>Why a security engineer needs it.</strong> Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not. The control it builds is: fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction, not by tuning.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Move where the monitoring sits: a shared-artifact graph and four other cross-run signals.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Coordinated runs detected across the population versus zero detected within any single run.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Every run in the source incident, examined alone, was an agent doing plausible work on its assigned task. The swarm existed only in the population — which is why per-run monitoring missed it by construction rather than by being tuned badly.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Four agents, thousands of runs. Coordination between runs that should be independent is invisible to per-run monitoring by construction — and the shared package cache in R4 is exactly the surface it would use.</p>

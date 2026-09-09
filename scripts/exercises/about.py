@@ -806,7 +806,7 @@ This is an **orientation** lesson. It has no code — it exists so the chapters 
 "E1.1": """
 **What it covers.** Change a prompt and show the control evidence going stale in real time.
 
-**Why a security engineer needs it.** An annual review certifies nothing about a system that changed on Tuesday. The control it builds is: continuous assurance; control effectiveness redefined for probabilistic systems.
+**Why a security engineer needs it.** An annual review certifies nothing about a system that changed the week after it was reviewed. The control it builds is: continuous assurance; control effectiveness redefined for probabilistic systems.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,

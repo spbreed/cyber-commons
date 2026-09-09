@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Deriving a storage tier for each telemetry source from the fastest query that reads it, and pricing that against indexing everything hot.</p>
 <p><strong>Why a security engineer needs it.</strong> The lake is designed twice — once on a whiteboard and once when the invoice arrives — and the second design is made by somebody with no information about what the SOC asks. Deriving the tier from the queries collapses that into one decision, and it is what keeps agent prompts alive: they are the biggest source, read by one query that can wait hours, and the first line cut when nobody has priced them properly.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Everything is indexed hot because nobody priced it, so retention is cut across the board and the agent traces go first.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Tier each source by the fastest query that reads it, and price the result against indexing everything.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>29% cheaper on the sample estate — and, more importantly, the prompts that are 23% of the volume survive at 1% of the hot price instead of being deleted.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The lake gets designed twice: once on a whiteboard where everything is indexed, and once when the invoice arrives and retention is cut across the board. The second design is the one that runs, and it is made by somebody who does not know which source a forensic replay needs.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The six sources are CyberTravels' own, and the one that decides the lesson is its agent prompts: 23% of the volume, read by exactly one query, and the first thing an infrastructure review proposes deleting. Delete it and D5.1 cannot replay the refund incident at all.</p>

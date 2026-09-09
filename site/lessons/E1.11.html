@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Take a validated model, add one tool, and show which parts of the validation are now void.</p>
 <p><strong>Why a security engineer needs it.</strong> The classical model-risk playbook silently breaks once the model can act: conceptual soundness was validated, and then the agent was granted write access nobody validated. The control it builds is: extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems, and name where it still holds.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The classical model-risk playbook silently breaks once the model can act, because validation was scoped to predictions.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Re-read the three pillars for a model that calls tools.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Ongoing monitoring, which is a key control indicator programme in older vocabulary — the lineage that convinces a risk function this is not new.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Model risk management has forty years of doctrine on validating models — conceptual soundness, ongoing monitoring, independent validation. Most of it transfers. The part that does not is the part where the model calls tools.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Forty years of model-risk doctrine transfers to CyberTravels. The part that does not is the part where the model calls <code>issue_refund</code>.</p>

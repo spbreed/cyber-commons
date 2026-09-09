@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Compare four context strategies against one bug and measure which are decidable and at what size.</p>
 <p><strong>Why a security engineer needs it.</strong> The model is given the repository and asked to be thorough, so the relevant line falls out of the window. The control it builds is: slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>The model is handed the repository and asked to be thorough, so the relevant line falls out of the context window.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Slice on the source-to-sink path rather than on distance: the smallest context that still supports a severity call.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>False positives before and after slicing, against tokens spent. The point is that both improve.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Give an agent more context and it gets better, until it gets worse. The cliff is real, it arrives earlier than anyone expects, and past it you are paying more per token for a worse answer.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Give the review agent CyberTravels' whole repository and it gets worse, not better. The cliff arrives earlier than anyone expects and you pay more per token for it.</p>

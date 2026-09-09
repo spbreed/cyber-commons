@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Produce an audit trail from the A2 chain that names authority at every hop.</p>
 <p><strong>Why a security engineer needs it.</strong> No trail showing under whose authority the agent acted. The control it builds is: the delegation chain <em>is</em> the audit trail.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Without attribution and replay captured at the moment of the action, neither can be reconstructed afterwards.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Capture the acting identity, the principal and the chain, plus enough to replay the run.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Share of autonomous actions whose full chain can be reconstructed. Anything below 1.00 is the part you cannot audit.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>"Why did it do that?" is a question with a legal deadline attached. Logging designed forwards records what was convenient; logging designed backwards from the auditor's question records what is needed.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> “Why did CyberTravels issue that refund?” has a legal deadline attached. Logging designed backwards from that question records the booking note; logging designed forwards records the HTTP call. R11.</p>

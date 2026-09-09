@@ -65,6 +65,7 @@ from exercises import EXERCISES  # noqa: E402
 from exercises.about import ABOUT
 from exercises.anchors import ANCHORS  # noqa: E402
 from exercises.cybertravels import GROUNDING  # noqa: E402
+from exercises.days import DAYS, FUNCTION_DAYS, FUNCTION_INTRO  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 from exercises.models import LIVE_MD, MODEL_RUNTIME, live_cell  # noqa: E402
 from exercises.skills import SKILL_RUNTIME  # noqa: E402
@@ -241,7 +242,35 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
         raise KeyError(f"{sid} has no ABOUT entry — every lesson opens by saying "
                        f"what it is and why it matters in a security context; "
                        f"add one to scripts/exercises/about.py")
-    cells.append(md(f"## What this lesson is\n\n{about.strip()}"))
+    # Day 0 / 1 / 2 sits directly under "What this lesson is", because the
+    # three questions it answers — why, how, and how you know it worked — are
+    # the ones a reader asks before deciding to spend an afternoon here.
+    day = DAYS.get(sid)
+    if not day:
+        raise KeyError(f"{sid} has no Day 0/1/2 entry — every lesson says why "
+                       f"it is worth doing, how it is done, and what number "
+                       f"tells you it worked; add one to "
+                       f"scripts/exercises/days.py")
+    d0, d1, d2 = day
+    cells.append(md(
+        f"## What this lesson is\n\n{about.strip()}\n\n"
+        f"| | |\n|---|---|\n"
+        f"| **Day 0 — why** | {d0.strip()} |\n"
+        f"| **Day 1 — how** | {d1.strip()} |\n"
+        f"| **Day 2 — measure** | {d2.strip()} |"))
+
+    # The lesson that opens a function also carries that function's own three
+    # days, so a reader who lands here first can tell whether the next thirty
+    # lessons are addressed to them before reading any of them.
+    fn_id = entry["fn"].split()[1] if entry["fn"].startswith("Function ") else ""
+    if FUNCTION_INTRO.get(fn_id) == sid:
+        fd = FUNCTION_DAYS[fn_id]
+        cells.append(md(
+            f"## Who this function is for, and what it is worth\n\n"
+            f"**Who.** {fd['who'].strip()}\n\n"
+            f"**Day 0 — why you would do this.** {fd['day0'].strip()}\n\n"
+            f"**Day 1 — how you do it.** {fd['day1'].strip()}\n\n"
+            f"**Day 2 — how you know it worked.** {fd['day2'].strip()}"))
 
     # ---- 1. the hook, and what it looks like at CyberTravels --------------
     hook = f"## 1 · The hook\n\n{ex['hook'].strip()}"

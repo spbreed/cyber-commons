@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Reconstruct who caused a deletion from a log that records only tool calls.</p>
 <p><strong>Why a security engineer needs it.</strong> You cannot say which user caused an action, or what made the agent decide — so the incident cannot be scoped and the action cannot be attributed. The control it builds is: attribution carried on every hop, in a store the agent cannot write to (A2.7).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>You cannot say which user caused an action, or what made the agent decide, so the incident cannot be scoped.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Attribution carried on every hop, into a store the agent cannot write to.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Actions whose full chain — human, agent, scope — can be reconstructed. Anything below 1.00 is what you cannot audit.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The trace shows the tool call. It does not show the text that motivated the call, or the human the agent was acting for. Six weeks later, nobody can say whether that action was authorised — including the person who authorised it.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The log says <code>cybertravels-svc issued refund 8812</code>. It does not say which of six people asked, or what text made the agent decide. Six weeks later nobody can tell whether that refund was authorised. R11.</p>

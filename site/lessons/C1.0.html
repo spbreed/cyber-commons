@@ -17,7 +17,33 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> The through-line of Function C: a single lifecycle from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, to the telemetry, containment and governance a finding ends in.</p>
 <p><strong>Why a security engineer needs it.</strong> Red teaming an agent is not red teaming a binary. The threat is non-deterministic, so a transcript is not a finding and a slide is not a control — and the researcher's real product is the defensive telemetry and policy the offensive work translates into.</p>
-<p>This is an <strong>introduction</strong> lesson. It has no code — it exists so the eleven lessons after it are read as one arc rather than eleven techniques.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is an <strong>introduction</strong> lesson. It has no code — it exists so the eleven lessons after it are read as one arc rather than eleven techniques.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Offensive work that produces anecdotes — a result that worked once, on one target, with no rate attached — changes nothing.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Follow one lifecycle end to end: reach, see, respond, carry forward.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Every lesson after this reports a rate with a denominator, and ends in a control somebody can deploy.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>Who this function is for, and what it is worth</h2>
+<p><strong>Who.</strong> Red team operators, AI security researchers and offensive ML engineers — and the defenders who have to receive what they find.</p>
+<p><strong>Day 0 — why you would do this.</strong> Nobody can tell you how your agentic system fails until somebody has tried to break it. Deterministic exploits have signatures; an agentic failure is a reasoning loop, code generated at run time and tool calls at machine speed, and none of that shows up in a scanner. Doing nothing here means your first real evidence arrives as an incident.</p>
+<p><strong>Day 1 — how you do it.</strong> Work one lifecycle end to end rather than collecting techniques: the ingestion and supply-chain surfaces an attacker reaches first, elicitation that scales, then the pivot — turn what you found into gateway telemetry, a deployable detection, a triage playbook, containment and a forensic replay, and hand it over as policy.</p>
+<p><strong>Day 2 — how you know it worked.</strong> A transcript is not a finding. Every technique reports a reproduction rate across attempts with its denominator, every detection reports the queue volume it would add, and every finding leaves with an evaluation case that fails on the unfixed build — so the fix is verifiable and cannot regress unnoticed.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>"It worked when I tried it" is the most common security claim about agents and the least useful. A deterministic exploit has a signature; an agentic one has a reasoning loop, a runtime it generated, and a success rate you have to measure before it means anything.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The board asked whether CyberTravels is secure. This function answers the version of that question a researcher can act on — what would go wrong, would it reproduce, and would we see it — and it answers it on CyberTravels end to end, from a poisoned template to a governed fix.</p>

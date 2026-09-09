@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Admission rules for an investigating agent: which sources it may reach, which fields it may never see, how much it may pull, and why every refusal is recorded with its query.</p>
-<p><strong>Why a security engineer needs it.</strong> Incident response grants the broadest read access in the organisation, at the moment of least supervision, often to an agent. That grant is frequently larger than the incident being investigated. Bounding it per investigation class, in advance, is the difference between a response and a second breach — and the refusal log is the evidence you were on the right side of that.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> Incident response grants the broadest read access in the organisation, at the moment of least supervision, often to an agent. That grant is frequently larger than the incident being investigated. Bounding it per investigation class, in advance, is the difference between a response and a second breach — and the refusal log is the evidence you were on the right side of that.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Incident response grants the broadest read in the organisation at the moment of least supervision — and that grant is often larger than the incident.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Bound the investigating agent per investigation class before it runs: sources, forbidden fields, volume cap.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>This one spends time on purpose. Measure refusals logged with their query — the evidence you stayed on the right side of the line.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The investigating agent is granted broad read across production so it can find the problem. Broad read across production is frequently what the problem was. Admission rules are how the response avoids becoming the second incident.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The admission set is written for CyberTravels' agent-misuse class: agent traces, gateway logs and the tool audit are in; the bookings database, with its payment cards, is not. The refused query that matters is the one asking for ninety thousand rows of a source that IS admitted — CyberTravels' whole gateway log, which is a copy.</p>

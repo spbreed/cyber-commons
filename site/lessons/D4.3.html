@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Exercise the ladder against a live misbehaving agent.</p>
 <p><strong>Why a security engineer needs it.</strong> Mass revocation takes down the business. The control it builds is: throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An agent at 300 actions a minute takes about 2,400 further actions inside an eight-minute approval cycle.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Pre-authorise automated revocation of non-human identities, which is safe precisely because they are not people.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Actions taken during containment: roughly 2,400 with a human in the path, about 60 without.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>You have to stop it faster than it acts. That means the containment path — revoke, cut the gateway, kill the loop — is a thing built in advance, because improvising it takes longer than the incident does.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> You have to stop CyberTravels faster than it issues refunds. The containment path is something CyberTravels builds in advance, because improvising it takes longer than the incident.</p>

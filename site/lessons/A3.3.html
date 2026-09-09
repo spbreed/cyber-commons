@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Attempt exfiltration to several destinations under an allow-list and see which survive.</p>
 <p><strong>Why a security engineer needs it.</strong> An agent with unrestricted egress turns any successful injection into data loss. The control it builds is: an allow-list at the network boundary, enforced where the agent cannot rewrite it.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An agent with unrestricted egress turns any successful injection into data loss.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>An allow-list at the network boundary, enforced where the agent cannot rewrite it.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Outbound destinations outside the allow-list, and the bytes that reached them.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Every exfiltration path in the architecture ends at the same place: a packet leaving your network. That makes egress the highest-leverage control you have, and the one most often left as allow-all because it broke something once.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Every way customer PII leaves CyberTravels — a prompt leak, an abused tool, an OCR'd invoice, a poisoned template — ends at the same network boundary. R9, R10.</p>

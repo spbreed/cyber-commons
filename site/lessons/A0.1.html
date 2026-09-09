@@ -16,7 +16,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> How to run any lesson in this commons on either of the two free routes — a GitHub clone, or a Kaggle CPU kernel — what each one needs, and what the single code cell in every lesson is actually doing.</p>
 <p><strong>Why a security engineer needs it.</strong> A lesson here carries no procedure: the procedure is a file in <code>skills/</code>, and the notebook fetches and runs it. That is what makes 118 lessons maintainable, and it is also a dependency the output does not show you. The control it builds is: a preflight that reproduces both ways the arrangement fails before reporting the host ready.</p>
-<p>This is the <strong>first</strong> lesson. It is the only one whose subject is the repository rather than the systems the repository is about, and everything after it assumes you have run something once.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is the <strong>first</strong> lesson. It is the only one whose subject is the repository rather than the systems the repository is about, and everything after it assumes you have run something once.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>You cannot judge any of this until one lesson runs on your own machine. A curriculum you cannot execute is a slide deck.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Run the preflight on both routes — a cloned repository and a hosted kernel — and reproduce the two failures it is built to produce.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Exit 0, twelve lines, and the same CRC on both routes. The matching checksum is the proof it is the same file either way.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The first code cell you open in this commons is twenty lines of <code>subprocess</code> and no procedure at all, which reads like a stub. It is not: the procedure is a file in the repository, the cell fetches it, and the only prerequisite anybody gets stuck on is one checkbox in a settings panel. Ten minutes here saves the hour spent concluding the lessons are empty.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Every procedure in this commons is run against CyberTravels — a synthetic estate, so a result can be diffed and argued with rather than taken on trust. The procedure this lesson executes to prove the machinery is A1.2's: a traveller's message overriding CyberTravels' operator prompt.</p>

@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Placing canary tokens and honeypot tasks in a data index so a harvesting agent trips a zero-false-positive alert, and checking nothing legitimate reaches the bait.</p>
-<p><strong>Why a security engineer needs it.</strong> Every other detector trades misses against false alarms through a threshold. A canary has none — unless it is placed where real work touches it, which converts it back into a tuned control.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> Every other detector trades misses against false alarms through a threshold. A canary has none — unless it is placed where real work touches it, which converts it back into a tuned control.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Every other detector needs a threshold, and every threshold trades misses against false alarms.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Place canary tokens and honeypot tasks where no legitimate task reaches, so a touch needs no threshold at all.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>False-positive rate of zero by construction — and the count of canaries that legitimate work does reach, which breaks that property.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Every detector in this function needed a threshold, and every threshold is a trade. A canary in the index needs neither — nothing legitimate has any reason to touch it — until the canary is placed where real work does.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The canary is a fake booking record in CyberTravels' index that no legitimate itinerary references, so a read of it is an agent going somewhere its task never sent it.</p>

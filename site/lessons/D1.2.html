@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Change the model underneath and catch the detection regression.</p>
 <p><strong>Why a security engineer needs it.</strong> A detection that worked last month is silently degraded. The control it builds is: watch model updates, prompt changes, index refreshes, tool versions.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A detection that worked last month is silently degraded, because the model, the prompt or the tool list changed and none of it was a code change.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Sign off a baseline, then watch the four surfaces that move without raising a ticket.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Time between a behaviour change and its detection — and the share of controls currently outside their freshness window.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Nothing was attacked. The model was upgraded, a prompt was edited, a tool changed its output format — and the behaviour of the system moved. Drift is the failure mode with no adversary, and it is far more common than the ones with one.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Nothing was attacked. The model provider upgraded, Alex edited a prompt, the tool manifest changed — and CyberTravels' baseline moved underneath every detection built on it.</p>

@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Validate four candidate patches on three axes and show which of them only made the scanner green.</p>
 <p><strong>Why a security engineer needs it.</strong> A patch that silences the scanner is indistinguishable from a patch that fixes the bug. The control it builds is: stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A patch that silences the scanner is indistinguishable from a patch that fixes the bug.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Generate the fix, re-run the exploit against the patched build, and require a regression test that fails on the old one.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Patches where the exploit no longer succeeds and the regression test fails pre-fix. Anything else is a silenced scanner.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A patch that passes the tests and changes the behaviour is not a fix, it is a second incident with a pull request attached. Remediation is the stage where the pipeline stops finding things and starts touching them.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The Coding Agent's fix must not break booking behaviour. A patch that passes the tests and changes what travellers experience is a second incident with a pull request attached. R8.</p>

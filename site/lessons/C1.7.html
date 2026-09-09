@@ -16,7 +16,29 @@
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Triaging a multi-threaded delegation graph with a loop, defended against deceptive self-correction by a severity floor and a stable-seeded closure sample.</p>
-<p><strong>Why a security engineer needs it.</strong> An agent scoring evidence only on support confirms its first theory and closes the wrong case silently. The floor and the sample are what keep an automated loop's false-negative rate visible.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p><strong>Why a security engineer needs it.</strong> An agent scoring evidence only on support confirms its first theory and closes the wrong case silently. The floor and the sample are what keep an automated loop's false-negative rate visible.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An agent that scores evidence only on support confirms its first theory and closes the wrong case at machine speed, silently.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Run triage as a loop with a severity floor and a stable-seeded sample of whatever it auto-closed.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Closures sampled to a human, and agreement on that sample — which is the only measurement of the loop's false-negative rate you will get.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The delegation graph is multi-threaded and the agents self-correct deceptively: a loop that scores evidence only on support confirms its first theory and closes the wrong case at machine speed, silently.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The alerts are CyberTravels', and the deceptive branch is the refund incident: the loop confirms 'the Workflow Agent did it' and never reaches the vendor tool description that actually did.</p>

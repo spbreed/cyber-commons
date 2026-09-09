@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Generate and unit-test Sigma rules in CI; map coverage to ATT&amp;CK.</p>
 <p><strong>Why a security engineer needs it.</strong> Coverage gaps nobody mapped. The control it builds is: detection-as-code with agents inside the CI loop.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>An agent writes candidate rules faster than anyone can review them, and a rule at 5% precision is not 5% useful — it is negative.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Let the loop generate, then score every candidate against real historical telemetry before anything ships.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Firing volume per true positive. A rule at 301 alerts to 1 is rejected with its number rather than with an opinion.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An agent can write and tune a detection far faster than you can, which means it can also ship a confident, wrong rule into production far faster than you can. The validation discipline is the whole of the value.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> An agent can write and tune a detection for CyberTravels' behaviour far faster than the detection engineer can — including a confident, wrong one, shipped to production.</p>

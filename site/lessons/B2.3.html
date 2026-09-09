@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Score grep, taint rules and model review against the same corpus, then combine them behind a confidence gate.</p>
 <p><strong>Why a security engineer needs it.</strong> Pattern matching floods the queue; the false-positive rate is what actually changed. The control it builds is: stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Pattern matching floods the queue, and the classes that matter in agentic code cannot be written as patterns at all.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Deterministic rules for what rules do well, then a model pass for what they cannot express.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>The clearest before-and-after in the commons: Semgrep holds precision 1.00 and finds about one real defect in seven; the reasoning pass finds about six in ten. Four times the recall, same code — and the extra false positives are what the next four stages exist to remove.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Semgrep's precision on this file is 1.00 at every ruleset width. Its recall goes from 0.17 to 0.67 depending on a config line nobody reads, and both scans exit zero. The number that decides whether a scan meant anything is the one almost nobody computes.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The IDOR that exposed card details by booking ID (R8) is exactly the class each generation of SAST handles differently — and the class the third generation will also confidently invent.</p>
@@ -49,8 +71,8 @@ confuse with each other.</p>
 <p><strong>The deterministic half is a real scanner with real rules.</strong> Semgrep, CodeQL,
 OpenGrep. Parse the code to a graph, ask a rule a question about it, and get
 the same answer every time. That repeatability is what lets you gate a merge on
-it — a probabilistic check cannot block a build, because the same commit would
-pass on Tuesday and fail on Wednesday.</p>
+it — a probabilistic check cannot block a build, because the same commit can
+pass on one run and fail on the next.</p>
 <p>Its limit is not accuracy. On the file below Semgrep's precision is <strong>1.00 at
 every ruleset width</strong>; it does not report bugs that are not there. Its limit is
 that a rule only finds the pattern somebody wrote, so its <strong>recall is a
@@ -415,8 +437,8 @@ are the argument. The most <em>precise</em> system on that board found roughly <
 IDOR in seven</strong> — it is right when it speaks and it stays quiet about six of
 every seven real defects. The best recall is <strong>six in ten</strong>, four times as many,
 from a system reasoning about the class.</p>
-<p>Three things follow, and the third is the one that changes what you do on
-Monday.</p>
+<p>Three things follow, and the third is the one that changes how you build the
+pipeline.</p>
 <p><strong>Precision is the easy half.</strong> A detector that reports nothing is perfectly
 precise. Any access-control tool that leads with its precision number is leading
 with the metric that improves when it finds less.</p>

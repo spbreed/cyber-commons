@@ -392,7 +392,8 @@ nobody's assessment form asks:
 
 For a library the answer is no — you pin a version. For a hosted model the
 answer is usually yes, and it changes the risk rating, because every control you
-tested was tested against behaviour the vendor can replace on a Tuesday.
+tested was tested against behaviour the vendor can replace at any time, without
+telling you and without a version number changing.
 
 Three artefact classes, with genuinely different maturity:
 

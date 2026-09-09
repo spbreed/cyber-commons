@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Route every call through one gateway and show the same policy holding for agents that never implemented it.</p>
 <p><strong>Why a security engineer needs it.</strong> Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code. The control it builds is: a single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>Per-agent controls diverge as the fleet grows, and legacy downstreams push a static credential back into agent code.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>One enforcement point holding identity, policy, egress, budget and audit together.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Share of agent traffic that transits the gateway. Whatever does not is unenforced, whatever the policy says.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>At one agent the controls live in the agent. At fifty, each team implements them slightly differently, none of them is audited, and the only honest answer to "is default-deny on?" is "in some of them".</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> At four agents the controls live in the agents. When CyberTravels ships the eighth, nobody can answer “is default-deny on?” with anything better than “in some of them”. R9.</p>

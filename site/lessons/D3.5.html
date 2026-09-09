@@ -17,7 +17,29 @@
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
 <p><strong>What it covers.</strong> Reconstruct a timeline from raw logs with a context-loaded agent.</p>
 <p><strong>Why a security engineer needs it.</strong> Reaching for the agent once you're already behind. The control it builds is: pre-load logs, telemetry, segmentation model and playbooks.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A model correlates thousands of log lines in seconds and will produce a fluent narrative from logs that never supported one.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Separate what the logs establish from what the reconstruction infers, and keep the evidence beside each claim.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>Claims with a log line behind them, as a share of claims in the timeline. A fast conclusion is not a finished one.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Reconstruction is reading, and agents read fast. The speed is real and so is the failure mode: a timeline that is 95% right and completely confident is worse than no timeline, because somebody will make decisions on it.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Reconstructing what CyberTravels did across six log sources is reading, and agents read fast. A timeline that is 95% right and fully confident is worse than none.</p>
