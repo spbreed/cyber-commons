@@ -31,14 +31,47 @@
         {
           "id": "A0",
           "chapter": 0,
-          "title": "Running the Commons — GitHub, Kaggle, and What You Need First",
-          "titles": "Anyone. This chapter assumes no security background and no setup.",
-          "changes": "One lesson. The two free routes through the commons, what each needs, and what the single code cell in every lesson is doing — demonstrated by running a real lesson's procedure three times, twice in the ways it breaks. 1 lesson.",
-          "autonomy": "Run one lesson end to end before reading a second one.",
-          "deliverable": "One lesson executed on a host you did not configure, with its output checksum matching the one recorded here.",
+          "title": "Introduction — What This Is, Who It Is For, and How to Use It",
+          "titles": "Anyone, in any of the five roles. This chapter assumes no security background and no setup.",
+          "changes": "Five lessons. Who the commons is for and how a lesson page is built; which function to open first given your job; what Day 0/1/2 mean and how to use the labs, the skills and the CyberTravels case study; how to run a lesson on either free route; and the four frameworks with a reference table for each. 5 lessons.",
+          "autonomy": "Read A0.1 to A0.3, run A0.4 once, and come back to A0.5 when a label on a lesson page needs resolving.",
+          "deliverable": "A route through the commons chosen for your role, and one lesson executed on a host you did not configure with its output checksum matching the one recorded here.",
           "sessions": [
             {
               "id": "A0.1",
+              "title": "What this is, who it is for, and what a lesson is made of",
+              "kind": "introduction",
+              "summary": "The one subject of this commons — security engineering when the thing you are securing, or the thing doing the securing, is an agent — the five roles it is written for, and the seven sections every lesson page is built from, in order.",
+              "risk": "A reader lands mid-curriculum, reads the hook as if it were a summary, finds it vague and leaves. The material was never the problem; the shape of the page was.",
+              "control": "One fixed page structure, named: the hook is a scene, the description sits under it, and the framework comes before any code on every lesson without exception.",
+              "lab": "No code. Open a lesson in a function that is not yours and find all seven sections on it.",
+              "tools": [],
+              "models": []
+            },
+            {
+              "id": "A0.2",
+              "title": "How to use this, by the chair you sit in",
+              "kind": "introduction",
+              "summary": "Five functions, five entry points. Which function to open first given the job you already do, the two Function A lessons each of the other four depends on, and the two shorter routes people ask for: a team about to ship, and a leadership audience deciding whether to fund any of it.",
+              "risk": "Read front to back, the curriculum puts three weeks of architecture in front of a detection engineer who needed an alert, and four functions in front of a risk owner who needed one report.",
+              "control": "An entry point per role, with the dependencies named — so a route skips everything it does not need and nothing it does.",
+              "lab": "No code. Pick your row, open the lesson it starts at, and read only its Day 0 line.",
+              "tools": [],
+              "models": []
+            },
+            {
+              "id": "A0.3",
+              "title": "Day 0, Day 1, Day 2 — the labs, the skills, and open source first",
+              "kind": "introduction",
+              "summary": "The three conventions running through every page: what Day 0, Day 1 and Day 2 mean and how to use them; how a lab and the SKILL.md behind it are meant to be used, by a person and by an agent; what the hook is doing and why it is always CyberTravels; and why every tool named here is one you can install before you can buy one.",
+              "risk": "A control with no number cannot be defended in a budget conversation, and a product nobody has built a bad version of cannot be specified — only compared on the seller's feature list.",
+              "control": "Three questions answered on every page, a runnable procedure behind every lesson, and an open-source reference for every control so the gap you hit is the buying requirement.",
+              "lab": "No code. Take the Day 2 line of a lesson in your function and write the same sentence about a control you already run.",
+              "tools": [],
+              "models": []
+            },
+            {
+              "id": "A0.4",
               "title": "Run your first lesson — GitHub, Kaggle, and what you need first",
               "kind": "introduction",
               "summary": "Every lesson is a page, a SKILL.md and a script, and the notebook holds none of them — it fetches the skills tree and runs the script out of it. This lesson says what that needs on each of the two free routes, then proves the chain by running A1.2's procedure with each condition broken in turn.",
@@ -49,14 +82,15 @@
               "models": []
             },
             {
-              "id": "A0.2",
+              "id": "A0.5",
               "title": "The four frameworks, and when each one is the right lens",
               "summary": "OWASP's two Top 10s, MITRE ATLAS, the NIST AI RMF and the EU AI Act. What each one is for, which question each answers, and a reference table for each — so a finding gets filed under the vocabulary its audience uses rather than the one the writer happens to know.",
               "risk": "Four vocabularies get used interchangeably, so a threat id lands in a risk register and a NIST function lands in an incident write-up, and neither audience can act on it.",
               "control": "One lookup, both directions, read from the same mapping file every lesson page is labelled from.",
               "lab": "Look up what a lesson maps to, then the harder direction: which lessons address a given EU AI Act article.",
               "tools": [],
-              "models": []
+              "models": [],
+              "kind": "reference"
             }
           ]
         },

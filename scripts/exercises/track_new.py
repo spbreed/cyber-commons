@@ -1,4 +1,4 @@
-"""Lessons added with the five-phase Function D restructure, plus A0.2 and E1.13.
+"""Lessons added with the five-phase Function D restructure, plus A0.5 and E1.13.
 
 These live in one file rather than being scattered into the five `track_d*`
 modules because they were written together and read as a set: the discover →
@@ -14,8 +14,8 @@ from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
 
-# ---------------------------------------------------------------- A0.2
-"A0.2": {
+# ---------------------------------------------------------------- A0.5
+"A0.5": {
  "concept": """
 Four vocabularies get used in this field, and they answer different questions.
 Using the wrong one is not a style problem — it is a finding nobody can act on.

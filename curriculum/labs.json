@@ -5,11 +5,11 @@
   "env": "export OPENAI_BASE_URL=http://localhost:11434/v1; export OPENAI_API_KEY=ollama; export MODEL=glm-4.6"
  },
  "labs": {
-  "A0.1": {
+  "A0.4": {
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A0.1   # run it headless and check it",
+    "jupyter notebook labs/notebooks/A0.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A0.4   # run it headless and check it",
     "",
     "# --- route one, from nothing: clone once and nothing is fetched afterwards ---",
     "git clone https://github.com/spbreed/cyber-commons && cd cyber-commons",
@@ -21,11 +21,11 @@
    ],
    "expect": "The tree inventoried from disk — 14 areas, 120 skills, 119 with a script at the time of writing, and the count moves as the commons grows — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file."
   },
-  "A0.2": {
+  "A0.5": {
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A0.2.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A0.2   # run it headless and check it"
+    "jupyter notebook labs/notebooks/A0.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A0.5   # run it headless and check it"
    ],
    "expect": "Look up what a lesson maps to, then the harder direction: which lessons address a given EU AI Act article."
   },

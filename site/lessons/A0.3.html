@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A0.3 — Day 0, Day 1, Day 2 — the labs, the skills, and open source first | Cyber Commons</title><meta name="description" content="Three questions answered on every page, a runnable procedure behind every lesson, and an open-source reference for every control so the gap you hit is the buying requirement."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Introduction — What This Is, Who It Is For, and How to Use It</div><div class="sid">A0.3</div><h1>Day 0, Day 1, Day 2 — the labs, the skills, and open source first</h1><div class="badges"><span class="badge t">A0</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A0.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A control with no number cannot be defended in a budget conversation, and a product nobody has built a bad version of cannot be specified — only compared on the seller&#x27;s feature list.</p></div><div class="ctrl"><div class="lab">Control</div><p>Three questions answered on every page, a runnable procedure behind every lesson, and an open-source reference for every control so the gap you hit is the buying requirement.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">No code. Take the Day 2 line of a lesson in your function and write the same sentence about a control you already run.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A0.3 · Day 0, Day 1, Day 2 — the labs, the skills, and open source first</h1>
+<p><strong>Function A — Securing AI Architectures → Introduction — What This Is, Who It Is For, and How to Use It</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A0.2.html">A0.2 · How to use this, by the chair you sit in</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>standard library only</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> The three conventions that run through every page: Day 0 / Day 1 / Day 2, how to use a lab and the <code>SKILL.md</code> behind it, and the hook's relationship to the CyberTravels case study — plus why every tool named here is open source.</p>
+<p><strong>Why a security engineer needs it.</strong> Day 2 is the question a sceptical reader asks and the one most security material cannot answer. The open-source rule is the same argument applied to tooling: you cannot specify a product you have never built a bad version of, and the gaps you hit building it are the reason to buy. The control it builds is: a number per lesson, and a defensible buy-versus-build position per control.</p>
+<p>This is a <strong>conventions</strong> lesson. Everything it defines is used on every other page.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>A control nobody can put a number on cannot be defended in a budget conversation, and a product nobody has built a bad version of cannot be specified — only compared on the seller's feature list.</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>Learn the three questions every page answers, how to run a lab and reuse the skill behind it, and the open-source stack each control is taught on before any product is named.</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>One number per lesson — that is what the Day 2 line is — and, per control you build openly, the gap you hit. The gap is the buying requirement.</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Every lesson answers the same three questions, and the third is the one that is easy to fake: what number tells you it worked. That number is why the labs are real code rather than screenshots, and why every tool named in this commons is one you can install this afternoon without a purchase order.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> CyberTravels is the answer to “why this example and not a better one”. A lesson could always find a sharper illustration of its own idea; it uses the one you already know instead, so the refund limit walked past in A1.2 is the same limit measured in D2 and reported in E1.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   THE THREE QUESTIONS, ON EVERY PAGE
+
+     DAY 0 -- why  -------&gt;  DAY 1 -- how  -------&gt;  DAY 2 -- measure
+     what goes wrong         the thing you           the number that
+     if you do nothing       actually build          says it worked
+          ^                                                |
+          |                     the number is the next Day 0
+          +------------------------------------------------+
+
+   AND HOW YOU LEARN THE DAY 1
+
+     concept  -&gt;  open-source build  -&gt;  the gap you found  -&gt;  buy (maybe)
+                  Wazuh, OpenSearch,     &quot;no product here      and now you can
+                  Sigma, Semgrep,         tells me which        say what you are
+                  Trivy, MISP, Shuffle    prompt did it&quot;        buying, and why
+
+   a control you have never operated has no &quot;buy when&quot; - it has a demo
+</code></pre>
+<p>Three conventions run through every lesson. They are the reason the pages are
+shaped the way they are, and each one exists because of a specific complaint.</p>
+<h3>Day 0, Day 1, Day 2</h3>
+<p>Every lesson and every function answers the same three questions, in the same
+order, in the same words:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>the question</th>
+<th>what a good answer looks like</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Day 0 — why</strong></td>
+<td>What goes wrong if you do nothing?</td>
+<td>A consequence in this lesson's own terms, not a general appeal to risk</td>
+</tr>
+<tr>
+<td><strong>Day 1 — how</strong></td>
+<td>What do you actually build or run?</td>
+<td>The concrete thing: a rule, a map, a gate, a score</td>
+</tr>
+<tr>
+<td><strong>Day 2 — measure</strong></td>
+<td>What number tells you it worked?</td>
+<td>A number this lesson produces — a recall figure, a false-positive rate, an interval in minutes</td>
+</tr>
+</tbody>
+</table>
+<p>These are <strong>not</strong> a maturity model and they are not a timeline. Day 0 is not
+"first week". They are three questions a practitioner asks before reading
+anything, and the commons was illegible until it answered them on every page.</p>
+<p>Day 2 is the one that is easy to fake, and the only one a sceptical reader
+believes. Where a lesson genuinely produces a number, Day 2 names that number.
+Where it does not — an orientation lesson produces nothing — Day 2 says what
+you count instead, and does not pretend.</p>
+<p>Use them like this: <strong>Day 0 decides whether to read the lesson. Day 1 is what
+you do. Day 2 is what you put in the update to whoever asked.</strong></p>
+<h3>The labs and the skills</h3>
+<p>Each lesson's procedure lives in a <code>SKILL.md</code> and a script beside it, in
+<code>skills/</code>. That file is doing two jobs at once, and you can use either.</p>
+<p><strong>As a person</strong>, it is a checklist. Read the markdown, follow it, ignore the
+frontmatter. It is written to be followed by hand.</p>
+<p><strong>As an agent's tool</strong>, it is loadable: the frontmatter says when the procedure
+applies, so a coding agent with the repository available will pull the right
+one at the right time rather than improvising a procedure.</p>
+<p>The lab is that skill running. One cell fetches the tree and runs the script as
+a subprocess — the script is standard library only and deterministic, so two
+runs can be diffed and a changed number means something changed. The recorded
+output on the page is a real run, checked byte for byte against the same
+notebook run on a second host. A0.4 is the whole mechanism, demonstrated on
+itself.</p>
+<p><strong>How to actually use a lab.</strong> Run it once as written and read <strong>Out</strong>. Then do
+the <em>Your turn</em> section, which always changes one input so a number moves. The
+lesson is in the difference between the two numbers, not in either one.</p>
+<h3>The hook, and CyberTravels</h3>
+<p>The first paragraph of every lesson is a scene, and it is always the same
+company. <strong>CyberTravels</strong> sells corporate travel; its product is an agentic
+platform of four agents — a workflow agent that books and refunds, a retrieval
+advisor, a coding agent, and a file-system agent reading vendor documents.
+Alex is the product engineer who shipped it.</p>
+<p>There is one system in this commons and every lesson is grounded in it. That is
+a deliberate cost: a lesson could always find a sharper example of its own idea,
+and instead it uses the one you already know. The payoff is cumulative. The
+refund limit an attacker walks past in Function A is the refund limit a
+detection watches in Function D and the control indicator a report counts in
+Function E — one company, one architecture, five jobs done on it.</p>
+<p>So the hook is not decoration and it is not a summary. It is that lesson's idea
+happening to CyberTravels before it is named. If you want the summary, the
+section under it is the summary.</p></div><div class="nbmd"><p>Every tool named in this commons is one you can install today without a purchase order. That is a teaching decision before it is a budget one.</p>
+<p><strong>You cannot specify a product you have not built a bad version of.</strong> A team that has stood up Wazuh and OpenSearch, written twenty Sigma rules and watched them fire on their own traffic can walk into a vendor conversation and ask the two questions that matter: what does this do that my rules do not, and what does it cost to keep it true. A team that has not can only compare feature lists — and a feature list is written by the seller.</p>
+<p>The second reason is that <strong>the gaps are the finding</strong>. Building the open-source version of a control tells you exactly where it stops. D1.0 names two of those out loud: there is no open-source data-loss prevention with the maturity of the other sensors, and <em>no product in the list at all</em> can tell you which prompt caused a file write. Neither of those is visible from a datasheet. Both are the reason to buy — or to build — and now you can say which.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what you need</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">learn it on</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">buy when</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Endpoint and workload sensing</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>Wazuh</b> — agent, manager, indexer</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Estate size or support obligations outgrow what you can operate</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Somewhere for telemetry to land</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>OpenSearch</b>, or the Wazuh indexer</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Retention and query cost stop being a tuning problem</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Portable, reviewable detections</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>Sigma</b>, mapped to <b>ATT&amp;CK</b> and <b>ATLAS</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Almost never — the rules outlive the platform, which is the point</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Static analysis in the pipeline</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>Semgrep</b>, with the reasoning pass from B2.3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Language coverage or triage volume is the constraint</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Dependency and image inspection</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>Trivy</b>, <b>Syft</b>, <b>Grype</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">You need attestation and provenance rather than a scan</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Threat intelligence and cases</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>MISP</b>, <b>OpenCTI</b>, <b>TheHive</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Intelligence you cannot source yourself is the gap</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Orchestration and forensics</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>Shuffle</b>, <b>Velociraptor</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Response time is bounded by people rather than by tooling</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The right-hand column is the one to argue about. A control you have never operated has no 'buy when' — it has a demo.</div></div><div class="nbmd"><h2>3 · Where each convention is defined</h2>
+<p>So you do not have to hold this page in your head:</p>
+<ul>
+<li><strong>Day 0/1/2</strong> — on every lesson, in the table under <em>What this lesson is</em>; per function, in that function's introduction (A1.0, B2.0, C1.0, D1.0, E1.0).</li>
+<li><strong>The labs and the skills</strong> — the mechanism is A0.4, demonstrated by running a real lesson's procedure three times, twice in the ways it breaks.</li>
+<li><strong>CyberTravels</strong> — the architecture is A1.1, and the risk register every function counts against is A1.18.</li>
+<li><strong>The framework labels</strong> on each page — A0.5, which says which of four questions each framework answers, and that the mappings are indicative rather than a certification.</li>
+</ul>
+<p>One thing that is <em>not</em> a convention, and gets read as one: the <strong>anchor</strong> line in Functions D and E. Those two functions are single arguments rather than collections — an interval between an agent acting and the control being back at target (D1.0), and a control indicator computed from the estate (E1.1) — so every other lesson in them says in one line which part of that argument it moves. The other three functions have no anchor because they are not shaped that way.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take the Day 2 line of any lesson in your function and try to write the same sentence about a control you already run. If you cannot name the number, that control is a Day 1 you never finished — and that gap is usually worth more than the lesson.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A0.4.html">A0.4 · Run your first lesson — GitHub, Kaggle, and what you need first</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A0.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A0.3.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A0.3.ipynb</code></p></div><div class="pager"><a href="A0.2.html"><span class="k">← Previous</span><span class="t">A0.2 · How to use this, by the chair you sit in</span></a><a class="next" href="A0.4.html"><span class="k">Next →</span><span class="t">A0.4 · Run your first lesson — GitHub, Kaggle, and what you need first</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

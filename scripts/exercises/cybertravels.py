@@ -227,8 +227,22 @@ FAMILIES = [
 # --------------------------------------------------------------------------
 GROUNDING: dict[str, str] = {
 
-# ---- A0 · running the commons at all -------------------------------------
-"A0.1": "Every procedure in this commons is run against CyberTravels — a "
+# ---- A0 · the introduction -----------------------------------------------
+"A0.1": "The scene in every hook on every page is happening inside "
+        "CyberTravels — the same four agents, the same refund limit, the same "
+        "vendor documents. That is why the hooks accumulate into an argument "
+        "rather than reading as a hundred unrelated anecdotes.",
+"A0.2": "The five functions are five jobs done on one system. The workflow "
+        "agent an architect hardens in Function A is the one a red teamer "
+        "attacks in Function C, a detection engineer watches in Function D, "
+        "and a risk owner counts in Function E.",
+"A0.3": "CyberTravels is the answer to “why this example and not a better "
+        "one”. A lesson could always find a sharper illustration of its own "
+        "idea; it uses the one you already know instead, so the refund limit "
+        "walked past in A1.2 is the same limit measured in D2 and reported in "
+        "E1.",
+
+"A0.4": "Every procedure in this commons is run against CyberTravels — a "
         "synthetic estate, so a result can be diffed and argued with rather "
         "than taken on trust. The procedure this lesson executes to prove the "
         "machinery is A1.2's: a traveller's message overriding CyberTravels' "

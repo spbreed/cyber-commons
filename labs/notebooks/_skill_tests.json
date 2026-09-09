@@ -12,7 +12,7 @@
    "contract": true,
    "script": true,
    "lines": 39,
-   "seconds": 0.06
+   "seconds": 0.05
   },
   {
    "skill": "appsec/appsec-exploit-validate",
@@ -20,7 +20,7 @@
    "contract": true,
    "script": true,
    "lines": 66,
-   "seconds": 0.07
+   "seconds": 0.08
   },
   {
    "skill": "appsec/appsec-triage-report",
@@ -36,7 +36,7 @@
    "contract": true,
    "script": true,
    "lines": 82,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "appsec/coding-agent-hardening",
@@ -44,7 +44,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/context-window-sizing",
@@ -84,7 +84,7 @@
    "contract": true,
    "script": true,
    "lines": 41,
-   "seconds": 0.04
+   "seconds": 0.05
   },
   {
    "skill": "appsec/fix-promotion-gate",
@@ -92,7 +92,7 @@
    "contract": true,
    "script": true,
    "lines": 81,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/idor-detection-recall",
@@ -260,7 +260,7 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "detection/agent-aware-rule-review",
@@ -292,7 +292,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "detection/agent-tempo-baseline",
@@ -332,7 +332,7 @@
    "contract": true,
    "script": true,
    "lines": 55,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "detection/detection-rule-synthesis",
@@ -340,7 +340,7 @@
    "contract": true,
    "script": true,
    "lines": 15,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/fleet-correlation-analysis",
@@ -348,7 +348,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "detection/sensor-coverage-matrix",
@@ -380,7 +380,7 @@
    "contract": true,
    "script": true,
    "lines": 76,
-   "seconds": 0.06
+   "seconds": 0.08
   },
   {
    "skill": "grc/agent-lifecycle-governance",
@@ -404,7 +404,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "grc/control-to-framework-mapping",
@@ -492,7 +492,7 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/autonomy-ladder-decisions",
@@ -516,7 +516,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/handoff-delivery-check",
@@ -524,7 +524,7 @@
    "contract": true,
    "script": true,
    "lines": 51,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/lesson-preflight",
@@ -532,7 +532,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.09
+   "seconds": 0.14
   },
   {
    "skill": "programme/ownership-seam-audit",
@@ -564,7 +564,7 @@
    "contract": true,
    "script": true,
    "lines": 44,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "programme/risk-translation-upward",
@@ -612,7 +612,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "redteam/greybox-authorization-matrix",
@@ -620,7 +620,7 @@
    "contract": true,
    "script": true,
    "lines": 60,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "redteam/offensive-agent-containment",
@@ -628,7 +628,7 @@
    "contract": true,
    "script": true,
    "lines": 72,
-   "seconds": 0.06
+   "seconds": 0.08
   },
   {
    "skill": "redteam/offensive-agent-safety-preflight",
@@ -652,7 +652,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "regulatory/autonomous-action-auditability",
@@ -724,7 +724,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "research/agent-supply-chain-assessment",
@@ -732,7 +732,7 @@
    "contract": true,
    "script": true,
    "lines": 47,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "research/eval-suite-health-check",
@@ -748,7 +748,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "research/generated-schema-audit",
@@ -764,7 +764,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "research/research-durability-check",
@@ -772,7 +772,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "research/row-level-policy-check",
@@ -796,7 +796,7 @@
    "contract": true,
    "script": true,
    "lines": 32,
-   "seconds": 0.04
+   "seconds": 0.05
   },
   {
    "skill": "research/weight-access-capability-delta",
@@ -812,7 +812,7 @@
    "contract": true,
    "script": true,
    "lines": 32,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "response/fleet-kill-switch-test",
@@ -908,7 +908,7 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "runtime/control-exemption-audit",
@@ -956,7 +956,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "secops/incident-scoping",
@@ -964,7 +964,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.06
+   "seconds": 0.05
   },
   {
    "skill": "secops/investigation-admission-rules",

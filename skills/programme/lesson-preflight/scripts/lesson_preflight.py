@@ -71,7 +71,7 @@ for md in sorted(SKILLS.rglob("SKILL.md")):
 # making one import the shared runtime — changes them, and a Kaggle kernel run
 # before that change prints the older number until it is re-run. That is the
 # check doing its job; it inventories what was actually fetched. The operational
-# consequence is that A0.1 must be the LAST notebook pushed in any cycle, or it
+# consequence is that A0.4 must be the LAST notebook pushed in any cycle, or it
 # verifies against a tree that changed after its kernel ran. Both times this
 # lesson has failed kaggle_verify, that was why.
 print("the tree this host fetched")

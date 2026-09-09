@@ -8,7 +8,7 @@ from __future__ import annotations
 
 HOOKS: dict[str, str] = {
 
-"A0.2":
+"A0.5":
  "A prompt-injection finding filed as a NIST function tells a regulator "
  "nothing and a developer less. The four vocabularies in this field answer "
  "four different questions, and picking the wrong one is how a real finding "
@@ -76,7 +76,7 @@ HOOKS: dict[str, str] = {
 
 DIAGRAMS: dict[str, str] = {
 
-"A0.2": """
+"A0.5": """
    THE QUESTION                       THE VOCABULARY THAT ANSWERS IT
 
    "what can go wrong in this      -> OWASP LLM Top 10      LLM01..LLM10

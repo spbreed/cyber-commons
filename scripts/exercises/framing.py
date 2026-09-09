@@ -28,6 +28,27 @@ and the curriculum stay in step.
 HOOKS: dict[str, str] = {
 
 "A0.1":
+ "Most people arrive here from a link, land in the middle of a lesson about "
+ "tool-call adjudication, and close it again. The material is not hard — the "
+ "shape is unfamiliar. Every lesson is the same seven sections in the same "
+ "order, and the first of them is deliberately not a summary. Ten minutes "
+ "here and the rest reads itself.",
+
+"A0.2":
+ "Five functions, fourteen chapters, and no reader needs all of them. A "
+ "detection engineer who starts at lesson one spends three weeks on "
+ "architecture before reaching an alert; a risk owner who starts there never "
+ "reaches the report they came for. The order that works depends on the chair "
+ "you sit in, and there are five chairs.",
+
+"A0.3":
+ "Every lesson answers the same three questions, and the third is the one "
+ "that is easy to fake: what number tells you it worked. That number is why "
+ "the labs are real code rather than screenshots, and why every tool named in "
+ "this commons is one you can install this afternoon without a purchase "
+ "order.",
+
+"A0.4":
  "The first code cell you open in this commons is twenty lines of "
  "`subprocess` and no procedure at all, which reads like a stub. It is not: "
  "the procedure is a file in the repository, the cell fetches it, and the "
@@ -708,6 +729,74 @@ HOOKS: dict[str, str] = {
 DIAGRAMS: dict[str, str] = {
 
 "A0.1": """
+   ONE LESSON PAGE, TOP TO BOTTOM
+
+   +--------------------------------------------------------------+
+   | 1  the hook          a scene in CyberTravels. NOT a summary.  |
+   +--------------------------------------------------------------+
+   | 2  what this is      the description  +  Day 0 / 1 / 2 table  |
+   +--------------------------------------------------------------+
+   | 3  the framework     the concept, the diagram, (the anchor)   |  <- the lesson
+   +--------------------------------------------------------------+
+   | 4  in CyberTravels   the same idea in the running system      |
+   +--------------------------------------------------------------+
+   | 5  the skill         SKILL.md, as it exists in skills/        |
+   +--------------------------------------------------------------+
+   | 6  run it  ->  Out   one cell, and its real recorded output   |  <- the proof
+   +--------------------------------------------------------------+
+   | 7  your turn         one input to change so a number moves    |
+   +--------------------------------------------------------------+
+
+   deciding whether to read it   ->  2 (the description and the Day table)
+   reading it                    ->  3, 4, 6
+   already know it               ->  6 alone
+""",
+
+"A0.2": """
+   FIVE CHAIRS, FIVE ENTRY POINTS
+
+                     +---------------------------+
+                     |   A0.4  run one lesson    |   everyone, ten minutes
+                     +-------------+-------------+
+                                   |
+     +----------+----------+-------+------+----------+-----------+
+     v          v          v              v          v
+   architect  AppSec    red team      SOC / IR     GRC / risk
+     |          |          |              |          |
+     v          v          v              v          v
+   A1.0       B2.0       C1.0           D1.0       E1.0 -> E1.1
+   A1 A2 A3   B2         C1             D1..D5     E1 E2 E3
+     |          |          |              |          |
+     +----------+----------+------+-------+----------+
+                                  v
+                     one system: CYBERTRAVELS
+              designed in A, tested in B, attacked in C,
+                 watched in D, reported on in E
+
+   building the system  ->  A, B     watching it  ->  C, D, E
+""",
+
+"A0.3": """
+   THE THREE QUESTIONS, ON EVERY PAGE
+
+     DAY 0 -- why  ------->  DAY 1 -- how  ------->  DAY 2 -- measure
+     what goes wrong         the thing you           the number that
+     if you do nothing       actually build          says it worked
+          ^                                                |
+          |                     the number is the next Day 0
+          +------------------------------------------------+
+
+   AND HOW YOU LEARN THE DAY 1
+
+     concept  ->  open-source build  ->  the gap you found  ->  buy (maybe)
+                  Wazuh, OpenSearch,     "no product here      and now you can
+                  Sigma, Semgrep,         tells me which        say what you are
+                  Trivy, MISP, Shuffle    prompt did it"        buying, and why
+
+   a control you have never operated has no "buy when" - it has a demo
+""",
+
+"A0.4": """
    WHAT YOU READ                 WHAT ACTUALLY RUNS
 
    +---------------------+       repository

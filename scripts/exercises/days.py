@@ -29,11 +29,14 @@ from __future__ import annotations
 # Function level — who it is for, and the three days across the whole function.
 # `who` is deliberately in job titles rather than skills, because a reader
 # decides whether to open a track by recognising their own role in it.
+# `who_short` is the same thing at homepage-card width — the full sentence does
+# not fit in a card and a truncated sentence reads worse than a written one.
 # --------------------------------------------------------------------------
 
 FUNCTION_DAYS: dict[str, dict[str, str]] = {
 
 "A": {
+ "who_short": "Security architects · product engineers shipping an agentic feature",
  "who": "Security architects, principal security engineers, and the product "
         "engineers and product managers who are building an agentic feature and "
         "have been asked whether it is safe to ship.",
@@ -56,6 +59,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "B": {
+ "who_short": "AppSec and product security engineers · penetration testers",
  "who": "AppSec engineers, product security engineers, secure code reviewers "
         "and penetration testers — the people who already run a security gate "
         "on every release.",
@@ -83,6 +87,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "C": {
+ "who_short": "Red team operators · AI security researchers",
  "who": "Red team operators, AI security researchers and offensive ML "
         "engineers — and the defenders who have to receive what they find.",
  "day0": "Nobody can tell you how your agentic system fails until somebody has "
@@ -103,6 +108,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "D": {
+ "who_short": "SOC analysts · detection engineers · incident responders",
  "who": "SOC analysts, detection engineers, incident responders, threat "
         "hunters and DFIR leads — running a SOC that now has agents in it, and "
         "agents watching it.",
@@ -127,6 +133,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "E": {
+ "who_short": "GRC and compliance · risk owners · the CISO office",
  "who": "GRC analysts, risk and compliance managers, control owners, privacy "
         "engineers, BISOs and the CISO office — anyone who has to answer for "
         "the estate rather than build it.",
@@ -156,7 +163,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 # --------------------------------------------------------------------------
 
 # The lesson that opens each function, and therefore the one that carries the
-# function-level Day 0/1/2 block. A0.1 is deliberately not here: it teaches the
+# function-level Day 0/1/2 block. A0.4 is deliberately not here: it teaches the
 # reader to run a notebook, which is not Function A's argument.
 FUNCTION_INTRO: dict[str, str] = {
     "A": "A1.0", "B": "B2.0", "C": "C1.0", "D": "D1.0", "E": "E1.0",
@@ -167,14 +174,42 @@ DAYS: dict[str, tuple[str, str, str]] = {}
 # ---- A · Securing AI Architectures ---------------------------------------
 DAYS.update({
 
-"A0.1": ("You cannot judge any of this until one lesson runs on your own "
+"A0.1": ("Readers who land mid-curriculum read the hook as a summary, find it "
+         "vague, and leave — the material was never the problem, the shape "
+         "was.",
+         "Learn the five audiences and the seven sections every lesson page "
+         "is built from, and which of them answers the question you arrived "
+         "with.",
+         "Nothing is computed here. The check is that you can open any lesson "
+         "in any function and name all seven sections on it."),
+
+"A0.2": ("Read front to back, the commons puts three weeks of architecture in "
+         "front of a detection engineer who needed an alert, and four "
+         "functions in front of a risk owner who needed one.",
+         "Find your row in the entry-point table, start at that function's "
+         "introduction, and take only the Function A lessons it names.",
+         "Time to the first lesson that changes what you do at work. On the "
+         "routed path it is one lesson; front to back it is between twenty "
+         "and sixty."),
+
+"A0.3": ("A control nobody can put a number on cannot be defended in a budget "
+         "conversation, and a product nobody has built a bad version of "
+         "cannot be specified — only compared on the seller's feature list.",
+         "Learn the three questions every page answers, how to run a lab and "
+         "reuse the skill behind it, and the open-source stack each control "
+         "is taught on before any product is named.",
+         "One number per lesson — that is what the Day 2 line is — and, per "
+         "control you build openly, the gap you hit. The gap is the buying "
+         "requirement."),
+
+"A0.4": ("You cannot judge any of this until one lesson runs on your own "
          "machine. A curriculum you cannot execute is a slide deck.",
          "Run the preflight on both routes — a cloned repository and a hosted "
          "kernel — and reproduce the two failures it is built to produce.",
          "Exit 0, twelve lines, and the same CRC on both routes. The matching "
          "checksum is the proof it is the same file either way."),
 
-"A0.2": ("A finding filed in the wrong vocabulary reaches the wrong audience "
+"A0.5": ("A finding filed in the wrong vocabulary reaches the wrong audience "
          "and gets actioned by nobody.",
          "Learn which of four questions each framework answers, then look a "
          "lesson up in both directions.",

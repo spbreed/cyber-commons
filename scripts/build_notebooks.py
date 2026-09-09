@@ -120,7 +120,7 @@ if _root is None:
     # scan; `curriculum` and `site/data` hold the framework mapping and the
     # session list that the reference-lookup skill reads. Miss any of them and
     # the skill clones successfully and then fails on a path that is not there,
-    # which is how A0.2 failed its first Kaggle run.
+    # which is how A0.5 failed its first Kaggle run.
     subprocess.run(["git", "-C", CLONE, "sparse-checkout", "set",
                     "skills", "cybertravels", "curriculum", "site/data"],
                    capture_output=True, text=True)

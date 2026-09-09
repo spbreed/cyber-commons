@@ -10,6 +10,30 @@ not do this job; this does, and the build refuses a lesson without one.
 ABOUT: dict[str, str] = {
 
 "A0.1": """
+**What it covers.** Who this commons is written for — five roles, one function each — and the seven sections every lesson page is built from, in the order they appear.
+
+**Why a security engineer needs it.** A reader who lands mid-curriculum reads the hook as an abstract, finds it vague, and leaves. The hook is a scene rather than a summary, and the description sits under it. The control it builds is: knowing which of the seven sections answers the question you actually arrived with.
+
+This is the **first** lesson to read. It has no code and takes ten minutes.
+""",
+
+"A0.2": """
+**What it covers.** Which of the five functions to open first, given the job you already do — and the two Function A lessons each of the other four depends on.
+
+**Why a security engineer needs it.** Read in order, the commons puts three weeks of architecture in front of a detection engineer who needed an alert. The functions are five jobs done on one system, not five stages of a course. The control it builds is: an entry point per role, and a route that skips nothing that route needs.
+
+This is an **orientation** lesson. Read it, pick a row, and go.
+""",
+
+"A0.3": """
+**What it covers.** The three conventions that run through every page: Day 0 / Day 1 / Day 2, how to use a lab and the `SKILL.md` behind it, and the hook's relationship to the CyberTravels case study — plus why every tool named here is open source.
+
+**Why a security engineer needs it.** Day 2 is the question a sceptical reader asks and the one most security material cannot answer. The open-source rule is the same argument applied to tooling: you cannot specify a product you have never built a bad version of, and the gaps you hit building it are the reason to buy. The control it builds is: a number per lesson, and a defensible buy-versus-build position per control.
+
+This is a **conventions** lesson. Everything it defines is used on every other page.
+""",
+
+"A0.4": """
 **What it covers.** How to run any lesson in this commons on either of the two free routes — a GitHub clone, or a Kaggle CPU kernel — what each one needs, and what the single code cell in every lesson is actually doing.
 
 **Why a security engineer needs it.** A lesson here carries no procedure: the procedure is a file in `skills/`, and the notebook fetches and runs it. That is what makes 118 lessons maintainable, and it is also a dependency the output does not show you. The control it builds is: a preflight that reproduces both ways the arrangement fails before reporting the host ready.
