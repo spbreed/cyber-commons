@@ -36,7 +36,7 @@
    "contract": true,
    "script": true,
    "lines": 82,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "appsec/coding-agent-hardening",
@@ -44,7 +44,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/context-window-sizing",
@@ -68,7 +68,7 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/exploit-replica-isolation-check",
@@ -76,7 +76,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/finding-dedup-and-verification",
@@ -100,7 +100,7 @@
    "contract": true,
    "script": true,
    "lines": 44,
-   "seconds": 0.05
+   "seconds": 0.03
   },
   {
    "skill": "appsec/patch-validation-harness",
@@ -108,7 +108,7 @@
    "contract": true,
    "script": true,
    "lines": 60,
-   "seconds": 0.07
+   "seconds": 0.06
   },
   {
    "skill": "appsec/reference-pipeline-scoring",
@@ -116,7 +116,7 @@
    "contract": true,
    "script": true,
    "lines": 50,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "appsec/sast-model-pass",
@@ -148,7 +148,7 @@
    "contract": true,
    "script": true,
    "lines": 59,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/threat-model-stride",
@@ -156,7 +156,7 @@
    "contract": true,
    "script": true,
    "lines": 119,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "architecture/agentic-architecture-map",
@@ -188,7 +188,7 @@
    "contract": true,
    "script": true,
    "lines": 73,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "attestation/attestation-signer-lifecycle",
@@ -300,7 +300,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "detection/agent-tempo-baseline",
@@ -356,7 +356,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "detection/sensor-coverage-matrix",
@@ -388,7 +388,7 @@
    "contract": true,
    "script": true,
    "lines": 76,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "grc/agent-lifecycle-governance",
@@ -436,7 +436,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.06
+   "seconds": 0.05
   },
   {
    "skill": "grc/model-risk-validation-scope",
@@ -508,7 +508,7 @@
    "contract": true,
    "script": true,
    "lines": 40,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "programme/capability-build-order",
@@ -620,7 +620,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "redteam/greybox-authorization-matrix",
@@ -652,7 +652,7 @@
    "contract": true,
    "script": true,
    "lines": 40,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "regulatory/assurance-conversation-prep",
@@ -796,7 +796,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "research/training-data-provenance-manifest",
@@ -972,7 +972,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "secops/investigation-admission-rules",

@@ -186,51 +186,39 @@ def kaggle_url(sid: str) -> str:
     return f"https://www.kaggle.com/kernels/welcome?src={RAW}/labs/notebooks/{sid}.ipynb"
 
 
-def notebook_block(sid: str) -> str:
-    """Render the lesson's notebook inline — the same cells, in order.
+# The lesson body is rendered from the same sources the notebook is built from,
+# never from the notebook itself. The notebook now carries code and nothing
+# else — the prose lived in both places and the copy inside the notebook was
+# the one nobody could correct.
+sys.path.insert(0, str(ROOT / "scripts"))
+from exercises import EXERCISES                       # noqa: E402
+from exercises.about import ABOUT                     # noqa: E402
+from exercises.anchors import ANCHORS                 # noqa: E402
+from exercises.cybertravels import GROUNDING          # noqa: E402
+from exercises.days import DAYS, FUNCTION_DAYS, FUNCTION_INTRO  # noqa: E402
+from exercises.framing import BRIDGES                 # noqa: E402
+SKILLS_DIR = ROOT / "skills"
 
-    The page shows the notebook rather than a separate prose copy of it, so the
-    thing you read and the thing you run cannot drift apart.
-    """
-    f = NB_DIR / f"{sid}.ipynb"
-    if not f.is_file():
-        return ""
-    nb = json.loads(f.read_text())
-    parts = ['<div class="nb">']
-    for cell in nb.get("cells", []):
-        src = "".join(cell.get("source", []))
-        if not src.strip():
-            continue
-        if cell["cell_type"] == "markdown":
-            parts.append(f'<div class="nbmd">{md_to_html(src)}</div>')
-        else:
-            # The live notebook, embedded from Kaggle, rather than a copy of
-            # its code on this page. The reader gets the real kernel — cells,
-            # outputs, and a Copy & Edit button — instead of source they cannot
-            # run from here.
-            #
-            # Only for a kernel a visitor can actually see. Kaggle's embedded
-            # viewer renders a private kernel as an EMPTY FRAME with no error,
-            # so embedding unconditionally puts a blank rectangle on every page
-            # whose kernel has not been pushed with --public yet. Which set that
-            # is comes from scripts/check_kaggle_public.py.
-            #
-            # Either way the recorded output is on the page: collapsed under the
-            # embed, inline without one. It is the site's evidence claim —
-            # `run_notebooks.py` executes the notebook here and
-            # `kaggle_verify.py` compares it byte for byte against the Kaggle
-            # run — and a page depending only on a third-party iframe loses it
-            # for any reader with scripts blocked.
-            if sid in KAGGLE_PUBLIC:
-                parts.append(kaggle_embed(sid))
-                parts.append(
-                    '<details class="recorded"><summary>The recorded run, '
-                    'checked byte for byte against the Kaggle kernel above'
-                    '</summary>' + output_block(sid) + "</details>")
-            else:
-                parts.append(output_block(sid))
-    parts.append("</div>")
-    return "".join(parts)
+# Every section gets one colour and one icon, and they are fixed across all 134
+# lessons so the shape of a page is learnable: a reader who has read two knows
+# where the framework is on the third without reading a heading.
+SECTIONS = {
+ "relevance": ("amber",  "\u25c9", "Use case relevance"),
+ "days":      ("violet", "\u25f4", "What this lesson is \u2014 Day 0, Day 1, Day 2"),
+ "framework": ("cyan",   "\u25a6", "The framework, and how it works"),
+ "skill":     ("green",  "\u25b6", "Real time execution as skill"),
+ "proved":    ("blue",   "\u2713", "What you just proved"),
+ "turn":      ("pink",   "\u270e", "Your turn"),
+ "bridge":    ("slate",  "\u2192", "Where this leaves you"),
+}
+
+
+def sec_open(key: str, extra: str = "") -> str:
+    hue, icon, title = SECTIONS[key]
+    return (f'<section class="ls ls-{hue}">'
+            f'<h2 class="lsh"><span class="lsi">{icon}</span>'
+            f'{html.escape(title)}{extra}</h2>'
+            f'<div class="lsb">')
 
 
 KAGGLE_OWNER = "cybercommons"
@@ -250,22 +238,129 @@ def kaggle_slug(sid: str) -> str:
 
 
 def kaggle_embed(sid: str) -> str:
-    """The live Kaggle kernel for a lesson, as Kaggle's own embedded viewer.
-
-    Only reachable while the kernel is public — `kaggle_push.py --all --public`
-    is what makes it so, and a private kernel renders as an empty frame rather
-    than an error. That is the reason the recorded output is kept beside it.
-    """
-    url = f"https://www.kaggle.com/embed/{KAGGLE_OWNER}/{kaggle_slug(sid)}"
+    """The live Kaggle kernel for a lesson, as Kaggle's own embedded viewer."""
+    slug = kaggle_slug(sid)
     return (
         f'<div class="kembed">'
         f'<div class="kbar"><span class="kdot"></span>'
         f'<span>Live Kaggle notebook — {html.escape(sid)}</span>'
-        f'<a href="https://www.kaggle.com/code/{KAGGLE_OWNER}/{kaggle_slug(sid)}" '
+        f'<a href="https://www.kaggle.com/code/{KAGGLE_OWNER}/{slug}" '
         f'target="_blank" rel="noopener">open on Kaggle ↗</a></div>'
-        f'<iframe src="{url}?cellIds=&amp;kernelSessionId=" '
+        f'<iframe src="https://www.kaggle.com/embed/{KAGGLE_OWNER}/{slug}" '
         f'title="Kaggle notebook {html.escape(sid)}" loading="lazy" '
         f'frameborder="0" scrolling="auto"></iframe></div>')
+
+
+def skill_html(ref: str) -> str:
+    """The SKILL.md as prose, with its frontmatter kept as the block an agent parses."""
+    path = SKILLS_DIR / ref / "SKILL.md"
+    if not path.is_file():
+        raise SystemExit(f"build_site.py: no such skill: skills/{ref}/SKILL.md")
+    _, front, body = path.read_text().split("---", 2)
+    link = f"{REPO}/blob/{BRANCH}/skills/{ref}/SKILL.md"
+    return (f'<p class="skillref">The skill — '
+            f'<a href="{link}" target="_blank" rel="noopener">'
+            f'<code>skills/{html.escape(ref)}/SKILL.md</code></a></p>'
+            f'<pre class="front"><code>{html.escape(front.strip())}</code></pre>'
+            + md_to_html(body.strip()))
+
+
+def steps_html(sid: str, ex: dict) -> tuple[str, str]:
+    """(the prose steps, the skill procedure) — the code steps are not rendered.
+
+    A lesson's steps interleave explanation with the thing that runs. On the
+    page the explanation belongs under the framework and the procedure under
+    execution, so they are split here rather than replayed in notebook order.
+    """
+    prose, skill = [], []
+    for kind, source in ex.get("steps", []):
+        if kind == "skill":
+            skill.append(skill_html(source))
+        elif kind == "md" and isinstance(source, str):
+            prose.append(md_to_html(source.replace("\\n", "\n")))
+        elif kind == "html":
+            prose.append(source)
+    return "".join(prose), "".join(skill)
+
+
+def lesson_body(entry: dict) -> str:
+    """The whole lesson, in its seven fixed sections, from source."""
+    sid = entry["s"]["id"]
+    ex = EXERCISES.get(sid)
+    if ex is None:
+        raise SystemExit(f"build_site.py: no exercise for {sid}")
+    out = []
+
+    # 1 — why this matters, as a scene in the running system
+    out.append(sec_open("relevance"))
+    out.append(f"<p class=\"lead\">{html.escape(ex['hook'].strip())}</p>")
+    if ground := GROUNDING.get(sid):
+        out.append(f'<div class="ct"><b>At CyberTravels.</b> '
+                   f'{html.escape(ground.strip())}</div>')
+    out.append("</div></section>")
+
+    # 2 — what it is and what it is worth, in one block rather than two
+    day = DAYS.get(sid)
+    out.append(sec_open("days"))
+    if about := ABOUT.get(sid):
+        out.append(md_to_html(about.strip()))
+    if day:
+        d0, d1, d2 = day
+        out.append('<div class="days">')
+        for cls, lab, txt in (("d0", "Day 0 \u2014 why", d0),
+                              ("d1", "Day 1 \u2014 how", d1),
+                              ("d2", "Day 2 \u2014 measure", d2)):
+            out.append(f'<div class="{cls}"><span>{lab}</span>'
+                       f'<p>{html.escape(txt.strip())}</p></div>')
+        out.append("</div>")
+    fn_id = entry["fn"].split()[1] if entry["fn"].startswith("Function ") else ""
+    if FUNCTION_INTRO.get(fn_id) == sid and (fd := FUNCTION_DAYS.get(fn_id)):
+        out.append(f'<div class="fnday"><b>Who this function is for.</b> '
+                   f'{html.escape(fd["who"].strip())}</div>')
+    out.append("</div></section>")
+
+    # 3 — the picture, the idea it names, and how the thing actually works
+    prose, skill = steps_html(sid, ex)
+    out.append(sec_open("framework"))
+    out.append(f'<pre class="dia">{html.escape(ex["diagram"].strip(chr(10)))}</pre>')
+    out.append(md_to_html(ex["concept"].strip()))
+    if anchor := ANCHORS.get(sid):
+        out.append(f'<blockquote class="anchor">{html.escape(anchor.strip())}'
+                   f'</blockquote>')
+    if prose:
+        out.append(f'<div class="how">{prose}</div>')
+    out.append("</div></section>")
+
+    # 4 — the procedure, and the kernel that runs it
+    has_code = bool(NB_DIR.joinpath(f"{sid}.ipynb").is_file() and any(
+        c["cell_type"] == "code"
+        for c in json.loads((NB_DIR / f"{sid}.ipynb").read_text())["cells"]))
+    if skill or has_code:
+        out.append(sec_open("skill"))
+        if skill:
+            out.append(f'<div class="skillmd">{skill}</div>')
+        if has_code:
+            if sid in KAGGLE_PUBLIC:
+                out.append(kaggle_embed(sid))
+                out.append('<details class="recorded"><summary>The recorded run, '
+                           'checked byte for byte against the Kaggle kernel above'
+                           '</summary>' + output_block(sid) + "</details>")
+            else:
+                out.append(output_block(sid))
+        out.append("</div></section>")
+
+    # 5, 6, 7 — the result, the exercise, and the gap into the next chapter
+    if has_code and (expect := ex.get("expect")):
+        out.append(sec_open("proved") + md_to_html(expect.strip()) + "</div></section>")
+    if challenge := ex.get("challenge"):
+        out.append(sec_open("turn") + md_to_html(challenge.strip()) + "</div></section>")
+    if entry.get("last_in_track") and (b := BRIDGES.get(entry["track_id"])):
+        out.append(sec_open("bridge")
+                   + f"<p><b>What you can do now.</b> {html.escape(b['gained'])}</p>"
+                   + f"<p><b>What you still cannot do.</b> {html.escape(b['gap'])}</p>"
+                   + f"<p class=\"nextch\">{html.escape(b['next'])}</p>"
+                   + "</div></section>")
+    return "".join(out)
 
 
 DIAGRAM_MARK = re.compile(r"^\[diagram:(dot|puml):([a-z0-9-]+)\]$", re.M)
@@ -490,12 +585,7 @@ def lesson_page(entry, prev, nxt) -> str:
         parts.append('<p class="sub kagnote">This lesson is a reading lesson — '
                      'diagrams and prose, no code to run.</p>')
 
-    nb = notebook_block(sid)
-    if nb:
-        parts.append('<h3 class="nbh">The notebook</h3>')
-        parts.append(nb)
-    elif lab.get("run"):                       # fallback if a notebook is missing
-        parts.append(f'<pre><code>{html.escape(chr(10).join(lab["run"]))}</code></pre>')
+    parts.append(lesson_body(entry))
 
     if lab.get("expect"):
         parts.append(f'<div class="expect"><b>Expect</b>{html.escape(lab["expect"])}</div>')

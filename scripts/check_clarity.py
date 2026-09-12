@@ -38,6 +38,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 NB = ROOT / "labs" / "notebooks"
+PAGES = ROOT / "site" / "lessons"
 
 WEEKDAYS = re.compile(
     r"\b(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b")
@@ -55,12 +56,20 @@ IDIOMS = [
 ]
 IDIOM_RE = re.compile("|".join(re.escape(i) for i in IDIOMS), re.I)
 
-# Prose only. A weekday inside a code cell is usually a date in test data, and
-# a lesson that teaches cron legitimately prints day names.
+# The rendered lesson page, stripped of tags — which is the prose a reader
+# actually meets. It used to read the notebook's markdown cells; the notebook
+# now carries code and nothing else, so that source went empty and this gate
+# would have passed 134 lessons without reading a word of them.
+TAG = re.compile(r"<[^>]+>")
+CODE = re.compile(r"<pre.*?</pre>|<code.*?</code>", re.S)
+
+
 def prose(sid: str) -> str:
-    nb = json.loads((NB / f"{sid}.ipynb").read_text())
-    return "\n".join("".join(c["source"]) for c in nb["cells"]
-                     if c["cell_type"] == "markdown")
+    page = (PAGES / f"{sid}.html").read_text()
+    body = page.split("<body>", 1)[-1]
+    # Code and recorded output are not prose: a weekday in test data is a date,
+    # and a lesson that teaches cron legitimately prints day names.
+    return TAG.sub(" ", CODE.sub(" ", body))
 
 
 def context(text: str, at: int, width: int = 68) -> str:

@@ -60,6 +60,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 NB = ROOT / "labs" / "notebooks"
+PAGES = ROOT / "site" / "lessons"
 
 from exercises import EXERCISES  # noqa: E402
 from exercises.anchors import ANCHORS  # noqa: E402
@@ -135,21 +136,28 @@ def main() -> int:
             problems.append(f"{sid}: hook is {words} words, wanted "
                             f"{HOOK_MIN_WORDS}-{HOOK_MAX_WORDS}")
 
-        # 2 — the picture before the terminal
+        # 2 — the picture before the terminal.
+        # Checked on the built page, not the notebook: the notebook now carries
+        # code and nothing else, and the lesson is rendered from source by
+        # build_site.py. The rule is unchanged — the framework has to come
+        # before anything that runs — only where it is enforced moved.
         path = NB / f"{sid}.ipynb"
         if not path.is_file():
             problems.append(f"{sid}: notebook not built")
             continue
         cells = json.loads(path.read_text())["cells"]
         kinds = [c["cell_type"] for c in cells]
-        heads = ["".join(c["source"])[:40] for c in cells]
-        framework = next((i for i, h in enumerate(heads)
-                          if h.startswith("## 2 · The framework")), None)
-        first_code = kinds.index("code") if "code" in kinds else None
-        if framework is None:
-            problems.append(f"{sid}: no framework section")
-        elif first_code is not None and first_code < framework:
-            problems.append(f"{sid}: a code cell precedes the framework")
+        page_f = PAGES / f"{sid}.html"
+        if not page_f.is_file():
+            problems.append(f"{sid}: lesson page not built — run build_site.py")
+            continue
+        page = page_f.read_text()
+        framework = page.find("The framework, and how it works")
+        execution = page.find("Real time execution as skill")
+        if framework < 0:
+            problems.append(f"{sid}: no framework section on the page")
+        elif 0 <= execution < framework:
+            problems.append(f"{sid}: the execution section precedes the framework")
 
         # 3 — a bridge out of every chapter
         if last and track not in BRIDGES:
@@ -165,13 +173,13 @@ def main() -> int:
                                 f"scripts/exercises/anchors.py")
             else:
                 seen_anchors.add(sid)
-                if "\n> " + anchor.splitlines()[0] not in "\n".join(
-                        "".join(c["source"]) for c in cells):
+                import html as _h
+                if _h.escape(anchor.splitlines()[0]) not in page:
                     problems.append(f"{sid}: anchor defined but not rendered — "
-                                    f"rebuild the notebooks")
+                                    f"rebuild the site")
 
         # 7 — realistic demos (reported, not enforced)
-        body = "\n".join("".join(c["source"]) for c in cells).lower()
+        body = page.lower()
         if (kinds.count("code") and s.get("kind") not in EXEMPT_KINDS
                 and not any(w in body for w in FAILURE_WORDS)):
             happy_path_only.append(sid)

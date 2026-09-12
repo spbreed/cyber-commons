@@ -26,12 +26,12 @@ import html as _html
 # the accents are mid-tones rather than the near-black that reads well on only
 # one of the two.
 INK = "currentColor"
-DIM = "#94a9bd"
-LINE = "#5f7385"
-DEFEND = "#22d3ee"      # what you build and run
-SECURE = "#d99a1f"      # what an adversary reaches for
-BAD = "#e05c4b"
-GOOD = "#2f9e7a"
+DIM = "#4a6172"
+LINE = "#7d93a3"
+DEFEND = "#0e7490"      # what you build and run
+SECURE = "#b45309"      # what an adversary reaches for
+BAD = "#b91c1c"
+GOOD = "#047857"
 
 
 def table(headers: list[str], rows: list[list[str]], *, caption: str = "",

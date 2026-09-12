@@ -223,160 +223,54 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     tools_used = ", ".join(used) or "standard library only"
 
     # ---- header ----------------------------------------------------------
-    where = f"**{entry['fn']} → {entry['track']}**"
-    if prev:
-        where += (f"\n\nBuilds on **[{prev['s']['id']} · {prev['s']['title']}]"
-                  f"({SITE}/lessons/{prev['s']['id']}.html)**.")
+    # One markdown cell, and it is identification rather than content: which
+    # lesson this is and where to read it. Everything else a reader needs —
+    # the relevance, the three days, the framework, the procedure, the
+    # challenge — lives on the lesson page, which is where it is rendered from
+    # source. A notebook that repeated all of it was the same words twice, and
+    # the copy inside the notebook was the one nobody could correct.
     cells = [md(
-        f"# {sid} · {s['title']}\n\n{where}\n\n"
+        f"# {sid} \u00b7 {s['title']}\n\n"
+        f"**{entry['fn']} \u2192 {entry['track']}**\n\n"
+        f"This notebook is the executable half of the lesson: the procedure, "
+        f"run. The lesson itself \u2014 why it matters, the framework, the "
+        f"skill it teaches and what the numbers below mean \u2014 is at "
+        f"**[{sid} on Cyber Commons]({SITE}/lessons/{sid}.html)**.\n\n"
         f"| | |\n|---|---|\n"
-        f"| Tools used | {tools_used} |"
+        f"| Tools used | {tools_used} |\n"
+        f"| Read the lesson | {SITE}/lessons/{sid}.html |"
     )]
 
-    # ---- 0. what this lesson is, and why a security engineer needs it -----
-    # Before the hook, which is a consequence rather than an orientation. A
-    # reader landing on one lesson from a search result has no idea what they
-    # are looking at until something says so plainly.
-    about = ABOUT.get(sid)
-    if not about:
-        raise KeyError(f"{sid} has no ABOUT entry — every lesson opens by saying "
-                       f"what it is and why it matters in a security context; "
-                       f"add one to scripts/exercises/about.py")
-    # Day 0 / 1 / 2 sits directly under "What this lesson is", because the
-    # three questions it answers — why, how, and how you know it worked — are
-    # the ones a reader asks before deciding to spend an afternoon here.
-    day = DAYS.get(sid)
-    if not day:
-        raise KeyError(f"{sid} has no Day 0/1/2 entry — every lesson says why "
-                       f"it is worth doing, how it is done, and what number "
-                       f"tells you it worked; add one to "
-                       f"scripts/exercises/days.py")
-    d0, d1, d2 = day
-    cells.append(md(
-        f"## What this lesson is\n\n{about.strip()}\n\n"
-        f"| | |\n|---|---|\n"
-        f"| **Day 0 — why** | {d0.strip()} |\n"
-        f"| **Day 1 — how** | {d1.strip()} |\n"
-        f"| **Day 2 — measure** | {d2.strip()} |"))
-
-    # The lesson that opens a function also carries that function's own three
-    # days, so a reader who lands here first can tell whether the next thirty
-    # lessons are addressed to them before reading any of them.
-    fn_id = entry["fn"].split()[1] if entry["fn"].startswith("Function ") else ""
-    if FUNCTION_INTRO.get(fn_id) == sid:
-        fd = FUNCTION_DAYS[fn_id]
-        cells.append(md(
-            f"## Who this function is for, and what it is worth\n\n"
-            f"**Who.** {fd['who'].strip()}\n\n"
-            f"**Day 0 — why you would do this.** {fd['day0'].strip()}\n\n"
-            f"**Day 1 — how you do it.** {fd['day1'].strip()}\n\n"
-            f"**Day 2 — how you know it worked.** {fd['day2'].strip()}"))
-
-    # ---- 1. the hook, and what it looks like at CyberTravels --------------
-    hook = f"## 1 · The hook\n\n{ex['hook'].strip()}"
-    ground = GROUNDING.get(sid)
-    if not ground:
-        raise KeyError(f"{sid} has no CyberTravels grounding — every lesson says "
-                       f"what its idea looks like in the system the reader has "
-                       f"been following")
-    hook += (f"\n\n> **At CyberTravels.** {ground.strip()}")
-    cells.append(md(hook))
-
-    # ---- 2. the framework: the picture first, then the idea it names ------
-    diagram = ex["diagram"].strip("\n")
-    framework = (f"## 2 · The framework\n\n```\n{diagram}\n```\n\n"
-                 f"{ex['concept'].strip()}")
-    # Function E is one argument told over thirty-one lessons, and the unit it
-    # is told in — a key control indicator — is defined in E1.1. Each lesson
-    # states its relationship to that unit here, under the concept it belongs
-    # to rather than in a footer nobody reaches.
-    if anchor := ANCHORS.get(sid):
-        framework += f"\n\n> {anchor.strip()}"
-    cells.append(md(framework))
-
-    # ---- 3..n the practical application, renumbered from here -------------
-    # A markdown step that ends on a bare "## N · Title" was written to
-    # introduce a code cell. Once a lesson carries no code, that heading
-    # promises something that never arrives, so it is dropped — the callout
-    # above it, which is the part that teaches, is kept.
+    # ---- the code, and nothing else --------------------------------------
+    # Only steps that execute. The prose steps, the SKILL.md, the diagram and
+    # the framing are rendered on the lesson page from these same sources, so
+    # dropping them here removes a duplicate rather than information.
     RUNS = {"py", "skill", "skill_script", "model"}
-    steps, n = [], len(ex["steps"])
+    n = len(ex["steps"])
     for i, (kind, source) in enumerate(ex["steps"]):
-        # The skill runtime is emitted *after* the SKILL.md it parses, by the
-        # skill step itself. A lesson that also asks for it as a step of its own
-        # would put sixty lines of parser above the procedure, which is the
-        # wrong order to meet them in — so drop it here.
+        # The skill runtime is emitted by the skill step that parses it; a
+        # lesson asking for it separately would run the parser twice.
         if (kind == "py" and source == SKILL_RUNTIME
                 and i + 1 < n and ex["steps"][i + 1][0] == "skill"):
             continue
-        if kind == "md" and isinstance(source, str):
-            follows = ex["steps"][i + 1][0] if i + 1 < n else None
-            if follows not in RUNS:
-                body = source.replace("\\n", "\n").rstrip()
-                lines = body.splitlines()
-                if lines and lines[-1].lstrip().startswith("## "):
-                    body = "\n".join(lines[:-1]).rstrip()
-                    if not body:
-                        continue
-                    source = body
-        steps.append((kind, source))
-
-    counter = [2]
-    for kind, source in steps:
         if kind == "skill":
-            # The procedure, as prose. No Python.
-            cells.append(md(skill_markdown(source)))
-        elif kind == "skill_script":
-            # And one cell that runs the real file out of the repository.
+            continue                      # the procedure is prose; the page has it
+        if kind == "skill_script":
             cells.append(code(run_skill_cell(source)))
         elif kind == "model":
-            # One adapter, then the same task run for real. The lesson keeps its
-            # deterministic replay as the offline default, so CI and the offline
-            # Kaggle run are unchanged.
-            cells.append(md(renumber("## 2 · " + source.get("title", "The model backend"),
-                                     counter)))
             cells.append(code(MODEL_RUNTIME))
-            cells.append(md(renumber(LIVE_MD, counter)))
             cells.append(code(live_cell(source["task"], source["replay"],
                                         source.get("system"), source["check"])))
         elif kind in ("md", "html"):
-            # An HTML/SVG diagram is markdown too — it just renders as a picture
-            # instead of asking the reader to parse a print statement.
-            cells.append(md(renumber(source, counter)))
+            continue                      # rendered on the page, not here
         else:
             cells.append(code(source))
 
-    # ---- close ------------------------------------------------------------
-    expect = ex.get("expect") or lab.get("expect", "")
-    if expect:
-        # "Proved" is only honest when something ran. A lesson that carries
-        # no code cell states what the procedure gives you instead, and one
-        # whose `expect` describes an execution it no longer performs is a
-        # lesson lying about itself — so the section is dropped entirely there.
-        ran = any(k in RUNS for k, _ in steps)
-        if ran:
-            cells.append(md(f"## What you just proved\n\n{expect}"))
-    if challenge := ex.get("challenge"):
-        cells.append(md(f"## Your turn\n\n{challenge}"))
-
-    # ---- the knowledge gap, on the last lesson of a chapter ---------------
-    if bridge := BRIDGES.get(entry["track_id"]) if entry["last_in_track"] else None:
-        cells.append(md(
-            f"## Where this leaves you\n\n"
-            f"**What you can do now.** {bridge['gained']}\n\n"
-            f"**What you still cannot do.** {bridge['gap']}\n\n"
-            f"**{bridge['next']}**"))
-
-    foot = ""
-    if nxt:
-        foot = (f"**Next → [{nxt['s']['id']} · {nxt['s']['title']}]"
-                f"({SITE}/lessons/{nxt['s']['id']}.html)**\n\n")
     cells.append(md(
-        f"---\n\n{foot}"
-        f"[All lessons]({SITE}/lessons/) · "
-        f"[This lesson's page]({SITE}/lessons/{sid}.html) · "
+        f"---\n\n[Read this lesson]({SITE}/lessons/{sid}.html) \u00b7 "
+        f"[All lessons]({SITE}/lessons/) \u00b7 "
         f"[Source]({REPO}/blob/{BRANCH}/labs/notebooks/{sid}.ipynb)\n\n"
-        f"*Cyber Commons — a free, open commons for Cyber AI.*"))
+        f"*Cyber Commons \u2014 a free, open commons for Cyber AI.*"))
 
     return {
         "cells": cells,

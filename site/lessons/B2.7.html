@@ -1,21 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.7 — Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries | Cyber Commons</title><meta name="description" content="Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.7</div><h1>Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries</h1><div class="badges"><span class="badge t">B2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM05</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Resource Development</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety, and is evidence of nothing but the manifest&#x27;s contents.</p></div><div class="ctrl"><div class="lab">Control</div><p>Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Scan an SBOM, then decompile the closed-source library it never mentions.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/supply-chain-decompile/scripts/supply_chain_decompile.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.7 · Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</strong></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.6.html">B2.6 · Sandbox replication</a></strong>.</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Tools used</td>
-<td>standard library only</td>
-</tr>
-</tbody>
-</table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Scan an SBOM against an advisory feed, reconcile it against
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.7 — Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries | Cyber Commons</title><meta name="description" content="Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.7</div><h1>Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries</h1><div class="badges"><span class="badge t">B2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM05</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Resource Development</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety, and is evidence of nothing but the manifest&#x27;s contents.</p></div><div class="ctrl"><div class="lab">Control</div><p>Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Scan an SBOM, then decompile the closed-source library it never mentions.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/supply-chain-decompile/scripts/supply_chain_decompile.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">The dependency report is clean and it is correct. It is also a statement about a manifest, and the jar the booking provider dropped into `lib/` is in no manifest — so it has no identifier, so it has no advisory, so it was counted as neither vulnerable nor safe. It was counted as nothing.</p><div class="ct"><b>At CyberTravels.</b> The booking provider&#x27;s integration bundle drops a jar into CyberTravels&#x27; image. It is in no manifest, so the weekly dependency report has been silently excluding it, and it carries a hardcoded telemetry endpoint and its own licence key. R5.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p><strong>What it covers.</strong> Scan an SBOM against an advisory feed, reconcile it against
 what is actually in the built image, and decompile the library that appears in
 no manifest.</p>
 <p><strong>Why a security engineer needs it.</strong> A dependency report is a statement about a
@@ -25,34 +8,7 @@ neither vulnerable nor safe — it is not counted. The control it builds is:
 reconcile in both directions, then read the constant pool of anything that was
 never declared.</p>
 <p>This is a <strong>tooling</strong> lesson: it uses a real compiled Java class and recovers its
-strings, classes and capabilities without the source.</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Day 0 — why</strong></td>
-<td>A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety.</td>
-</tr>
-<tr>
-<td><strong>Day 1 — how</strong></td>
-<td>Reconcile the SBOM against what is actually on disk, then recover strings, imports and egress from the binaries it missed.</td>
-</tr>
-<tr>
-<td><strong>Day 2 — measure</strong></td>
-<td>Artefacts on disk that appear in the SBOM. The gap is the finding, and it is usually not zero.</td>
-</tr>
-</tbody>
-</table></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>The dependency report is clean and it is correct. It is also a statement about a manifest, and the jar the booking provider dropped into <code>lib/</code> is in no manifest — so it has no identifier, so it has no advisory, so it was counted as neither vulnerable nor safe. It was counted as nothing.</p>
-<blockquote>
-<p><strong>At CyberTravels.</strong> The booking provider's integration bundle drops a jar into CyberTravels' image. It is in no manifest, so the weekly dependency report has been silently excluding it, and it carries a hardcoded telemetry endpoint and its own licence key. R5.</p>
-</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   WHAT THE DEPENDENCY REPORT COUNTED
+strings, classes and capabilities without the source.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety.</p></div><div class="d1"><span>Day 1 — how</span><p>Reconcile the SBOM against what is actually on disk, then recover strings, imports and egress from the binaries it missed.</p></div><div class="d2"><span>Day 2 — measure</span><p>Artefacts on disk that appear in the SBOM. The gap is the finding, and it is usually not zero.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   WHAT THE DEPENDENCY REPORT COUNTED
 
    manifest ---&gt; SBOM ---&gt; advisory feed ---&gt; &quot;3 findings / 5 components&quot;
                                                   all of it true
@@ -76,9 +32,7 @@ strings, classes and capabilities without the source.</p>
 
    provable: it CAN reach that endpoint.  not provable: what it sends.
    report the capability. the sentence you cannot evidence takes the
-   rest of the report down with it
-</code></pre>
-<p>Everything the pipeline has audited so far is code CyberTravels wrote. Most of
+   rest of the report down with it</pre><p>Everything the pipeline has audited so far is code CyberTravels wrote. Most of
 what it ships is not.</p>
 <p>A dependency scanner answers one question, and answers it well: <em>are any of the
 components I declared known to be vulnerable?</em> Both halves of that sentence are
@@ -111,13 +65,13 @@ software composition analysis:</p>
 </ol>
 <p>That third step is what <code>jadx</code>, <code>procyon</code>, <code>Ghidra</code> and <code>strings</code> all start
 with. The lesson runs it on a real compiled class and gets a hardcoded endpoint
-and a credential-shaped literal out of a library that appears in no manifest.</p></div><div class="nbmd"><blockquote>
+and a credential-shaped literal out of a library that appears in no manifest.</p><div class="how"><blockquote>
 <p><strong>Where you are in the pipeline.</strong></p>
 <p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · Two questions, and the one nobody asks</h2>
+</blockquote><h2>2 · Two questions, and the one nobody asks</h2>
 <table>
 <thead>
 <tr>
@@ -143,25 +97,50 @@ and a credential-shaped literal out of a library that appears in no manifest.</p
 distributions live. Every one of them arrives as somebody else's compiled code
 inside your build, and none of them appears in a report that reads a manifest.</p>
 <p>At CyberTravels the booking provider ships an integration bundle. It works, it
-was signed off by procurement, and nobody has ever opened it.</p></div><div class="nbmd"><h2>4 · Where it breaks — the clean report</h2>
+was signed off by procurement, and nobody has ever opened it.</p><h2>3 · Where it breaks — the clean report</h2>
 <p>The scan below finds three real advisories in five declared components, and
 every word of it is correct. Then the reconciliation finds a sixth component
 that is on disk, in no manifest, and therefore in none of the three numbers
 above it.</p>
 <p>The failure is not that the scanner is wrong. It is that "3 findings across 5
 components" and "3 findings across 5 of 6 components, one unassessed" are the
-same report unless somebody counts the filesystem.</p></div><div class="nbmd"><h2>5 · The stage, as a skill</h2>
+same report unless somebody counts the filesystem.</p><h2>4 · The stage, as a skill</h2>
 <p>Three fixtures and one real artefact. The SBOM is CycloneDX, the advisory feed is OSV-shaped, the inventory is what an image scan returns — and <code>VendorTelemetry.class</code> is a genuinely compiled Java class, built with <code>javac</code> and committed beside the skill. The parser reads its constant pool the way a decompiler does and never sees the source.</p>
-<p>The source <em>is</em> in the repository, in <code>evidence/provenance/</code>, so you can check the recovered strings against it. A vendor does not give you that, which is the reason the step exists.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/supply-chain-decompile/SKILL.md"><code>skills/appsec/supply-chain-decompile/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: supply-chain-decompile
+<p>The source <em>is</em> in the repository, in <code>evidence/provenance/</code>, so you can check the recovered strings against it. A vendor does not give you that, which is the reason the step exists.</p><h2>5 · Read the recovered strings again</h2>
+<pre><code>https://telemetry.vendor-analytics.io/v2/ingest?k=vnd_live_8f2c41a09e7b
+AES/ECB/PKCS5Padding
+java.net.HttpURLConnection   javax.crypto.Cipher
+</code></pre>
+<p>The endpoint and the key arrived <strong>concatenated</strong> — the compiler folded them
+into a single constant, which is a small gift and a real one: the artefact
+carries its own credential in plaintext, and no SBOM, CVE feed or licence scan
+would ever have shown you either.</p>
+<p>Now the discipline that decides whether this finding survives review. What the
+constant pool proves is that this library <strong>can</strong> reach that endpoint and
+<strong>can</strong> encrypt before it does. What it sends is not in the constant pool. Write
+the finding as a <em>capability</em> and it is unarguable; write it as "exfiltrates
+traveller PII" and the one sentence you cannot evidence takes the rest of the
+report down with it.</p>
+<p><code>AES/ECB</code> is worth its own line, and it is the kind of thing this step finds by
+accident: ECB mode leaks structure across blocks, so whatever this is
+protecting, it is protecting it badly.</p><h2>6 · What to do with it first</h2>
+<p>Three moves, in cost order:</p>
+<ol>
+<li><strong>Count your undeclared artefacts.</strong> Diff the SBOM against the built image.
+   The number is almost never zero and almost nobody has it.</li>
+<li><strong>Egress-allowlist the workload</strong>, so a capability like the one above cannot
+   become a transfer regardless of what the library intended. This is the same
+   control as A3.3, arriving from a different direction.</li>
+<li><strong>Make the reconciliation a build gate.</strong> An artefact appearing on disk with
+   no manifest entry is a build-time event, and it is far cheaper to fail there
+   than to find it in a constant pool afterwards.</li>
+</ol></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/supply-chain-decompile/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/supply-chain-decompile/SKILL.md</code></a></p><pre class="front"><code>name: supply-chain-decompile
 description: &gt;-
   Scan an SBOM for known vulnerabilities, reconcile it against what is actually
   on disk, and decompile the dependency that no manifest declares. Use when a
   dependency scan comes back clean, when a third party ships a binary bundle,
   or when asked what a closed-source library in the build actually does.
-allowed-tools: Read, Glob, Grep, Bash
-</code></pre>
-<h1>What is in the build that the manifest never mentioned?</h1>
+allowed-tools: Read, Glob, Grep, Bash</code></pre><h1>What is in the build that the manifest never mentioned?</h1>
 <p>Dependency scanning answers one question well: <em>are any of the components I
 declared known to be vulnerable?</em> Both halves of that sentence are limits. It
 sees only what was <strong>declared</strong>, and only what is <strong>already published</strong> as an
@@ -303,37 +282,4 @@ decompiling 1691 bytes of VendorTelemetry.class (class file version 65, no sourc
 
 unassessable by SBOM: 1
 That number is the finding. A dependency report that omits it has
-claimed the undeclared code is clean, on evidence it never had.</code></pre></div><div class="nbmd"><h2>6 · Read the recovered strings again</h2>
-<pre><code>https://telemetry.vendor-analytics.io/v2/ingest?k=vnd_live_8f2c41a09e7b
-AES/ECB/PKCS5Padding
-java.net.HttpURLConnection   javax.crypto.Cipher
-</code></pre>
-<p>The endpoint and the key arrived <strong>concatenated</strong> — the compiler folded them
-into a single constant, which is a small gift and a real one: the artefact
-carries its own credential in plaintext, and no SBOM, CVE feed or licence scan
-would ever have shown you either.</p>
-<p>Now the discipline that decides whether this finding survives review. What the
-constant pool proves is that this library <strong>can</strong> reach that endpoint and
-<strong>can</strong> encrypt before it does. What it sends is not in the constant pool. Write
-the finding as a <em>capability</em> and it is unarguable; write it as "exfiltrates
-traveller PII" and the one sentence you cannot evidence takes the rest of the
-report down with it.</p>
-<p><code>AES/ECB</code> is worth its own line, and it is the kind of thing this step finds by
-accident: ECB mode leaks structure across blocks, so whatever this is
-protecting, it is protecting it badly.</p></div><div class="nbmd"><h2>7 · What to do with it first</h2>
-<p>Three moves, in cost order:</p>
-<ol>
-<li><strong>Count your undeclared artefacts.</strong> Diff the SBOM against the built image.
-   The number is almost never zero and almost nobody has it.</li>
-<li><strong>Egress-allowlist the workload</strong>, so a capability like the one above cannot
-   become a transfer regardless of what the library intended. This is the same
-   control as A3.3, arriving from a different direction.</li>
-<li><strong>Make the reconciliation a build gate.</strong> An artefact appearing on disk with
-   no manifest entry is a build-time event, and it is far cheaper to fail there
-   than to find it in a constant pool afterwards.</li>
-</ol></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Three of five declared components carry published advisories — Text4Shell in commons-text 1.9 as critical, PyYAML 5.3.1 as high, requests 2.31.0 as medium — and commons-text only appears because the version comparison is numeric rather than lexical. Reconciliation then finds one artefact on disk that is in no manifest, which every one of those numbers excluded. Decompiling it recovers, with no source, a hardcoded telemetry endpoint with the licence key folded into the same literal, an AES/ECB cipher spec, and references to <code>HttpURLConnection</code> and <code>javax.crypto.Cipher</code> — network egress and cryptography as provable capabilities. <code>unassessable_by_sbom: 1</code> is the number the report exists to produce.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Generate an SBOM for one service you run, then list what is actually in the built image and diff the two. Every artefact on disk with no manifest entry has been scanned by nothing, and the clean report you have been reading each week was never about it. For the first one you find, pull the strings out of it before you ask the vendor — the conversation goes differently when you open with the endpoint.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.8.html">B2.8 · Dynamic exploitation (DAST)</a></strong></p>
-<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Three of five declared components carry advisories, including Text4Shell in commons-text 1.9 — which only appears because the version comparison is numeric. Reconciliation finds one artefact on disk in no manifest; decompiling its constant pool recovers a hardcoded telemetry endpoint with the licence key folded into the same literal, an AES/ECB cipher spec, and network-egress and cryptography capabilities. unassessable_by_sbom: 1.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.7.ipynb</code></p></div><div class="pager"><a href="B2.6.html"><span class="k">← Previous</span><span class="t">B2.6 · Sandbox replication</span></a><a class="next" href="B2.8.html"><span class="k">Next →</span><span class="t">B2.8 · Dynamic exploitation (DAST)</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+claimed the undeclared code is clean, on evidence it never had.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Three of five declared components carry published advisories — Text4Shell in commons-text 1.9 as critical, PyYAML 5.3.1 as high, requests 2.31.0 as medium — and commons-text only appears because the version comparison is numeric rather than lexical. Reconciliation then finds one artefact on disk that is in no manifest, which every one of those numbers excluded. Decompiling it recovers, with no source, a hardcoded telemetry endpoint with the licence key folded into the same literal, an AES/ECB cipher spec, and references to <code>HttpURLConnection</code> and <code>javax.crypto.Cipher</code> — network egress and cryptography as provable capabilities. <code>unassessable_by_sbom: 1</code> is the number the report exists to produce.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Generate an SBOM for one service you run, then list what is actually in the built image and diff the two. Every artefact on disk with no manifest entry has been scanned by nothing, and the clean report you have been reading each week was never about it. For the first one you find, pull the strings out of it before you ask the vendor — the conversation goes differently when you open with the endpoint.</p></div></section><div class="expect"><b>Expect</b>Three of five declared components carry advisories, including Text4Shell in commons-text 1.9 — which only appears because the version comparison is numeric. Reconciliation finds one artefact on disk in no manifest; decompiling its constant pool recovers a hardcoded telemetry endpoint with the licence key folded into the same literal, an AES/ECB cipher spec, and network-egress and cryptography capabilities. unassessable_by_sbom: 1.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.7.ipynb</code></p></div><div class="pager"><a href="B2.6.html"><span class="k">← Previous</span><span class="t">B2.6 · Sandbox replication</span></a><a class="next" href="B2.8.html"><span class="k">Next →</span><span class="t">B2.8 · Dynamic exploitation (DAST)</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

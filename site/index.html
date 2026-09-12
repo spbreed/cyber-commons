@@ -25,20 +25,20 @@
      the adversary, and anything urgent — because the whole diagram
      vocabulary across 134 lessons reads it that way.                      */
   :root{
-    --ink:#0a0e1a;
-    --ink-2:#0d1424;
-    --surface:#111827;
-    --line:#1f3a4d;
-    --line-soft:#16283a;
-    --text:#e8eef5;
-    --text-dim:#94a9bd;
-    --text-faint:#5f7385;
-    --accent:#22d3ee;
-    --accent-lt:#67e8f9;
-    --accent-dk:#06b6d4;
-    --accent-soft:#0e7490;
-    --warn:#fbbf24;
-    --warn-soft:#78561a;
+    --ink:#ffffff;
+    --ink-2:#f6f9fb;
+    --surface:#eef4f8;
+    --line:#d3e0e9;
+    --line-soft:#e6eef4;
+    --text:#0d1b26;
+    --text-dim:#4a6172;
+    --text-faint:#7d93a3;
+    --accent:#0e7490;
+    --accent-lt:#0891b2;
+    --accent-dk:#155e75;
+    --accent-soft:#cdeaf2;
+    --warn:#b45309;
+    --warn-soft:#fdf0d2;
     --maxw:1180px;
     --ease:cubic-bezier(.2,.7,.2,1);
   }
@@ -49,12 +49,6 @@
     font-family:"Rajdhani","Inter",system-ui,-apple-system,sans-serif;
     font-size:17.5px;line-height:1.62;
     -webkit-font-smoothing:antialiased;overflow-x:hidden}
-  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-    background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),
-                     linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
-    background-size:64px 64px;opacity:.22;
-    -webkit-mask-image:radial-gradient(118% 80% at 50% 0%,#000 20%,transparent 75%);
-            mask-image:radial-gradient(118% 80% at 50% 0%,#000 20%,transparent 75%)}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1}
   a{color:inherit}
   h1,h2,h3{font-family:"Rajdhani","Inter",system-ui,sans-serif;font-weight:700;
@@ -62,7 +56,7 @@
 
   /* ---------- NAV ---------- */
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
-    background:rgba(10,14,26,.82);border-bottom:1px solid var(--line-soft)}
+    background:rgba(255,255,255,.88);border-bottom:1px solid var(--line-soft)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
   .brand{display:flex;align-items:center;gap:11px;font-family:"Rajdhani";font-weight:700;
     font-size:20px;letter-spacing:-.01em;text-decoration:none;flex:none}
@@ -105,27 +99,17 @@
   .btn{font-family:"IBM Plex Mono";font-size:14px;text-decoration:none;padding:15px 26px;
     border-radius:10px;display:inline-block;
     transition:transform .15s var(--ease),box-shadow .25s,border-color .2s,color .2s}
-  .btn.p{background:var(--accent);color:#04212a;font-weight:700;letter-spacing:.01em}
+  .btn.p{background:var(--accent);color:#ffffff;font-weight:700;letter-spacing:.01em}
   .btn.p:hover{transform:translateY(-2px);box-shadow:0 12px 30px -12px var(--accent)}
   .btn.g{border:1px solid var(--line);color:var(--text)}
   .btn.g:hover{border-color:var(--accent);color:var(--accent)}
-
-  /* ---------- hero figure ---------- */
-  .herofig{margin:38px 0 0;border:1px solid var(--line-soft);border-radius:14px;
-    background:var(--ink-2);padding:22px 20px;overflow-x:auto}
-  .herofig svg{display:block;width:100%;height:auto;min-width:700px}
-  .herofig .hl{font-family:"IBM Plex Mono",monospace;font-size:11px;
-    letter-spacing:.14em}
-  .herofig .hs{font-family:"Rajdhani",sans-serif;font-size:14.5px;font-weight:500}
-  .herofig .hc{font-family:"IBM Plex Mono",monospace;font-size:11px;
-    fill:var(--text-faint)}
 
   /* ---------- SECTIONS ----------------------------------------------------
      Five of them, built the same way: eyebrow, headline, one line, a
      graphic, and at most three bullets. The shape is the consistency — a
      section needing a different layout would be one carrying too much.    */
   .sec{border-top:1px solid var(--line-soft);padding:56px 0;position:relative}
-  .sec:nth-of-type(even){background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+  .sec:nth-of-type(even){background:var(--ink-2)}
   .sec h2{font-size:clamp(24px,3.3vw,35px);max-width:22ch;margin-top:13px}
   .sec .say{color:var(--text-dim);font-size:16.5px;margin:15px 0 0;max-width:62ch}
   .sec .say b{color:var(--text);font-weight:600}
@@ -245,84 +229,13 @@
 <div class="hero">
   <div class="wrap">
     <span class="eyebrow">Open source · Practitioner-curated</span>
-    <h1>Democratizing defensive <span class="a">AI</span> cyber knowledge, before the curve <span class="b">of transfers</span>.</h1>
+    <h1>Democratizing defensive <span class="a">AI</span> cyber knowledge, <span class="a">before</span> the curve <span class="b">outruns us</span>.</h1>
     <p class="lede">An open curriculum for defending systems that now act on their own — <b>the architecture, the pipeline, the red team, the SOC and the governance</b>, taught in the order the work happens and runnable in your own Kaggle account with nothing installed.</p>
     <div class="btns">
       <a class="btn p" href="lessons/index.html">Start the first lesson →</a>
       <a class="btn g" href="lessons/index.html">Browse all <span data-n="sessions">134</span> lessons</a>
     </div>
 
-    <!-- The one system the whole commons is taught on, drawn once. Left to
-         right is the direction a request travels; the amber card is the only
-         untrusted input, and the amber ring is the enforcement point every
-         control in Functions A2 and A3 lands on. -->
-    <figure class="herofig rv">
-      <svg viewBox="0 0 900 250" role="img" aria-label="An agentic platform: untrusted input reaches a gateway that adjudicates every tool call, four agents behind it — workflow, retrieval, coding and file system — and the downstream systems they reach: payments, bookings, the CRM, the vector store and the production repository.">
-        <defs>
-          <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#0a0e1a"/>
-            <stop offset="55%" stop-color="#0e7490"/>
-            <stop offset="100%" stop-color="#06b6d4"/>
-          </linearGradient>
-          <marker id="hah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
-          </marker>
-          <marker id="haw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--warn)"/>
-          </marker>
-        </defs>
-
-        <!-- untrusted ingress -->
-        <rect x="0" y="88" width="150" height="66" rx="10" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
-        <text class="hl" x="16" y="114" fill="var(--warn)">UNTRUSTED</text>
-        <text class="hs" x="16" y="136">chat · docs · tickets</text>
-        <path d="M150 121 h34" stroke="var(--warn)" stroke-width="1.5" fill="none" marker-end="url(#haw)"/>
-
-        <!-- the enforcement point -->
-        <rect x="192" y="66" width="132" height="110" rx="12" fill="url(#hg)" stroke="var(--accent)" stroke-width="1.5"/>
-        <text class="hl" x="208" y="96" fill="var(--accent-lt)">GATEWAY</text>
-        <text class="hs" x="208" y="118" fill="#cfeff7">provenance</text>
-        <text class="hs" x="208" y="136" fill="#cfeff7">default-deny</text>
-        <text class="hs" x="208" y="154" fill="#cfeff7">every tool call</text>
-        <path d="M324 121 h34" stroke="var(--accent)" stroke-width="1.5" fill="none" marker-end="url(#hah)"/>
-
-        <!-- four agents -->
-        <g fill="var(--surface)" stroke="var(--accent-soft)">
-          <rect x="366" y="16"  width="176" height="46" rx="9"/>
-          <rect x="366" y="76"  width="176" height="46" rx="9"/>
-          <rect x="366" y="136" width="176" height="46" rx="9"/>
-          <rect x="366" y="196" width="176" height="46" rx="9"/>
-        </g>
-        <g class="hs" fill="var(--text)">
-          <text x="384" y="45">Workflow agent</text>
-          <text x="384" y="105">Retrieval advisor</text>
-          <text x="384" y="165">Coding agent</text>
-          <text x="384" y="225">File system agent</text>
-        </g>
-        <g stroke="var(--accent)" stroke-width="1.2" fill="none" opacity=".8">
-          <path d="M542 39 h44" marker-end="url(#hah)"/>
-          <path d="M542 99 h44" marker-end="url(#hah)"/>
-          <path d="M542 159 h44" marker-end="url(#hah)"/>
-          <path d="M542 219 h44" marker-end="url(#hah)"/>
-        </g>
-
-        <!-- downstream -->
-        <g fill="none" stroke="var(--line)">
-          <rect x="596" y="16"  width="200" height="46" rx="9"/>
-          <rect x="596" y="76"  width="200" height="46" rx="9"/>
-          <rect x="596" y="136" width="200" height="46" rx="9"/>
-          <rect x="596" y="196" width="200" height="46" rx="9"/>
-        </g>
-        <g class="hs" fill="var(--text-dim)">
-          <text x="614" y="45">payments · refunds</text>
-          <text x="614" y="105">vector store</text>
-          <text x="614" y="165">production repository</text>
-          <text x="614" y="225">CRM · customer PII</text>
-        </g>
-
-        <text class="hc" x="366" y="250">four agents, one enforcement point — every control in this commons lands on the ring in the middle</text>
-      </svg>
-    </figure>
   </div>
 </div>
 
