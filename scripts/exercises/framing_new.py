@@ -8,12 +8,6 @@ from __future__ import annotations
 
 HOOKS: dict[str, str] = {
 
-"A0.5":
- "A prompt-injection finding filed as a NIST function tells a regulator "
- "nothing and a developer less. The four vocabularies in this field answer "
- "four different questions, and picking the wrong one is how a real finding "
- "becomes a paragraph nobody actions.",
-
 "D3.10":
  "The alert queue has been quiet for a fortnight and nobody believes it. "
  "Hunting is the pass that finds what no rule was written for — and the "
@@ -75,24 +69,6 @@ HOOKS: dict[str, str] = {
 }
 
 DIAGRAMS: dict[str, str] = {
-
-"A0.5": """
-   THE QUESTION                       THE VOCABULARY THAT ANSWERS IT
-
-   "what can go wrong in this      -> OWASP LLM Top 10      LLM01..LLM10
-    feature?"                         OWASP Agentic Top 10  T1..T15
-
-   "what did the attacker do?"     -> MITRE ATLAS           tactics
-
-   "how do we organise to          -> NIST AI RMF           GOVERN  MAP
-    find out?"                                              MEASURE MANAGE
-
-   "what must we be able          -> EU AI Act             Art. 9, 12,
-    to show, and by when?"                                  14, 15, 26 ...
-
-   one control usually needs one of each: a threat it addresses, a tactic
-   it frustrates, a function it belongs to, an obligation it discharges
-""",
 
 "D3.10": """
    DETECTION                          HUNTING

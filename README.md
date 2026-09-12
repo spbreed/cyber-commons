@@ -3,11 +3,11 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**137 lessons across 14 chapters.** Most are reading lessons — the idea, the
+**134 lessons across 14 chapters.** Most are reading lessons — the idea, the
 diagram, the control, and what it looks like in one running system — and then
-they **run a skill**. 131 of the 137 do, and the code is not in the notebook:
+they **run a skill**. 131 of the 134 do, and the code is not in the notebook:
 the lesson shows the `SKILL.md` as prose and runs that skill's own script from
-[`skills/`](skills/). Every one of the 137 is executed in CI before it ships,
+[`skills/`](skills/). Every one of the 134 is executed in CI before it ships,
 and so is every skill. No licence, no vendor, no paid model account.
 
 🌐 **[Live site](https://spbreed.github.io/cyber-commons/)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md)
@@ -16,20 +16,14 @@ and so is every skill. No licence, no vendor, no paid model account.
 
 ## Start here
 
-1. Read the introduction, three short pages:
-   [**A0.1**](https://spbreed.github.io/cyber-commons/lessons/A0.1.html) — who
-   this is for and what a lesson is made of;
-   [**A0.2**](https://spbreed.github.io/cyber-commons/lessons/A0.2.html) —
-   which of the five functions to open first, given the job you do; and
-   [**A0.3**](https://spbreed.github.io/cyber-commons/lessons/A0.3.html) — what
-   Day 0, Day 1 and Day 2 mean, how to use the labs and the skills, and why
-   every tool named here is open source.
-2. Then run [**A0.4**](https://spbreed.github.io/cyber-commons/lessons/A0.4.html)
-   — the two free routes through the commons, what each one needs, and what the
-   single code cell in every lesson is doing.
-3. On a lesson that carries a skill, press **▶ Run on Kaggle** — the notebook
+1. Open [**A0.1**](https://spbreed.github.io/cyber-commons/lessons/A0.1.html)
+   — the whole introduction on one page: who this is for, what a lesson is
+   made of, which of the five tracks to open first, what Day 0/1/2 mean,
+   and how to run a lesson on either free route. Then
+   [**A1.0**](https://spbreed.github.io/cyber-commons/lessons/A1.0.html).
+2. On a lesson that carries a skill, press **▶ Run on Kaggle** — the notebook
    opens in *your* Kaggle account.
-4. Switch **Internet** on in the settings panel, then press **Run All**.
+3. Switch **Internet** on in the settings panel, then press **Run All**.
 
 That is the whole setup. A lesson fetches the skills tree — a shallow, sparse
 clone, about three seconds — and runs one script out of it. Standard library
@@ -73,7 +67,7 @@ python3 scripts/check_skills.py --check   # parses, names, tools, contracts, rou
 
 Each declares an **output contract**, which is what makes a skill checkable
 rather than aspirational. Every skill lesson embeds its skill verbatim at build
-time — so the lesson can never drift from the skill — and every one of the 138 carries
+time — so the lesson can never drift from the skill — and every one of the 139 carries
 a script the lesson runs. Several build the contract shape from the data they
 just produced and validate it, then show what the contract *cannot* see: **an
 empty result conforms perfectly.** Conformance is a statement about the
@@ -97,7 +91,7 @@ removed, and a script that runs and prints nothing counts as a failure.
 | [`redteam/`](skills/redteam) · [`research/`](skills/research) | 14 — campaigns, reproducibility, corpus integrity, supply chain, published incidents |
 | [`detection/`](skills/detection) · [`response/`](skills/response) · [`secops/`](skills/secops) | 21 — agent tempo, drift, fleet correlation, canaries, containment, stop authority |
 | [`grc/`](skills/grc) · [`regulatory/`](skills/regulatory) · [`programme/`](skills/programme) | 27 — tiering, control mapping, obligations, disclosure, sequencing, metrics |
-| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 13 — turn a control claim into a signed statement bound to one deployment ([B2.18](labs/notebooks/B2.18.ipynb), run against 10 real OSS agent/MCP repos) |
+| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 14 — turn a control claim into a signed statement bound to one deployment ([B2.18](labs/notebooks/B2.18.ipynb), run against 10 real OSS agent/MCP repos) |
 
 ## The programme
 
@@ -113,19 +107,19 @@ lesson** that meets CyberTravels and asks its own question of it.
 
 | Function | The question it asks of CyberTravels | Chapters | Lessons |
 |---|---|---|---|
-| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [0](curriculum/track-a0.md) Introduction · [1](curriculum/track-a1.md) Architecture and every risk · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 43 |
+| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [0](curriculum/track-a0.md) Introduction · [1](curriculum/track-a1.md) Architecture and every risk · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 40 |
 | **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b2.md) The AI SDLC pipeline, and agentic pentesting | 20 |
 | **C · Agentic Evaluation and Red Teaming** | can we break it before somebody else does | [5](curriculum/track-c1.md) One red-team lifecycle, end to end | 12 |
 | **D · The Agentic SOC** | would we see it happening, and could we stop it | [6](curriculum/track-d1.md) Discover · [7](curriculum/track-d2.md) Detect · [8](curriculum/track-d3.md) Understand · [9](curriculum/track-d4.md) Respond · [10](curriculum/track-d5.md) Recover and root cause | 31 |
 | **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [11](curriculum/track-e1.md) Risk and control · [12](curriculum/track-e2.md) Regulatory and compliance · [13](curriculum/track-e3.md) Running the programme | 31 |
-| | | **14 chapters** | **137** |
+| | | **14 chapters** | **134** |
 
 Nobody takes all of it. Everyone takes the **common spine** first — twenty
 lessons, in order, that carry the vocabulary the rest runs on. Then the chapters
 for the chair you sit in, then one adjacent chapter, because the failures happen
 in the seams.
 
-> **Spine:** A0.2 → A0.4 → A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 →
+> **Spine:** A0.1 → A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 →
 > A2.3 → A2.4 → A3.1 → A3.2 → A3.5 → **B2.0** → **B2.1** → B2.3 → **D1.0** →
 > D1.3 → **E1.0** → E1.10
 
@@ -150,7 +144,7 @@ only one produces a practitioner who gets surprised.
 
 ## Why you can trust the output
 
-**Every one of the 137 notebooks has been run twice — here, and again on Kaggle
+**Every one of the 134 notebooks has been run twice — here, and again on Kaggle
 on a different machine — and printed exactly the same bytes.**
 
 That second run is the claim worth making, because a kernel that prints nothing
@@ -243,13 +237,13 @@ refuses to read a credential file inside the repo. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 137 sessions, 14 chapters
+site/data/curriculum.json   source of truth: 134 sessions, 14 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: A1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
-skills/                     138 agent skills, plus _runtime/ — the one shared library
-labs/notebooks/             137 generated notebooks + execution and Kaggle evidence
+skills/                     139 agent skills, plus _runtime/ — the one shared library
+labs/notebooks/             134 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_{lessons,skills,secrets,determinism,register} · kaggle_*

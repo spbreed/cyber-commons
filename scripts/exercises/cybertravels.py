@@ -232,23 +232,6 @@ GROUNDING: dict[str, str] = {
         "CyberTravels — the same four agents, the same refund limit, the same "
         "vendor documents. That is why the hooks accumulate into an argument "
         "rather than reading as a hundred unrelated anecdotes.",
-"A0.2": "The five functions are five jobs done on one system. The workflow "
-        "agent an architect hardens in Function A is the one a red teamer "
-        "attacks in Function C, a detection engineer watches in Function D, "
-        "and a risk owner counts in Function E.",
-"A0.3": "CyberTravels is the answer to “why this example and not a better "
-        "one”. A lesson could always find a sharper illustration of its own "
-        "idea; it uses the one you already know instead, so the refund limit "
-        "walked past in A1.2 is the same limit measured in D2 and reported in "
-        "E1.",
-
-"A0.4": "Every procedure in this commons is run against CyberTravels — a "
-        "synthetic estate, so a result can be diffed and argued with rather "
-        "than taken on trust. The procedure this lesson executes to prove the "
-        "machinery is A1.2's: a traveller's message overriding CyberTravels' "
-        "operator prompt.",
-
-# ---- A1 · the architecture and its risks ---------------------------------
 "A1.0": "CyberTravels is the system. Everything after this lesson names one of its "
         "boxes.",
 "A1.1": "The generic names on this map have CyberTravels names too: ingress is "
@@ -316,6 +299,12 @@ GROUNDING: dict[str, str] = {
          "component, a control and the lesson that owns it.",
 
 # ---- A2 · identity and ingress -------------------------------------------
+"A1.19": "CyberTravels' exposure is not only the twelve agentic risks. It shares "
+         "one service account across four agents, its Coding Agent is the "
+         "production boundary, and no product in its estate records which "
+         "prompt caused an action \u2014 three ordinary control failures that "
+         "predate every model it runs.",
+
 "A2.1": "Three identities are present whenever CyberTravels books a flight: the "
         "traveller who asked, the workload the agent runs as, and which of the "
         "four agents is acting. CyberTravels collapses all three into "

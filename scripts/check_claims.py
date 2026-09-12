@@ -7,7 +7,7 @@
 A repository that counts itself in prose goes wrong the same way every time:
 somebody adds a skill and eleven sentences elsewhere quietly become false. This
 session alone, "115 skills", "118 lessons", "the other 117 notebooks", "seven
-skills call a model", "eleven plausible tasks" and A0.4's "13 skills import the
+skills call a model", "eleven plausible tasks" and A0.1's "13 skills import the
 runtime" all drifted, and A0.4's drift failed Kaggle verification twice before
 the cause was fixed rather than the instance.
 

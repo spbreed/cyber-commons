@@ -38,7 +38,7 @@ from .track_d2 import EXERCISES as _d2
 from .track_e1 import EXERCISES as _e1
 from .track_e2 import EXERCISES as _e2
 from .track_e3 import EXERCISES as _e3
-from .track_new import EXERCISES as _new   # the five-phase D lessons, A0.5, E1.13
+from .track_new import EXERCISES as _new   # the five-phase D lessons, E1.13
 
 EXERCISES: dict[str, dict] = {
     **_intro,

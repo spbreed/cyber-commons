@@ -17,30 +17,6 @@ ABOUT: dict[str, str] = {
 This is the **first** lesson to read. It has no code and takes ten minutes.
 """,
 
-"A0.2": """
-**What it covers.** Which of the five functions to open first, given the job you already do — and the two Function A lessons each of the other four depends on.
-
-**Why a security engineer needs it.** Read in order, the commons puts three weeks of architecture in front of a detection engineer who needed an alert. The functions are five jobs done on one system, not five stages of a course. The control it builds is: an entry point per role, and a route that skips nothing that route needs.
-
-This is an **orientation** lesson. Read it, pick a row, and go.
-""",
-
-"A0.3": """
-**What it covers.** The three conventions that run through every page: Day 0 / Day 1 / Day 2, how to use a lab and the `SKILL.md` behind it, and the hook's relationship to the CyberTravels case study — plus why every tool named here is open source.
-
-**Why a security engineer needs it.** Day 2 is the question a sceptical reader asks and the one most security material cannot answer. The open-source rule is the same argument applied to tooling: you cannot specify a product you have never built a bad version of, and the gaps you hit building it are the reason to buy. The control it builds is: a number per lesson, and a defensible buy-versus-build position per control.
-
-This is a **conventions** lesson. Everything it defines is used on every other page.
-""",
-
-"A0.4": """
-**What it covers.** How to run any lesson in this commons on either of the two free routes — a GitHub clone, or a Kaggle CPU kernel — what each one needs, and what the single code cell in every lesson is actually doing.
-
-**Why a security engineer needs it.** A lesson here carries no procedure: the procedure is a file in `skills/`, and the notebook fetches and runs it. That is what makes 118 lessons maintainable, and it is also a dependency the output does not show you. The control it builds is: a preflight that reproduces both ways the arrangement fails before reporting the host ready.
-
-This is the **first** lesson. It is the only one whose subject is the repository rather than the systems the repository is about, and everything after it assumes you have run something once.
-""",
-
 "A1.0": """
 **What it covers.** Place the five functions of the commons on one diagram and find where your own work sits.
 
@@ -191,6 +167,14 @@ This is a **risk** lesson: it shows the failure happening before anything tries 
 **Why a security engineer needs it.** A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when CyberTravels grows a fifth agent. The control it builds is: four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
+""",
+
+"A1.19": """
+**What it covers.** The full control index for CyberTravels: the twelve controls that were required before agents existed, the ten the agents added, what each is scored at today, and the lesson that owns it.
+
+**Why a security engineer needs it.** A control list written the week after shipping agents covers the new rows and reports coverage against the wrong denominator. Vulnerability scanning, supply chain, environment segregation, encryption at rest and in transit, input validation, change management, DMZ termination, credentials, PKI, key lifecycle and logging did not stop applying — several of them are what the agents broke. The control it builds is: one index with an era column, a three-valued status measured against what runs, an owner per row, and coverage reported per era rather than blended.
+
+This is an **index** lesson. It is the reference you come back to, and the place a programme gets sequenced from.
 """,
 
 "A2.1": """

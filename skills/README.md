@@ -1,6 +1,6 @@
 # Agent skills
 
-138 skills the curriculum teaches you to write, and then uses. Each one is a
+139 skills the curriculum teaches you to write, and then uses. Each one is a
 real `SKILL.md` — markdown with YAML frontmatter, the format a coding agent
 actually loads — not an illustration of one. 132 of them carry a script
 the lesson executes, and `test_skills.py` runs every one of those on every

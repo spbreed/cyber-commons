@@ -34,28 +34,6 @@ HOOKS: dict[str, str] = {
  "order, and the first of them is deliberately not a summary. Ten minutes "
  "here and the rest reads itself.",
 
-"A0.2":
- "Five functions, fourteen chapters, and no reader needs all of them. A "
- "detection engineer who starts at lesson one spends three weeks on "
- "architecture before reaching an alert; a risk owner who starts there never "
- "reaches the report they came for. The order that works depends on the chair "
- "you sit in, and there are five chairs.",
-
-"A0.3":
- "Every lesson answers the same three questions, and the third is the one "
- "that is easy to fake: what number tells you it worked. That number is why "
- "the labs are real code rather than screenshots, and why every tool named in "
- "this commons is one you can install this afternoon without a purchase "
- "order.",
-
-"A0.4":
- "The first code cell you open in this commons is twenty lines of "
- "`subprocess` and no procedure at all, which reads like a stub. It is not: "
- "the procedure is a file in the repository, the cell fetches it, and the "
- "only prerequisite anybody gets stuck on is one checkbox in a settings "
- "panel. Ten minutes here saves the hour spent concluding the lessons are "
- "empty.",
-
 "A1.0":
  "Two teams argue for an hour about whether an agent is safe, and discover at "
  "the end that one of them meant the model and the other meant the loop calling "
@@ -723,6 +701,13 @@ HOOKS: dict[str, str] = {
  "The difference between a list and a register is four columns — the scene, "
  "the component, the control, and the lesson where that control is actually "
  "taught — and only the fourth makes it a plan rather than a document.",
+"A1.19":
+ "The agentic control list a team writes the week after shipping agents is "
+ "correct, complete about the wrong thing, and reassuring. It scores ten new "
+ "controls and says nothing about the twelve that were required before any of "
+ "this existed \u2014 which are older, more reachable, and where an attacker "
+ "will actually start.",
+
 }
 
 # --------------------------------------------------------------------------
@@ -750,72 +735,6 @@ DIAGRAMS: dict[str, str] = {
    deciding whether to read it   ->  2 (the description and the Day table)
    reading it                    ->  3, 4, 6
    already know it               ->  6 alone
-""",
-
-"A0.2": """
-   FIVE CHAIRS, FIVE ENTRY POINTS
-
-                     +---------------------------+
-                     |   A0.4  run one lesson    |   everyone, ten minutes
-                     +-------------+-------------+
-                                   |
-     +----------+----------+-------+------+----------+-----------+
-     v          v          v              v          v
-   architect  AppSec    red team      SOC / IR     GRC / risk
-     |          |          |              |          |
-     v          v          v              v          v
-   A1.0       B2.0       C1.0           D1.0       E1.0 -> E1.1
-   A1 A2 A3   B2         C1             D1..D5     E1 E2 E3
-     |          |          |              |          |
-     +----------+----------+------+-------+----------+
-                                  v
-                     one system: CYBERTRAVELS
-              designed in A, tested in B, attacked in C,
-                 watched in D, reported on in E
-
-   building the system  ->  A, B     watching it  ->  C, D, E
-""",
-
-"A0.3": """
-   THE THREE QUESTIONS, ON EVERY PAGE
-
-     DAY 0 -- why  ------->  DAY 1 -- how  ------->  DAY 2 -- measure
-     what goes wrong         the thing you           the number that
-     if you do nothing       actually build          says it worked
-          ^                                                |
-          |                     the number is the next Day 0
-          +------------------------------------------------+
-
-   AND HOW YOU LEARN THE DAY 1
-
-     concept  ->  open-source build  ->  the gap you found  ->  buy (maybe)
-                  Wazuh, OpenSearch,     "no product here      and now you can
-                  Sigma, Semgrep,         tells me which        say what you are
-                  Trivy, MISP, Shuffle    prompt did it"        buying, and why
-
-   a control you have never operated has no "buy when" - it has a demo
-""",
-
-"A0.4": """
-   WHAT YOU READ                 WHAT ACTUALLY RUNS
-
-   +---------------------+       repository
-   |  the lesson page    |       +---------------------------------+
-   |    hook             |       |  skills/<area>/<name>/          |
-   |    framework        |       |     SKILL.md    the procedure   |
-   |    the SKILL.md     |<------|     scripts/*.py  its executable|
-   |    Out: the output  |       |  skills/_runtime/  the library  |
-   +---------------------+       +---------------------------------+
-              |                            ^
-              | Run on Kaggle              | fetch (~3s), then run
-              v                            |
-   +---------------------+                 |
-   |  one cell, 20 lines |-----------------+
-   |  no procedure in it |
-   +---------------------+
-
-   on your laptop   the tree is already there   -> nothing is fetched
-   on Kaggle        the tree is not             -> Internet must be on
 """,
 
 "A1.0": """
@@ -2431,7 +2350,31 @@ DIAGRAMS: dict[str, str] = {
 
    5 of 12 belong to no single agent: ingress, transport, identity,
    logging, blast radius - properties of how the four are wired together
-"""
+""",
+"A1.19": """
+   TWO ERAS, ONE INDEX
+
+   +--------------------------------------------------------------+
+   |  AGENTIC     workload identity . delegated authority . JIT    |
+   |  (10 rows)   provenance . default-deny . sandbox . egress     |
+   |              budgets . agent telemetry . human oversight      |
+   +--------------------------------------------------------------+
+   |  FOUNDATION  vuln mgmt . supply chain . prod/non-prod         |
+   |  (12 rows)   crypto at rest . crypto in transit . input val   |
+   |              SDLC + change . DMZ . creds . PKI . KMS . logs   |
+   +--------------------------------------------------------------+
+
+   the list most teams write        ->  the top box only
+   the exposure they actually have  ->  both boxes
+   where an attacker starts         ->  the bottom box
+
+   status is three-valued, because pass/fail rounds up:
+       in place  |  partial  |  absent
+
+   and coverage is reported PER ERA. one blended number hides the
+   gap the index exists to surface.
+""",
+
 }
 
 # --------------------------------------------------------------------------

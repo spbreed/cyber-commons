@@ -429,7 +429,7 @@ def lesson_page(entry, prev, nxt) -> str:
                      '<code>cybercommons/cyber-commons-skills</code> instead. '
                      'The copy is yours to edit and re-run, and nothing is '
                      'written back here.</p>'
-                     '<p>New here? <a href="A0.4.html">A0.4</a> walks the whole '
+                     '<p>New here? <a href="A0.1.html">A0.1</a> walks the whole '
                      'mechanism and runs it on itself.</p></div></details>')
     else:
         parts.append('<p class="sub kagnote">This lesson is a reading lesson — '

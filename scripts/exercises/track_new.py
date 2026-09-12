@@ -1,4 +1,4 @@
-"""Lessons added with the five-phase Function D restructure, plus A0.5 and E1.13.
+"""Lessons added with the five-phase Function D restructure, plus E1.13.
 
 These live in one file rather than being scattered into the five `track_d*`
 modules because they were written together and read as a set: the discover →
@@ -13,63 +13,6 @@ from __future__ import annotations
 from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
-
-# ---------------------------------------------------------------- A0.5
-"A0.5": {
- "concept": """
-Four vocabularies get used in this field, and they answer different questions.
-Using the wrong one is not a style problem — it is a finding nobody can act on.
-
-**OWASP's two Top 10s** describe *what can go wrong*. The
-[LLM Top 10](https://genai.owasp.org/llm-top-10/) is application-level: prompt
-injection, excessive agency, improper output handling. The
-[Agentic Top 10](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
-is for systems that plan and call tools: memory poisoning, tool misuse, rogue
-agents in a multi-agent system. Reach for these when reviewing a feature.
-
-**[MITRE ATLAS](https://atlas.mitre.org/)** describes *what an attacker did*.
-It is the ATT&CK grammar applied to AI systems — tactics and techniques — and
-it is the right lens in an incident write-up, where the question is how the
-thing happened rather than which control was missing.
-
-**[NIST AI RMF 1.0](https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF)**
-describes *how you organise to find out*. Four functions — GOVERN, MAP,
-MEASURE, MANAGE — and they are about a programme, not a bug. A NIST function in
-a vulnerability report is a category error.
-
-**The [EU AI Act](https://artificialintelligenceact.eu/)** describes *what you
-must be able to show*, by article, with dates attached. Article 15 is accuracy,
-robustness and cybersecurity; Article 14 is human oversight. This is the only
-one of the four that can fine you.
-
-A control usually needs one of each: a threat it addresses, a tactic it
-frustrates, a function it belongs to, and an obligation it discharges. That is
-why every lesson in this commons carries several labels, and why they link out
-— the labels here are indicative mappings, not a certification.
-""",
- "steps": [
-  ("md", """## 2 · The direction that matters
-
-Nobody asks what a lesson maps to. They ask **"show me where human oversight is
-addressed"** — and the answer has to be a list of lessons that exist, not a
-paragraph claiming coverage.
-
-So the lookup runs both ways, and it reads `curriculum/frameworks.json`: the
-same file the labels on every lesson page are generated from. A reference table
-that keeps its own copy of the mapping will disagree with the pages within a
-month."""),
-  *skill_steps('regulatory/framework-reference-lookup',
-               "## 3 · The reference tables, as a skill\\n\\n"
-               "Two tables and two lookups. Read the coverage counts as a gap "
-               "finder: a control with one lesson behind it is thin, and one "
-               "with none is a hole."),
- ],
- "expect": "Reference tables for the EU AI Act articles and for label coverage, "
-           "then the same mapping resolved in both directions — a lesson's labels, "
-           "and every lesson addressing Article 14.",
- "challenge": "Pick the article your organisation is most exposed on and count the "
-              "lessons behind it. If the count is one, that is your next gap.",
-},
 
 # ---------------------------------------------------------------- D3.10
 "D3.10": {

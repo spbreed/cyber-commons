@@ -44,17 +44,65 @@ Function C, build the pipeline that reviews its code in Function B, detect it
 misbehaving in Function D, and govern it in Function E. It starts here, because
 none of the rest is possible until the system is drawn.
 
-So this function is one picture and its consequences, in three chapters:
+### Zero trust, when the thing you cannot trust is the agent
+
+Zero trust has a one-line definition that survives contact with agents: **no
+implicit trust from position in the network, and every request authenticated,
+authorised and logged at the point it is served.** Applied to a user on a
+laptop, that means the VPN is not a permission. Applied to CyberTravels, it
+means four harder things.
+
+- **The identity is a workload, not a person.** The Workflow Agent needs its
+  own attested identity, not a shared service account, or you cannot say which
+  agent acted and cannot revoke one without breaking all of them.
+- **The authority is per call, not per session.** An agent that holds
+  `booking.*` for an hour is one injected instruction away from a refund. The
+  grant has to be `booking.create`, issued for this task, expiring with it.
+- **Instructions are data until something proves otherwise.** A model reads its
+  operator's prompt, the user's message and a retrieved document as the same
+  kind of token. Provenance at ingress is what makes the third one unable to
+  select a tool.
+- **The decision is adjudicated outside the agent.** A model asked to enforce
+  its own policy is being asked to be both the subject and the guard. The
+  enforcement point is the gateway in front of the tool call.
+
+Stated in the negative, which is how you audit it: **the system prompt is not a
+control, the network boundary is not a control, and "the model was told not to"
+is not a control.** Each of those has to be replaced by something that holds
+when the model does the wrong thing, because sooner or later it will.
+
+### How this function is organised: risks, then controls
+
+Function A is built out of two kinds of lesson, and the split is deliberate.
+
+A **risk lesson** shows a failure happening, before anything tries to stop it.
+It names the component of CyberTravels it attacks and produces the evidence —
+so the control that follows is answering something you have already watched go
+wrong, rather than a hazard somebody asserted.
+
+A **control lesson** builds the mechanism, then breaks it, so you can see what
+the control is actually load-bearing for. A control whose limits you cannot
+state is one you will over-trust.
 
 - **Chapter A1 — the architecture, and every risk it carries.** The component
-  map, then one lesson per risk, each naming the component of CyberTravels it
-  attacks and grounded in the OWASP Agentic AI threat taxonomy.
+  map, then one lesson per risk, each grounded in the OWASP Agentic AI threat
+  taxonomy. It introduces no control at all, on purpose. It ends with two
+  indexes: the twelve-row AI risk register in A1.18, and in **A1.19 the full
+  control index** — every control CyberTravels needs, the agentic ones and the
+  ordinary ones it still has to get right, with the lesson that owns each.
 - **Chapter A2 — securing it: identity and ingress.** Who is calling, on whose
-  behalf, and what came in from outside. These two controls close more of
-  CyberTravels' risks than anything else, which is why they come first.
+  behalf, and what came in from outside. These two close more of CyberTravels'
+  risks than anything else, which is why they come first.
 - **Chapter A3 — securing it: runtime and the gateway.** What holds after
   identity has been defeated, and how the controls collapse into one enforcement
   point once CyberTravels runs more than four agents.
+
+One warning about the shape of this function, and it is the reason A1.19
+exists. The agentic risks are the new ones, not the only ones. CyberTravels
+still has to scan its dependencies, segregate production from everything else,
+encrypt at rest and in transit, manage credentials and keys, validate input and
+log what happened. An agent platform built on an estate that has not done those
+is not an agentic security problem; it is an ordinary one wearing a new hat.
 
 > The CyberTravels narrative, the six risk families and the twelve-row register
 > used throughout this commons are from *Agentic AI is rising fast — but the
@@ -65,7 +113,34 @@ So this function is one picture and its consequences, in three chapters:
   ("md", "## 2 · CyberTravels, as built"),
   ("html", CT.ARCHITECTURE),
 
-  ("md", "## 3 · The four agents, and what each one can reach"),
+  ("md", "## 3 \u00b7 Zero trust, applied to this picture"),
+  ("html", D.table(
+    ["the rule", "what it means for CyberTravels", "where it is built"],
+    [["<b>Identity is per workload</b>",
+      "Each of the four agents gets its own attested identity. A shared "
+      "service account means you cannot say which agent acted, and cannot "
+      "revoke one without breaking all four.",
+      "A2.1 &middot; A2.2 &middot; A2.5"],
+     ["<b>Authority is per call</b>",
+      "<code>booking.create</code> issued for this task and expiring with it, "
+      "never <code>booking.*</code> held for the session. This is what stops "
+      "an injected instruction reaching the refund endpoint.",
+      "A2.3 &middot; A2.4"],
+     ["<b>Instructions are data until proven otherwise</b>",
+      "The operator prompt, the traveller's message and a retrieved document "
+      "arrive as the same kind of token. Provenance at ingress is what stops "
+      "the third one selecting a tool.",
+      "A2.6 &middot; A3.1"],
+     ["<b>The decision is adjudicated outside the agent</b>",
+      "A model asked to enforce its own policy is both subject and guard. "
+      "Default-deny sits at the gateway in front of the tool call, with the "
+      "sandbox and egress control behind it.",
+      "A3.1 &middot; A3.2 &middot; A3.3"]],
+    caption="Stated in the negative, which is how you audit it: the system "
+            "prompt is not a control, the network boundary is not a control, "
+            "and \u2018the model was told not to\u2019 is not a control.")),
+
+  ("md", "## 4 · The four agents, and what each one can reach"),
   ("html", D.table(
     ["agent", "what it does", "what it can reach"],
     [["Workflow Agent", CT.AGENTS["workflow"][1],
@@ -80,7 +155,7 @@ So this function is one picture and its consequences, in three chapters:
     caption="Read the third column as a permission set rather than a feature "
             "list. Two of these four can move money or ship code.")),
 
-  ("md", "## 4 · Where the five functions sit\\n\\n"
+  ("md", "## 5 · Where the five functions sit\\n\\n"
          "Each one takes the same system and asks a different question of it."),
   ("html", D.table(
     ["function", "the question it asks of CyberTravels", "what it produces"],
@@ -94,7 +169,7 @@ So this function is one picture and its consequences, in three chapters:
     caption="Nobody takes all five. Everyone takes the common spine first, then "
             "the chapters for the chair they sit in, then one adjacent chapter.")),
 
-  ("md", "## 5 · What the other four borrow from this one\\n\\n"
+  ("md", "## 6 · What the other four borrow from this one\\n\\n"
          "Not a claim about tidiness. It is why the map has to come first: every "
          "later function names a component of CyberTravels from it."),
   ("html", D.svg(D.DEFS
@@ -110,14 +185,16 @@ So this function is one picture and its consequences, in three chapters:
     caption="Chapter A1 introduces no control at all, on purpose: you cannot "
             "choose a control for a risk you cannot yet name.")),
 
-  ("md", "## 4 · Function A, in order"),
+  ("md", "## 7 · Function A, in order"),
   ("html", D.table(
-    ["chapter", "what it covers", "lessons"],
-    [["1", "the architecture, and every risk it carries", "17"],
-     ["2", "securing it — identity and ingress", "8"],
-     ["3", "securing it — runtime and the gateway", "10"]],
-    caption="Chapters A2 and A3 are controls. Chapter A1 is the picture they "
-            "stand on.")),
+    ["chapter", "what it covers", "kind of lesson"],
+    [["A1", "the architecture, every risk it carries, and the two indexes "
+            "that close it", "risk"],
+     ["A2", "securing it — identity and ingress", "control"],
+     ["A3", "securing it — runtime and the gateway", "control"]],
+    caption="Chapter A1 is the picture the other two stand on, and it ends on "
+            "the index: A1.18 for the twelve agentic risks, A1.19 for every "
+            "control CyberTravels needs including the ones that predate it.")),
  ],
  "expect": "CyberTravels as built — four agents, two MCP servers, direct API calls "
            "that skip MCP, agent-to-agent messaging and a local std-I/O path — "

@@ -33,64 +33,20 @@
           "chapter": 0,
           "title": "Introduction — What This Is, Who It Is For, and How to Use It",
           "titles": "Anyone, in any of the five roles. This chapter assumes no security background and no setup.",
-          "changes": "Five lessons. Who the commons is for and how a lesson page is built; which function to open first given your job; what Day 0/1/2 mean and how to use the labs, the skills and the CyberTravels case study; how to run a lesson on either free route; and the four frameworks with a reference table for each. 5 lessons.",
-          "autonomy": "Read A0.1 to A0.3, run A0.4 once, and come back to A0.5 when a label on a lesson page needs resolving.",
+          "changes": "One lesson. Who the commons is for, how a lesson page is built, which function to open first, what Day 0/1/2 mean, how to use the labs and skills, the open-source-first rule, the four frameworks, and how to run a lesson on either free route — demonstrated by running a real lesson's procedure three times, twice in the ways it breaks. 1 lesson.",
+          "autonomy": "Read it once and run it once before opening a second lesson.",
           "deliverable": "A route through the commons chosen for your role, and one lesson executed on a host you did not configure with its output checksum matching the one recorded here.",
           "sessions": [
             {
               "id": "A0.1",
-              "title": "What this is, who it is for, and what a lesson is made of",
+              "title": "Start here — what this is, who it is for, and how to run it",
               "kind": "introduction",
-              "summary": "The one subject of this commons — security engineering when the thing you are securing, or the thing doing the securing, is an agent — the five roles it is written for, and the seven sections every lesson page is built from, in order.",
-              "risk": "A reader lands mid-curriculum, reads the hook as if it were a summary, finds it vague and leaves. The material was never the problem; the shape of the page was.",
-              "control": "One fixed page structure, named: the hook is a scene, the description sits under it, and the framework comes before any code on every lesson without exception.",
-              "lab": "No code. Open a lesson in a function that is not yours and find all seven sections on it.",
-              "tools": [],
-              "models": []
-            },
-            {
-              "id": "A0.2",
-              "title": "How to use this, by the chair you sit in",
-              "kind": "introduction",
-              "summary": "Five functions, five entry points. Which function to open first given the job you already do, the two Function A lessons each of the other four depends on, and the two shorter routes people ask for: a team about to ship, and a leadership audience deciding whether to fund any of it.",
-              "risk": "Read front to back, the curriculum puts three weeks of architecture in front of a detection engineer who needed an alert, and four functions in front of a risk owner who needed one report.",
-              "control": "An entry point per role, with the dependencies named — so a route skips everything it does not need and nothing it does.",
-              "lab": "No code. Pick your row, open the lesson it starts at, and read only its Day 0 line.",
-              "tools": [],
-              "models": []
-            },
-            {
-              "id": "A0.3",
-              "title": "Day 0, Day 1, Day 2 — the labs, the skills, and open source first",
-              "kind": "introduction",
-              "summary": "The three conventions running through every page: what Day 0, Day 1 and Day 2 mean and how to use them; how a lab and the SKILL.md behind it are meant to be used, by a person and by an agent; what the hook is doing and why it is always CyberTravels; and why every tool named here is one you can install before you can buy one.",
-              "risk": "A control with no number cannot be defended in a budget conversation, and a product nobody has built a bad version of cannot be specified — only compared on the seller's feature list.",
-              "control": "Three questions answered on every page, a runnable procedure behind every lesson, and an open-source reference for every control so the gap you hit is the buying requirement.",
-              "lab": "No code. Take the Day 2 line of a lesson in your function and write the same sentence about a control you already run.",
-              "tools": [],
-              "models": []
-            },
-            {
-              "id": "A0.4",
-              "title": "Run your first lesson — GitHub, Kaggle, and what you need first",
-              "kind": "introduction",
-              "summary": "Every lesson is a page, a SKILL.md and a script, and the notebook holds none of them — it fetches the skills tree and runs the script out of it. This lesson says what that needs on each of the two free routes, then proves the chain by running A1.2's procedure with each condition broken in turn.",
-              "risk": "A reader opens the first code cell, finds twenty lines of subprocess and no procedure, and concludes the lessons are stubs — or runs one on a hosted kernel with no network and reports a broken lesson when the fetch is what failed.",
-              "control": "A preflight that inventories the tree from disk and reproduces both failure conditions before reporting the host ready.",
+              "summary": "The one subject of this commons, the five roles it is written for, and the seven sections every lesson page is built from. Then what Day 0, Day 1 and Day 2 mean, how to use a lab and the skill behind it, why every tool named here is open source, which of four frameworks answers which question, and how to run a lesson on either free route.",
+              "risk": "A reader lands mid-curriculum, reads the hook as a summary, finds it vague and leaves — or opens the first code cell, finds twenty lines of subprocess and no procedure, and concludes the lessons are stubs.",
+              "control": "One page that says what the commons is for, which track your job maps to, and what the code cell is doing — then a preflight that reproduces both ways the arrangement fails before reporting the host ready.",
               "lab": "Run the preflight on both routes and compare the output checksum.",
               "tools": [],
               "models": []
-            },
-            {
-              "id": "A0.5",
-              "title": "The four frameworks, and when each one is the right lens",
-              "summary": "OWASP's two Top 10s, MITRE ATLAS, the NIST AI RMF and the EU AI Act. What each one is for, which question each answers, and a reference table for each — so a finding gets filed under the vocabulary its audience uses rather than the one the writer happens to know.",
-              "risk": "Four vocabularies get used interchangeably, so a threat id lands in a risk register and a NIST function lands in an incident write-up, and neither audience can act on it.",
-              "control": "One lookup, both directions, read from the same mapping file every lesson page is labelled from.",
-              "lab": "Look up what a lesson maps to, then the harder direction: which lessons address a given EU AI Act article.",
-              "tools": [],
-              "models": [],
-              "kind": "reference"
             }
           ]
         },
@@ -396,6 +352,17 @@
               "risk": "A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when CyberTravels grows a fifth agent.",
               "control": "Four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.",
               "lab": "Roll the twelve risks up into families, find which agent carries each, and check that every row has an owner.",
+              "tools": [],
+              "models": []
+            },
+            {
+              "id": "A1.19",
+              "title": "The control index — every control CyberTravels needs, not only the new ones",
+              "kind": "architecture",
+              "summary": "One index with two eras in it: the twelve controls that were required before agents existed — vulnerability scanning, supply chain, production segregation, encryption at rest and in transit, input validation, SDLC and change management, DMZ termination, credentials, PKI, key lifecycle, logging and monitoring — and the ten the agents added. Each scored in place, partial or absent against what runs, with the lesson that owns it.",
+              "risk": "A team that has just shipped agents writes an agentic control list. Every row is right, and it reports coverage against the wrong denominator — saying nothing about the older, more reachable controls an attacker will actually start from.",
+              "control": "One index carrying both eras, a three-valued status measured against what runs rather than what is documented, an owner per row, and coverage reported per era rather than blended.",
+              "lab": "Score the twenty-two controls and read the two coverage lines separately — the gap between them is the finding.",
               "tools": [],
               "models": []
             }

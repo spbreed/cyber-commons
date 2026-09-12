@@ -10,7 +10,7 @@ See `cybertravels.py` for the canonical architecture and register.
 
 from . import cybertravels as CT
 from . import diagrams as D
-from .skills import runtime_step
+from .skills import runtime_step, skill_steps
 
 RUNTIME_STEP = runtime_step()
 
@@ -95,6 +95,97 @@ is the useful part — it tells Alex which afternoon to spend first.
               "column that will be hardest is the fourth: for each control, "
               "where is it taught, tested and evidenced in your organisation? "
               "The rows with no answer are the ones that will recur.",
+},
+
+"A1.19": {
+ "concept": """
+A1.18 registered the twelve risks the agents brought. This lesson is the other
+index, and it is the one that gets skipped: **every control CyberTravels needs,
+including the dozen that were required before it shipped a single agent.**
+
+The failure this prevents is specific and common. A team that has just built an
+agentic platform writes an agentic control list — provenance, default-deny,
+sandboxing, egress, budgets, telemetry. Every row on it is right. The list
+reports coverage of the ten controls somebody thought of last quarter and says
+nothing about the twelve that were true in 2015, and *those* are where an
+attacker starts, because they are older, more reachable and much better
+understood than anything involving a model.
+
+So the index carries both, in one table, with a column that says which era each
+control belongs to:
+
+**The foundation — true before agents, and still true.** Vulnerability scanning.
+Supply chain and SBOM. Production and non-production segregation. Encryption at
+rest. Encryption in transit. Input validation. SDLC and change management.
+Termination of externally initiated connectivity in a DMZ. Credential
+management. PKI. KMS key lifecycle. Logging and monitoring.
+
+**The agentic layer — new, and sitting on top of it.** Workload identity per
+agent. Delegated authority that narrows. Just-in-time authorisation. Provenance
+at ingress. Default-deny on the tool call. Sandboxed execution. Egress control.
+Budgets and stop conditions. Agent telemetry. Human oversight that survives
+volume.
+
+### The foundation rows are not unchanged — they are stressed
+
+This is the part worth reading slowly. Agents did not make change management
+obsolete; they broke the assumption underneath it, which was that a human read
+every change. They did not replace credential management; they made one shared
+service account span four agents, so a rotation breaks all four and an incident
+cannot be attributed to one. They did not remove the DMZ; they made **egress**
+the direction that matters, because an agent with tool access initiates
+outbound calls the perimeter was never shaped for.
+
+Every foundation row in the index carries a line saying what the agents changed
+about it. A row with an empty line is a row nobody has thought about yet.
+
+### Status is measured, and three-valued
+
+Each row is **in place**, **partial** or **absent**, against what is running
+rather than what is documented. Three values rather than two, because with a
+pass/fail scheme almost everything gets rounded up to pass, and *partial* is the
+honest answer for most controls in most estates.
+
+And coverage is reported **per era, never blended**. One overall number hides
+exactly the gap the index exists to surface.
+""",
+ "steps": [
+  ("md", """## 2 · Why a control needs an owner, not just a status
+
+Four columns make this an index rather than a poster: the control, the era, the
+status, and **the lesson that owns it**. The fourth is the one that decides
+whether anything changes.
+
+A status with no owner regresses silently between measurements — somebody
+records *partial*, nobody is accountable for the other half, and the next
+measurement finds the same word. In this commons the owner is a lesson id, so
+every row in the index is a thing you can go and read. In your organisation it
+is a team, and the rule is the same: a row with no owner will be absent again
+next quarter."""),
+
+  *skill_steps("architecture/control-baseline-index",
+               "## 3 \u00b7 The index, scored\n\n"
+               "Watch the two coverage lines rather than the overall one. The "
+               "gap between them is the finding, and the last block is the "
+               "sentence to take to whoever funds this: the foundation rows "
+               "that are absent are ordinary controls that were already "
+               "required, and they are listed by id."),
+ ],
+ "expect": "Twenty-two controls indexed \u2014 twelve that predate agents and ten "
+           "that arrived with them \u2014 each with its era, its status and the "
+           "lesson that owns it. Then coverage scored separately per era, which "
+           "is where the point lands: the foundation is half-covered and the "
+           "agentic layer is barely started, and two of the absent rows are "
+           "ordinary controls that were required before CyberTravels shipped "
+           "anything. An index of only the agentic rows would have reported a "
+           "number about the wrong denominator.",
+ "challenge": "Write the same table for one system you run, foundation rows "
+              "first and before you write a single agentic row \u2014 the order "
+              "matters, because a list started from what is currently "
+              "interesting inherits that shape. Then score it against what is "
+              "running rather than what is documented. If your foundation "
+              "coverage is below your agentic coverage, you have found the "
+              "sequencing problem this lesson exists for.",
 },
 
 }

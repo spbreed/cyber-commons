@@ -627,6 +627,19 @@
         "Art. 11",
         "Art. 26"
       ]
+    },
+    "A1.19": {
+      "owasp": [],
+      "atlas": [],
+      "nist": [
+        "GOVERN",
+        "MAP",
+        "MANAGE"
+      ],
+      "euai": [
+        "Art. 9",
+        "Art. 15"
+      ]
     }
   }
 }

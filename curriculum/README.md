@@ -6,8 +6,8 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 
 | Track | Role | Sessions | Function |
 |---|---|---|---|
-| [A0](track-a0.md) | Introduction — What This Is, Who It Is For, and How to Use It | 5 | A — Securing AI Architectures |
-| [A1](track-a1.md) | CyberTravels' Architecture, and Every Risk It Carries | 19 | A — Securing AI Architectures |
+| [A0](track-a0.md) | Introduction — What This Is, Who It Is For, and How to Use It | 1 | A — Securing AI Architectures |
+| [A1](track-a1.md) | CyberTravels' Architecture, and Every Risk It Carries | 20 | A — Securing AI Architectures |
 | [A2](track-a2.md) | Securing the Architecture — Identity and Ingress | 8 | A — Securing AI Architectures |
 | [A3](track-a3.md) | Securing the Architecture — Runtime and the Gateway | 11 | A — Securing AI Architectures |
 | [B2](track-b2.md) | The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy | 20 | B — Application Security with an AI SDLC |

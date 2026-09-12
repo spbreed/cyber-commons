@@ -8,12 +8,6 @@ from __future__ import annotations
 
 ABOUT: dict[str, str] = {
 
-"A0.5": """
-**What it covers.** The four control vocabularies this curriculum labels against — OWASP's LLM and Agentic Top 10s, MITRE ATLAS, the NIST AI RMF and the EU AI Act — what question each one answers, and a reference table for each.
-
-**Why a security engineer needs it.** These get used interchangeably and they are not interchangeable. A threat id in a risk register and a NIST function in a vulnerability report are both category errors, and both produce findings the receiving audience cannot act on. The lookup also runs the direction an auditor actually asks in: not "what does this lesson map to" but "show me every lesson that addresses human oversight".
-""",
-
 "D3.10": """
 **What it covers.** Hypothesis-first hunting over agent telemetry: stating a falsifiable hypothesis, naming the population before running it, scoring what it caught against what it missed, and deciding to promote, tune or discard.
 
@@ -77,12 +71,6 @@ ABOUT: dict[str, str] = {
 }
 
 CYBERTRAVELS: dict[str, str] = {
-
-"A0.5": "CyberTravels is the system every label in this curriculum is applied "
-        "to, so the reference tables here are not abstract: the coverage "
-        "counts are how many lessons about this one estate address each "
-        "control. A framework with one lesson behind it is a thin spot in "
-        "CyberTravels' defence, stated in the regulator's own vocabulary.",
 
 "D3.10": "The corpus is CyberTravels' agent runs — the Workflow Agent and the "
         "RAG Advisor, forty runs across a fortnight. The overnight batch that "

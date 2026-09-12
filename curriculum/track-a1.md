@@ -386,3 +386,24 @@ python3 scripts/run_notebooks.py --session A1.18   # run it headless and check i
 *Expect:* Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. Every risk has an owner, across more than fifteen lessons in four functions.
 
 ---
+
+### A1.19 — The control index — every control CyberTravels needs, not only the new ones
+
+- **Risk** — A team that has just shipped agents writes an agentic control list. Every row is right, and it reports coverage against the wrong denominator — saying nothing about the older, more reachable controls an attacker will actually start from.
+- **Control** — One index carrying both eras, a three-valued status measured against what runs rather than what is documented, an owner per row, and coverage reported per era rather than blended.
+- **Lab** — Score the twenty-two controls and read the two coverage lines separately — the gap between them is the finding.
+
+**Run it** — Score the twenty-two controls and read the two coverage lines separately — the gap between them is the finding.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.19.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.19   # run it headless and check it
+
+# --- or run the skill directly, which is what the notebook does ---
+PYTHONPATH=skills/_runtime python3 skills/architecture/control-baseline-index/scripts/control_baseline_index.py
+```
+
+*Expect:* Twenty-two controls indexed across two eras, each with a status and the lesson that owns it, then coverage scored per era: 50% on the twelve controls that predate agents and 10% on the ten that arrived with them.
+
+---

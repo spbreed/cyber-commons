@@ -163,7 +163,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 # --------------------------------------------------------------------------
 
 # The lesson that opens each function, and therefore the one that carries the
-# function-level Day 0/1/2 block. A0.4 is deliberately not here: it teaches the
+# function-level Day 0/1/2 block. A0.1 is deliberately not here: it teaches the
 # reader to run a notebook, which is not Function A's argument.
 FUNCTION_INTRO: dict[str, str] = {
     "A": "A1.0", "B": "B2.0", "C": "C1.0", "D": "D1.0", "E": "E1.0",
@@ -182,39 +182,6 @@ DAYS.update({
          "with.",
          "Nothing is computed here. The check is that you can open any lesson "
          "in any function and name all seven sections on it."),
-
-"A0.2": ("Read front to back, the commons puts three weeks of architecture in "
-         "front of a detection engineer who needed an alert, and four "
-         "functions in front of a risk owner who needed one.",
-         "Find your row in the entry-point table, start at that function's "
-         "introduction, and take only the Function A lessons it names.",
-         "Time to the first lesson that changes what you do at work. On the "
-         "routed path it is one lesson; front to back it is between twenty "
-         "and sixty."),
-
-"A0.3": ("A control nobody can put a number on cannot be defended in a budget "
-         "conversation, and a product nobody has built a bad version of "
-         "cannot be specified — only compared on the seller's feature list.",
-         "Learn the three questions every page answers, how to run a lab and "
-         "reuse the skill behind it, and the open-source stack each control "
-         "is taught on before any product is named.",
-         "One number per lesson — that is what the Day 2 line is — and, per "
-         "control you build openly, the gap you hit. The gap is the buying "
-         "requirement."),
-
-"A0.4": ("You cannot judge any of this until one lesson runs on your own "
-         "machine. A curriculum you cannot execute is a slide deck.",
-         "Run the preflight on both routes — a cloned repository and a hosted "
-         "kernel — and reproduce the two failures it is built to produce.",
-         "Exit 0, twelve lines, and the same CRC on both routes. The matching "
-         "checksum is the proof it is the same file either way."),
-
-"A0.5": ("A finding filed in the wrong vocabulary reaches the wrong audience "
-         "and gets actioned by nobody.",
-         "Learn which of four questions each framework answers, then look a "
-         "lesson up in both directions.",
-         "Coverage per framework — how many lessons address each control — and "
-         "the obligations with only one lesson behind them."),
 
 "A1.0": ("\"Secure the agent\" has no referent until the system is drawn, so "
          "every control argument is really an argument about the picture.",
@@ -349,6 +316,17 @@ DAYS.update({
           "that no row ships without the fourth.",
           "Rows with an owning lesson. This is the register's own coverage, and "
           "it is the number Function A is graded on."),
+
+"A1.19": ("A control list written after shipping agents covers the new rows "
+          "and reports a number about the wrong denominator \u2014 while the "
+          "older, more reachable controls an attacker actually starts from go "
+          "uncounted.",
+          "Index both eras in one table: the twelve controls that predate "
+          "agents and the ten that arrived with them, each scored in place, "
+          "partial or absent against what runs, with an owner per row.",
+          "Coverage per era, never blended. CyberTravels scores 50% on the "
+          "foundation and 10% on the agentic layer across 22 controls, and "
+          "two of the absent rows were required before it shipped an agent."),
 
 "A2.1": ("A shared service account answers \"what ran\" and destroys \"for "
          "whom\", so no later control can be conditioned on the caller.",
