@@ -177,7 +177,7 @@ git_push      True    project  False       False
   actually prompts, and audit the configuration that decides that.</li>
 <li><strong>Rating an injection finding by the text of the injection.</strong> Rate it by what
   the allowlist permits.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A3.11</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a3-11" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a3-11?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A3.11" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>tool          writes  scope    reversible  inner loop?
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>tool          writes  scope    reversible  inner loop?
 ----------------------------------------------------------
 read_file     False   self     True        True
 write_file    True    project  True        True
@@ -224,7 +224,7 @@ unbounded pre-approved tools: [&#x27;run_shell&#x27;, &#x27;git_push&#x27;]
 
 The injection finding is Critical not because the README says anything
 clever, but because a directive path exists to a tool that cannot be
-undone. Rewrite the payload and the severity does not move.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+undone. Rewrite the payload and the severity does not move.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating <code>git_push</code> drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Ship the credential deny-list first — it is a config file, it takes an afternoon, and no developer will notice. Then find out how many agents in your organisation could read <code>~/.aws/credentials</code> yesterday.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> Layers now stand between a compromised agent and a consequence — the policy decision at the tool call, the sandbox, egress, the budget, the gateway — plus the three the incident register adds: shared infrastructure that is no longer a channel, exemptions that cost blast radius, and an agent that has somewhere to report.</p>

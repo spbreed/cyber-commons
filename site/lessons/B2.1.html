@@ -158,7 +158,7 @@ same prompt, with and without something checking the answer.</p>
   and the budget goes on retries.</li>
 <li><strong>Asking a model to judge the answer.</strong> That is a second opinion, not a
   verification.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-1?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
 model         : deterministic stand-in (no backend configured)
 
 This lesson runs offline against a deterministic replay, which is why
@@ -196,7 +196,7 @@ a plausible-looking answer: return DB.execute(&quot;SELECT * FROM bookings WHERE
    would the verifier accept it? False
 
 It reads like a fix and it is still concatenation. Without the verifier
-this loop ships it, reports success, and the trace looks clean.</code></pre></div></details><div class="nbmd"><h2>4 · The part worth keeping</h2>
+this loop ships it, reports success, and the trace looks clean.</code></pre></div><div class="nbmd"><h2>4 · The part worth keeping</h2>
 <p>Read the last block of that output again. The answer it rejects —
 <code>ref=" + escape(ref)</code> — is the one that matters: it reads like a fix, it would
 pass a human skim, and it is still concatenation. Without a verifier the loop

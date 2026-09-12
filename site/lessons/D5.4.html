@@ -133,7 +133,7 @@ Without the re-measurement, that reads as done.</p>
 <li><strong>Reporting an average across indicators.</strong> Two restored and two not is not
   "50% recovered", it is two open gaps.</li>
 <li><strong>Measuring once.</strong> Regression at the next cycle is the normal case.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D5.4</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d5-4" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d5-4?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D5.4" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>kci     measures                                 target  before  incident   after  verdict
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>kci     measures                                 target  before  incident   after  verdict
 KCI-01  tool calls carrying provenance          &gt;= 0.99    1.00      0.41    1.00  restored
 KCI-02  vendor tool descriptions pinned         == 1.00    1.00      0.00    1.00  restored
 KCI-03  refunds with a matching approval        &gt;= 0.99    1.00      0.86    0.94  NOT RESTORED
@@ -154,7 +154,7 @@ back to target and 2 did not, and the incident record would have said
 KCI-04 is the uncomfortable one. Detection time improved from 194 minutes
 to 118 and is still eight times the target, so the control the root cause
 record named has been partially built. Partially built is not built, and
-without the re-measurement it reads as done.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+without the re-measurement it reads as done.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Three indicators restored and two not, against an incident record that would have called all five remediated.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add a sixth indicator that regressed — better than target before, worse after. The report has nowhere to put it yet.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D5.5.html">D5.5 · Proposing the policy change — the diff, and what it does not fix</a></strong></p>

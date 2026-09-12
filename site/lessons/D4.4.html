@@ -136,7 +136,7 @@ time        VAGUE    quickly
 <li><strong>An estimated time-to-stop.</strong> Measure it once and the estimate is revealed.</li>
 <li><strong>Stop authority behind an approval.</strong> That is escalation with a different
   name.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D4.4</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d4-4" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d4-4?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D4.4" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>who         VAGUE    the security team
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>who         VAGUE    the security team
             CONCRETE on-call SRE, no approval required for non-human identities
 
 mechanism   VAGUE    we can turn off the agents
@@ -180,7 +180,7 @@ as usually documented: ready=False
    ⚠ time-to-stop has never been measured
    ⚠ not tested in the last 180 days
 
-after a game day: ready=True</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+after a game day: ready=True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The vague and concrete answers print side by side. Killing the process stops the agent but does not survive a restart, while identity revocation does. The game-day timeline gives a measured 12-second time-to-stop, permitting 12 to 240 further actions depending on rate. The readiness check fails the vague version on three counts and passes the tested one.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the game day. The deliverable is the number, and the number is what goes in the evidence pack for E1.7 and the board slide for E3.5. An untested stop button is a belief.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D4.5.html">D4.5 · The fleet kill switch</a></strong></p>

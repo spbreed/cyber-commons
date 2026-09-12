@@ -152,7 +152,7 @@ hypothesis' clothes. Tune it or discard it — do not ship it.</p>
   nothing else has perfect precision and no value.</li>
 <li><strong>Never discarding.</strong> A hunt library where nothing is ever retired becomes a
   second alert queue with worse rules.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D3.10</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d3-10" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d3-10?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D3.10" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>corpus: 40 agent runs, 6 of them labelled anomalous
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>corpus: 40 agent runs, 6 of them labelled anomalous
 
 hypothesis                       matched  tp  fp  precision  recall
 tool outside declared scope            3   3   0       1.00    0.50
@@ -172,7 +172,7 @@ Note what recall is NOT saying here. No hypothesis reaches 1.00 and none
 should: a hunt is one hypothesis about one behaviour, and these six
 anomalies are not one behaviour. Recall against every anomaly in the corpus
 is the wrong denominator - recall against the behaviour the hypothesis
-describes is the right one, and that is why each hypothesis is scored alone.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+describes is the right one, and that is why each hypothesis is scored alone.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Three hypotheses scored on precision and recall against a labelled corpus, each ending in promote, tune or discard — and the working-hours hypothesis rejected at precision 0.14.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write a fourth hypothesis for CyberTravels and score it. If its precision is near the base rate, you have described normal work.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> You can end the understand interval honestly: the investigator bounded before it starts, an alert carrying the fields agent triage needs, a trace where the first theory was abandoned in the open, scope walked along the delegation graph, coordination that exists only in the population, third-party intel that had to become a rule to count, and a hunt scored on precision.</p>

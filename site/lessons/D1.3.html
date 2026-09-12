@@ -192,7 +192,7 @@ polite-agent            0.021   1.26      0.0     0.83  agent
 <li><strong>Scoring the user agent string.</strong> It is self-declared.</li>
 <li><strong>Optimising accuracy.</strong> It assumes the two errors cost the same.</li>
 <li><strong>Flagging registered agents.</strong> They are supposed to look like agents.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D1.3</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d1-3" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d1-3?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D1.3" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
 --------------------------------------------------------------
 svc-indexer             0.800    0.0    20.04     0.01  agent
 dana@corp               0.028   1.55      0.0     1.11  human
@@ -259,7 +259,7 @@ sensitive content after 90 days: none
 can still answer &#x27;what did it do and what did the harness believe?&#x27;: True
 
 The hash is retained, so if the original is recovered from a backup you
-can still prove it is the same content the agent saw.</code></pre></div></details><div class="nbmd"><h2>4 · Keeping the trace, as a skill</h2>
+can still prove it is the same content the agent saw.</code></pre></div><div class="nbmd"><h2>4 · Keeping the trace, as a skill</h2>
 <p>The run record contains a payment-card pattern, in a source file the agent read legitimately. The skill scans every field, then sets retention per field so timestamps and verdicts survive for 400 days and prompts do not survive 30.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-telemetry-retention/SKILL.md"><code>skills/detection/agent-telemetry-retention/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: agent-telemetry-retention
 description: &gt;-
@@ -319,7 +319,7 @@ Nobody put a card number in the trace deliberately. The agent read a
 <li><strong>Retaining or discarding whole records.</strong> Both answers are wrong.</li>
 <li><strong>Scanning prompts only.</strong> Tool results carry the same content.</li>
 <li><strong>Not stating what the short windows lose.</strong> That is the trade being made.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D1.3</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d1-3" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d1-3?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D1.3" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
 --------------------------------------------------------------
 svc-indexer             0.800    0.0    20.04     0.01  agent
 dana@corp               0.028   1.55      0.0     1.11  human
@@ -386,7 +386,7 @@ sensitive content after 90 days: none
 can still answer &#x27;what did it do and what did the harness believe?&#x27;: True
 
 The hash is retained, so if the original is recovered from a backup you
-can still prove it is the same content the agent saw.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+can still prove it is the same content the agent saw.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>First: the service indexer and unknown token score highest, the human lowest, with the IDE user and the politely-jittered agent in between. The threshold sweep shows humans flagged rising and agents missed falling as it drops, cost-weighting selects a low one, and joining against the registry names the unregistered actors as shadow agents. Then the trace of one of them: a payment-card pattern in a source file it read legitimately, and per-field retention that keeps timestamps, tool, target and verifier for 400 days while dropping prompts at 30 and tool results at 7. After 90 days no sensitive content remains and the record still answers what the agent did.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the scoring against a week of your own authentication logs and count the actors it flags that are not in your registry. Then check the retention period on whatever traces you keep for them: if it matches your firewall logs, one of those two numbers was chosen without anyone looking at what the traces contain.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> You can measure the discover interval instead of assuming it: four sensor classes scored against what an agent actually does, drift caught without a code change, and — as a bonus — the agents nobody registered found on behaviour, with their traces kept per field.</p>

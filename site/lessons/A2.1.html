@@ -165,7 +165,7 @@ memory keys - the same workspace, two users:
   is the only place authorisation can happen.</li>
 <li><strong>Measuring delegation by whether the call succeeded.</strong> A call that succeeds
   with too much scope is the failure being looked for.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A2.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a2-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a2-1?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A2.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>request                     authorized?  attributed to
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>request                     authorized?  attributed to
 dana@corp -&gt; reports:read   True         dana@corp via reports-agent
 dana@corp -&gt; db:admin       False        dana@corp via reports-agent
 
@@ -177,7 +177,7 @@ memory keys - the same workspace, two users:
 db:admin is refused because the WORKLOAD never held it - so no user can
 borrow it through the agent, which is A1.6 closed. The audit line names
 dana, which is A1.14 closed. And a note written in dana&#x27;s session cannot
-be read back in priya&#x27;s, which is A1.4 closed.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+be read back in priya&#x27;s, which is A1.4 closed.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its own shape: a routing description an agent reads to decide whether this review applies, the tools it is allowed to use, and a procedure long enough to separate user, workload and agent instance and to check both narrowing rules — scope is a subset of what was presented, and within the actor's own ceiling.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For one agent, write down its three identities. If the workload and the user are the same value, you have inherited credentials; if the instance does not exist, you cannot revoke one run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">A2.2 · Bootstrapping the first credential</a></strong></p>

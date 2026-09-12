@@ -142,7 +142,7 @@ drop a table                   REACHES     contained
   probe into a credential theft.</li>
 <li><strong>Skipping the destructive probes</strong> because they are destructive. That
   reluctance is the answer.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.6</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-6" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-6?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.6" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>ALLOW http://replica.local/reports                   replica-internal
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>ALLOW http://replica.local/reports                   replica-internal
 ALLOW http://db.replica.local:5432/                  replica-internal
 DENY  https://api.github.com/                        not on the replica allowlist
 DENY  http://169.254.169.254/latest/meta-data/       private address outside the replica — blocked
@@ -176,7 +176,7 @@ staging
 
 replica destroyed; state cannot leak into the next run
 credentials after destroy: cleared
-data after destroy:        cleared</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+data after destroy:        cleared</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check whether your dynamic testing currently runs against staging. If it does, list what staging shares with production — identity provider, message bus, data replica. Each shared component is a path from a test probe to a real incident.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.7.html">B2.7 · Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries</a></strong></p>

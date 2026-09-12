@@ -165,7 +165,7 @@ rewriting the payload does not help - the check never reads it:
   forgotten one, because they arrive from a system you trust.</li>
 <li><strong>Ignoring the combination check</strong> because each element looked acceptable
   alone.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A2.6</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a2-6" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a2-6?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A2.6" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>the same payload, through every ingress component:
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the same payload, through every ingress component:
    knowledge  -&gt; refused   (knowledge may not select a tool)
    memory     -&gt; refused   (memory may not select a tool)
    mcp        -&gt; refused   (mcp may not select a tool)
@@ -183,7 +183,7 @@ read back from memory a week later: refused
 
 The document is still read, still summarised, still useful. It simply
 cannot choose an action - and neither can the memory record written
-from it.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+from it.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Its ceiling is the lesson: a screening step is evidence of effort, not of protection, so the verdict is capped at PARTIAL however good the detector's benchmark looks — and the combination it flags, private data reachable plus untrusted content plus egress, is the one that turns a summary into an exfiltration.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>List every place text enters your agent's context and check which of them attaches an origin. The untagged ones are the paths where this control does not exist, whatever the design document says.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.7.html">A2.7 · Attribution: an audit trail that answers "who"</a></strong></p>

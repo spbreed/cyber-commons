@@ -136,7 +136,7 @@ input origin was 'knowledge' - a trust-0 component. That single
 <li><strong>Answering a question by correlation.</strong> Correlation is a plan, not a record.</li>
 <li><strong>Testing amendment through the API only.</strong> Try the storage layer the agent's
   role can reach.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A2.7</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a2-7" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a2-7?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A2.7" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>   which user caused the deletion?     dana@corp
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   which user caused the deletion?     dana@corp
    what performed it?                  spiffe://corp/reports-agent (run-8812)
    how did authority reach it?         dana@corp -&gt; orchestrator -&gt; reports-agent
    what made the agent decide?         &#x27;wiki/473: retire invoice 8812 when the custo&#x27; from knowledge
@@ -147,7 +147,7 @@ input origin was &#x27;knowledge&#x27; - a trust-0 component. That single
 field turns &#x27;the agent deleted an invoice&#x27; into &#x27;a wiki page told it to&#x27;,
 which is a root cause rather than an observation.
 
-agent attempting to amend the ledger: refused (ledger is append-only and out of the agent&#x27;s trust domain)</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+agent attempting to amend the ledger: refused (ledger is append-only and out of the agent&#x27;s trust domain)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take the last significant action one of your agents performed and try to fill in these four fields from what you actually logged. The missing one is almost always the motivating input.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.8.html">A2.8 · An audit trail the workload cannot forge</a></strong></p>

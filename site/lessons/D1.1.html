@@ -179,7 +179,7 @@ actually prints.</p>
   The four named rows are the finding.</li>
 <li><strong>Treating a partial as a full.</strong> Seeing a TLS session open is not seeing what
   crossed it.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D1.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d1-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d1-1?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D1.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>the sensor estate, as bought
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the sensor estate, as bought
   EDR    Wazuh agent            process, file and network activity on a host
   DLP    regex + Wazuh FIM      sensitive content leaving a monitored channel
   CSPM   Prowler / ScoutSuite   cloud configuration, evaluated periodically
@@ -216,7 +216,7 @@ per-sensor coverage of the agent&#x27;s day
 note what they have in common: every one of them happens inside the
 agent&#x27;s reasoning loop or behind an API the host never observes.
 buying a fifth product of the same four kinds does not move this column.
-D1.3 is the source that does, and D2.1 is where it has to land.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+D1.3 is the source that does, and D2.1 is where it has to land.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>EDR and CNAPP each cover about a third of the agent's day, DLP and CSPM almost none of it, and all four combined still leave four of the nine actions seen by nothing: reading a customer record through an internal API, placing it in a prompt, calling a vendor MCP tool, and issuing a refund. Those four share a property, and it is the argument for D1.3 and D2.1 rather than for a fifth product.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Build the same matrix for your estate with your own actions in the rows. The number that matters is not the percentage — it is whether the uncovered rows have something in common.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Drift monitoring — behaviour that changes without a code change</a></strong></p>

@@ -154,7 +154,7 @@ provide containment, and those are separate purchases.</p>
   where the allow-list applies.</li>
 <li><strong>Concluding the model is untrustworthy.</strong> It improved triage. It is not a
   control, which is a different sentence.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.10</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-10" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-10?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.10" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
 model         : deterministic stand-in (no backend configured)
 
 This lesson runs offline against a deterministic replay, which is why
@@ -225,7 +225,7 @@ property checked : put the unauthenticated endpoint first
 held on replay       : True
 
 Same code, same assertions, two possible backends. Offline the answer is
-the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Severity sorting puts 2 of 3 exploitable findings in the top 3; model triage puts 3 of 3, and correctly reasons that the partner CDN is out of scope. With the model adversarially convinced that the out-of-scope host is critical, the unenforced harness acts on it and the enforced harness refuses. Underneath the harness the sandbox refuses three requests for three different reasons — rate limit, engagement boundary, and cloud metadata — without consulting the model at all.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write your engagement scope as a data structure your harness reads, not as a paragraph in a PDF. Then ask what your current tooling would do if a target redirected to a host you were not authorised to touch.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.11.html">B2.11 · White-box agentic pentest — the source, and what it lets you prove</a></strong></p>

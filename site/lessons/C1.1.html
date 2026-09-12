@@ -126,7 +126,7 @@ colourama==0.4.6        block
   that differs.</li>
 <li><strong>Treating an MCP connector as configuration.</strong> It is code that runs with the
   agent.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — C1.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-c1-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-c1-1?cellIds=&amp;kernelSessionId=" title="Kaggle notebook C1.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>requests==2.31.0        allow
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>requests==2.31.0        allow
 requsts==2.31.0         block
       · unsigned — no attestation to source
       · published 3d ago — no soak time
@@ -172,7 +172,7 @@ model weights     assessed on 1/4 signals; signature, downloads, lineage not ava
 MCP tool pack     assessed on 1/4 signals; signature, downloads, lineage not available for this artefact class
 
 That last sentence is the deliverable. A risk rating that hides which
-signals were unavailable is a number someone will later rely on.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+signals were unavailable is a number someone will later rely on.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The pinned libraries score low-risk, the hosted model and the re-pulled dataset score high because neither can be pinned, and the one component with no provenance at all is the finding.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>List every model and dataset your pipeline pulls at train or deploy time. The ones with no pinned digest are the ones an attacker can change without touching your code.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.2.html">C1.2 · Weaponizing the ingestion path</a></strong></p>

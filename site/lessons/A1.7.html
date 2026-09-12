@@ -143,7 +143,7 @@ which agent did it? candidates: ['deploy-agent', 'patch-agent', 'triage-agent']
 <li><strong>Assuming the log will disambiguate.</strong> Read an actual row before assuming a
   field exists.</li>
 <li><strong>Reporting only attribution.</strong> The containment cost is what makes it urgent.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A1.7</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a1-7" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a1-7?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A1.7" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>what the downstream service recorded:
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>what the downstream service recorded:
    caller=svc-agent-7f3a1c  read    reports
    caller=svc-agent-7f3a1c  read    reports
    caller=svc-agent-7f3a1c  read    reports
@@ -158,7 +158,7 @@ containment options:
    rotate only the culprit -&gt; not available; there is no &#x27;only&#x27;
 
 No attacker forged anything. Impersonation is the resting state of a
-system where identity was never per-workload.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+system where identity was never per-workload.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count the distinct credentials across your agents and divide by the number of agents. Any answer below one is this risk, and the number tells you how many innocent agents a revocation takes down.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">A1.8 · Malicious code execution</a></strong></p>

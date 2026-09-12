@@ -146,7 +146,7 @@ resources, including a payments repository and a dev vault.
 <li><strong>Revoking one agent's token</strong> when the identity is shared, and calling it
   contained.</li>
 <li><strong>Containing before snapshotting</strong> a log store the agent can write to.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D3.7</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d3-7" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d3-7?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D3.7" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>chain                     dana@corp → orchestrator → patch-agent → deploy-agent
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>chain                     dana@corp → orchestrator → patch-agent → deploy-agent
 scoped_last_actor_only    [&#x27;cluster-prod&#x27;]
 scoped_whole_chain        [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
 missed_by_naive_scoping   [&#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
@@ -191,7 +191,7 @@ combination says the grant was too broad - a different fix from a
 control that failed, which is why the contract counts them separately.
 
 Reach is 4 resources; confirmed exfiltration is 0. Reporting the second
-as the scope is how a notification decision gets made on the wrong number.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+as the scope is how a notification decision gets made on the wrong number.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Scoping the last actor finds <code>cluster-prod</code> alone; the whole chain reaches six resources, missing five, with an undercount factor of 6.0. The undercount grows with each hop. Transitive scoping adds five second-order identities that shared a resource, explicitly marked as in scope rather than confirmed compromised.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For your last incident involving a service account, recompute the scope by walking what else that account could reach. The number is almost always larger than what was written in the report.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.8.html">D3.8 · Fleet-level correlation — seeing a swarm</a></strong></p>

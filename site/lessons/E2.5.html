@@ -136,7 +136,7 @@ a support ticket, which is exactly what it was asked to do.
 <li><strong>Assuming erasure works.</strong> Run one and find out.</li>
 <li><strong>Reporting failures without the lawful retentions.</strong> Half the list is fine
   and the report loses credibility without saying so.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — E2.5</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-e2-5" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-e2-5?cellIds=&amp;kernelSessionId=" title="Kaggle notebook E2.5" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>personal data present in the agent trace:
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>personal data present in the agent trace:
    step 1  email           dana.okonkwo@example.com
    step 1  payment card    4111111111111111
    step 1  account number  acct 8812
@@ -180,7 +180,7 @@ target       400  cheap, high forensic value, no personal data
 result         7  tool output — highest sensitivity, lowest retention
 
 At 7 days the result field is gone and the trace is still forensically
-useful: you know what the agent did, to what, and when.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+useful: you know what the agent did, to what, and when.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Five items of personal data appear in the agent trace — name, email, account number and payment card — none placed there deliberately. The erasure request fails in three systems that cannot locate the record, two of which retain indefinitely. Building a subject index locates the affected steps, erasure leaves no personal data while retaining the hash, and per-field retention drops the sensitive field at 7 days.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Time-box this to an hour: can you delete one customer's data from your agent traces today? The answer usually arrives in ten minutes and is usually no — and the eval corpus is the system people forget entirely.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.6.html">E2.6 · Incident and disclosure obligations</a></strong></p>

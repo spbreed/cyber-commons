@@ -149,7 +149,7 @@ presenting it elsewhere fails.</p>
   the one that gets through.</li>
 <li><strong>Recording a long TTL as acceptable</strong> because rotation exists. Rotation is
   not a deadline for a copy already taken.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A2.2</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a2-2" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a2-2?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A2.2" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>   proc-1        spiffe://corp/reports-agent     issued
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   proc-1        spiffe://corp/reports-agent     issued
    proc-2        -                               image is not registered to any identity
    proc-stolen   -                               no attestation - unattested process
 
@@ -159,7 +159,7 @@ presenting it elsewhere fails.</p>
 
 Copying the credential does not help: it is bound to a node and expires
 in five minutes. Copying the image does not help either - proc-2 is a
-real process and still gets nothing, because its image is not registered.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+real process and still gets nothing, because its image is not registered.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find where one of your agents gets its first credential. If the answer is an environment variable or a mounted file, list everyone who can read it — that is the set of people who are currently that agent.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.3.html">A2.3 · Delegation that narrows, and survives audit</a></strong></p>

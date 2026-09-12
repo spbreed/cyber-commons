@@ -122,7 +122,7 @@ preserve first    snapshot state and transcripts -&gt; terminate -&gt; revoke cr
 <li><strong>Terminating without revoking.</strong> The credentials outlive the workloads.</li>
 <li><strong>Killing before preserving.</strong> The incident becomes unreconstructable.</li>
 <li><strong>A fleet-only switch.</strong> Nobody uses it until the whole estate is on fire.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — C1.9</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-c1-9" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-c1-9?cellIds=&amp;kernelSessionId=" title="Kaggle notebook C1.9" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
 terminate and revoke  : 8 agents stopped, 0 tokens still valid
 
 In the source incident, third-party access ended when the third party
@@ -145,7 +145,7 @@ over target: 1  (6.8)
 
 The quarter that was not run is the finding, and the quarter that ran
 long is the second one: under partial failure the revocation half is
-what slows down, which is the half that matters.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+what slows down, which is the half that matters.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The kill switch selects the whole fleet in one action and the run shows persistence surviving termination but not revocation, so the control is judged on what the tokens can still do afterwards.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Time how long it takes to revoke every credential one class of agent holds. If the answer is 'we would terminate the processes', you have not tested containment, only restart.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.10.html">C1.10 · Forensic replay and control architecture</a></strong></p>

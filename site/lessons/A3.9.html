@@ -145,7 +145,7 @@ checked one decision at a time:
   wrong.</li>
 <li><strong>No expiry.</strong> A permanent exemption is a policy change made by whoever was
   on call.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A3.9</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a3-9" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a3-9?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A3.9" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>day  12  disable cyber-classifier    ALLOW via EX-118
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>day  12  disable cyber-classifier    ALLOW via EX-118
 day  44  disable cyber-classifier    REFUSE - no approved exemption
 day  12  disable transcript-signing  REFUSE - no approved exemption
 
@@ -175,7 +175,7 @@ classifier + signing off    two-or-more-off             25       2h
 50,000 -&gt; 200 -&gt; 25. The second exemption costs an order of magnitude
 more than the first, which is the correct shape: compounding is where
 the incident&#x27;s risk sat, and it is the case a human reviewer is worst at
-holding in their head.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+holding in their head.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find one control currently disabled in your environment and ask three questions: who approved it, when does it expire, and what cap came with it. The third question is the one that usually has no answer.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.10.html">A3.10 · The agent's escalation path</a></strong></p>

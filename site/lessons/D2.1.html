@@ -170,7 +170,7 @@ actually prints.</p>
   is a liability with a bill attached.</li>
 <li><strong>Reading the saving as the result.</strong> The result is which sources survive the
   next cut, and why.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D2.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d2-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d2-1?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D2.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>what the SOC actually asks, and how fast it needs an answer
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>what the SOC actually asks, and how fast it needs an answer
 
   [seconds]  triage: what did this agent do in the last hour
               reads  agent traces: tool calls
@@ -208,7 +208,7 @@ tiering, derived from the fastest query that reads each source
 &#x27;agent traces: prompts&#x27; is 23% of the volume and is read by 1 query,
 which can wait hours. Priced hot it is the line that gets cut when the
 bill arrives, and cutting it removes the only source D5.1 can replay a
-run from. Tiered cold it survives at 1% of the hot cost.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+run from. Tiered cold it survives at 1% of the hot cost.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four sources go hot because triage and scoping read them in seconds, host EDR goes warm, and agent prompts go cold — read by one query that can wait hours. Tiering costs about 29% less than indexing everything hot, and the prompts that are 23% of the volume survive at 1% of the hot price rather than being deleted.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>List the five queries your SOC actually ran last month, then tier your sources from them. Any source that appears in no query is the finding — you are paying to store something nobody asks.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.2.html">D2.2 · Detections whose subject is the agent — mapped to ATT&amp;CK and ATLAS</a></strong></p>

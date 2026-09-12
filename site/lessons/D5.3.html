@@ -129,14 +129,14 @@ WEAK update the prompt to warn the model       type=guidance    owner=—       
 <li><strong>Closing actions at the review.</strong> Re-check weeks later or the number is
   aspirational.</li>
 <li><strong>No before-and-after blast radius.</strong> Nothing shows whether it helped.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D5.3</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d5-3" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d5-3?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D5.3" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>blast before 44  after 4
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>blast before 44  after 4
 the manifest diff records the change even though no PR was raised.
 
 OK   gate http_post behind approval            type=preventive  owner=platform-sec   verify_by=2026-09-30
 OK   alert on credential-path reads            type=detective   owner=soc            verify_by=2026-09-15
 WEAK update the prompt to warn the model       type=guidance    owner=—              verify_by=—
 
-1 action(s) are guidance rather than controls: [&#x27;update the prompt to warn the model&#x27;]</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+1 action(s) are guidance rather than controls: [&#x27;update the prompt to warn the model&#x27;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four of seven change surfaces bypass change management. Only 2 of 6 post-incident actions are verifiable six weeks later, and one of them is a prompt edit that is guidance rather than a control. The manifest diff records the gating change with the blast radius dropping from 40 to 3, and the action review flags the prompt update as weak.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take your last incident's action list and mark each item's landing surface. Anything landing in a console has no record and no verification path — move those into git before the next one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D5.4.html">D5.4 · Validating the fix — re-measuring the indicators the incident moved</a></strong></p>

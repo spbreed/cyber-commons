@@ -141,7 +141,7 @@ whole file          True   True    True    True    True
 <li><strong>Judging slices by eye.</strong> Write the decidability requirement down first.</li>
 <li><strong>Ignoring unrelated content</strong> in a decidable slice. It is the cost you can
   actually remove.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.17</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-17" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-17?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.17" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>the bug is on line 22
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the bug is on line 22
 whole file             839 chars   29 lines
 ±2 line window         207 chars    5 lines
 ±6 line window         432 chars   13 lines
@@ -197,7 +197,7 @@ Same model, same prompt, different slice.
 
 So the rule is not &#x27;send less&#x27;. It is: find the smallest slice in which the
 defect is DECIDABLE, and only then make it smaller. Cutting below that line
-does not save money, it buys false positives at a discount.</code></pre></div></details><div class="nbmd"><h2>4 · The rule, in one line</h2>
+does not save money, it buys false positives at a discount.</code></pre></div><div class="nbmd"><h2>4 · The rule, in one line</h2>
 <p><strong>Find the smallest slice in which the defect is decidable, and only then make
 it smaller.</strong></p>
 <p>Cutting below that line does not save money. It buys false positives at a

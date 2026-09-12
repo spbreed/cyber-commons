@@ -130,7 +130,7 @@ automated remediation does not increase customer-facing incidentsoutcome        
 <li><strong>An outcome guardrail with a metric and no threshold.</strong> Nothing fails.</li>
 <li><strong>Leaving unmeasurable rules unmarked.</strong> The policy loses credibility as a
   whole.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — E1.6</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-e1-6" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-e1-6?cellIds=&amp;kernelSessionId=" title="Kaggle notebook E1.6" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>rule                                                        kind        enforceable
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>rule                                                        kind        enforceable
 --------------------------------------------------------------------------------------
 all agent egress goes through the gateway                   operating          True
 privileged tools require approval below L3                  operating          True
@@ -160,7 +160,7 @@ no agent action causes unrecoverable customer data loss
 
 5/7 guardrails are enforceable today.
 The following are agreed but UNMEASURED, and are not counted as coverage:
-   - no agent action causes unrecoverable customer data loss</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+   - no agent action causes unrecoverable customer data loss</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four operating guardrails are all enforceable today; three outcome guardrails are enforceable only where a measurement exists. Counting only what shipped gives 100% coverage; counting all agreed guardrails gives 71%. One outcome guardrail is fully specified and enforceable; the other is labelled an aspiration and excluded from coverage.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick one outcome guardrail your programme has agreed and specify its metric, threshold, source and cadence precisely enough that someone could dispute the result. If you cannot, say so in the coverage report rather than counting it.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.7.html">E1.7 · Continuous control verification</a></strong></p>

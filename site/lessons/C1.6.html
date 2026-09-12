@@ -120,7 +120,7 @@ R5 credential path OR link-local          2  1.000   1.000        1.0
 <li><strong>Setting the bar after seeing the results.</strong> That is choosing a winner.</li>
 <li><strong>Deploying a rule with an unrecorded field dependency.</strong> It fails silently
   when the field stops being populated.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — C1.6</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-c1-6" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-c1-6?cellIds=&amp;kernelSessionId=" title="Kaggle notebook C1.6" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
 model         : deterministic stand-in (no backend configured)
 
 This lesson runs offline against a deterministic replay, which is why
@@ -174,7 +174,7 @@ property checked : expresses a threshold
 held on replay       : True
 
 Same code, same assertions, two possible backends. Offline the answer is
-the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>All candidates detect the anomaly, but their firing volumes differ by orders of magnitude, and the deployable one is chosen by the volume it would add to the queue rather than by recall alone.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take a detection you are proud of and compute how many times it fired last month against how many were true. If you cannot, the rule is unmeasured, which is the same as untuned.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.7.html">C1.7 · Triaging the non-deterministic swarm</a></strong></p>

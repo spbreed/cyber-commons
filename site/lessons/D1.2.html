@@ -129,7 +129,7 @@ tolerance            0.25
 <li><strong>Trusting the changelog.</strong> Most of what changes an agent is not in it.</li>
 <li><strong>Drift with no attribution.</strong> A number nobody can act on.</li>
 <li><strong>No consequence at the tolerance.</strong> The line stops being a line.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D1.2</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d1-2" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d1-2?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D1.2" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>    when  event                       drift  new tools
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>    when  event                       drift  new tools
 ------------------------------------------------------------------
     90d  control signed off          0.000  []
     60d  prompt edited               0.100  []
@@ -145,7 +145,7 @@ SB-1             90     STALE
 SB-2             10      PASS
 DR-1              0      FAIL
 
-currently evidenced: 1/3</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+currently evidenced: 1/3</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Drift rises across the quarter from 0.0 at sign-off to roughly 0.35 after the model upgrade, with <code>run_shell</code> appearing as a new tool. Four of six change surfaces bypass change management. The observed drift rate yields a freshness window, and the 90-day-old control test is reported STALE rather than passing.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Compute the drift rate for one production agent from three months of telemetry, and set its control freshness window from that number rather than from the audit calendar.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Bonus — finding the agents, and keeping what they emit</a></strong></p>

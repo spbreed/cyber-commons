@@ -144,7 +144,7 @@ refund on BK-772                            True    0      0%  REJECT — matche
 <li><strong>Selecting on "does it catch the incident".</strong> Every candidate does.</li>
 <li><strong>Shipping without a false-positive number.</strong> That is a guess with syntax.</li>
 <li><strong>Never writing the bad candidates.</strong> Then nothing shows the good one is good.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D2.5</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d2-5" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d2-5?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D2.5" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>incident: 3 steps · benign corpus: 84 runs
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>incident: 3 steps · benign corpus: 84 runs
 
 candidate rule                          fires on   FP  FP rate  verdict
 any refund                                  True   18     21%  REJECT — buries the queue
@@ -158,7 +158,7 @@ cannot be the property you select on.
 &#x27;any refund&#x27; fires on 18 legitimate refunds - a 21% false-positive
 rate, and refunds are the business. &#x27;refund on BK-772&#x27; is perfect on this
 corpus and worthless tomorrow, because the booking id will be different.
-Only the sequence rule generalises AND stays quiet.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+Only the sequence rule generalises AND stays quiet.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>All three candidates catch the incident; only the sequence rule ships. The naive rule fires on 18 legitimate refunds — a 21% false-positive rate on a business that runs on refunds.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add a benign run that the shipped rule fires on. If you cannot construct one, your corpus is too easy.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.6.html">D2.6 · Honeypots, canaries and deception — the detector with no threshold</a></strong></p>

@@ -226,7 +226,7 @@ DR-1                0            FAIL         FAIL
   tamper-evident document full of dead links.</li>
 <li><strong>Attesting once.</strong> Without drift-triggered re-attestation the artefact
   describes a deployment that may no longer exist.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — E1.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-e1-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-e1-1?cellIds=&amp;kernelSessionId=" title="Kaggle notebook E1.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>control    age (days)   point-in-time   continuous
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>control    age (days)   point-in-time   continuous
 ----------------------------------------------------
 AC-1                3            PASS         PASS
 AC-2                9            PASS         PASS
@@ -256,7 +256,7 @@ ST-1                —             90            —NO EVIDENCE
 with drift-derived windows: 4/8 = 50% currently evidenced
 
 SB-2 tests a tool manifest that changes weekly; a 210-day-old screenshot
-cannot evidence it. Saying so is the control, not a criticism of anyone.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+cannot evidence it. Saying so is the control, not a criticism of anyone.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape, and its failure modes are the governance lesson stated as engineering: the relying party must fail closed on a missing attestation, because reading absence as a pass is exactly the annual-test habit arriving in a new format. Drift against the digest and the manifest is what re-triggers it, not the calendar.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick your three most important AI controls and set a freshness window for each from the observed change rate of what it tests. Then recompute your posture. The number will drop, and it will be the first honest one you have had.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.2.html">E1.2 · Building the AI and agent inventory</a></strong></p>

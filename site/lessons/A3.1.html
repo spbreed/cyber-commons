@@ -174,7 +174,7 @@ allow-by-default:
   can grant the same action; the union is what matters.</li>
 <li><strong>Treating a low excess count as a pass</strong> while a wildcard is present. The
   baseline check is a gate, not a contributor to a score.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A3.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a3-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a3-1?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A3.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>   charge_card payments:booking          [&#x27;CHARGE&#x27;]
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   charge_card payments:booking          [&#x27;CHARGE&#x27;]
    run_query   table:bookings            [&#x27;SELECT&#x27;, &#x27;UPDATE&#x27;]
    send_email  domain:cybertravels.com   [&#x27;*&#x27;]
 allow-by-default:
@@ -199,7 +199,7 @@ each one is a real risk from Chapter 1 walking through.
 Row three is the one to sit with: same identity, same tool, same
 resource, refused on the VERB. An entitlement attached to the tool
 instead of the call cannot express that distinction at all - and the
-distance between CHARGE and REFUND is the whole of R1.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+distance between CHARGE and REFUND is the whole of R1.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Two of its failure modes are the ones this lesson is about: counting managed-policy <em>names</em> instead of effective actions, and reading a low excess count as a pass while a wildcard sits in the policy — a wildcard is not a large number of permissions, it is an unbounded one.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one tool policy you have and check whether it names the resource <em>and</em> the verb. If it grants <code>run_query</code> rather than <code>SELECT on these tables</code>, it cannot express the difference that A1.5 and R1 both turn on.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.2.html">A3.2 · Sandboxed execution</a></strong></p>

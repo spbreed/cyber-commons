@@ -140,7 +140,7 @@ your controls were tested against a model that changed 5 days ago:
   model.</li>
 <li><strong>Missing embedded AI features.</strong> They arrived with a product you already
   own.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — E1.8</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-e1-8" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-e1-8?cellIds=&amp;kernelSessionId=" title="Kaggle notebook E1.8" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>component                               kind          tier    flags
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>component                               kind          tier    flags
 ------------------------------------------------------------------------------------------------
 cryptography==42.0.5                    library       low     —
 langchain==0.2.1                        library       medium  unsigned
@@ -178,7 +178,7 @@ tool package                     1/4  [&#x27;signature&#x27;, &#x27;downloads&#x
   tool package: assessed on 1/4 signals. signature, downloads, lineage unavailable for this artefact class.
 
 That last sentence is the deliverable. A rating that hides which signals
-were unavailable is a number someone will later rely on.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+were unavailable is a number someone will later rely on.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The hosted model and the MCP tool package both tier high — one for silent change, one for running with agent authority. The silent model change invalidates all three control tests taken before it. The signal table shows libraries with 4 of 4 signals available and hosted models with 0 of 4, and each assessment statement names what was unavailable.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add "can this change without notifying us?" to your third-party assessment form. For hosted models the answer is usually yes, and it should carry an explicit control-test expiry.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.9.html">E1.9 · Model and agent lifecycle governance</a></strong></p>

@@ -143,7 +143,7 @@ Not zero because the detector is good - zero because nothing legitimate
 <li><strong>Naming it as a canary.</strong> It becomes a filter for the competent attacker.</li>
 <li><strong>Never rotating.</strong> The signal decays and the absence of alerts reads as
   safety.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D2.6</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d2-6" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d2-6?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D2.6" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>token                     source        agent                 verdict
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>token                     source        agent                 verdict
 hf_liveTokenNotShown      10.2.0.11     ci-runner             normal use
 hf_CANARY7Fq2mXvLpR8s     203.0.113.9   python-requests/2.31  CONFIRMED COMPROMISE
 ghp_alsoLive              10.2.0.11     ci-runner             normal use
@@ -184,7 +184,7 @@ detectors needing no threshold: [&#x27;credential canary&#x27;, &#x27;honeypot t
 
 Deception finds less. What it finds needs no triage, no tuning and no
 argument - which is why it belongs beside the volume detectors rather
-than instead of them.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+than instead of them.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Place one canary credential in the environment your agents run in, wired to a real alert, and leave it. The interesting outcome is not the alert; it is discovering, six weeks later, which systems can even see it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> You can shorten detect: a lake tiered by the queries that read it rather than by whoever holds the invoice, detections for both subjects — the agent and the platform running it — each carrying a MITRE technique, rules scored against traffic that is not the incident, and the one detector that needs no threshold at all.</p>

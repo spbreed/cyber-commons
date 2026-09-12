@@ -123,7 +123,7 @@ setup                               Q1   Q2   Q3   Q4
 <li><strong>Arguing about feasibility.</strong> Print the record count and the argument ends.</li>
 <li><strong>A manifest with no source field.</strong> It answers "changed", never "from where".</li>
 <li><strong>A root with no per-record hashes.</strong> Detection without localisation.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — C1.2</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-c1-2" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-c1-2?cellIds=&amp;kernelSessionId=" title="Kaggle notebook C1.2" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>   10 poisoned of 100,000 → 0.01000%
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   10 poisoned of 100,000 → 0.01000%
   100 poisoned of 100,000 → 0.10000%
  1000 poisoned of 100,000 → 1.00000%
 
@@ -154,7 +154,7 @@ after removal: 1002 records, root=b4736375282a2d9e
 target still present: False
 
 The same mechanism answers a GDPR erasure request and a poison removal.
-Without per-record hashes, neither is possible at all.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+Without per-record hashes, neither is possible at all.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The manifest names each source and the parser that touched it, and the record with no verifiable origin is flagged as the one a payload would ride in on.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find the host that runs your embedding jobs and check what it can reach. It is usually the most privileged machine nobody threat-modelled.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.3.html">C1.3 · Cognitive vulnerability and elicitation scaling</a></strong></p>

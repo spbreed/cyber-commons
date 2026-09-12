@@ -294,7 +294,7 @@ T-04  I get_booking     load_booking       9  no open CSPM finding on the resour
 <li><strong>Scoring without recording why.</strong> A score nobody can argue with is a score
   nobody will act on.</li>
 </ul></div><div class="nbmd"><h2>4 · Its script</h2>
-<p>The deterministic half of the skill — the part that has to give the same answer twice so two runs can be diffed. Embedded from <code>skills/appsec/threat-model-stride/scripts/</code>.</p></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.2</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-2" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-2?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.2" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>id      entry           sink           score  why
+<p>The deterministic half of the skill — the part that has to give the same answer twice so two runs can be diffed. Embedded from <code>skills/appsec/threat-model-stride/scripts/</code>.</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>id      entry           sink           score  why
 --------------------------------------------------------------------------------------------
 T-10  I upload_voucher  store             11  a live CSPM finding on the resource this path reaches
 T-01  S get_booking     load_booking      11  the running role is assumable by *
@@ -343,7 +343,7 @@ threat rows: 12 -&gt; 12   (unchanged)
 max severity: 11 -&gt; 2
 
 The rows do not disappear. Hardening removes severity, not threats -
-and the row is what you re-check after the next terraform change.</code></pre></div></details><div class="nbmd"><h2>5 · Execute it against CyberTravels</h2>
+and the row is what you re-check after the next terraform change.</code></pre></div><div class="nbmd"><h2>5 · Execute it against CyberTravels</h2>
 <p>Five synthetic inputs, standing in for what a real estate already holds.</p></div><div class="nbmd"><h2>6 · The diagram it emits</h2>
 <p>Mermaid, so it renders here and on the lesson page without a library. Double arrows are trust-boundary crossings — the edges every finding turned out to live on.</p></div><div class="nbmd"><h2>7 · The same code, a hardened estate</h2>
 <p>Not one line of CyberTravels' source changes. Only the four evidence inputs around it do.</p></div><div class="nbmd"><h2>What you just proved</h2>

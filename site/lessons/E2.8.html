@@ -132,7 +132,7 @@ answerable        True
 <li><strong>Measuring completeness.</strong> The false record is complete.</li>
 <li><strong>Accepting a matching subject as delegation.</strong> Impersonation matches too.</li>
 <li><strong>Calling a non-replayable record answerable.</strong> It answers what, not why.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — E2.8</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-e2-8" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-e2-8?cellIds=&amp;kernelSessionId=" title="Kaggle notebook E2.8" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>action            merge_pr #8812
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>action            merge_pr #8812
 acting_identity   patch-agent
 on_behalf_of      dana@corp
 chain             dana@corp → orchestrator → patch-agent
@@ -161,7 +161,7 @@ auditability: 1/3 sampled actions fully answerable (33%)
 
 Run this as a drill, quarterly, on randomly chosen production actions.
 The percentage is the number that goes in the evidence pack — and it is
-far more persuasive than a statement that logging is comprehensive.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+far more persuasive than a statement that logging is comprehensive.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The complete record names the acting identity, principal, chain and scopes and is replayable, so it is answerable. Impersonation produces a complete, consistent and false record attributing the merge to the human. Missing replay fields break the other half. The drill reports 1 of 3 sampled actions fully answerable.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the drill on three real production actions from last week. The field you cannot fill is your auditability gap, stated precisely — and a number like "1 of 3" is far more useful to a supervisor than a paragraph about comprehensive logging.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.9.html">E2.9 · Regulator and auditor conversations</a></strong></p>

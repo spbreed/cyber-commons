@@ -144,7 +144,7 @@ preserve first    snapshot state and transcripts -&gt; terminate -&gt; revoke cr
 <li><strong>Terminating without revoking.</strong> The credentials outlive the workloads.</li>
 <li><strong>Killing before preserving.</strong> The incident becomes unreconstructable.</li>
 <li><strong>A fleet-only switch.</strong> Nobody uses it until the whole estate is on fire.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D4.5</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d4-5" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d4-5?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D4.5" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
 terminate and revoke  : 8 agents stopped, 0 tokens still valid
 
 In the source incident, third-party access ended when the third party
@@ -167,7 +167,7 @@ over target: 1  (6.8)
 
 The quarter that was not run is the finding, and the quarter that ran
 long is the second one: under partial failure the revocation half is
-what slows down, which is the half that matters.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+what slows down, which is the half that matters.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Ask who in your organisation is allowed to stop every agent at once, without asking anyone. If the answer is a committee, you do not have a kill switch — you have an escalation path, and they take different amounts of time.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> You can fix the contain interval before the incident — actions classified on reversibility and radius, tiers derived from that rather than from their author, containment timed against a measured breakout, and a fleet stop that revokes as well as terminates.</p>

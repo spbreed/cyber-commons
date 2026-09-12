@@ -206,7 +206,7 @@ produce continuous noise and are disabled within a week.
 <li><strong>Muting the classic rules.</strong> You lose them for humans too.</li>
 <li><strong>A baseline nobody signed off.</strong> Nothing to appeal to when it drifts.</li>
 <li><strong>Alerting on the distance only.</strong> Name the new tool.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D2.2</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d2-2" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d2-2?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D2.2" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>classic rule                      fires on agent  fires on human
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>classic rule                      fires on agent  fires on human
 ------------------------------------------------------------------
 rate &gt; 30 actions/min             True            False
 activity outside 09:00-18:00      True            True
@@ -226,7 +226,7 @@ week 8 (upgrade)       drift=0.600  rate×0.83  SIGNIFICANT — re-test the cont
    why it matters: the controls in A3 were tested against the old
                    behaviour; a new tool may not be covered
    do this      : confirm a manifest change was reviewed (A1.1),
-                   then re-run the containment suite (C1.2)</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+                   then re-run the containment suite (C1.2)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>All three classic rules fire on an agent doing its job and only the rate rule fires on the human. Drift is within tolerance at week 1, significant at week 4 with <code>write_file</code> and <code>repo:write</code> new, and larger at week 8 with <code>run_shell</code> and an <code>exec</code> scope. The alert text names what changed, why it matters and what to do.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one human-baseline rule in your SIEM and check how it behaves against a service account. If it fires nightly, it is already tuned off for that actor — which means you have no detection there at all.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Detections whose subject is the agent platform</a></strong></p>

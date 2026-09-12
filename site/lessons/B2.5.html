@@ -261,7 +261,7 @@ not, the pipeline invented findings after the audit stage — stop and report.</
 </ul>
 <h2>Handoff</h2>
 <p>Feasible, confirmed findings go to <strong>appsec-exploit-validate</strong> for proof.
-Everything else goes to <strong>appsec-triage-report</strong> with its verdict intact.</p></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.5</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-5" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-5?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.5" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>call graph:
+Everything else goes to <strong>appsec-triage-report</strong> with its verdict intact.</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>call graph:
    http_get_report   → [&#x27;load_report&#x27;]
    http_health       → —
    load_report       → —
@@ -385,7 +385,7 @@ router&#x27;s table - including the command injection in the Coding Agent and
 the traversal on the File System Agent&#x27;s invoice path. A two-bucket
 pipeline files all three as unreachable and reports the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
 Almost everything below the router is blue: the table lookup is what
-the AST cannot follow, not a property of the functions themselves.</code></pre></div></details><div class="nbmd"><h2>5 · Where it breaks — deduplicating on the wrong key</h2>
+the AST cannot follow, not a property of the functions themselves.</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — deduplicating on the wrong key</h2>
 <p>The skill says to collapse on the <strong>defect identity</strong>, <code>(cwe, file, unit, sink_expression)</code>, and never on the message text. Here is why that sentence is in the procedure.</p></div><div class="nbmd"><h2>6 · The same failure, from a real model</h2>
 <p>Everything above is constructed. Here is the identical failure produced by an actual open-weight model — <strong>Moonlight-16B-A3B</strong>, Moonshot AI's MoE from the Kimi team — run on a Kaggle CPU kernel against this skill's output contract.</p>
 <p>It was given the contract and two vulnerable functions: an <code>open()</code> on a caller-supplied path, and an <code>os.system()</code> on a caller-supplied argument. Its answer is reproduced verbatim below (<a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/kimi/moonlight-16b-completion-prompt.txt">full run</a>).</p></div><div class="nbmd"><h2>7 · Read that output again</h2>
@@ -514,7 +514,7 @@ simple codebase or a bug.</p>
   the routes file.</li>
 <li><strong>Deleting on the graph's word alone.</strong> Reachability from <em>untrusted</em> entry
   points is not reachability from anywhere; check both before a deletion.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.5</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-5" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-5?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.5" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>call graph:
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>call graph:
    http_get_report   → [&#x27;load_report&#x27;]
    http_health       → —
    load_report       → —
@@ -638,7 +638,7 @@ router&#x27;s table - including the command injection in the Coding Agent and
 the traversal on the File System Agent&#x27;s invoice path. A two-bucket
 pipeline files all three as unreachable and reports the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
 Almost everything below the router is blue: the table lookup is what
-the AST cannot follow, not a property of the functions themselves.</code></pre></div></details><div class="nbmd"><h2>9 · The bucket that is work rather than a result</h2>
+the AST cannot follow, not a property of the functions themselves.</code></pre></div><div class="nbmd"><h2>9 · The bucket that is work rather than a result</h2>
 <p>Read the middle column rather than the total: <strong>4 reachable, 8 unreachable, 10
 undecided.</strong></p>
 <p>The eight unreachable ones are the easy win, and they are a deletion rather

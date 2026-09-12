@@ -191,7 +191,7 @@ F-06   high      medium           2   ← moved
 <h2>Handoff</h2>
 <p>This is the end of the pipeline. Feed <code>quality.false_positive_rate</code> back into
 the next run's Phase 2 scoring — a pipeline that never learns from its own
-misses repeats them at machine speed.</p></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.15</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-15" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-15?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.15" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>id     rule sev  calibrated   score
+misses repeats them at machine speed.</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>id     rule sev  calibrated   score
 ----------------------------------------
 F-01   high      critical         7   ← moved
 F-02   high      low              0   ← moved
@@ -271,7 +271,7 @@ findings reported above Medium on no evidence: [&#x27;F-02&#x27;, &#x27;F-04&#x2
 Both versions are schema-valid; only one of them is defensible. The
 uncalibrated table leads with Highs that were never reproduced, and the
 reader cannot tell which. The first time one of them turns out to be a
-false positive, every other number in the report is discounted too.</code></pre></div></details><div class="nbmd"><h2>4 · Where it breaks — the uncalibrated headline</h2>
+false positive, every other number in the report is discounted too.</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the uncalibrated headline</h2>
 <p>Now report the same findings without the cap.</p></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Recalculate severity for your current open findings using confirmation and reachability alone — you do not need chaining to see the effect. The queue reorders, and the items that fall are usually the ones people have been arguing about.</p></div><div class="nbmd"><hr />

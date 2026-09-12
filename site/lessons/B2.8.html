@@ -144,7 +144,7 @@ P-03   CWE-89   False      2 rows, owners=['test-user-a']
 <li><strong>Asserting on shape.</strong> "Rows came back" is true for the legitimate query.</li>
 <li><strong>Recording untested as refuted.</strong> They have different owners and different
   next steps.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.8</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-8" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-8?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.8" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>normal use:
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>normal use:
    list_reports(&#x27;test-user-a&#x27;) → [(1, &#x27;test-user-a&#x27;, 100), (2, &#x27;test-user-a&#x27;, 250)]
    fetch_doc(&#x27;readme.txt&#x27;)     → public readme
 probe  cwe      exploited  observation
@@ -166,7 +166,7 @@ F-03  CWE-89   UNVALIDATED no probe generated — cannot confirm or refute
 
 2 confirmed by execution — these go to stages 13-15.
 UNVALIDATED is not a pass. It is a gap in probe generation, and it should
-appear in the report as one.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+appear in the report as one.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Look at your DAST assertions. If any of them checks only for a non-error response, it is confirming findings it has not tested — and the control probe above is how you prove that in five minutes.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.9.html">B2.9 · Exploit chaining</a></strong></p>

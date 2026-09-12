@@ -130,7 +130,7 @@ agents reading ~/.aws/credentials             technique    0.88  RULE — conver
 <li><strong>Converting narratives.</strong> They do not match on anything.</li>
 <li><strong>Rules with no response.</strong> The alert lands and stops.</li>
 <li><strong>Reporting alerts rather than actions.</strong> Alerts are cheap to produce.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D3.9</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d3-9" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d3-9?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D3.9" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>indicator                                     kind         conf  verdict
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>indicator                                     kind         conf  verdict
 ----------------------------------------------------------------------------------------
 collect.example.com                           host         0.95  RULE — convertible to a rule
 169.254.169.254                               host         0.99  RULE — convertible to a rule
@@ -159,7 +159,7 @@ the three numbers that matter:
    alerts fired        : 3
    alerts actioned     : 2  (67%)
 
-The third number is the one that decides whether the subscription renews.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+The third number is the one that decides whether the subscription renews.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four of seven indicators convert to rules — the two narratives and the low-confidence host are dropped with reasons. The rules fire on three of five events with concrete responses. The three-number summary shows a 57% conversion rate and 67% of alerts actioned, and the source table ranks internal sources highest.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Compute your own three numbers for last quarter: indicators received, rules deployed, alerts actioned. The ratio between the first and third is the honest value of the programme.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.10.html">D3.10 · Hunting in agent telemetry</a></strong></p>

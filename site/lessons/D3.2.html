@@ -137,7 +137,7 @@ query.</p>
 <li><strong>Silent drops.</strong> A refusal nobody sees is indistinguishable from no data.</li>
 <li><strong>Rules written after the first investigation.</strong> They will be written to
   permit whatever that one did.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D3.2</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d3-2" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d3-2?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D3.2" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>investigation class: agent-misuse
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>investigation class: agent-misuse
    sources admitted : agent.traces, gateway.logs, tool.audit
    fields denied    : message_body, passport_no, payment_card
    row cap          : 5000
@@ -159,7 +159,7 @@ become the second incident.
 
 Note the third refusal. Nothing about it is sensitive - it is the same
 source and the same fields as an allowed query. It is refused on volume,
-because 90,000 rows is not an investigation, it is a copy.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+because 90,000 rows is not an investigation, it is a copy.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Three queries allowed and three refused — one on an inadmissible source, one on a denied field, and one on volume alone.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write the admission set for a data-exfiltration investigation. It is not the same set, and working out why is the exercise.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.3.html">D3.3 · The context that makes agent triage work</a></strong></p>

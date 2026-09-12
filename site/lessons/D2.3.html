@@ -149,7 +149,7 @@ generic anomaly score for this run: 0.07  (seven syscalls is unremarkable)
 <li><strong>Rules whose inputs nobody collects.</strong> Check the pipeline, not the rule.</li>
 <li><strong>One rule for "escape".</strong> Escape is several mechanisms with different
   evidence.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D2.3</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d2-3" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d2-3?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D2.3" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>  t  rule                                process
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>  t  rule                                process
   3  ptrace attach to a non-child        solve.py
   4  LD_PRELOAD on a spawned process     solve.py
   5  non-harness write to the RPC path   x.so
@@ -179,7 +179,7 @@ credential exposure to revocation (C4.1)
 
 exemption-state reconciliation (C6.3), day 44
    cyber-classifier    disabled  P1 - exemption expired on day 30, auto re-enable
-   egress-allowlist    disabled  P1 - disabled with no approved exemption</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+   egress-allowlist    disabled  P1 - disabled with no approved exemption</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick the orphaned-process rule and write it for your own platform. It is one query, it has a low false-positive rate, and on most agent platforms nobody has ever run it.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.4.html">D2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human</a></strong></p>

@@ -133,7 +133,7 @@ INSTINCT 2 — interview the user
 <li><strong>Recording the user as having authorised the actions.</strong> They authorised a
   task.</li>
 <li><strong>Containing the worker and not the orchestrator.</strong> It will start another.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D3.4</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d3-4" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d3-4?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D3.4" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>INSTINCT 1 — disable dana@corp&#x27;s account
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>INSTINCT 1 — disable dana@corp&#x27;s account
    dana@corp (human)      can act: True   account disabled, but the issued token is still valid
    patch-agent            can act: True   active
    deploy-agent           can act: True   active
@@ -164,7 +164,7 @@ TIME TO EFFECT, measured:
    disable the human&#x27;s account         5s  agent unaffected
    kill the agent process              2s  supervisor restarts it; token still valid
    revoke the agent identity          12s  agent cannot act, even after restart
-   rotate the shared credential      420s  works, and breaks every other consumer</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+   rotate the shared credential      420s  works, and breaks every other consumer</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Disabling the human's account leaves both agents able to act on already-issued tokens. The interview establishes the user authorised a task, not the actions. The chain shows three actors where the logs show one. Revoking <code>patch-agent</code>'s identity stops it in 12 seconds while dana and <code>deploy-agent</code> continue working.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write your agentic incident runbook's first three steps. If step one is "disable the user account", rewrite it — and check whether you can currently revoke a single agent identity at all.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.5.html">D3.5 · Agent-assisted reconstruction — a timeline you can challenge</a></strong></p>

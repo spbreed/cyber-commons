@@ -138,7 +138,7 @@ actually prints.</p>
   fixes or one chokepoint, and the list does not say which.</li>
 <li><strong>Trusting the manifest over the code.</strong> The manifest says what an agent may
   call; the call graph says what it does.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.11</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-11" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-11?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.11" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>what this engagement was handed, and what each source establishes
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>what this engagement was handed, and what each source establishes
 
   repository at a pinned commit    entry points, call graph, sinks
   dependency lock file             the versions really resolved
@@ -177,7 +177,7 @@ checks that this caller is entitled to this object:
   - payments.refund        from cron nightly_reconcile   (has service_account, which is not authorisation)
 
 that is the shape of every BOLA finding, and it is the shape of the
-CyberTravels refund incident: the caller was authenticated throughout.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+CyberTravels refund incident: the caller was authenticated throughout.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Of seven sinks in the tree, five are reachable from an entry point and two are reported as present-but-unreachable rather than dropped. Three of the reachable five carry only a session or service-account check — authentication, not authorisation — including the refund path, which is the incident's shape stated before the incident.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one endpoint in your own estate and trace it to its sink by hand. Count the hops that check the caller is somebody against the hops that check they own this object. If the second count is zero, you have found your first finding.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Black-box agentic pentest — inference, and refusing to report it as fact</a></strong></p>

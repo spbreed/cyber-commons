@@ -289,7 +289,7 @@ INTENT_EVIDENCED, and two controls cannot exceed PARTIAL at all.
   not appear in a static scan; record that as a <code>PARTIAL</code>, not a clean pass.</li>
 <li><strong>Hashing the tool name instead of the description.</strong> The description is what
   the model reads and what a rug-pull changes.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.18</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-18" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-18?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.18" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>C1_default_deny_least_privilege   INTENT_EVIDENCED  runtime verdict needs observed usage and the
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>C1_default_deny_least_privilege   INTENT_EVIDENCED  runtime verdict needs observed usage and the
 C2_sandbox_no_egress              PARTIAL           absence of a covert channel is not provable 
 C3_identity_chain_obo             INTENT_EVIDENCED  4 signals; enforcement not shown
 C4_gateway_guardrails             INTENT_EVIDENCED  runtime verdict needs reachability testing f
@@ -361,7 +361,7 @@ control evaluations : 50
 
 `signatures` is empty and says so. A relying party MUST fail closed on a
 missing or unsigned attestation: a signed file can be deleted, and
-absence must never be read as a pass.</code></pre></div></details><div class="nbmd"><h2>4 · Control intent, and why it is the honest static claim</h2>
+absence must never be read as a pass.</code></pre></div><div class="nbmd"><h2>4 · Control intent, and why it is the honest static claim</h2>
 <p>Static analysis cannot show that a control <strong>holds</strong>. It can show that somebody <strong>intended</strong> it — an imported sandbox, a validated audience claim, a provenance tag. That is a smaller claim and a true one, so the analyser never emits PASS.</p></div><div class="nbmd"><h2>5 · Run against ten real repositories</h2>
 <p>These are the verdicts the analyser in <code>labs/attestation/control_intent.py</code> produced against the five most-deployed open-source MCP repositories and five most-used agent frameworks, cloned at HEAD. Not a simulation — the counts below are what the scan returned.</p></div><div class="nbmd"><h2>6 · What the scan actually found</h2>
 <p>Three findings worth more than the table.</p></div><div class="nbmd"><h2>7 · The artefact</h2>

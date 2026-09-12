@@ -138,7 +138,7 @@ EV-2     PASS                  12.0
   is configured. Whether traffic actually obeys it is the egress verifier's job.</li>
 <li><strong>Ignoring the route table</strong> because a private endpoint exists.</li>
 <li><strong>Recording that logging is enabled</strong> without checking that it is delivering.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — E1.7</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-e1-7" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-e1-7?cellIds=&amp;kernelSessionId=" title="Kaggle notebook E1.7" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>control  state           age (days)
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>control  state           age (days)
 ------------------------------------
 AC-1     PASS                   2.0
 AC-2     PASS                   9.0
@@ -165,7 +165,7 @@ prioritise automation by how often a control goes stale:
    SB-1  window  30d → 12.2 manual re-tests per year
    EV-2  window  30d → 12.2 manual re-tests per year
    DR-1  window  30d → 12.2 manual re-tests per year
-   EV-1  window  60d →  6.1 manual re-tests per year</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+   EV-1  window  60d →  6.1 manual re-tests per year</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape, and the line to take from it is the boundary it draws: configuration is not enforcement. A private endpoint next to a route table with a NAT gateway is a recorded fact and an open path at the same time, and logging that is switched on but not delivering evidences nothing at all.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Automate the control with the shortest freshness window first — it is the one costing the most manual effort and going stale most often. One automated test converts an annual assertion into a live control.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.8.html">E1.8 · Third-party and model supply chain risk</a></strong></p>

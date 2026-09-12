@@ -126,7 +126,7 @@ The first row contained in ONE HOUR and still missed the deadline.
 <li><strong>Starting the clock at confirmation.</strong> A regulator may start it earlier.</li>
 <li><strong>Optimising containment.</strong> Scoping is the term that misses the deadline.</li>
 <li><strong>An unowned runbook step.</strong> It is the one that takes a day.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D5.6</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d5-6" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d5-6?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D5.6" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>scenario                            contain   report   met   margin
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>scenario                            contain   report   met   margin
 --------------------------------------------------------------------
 fast containment, slow scoping          1.0     80.0 False     -8.0
 slow containment, fast reporting       40.0     60.0  True     12.0
@@ -164,7 +164,7 @@ as usually written: sound=False
    ⚠ one owner for both workstreams — they compete for the same person under time pressure
    ⚠ clock starts at &#x27;confirmation&#x27;, not at awareness — a regulator will use the earlier point
 
-corrected: sound=True</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+corrected: sound=True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>One-hour containment still misses the 72-hour deadline in the slow-scoping scenario, and broken attribution misses it by 20 hours. The same incident is met or missed depending on which point is treated as awareness. The obligation register shows DORA's 4-hour clock as the binding one, and the runbook check flags a shared owner and a late clock start.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Build your shortest-clock register: every obligation, its deadline, and who notifies. Then check whether your runbook starts the clock at awareness or at confirmation. The gap between those two is often more than a day.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> You can close an incident properly: a run you can reproduce, a root cause naming a control rather than a person, the fix at the right layer, the indicators re-read to see which actually came back, and the policy change as a reviewable diff.</p>

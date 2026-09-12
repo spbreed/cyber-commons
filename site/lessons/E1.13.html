@@ -142,7 +142,7 @@ the same units as everything else.</p>
   anyone.</li>
 <li><strong>Measuring from the register.</strong> It records intent, not state.</li>
 <li><strong>Indicators that all fail.</strong> Nothing shows the instrument works.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — E1.13</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-e1-13" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-e1-13?cellIds=&amp;kernelSessionId=" title="Kaggle notebook E1.13" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>cybertravels/ · 20 modules · 7 object handlers
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>cybertravels/ · 20 modules · 7 object handlers
 
 kci     indicator                                    target  measured  status
 KCI-01  object handlers that compare an owner       == 1.00      0.29  GAP
@@ -172,7 +172,7 @@ Re-run it after a change and the same five numbers move or they do not.
 KCI-05 is the one worth arguing about. It measures a component that does
 not exist, so it reads 0.00 and always will until somebody builds a
 gateway. An indicator for a control you have not built is not a failure
-of the estate - it is the backlog, stated in the same units as the rest.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+of the estate - it is the backlog, stated in the same units as the rest.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>One indicator met and five gaps, each with a named mitigation — and every number computed from the tree at run time rather than read from a register.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write a seventh indicator for a control CyberTravels does have, and check it reads as met. An instrument that only ever says GAP is not measuring.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> A key control indicator you can compute, and everything it needs to be one: an inventory for its denominator, a risk tier for its target, a control map for its subject, an owner against its name, and verification that re-reads it instead of citing last year. E1.13 runs six of them over CyberTravels and returns five gaps.</p>

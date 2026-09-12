@@ -124,7 +124,7 @@ Not zero because the detector is good - zero because nothing legitimate
 <li><strong>Naming it as a canary.</strong> It becomes a filter for the competent attacker.</li>
 <li><strong>Never rotating.</strong> The signal decays and the absence of alerts reads as
   safety.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — C1.8</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-c1-8" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-c1-8?cellIds=&amp;kernelSessionId=" title="Kaggle notebook C1.8" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>token                     source        agent                 verdict
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>token                     source        agent                 verdict
 hf_liveTokenNotShown      10.2.0.11     ci-runner             normal use
 hf_CANARY7Fq2mXvLpR8s     203.0.113.9   python-requests/2.31  CONFIRMED COMPROMISE
 ghp_alsoLive              10.2.0.11     ci-runner             normal use
@@ -165,7 +165,7 @@ detectors needing no threshold: [&#x27;credential canary&#x27;, &#x27;honeypot t
 
 Deception finds less. What it finds needs no triage, no tuning and no
 argument - which is why it belongs beside the volume detectors rather
-than instead of them.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+than instead of them.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The canaries sit outside every legitimate path, so a single touch is a high-confidence alert with no threshold, and the one placed too close to real work is flagged as a false-positive source before it ships.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Plant one canary credential in a place only an over-reaching agent would look, and wire its use to a page. It is the cheapest high-signal detector you will build.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.9.html">C1.9 · Machine-speed containment and fleet revocation</a></strong></p>

@@ -289,7 +289,7 @@ so a namespace with no policy is not "no rules" — it is "all traffic".</p>
   boundary did not stop being crossed by a file.</li>
 <li><strong>Reading a namespace with no NetworkPolicy as restricted.</strong> It is
   unrestricted.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A3.2</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a3-2" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a3-2?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A3.2" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>no sandbox                      reached 8
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no sandbox                      reached 8
       file:/etc/passwd
       file:/home/agent/.ssh/id_ed25519
       file:/home/agent/work/data.csv
@@ -334,7 +334,7 @@ Deleting the deny changed nothing about workflow-agent - its own policy
 still selects it. What it changed is every OTHER pod in the namespace,
 including coding-agent, which now reaches the internet because no
 object mentions it. Nothing failed, nothing alerted, and the namespace
-went from default-deny to default-allow in one commit.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+went from default-deny to default-allow in one commit.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The same code is executed against three environments: unsandboxed it reaches a private key, two credentials and the whole network; sandboxed with production credentials mounted it still reaches both credentials and the production database; only the third contains it. Then the two NetworkPolicy objects are evaluated — 2 of 5 connections permitted, with cloud metadata and the exfiltration target both refused for not being named. Deleting <code>default-deny-all</code> leaves workflow-agent unchanged and silently opens every other pod in the namespace.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run <code>kubectl get networkpolicy -A</code> and look for a policy with an empty <code>podSelector</code> and <code>policyTypes: [Ingress, Egress]</code>. If there isn't one in the namespace your agents run in, every narrow policy you have written is an allowance rather than a restriction, and every pod nobody wrote a policy for has the internet.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">A3.3 · Egress control</a></strong></p>

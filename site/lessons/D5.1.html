@@ -127,7 +127,7 @@ prompts only           replayable=False
 <li><strong>Assuming replay is possible.</strong> Check the record before promising it.</li>
 <li><strong>Replaying on the current model.</strong> It is not the one that acted.</li>
 <li><strong>Instrumenting everything or nothing.</strong> Tier it and write the choice down.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D5.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d5-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d5-1?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D5.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>fully instrumented     replayable=True
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>fully instrumented     replayable=True
 typical production     replayable=False
       ✗ model version — a silent upgrade changes the output
       ✗ seed — sampling makes the run unrepeatable
@@ -168,7 +168,7 @@ after adding seed             replayable=True  still missing=0
 
 after adding prompts          replayable=True  still missing=0
 
-after adding tool results     replayable=True  still missing=0</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+after adding tool results     replayable=True  still missing=0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Only the fully instrumented run is replayable; the typical production run is missing the model version and seed. Replaying the incident under two later model versions produces a different action, so the original run does not reproduce. Adding the two cheapest fields (model version and seed) makes the typical production run replayable.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add model version and seed to your agent's run records this week. Both are one field each, and together they are the difference between forensics and storytelling.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D5.2.html">D5.2 · The root cause record — naming a control, not a person</a></strong></p>

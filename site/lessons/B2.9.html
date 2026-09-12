@@ -166,7 +166,7 @@ useful signal the pipeline produces about its own false-positive rate.</p>
 <h2>Handoff</h2>
 <p>Pass <code>validations</code> to <strong>appsec-triage-report</strong>. Findings that failed to
 reproduce keep their finding record and gain <code>reproduced: false</code> — the report
-must be able to distinguish "demonstrated" from "asserted".</p></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.9</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-9" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-9?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.9" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>id     cwe       sev      requires                              grants
+must be able to distinguish "demonstrated" from "asserted".</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>id     cwe       sev      requires                              grants
 ------------------------------------------------------------------------------------------------
 F-01   CWE-200   low      [&#x27;unauthenticated&#x27;]                   [&#x27;valid_report_id&#x27;]
 F-02   CWE-639   medium   [&#x27;authenticated&#x27;, &#x27;valid_report_id&#x27;]  [&#x27;other_users_report_data&#x27;]
@@ -231,7 +231,7 @@ measured false-positive rate of Phase 3: 33%
 
 Both conform. The tidy one drops the non-reproductions, and with them
 the only number that says how good the earlier phases actually are.
-Its reader sees a pipeline that is right every time.</code></pre></div></details><div class="nbmd"><h2>4 · Where it breaks — the tidy report</h2>
+Its reader sees a pipeline that is right every time.</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the tidy report</h2>
 <p>Now suppose two of these findings do not reproduce, and the pipeline does the natural thing with them.</p></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take your current open findings and write down each one's preconditions and effects. The chaining falls out mechanically, and the finding you should fix first is usually not the one at the top of the severity-sorted queue.</p></div><div class="nbmd"><hr />

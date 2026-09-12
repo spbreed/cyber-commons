@@ -209,22 +209,39 @@ def notebook_block(sid: str) -> str:
             # outputs, and a Copy & Edit button — instead of source they cannot
             # run from here.
             #
-            # The recorded output stays underneath, collapsed. It is the site's
-            # evidence claim: `run_notebooks.py` executes the notebook here and
+            # Only for a kernel a visitor can actually see. Kaggle's embedded
+            # viewer renders a private kernel as an EMPTY FRAME with no error,
+            # so embedding unconditionally puts a blank rectangle on every page
+            # whose kernel has not been pushed with --public yet. Which set that
+            # is comes from scripts/check_kaggle_public.py.
+            #
+            # Either way the recorded output is on the page: collapsed under the
+            # embed, inline without one. It is the site's evidence claim —
+            # `run_notebooks.py` executes the notebook here and
             # `kaggle_verify.py` compares it byte for byte against the Kaggle
-            # run. Dropping it would leave the page depending entirely on a
-            # third-party iframe that a blocked script or an offline reader
-            # never sees.
-            parts.append(kaggle_embed(sid))
-            parts.append(
-                '<details class="recorded"><summary>The recorded run, checked '
-                'byte for byte against the Kaggle kernel above</summary>'
-                + output_block(sid) + "</details>")
+            # run — and a page depending only on a third-party iframe loses it
+            # for any reader with scripts blocked.
+            if sid in KAGGLE_PUBLIC:
+                parts.append(kaggle_embed(sid))
+                parts.append(
+                    '<details class="recorded"><summary>The recorded run, '
+                    'checked byte for byte against the Kaggle kernel above'
+                    '</summary>' + output_block(sid) + "</details>")
+            else:
+                parts.append(output_block(sid))
     parts.append("</div>")
     return "".join(parts)
 
 
 KAGGLE_OWNER = "cybercommons"
+
+# Which kernels a visitor can actually see. Written by
+# scripts/check_kaggle_public.py; missing or empty means embed nothing, which
+# is the safe direction — a private kernel renders as a blank frame, not an
+# error, so an unconditional embed fails silently on every page.
+_KP = NB_DIR / "_kaggle_public.json"
+KAGGLE_PUBLIC = set(
+    json.loads(_KP.read_text()).get("public", []) if _KP.is_file() else [])
 
 
 def kaggle_slug(sid: str) -> str:

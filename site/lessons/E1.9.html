@@ -165,7 +165,7 @@ sunset-agent                    2             False           —  ACTIVE CREDEN
 <li><strong>Ranking by age.</strong> A recent orphan with deploy rights outranks an old
   read-only one.</li>
 <li><strong>A sweep with no automatic consequence.</strong> It becomes a recurring report.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — E1.9</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-e1-9" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-e1-9?cellIds=&amp;kernelSessionId=" title="Kaggle notebook E1.9" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>identity            last auth (d)   service running       owner  finding
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>identity            last auth (d)   service running       owner  finding
 --------------------------------------------------------------------------------------------
 triage-agent                    0              True      appsec  
 patch-agent                     1              True    platform  
@@ -184,7 +184,7 @@ and the manifest-diff check, for the events that change behaviour:
    → requires re-tiering (E1.3) and a fresh SB-2 test (E1.7)
 
 1 critical lifecycle finding(s) — each is a standing credential
-for something everyone believes is switched off.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+for something everyone believes is switched off.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four of six lifecycle events generate no reliable record at all. The identity review flags <code>sunset-agent</code> as critical — an active credential for a decommissioned service — plus two orphans with no authentication in 300+ days. The manifest diff shows the blast radius rising from 0 to 40, requiring re-tiering and a fresh control test.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Query your identity provider for non-human identities whose service is retired but which authenticated in the last 30 days. Every hit is either an undocumented dependency or someone else's foothold, and you cannot tell which from the directory alone.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.10.html">E1.10 · The stakeholder map — who owns what</a></strong></p>

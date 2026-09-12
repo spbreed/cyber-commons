@@ -141,7 +141,7 @@ validation passed it; the oracle refuted it.
 <li><strong>Using a model as the oracle.</strong> Two models agreeing is not evidence.</li>
 <li><strong>Defaulting unverifiable to true</strong> because the pipeline needs a value. That
   default is the defect.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A3.5</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a3-5" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a3-5?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A3.5" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>   schema_ok=True  -&gt; {&#x27;stopped&#x27;: &#x27;refuted&#x27;, &#x27;claim&#x27;: &#x27;libfoo has no known CVEs&#x27;, &#x27;by&#x27;: &#x27;checked against the advisory database&#x27;}
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   schema_ok=True  -&gt; {&#x27;stopped&#x27;: &#x27;refuted&#x27;, &#x27;claim&#x27;: &#x27;libfoo has no known CVEs&#x27;, &#x27;by&#x27;: &#x27;checked against the advisory database&#x27;}
    schema_ok=True  -&gt; {&#x27;propagated&#x27;: &#x27;test_login passes&#x27;, &#x27;verified_by&#x27;: &#x27;checked against the advisory database&#x27;, &#x27;hops&#x27;: 3}
    schema_ok=True  -&gt; {&#x27;stopped&#x27;: &#x27;unverifiable&#x27;, &#x27;claim&#x27;: &#x27;the refund was approved&#x27;, &#x27;why&#x27;: &#x27;no oracle for this claim&#x27;}
    schema_ok=False -&gt; {&#x27;stopped&#x27;: &#x27;malformed&#x27;}
@@ -151,7 +151,7 @@ validation passed it; the oracle refuted it.
 
 The third is unverifiable - no oracle exists. That is a legitimate
 outcome and it must not silently become &#x27;true&#x27;. It stops here with a
-reason, which is what A1.12&#x27;s cascade never had.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+reason, which is what A1.12&#x27;s cascade never had.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four messages are checked twice. A schema-perfect, high-confidence claim is refuted by the oracle; a claim with no oracle stops with <code>unverifiable</code> rather than silently becoming true; a malformed message is caught by the schema; and only the verified claim propagates.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find one place a sub-agent's output becomes another agent's input and ask what oracle checks it. If the answer is the model's own confidence, that is the component grading its own work.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.6.html">A3.6 · Human approval that survives volume</a></strong></p>

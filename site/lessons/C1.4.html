@@ -122,7 +122,7 @@ polite-agent            0.021   1.26      0.0     0.83  agent
 <li><strong>Scoring the user agent string.</strong> It is self-declared.</li>
 <li><strong>Optimising accuracy.</strong> It assumes the two errors cost the same.</li>
 <li><strong>Flagging registered agents.</strong> They are supposed to look like agents.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — C1.4</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-c1-4" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-c1-4?cellIds=&amp;kernelSessionId=" title="Kaggle notebook C1.4" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
 --------------------------------------------------------------
 svc-indexer             0.800    0.0    20.04     0.01  agent
 dana@corp               0.028   1.55      0.0     1.11  human
@@ -156,7 +156,7 @@ cost-minimising threshold: 0.55 (expected 40.0 hrs)
 Accuracy-maximising would sit higher and let the polite agent through.
 at that threshold: 0 humans investigated, 1 agents missed
 shadow agents (behaves like software, not in the inventory):
-   unknown-token-7f3c     score=0.563</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+   unknown-token-7f3c     score=0.563</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The service accounts and unregistered token score highest, the human lowest, and cost-weighting selects a low threshold that finds the shadow agents at the price of a few analyst-hours.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check whether your model gateway logs the acting identity per call. If it logs only the API key, every agent is anonymous and this scoring is the only actor you have.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.5.html">C1.5 · Emergent swarms and multi-agent proliferation</a></strong></p>

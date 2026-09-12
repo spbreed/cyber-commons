@@ -145,7 +145,7 @@ secrets table now: []
 <li><strong>Counting a docstring refusal as a control.</strong> It is a comment.</li>
 <li><strong>Narrowing to the tool name.</strong> <code>run_query</code> is not a permission; a verb on a
   resource is.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A1.5</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a1-5" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a1-5?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A1.5" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>intended use:
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>intended use:
    how many invoices  -&gt; {&#x27;rows&#x27;: [{&#x27;id&#x27;: 7, &#x27;amount&#x27;: 120}]}
 
 same tool, same identity, same well-formed arguments:
@@ -156,7 +156,7 @@ secrets table now: []
 
 No exploit. The tool did exactly what it was built to do. It was scoped
 for the nightly reconciliation job, and every caller inherited that
-scope - including the one steered by a poisoned ticket in A1.3.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+scope - including the one steered by a poisoned ticket in A1.3.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>A single database tool, scoped for the widest job it ever performs, reads a signing key and empties the secrets table for requests it was never meant to serve — with the right identity, a familiar tool and well-formed arguments on every call.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take the most powerful tool one of your agents can call and write down the worst thing one call could do with attacker-chosen arguments. That sentence, not the tool's name, is what belongs in the risk register.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.6.html">A1.6 · Privilege compromise</a></strong></p>

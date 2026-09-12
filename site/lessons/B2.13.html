@@ -133,7 +133,7 @@ actually prints.</p>
   id is the security test.</li>
 <li><strong>Trusting the design column.</strong> It is what the team believes is enforced,
   which is the thing under test.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.13</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-13" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-13?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.13" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>what a grey-box engagement is handed
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>what a grey-box engagement is handed
 
   one credential per role        traveller, agent-svc, finance — the minimum
   API schema (OpenAPI)           every object and verb that exists
@@ -192,7 +192,7 @@ tested 12 of 30 cells (40%)
 an endpoint-coverage report would call this engagement complete:
 every endpoint in the schema was touched at least once. authorisation
 does not live in endpoints, it lives in cells, and the two highest-cost
-cells here were never sent a single request.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+cells here were never sent a single request.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The engagement exercises 12 of 30 cells (40%) and finds two mismatches — a traveller reading another traveller's booking and the agent service writing one — while the two highest-cost cells, both on the audit log, were never sent a request. Endpoint coverage would have called this complete.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Build the matrix for one service you own with two real accounts. The cell you least want to test — an admin verb on another tenant's object — is the one whose result you most need to know.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.14.html">B2.14 · Bonus — testing safely: the controls an offensive agent runs inside</a></strong></p>

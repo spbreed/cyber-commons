@@ -139,7 +139,7 @@ code comment              False                 True
 <li><strong>Using attack vocabulary in the payload.</strong> It measures the blocklist.</li>
 <li><strong>Declaring success when everything is blocked.</strong> Check the principal's own
   calls still work, or the control is an outage.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A1.9</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a1-9" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a1-9?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A1.9" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>normal pipeline run:
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>normal pipeline run:
    {&#x27;tool&#x27;: &#x27;read_diff&#x27;, &#x27;executed&#x27;: True}
    {&#x27;tool&#x27;: &#x27;index_repo&#x27;, &#x27;executed&#x27;: True}
    {&#x27;tool&#x27;: &#x27;post_comment&#x27;, &#x27;executed&#x27;: True}
@@ -181,7 +181,7 @@ privileged set derived from effects: [&#x27;approve_pr&#x27;, &#x27;dismiss_find
 content-driven comment: executed=False — privileged tool requested by &#x27;PR description&#x27;, not by the principal
 
 post_comment IS privileged here, because CI listens to comments. It
-would not have been last year. Re-derive it whenever CI changes.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+would not have been last year. Re-derive it whenever CI changes.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach <code>approve_pr</code> on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows <code>post_comment</code> is privileged because CI listens to comments, and a content-driven comment is then blocked.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>List every place your CI reacts to something the pipeline can produce — comments, labels, branch names, commit trailers. Each one promotes an innocuous tool into a privileged one, without anyone editing the pipeline.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.10.html">A1.10 · Agent communication poisoning</a></strong></p>

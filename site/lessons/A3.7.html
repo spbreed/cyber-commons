@@ -166,7 +166,7 @@ credential held by the agent: never - attached at the gateway
 <li><strong>Missing the background path.</strong> Scheduled and tool-initiated calls are the
   ones that bypass the gateway in practice.</li>
 <li><strong>Recording a guardrail as enforced when its action is observe.</strong></li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A3.7</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a3-7" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a3-7?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A3.7" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>   the intended call           ALLOWED
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   the intended call           ALLOWED
    unregistered agent          denied at identity
    verb not permitted          denied at policy
    exfiltration destination    denied at egress
@@ -180,7 +180,7 @@ inherits every control by being on the other side of one hop.
 
 And the legacy database, which cannot consume a delegated token, is
 reached with a static credential the agent has never seen - authorised
-against dana before the call was made.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+against dana before the call was made.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Its confidence is HIGH only where egress is enforced below the application — the gateway is a choke point because the network makes it one, not because the SDK was configured to point at it, and an application-level base URL is a default, not a control.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count your agents. If it is more than five, work out how you would currently answer 'is egress control on for all of them' — and how long that would take.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.8.html">A3.8 · Shared infrastructure between agent runs</a></strong></p>

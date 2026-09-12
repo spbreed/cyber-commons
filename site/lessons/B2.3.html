@@ -254,7 +254,7 @@ it is cheaper.</p>
 <li><strong>Enabling every pack to fix recall.</strong> Recall rises and so does triage cost;
   the widest width here still misses a third of the key, so width alone was
   never going to be the answer.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.3</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-3" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-3?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.3" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
 
 config                   found  tp  fp   prec  recall
 p/python + p/secrets         1   1   0   1.00    0.12
@@ -389,7 +389,7 @@ on its own, and note that this run is one sample of it.
 Nothing here is promoted. This skill produces hypotheses; dedup,
 verification, reachability and dynamic validation decide which of them
 become findings. An audit stage that promotes its own output has removed
-the only independent step it had.</code></pre></div></details><div class="nbmd"><h2>6 · What changed when SAST learned to reason</h2>
+the only independent step it had.</code></pre></div><div class="nbmd"><h2>6 · What changed when SAST learned to reason</h2>
 <p>For twenty years the answer to "can a scanner find this?" was decided by one
 question: <strong>is there a pattern?</strong> Everything else followed. Rules were written
 per defect class and per library, coverage was a config decision, and a class
@@ -604,7 +604,7 @@ that reports only findings cannot give you.</p>
   and B2.4 is what promotes them.</li>
 <li><strong>Ranking by CWE.</strong> Every IDOR is CWE-639. The one on the refund path is not
   the same finding as the one on a read.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.3</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-3" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-3?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.3" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
 
 config                   found  tp  fp   prec  recall
 p/python + p/secrets         1   1   0   1.00    0.12
@@ -739,7 +739,7 @@ on its own, and note that this run is one sample of it.
 Nothing here is promoted. This skill produces hypotheses; dedup,
 verification, reachability and dynamic validation decide which of them
 become findings. An audit stage that promotes its own output has removed
-the only independent step it had.</code></pre></div></details><div class="nbmd"><h2>9 · The finding count went down and the risk did not</h2>
+the only independent step it had.</code></pre></div><div class="nbmd"><h2>9 · The finding count went down and the risk did not</h2>
 <p><code>search_bookings</code> concatenates its reference into SQL <strong>and</strong> returns every
 owner's bookings. Semgrep finds the first at the widest width. Nothing finds the
 second.</p>
@@ -839,7 +839,7 @@ independent step in it at all.</p>
   the slice that makes it decidable is smaller than the file.</li>
 <li><strong>Dropping the signature from the slice.</strong> The identical body is a critical
   defect in a handler and irrelevant in a migration script.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — B2.3</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-b2-3" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-b2-3?cellIds=&amp;kernelSessionId=" title="Kaggle notebook B2.3" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
 
 config                   found  tp  fp   prec  recall
 p/python + p/secrets         1   1   0   1.00    0.12
@@ -974,7 +974,7 @@ on its own, and note that this run is one sample of it.
 Nothing here is promoted. This skill produces hypotheses; dedup,
 verification, reachability and dynamic validation decide which of them
 become findings. An audit stage that promotes its own output has removed
-the only independent step it had.</code></pre></div></details><div class="nbmd"><h2>11 · Where it breaks — gating on the confidence number</h2>
+the only independent step it had.</code></pre></div><div class="nbmd"><h2>11 · Where it breaks — gating on the confidence number</h2>
 <p>In the offline run the replay returns 0.82 on the function with the defect and
 0.77 on the one without it. Five points of confidence separate a real finding
 from a correct all-clear. It is tempting to read a threshold into a gap that

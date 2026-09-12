@@ -313,7 +313,7 @@ by which point most of what the actor was going to do is done. If those
 <li><strong>Reading an early firing as coverage.</strong> It is one alert and then silence.</li>
 <li><strong>One agent baseline for every agent.</strong> Their tempos differ as much as their
   jobs do.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — D1.0</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-d1-0" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-d1-0?cellIds=&amp;kernelSessionId=" title="Kaggle notebook D1.0" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>   Alex                12 actions/hour -&gt; silent
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   Alex                12 actions/hour -&gt; silent
    workflow agent    1400 actions/hour -&gt; ALERT
 
 the agent crosses the threshold after 154 seconds
@@ -324,7 +324,7 @@ by which point most of what the actor was going to do is done. If those
 were refunds, the alert arrives after the money has moved.
 
 Chapter 8 is about detections that fire on shape rather than volume.
-Chapter 9 is about who can pull the stop lever without asking.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+Chapter 9 is about who can pull the stop lever without asking.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Five behavioural signals for Alex and for CyberTravels' Workflow Agent over the same hour, with ratios in the hundreds. The volume rule tuned for human tempo does fire — 154 seconds into a sixty-minute run, leaving 3,446 seconds unmonitored. Five of the six things an agentic SOC needs are not in any application log.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8 and it is a telemetry problem rather than a detection one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent</a></strong></p>

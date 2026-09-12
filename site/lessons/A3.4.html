@@ -140,7 +140,7 @@ actions              20        6
 <li><strong>Returning partial work as an answer.</strong> The flag is the control; the number
   is the trigger.</li>
 <li><strong>A ceiling the agent can reset by spawning.</strong> Count the whole tree.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A3.4</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a3-4" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a3-4?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A3.4" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>steps taken : 6
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>steps taken : 6
 stopped by  : per_target (reports-db)
 complete    : False   &lt;- visible in the output, not silent
 
@@ -155,7 +155,7 @@ action budget. That is the ceiling that protects everyone else, and it is
 the one most budgets do not have.
 
 `complete: False` is the other half. A run that stops silently and
-reports what it managed becomes A1.16 with extra steps.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+reports what it managed becomes A1.16 with extra steps.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The impossible task from A1.13 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries <code>complete: False</code> rather than reporting what it managed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check whether your agent's budget bounds calls per downstream target. If it only bounds tokens, your cost is protected and the service your agent hammers is not.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.5.html">A3.5 · Validating what comes back</a></strong></p>

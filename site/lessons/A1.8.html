@@ -147,7 +147,7 @@ steered by an injection:
   need to be.</li>
 <li><strong>Reporting only the steered run.</strong> The benign run is the more persuasive
   half of the finding.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A1.8</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a1-8" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a1-8?cellIds=&amp;kernelSessionId=" title="Kaggle notebook A1.8" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>ordinary bug / benign task:
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>ordinary bug / benign task:
    code   : rows = open(&#x27;/home/agent/work/data.csv&#x27;).read()
    reached: 3 things
       file:/etc/passwd
@@ -169,7 +169,7 @@ private key it had no reason to touch. It was not attacked - the code
 used open(), and open() sees what the process sees.
 
 Blast radius here is a property of the environment. A3.2 changes the
-environment; no amount of instruction changes it.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+environment; no amount of instruction changes it.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For one agent that executes code, list what is in its process environment right now. The credentials in that list are the blast radius of the next ordinary bug, not of the next attack.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.9.html">A1.9 · Injection through content the agent was asked to read</a></strong></p>

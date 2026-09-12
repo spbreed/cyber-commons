@@ -143,7 +143,7 @@ the automation, and it belongs in every report about it.</p>
   suppress a working detection.</li>
 <li><strong>Removing <code>needs_human</code>.</strong> Forced verdicts under uncertainty are how a queue
   becomes an incident.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — C1.7</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-c1-7" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-c1-7?cellIds=&amp;kernelSessionId=" title="Kaggle notebook C1.7" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>BARE ALERT (what most SOCs receive):
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>BARE ALERT (what most SOCs receive):
    patch-agent read /vault/.env
    rotator-agent read /vault/.env
    → identical. An analyst cannot tell these apart.
@@ -191,7 +191,7 @@ auto-closed 3, of which 2 sampled back for human review
 
 `benign_true_positive` is its own verdict. Folding it into false-positive
 would teach the tuner to suppress a detection that is working exactly as
-designed - the read really happened, it was simply within remit.</code></pre></div></details><div class="nbmd"><h2>What you just proved</h2>
+designed - the read really happened, it was simply within remit.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The loop matches ground truth on the routine alerts, the severity floor converts every high closure into an escalation, and the closure sample routes a fraction to a human so the false-negative rate is measured rather than assumed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Ask your SOC whether anyone checks, when an incident is confirmed, whether an earlier alert about it was auto-closed. If not, your loop's error rate is invisible.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.8.html">C1.8 · Defensive deception and threshold failures</a></strong></p>
