@@ -204,13 +204,51 @@ def notebook_block(sid: str) -> str:
         if cell["cell_type"] == "markdown":
             parts.append(f'<div class="nbmd">{md_to_html(src)}</div>')
         else:
-            # A lesson page shows what the skill **printed**, not the eight
-            # lines that located the file and ran it. The code lives in the
-            # repository and is linked from the cell; putting it on the page
-            # again made the page look like source and buried the result.
-            parts.append(output_block(sid))
+            # The live notebook, embedded from Kaggle, rather than a copy of
+            # its code on this page. The reader gets the real kernel — cells,
+            # outputs, and a Copy & Edit button — instead of source they cannot
+            # run from here.
+            #
+            # The recorded output stays underneath, collapsed. It is the site's
+            # evidence claim: `run_notebooks.py` executes the notebook here and
+            # `kaggle_verify.py` compares it byte for byte against the Kaggle
+            # run. Dropping it would leave the page depending entirely on a
+            # third-party iframe that a blocked script or an offline reader
+            # never sees.
+            parts.append(kaggle_embed(sid))
+            parts.append(
+                '<details class="recorded"><summary>The recorded run, checked '
+                'byte for byte against the Kaggle kernel above</summary>'
+                + output_block(sid) + "</details>")
     parts.append("</div>")
     return "".join(parts)
+
+
+KAGGLE_OWNER = "cybercommons"
+
+
+def kaggle_slug(sid: str) -> str:
+    """The kernel slug scripts/kaggle_push.py creates for a session."""
+    return f"cyber-commons-{sid.lower().replace('.', '-')}"
+
+
+def kaggle_embed(sid: str) -> str:
+    """The live Kaggle kernel for a lesson, as Kaggle's own embedded viewer.
+
+    Only reachable while the kernel is public — `kaggle_push.py --all --public`
+    is what makes it so, and a private kernel renders as an empty frame rather
+    than an error. That is the reason the recorded output is kept beside it.
+    """
+    url = f"https://www.kaggle.com/embed/{KAGGLE_OWNER}/{kaggle_slug(sid)}"
+    return (
+        f'<div class="kembed">'
+        f'<div class="kbar"><span class="kdot"></span>'
+        f'<span>Live Kaggle notebook — {html.escape(sid)}</span>'
+        f'<a href="https://www.kaggle.com/code/{KAGGLE_OWNER}/{kaggle_slug(sid)}" '
+        f'target="_blank" rel="noopener">open on Kaggle ↗</a></div>'
+        f'<iframe src="{url}?cellIds=&amp;kernelSessionId=" '
+        f'title="Kaggle notebook {html.escape(sid)}" loading="lazy" '
+        f'frameborder="0" scrolling="auto"></iframe></div>')
 
 
 DIAGRAM_MARK = re.compile(r"^\[diagram:(dot|puml):([a-z0-9-]+)\]$", re.M)
@@ -354,8 +392,8 @@ HEAD = ('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
         '<link rel="icon" type="image/png" href="../assets/favicon.png">'
         '<link rel="preconnect" href="https://fonts.googleapis.com">'
         '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-        '<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700'
-        '&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600'
+        '<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700'
+        '&family=IBM+Plex+Mono:wght@400;500;600'
         '&display=swap" rel="stylesheet">'
         '<link rel="stylesheet" href="../assets/lesson.css"></head><body>')
 

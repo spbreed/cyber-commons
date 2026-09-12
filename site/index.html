@@ -16,28 +16,29 @@
 <meta name="twitter:image" content="assets/logo-full.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   /* ---------- PALETTE ----------------------------------------------------
-     Two hues, and each one means exactly one thing:
-       blue  = the commons, and anything you do
-       amber = the adversary, and anything urgent
-     Everything else is the neutral ink ramp. Nothing else gets a colour —
-     a third hue here would be decoration, and decoration in a palette this
-     small reads as a third meaning the reader then has to guess.          */
+     Shared with the Lossless Network learn pages: a near-black navy ground,
+     a slate surface, and one cyan ramp carrying every interactive and
+     "this is the commons" signal. Amber is kept for exactly one job —
+     the adversary, and anything urgent — because the whole diagram
+     vocabulary across 134 lessons reads it that way.                      */
   :root{
-    --ink:#0A0E19;
-    --ink-2:#0E1424;
-    --surface:#131B2E;
-    --line:#26314b;
-    --line-soft:#1c2740;
-    --text:#E9EDF6;
-    --text-dim:#96A0B8;
-    --text-faint:#606B85;
-    --accent:#4D9BFF;
-    --accent-soft:#2b4a7a;
-    --warn:#FFAF5C;
-    --warn-soft:#7a5730;
+    --ink:#0a0e1a;
+    --ink-2:#0d1424;
+    --surface:#111827;
+    --line:#1f3a4d;
+    --line-soft:#16283a;
+    --text:#e8eef5;
+    --text-dim:#94a9bd;
+    --text-faint:#5f7385;
+    --accent:#22d3ee;
+    --accent-lt:#67e8f9;
+    --accent-dk:#06b6d4;
+    --accent-soft:#0e7490;
+    --warn:#fbbf24;
+    --warn-soft:#78561a;
     --maxw:1180px;
     --ease:cubic-bezier(.2,.7,.2,1);
   }
@@ -45,7 +46,8 @@
   html{scroll-behavior:smooth;scroll-padding-top:80px}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   body{margin:0;background:var(--ink);color:var(--text);
-    font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.55;
+    font-family:"Rajdhani","Inter",system-ui,-apple-system,sans-serif;
+    font-size:17.5px;line-height:1.62;
     -webkit-font-smoothing:antialiased;overflow-x:hidden}
   body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),
@@ -55,20 +57,20 @@
             mask-image:radial-gradient(118% 80% at 50% 0%,#000 20%,transparent 75%)}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1}
   a{color:inherit}
-  h1,h2,h3{font-family:"Space Grotesk",sans-serif;font-weight:600;line-height:1.08;
-    letter-spacing:-.02em;margin:0}
+  h1,h2,h3{font-family:"Rajdhani","Inter",system-ui,sans-serif;font-weight:700;
+    line-height:1.1;letter-spacing:-.005em;margin:0}
 
   /* ---------- NAV ---------- */
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
-    background:rgba(10,14,25,.78);border-bottom:1px solid var(--line-soft)}
+    background:rgba(10,14,26,.82);border-bottom:1px solid var(--line-soft)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
-  .brand{display:flex;align-items:center;gap:11px;font-family:"Space Grotesk";font-weight:600;
-    font-size:18px;letter-spacing:-.01em;text-decoration:none;flex:none}
+  .brand{display:flex;align-items:center;gap:11px;font-family:"Rajdhani";font-weight:700;
+    font-size:20px;letter-spacing:-.01em;text-decoration:none;flex:none}
   .brand img{height:40px;width:auto;flex:none;display:block}
   .brand .bt{display:flex;flex-direction:column;line-height:1.05}
   .brand .bt small{font-family:"IBM Plex Mono";font-size:9.5px;letter-spacing:.13em;
     text-transform:uppercase;color:var(--text-faint);font-weight:400;margin-top:3px}
-  .brand b{color:var(--warn);font-weight:600}
+  .brand b{color:var(--accent);font-weight:700}
   @media(max-width:560px){.brand .bt small{display:none}}
   .nav-links{display:flex;gap:26px;align-items:center}
   .nav-links a{font-size:14.5px;color:var(--text-dim);text-decoration:none;
@@ -76,7 +78,7 @@
   .nav-links a:hover{color:var(--text)}
   .nav-cta{border:1px solid var(--line);border-radius:8px;padding:9px 16px !important;
     color:var(--text) !important;font-family:"IBM Plex Mono";font-size:13px}
-  .nav-cta:hover{border-color:var(--warn);color:var(--warn) !important}
+  .nav-cta:hover{border-color:var(--accent);color:var(--accent) !important}
   @media(max-width:820px){.nav-links a:not(.nav-cta){display:none}}
   .share-btn{appearance:none;background:transparent;border:1px solid var(--line);
     border-radius:8px;color:var(--text-dim);font-family:"IBM Plex Mono";font-size:13px;
@@ -103,10 +105,20 @@
   .btn{font-family:"IBM Plex Mono";font-size:14px;text-decoration:none;padding:15px 26px;
     border-radius:10px;display:inline-block;
     transition:transform .15s var(--ease),box-shadow .25s,border-color .2s,color .2s}
-  .btn.p{background:var(--warn);color:#231402;font-weight:600}
-  .btn.p:hover{transform:translateY(-2px);box-shadow:0 12px 30px -12px var(--warn)}
+  .btn.p{background:var(--accent);color:#04212a;font-weight:700;letter-spacing:.01em}
+  .btn.p:hover{transform:translateY(-2px);box-shadow:0 12px 30px -12px var(--accent)}
   .btn.g{border:1px solid var(--line);color:var(--text)}
   .btn.g:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ---------- hero figure ---------- */
+  .herofig{margin:38px 0 0;border:1px solid var(--line-soft);border-radius:14px;
+    background:var(--ink-2);padding:22px 20px;overflow-x:auto}
+  .herofig svg{display:block;width:100%;height:auto;min-width:700px}
+  .herofig .hl{font-family:"IBM Plex Mono",monospace;font-size:11px;
+    letter-spacing:.14em}
+  .herofig .hs{font-family:"Rajdhani",sans-serif;font-size:14.5px;font-weight:500}
+  .herofig .hc{font-family:"IBM Plex Mono",monospace;font-size:11px;
+    fill:var(--text-faint)}
 
   /* ---------- SECTIONS ----------------------------------------------------
      Five of them, built the same way: eyebrow, headline, one line, a
@@ -239,6 +251,78 @@
       <a class="btn p" href="lessons/index.html">Start the first lesson →</a>
       <a class="btn g" href="lessons/index.html">Browse all <span data-n="sessions">134</span> lessons</a>
     </div>
+
+    <!-- The one system the whole commons is taught on, drawn once. Left to
+         right is the direction a request travels; the amber card is the only
+         untrusted input, and the amber ring is the enforcement point every
+         control in Functions A2 and A3 lands on. -->
+    <figure class="herofig rv">
+      <svg viewBox="0 0 900 250" role="img" aria-label="An agentic platform: untrusted input reaches a gateway that adjudicates every tool call, four agents behind it — workflow, retrieval, coding and file system — and the downstream systems they reach: payments, bookings, the CRM, the vector store and the production repository.">
+        <defs>
+          <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0a0e1a"/>
+            <stop offset="55%" stop-color="#0e7490"/>
+            <stop offset="100%" stop-color="#06b6d4"/>
+          </linearGradient>
+          <marker id="hah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
+          </marker>
+          <marker id="haw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--warn)"/>
+          </marker>
+        </defs>
+
+        <!-- untrusted ingress -->
+        <rect x="0" y="88" width="150" height="66" rx="10" fill="none" stroke="var(--warn)" stroke-width="1.5"/>
+        <text class="hl" x="16" y="114" fill="var(--warn)">UNTRUSTED</text>
+        <text class="hs" x="16" y="136">chat · docs · tickets</text>
+        <path d="M150 121 h34" stroke="var(--warn)" stroke-width="1.5" fill="none" marker-end="url(#haw)"/>
+
+        <!-- the enforcement point -->
+        <rect x="192" y="66" width="132" height="110" rx="12" fill="url(#hg)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text class="hl" x="208" y="96" fill="var(--accent-lt)">GATEWAY</text>
+        <text class="hs" x="208" y="118" fill="#cfeff7">provenance</text>
+        <text class="hs" x="208" y="136" fill="#cfeff7">default-deny</text>
+        <text class="hs" x="208" y="154" fill="#cfeff7">every tool call</text>
+        <path d="M324 121 h34" stroke="var(--accent)" stroke-width="1.5" fill="none" marker-end="url(#hah)"/>
+
+        <!-- four agents -->
+        <g fill="var(--surface)" stroke="var(--accent-soft)">
+          <rect x="366" y="16"  width="176" height="46" rx="9"/>
+          <rect x="366" y="76"  width="176" height="46" rx="9"/>
+          <rect x="366" y="136" width="176" height="46" rx="9"/>
+          <rect x="366" y="196" width="176" height="46" rx="9"/>
+        </g>
+        <g class="hs" fill="var(--text)">
+          <text x="384" y="45">Workflow agent</text>
+          <text x="384" y="105">Retrieval advisor</text>
+          <text x="384" y="165">Coding agent</text>
+          <text x="384" y="225">File system agent</text>
+        </g>
+        <g stroke="var(--accent)" stroke-width="1.2" fill="none" opacity=".8">
+          <path d="M542 39 h44" marker-end="url(#hah)"/>
+          <path d="M542 99 h44" marker-end="url(#hah)"/>
+          <path d="M542 159 h44" marker-end="url(#hah)"/>
+          <path d="M542 219 h44" marker-end="url(#hah)"/>
+        </g>
+
+        <!-- downstream -->
+        <g fill="none" stroke="var(--line)">
+          <rect x="596" y="16"  width="200" height="46" rx="9"/>
+          <rect x="596" y="76"  width="200" height="46" rx="9"/>
+          <rect x="596" y="136" width="200" height="46" rx="9"/>
+          <rect x="596" y="196" width="200" height="46" rx="9"/>
+        </g>
+        <g class="hs" fill="var(--text-dim)">
+          <text x="614" y="45">payments · refunds</text>
+          <text x="614" y="105">vector store</text>
+          <text x="614" y="165">production repository</text>
+          <text x="614" y="225">CRM · customer PII</text>
+        </g>
+
+        <text class="hc" x="366" y="250">four agents, one enforcement point — every control in this commons lands on the ring in the middle</text>
+      </svg>
+    </figure>
   </div>
 </div>
 
@@ -350,52 +434,11 @@
 
     <p class="say" style="margin-top:22px">It is written by <b>practitioners</b> who ship this under audit — senior people working in regulated industries, where a control has to satisfy an auditor as well as an attacker. The material and the building blocks are updated continuously, so they keep pace with what those practitioners are actually seeing.</p>
 
-    <figure class="fig rv">
-      <svg viewBox="0 0 820 246" role="img" aria-label="A loop: practitioners in regulated industries write each lesson as a risk, a control and a lab; every lab is executed and its output committed; it is published openly; and the whole set is reviewed again on each release, reaching teams that cannot buy the capability.">
-        <defs>
-          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
-          </marker>
-          <marker id="aw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-            <path d="M0 0 L10 5 L0 10 z" fill="var(--warn)"/>
-          </marker>
-        </defs>
-        <g fill="var(--surface)" stroke="var(--line)">
-          <rect x="0"   y="30" width="188" height="82" rx="10"/>
-          <rect x="212" y="30" width="188" height="82" rx="10"/>
-          <rect x="424" y="30" width="188" height="82" rx="10"/>
-          <rect x="636" y="30" width="184" height="82" rx="10"/>
-        </g>
-        <g class="g-lab" fill="var(--accent)">
-          <text x="18" y="52">Practitioners</text>
-          <text x="230" y="52">Each lesson</text>
-          <text x="442" y="52">Every lab</text>
-          <text x="654" y="52">Published</text>
-        </g>
-        <g class="g-txt">
-          <text x="18" y="76">Regulated industries,</text><text x="18" y="96">still doing the work</text>
-          <text x="230" y="76">names a risk, a control</text><text x="230" y="96">and a runnable lab</text>
-          <text x="442" y="76">is executed and its</text><text x="442" y="96">output committed</text>
-          <text x="654" y="76">openly, corrected</text><text x="654" y="96">by pull request</text>
-        </g>
-        <g stroke="var(--accent)" fill="none" stroke-width="1.5">
-          <path d="M188 71 h16" marker-end="url(#ah)"/>
-          <path d="M400 71 h16" marker-end="url(#ah)"/>
-          <path d="M612 71 h16" marker-end="url(#ah)"/>
-          <path d="M728 112 v30 H94 v-30" marker-end="url(#ah)" stroke-dasharray="4 4"/>
-        </g>
-        <rect x="278" y="126" width="264" height="16" fill="var(--ink-2)"/>
-        <text class="g-lab" x="410" y="138" text-anchor="middle" fill="var(--accent)">Reviewed again on every release</text>
-        <path d="M410 168 v26" stroke="var(--warn)" stroke-width="1.5" marker-end="url(#aw)" fill="none"/>
-        <text class="g-val" x="410" y="226" text-anchor="middle" fill="var(--warn)">Reaches the teams that cannot buy it</text>
-      </svg>
-      <figcaption>The loop is the part that matters. A lesson written once and left alone describes a threat model that has already moved, so these are revisited against <b>OWASP LLM &amp; Agentic Top 10, MITRE ATLAS and NIST AI RMF</b> as those change.</figcaption>
-    </figure>
 
     <ul class="pts">
-      <li><b>Day 0 is the part that gets cut</b>The technique is teachable anywhere. The argument for spending the quarter on it is what most material leaves out, and it is the thing a constrained team actually needs.</li>
+      <li><b>Day 0 is what gets given away on purpose</b>The technique is teachable anywhere. The argument for spending the quarter on it is what most material leaves out, and it is exactly what a constrained team cannot buy — so it is the part given away first.</li>
       <li><b>Audit-grade by default</b>Every lesson names a risk, a control and a lab — the shape a regulator asks for, which happens to be the shape that teaches well.</li>
-      <li><b>Given away on purpose</b>Levelling the field is the point. Hoarded security knowledge makes the whole network less safe.</li>
+      <li><b>Reviewed on every release</b>A lesson written once describes a threat model that has already moved, so these are revisited against OWASP LLM &amp; Agentic Top 10, MITRE ATLAS and NIST AI RMF as those change.</li>
     </ul>
   </div>
 </section>
