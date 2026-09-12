@@ -1,0 +1,74 @@
+CyberTravels control index — every control the platform needs
+==============================================================================
+id    domain                          era         status    owns
+------------------------------------------------------------------------------
+F-01  vulnerability management        foundation  partial   B2.6
+F-02  supply chain                    foundation  partial   B2.7
+F-03  environment segregation         foundation  absent    A2.5
+F-04  encryption at rest              foundation  in place  A3.7
+F-05  encryption in transit           foundation  partial   A3.5
+F-06  input validation                foundation  partial   A2.6
+F-07  SDLC and change management      foundation  partial   B2.0
+F-08  perimeter and DMZ               foundation  in place  A3.3
+F-09  credential management           foundation  absent    A2.1
+F-10  PKI                             foundation  partial   A2.2
+F-11  key management lifecycle        foundation  partial   B2.18
+F-12  logging and monitoring          foundation  partial   D1.0
+A-01  workload identity for agents    agentic     absent    A2.1
+A-02  delegated authority that narrow agentic     absent    A2.3
+A-03  just-in-time authorisation      agentic     absent    A2.4
+A-04  provenance at ingress           agentic     absent    A2.6
+A-05  default-deny on the tool call   agentic     absent    A3.1
+A-06  sandboxed execution             agentic     partial   A3.2
+A-07  egress control                  agentic     absent    A3.3
+A-08  budgets and stop conditions     agentic     absent    A3.4
+A-09  agent telemetry                 agentic     absent    D1.3
+A-10  human oversight that survives v agentic     partial   A3.6
+
+coverage by era
+------------------------------------------------------------------------------
+foundation  ##########..........    50%  2 in place, 8 partial, 2 absent  (n=12)
+agentic     ##..................    10%  0 in place, 2 partial, 8 absent  (n=10)
+overall     ######..............    32%  (n=22)
+
+the rows with nothing behind them
+------------------------------------------------------------------------------
+  F-03  environment segregation  (foundation, taught in A2.5)
+        needs: production separated from non-production by network, identity and data, with no shared credentials across the boundary
+        agents change it: The Coding Agent tests in lower environments and opens pull requests against production. It is the boundary, and it is one identity.
+  F-09  credential management  (foundation, taught in A2.1)
+        needs: no long-lived secrets in code or configuration, central storage, rotation on a clock and on departure
+        agents change it: Four agents share one service account, so a rotation breaks all four and an incident cannot be attributed to one.
+  A-01  workload identity for agents  (agentic, taught in A2.1)
+        needs: each agent holds an attested identity, separately revocable
+        agents change it: Without it, attribution fails before the incident starts.
+  A-02  delegated authority that narrows  (agentic, taught in A2.3)
+        needs: authority decreases at every hop and the act chain is recorded
+        agents change it: An agent acting with more authority than its requester is the single most common finding.
+  A-03  just-in-time authorisation  (agentic, taught in A2.4)
+        needs: task-scoped grants that expire with the task, never session-long wildcards
+        agents change it: This is what stops an injected instruction reaching refunds.
+  A-04  provenance at ingress  (agentic, taught in A2.6)
+        needs: every span carries its origin, and untrusted spans may not select a tool
+        agents change it: The control that separates instructions from data.
+  A-05  default-deny on the tool call  (agentic, taught in A3.1)
+        needs: adjudicated outside the agent, at the gateway
+        agents change it: A model asked to enforce its own policy is subject and guard.
+  A-07  egress control  (agentic, taught in A3.3)
+        needs: deny-by-default outbound, with an allowlist per agent
+        agents change it: Exfiltration by an agent looks like an ordinary API call.
+  A-08  budgets and stop conditions  (agentic, taught in A3.4)
+        needs: a bounded spend, a bounded loop count, and a stop that works
+        agents change it: A loop that concludes wrongly does so at machine speed.
+  A-09  agent telemetry  (agentic, taught in D1.3)
+        needs: prompts, tool calls and decisions emitted as traces
+        agents change it: Instrumentation you write. No product in the stack emits it.
+
+what the index is for
+------------------------------------------------------------------------------
+22 controls indexed: 12 predate agents entirely, 10 arrived with them.
+10 have nothing behind them, and 2 of those are ordinary controls that were
+already required before CyberTravels shipped a single agent.
+
+An index of only the agentic rows would report 10% coverage of 10 controls
+and say nothing about F-03, F-09 — which is where an attacker starts.
