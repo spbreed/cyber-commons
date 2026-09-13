@@ -13,6 +13,19 @@ the recorded output for the rest, which is why a half-finished
 `kaggle_push.py --all --public` degrades into the previous rendering rather than
 into blank frames.
 
+**Kaggle caps public notebooks per day.** Publishing is not the same operation
+as pushing: pushing a private kernel is effectively unlimited, but `--public`
+counts against a separate daily quota, and past it every attempt returns
+
+    HTTP 429  {"code":429,"message":"You have reached the limit for
+               publishing public notebooks per day."}
+
+That is a quota, not a rate limit. Backoff never clears it — four hours of
+sweeps landed nothing — and it resets on the day boundary, at roughly fifteen
+notebooks a day. So filling in the remaining kernels is a job measured in days,
+and the fallback below is what keeps the site correct meanwhile rather than an
+excuse for it.
+
 Re-run it after any public push:
 
     python3 scripts/kaggle_push.py --all --public
