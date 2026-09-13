@@ -17,6 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add("js")</script>
 <style>
   /* ---------- PALETTE ----------------------------------------------------
      Shared with the Lossless Network learn pages: a near-black navy ground,
@@ -198,10 +199,17 @@
     font-family:"IBM Plex Mono";font-size:13px;padding:12px 20px;border-radius:10px;
     opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
   .toast.on{opacity:1;transform:translate(-50%,0)}
-  .rv{opacity:0;transform:translateY(20px);
+  /* The scroll reveal is an enhancement, never a precondition for reading the
+     page. `.rv` is only hidden under html.js, which the inline script in the
+     head sets — so a blocked, failed or disabled script leaves every section
+     visible instead of rendering a blank white page. It used to hide nine
+     blocks unconditionally, which on a white ground is indistinguishable from
+     the site being down. */
+  html.js .rv{opacity:0;transform:translateY(20px);
     transition:opacity .7s var(--ease),transform .7s var(--ease)}
-  .rv.in{opacity:1;transform:none}
-  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+  html.js .rv.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    html.js .rv{opacity:1;transform:none;transition:none}}
   :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 </style>
 </head>
@@ -471,6 +479,7 @@
   const toastEl = document.getElementById('toast');
   let toastTimer;
   function toast(msg){
+    if(!toastEl) return;
     toastEl.textContent = msg;
     toastEl.classList.add('on');
     clearTimeout(toastTimer);
@@ -491,12 +500,21 @@
     catch(err){ toast('Copy this page URL to share'); }
   });
 
-  const io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  },{threshold:.08, rootMargin:'0px 0px -6% 0px'});
-  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+  // If anything here fails, every .rv block must end up visible rather than
+  // invisible — the failure mode of the previous version was a blank page.
+  const rv = document.querySelectorAll('.rv');
+  function showAll(){ rv.forEach(function(el){ el.classList.add('in'); }); }
+  try{
+    if(!('IntersectionObserver' in window)){ showAll(); }
+    else{
+      const io = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+        });
+      },{threshold:.08, rootMargin:'0px 0px -6% 0px'});
+      rv.forEach(function(el){ io.observe(el); });
+    }
+  }catch(err){ showAll(); }
 })();
 </script>
 </body>
