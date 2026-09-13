@@ -380,9 +380,22 @@ def main() -> int:
         print(f"\n[batch {n}/{len(batches)}] {batch}")
         launched = []
         for sid in batch:
-            results[sid] = push_one(sid)
-            ok = not results[sid].startswith("ERROR")
-            print(f"   {sid:8s} {'→ ' + results[sid] if ok else results[sid][:88]}")
+            outcome = push_one(sid)
+            ok = not outcome.startswith("ERROR")
+            # A rate limit says nothing about the notebook. Overwriting a
+            # recorded "complete" with an ERROR row makes the ledger claim a
+            # lesson failed when its kernel exists, ran, and was verified
+            # identical to the local run — and the row outlives the limit that
+            # caused it. So a transport failure never downgrades a success.
+            transient = ("retries exhausted" in outcome
+                         or "Connection reset" in outcome
+                         or "after 6 attempts" in outcome)
+            if ok or not (transient and results.get(sid) == "complete"):
+                results[sid] = outcome
+            else:
+                print(f"   {sid:8s} rate limited — keeping the recorded "
+                      f"'complete' rather than marking it failed")
+            print(f"   {sid:8s} {'→ ' + outcome if ok else outcome[:88]}")
             if ok:
                 launched.append(sid)
         # Kaggle runs a kernel on push, so the batch must finish before the next
