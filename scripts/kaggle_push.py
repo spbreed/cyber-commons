@@ -390,11 +390,17 @@ def main() -> int:
             transient = ("retries exhausted" in outcome
                          or "Connection reset" in outcome
                          or "after 6 attempts" in outcome)
-            if ok or not (transient and results.get(sid) == "complete"):
+            # A transient failure never writes to the ledger at all. The first
+            # version only protected a row that currently said "complete",
+            # which meant one rate-limited attempt could turn a row into an
+            # ERROR and every attempt after that kept it there — the guard
+            # defended the good state and not the row. A rate limit says
+            # nothing about the notebook, so it leaves the record alone.
+            if ok or not transient:
                 results[sid] = outcome
             else:
-                print(f"   {sid:8s} rate limited — keeping the recorded "
-                      f"'complete' rather than marking it failed")
+                print(f"   {sid:8s} rate limited — ledger row left as "
+                      f"{results.get(sid, 'unset')!r}")
             print(f"   {sid:8s} {'→ ' + outcome if ok else outcome[:88]}")
             if ok:
                 launched.append(sid)
