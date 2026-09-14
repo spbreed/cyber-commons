@@ -5,261 +5,261 @@
  "notebooks": 134,
  "passed": 134,
  "failed": 0,
- "total_seconds": 7.2,
+ "total_seconds": 9.21,
  "total_output_lines": 5136,
  "results": [
   {
    "session": "A0.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.12,
+   "seconds": 0.15,
    "stdout_lines": 33,
    "stdout_chars": 1345,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.0",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
+   "seconds": 0.02,
    "stdout_lines": 0,
    "stdout_chars": 0,
    "error": "",
    "code_cells": 0,
-   "markdown_cells": 2
+   "markdown_cells": 1
   },
   {
    "session": "A1.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.08,
+   "seconds": 0.1,
    "stdout_lines": 70,
    "stdout_chars": 4190,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.10",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 11,
    "stdout_chars": 393,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.11",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 12,
    "stdout_chars": 561,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.12",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 15,
    "stdout_chars": 606,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.13",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.06,
    "stdout_lines": 12,
    "stdout_chars": 477,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.14",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 18,
    "stdout_chars": 850,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.15",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 11,
    "stdout_chars": 522,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.16",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 14,
    "stdout_chars": 562,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.17",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 19,
    "stdout_chars": 878,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.18",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.06,
    "stdout_lines": 46,
    "stdout_chars": 1788,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.19",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 74,
    "stdout_chars": 5053,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 12,
    "stdout_chars": 526,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 14,
    "stdout_chars": 685,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 8,
    "stdout_chars": 392,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 12,
    "stdout_chars": 495,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 15,
    "stdout_chars": 705,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 16,
    "stdout_chars": 673,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 23,
    "stdout_chars": 768,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A1.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 43,
    "stdout_chars": 2286,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A2.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 13,
    "stdout_chars": 576,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 11,
    "stdout_chars": 602,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A2.3",
@@ -270,73 +270,73 @@
    "stdout_chars": 1170,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A2.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 9,
    "stdout_chars": 437,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A2.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.06,
    "stdout_lines": 60,
    "stdout_chars": 2184,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A2.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 19,
    "stdout_chars": 810,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A2.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 12,
    "stdout_chars": 633,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A2.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 31,
    "stdout_chars": 1406,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 26,
    "stdout_chars": 1565,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.10",
@@ -347,326 +347,326 @@
    "stdout_chars": 1928,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.11",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.1,
    "stdout_lines": 48,
    "stdout_chars": 2376,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 46,
    "stdout_chars": 2181,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 16,
    "stdout_chars": 955,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 16,
    "stdout_chars": 585,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 11,
    "stdout_chars": 722,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.08,
+   "seconds": 0.1,
    "stdout_lines": 67,
    "stdout_chars": 3999,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 15,
    "stdout_chars": 630,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 26,
    "stdout_chars": 1379,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "A3.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 31,
    "stdout_chars": 1602,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.0",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 37,
    "stdout_chars": 2242,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.08,
+   "seconds": 0.1,
    "stdout_lines": 39,
    "stdout_chars": 1739,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.10",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.11,
    "stdout_lines": 72,
    "stdout_chars": 3874,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.11",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 40,
    "stdout_chars": 2126,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.12",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 58,
    "stdout_chars": 2829,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.13",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 60,
    "stdout_chars": 3360,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.14",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 45,
    "stdout_chars": 2765,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.15",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.1,
+   "seconds": 0.11,
    "stdout_lines": 81,
    "stdout_chars": 3324,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.16",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.14,
+   "seconds": 0.17,
    "stdout_lines": 141,
    "stdout_chars": 6322,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.17",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 57,
    "stdout_chars": 3036,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.18",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.06,
    "stdout_lines": 73,
    "stdout_chars": 3353,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.19",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.06,
    "stdout_lines": 50,
    "stdout_chars": 3381,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.1,
    "stdout_lines": 119,
    "stdout_chars": 5271,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.15,
+   "seconds": 0.18,
    "stdout_lines": 136,
    "stdout_chars": 7271,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.07,
+   "seconds": 0.09,
    "stdout_lines": 41,
    "stdout_chars": 2249,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.16,
+   "seconds": 0.19,
    "stdout_lines": 236,
    "stdout_chars": 12256,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 35,
    "stdout_chars": 1301,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 59,
    "stdout_chars": 2442,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.08,
    "stdout_lines": 23,
    "stdout_chars": 1254,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "B2.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.12,
    "stdout_lines": 66,
    "stdout_chars": 3135,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.0",
@@ -677,469 +677,469 @@
    "stdout_chars": 0,
    "error": "",
    "code_cells": 0,
-   "markdown_cells": 2
+   "markdown_cells": 1
   },
   {
    "session": "C1.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 47,
    "stdout_chars": 2148,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.10",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 42,
    "stdout_chars": 1942,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.11",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 46,
    "stdout_chars": 2405,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.07,
+   "seconds": 0.1,
    "stdout_lines": 32,
    "stdout_chars": 1385,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.07,
    "stdout_lines": 35,
    "stdout_chars": 1641,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.07,
+   "seconds": 0.1,
    "stdout_lines": 35,
    "stdout_chars": 1800,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 49,
    "stdout_chars": 2043,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.14,
    "stdout_lines": 55,
    "stdout_chars": 2568,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.16,
    "stdout_lines": 49,
    "stdout_chars": 2217,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 42,
    "stdout_chars": 2177,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "C1.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 24,
    "stdout_chars": 1239,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D1.0",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.06,
    "stdout_lines": 12,
    "stdout_chars": 527,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D1.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 38,
    "stdout_chars": 1870,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D1.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.08,
    "stdout_lines": 17,
    "stdout_chars": 663,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D1.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.11,
+   "seconds": 0.16,
    "stdout_lines": 68,
    "stdout_chars": 4186,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D2.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 39,
    "stdout_chars": 1941,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.08,
    "stdout_lines": 21,
    "stdout_chars": 1320,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D2.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 31,
    "stdout_chars": 1427,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D2.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.12,
    "stdout_lines": 55,
    "stdout_chars": 2568,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D2.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 15,
    "stdout_chars": 820,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D2.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 42,
    "stdout_chars": 2177,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.1,
+   "seconds": 0.11,
    "stdout_lines": 76,
    "stdout_chars": 3684,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.10",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 21,
    "stdout_chars": 1104,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 23,
    "stdout_chars": 1215,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.12,
    "stdout_lines": 49,
    "stdout_chars": 2217,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.07,
    "stdout_lines": 32,
    "stdout_chars": 1526,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.09,
    "stdout_lines": 50,
    "stdout_chars": 2480,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 22,
    "stdout_chars": 1145,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.08,
+   "seconds": 0.13,
    "stdout_lines": 46,
    "stdout_chars": 2593,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.06,
    "stdout_lines": 45,
    "stdout_chars": 1882,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D3.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 30,
    "stdout_chars": 1772,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D4.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 23,
    "stdout_chars": 1184,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D4.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 28,
    "stdout_chars": 1740,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D4.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.06,
    "stdout_lines": 34,
    "stdout_chars": 1908,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D4.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.08,
    "stdout_lines": 45,
    "stdout_chars": 1907,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D4.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.06,
    "stdout_lines": 24,
    "stdout_chars": 1239,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D5.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.1,
    "stdout_lines": 42,
    "stdout_chars": 1942,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D5.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 29,
    "stdout_chars": 1369,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D5.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 8,
    "stdout_chars": 490,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D5.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 22,
    "stdout_chars": 1265,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D5.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 33,
    "stdout_chars": 1439,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "D5.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 39,
    "stdout_chars": 2042,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.0",
@@ -1150,337 +1150,337 @@
    "stdout_chars": 0,
    "error": "",
    "code_cells": 0,
-   "markdown_cells": 2
+   "markdown_cells": 1
   },
   {
    "session": "E1.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.09,
    "stdout_lines": 31,
    "stdout_chars": 1574,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.10",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 31,
    "stdout_chars": 1474,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.11",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 54,
    "stdout_chars": 2753,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.12",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 51,
    "stdout_chars": 2617,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.13",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.08,
+   "seconds": 0.1,
    "stdout_lines": 31,
    "stdout_chars": 1653,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 34,
    "stdout_chars": 2415,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 48,
    "stdout_chars": 2528,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.09,
    "stdout_lines": 74,
    "stdout_chars": 3330,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.09,
+   "seconds": 0.13,
    "stdout_lines": 35,
    "stdout_chars": 1363,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 31,
    "stdout_chars": 1569,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 28,
    "stdout_chars": 1111,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 39,
    "stdout_chars": 2257,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E1.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 20,
    "stdout_chars": 1260,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 26,
    "stdout_chars": 1582,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 45,
    "stdout_chars": 2069,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 37,
    "stdout_chars": 1639,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 46,
    "stdout_chars": 2237,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.08,
    "stdout_lines": 45,
    "stdout_chars": 2393,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 41,
    "stdout_chars": 2196,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.07,
    "stdout_lines": 30,
    "stdout_chars": 1229,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 30,
    "stdout_chars": 1286,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E2.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 30,
    "stdout_chars": 1071,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E3.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 42,
    "stdout_chars": 2007,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E3.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 40,
    "stdout_chars": 2329,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E3.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 51,
    "stdout_chars": 2136,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E3.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 25,
    "stdout_chars": 1368,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E3.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 34,
    "stdout_chars": 1888,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E3.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 45,
    "stdout_chars": 2209,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E3.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.05,
    "stdout_lines": 36,
    "stdout_chars": 2196,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   },
   {
    "session": "E3.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.06,
    "stdout_lines": 44,
    "stdout_chars": 2295,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 2
+   "markdown_cells": 0
   }
  ]
 }

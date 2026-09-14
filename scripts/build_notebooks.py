@@ -222,55 +222,55 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     ))
     tools_used = ", ".join(used) or "standard library only"
 
-    # ---- header ----------------------------------------------------------
-    # One markdown cell, and it is identification rather than content: which
-    # lesson this is and where to read it. Everything else a reader needs —
-    # the relevance, the three days, the framework, the procedure, the
-    # challenge — lives on the lesson page, which is where it is rendered from
-    # source. A notebook that repeated all of it was the same words twice, and
-    # the copy inside the notebook was the one nobody could correct.
-    cells = [md(
-        f"# {sid} \u00b7 {s['title']}\n\n"
-        f"**{entry['fn']} \u2192 {entry['track']}**\n\n"
-        f"This notebook is the executable half of the lesson: the procedure, "
-        f"run. The lesson itself \u2014 why it matters, the framework, the "
-        f"skill it teaches and what the numbers below mean \u2014 is at "
-        f"**[{sid} on Cyber Commons]({SITE}/lessons/{sid}.html)**.\n\n"
-        f"| | |\n|---|---|\n"
-        f"| Tools used | {tools_used} |\n"
-        f"| Read the lesson | {SITE}/lessons/{sid}.html |"
-    )]
-
-    # ---- the code, and nothing else --------------------------------------
-    # Only steps that execute. The prose steps, the SKILL.md, the diagram and
-    # the framing are rendered on the lesson page from these same sources, so
-    # dropping them here removes a duplicate rather than information.
+    # ---- code, and nothing but code --------------------------------------
+    # The notebook is the executable half of the lesson and carries no prose at
+    # all: no title block, no framing, no SKILL.md, no footer. All of that is
+    # rendered on the lesson page from these same sources, and a second copy
+    # inside the notebook was the one nobody could correct.
+    #
+    # What a reader needs to get back to the lesson rides in a comment at the
+    # top of the first cell, so provenance survives without a markdown section.
+    cells = []
     RUNS = {"py", "skill", "skill_script", "model"}
     n = len(ex["steps"])
     for i, (kind, source) in enumerate(ex["steps"]):
-        # The skill runtime is emitted by the skill step that parses it; a
-        # lesson asking for it separately would run the parser twice.
+        # The skill runtime is emitted by the skill step that parses it; asking
+        # for it separately would run the parser twice.
         if (kind == "py" and source == SKILL_RUNTIME
                 and i + 1 < n and ex["steps"][i + 1][0] == "skill"):
             continue
-        if kind == "skill":
-            continue                      # the procedure is prose; the page has it
+        if kind in ("md", "html", "skill"):
+            continue                      # prose — the page renders it
         if kind == "skill_script":
             cells.append(code(run_skill_cell(source)))
         elif kind == "model":
             cells.append(code(MODEL_RUNTIME))
             cells.append(code(live_cell(source["task"], source["replay"],
                                         source.get("system"), source["check"])))
-        elif kind in ("md", "html"):
-            continue                      # rendered on the page, not here
         else:
             cells.append(code(source))
 
-    cells.append(md(
-        f"---\n\n[Read this lesson]({SITE}/lessons/{sid}.html) \u00b7 "
-        f"[All lessons]({SITE}/lessons/) \u00b7 "
-        f"[Source]({REPO}/blob/{BRANCH}/labs/notebooks/{sid}.ipynb)\n\n"
-        f"*Cyber Commons \u2014 a free, open commons for Cyber AI.*"))
+    header = (f"# {sid} \u00b7 {s['title']}\n"
+              f"# {entry['fn']} \u2192 {entry['track']}\n"
+              f"#\n"
+              f"# This notebook runs the lesson's procedure. The lesson itself\n"
+              f"# \u2014 why it matters, the framework, the skill and what these\n"
+              f"# numbers mean \u2014 is at:\n"
+              f"#   {SITE}/lessons/{sid}.html\n"
+              f"# Tools used: {tools_used}\n\n")
+    if cells:
+        first = cells[0]["source"]
+        cells[0]["source"] = [header] + (first if isinstance(first, list) else [first])
+    else:
+        # A reading lesson has no code, so there is none to keep. It gets one
+        # markdown cell instead of a comment-only code cell — a code cell that
+        # executes nothing would still count as "a lesson that runs a skill"
+        # everywhere that metric is measured, and three lessons would quietly
+        # start claiming to run something they do not.
+        cells.append(md(
+            f"### {sid} \u00b7 {s['title']}\n\n"
+            f"This lesson has no procedure to run \u2014 it is read. "
+            f"[Open it on Cyber Commons]({SITE}/lessons/{sid}.html)."))
 
     return {
         "cells": cells,

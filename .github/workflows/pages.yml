@@ -93,6 +93,15 @@ jobs:
       - name: Check the prose for phrasing a reader must decode
         run: python3 scripts/check_clarity.py --check
 
+      # Text that is present, correct and invisible. A white-theme change left
+      # a dark-theme `pre` behind, a later rule gave every `code` a light pill
+      # background, and fenced blocks rendered pale blue on near-white — the
+      # `git clone` lines and every SKILL.md frontmatter were unreadable with a
+      # green build. No rule catches that: each declaration is fine alone. So
+      # the pages are rendered and measured. Skipped where there is no browser.
+      - name: Check every page for text nobody can read
+        run: python3 scripts/check_contrast.py --all --check
+
       - name: Install the diagram renderers
         run: sudo apt-get update -qq && sudo apt-get install -y -qq graphviz plantuml
 

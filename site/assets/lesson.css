@@ -84,7 +84,8 @@ header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
 /* video */
 .video{margin:26px 0 30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;
   background:var(--ink-2)}
-.video .frame{position:relative;width:100%;aspect-ratio:16/9;background:#070a12}
+.video .frame{position:relative;width:100%;aspect-ratio:16/9;background:#0d1b26;
+  --on-dark:#b9cad8}
 /* an empty slot should not push the lesson below the fold */
 .video.empty .frame{aspect-ratio:auto;min-height:190px}
 .video .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
@@ -93,9 +94,9 @@ header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
   background:radial-gradient(120% 90% at 50% 0%,rgba(77,155,255,.08),transparent 70%)}
 .video .ph .icon{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);
   display:grid;place-items:center;color:var(--text-faint);font-size:20px;background:var(--surface)}
-.video .ph p{margin:0;color:var(--text-faint);font-size:14px;max-width:44ch}
+.video .ph p{margin:0;color:var(--on-dark,#b9cad8);font-size:14px;max-width:44ch}
 .video .ph .lab{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--text-faint)}
+  text-transform:uppercase;color:var(--on-dark,#b9cad8)}
 .video .cap{padding:12px 16px;border-top:1px solid var(--line-soft);font-family:"IBM Plex Mono";
   font-size:11.5px;color:var(--text-faint);display:flex;justify-content:space-between;gap:12px;
   flex-wrap:wrap}
@@ -116,12 +117,20 @@ header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
 .sec > h2{font-size:20px;margin-bottom:6px}
 .sec > .sub{color:var(--text-faint);font-size:13.5px;margin:0 0 16px}
 
-/* code */
-pre{background:#070a12;border:1px solid var(--line-soft);border-radius:12px;padding:18px 20px;
-  overflow-x:auto;margin:0}
+/* code ------------------------------------------------------------------
+   These were dark-theme rules that survived the switch to a white ground:
+   a near-black `pre` with pale blue `#cfe0ff` text. On its own that was
+   still legible. What made it invisible was the section rule below giving
+   every `code` element a light pill background — so a fenced block ended up
+   pale blue on near-white, and the `git clone` lines on A0.1 and every
+   embedded SKILL.md frontmatter disappeared entirely.
+   Both halves are fixed here: the block is light with dark text, and the
+   pill is scoped so it can never apply inside a `pre`. */
+pre{background:var(--ink-2);border:1px solid var(--line);border-radius:12px;
+  padding:18px 20px;overflow-x:auto;margin:0;color:var(--text)}
 code{font-family:"IBM Plex Mono",monospace;font-size:13.2px}
-pre code{color:#cfe0ff;line-height:1.7}
-:not(pre) > code{background:var(--surface);border:1px solid var(--line-soft);border-radius:5px;
+pre code{color:var(--text);background:none;border:0;padding:0;line-height:1.7}
+:not(pre) > code{background:var(--surface);border:1px solid var(--line);border-radius:5px;
   padding:1px 6px;font-size:13px;color:var(--text)}
 .expect{margin-top:14px;border-left:2px solid var(--secure);padding:10px 0 10px 14px;
   color:var(--text-dim);font-size:14.5px}
@@ -134,7 +143,7 @@ pre code{color:#cfe0ff;line-height:1.7}
   text-decoration:none;padding:12px 18px;border-radius:10px;border:1px solid var(--line);
   color:var(--text);transition:border-color .2s,color .2s}
 .btn:hover{border-color:var(--defend);color:var(--defend)}
-.btn.p{background:var(--secure);color:#231402;border-color:var(--secure);font-weight:600}
+.btn.p{background:var(--secure);color:#fff;border-color:var(--secure);font-weight:700}
 .btn.p:hover{color:#231402;filter:brightness(1.06)}
 
 /* tools used — packages and models in one list, not three categories */
@@ -179,7 +188,7 @@ footer a{color:var(--text-dim);text-decoration:none}
 /* ---------------------------------------------------------------- notebook
    The lesson renders the same .ipynb that runs on Kaggle, cell by cell, so the
    page and the exercise cannot drift apart. */
-.btn.k{background:var(--defend);color:#04101f;border-color:var(--defend);font-weight:600}
+.btn.k{background:var(--defend);color:#fff;border-color:var(--defend);font-weight:700}
 .btn.k:hover{color:#04101f;filter:brightness(1.08)}
 .kagnote{margin-top:10px;font-size:13.5px;line-height:1.55}
 .kagnote b{color:var(--text)}
@@ -225,7 +234,7 @@ details.kagnote>summary:focus-visible{outline:2px solid var(--accent,#4D9BFF);
 .nbmd hr{border:0;border-top:1px solid var(--line-soft);margin:16px 0}
 .nbmd code{font-size:13px}
 
-.nbcode{position:relative;background:#080C16}
+.nbcode{position:relative;background:var(--ink-2);border:1px solid var(--line);border-radius:10px}
 .nbcode pre{margin:0;border:0;border-radius:0;background:transparent;
   padding:16px 20px 16px 54px;overflow-x:auto}
 .nbtag{position:absolute;top:16px;left:14px;font-family:"IBM Plex Mono";font-size:10.5px;
@@ -238,7 +247,7 @@ details.kagnote>summary:focus-visible{outline:2px solid var(--accent,#4D9BFF);
 /* A diagram a skill emitted, rendered by real Graphviz/PlantUML. The source is
    text so the notebook stays dependency-free; the page shows the picture. */
 .nbdiag{margin:14px 0;padding:14px 14px 10px;border:1px solid var(--line);
-  border-radius:10px;background:var(--panel,#0f131c);overflow-x:auto}
+  border-radius:10px;background:var(--ink-2);overflow-x:auto}
 .nbdiag img{display:block;max-width:100%;height:auto;margin:0 auto}
 .nbdiag figcaption{margin-top:10px;padding-top:9px;border-top:1px solid var(--line-soft);
   font-size:12px;color:var(--text-faint);text-align:left}
@@ -301,7 +310,7 @@ details.recorded .out{margin:0;border:0;border-top:1px solid var(--line-soft);
 .lsb th,.lsb td{border:1px solid var(--line);padding:9px 11px;text-align:left;
   vertical-align:top}
 .lsb th{background:var(--surface);font-weight:700}
-.lsb code{background:var(--surface);border-radius:4px;padding:1px 5px;
+.lsb :not(pre) > code{background:var(--surface);border-radius:4px;padding:1px 5px;
   font-family:"IBM Plex Mono",monospace;font-size:13.5px}
 
 .ls-amber {border-color:var(--s-amber-ln); border-left-color:var(--s-amber)}
