@@ -111,6 +111,13 @@ jobs:
       - name: Check the documentation's counted claims against the tree
         run: python3 scripts/check_claims.py --check
 
+      # A context file that has drifted is read with the same confidence as a
+      # correct one. check_claims covers its numbers; this covers its structure
+      # — every script it names exists, and its gate table and this workflow
+      # agree in both directions.
+      - name: Check CLAUDE.md against the repository it describes
+        run: python3 scripts/check_claude_md.py --check
+
       - name: Every lesson's framework labels must resolve, and be real
         run: python3 scripts/check_frameworks.py
 
