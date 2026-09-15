@@ -250,27 +250,55 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
         else:
             cells.append(code(source))
 
-    header = (f"# {sid} \u00b7 {s['title']}\n"
-              f"# {entry['fn']} \u2192 {entry['track']}\n"
-              f"#\n"
-              f"# This notebook runs the lesson's procedure. The lesson itself\n"
-              f"# \u2014 why it matters, the framework, the skill and what these\n"
-              f"# numbers mean \u2014 is at:\n"
-              f"#   {SITE}/lessons/{sid}.html\n"
-              f"# Tools used: {tools_used}\n\n")
+    # The header is a comment rather than a markdown cell so the notebook stays
+    # code-only. It carries the one prerequisite people actually get stuck on:
+    # the cell below clones this repository, and a Kaggle kernel has no network
+    # until you switch it on. Without this, the first thing a reader meets is
+    # a failed clone and no idea why.
+    header = (
+        f"# {'=' * 74}\n"
+        f"# {sid} \u00b7 {s['title']}\n"
+        f"# {entry['fn']} \u2192 {entry['track']}\n"
+        f"#\n"
+        f"# READ THE LESSON:  {SITE}/lessons/{sid}.html\n"
+        f"# Tools used:       {tools_used}\n"
+        f"# {'=' * 74}\n"
+        f"#\n"
+        f"# BEFORE YOU RUN THIS ON KAGGLE \u2014 turn the internet on.\n"
+        f"#\n"
+        f"#   This cell clones github.com/spbreed/cyber-commons to fetch the\n"
+        f"#   procedure. A Kaggle kernel starts with no network, so the clone\n"
+        f"#   fails with something like \"Could not resolve host: github.com\".\n"
+        f"#   That is the kernel, not the lesson.\n"
+        f"#\n"
+        f"#   1. Open the right-hand panel   (Kaggle: the \u00ab chevron, top right)\n"
+        f"#   2. Session options \u2192 Internet   \u2192 switch it ON\n"
+        f"#   3. Accept the prompt, then re-run this cell\n"
+        f"#\n"
+        f"#   The toggle needs a phone-verified Kaggle account\n"
+        f"#   (Settings \u2192 Phone Verification, about a minute).\n"
+        f"#\n"
+        f"#   NO PHONE VERIFICATION? Use the dataset instead, no network needed:\n"
+        f"#   Add Input \u2192 Datasets \u2192 search \"cyber-commons-skills\"\n"
+        f"#   \u2192 add cybercommons/cyber-commons-skills. The cell finds it at\n"
+        f"#   /kaggle/input and skips the clone entirely.\n"
+        f"#\n"
+        f"#   Running from a git checkout instead? Nothing to do \u2014 the tree\n"
+        f"#   is already on disk and nothing is fetched.\n"
+        f"# {'=' * 74}\n\n")
     if cells:
         first = cells[0]["source"]
         cells[0]["source"] = [header] + (first if isinstance(first, list) else [first])
     else:
-        # A reading lesson has no code, so there is none to keep. It gets one
-        # markdown cell instead of a comment-only code cell — a code cell that
-        # executes nothing would still count as "a lesson that runs a skill"
-        # everywhere that metric is measured, and three lessons would quietly
-        # start claiming to run something they do not.
-        cells.append(md(
-            f"### {sid} \u00b7 {s['title']}\n\n"
-            f"This lesson has no procedure to run \u2014 it is read. "
-            f"[Open it on Cyber Commons]({SITE}/lessons/{sid}.html)."))
+        # A reading lesson has no procedure. It still gets a code cell, so every
+        # notebook in the tree is code-only — and "how many lessons run a skill"
+        # is measured from the lesson sources rather than from "has a code
+        # cell", so this cell cannot inflate that number.
+        cells.append(code(
+            header.rstrip() + "\n\n"
+            "# This lesson is read, not run: it has no procedure.\n"
+            f"print(\"{sid} is a reading lesson \u2014 open it at\")\n"
+            f"print(\"  {SITE}/lessons/{sid}.html\")\n"))
 
     return {
         "cells": cells,

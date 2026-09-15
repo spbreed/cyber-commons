@@ -32,6 +32,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from exercises import EXERCISES  # noqa: E402
 
 
 def facts() -> dict[str, int]:
@@ -46,8 +48,22 @@ def facts() -> dict[str, int]:
     return {
         "skills": len(list((ROOT / "skills").rglob("SKILL.md"))),
         "notebooks": len(nb),
-        "run_a_skill": sum(1 for c in cells
-                           if any(x["cell_type"] == "code" for x in c)),
+        # Measured from the lesson sources, not from "does the notebook have a
+        # code cell". Every notebook is code-only now, including the reading
+        # lessons whose single cell is a comment — counting cells would report
+        # all 134 as running a skill, which is the claim this exists to check.
+        # Measured from the lesson sources, not from "does the notebook have a
+        # code cell". Every notebook is code-only now, including the reading
+        # lessons whose single cell is a comment — counting cells would report
+        # all 134 as running a skill, which is the claim this exists to check.
+        # Restricted to ids the curriculum actually carries: EXERCISES still
+        # holds three orphans from the Function C trim, and they are not lessons.
+        "run_a_skill": sum(
+            1 for sid, ex in EXERCISES.items()
+            if sid in {s["id"] for f in cur["functions"] for t in f["tracks"]
+                       for s in t["sessions"]}
+            and any(k in ("py", "skill_script", "model")
+                    for k, _ in ex.get("steps", []))),
         "sessions": sum(len(t["sessions"]) for f in cur["functions"]
                         for t in f["tracks"]),
         "chapters": sum(len(f["tracks"]) for f in cur["functions"]),

@@ -118,6 +118,12 @@ jobs:
       - name: Check CLAUDE.md against the repository it describes
         run: python3 scripts/check_claude_md.py --check
 
+      # The recording scripts are generated from the lesson sources. If a
+      # lesson changes and this is not regenerated, somebody records a script
+      # for a lesson that no longer says that.
+      - name: Check the lightboard scripts are in step with the lessons
+        run: python3 scripts/build_lightboard.py --check
+
       - name: Every lesson's framework labels must resolve, and be real
         run: python3 scripts/check_frameworks.py
 

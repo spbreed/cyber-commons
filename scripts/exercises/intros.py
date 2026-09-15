@@ -17,6 +17,41 @@ EXERCISES: dict[str, dict] = {
 
 "A1.0": {
  "concept": """
+### First, what CyberTravels is — and why it is in every lesson you will read
+
+**CyberTravels is a company that does not exist, and it is the most important
+thing in this commons.** It is a corporate travel business: it books flights and
+hotels for other companies' staff, takes payments, issues refunds, and keeps
+customer profiles. Ordinary. Then it shipped an agentic platform, and became the
+one system this entire curriculum is taught on.
+
+Every lesson in all five functions is grounded in it. Not *illustrated with* —
+**grounded in**. When Function A names a component, it is a CyberTravels
+component. When Function C attacks something, it attacks CyberTravels. When
+Function D writes a detection, it writes it against CyberTravels' telemetry, and
+when Function E counts a control, it counts CyberTravels' controls.
+
+That is a deliberate cost. Any given lesson could find a sharper example of its
+own idea somewhere else, and several would. What you get instead is
+**accumulation**: the refund limit an attacker walks past in A1.2 is the same
+refund limit a detection watches for in Function D and a report counts in
+Function E. By the fourth function you are not learning a fourth example — you
+are watching a system you already understand fail in a new way.
+
+The alternative is what most security material does: a fresh example per topic,
+so the reader holds a hundred unrelated systems and never builds a model of any
+of them. One system, followed all the way through, is worth more than a hundred
+sharp illustrations.
+
+**Where it comes from.** The narrative, the six risk families and the twelve-row
+register are from *Agentic AI is rising fast — but the attack surface is
+exploding* (Karthik Ramamoorthy, May 2025). The architecture below, the mapping
+onto lessons, the controls and all of the code are this commons'.
+
+So: meet the company.
+
+---
+
 Meet **CyberTravels**. It sells corporate travel, and last quarter it shipped
 an agentic platform that plans and manages a whole trip through a conversation.
 Alex is the product engineer who built it.
