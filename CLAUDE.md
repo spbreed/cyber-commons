@@ -164,7 +164,7 @@ that are enforced or that get broken most.
 
 ## 5 · Pre-deployment testing
 
-Fourteen gates, in the order CI runs them. Each exists because of a specific
+Sixteen gates, in the order CI runs them. Each exists because of a specific
 failure — a gate whose reason is written down does not get deleted by the next
 person.
 

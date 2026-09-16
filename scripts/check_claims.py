@@ -52,10 +52,6 @@ def facts() -> dict[str, int]:
         # code cell". Every notebook is code-only now, including the reading
         # lessons whose single cell is a comment — counting cells would report
         # all 134 as running a skill, which is the claim this exists to check.
-        # Measured from the lesson sources, not from "does the notebook have a
-        # code cell". Every notebook is code-only now, including the reading
-        # lessons whose single cell is a comment — counting cells would report
-        # all 134 as running a skill, which is the claim this exists to check.
         # Restricted to ids the curriculum actually carries: EXERCISES still
         # holds three orphans from the Function C trim, and they are not lessons.
         "run_a_skill": sum(
@@ -74,6 +70,13 @@ def facts() -> dict[str, int]:
         "skills_with_script": sum(
             1 for d in (ROOT / "skills").rglob("SKILL.md")
             if list(d.parent.glob("scripts/*.py"))),
+        # How many check scripts CI actually invokes. The README counts them,
+        # and CLAUDE.md's gate table groups a couple of them onto one row, so
+        # the two numbers are allowed to differ — check_claude_md.py is what
+        # holds the table itself to the workflow.
+        "ci_scripts": len(set(re.findall(
+            r"python3 scripts/([a-z_0-9]+\.py)",
+            (ROOT / ".github/workflows/pages.yml").read_text()))),
     }
 
 
@@ -85,8 +88,10 @@ CLAIMS = [
      "the headline lesson count"),
     ("README.md", r"\*\*\d+ lessons across (\d+) chapters\.\*\*", "chapters",
      "the headline chapter count"),
-    ("README.md", r"they \*\*run a skill\*\*\. (\d+) of the \d+ do", "run_a_skill",
+    ("README.md", r"skill\*\*\. (\d+) of the \d+ do", "run_a_skill",
      "how many lessons execute something"),
+    ("README.md", r"It runs (\d+) scripts, each of which", "ci_scripts",
+     "how many check scripts CI runs"),
     ("README.md", r"Every one of the (\d+) is executed in CI", "notebooks",
      "the CI coverage claim"),
     ("README.md", r"skills/\s+(\d+) agent skills", "skills",
