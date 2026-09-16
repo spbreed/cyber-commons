@@ -8,10 +8,10 @@ So there is one system now, and every lesson is grounded in it: **CyberTravels**
 (cybertravels.com), a corporate travel company whose product, **CyberTravels**, is an
 agentic platform. Alex is the product engineer who shipped it.
 
-The narrative and the risk register below come from *Agentic AI is rising fast —
-but the attack surface is exploding* by Karthik Ramamoorthy (May 2025). They are
-used here as the spine of the curriculum: the architecture, the six risk
-families and the twelve-row register are his; the mapping onto lessons, the
+The narrative and the risk register below are adapted from *Agentic AI is rising
+fast — but the attack surface is exploding* (May 2025). They are used here as the
+spine of the curriculum: the architecture, the six risk families and the
+twelve-row register come from that article; the mapping onto lessons, the
 controls and the code are this commons'.
 
 Three things live here so that they cannot drift:

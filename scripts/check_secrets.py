@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refuse to let a credential reach git history.
+"""Refuse to let a credential — or a personal identifier — reach git history.
 
 Run standalone (`python3 scripts/check_secrets.py`) or as a pre-commit hook
 (`scripts/install-hooks.sh`). It scans tracked and staged files for the token
@@ -9,10 +9,17 @@ Kaggle workflow in `scripts/kaggle_push.py` takes a live key.
 The rule for this repo is absolute: **credentials live in ~/.kaggle/kaggle.json
 or the environment, never in the tree.** This script is the enforcement.
 
-Exit status: 0 clean, 1 something credential-shaped was found.
+It also refuses a second class of thing: the maintainer's real name. That is
+not a credential, but it is the one field that de-anonymised this project
+once — a citation byline rendered into a live lesson page, which is
+searchable, indexed, and enough on its own to tie the site to a person. See
+IDENTIFIERS for how that check avoids reintroducing what it forbids.
+
+Exit status: 0 clean, 1 something credential-shaped or identifying was found.
 """
 from __future__ import annotations
 
+import hashlib
 import re
 import subprocess
 import sys
@@ -57,6 +64,46 @@ FIXTURES = {
 }
 
 
+# --- personal identifiers ----------------------------------------------------
+#
+# Stored as SHA-256 of the lowercased token, never as the token. A guard
+# written in plaintext would put the very string it forbids back into the tree,
+# into CI logs, and into every clone — it would be the leak it is meant to
+# stop. Hashing costs nothing here because we are testing membership, not
+# searching: the file is tokenised and each token is hashed once.
+#
+# Both a single word and a two-word phrase are covered, because the exposure
+# was a citation byline ("Firstname Surname, May 2025") rendered into a public
+# lesson page while the surname alone never appeared.
+#
+# To add one: python3 -c "import hashlib,sys;\
+#   print(hashlib.sha256(sys.argv[1].lower().encode()).hexdigest())" 'the token'
+# Run that where the shell does not record history, and do not paste the token
+# into a commit message.
+IDENTIFIERS = {
+    "ffa26d0d4ffccd0878e06bfdc3fd1d3388515578694b28c07942a31ea50c97a8",
+    "dc30ba68122a956c947056286dd419658be6e166518b82b6ee041e9450440661",
+    "039fdb01b87568e3f205a53652de34e7acbcfadb0af0d1eb835457fed237df03",
+}
+
+_WORD = re.compile(r"[A-Za-z][A-Za-z'’-]{2,}")
+
+
+def identifiers_in(text: str) -> set[str]:
+    """Digests from IDENTIFIERS that this text contains.
+
+    Single words and adjacent pairs both, since a full name is two tokens and
+    a surname on its own is one. Returns digests, not the matched text: this
+    function's whole point is that the caller never handles the string.
+    """
+    words = [m.group(0).lower() for m in _WORD.finditer(text)]
+    cand = set(words)
+    cand |= {f"{a} {b}" for a, b in zip(words, words[1:])}
+    cand |= {a + b for a, b in zip(words, words[1:])}
+    return {h for h in (hashlib.sha256(c.encode()).hexdigest() for c in cand)
+            if h in IDENTIFIERS}
+
+
 # Shapes the rules above MUST catch, and shapes they must not. These are the
 # real formats issued today, with the secret bodies replaced by filler of the
 # same length and character class — the originals were checked against this
@@ -85,6 +132,14 @@ def self_test() -> int:
     never tested against a real shape is a scanner nobody has checked.
     """
     bad = 0
+    # The identifier check is tested by construction rather than by fixture,
+    # for the same reason it is stored hashed: a test case would have to spell
+    # the name out. A digest of a token nothing matches proves the lookup runs
+    # and that ordinary prose does not trip it.
+    probe = hashlib.sha256(b"zzqx nonexistent").hexdigest()
+    if identifiers_in("zzqx nonexistent") or probe in IDENTIFIERS:
+        print("  NOISE identifier check fires on filler text")
+        bad += 1
     for s in MUST_DETECT:
         if not any(p.search(s) for _, p in RULES):
             print(f"  MISS  a credential shape is not detected: {s[:24]}...")
@@ -112,6 +167,7 @@ def main() -> int:
     if "--self-test" in sys.argv:
         return self_test()
     hits: list[tuple[str, str, int, str]] = []
+    named: list[str] = []
     for rel in tracked_files():
         if rel in SELF:
             continue
@@ -122,6 +178,8 @@ def main() -> int:
             text = f.read_text(errors="ignore")
         except OSError:
             continue
+        if identifiers_in(text):
+            named.append(rel)
         for name, pat in RULES:
             for m in pat.finditer(text):
                 if m.group(0) in FIXTURES:
@@ -130,15 +188,29 @@ def main() -> int:
                 # never echo the secret itself into logs or CI output
                 hits.append((rel, name, line, m.group(0)[:6] + "…"))
 
+    if named:
+        # Deliberately says neither the token nor which of them matched: this
+        # output goes to a public CI log, and naming it there would undo the
+        # removal that the check exists to hold.
+        print("BLOCKED — a guarded personal identifier appears in:\n",
+              file=sys.stderr)
+        for rel in named:
+            print(f"  {rel}", file=sys.stderr)
+        print("\nThe site is published, so a name in a source file becomes a "
+              "name on a public page. Remove it and rebuild.", file=sys.stderr)
+
     if hits:
         print("BLOCKED — credential-shaped content in tracked files:\n", file=sys.stderr)
         for rel, name, line, redacted in hits:
             print(f"  {rel}:{line}  {name}  ({redacted})", file=sys.stderr)
         print("\nMove it to ~/.kaggle/kaggle.json or an environment variable and "
               "remove it from the tree.", file=sys.stderr)
+
+    if hits or named:
         return 1
 
-    print(f"ok: no credentials in {len(tracked_files())} tracked files")
+    print(f"ok: no credentials and no guarded identifiers in "
+          f"{len(tracked_files())} tracked files")
     return self_test()
 
 

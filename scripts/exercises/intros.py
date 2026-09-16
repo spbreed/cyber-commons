@@ -44,8 +44,8 @@ of them. One system, followed all the way through, is worth more than a hundred
 sharp illustrations.
 
 **Where it comes from.** The narrative, the six risk families and the twelve-row
-register are from *Agentic AI is rising fast — but the attack surface is
-exploding* (Karthik Ramamoorthy, May 2025). The architecture below, the mapping
+register are adapted from *Agentic AI is rising fast — but the attack surface is
+exploding* (May 2025). The architecture below, the mapping
 onto lessons, the controls and all of the code are this commons'.
 
 So: meet the company.
@@ -140,9 +140,9 @@ log what happened. An agent platform built on an estate that has not done those
 is not an agentic security problem; it is an ordinary one wearing a new hat.
 
 > The CyberTravels narrative, the six risk families and the twelve-row register
-> used throughout this commons are from *Agentic AI is rising fast — but the
-> attack surface is exploding*, Karthik Ramamoorthy, May 2025. The mapping onto
-> lessons, the controls and all of the code are this commons'.
+> used throughout this commons are adapted from *Agentic AI is rising fast — but
+> the attack surface is exploding* (May 2025). The mapping onto lessons, the
+> controls and all of the code are this commons'.
 """,
  "steps": [
   ("md", "## 2 · CyberTravels, as built"),
