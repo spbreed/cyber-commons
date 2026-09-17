@@ -10,13 +10,31 @@ they fail for different reasons:
 
   parses      the frontmatter and body split, name matches the directory
   contract    the output contract is valid JSON
-  script      the skill's own script executes to completion, standard library
-              only, and prints something
+  script      the skill's own script behaves correctly with **no model
+              configured**
 
-The script check runs each file in a subprocess with a stripped environment, so
-a skill that quietly depends on a model key, a network path or something a
-notebook happened to define is caught here rather than on somebody else's
-machine.
+That last one changed when every skill became model-backed, and the new
+meaning is the more useful one. Each script runs in a subprocess with the model
+and cloud variables stripped, and there are now two acceptable outcomes:
+
+  refuses     exit 2, having said that no model endpoint is configured. This
+              is the correct behaviour for a skill that needs a model, and
+              proving it is worth more than the old check ever was: it is the
+              evidence that no skill quietly substitutes a canned answer for a
+              model's. A stand-in that is allowed to answer has the right
+              shape, passes the contract, and is not a model result.
+
+  runs        exits 0 and prints something, for the skills that genuinely do
+              not call a model.
+
+What is *not* acceptable is a script that exits 0 and prints nothing, or that
+dies with a traceback instead of the refusal — a reader hitting a traceback
+concludes the repository is broken rather than that their machine is
+unconfigured.
+
+CI has no model endpoint and is not given one. Running the skills *against* a
+model is a separate job with a key attached; this gate is about what happens
+without one.
 
     python3 scripts/test_skills.py           # report
     python3 scripts/test_skills.py --check   # CI: non-zero on any failure
@@ -77,7 +95,7 @@ def main() -> int:
     for p in paths:
         ref = f"{p.parent.parent.name}/{p.parent.name}"
         row = {"skill": ref, "parses": False, "contract": False,
-               "script": None, "lines": 0, "seconds": 0.0}
+               "script": None, "lines": 0, "seconds": 0.0, "refused": False}
 
         try:
             meta, body = parse_skill(p.read_text())
@@ -108,9 +126,18 @@ def main() -> int:
                 row["seconds"] = round(time.time() - t0, 2)
                 out = r.stdout.strip()
                 row["lines"] = len(out.splitlines())
-                if r.returncode != 0:
+                if r.returncode == 2 and "no model" in out.lower():
+                    # The designed refusal. Exit 2 alone is not enough: it has
+                    # to have said why, on stdout, where the reader is looking.
+                    row["script"] = True
+                    row["refused"] = True
+                elif r.returncode != 0:
                     row["script"] = False
                     tail = (r.stderr.strip().splitlines() or ["(no stderr)"])[-1]
+                    if r.returncode == 2:
+                        tail = ("exited 2 without saying that no model is "
+                                "configured — a reader sees a broken "
+                                "repository, not an unconfigured machine")
                     problems.append(f"{ref}: {s.name} exited {r.returncode} — {tail}")
                 elif not out:
                     # A script that runs and prints nothing has not been shown
@@ -121,6 +148,8 @@ def main() -> int:
                     row["script"] = True
 
         mark = {True: "ok  ", False: "FAIL", None: "  - "}[row["script"]]
+        if row["refused"]:
+            mark = "wait"   # correctly refused: needs a model, said so
         print(f"  {mark} {ref:52s} contract={'y' if row['contract'] else 'N'} "
               f"{row['lines']:4d} lines {row['seconds']:5.2f}s")
         rows.append(row)

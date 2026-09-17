@@ -5,12 +5,15 @@
 A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.
 
-**134 lessons across 14 chapters.** Every lesson is the idea, the diagram, the
+**135 lessons across 14 chapters.** Every lesson is the idea, the diagram, the
 control, and what it looks like in one running system — and then it **runs a
-skill**. 131 of the 134 do, and the code is not in the notebook: the page shows
+skill**. 132 of the 135 do, and the code is not in the notebook: the page shows
 the `SKILL.md` as prose and the notebook runs that skill's own script out of
-[`skills/`](skills/). Every one of the 134 is executed in CI before it ships,
-and so is every skill. No licence, no vendor, no paid account, nothing to buy.
+[`skills/`](skills/). Every one of the 135 is executed in CI before it ships,
+and so is every skill. **Every skill is executed by a language model** — the
+script is the harness, not the procedure — so there is one prerequisite, and
+[A0.0](https://cybercommons.ai/lessons/A0.0.html) sets it up on a free tier. No
+licence, no vendor, no paid plan required.
 
 🌐 **[cybercommons.ai](https://cybercommons.ai)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md) · 🎙 [Recording scripts](LIGHTBOARD.md)
 
@@ -21,45 +24,61 @@ and so is every skill. No licence, no vendor, no paid account, nothing to buy.
 Three steps. The first two take about five minutes, and nothing is installed
 until you decide you want it local.
 
-## 1 · Read one page, so the rest makes sense
+## 1 · Set your machine up — this is the one that blocks everything
 
-**[A0.1 — Start here](https://cybercommons.ai/lessons/A0.1.html)** is the whole
-introduction on one page: who this is for, what a lesson is made of, which
-track to open first, and what Day 0/1/2 mean. Then
+**[A0.0 — Set up your machine](https://cybercommons.ai/lessons/A0.0.html)**
+compares the developer AI tools on the two things that decide the choice (real
+context window, and what the free tier gets you), then installs, clones, and
+points the skill runtime at a model. It ends by running one skill end to end
+and printing which model answered.
+
+```bash
+git clone --branch master https://github.com/spbreed/cyber-commons.git
+cd cyber-commons
+
+curl -fsSL https://ollama.com/install.sh | sh   # local, free, no account
+ollama serve & ollama pull qwen2.5:7b-instruct
+
+export OPENAI_BASE_URL=http://127.0.0.1:11434/v1   # the /v1 is not optional
+export OPENAI_API_KEY=ollama
+export MODEL=qwen2.5:7b-instruct
+
+PYTHONPATH=skills/_runtime python3 \
+  skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
+```
+
+A hosted free tier works identically — Google AI Studio issues a key with no
+card, and only the three variables change. **Without an endpoint every skill
+exits 2 and says so**; nothing here substitutes a canned answer for a model's,
+because an answer of that kind has the right shape, passes the contract, and is
+not a model result.
+
+## 2 · Read one page, then run a lesson
+
+**[A0.1](https://cybercommons.ai/lessons/A0.1.html)** is the whole introduction
+on one page: who this is for, what a lesson is made of, which track to open
+first, and what Day 0/1/2 mean. Then
 **[A1.0](https://cybercommons.ai/lessons/A1.0.html)**, which introduces
 CyberTravels — the one system every lesson is grounded in.
 
-## 2 · Run your first lesson
-
-Pick whichever route matches how you like to work. All three run the *same*
-skill script; none of them need a paid account.
-
-**Route A — in the browser, nothing installed.** Open any lesson page and press
-**▶ Run on Kaggle**. The notebook opens as a new kernel in *your* Kaggle
-account. Switch **Internet** on in the settings panel, then **Run All**. The
-copy is yours to edit and nothing is written back here.
-
-**Route B — locally. One clone, no dependencies.**
-
 ```bash
-git clone https://github.com/spbreed/cyber-commons.git
-cd cyber-commons
-python3 scripts/run_notebooks.py --session A1.2   # prompt injection — well under a second
-python3 scripts/run_notebooks.py                  # or all 134, about seven seconds
+python3 scripts/run_notebooks.py --session A1.2   # prompt injection
 ```
 
-**Route C — in your own coding agent.** Skip the lessons and take the
-procedures. Each is a real agent skill with frontmatter, in the format an agent
-loads:
+Or press **▶ Run on Kaggle** on any lesson page: the notebook opens as a new
+kernel in *your* account, and you set the same three variables there.
+
+**Taking the skills instead of the lessons?** Each is a real agent skill in the
+[agentskills.io](https://agentskills.io) format, which any skills-compatible
+agent loads:
 
 ```bash
 cp -r skills/appsec/appsec-vuln-audit ~/.claude/skills/
 python3 scripts/check_skills.py --check   # what CI checks them against
 ```
 
-Standard library only, free CPU kernel, no model download, no API key, no GPU,
-no quota. A lesson fetches the skills tree — a shallow, sparse clone, about
-three seconds — and runs one script out of it.
+Standard library only — there is nothing to `pip install`. The dependency is
+the model, not a package tree.
 
 > **If the Kaggle clone fails with `Could not resolve host: github.com`**, that
 > is the kernel, not the lesson: a Kaggle kernel starts with no network.
@@ -69,7 +88,7 @@ three seconds — and runs one script out of it.
 
 ## 3 · Then take the spine, then your chapter
 
-Nobody takes all 134. Everyone takes the **common spine** first — twenty
+Nobody takes all 135. Everyone takes the **common spine** first — twenty
 lessons, in order, that carry the vocabulary the rest runs on. Then the
 chapters for the chair you sit in, then one adjacent chapter, because the
 failures happen in the seams.
@@ -139,7 +158,7 @@ Every procedure is packaged as a real agent skill in [`skills/`](skills) —
 `SKILL.md` files with frontmatter, the format a coding agent loads. Each
 declares an **output contract**, which is what makes a skill checkable rather
 than aspirational. Every skill lesson embeds its skill verbatim at build time —
-so the lesson can never drift from the skill — and every one of the 139 carries
+so the lesson can never drift from the skill — and every one of the 140 carries
 a script the lesson runs.
 
 Several build the contract shape from the data they just produced and validate
@@ -223,7 +242,7 @@ label exists upstream and that the link resolves.
 
 ## Why you can trust the output
 
-**Every one of the 134 notebooks has been run twice — here, and again on Kaggle
+**Every one of the 135 notebooks has been run twice — here, and again on Kaggle
 on a different machine — and printed exactly the same bytes.**
 
 That second run is the claim worth making, because a kernel that prints nothing
@@ -331,13 +350,13 @@ guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 134 sessions, 14 chapters
+site/data/curriculum.json   source of truth: 135 sessions, 14 chapters
 curriculum/                 generated chapter docs + labs.json + frameworks.json
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: A1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
-skills/                     139 agent skills, plus _runtime/ — the one shared library
-labs/notebooks/             134 generated notebooks + execution and Kaggle evidence
+skills/                     140 agent skills, plus _runtime/ — the one shared library
+labs/notebooks/             135 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_* · kaggle_*

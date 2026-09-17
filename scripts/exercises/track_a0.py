@@ -16,6 +16,179 @@ from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
 
+"A0.0": {
+ "concept": """
+Every skill in this commons is **executed by a language model**. The Python
+script is not the procedure — it is the harness: it assembles the skill's
+documented steps, sends them to a model with the input, and validates the
+reply against the skill's output contract. So there is exactly one prerequisite,
+and it is not a Python package. It is a model endpoint.
+
+Get that wrong and nothing works, in a way that reads as a broken repository
+rather than an unconfigured machine. That is what this lesson prevents.
+
+### What you need, and what it costs
+
+Three things: a place to write code, a copy of this repository, and a model that
+answers. Only the third one has any real decision in it.
+
+The table below is the honest version of the developer-AI-tool market as it
+stands. Two columns matter more than the price. **The context window** is how
+much the tool can hold at once — and it is not all yours, because the working
+file, the project instructions, the terminal output and the dependencies are all
+spending from the same budget. **The free tier** is what you can actually do
+without a card.
+
+### A caution about the number in the middle column
+
+A context window is a ceiling, not an allowance. A tool advertising a million
+tokens will still lose the thread at a fraction of that, because the window is
+shared between your file, the project-root instructions, background command
+output and every dependency the agent pulled in. Both Cursor and Claude Code
+ship explicit compaction commands for exactly this reason. Treat the figure as
+"how much this could hold before it refuses", not "how much it will reason over
+well".
+
+The other thing worth knowing before you pick: **flat-rate pricing is mostly
+gone.** GitHub Copilot's $10 tier is not unlimited use — it is a baseline of AI
+credits that drains faster when you run an agent workflow than when you accept
+an autocomplete. Budget by what you run, not by the headline.
+
+### The rule for this lesson
+
+Everything below works on a free tier. You do not need a paid plan to finish
+this commons, and if a lesson ever requires one, that is a defect in the lesson.
+""",
+ "steps": [
+  ("md", "## 2 · Pick a tool, against its real numbers"),
+  ("html", D.table(
+    ["tool", "free tier", "max context window", "paid, per month"],
+    [["<b>Anthropic Claude</b> / Claude Code",
+      "Rolling message caps on the web app, resetting every 5 hours. $5 API "
+      "trial credit on phone verification.",
+      "<b>1M tokens</b> on paid plans with frontier models; 200k on the free "
+      "web plan",
+      "$20 Pro · $25 Max · usage-based API"],
+     ["<b>Google Antigravity</b>",
+      "Perpetual public preview, free. Local orchestration across editor, "
+      "terminal and browser.",
+      "<b>1M–2M tokens</b> depending on the underlying Gemini model, with "
+      "built-in state compression",
+      "$0 preview · enterprise seats via Google Cloud"],
+     ["<b>Google AI Studio</b>",
+      "Free API keys, 60 requests/minute on Gemini Flash, no billing details "
+      "required",
+      "<b>2M tokens</b> on Gemini Pro models",
+      "Pay-as-you-go once the free quota is breached"],
+     ["<b>OpenAI ChatGPT</b> / Codex",
+      "GPT-4o mini, code execution and data analysis. The legacy $5 API credit "
+      "is largely phased out.",
+      "128k tokens on standard frontier models; larger on API-only reasoning "
+      "tasks",
+      "$20 Plus · $200 Pro"],
+     ["<b>GitHub Copilot</b>",
+      "2,000 completions + 50 chat messages a month. <b>Students get the "
+      "premium tier free.</b>",
+      "32k–128k, scaled dynamically by which model serves the request",
+      "$10 Pro (bundles $15 of AI credits) · $39 Pro+"],
+     ["<b>Cursor</b>",
+      "Hobby: 2,000 completions + 50 slow requests a month. <b>Students get up "
+      "to a year of Pro.</b>",
+      "128k–200k mapped codebase context; up to 1M with your own API key",
+      "$20 Pro · $40 Business"],
+     ["<b>Amazon Q Developer</b>",
+      "50 agentic requests a month + 1,000 lines of code translation",
+      "100k+ tokens of indexed codebase, mapped into the IDE panel",
+      "$19 per user (Q Pro)"]],
+    caption="Free tiers and context windows as at the time of writing. If you "
+            "are a student, start at the two rows that say so — they are the "
+            "best value in the table by a wide margin.")),
+
+  ("md", "## 3 · Install what you actually need\n\n"
+         "Two of these are required. The third is the one people skip and then "
+         "spend an afternoon on.\n\n"
+         "```bash\n"
+         "# 1 — git and python3. Almost certainly already there.\n"
+         "git --version          # any 2.x\n"
+         "python3 --version      # 3.10 or newer\n"
+         "\n"
+         "# 2 — the repository. master is the trunk; every link on the site\n"
+         "#     points at it.\n"
+         "git clone --branch master https://github.com/spbreed/cyber-commons.git\n"
+         "cd cyber-commons\n"
+         "\n"
+         "# 3 — a model that answers. Local, free, no account:\n"
+         "curl -fsSL https://ollama.com/install.sh | sh\n"
+         "ollama serve &                 # not automatic on every platform\n"
+         "ollama pull qwen2.5:7b-instruct\n"
+         "```\n\n"
+         "There is nothing to `pip install`. Every script in this repository is "
+         "standard library only — the dependency is the model, not a package "
+         "tree.\n\n"
+         "## 4 · Point the runtime at the model"),
+
+  ("html", D.table(
+    ["variable", "what it is", "example"],
+    [["<code>OPENAI_BASE_URL</code>",
+      "The chat-completions endpoint. <b>It must end in <code>/v1</code></b> — "
+      "leaving it off is the single most common setup error, and it fails with "
+      "a 404 that names nothing.",
+      "<code>http://127.0.0.1:11434/v1</code>"],
+     ["<code>OPENAI_API_KEY</code>",
+      "Any non-empty value against a local server. A real key against a hosted "
+      "one.",
+      "<code>ollama</code>"],
+     ["<code>MODEL</code>",
+      "Which model to ask for. Must match a name the server actually serves.",
+      "<code>qwen2.5:7b-instruct</code>"]],
+    caption="One protocol — OpenAI-compatible chat completions — so the same "
+            "three variables point at Ollama, llama.cpp, vLLM or a hosted free "
+            "tier without a line of code changing.")),
+
+  ("md", "### Either of these works\n\n"
+         "```bash\n"
+         "# Local, free, offline after the pull, nothing leaves the machine:\n"
+         "export OPENAI_BASE_URL=http://127.0.0.1:11434/v1\n"
+         "export OPENAI_API_KEY=ollama\n"
+         "export MODEL=qwen2.5:7b-instruct\n"
+         "\n"
+         "# Or a hosted free tier — Google AI Studio gives a key with no card:\n"
+         "export OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\n"
+         "export OPENAI_API_KEY=<your AI Studio key>\n"
+         "export MODEL=gemini-2.5-flash\n"
+         "```\n\n"
+         "**Put the key in your shell profile, never in a file inside the "
+         "repository.** `scripts/check_secrets.py` runs as a pre-commit hook "
+         "and in CI, and it blocks anything credential-shaped from being "
+         "committed — but the habit is what protects you, not the gate.\n\n"
+         "## 5 · Prove it, by running one"),
+
+  *skill_steps(
+    "programme/dev-environment-preflight",
+    "The skill below is the proof. It reports the runtime, reports the "
+    "configuration without ever printing your key, **causes the unconfigured "
+    "failure on purpose in a child process** so you meet that message here "
+    "rather than on lesson forty, then makes one real model call and validates "
+    "the reply against its own output contract.\n\n"
+    "Read what it does before you run it — that order is the house rule, and "
+    "it is the one this commons is strictest about.\n\n"
+    "### The skill"),
+ ],
+ "expect": "The runtime resolving from skills/_runtime, your endpoint and model "
+           "named, and the key reported as present rather than printed. Then "
+           "exit code 2 from the deliberate unconfigured run, with the refusal "
+           "as its first line. Then one real model call: the model that "
+           "answered, the number of contract violations in its reply, and the "
+           "filled-in contract as JSON. A different model will fill it in "
+           "differently — that is the subject of the whole commons, not a fault "
+           "in the setup.",
+ "challenge": "Run it a second time with a different MODEL and diff the two "
+              "JSON blocks. Nothing about your machine changed, and the answer "
+              "did. Every finding in every later lesson carries that same "
+              "property, which is why each one names the model that produced "
+              "it.",
+},
+
 "A0.1": {
  "concept": """
 This commons has one subject: **security engineering when the thing you are

@@ -1,8 +1,8 @@
 {
  "generated_by": "scripts/test_skills.py",
  "note": "Each row is one skill: whether its frontmatter and output contract parse, and whether its own script runs to completion in a stripped environment and prints something. A script that runs and prints nothing counts as a failure.",
- "skills": 139,
- "executed": 139,
+ "skills": 140,
+ "executed": 140,
  "without_script": 0,
  "problems": [],
  "results": [
@@ -11,8 +11,9 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 39,
-   "seconds": 0.06
+   "lines": 11,
+   "seconds": 0.05,
+   "refused": true
   },
   {
    "skill": "appsec/appsec-exploit-validate",
@@ -20,7 +21,8 @@
    "contract": true,
    "script": true,
    "lines": 66,
-   "seconds": 0.08
+   "seconds": 0.06,
+   "refused": false
   },
   {
    "skill": "appsec/appsec-triage-report",
@@ -28,7 +30,8 @@
    "contract": true,
    "script": true,
    "lines": 81,
-   "seconds": 0.08
+   "seconds": 0.06,
+   "refused": false
   },
   {
    "skill": "appsec/appsec-vuln-audit",
@@ -36,7 +39,8 @@
    "contract": true,
    "script": true,
    "lines": 82,
-   "seconds": 0.07
+   "seconds": 0.06,
+   "refused": false
   },
   {
    "skill": "appsec/coding-agent-hardening",
@@ -44,7 +48,8 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.06
+   "seconds": 0.05,
+   "refused": false
   },
   {
    "skill": "appsec/context-window-sizing",
@@ -52,7 +57,8 @@
    "contract": true,
    "script": true,
    "lines": 57,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "appsec/dead-code-ast-reachability",
@@ -60,7 +66,8 @@
    "contract": true,
    "script": true,
    "lines": 154,
-   "seconds": 0.07
+   "seconds": 0.06,
+   "refused": false
   },
   {
    "skill": "appsec/dynamic-exploitation-probe",
@@ -68,7 +75,8 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "appsec/exploit-replica-isolation-check",
@@ -76,7 +84,8 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "appsec/finding-dedup-and-verification",
@@ -84,7 +93,8 @@
    "contract": true,
    "script": true,
    "lines": 41,
-   "seconds": 0.05
+   "seconds": 0.04,
+   "refused": false
   },
   {
    "skill": "appsec/fix-promotion-gate",
@@ -92,7 +102,8 @@
    "contract": true,
    "script": true,
    "lines": 81,
-   "seconds": 0.06
+   "seconds": 0.05,
+   "refused": false
   },
   {
    "skill": "appsec/idor-detection-recall",
@@ -100,15 +111,17 @@
    "contract": true,
    "script": true,
    "lines": 44,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "appsec/patch-validation-harness",
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 60,
-   "seconds": 0.07
+   "lines": 11,
+   "seconds": 0.05,
+   "refused": true
   },
   {
    "skill": "appsec/reference-pipeline-scoring",
@@ -116,15 +129,17 @@
    "contract": true,
    "script": true,
    "lines": 50,
-   "seconds": 0.03
+   "seconds": 0.02,
+   "refused": false
   },
   {
    "skill": "appsec/sast-model-pass",
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 50,
-   "seconds": 0.07
+   "lines": 11,
+   "seconds": 0.06,
+   "refused": true
   },
   {
    "skill": "appsec/sast-semgrep-deterministic",
@@ -132,7 +147,8 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.03
+   "seconds": 0.02,
+   "refused": false
   },
   {
    "skill": "appsec/sdlc-control-placement",
@@ -140,7 +156,8 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "appsec/supply-chain-decompile",
@@ -148,7 +165,8 @@
    "contract": true,
    "script": true,
    "lines": 59,
-   "seconds": 0.03
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "appsec/threat-model-stride",
@@ -156,7 +174,8 @@
    "contract": true,
    "script": true,
    "lines": 119,
-   "seconds": 0.07
+   "seconds": 0.05,
+   "refused": false
   },
   {
    "skill": "architecture/agentic-architecture-map",
@@ -164,7 +183,8 @@
    "contract": true,
    "script": true,
    "lines": 70,
-   "seconds": 0.06
+   "seconds": 0.05,
+   "refused": false
   },
   {
    "skill": "architecture/blast-radius-review",
@@ -172,7 +192,8 @@
    "contract": true,
    "script": true,
    "lines": 67,
-   "seconds": 0.06
+   "seconds": 0.05,
+   "refused": false
   },
   {
    "skill": "architecture/control-baseline-index",
@@ -180,7 +201,8 @@
    "contract": true,
    "script": true,
    "lines": 74,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "attestation/agent-code-surface-analyzer",
@@ -188,7 +210,8 @@
    "contract": true,
    "script": true,
    "lines": 73,
-   "seconds": 0.03
+   "seconds": 0.02,
+   "refused": false
   },
   {
    "skill": "attestation/attestation-signer-lifecycle",
@@ -196,7 +219,8 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.05
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "attestation/aws-runtime-posture-collector",
@@ -204,7 +228,8 @@
    "contract": true,
    "script": true,
    "lines": 28,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "attestation/deployment-inventory-resolver",
@@ -212,7 +237,8 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "attestation/entitlement-overprivilege-analyzer",
@@ -220,7 +246,8 @@
    "contract": true,
    "script": true,
    "lines": 9,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "attestation/iam-least-privilege-verifier",
@@ -228,7 +255,8 @@
    "contract": true,
    "script": true,
    "lines": 26,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "attestation/identity-chain-verifier",
@@ -236,7 +264,8 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.02,
+   "refused": false
   },
   {
    "skill": "attestation/input-injection-screening-verifier",
@@ -244,7 +273,8 @@
    "contract": true,
    "script": true,
    "lines": 19,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "attestation/llm-gateway-guardrail-verifier",
@@ -252,7 +282,8 @@
    "contract": true,
    "script": true,
    "lines": 15,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "attestation/risk-registry-integrator",
@@ -260,7 +291,8 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "attestation/sandbox-egress-verifier",
@@ -268,7 +300,8 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/agent-aware-rule-review",
@@ -276,7 +309,8 @@
    "contract": true,
    "script": true,
    "lines": 21,
-   "seconds": 0.05
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "detection/agent-platform-detections",
@@ -284,7 +318,8 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/agent-telemetry-hunt",
@@ -292,7 +327,8 @@
    "contract": true,
    "script": true,
    "lines": 21,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/agent-telemetry-retention",
@@ -300,7 +336,8 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "detection/agent-tempo-baseline",
@@ -308,7 +345,8 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/agent-versus-human-scoring",
@@ -316,7 +354,8 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.06
+   "seconds": 0.05,
+   "refused": false
   },
   {
    "skill": "detection/behavioural-drift-monitor",
@@ -324,7 +363,8 @@
    "contract": true,
    "script": true,
    "lines": 17,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "detection/canary-and-honeypot-design",
@@ -332,15 +372,17 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/detection-rule-deployability",
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 55,
-   "seconds": 0.08
+   "lines": 11,
+   "seconds": 0.05,
+   "refused": true
   },
   {
    "skill": "detection/detection-rule-synthesis",
@@ -348,7 +390,8 @@
    "contract": true,
    "script": true,
    "lines": 15,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/fleet-correlation-analysis",
@@ -356,7 +399,8 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/sensor-coverage-matrix",
@@ -364,7 +408,8 @@
    "contract": true,
    "script": true,
    "lines": 38,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/telemetry-tiering-cost",
@@ -372,7 +417,8 @@
    "contract": true,
    "script": true,
    "lines": 39,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "detection/threat-intel-to-rules",
@@ -380,15 +426,17 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "detection/triage-loop-with-floor",
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 76,
-   "seconds": 0.07
+   "lines": 11,
+   "seconds": 0.05,
+   "refused": true
   },
   {
    "skill": "grc/agent-lifecycle-governance",
@@ -396,7 +444,8 @@
    "contract": true,
    "script": true,
    "lines": 20,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "grc/agentic-risk-tiering",
@@ -404,7 +453,8 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "grc/control-evidence",
@@ -412,7 +462,8 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.08
+   "seconds": 0.06,
+   "refused": false
   },
   {
    "skill": "grc/control-to-framework-mapping",
@@ -420,7 +471,8 @@
    "contract": true,
    "script": true,
    "lines": 74,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "grc/guardrail-specification",
@@ -428,7 +480,8 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "grc/kci-control-measurement",
@@ -436,7 +489,8 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.06
+   "seconds": 0.04,
+   "refused": false
   },
   {
    "skill": "grc/model-risk-validation-scope",
@@ -444,7 +498,8 @@
    "contract": true,
    "script": true,
    "lines": 54,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "grc/policy-change-proposal",
@@ -452,7 +507,8 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "grc/third-party-ai-assessment",
@@ -460,7 +516,8 @@
    "contract": true,
    "script": true,
    "lines": 39,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "identity/agent-identity-review",
@@ -468,7 +525,8 @@
    "contract": true,
    "script": true,
    "lines": 13,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "identity/attribution-ledger-check",
@@ -476,7 +534,8 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "identity/nhi-lifecycle-audit",
@@ -484,7 +543,8 @@
    "contract": true,
    "script": true,
    "lines": 59,
-   "seconds": 0.03
+   "seconds": 0.02,
+   "refused": false
   },
   {
    "skill": "identity/tamper-evident-log-check",
@@ -492,7 +552,8 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "identity/workload-attestation-check",
@@ -500,7 +561,8 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "programme/autonomy-ladder-decisions",
@@ -508,7 +570,8 @@
    "contract": true,
    "script": true,
    "lines": 40,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "programme/capability-build-order",
@@ -516,7 +579,8 @@
    "contract": true,
    "script": true,
    "lines": 36,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "programme/conditional-approval-design",
@@ -524,7 +588,17 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
+  },
+  {
+   "skill": "programme/dev-environment-preflight",
+   "parses": true,
+   "contract": true,
+   "script": true,
+   "lines": 22,
+   "seconds": 0.05,
+   "refused": true
   },
   {
    "skill": "programme/handoff-delivery-check",
@@ -532,7 +606,8 @@
    "contract": true,
    "script": true,
    "lines": 51,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "programme/lesson-preflight",
@@ -540,7 +615,8 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.11
+   "seconds": 0.08,
+   "refused": false
   },
   {
    "skill": "programme/ownership-seam-audit",
@@ -548,7 +624,8 @@
    "contract": true,
    "script": true,
    "lines": 25,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "programme/programme-metrics-selection",
@@ -556,7 +633,8 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "programme/programme-sequencing",
@@ -564,7 +642,8 @@
    "contract": true,
    "script": true,
    "lines": 51,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "programme/resilience-readiness-check",
@@ -572,7 +651,8 @@
    "contract": true,
    "script": true,
    "lines": 44,
-   "seconds": 0.03
+   "seconds": 0.02,
+   "refused": false
   },
   {
    "skill": "programme/risk-translation-upward",
@@ -580,7 +660,8 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "programme/stakeholder-seam-map",
@@ -588,7 +669,8 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "redteam/agentic-finding-report",
@@ -596,7 +678,8 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.03
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "redteam/attack-success-rate-campaign",
@@ -604,7 +687,8 @@
    "contract": true,
    "script": true,
    "lines": 47,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "redteam/blackbox-claim-provenance",
@@ -612,7 +696,8 @@
    "contract": true,
    "script": true,
    "lines": 58,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "redteam/eval-corpus-integrity-check",
@@ -620,7 +705,8 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.04
+   "seconds": 0.04,
+   "refused": false
   },
   {
    "skill": "redteam/greybox-authorization-matrix",
@@ -628,15 +714,17 @@
    "contract": true,
    "script": true,
    "lines": 60,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "redteam/offensive-agent-containment",
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 72,
-   "seconds": 0.07
+   "lines": 11,
+   "seconds": 0.05,
+   "refused": true
   },
   {
    "skill": "redteam/offensive-agent-safety-preflight",
@@ -644,7 +732,8 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "redteam/whitebox-path-reachability",
@@ -652,7 +741,8 @@
    "contract": true,
    "script": true,
    "lines": 40,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "regulatory/assurance-conversation-prep",
@@ -660,7 +750,8 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "regulatory/autonomous-action-auditability",
@@ -668,7 +759,8 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "regulatory/disclosure-phase-breakdown",
@@ -676,7 +768,8 @@
    "contract": true,
    "script": true,
    "lines": 41,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "regulatory/framework-reference-lookup",
@@ -684,7 +777,8 @@
    "contract": true,
    "script": true,
    "lines": 41,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "regulatory/framework-spine-selection",
@@ -692,7 +786,8 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "regulatory/horizontal-requirement-to-control",
@@ -700,7 +795,8 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "regulatory/obligation-mapping",
@@ -708,7 +804,8 @@
    "contract": true,
    "script": true,
    "lines": 26,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "regulatory/sector-overlay-assessment",
@@ -716,7 +813,8 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "regulatory/supervisory-documentation-score",
@@ -724,7 +822,8 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "regulatory/trace-personal-data-audit",
@@ -732,7 +831,8 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "research/agent-supply-chain-assessment",
@@ -740,7 +840,8 @@
    "contract": true,
    "script": true,
    "lines": 47,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "research/eval-suite-health-check",
@@ -748,7 +849,8 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "research/finding-to-control-handover",
@@ -756,7 +858,8 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "research/generated-schema-audit",
@@ -764,7 +867,8 @@
    "contract": true,
    "script": true,
    "lines": 20,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "research/incident-control-mapping",
@@ -772,7 +876,8 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "research/research-durability-check",
@@ -780,7 +885,8 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "research/row-level-policy-check",
@@ -788,7 +894,8 @@
    "contract": true,
    "script": true,
    "lines": 25,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "research/technique-reproducibility-test",
@@ -796,7 +903,8 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "research/training-data-provenance-manifest",
@@ -804,7 +912,8 @@
    "contract": true,
    "script": true,
    "lines": 32,
-   "seconds": 0.06
+   "seconds": 0.04,
+   "refused": false
   },
   {
    "skill": "research/weight-access-capability-delta",
@@ -812,7 +921,8 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/agent-actor-containment",
@@ -820,7 +930,8 @@
    "contract": true,
    "script": true,
    "lines": 32,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "response/fleet-kill-switch-test",
@@ -828,7 +939,8 @@
    "contract": true,
    "script": true,
    "lines": 24,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/incident-reconstruction-check",
@@ -836,7 +948,8 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "response/kci-fix-validation",
@@ -844,7 +957,8 @@
    "contract": true,
    "script": true,
    "lines": 22,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/machine-speed-containment",
@@ -852,7 +966,8 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/post-incident-change-surface",
@@ -860,7 +975,8 @@
    "contract": true,
    "script": true,
    "lines": 8,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/regulatory-clock-check",
@@ -868,7 +984,8 @@
    "contract": true,
    "script": true,
    "lines": 39,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/remediation-policy-check",
@@ -876,7 +993,8 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/root-cause-record",
@@ -884,7 +1002,8 @@
    "contract": true,
    "script": true,
    "lines": 29,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/run-replayability-audit",
@@ -892,7 +1011,8 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "response/runbook-tier-assignment",
@@ -900,7 +1020,8 @@
    "contract": true,
    "script": true,
    "lines": 28,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "response/stop-authority-readiness",
@@ -908,7 +1029,8 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "runtime/budget-and-stop-condition-audit",
@@ -916,7 +1038,8 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "runtime/control-exemption-audit",
@@ -924,7 +1047,8 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "runtime/escalation-path-review",
@@ -932,7 +1056,8 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.03
+   "seconds": 0.02,
+   "refused": false
   },
   {
    "skill": "runtime/sandbox-containment-probe",
@@ -940,7 +1065,8 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "runtime/shared-surface-channel-audit",
@@ -948,7 +1074,8 @@
    "contract": true,
    "script": true,
    "lines": 26,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "runtime/tool-return-validation-check",
@@ -956,7 +1083,8 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "secops/detection-triage",
@@ -964,7 +1092,8 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.09
+   "seconds": 0.06,
+   "refused": false
   },
   {
    "skill": "secops/incident-scoping",
@@ -972,7 +1101,8 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.07
+   "seconds": 0.05,
+   "refused": false
   },
   {
    "skill": "secops/investigation-admission-rules",
@@ -980,7 +1110,8 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "secops/investigation-replan-trace",
@@ -988,7 +1119,8 @@
    "contract": true,
    "script": true,
    "lines": 22,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/agent-registry-gap-check",
@@ -996,7 +1128,8 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/approval-queue-saturation-model",
@@ -1004,7 +1137,8 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/audit-answerability-check",
@@ -1012,7 +1146,8 @@
    "contract": true,
    "script": true,
    "lines": 18,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/authority-composition-check",
@@ -1020,7 +1155,8 @@
    "contract": true,
    "script": true,
    "lines": 19,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/authorization-subject-check",
@@ -1028,7 +1164,8 @@
    "contract": true,
    "script": true,
    "lines": 15,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/confidence-provenance-decay-check",
@@ -1036,7 +1173,8 @@
    "contract": true,
    "script": true,
    "lines": 15,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/content-derived-privilege-check",
@@ -1044,7 +1182,8 @@
    "contract": true,
    "script": true,
    "lines": 43,
-   "seconds": 0.04
+   "seconds": 0.03,
+   "refused": false
   },
   {
    "skill": "threats/generated-code-reach-enumerator",
@@ -1052,7 +1191,8 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/indirect-injection-path-trace",
@@ -1060,7 +1200,8 @@
    "contract": true,
    "script": true,
    "lines": 14,
-   "seconds": 0.02
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/instruction-channel-check",
@@ -1068,7 +1209,8 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/memory-scope-and-origin-audit",
@@ -1076,7 +1218,8 @@
    "contract": true,
    "script": true,
    "lines": 8,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/objective-gaming-check",
@@ -1084,7 +1227,8 @@
    "contract": true,
    "script": true,
    "lines": 14,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/peer-message-propagation-trace",
@@ -1092,7 +1236,8 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/shared-credential-attribution-check",
@@ -1100,7 +1245,8 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/tool-scope-abuse-probe",
@@ -1108,7 +1254,8 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   },
   {
    "skill": "threats/unbounded-loop-cost-probe",
@@ -1116,7 +1263,8 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.01
+   "seconds": 0.01,
+   "refused": false
   }
  ]
 }

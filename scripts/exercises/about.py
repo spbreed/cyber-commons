@@ -9,6 +9,12 @@ not do this job; this does, and the build refuses a lesson without one.
 
 ABOUT: dict[str, str] = {
 
+"A0.0": """
+**What it covers.** The developer AI tools, compared on the two things that actually decide the choice — the real context window and what the free tier gets you — then the install, the clone from master, and the three environment variables that let any skill in the commons call a model.
+
+**Why a security engineer needs it.** Every skill here is executed by a model, so a machine with no endpoint configured cannot run any of them, and the failure looks like a broken repository rather than an unconfigured host. The control it builds is: a preflight that names the runtime, causes the unconfigured failure on purpose so the message is recognised, then makes one real call and validates the reply against a contract.
+""",
+
 "A0.1": """
 **What it covers.** Who this commons is written for — five roles, one function each — and the seven sections every lesson page is built from, in the order they appear.
 

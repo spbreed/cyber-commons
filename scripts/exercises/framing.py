@@ -27,6 +27,13 @@ and the curriculum stay in step.
 # --------------------------------------------------------------------------
 HOOKS: dict[str, str] = {
 
+"A0.0":
+ "Somebody clones the repository, opens the first lesson, runs the cell and "
+ "gets an error. They read it as a broken repository and close the tab. The "
+ "repository is fine — every skill here is executed by a model, and their "
+ "machine has not been told which one. That failure is the first thing anyone "
+ "hits, so it is the first thing this commons deals with.",
+
 "A0.1":
  "Most people arrive here from a link, land in the middle of a lesson about "
  "tool-call adjudication, and close it again. The material is not hard — the "
@@ -712,6 +719,29 @@ HOOKS: dict[str, str] = {
 
 # --------------------------------------------------------------------------
 DIAGRAMS: dict[str, str] = {
+
+"A0.0": """
+   WHAT HAS TO BE TRUE BEFORE ANY SKILL MEANS ANYTHING
+
+   your machine                      the model
+   +-----------------------+         +---------------------------+
+   | 1  git + python3      |         |  local:  ollama / llama.cpp|
+   |    clone --branch     |         |  hosted: any OpenAI-       |
+   |    master             |         |          compatible /v1    |
+   +-----------------------+         +---------------------------+
+   | 2  skills/_runtime    |                    ^
+   |    on the import path |                    |
+   +-----------------------+                    | OPENAI_BASE_URL
+   | 3  the skill script   |  ---- prompt ----> | OPENAI_API_KEY
+   |    = the harness      |  <--- JSON ------- | MODEL
+   +-----------------------+                    |
+             |                                  |
+             v                                  |
+   +-----------------------+                    |
+   |  validate against the |   any one of the three missing
+   |  skill's own contract |   and the run prints nothing,
+   +-----------------------+   or a traceback. Never a wrong answer.
+""",
 
 "A0.1": """
    ONE LESSON PAGE, TOP TO BOTTOM

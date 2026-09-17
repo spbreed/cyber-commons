@@ -228,6 +228,10 @@ FAMILIES = [
 GROUNDING: dict[str, str] = {
 
 # ---- A0 · the introduction -----------------------------------------------
+"A0.0": "Nothing in CyberTravels yet — you meet the company in A1.0. This "
+         "lesson is about the machine you will attack and defend it from, and "
+         "the model that will do the work when you do.",
+
 "A0.1": "The scene in every hook on every page is happening inside "
         "CyberTravels — the same four agents, the same refund limit, the same "
         "vendor documents. That is why the hooks accumulate into an argument "

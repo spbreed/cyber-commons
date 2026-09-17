@@ -132,8 +132,16 @@ _out = subprocess.run([sys.executable, os.path.join(_root, SCRIPT)],
                                PYTHONPATH=os.path.join(_root, "skills/_runtime"),
                                PYTHONHASHSEED="0"))
 print(_out.stdout, end="")
+# Exit 2 is the skill saying "no model endpoint is configured", and it has
+# already printed why, on stdout, above. Propagate the code unchanged so the
+# reason survives; collapsing it into SystemExit(stderr) produced exit 1 with
+# an empty message, which reads as a broken notebook rather than an
+# unconfigured machine — the exact confusion A0.0 exists to prevent.
+if _out.returncode == 2:
+    raise SystemExit(2)
 if _out.returncode:
-    raise SystemExit(_out.stderr.strip()[-2000:])'''
+    raise SystemExit(_out.stderr.strip()[-2000:] or
+                     f"the skill exited {_out.returncode} with no stderr")'''
 
 
 def run_skill_cell(script: str) -> str:

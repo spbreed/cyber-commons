@@ -115,42 +115,14 @@ same prompt, with and without something checking the answer.</p>
   and the budget goes on retries.</li>
 <li><strong>Asking a model to judge the answer.</strong> That is a second opinion, not a
   verification.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
-model         : deterministic stand-in (no backend configured)
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-This lesson runs offline against a deterministic replay, which is why
-it works on a Kaggle kernel with the internet switched off. To run the
-identical code against a real model, serve an open-weight model from
-Kaggle Models and point the adapter at it:
+No model endpoint is configured, and every skill here needs one.
 
-   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
-           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
-   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
-          MODEL=qwen2.5-7b-instruct
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-   MODELS.md has the exact Kaggle download. There is no paid backend:
-   every model result in this repository was produced this way.
-the loop, wired: [&#x27;plan&#x27;, &#x27;act&#x27;, &#x27;verify&#x27;, &#x27;stop&#x27;]
-backend  : replay
-steps    : 1
-accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
-verified : None   &lt;- nothing checked it
-
-The loop stopped because the model produced something, which is not the
-same as producing something correct. Whatever came back was accepted.
-accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
-verified : True   &lt;- an independent check said so
-steps    : 1
-
-property checked : the verified loop returns a parameterised query
-held on replay       : True
-
-a correct psycopg fix: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=%s&quot;, (ref,))
-   narrow verifier (only &#x27;?&#x27;) : REJECTS a correct fix
-   this lesson&#x27;s verifier     : accepts
-
-a plausible-looking answer: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + escape(ref))
-   would the verifier accept it? False
-
-It reads like a fix and it is still concatenation. Without the verifier
-this loop ships it, reports success, and the trace looks clean.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The loop runs with a real model behind <code>ask()</code> — a labelled replay offline, a real open-weight call when one is served. With no verifier it accepts whatever came back and reports <code>verified: None</code>. With the verifier the same model and prompt produce an accepted, parameterised line; a narrow verifier that only accepts <code>?</code> is shown rejecting a correct psycopg fix, and a plausible answer wrapping the input in <code>escape()</code> is refused, because it is still concatenation.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Name your pipeline's verifier out loud. If the sentence contains "the model checks" or "it looks right", you have a judge, and a judge approves confident prose — including prose that contradicts the finding it is attached to.</p></div></section><div class="expect"><b>Expect</b>Without a verifier the loop accepts whatever the model returned and reports verified: None. With one, the same model and prompt produce an accepted parameterised line, a too-narrow verifier is shown rejecting a correct fix, and an answer that wraps the input in escape() is refused because it is still concatenation.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.1.ipynb</code></p></div><div class="pager"><a href="B2.0.html"><span class="k">← Previous</span><span class="t">B2.0 · The AI SDLC — what runs before a deploy, and what runs after</span></a><a class="next" href="B2.2.html"><span class="k">Next →</span><span class="t">B2.2 · Threat modelling from what the estate already knows</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The loop runs with a real model behind <code>ask()</code> — a labelled replay offline, a real open-weight call when one is served. With no verifier it accepts whatever came back and reports <code>verified: None</code>. With the verifier the same model and prompt produce an accepted, parameterised line; a narrow verifier that only accepts <code>?</code> is shown rejecting a correct psycopg fix, and a plausible answer wrapping the input in <code>escape()</code> is refused, because it is still concatenation.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Name your pipeline's verifier out loud. If the sentence contains "the model checks" or "it looks right", you have a judge, and a judge approves confident prose — including prose that contradicts the finding it is attached to.</p></div></section><div class="expect"><b>Expect</b>Without a verifier the loop accepts whatever the model returned and reports verified: None. With one, the same model and prompt produce an accepted parameterised line, a too-narrow verifier is shown rejecting a correct fix, and an answer that wraps the input in escape() is refused because it is still concatenation.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.1.ipynb</code></p></div><div class="pager"><a href="B2.0.html"><span class="k">← Previous</span><span class="t">B2.0 · The AI SDLC — what runs before a deploy, and what runs after</span></a><a class="next" href="B2.2.html"><span class="k">Next →</span><span class="t">B2.2 · Threat modelling from what the estate already knows</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

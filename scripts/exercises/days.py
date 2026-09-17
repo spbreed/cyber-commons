@@ -174,6 +174,15 @@ DAYS: dict[str, tuple[str, str, str]] = {}
 # ---- A · Securing AI Architectures ---------------------------------------
 DAYS.update({
 
+"A0.0": ("An unconfigured machine does not fail loudly and specifically. It "
+         "fails in a way a newcomer reads as \"this repository is broken\", "
+         "and they leave before lesson one.",
+         "Choose a developer AI tool against its real context window and cost, "
+         "clone master, and point the skill runtime at a model on a free tier.",
+         "One model call completed, with zero contract violations in the "
+         "reply — and the name of the model that produced it, printed in the "
+         "output."),
+
 "A0.1": ("Readers who land mid-curriculum read the hook as a summary, find it "
          "vague, and leave — the material was never the problem, the shape "
          "was.",

@@ -69,15 +69,25 @@ def run_one(path: Path, timeout: int = 120) -> dict:
     outdir.mkdir(exist_ok=True)
     (outdir / f"{path.stem}.txt").write_text(p.stdout)
 
+    # Exit 2 with the refusal on stdout is a *correct* outcome, not a failure.
+    # Every skill in this commons is executed by a model, and CI is given no
+    # model endpoint on purpose — so the lessons that call one must refuse
+    # here, and refuse legibly. Treating that as a failure would mean either
+    # putting a key in CI or letting a lesson substitute a canned answer for a
+    # model's, and the second one is undetectable downstream: it has the right
+    # shape and passes the contract.
+    refused = p.returncode == 2 and "no model" in p.stdout.lower()
+
     return {
         "session": path.stem,
-        "ok": p.returncode == 0,
+        "ok": p.returncode == 0 or refused,
+        "refused_no_model": refused,
         "returncode": p.returncode,
         "seconds": round(elapsed, 2),
         "stdout_lines": len(p.stdout.splitlines()),
         "stdout_chars": len(p.stdout),
         # keep the tail of stderr only on failure — enough to diagnose, not a dump
-        "error": "" if p.returncode == 0 else p.stderr.strip()[-1200:],
+        "error": "" if (p.returncode == 0 or refused) else p.stderr.strip()[-1200:],
         "code_cells": sum(1 for c in nb["cells"] if c["cell_type"] == "code"),
         "markdown_cells": sum(1 for c in nb["cells"] if c["cell_type"] == "markdown"),
     }

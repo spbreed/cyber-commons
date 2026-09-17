@@ -92,9 +92,59 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 ---
 
+### A0.0 · Set up your machine — the AI tools, and the model every lesson runs on
+
+Chapter A0 · lesson 1 of 2 · runs a skill · 279 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+
+**① Open**
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+WHAT HAS TO BE TRUE BEFORE ANY SKILL MEANS ANYTHING
+```
+
+Somebody clones the repository, opens the first lesson, runs the cell and gets an error. They read it as a broken repository and close the tab. The repository is fine — every skill here is executed by a model, and their machine has not been told which one. That failure is the first thing anyone hits, so it is the first thing this commons deals with.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+An unconfigured machine does not fail loudly and specifically. It fails in a way a newcomer reads as "this repository is broken", and they leave before lesson one.
+
+Same company, same four agents, new way of failing. Nothing in CyberTravels yet — you meet the company in A1.0. This lesson is about the machine you will attack and defend it from, and the model that will do the work when you do.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Choose a developer AI tool against its real context window and cost, clone master, and point the skill runtime at a model on a free tier.
+
+*[Run the cell on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+One model call completed, with zero contract violations in the reply — and the name of the model that produced it, printed in the output.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The runtime resolving from skills/_runtime, your endpoint and model named, and the key reported as present rather than printed. Then exit code 2 from the deliberate unconfigured run, with the refusal as its first line.
+
+**⑤ Hand it over**
+
+Run it a second time with a different MODEL and diff the two JSON blocks. Nothing about your machine changed, and the answer did.
+
+Next up: A0.1, Start here — what this is, who it is for, and how to run it.
+
+---
+
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 1 of 1 · runs a skill · 464 words, about 3.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · runs a skill · 596 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -107,6 +157,8 @@ A model that only answers questions is a chatbot. Give it tools — let it call 
 So, what this is. A hundred and thirty-four lessons. It is free, there is no vendor, there is no paid account, and every single one of them runs — you press a button and the code executes in your own account, not mine. I am going to use one made-up company for all of it, and I will introduce you to them in the next video.
 
 **① Open**
+
+Still inside chapter A0. Last one was Set up your machine — the AI tools, and the model every lesson runs on.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -147,6 +199,14 @@ Nothing is computed here. The check is that you can open any lesson in any funct
 **⑤ Hand it over**
 
 Run it on the other route. If you read this on Kaggle, clone the repository and run the same command locally; if you read it locally, press Run on Kaggle.
+
+That closes chapter A0. You can run any lesson in the commons on either route, you know what the one code cell in it is doing, and you can tell a fetch failure from a procedure failure by reading one line of the error.
+
+*[Slow down here. This is the reason anybody clicks the next chapter.]*
+
+And here is what it still cannot do. You have run a procedure and you cannot yet say what it is for. The preflight proved the machinery works; it proved nothing about agentic systems, which is the only reason any of this exists.
+
+Chapter A1 draws the system everything else in the commons names — CyberTravels, its components, and the fifteen risks that architecture makes possible.
 
 Next up: A1.0, Start here — what securing an AI architecture means.
 

@@ -32,11 +32,28 @@
           "id": "A0",
           "chapter": 0,
           "title": "Introduction — What This Is, Who It Is For, and How to Use It",
-          "titles": "Anyone, in any of the five roles. This chapter assumes no security background and no setup.",
-          "changes": "One lesson. Who the commons is for, how a lesson page is built, which function to open first, what Day 0/1/2 mean, how to use the labs and skills, the open-source-first rule, the four frameworks, and how to run a lesson on either free route — demonstrated by running a real lesson's procedure three times, twice in the ways it breaks. 1 lesson.",
+          "titles": "Anyone, in any of the five roles. This chapter assumes no security background. It does assume you can install software on the machine in front of you.",
+          "changes": "Two lessons. First the setup — the developer AI tools compared on context window and real cost, the clone, and the model endpoint every later lesson depends on. Then who the commons is for, how a lesson page is built, which function to open first, what Day 0/1/2 mean, how to use the labs and skills, the open-source-first rule, and the four frameworks. 2 lessons.",
           "autonomy": "Read it once and run it once before opening a second lesson.",
-          "deliverable": "A route through the commons chosen for your role, and one lesson executed on a host you did not configure with its output checksum matching the one recorded here.",
+          "deliverable": "A machine that can run any lesson in the commons — a model endpoint configured and proven — and a route through it chosen for your role.",
           "sessions": [
+            {
+              "id": "A0.0",
+              "title": "Set up your machine — the AI tools, and the model every lesson runs on",
+              "kind": "introduction",
+              "summary": "Every skill in this commons is executed by a large language model, so nothing here runs until one is configured. This lesson sets that up on a free tier: pick a developer AI tool against its real context window and price, install it, clone the repository, point the skill runtime at a model, and run one skill end to end to prove the model answered.",
+              "risk": "A reader arrives, clones the repository, runs a lesson and gets an error they read as a broken repository rather than as an unconfigured machine — and leaves. Nothing in the commons executes without a model endpoint, and that is the first thing anybody hits.",
+              "control": "One setup lesson that ends in a verified model call: the tool chosen against its real context window and cost, the clone from master, the three environment variables, and a skill run whose output names the model that produced it.",
+              "lab": "Configure a model endpoint, then run one skill and read back which model answered.",
+              "tools": [
+                "ollama",
+                "git",
+                "python3"
+              ],
+              "models": [
+                "qwen2.5-7b-instruct"
+              ]
+            },
             {
               "id": "A0.1",
               "title": "Start here — what this is, who it is for, and how to run it",

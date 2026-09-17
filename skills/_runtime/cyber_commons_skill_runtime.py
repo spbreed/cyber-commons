@@ -155,11 +155,35 @@ import json, os, urllib.error, urllib.request
 OPEN_WEIGHT_DEFAULT = "qwen2.5-7b-instruct"
 TIMEOUT = 60
 
+class NoModelConfigured(RuntimeError):
+    """Raised when a skill is run with no model endpoint configured.
+
+    Every skill in this commons runs on a model. There is no offline path and
+    no stand-in: a stand-in that is allowed to answer is a stand-in somebody
+    eventually quotes as a model result. If nothing is configured, the skill
+    refuses rather than producing something that looks like an answer.
+
+    A0.0 is the lesson that sets this up, start to finish, on free tiers.
+    """
+
+
 def backend():
-    """(kind, model). Configuration comes from the environment, never a literal."""
+    """(kind, model). Configuration comes from the environment, never a literal.
+
+    Raises NoModelConfigured when there is nothing to call.
+    """
     if os.environ.get("OPENAI_BASE_URL"):
         return "open-weight", os.environ.get("MODEL", OPEN_WEIGHT_DEFAULT)
-    return "replay", "deterministic stand-in (no backend configured)"
+    raise NoModelConfigured(
+        "No model endpoint is configured, and every skill here needs one.\n"
+        "\n"
+        "  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1\n"
+        "  export OPENAI_API_KEY=ollama          # any non-empty value locally\n"
+        "  export MODEL=qwen2.5-7b-instruct\n"
+        "\n"
+        "Lesson A0.0 sets this up end to end on a free tier — a local model\n"
+        "with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists\n"
+        "which model suits which lab.")
 
 def _post(url, payload, headers):
     req = urllib.request.Request(url, data=json.dumps(payload).encode(),
@@ -178,21 +202,24 @@ def _openai_compatible(prompt, system, model, max_tokens, temperature):
                 {"authorization": f"Bearer {key}"})
     return out["choices"][0]["message"]["content"].strip()
 
-def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
-    """Answer `prompt` with the configured backend, or return `replay`.
+def ask(prompt, *, system=None, max_tokens=512, temperature=0.0):
+    """Answer `prompt` with the configured model. Returns (answer, kind, model).
 
-    `replay` is required, not optional: a lesson must be able to run offline,
-    and the answer it falls back to has to be visible in the source rather than
-    invented at runtime.
+    There is no fallback. A failed call raises, because the alternative — a
+    canned answer returned in a model's place — is the one failure mode that
+    cannot be detected downstream: it has the right shape, it validates against
+    the contract, and it is not a model result.
+
+    `temperature` defaults to 0 so two runs are as close as a model gets. That
+    is not determinism and nothing here pretends it is; see WHAT_CHANGED.md.
     """
     kind, model = backend()
-    if kind == "replay":
-        return replay, kind, model
     try:
         return _openai_compatible(prompt, system, model, max_tokens,
                                   temperature), kind, model
-    except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
-        # Print what the server actually said. "failed: 400" costs whoever hits
+    except (urllib.error.URLError, urllib.error.HTTPError, KeyError,
+            TimeoutError) as e:
+        # Say what the server actually said. "failed: 400" costs whoever hits
         # this an hour; the body usually names the exact missing parameter, and
         # it never contains a key.
         detail = getattr(e, "code", None) or type(e).__name__
@@ -202,36 +229,111 @@ def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
                 why = json.loads(e.read().decode()).get("error", {}).get("message", "")
             except Exception:
                 why = ""
-        print(f"   !! {kind} backend ({model}) failed: {detail}"
-              f"{' - ' + why if why else ''}")
-        print("      Using the replay, which is labelled as one. No model answered.")
-        return replay, "replay", f"{model} unreachable"
+        raise RuntimeError(
+            f"the model backend ({model}) failed: {detail}"
+            f"{' - ' + why if why else ''}\n"
+            f"Endpoint: {os.environ.get('OPENAI_BASE_URL')}\n"
+            f"Nothing is substituted for a model answer. Fix the endpoint and "
+            f"run it again; A0.0 walks through the free options.") from e
 
 def announce_backend():
-    """Say which backend is configured, where a lesson can see it.
+    """Say which model is about to answer, where a lesson can see it.
 
-    A library must not print at import: 117 notebooks importing this file
-    would each open with a banner nobody asked for. The skills that call a
-    model call this; the rest never see it.
+    A library must not print at import: 134 notebooks importing this file would
+    each open with a banner nobody asked for. Every skill calls this as its
+    first line, so the reader always knows which model produced what follows —
+    and, when nothing is configured, gets the setup instructions instead of a
+    traceback.
     """
-    kind, model = backend()
+    try:
+        kind, model = backend()
+    except NoModelConfigured as e:
+        print("no model configured\n")
+        print(e)
+        raise SystemExit(2)
     print(f"model backend : {kind}")
     print(f"model         : {model}")
-    if kind == "replay":
-        print()
-        print("This lesson runs offline against a deterministic replay, which is why")
-        print("it works on a Kaggle kernel with the internet switched off. To run the")
-        print("identical code against a real model, serve an open-weight model from")
-        print("Kaggle Models and point the adapter at it:")
-        print()
-        print("   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \\")
-        print("           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen")
-        print("   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \\")
-        print("          MODEL=qwen2.5-7b-instruct")
-        print()
-        print("   MODELS.md has the exact Kaggle download. There is no paid backend:")
-        print("   every model result in this repository was produced this way.")
+    print(f"endpoint      : {os.environ.get('OPENAI_BASE_URL')}")
+    print()
+    print("Everything below is this model's output, validated against the")
+    print("skill's contract. Another model will answer differently; that is the")
+    print("point of the lesson, not a defect in it.")
+    print()
     return kind, model
+
+
+# ------------------------------------------------------- the generic run path
+#
+# Every skill is the same shape: a procedure written in SKILL.md, an output
+# contract under `## Output contract`, and some input to apply it to. So the
+# model gets the skill's own text rather than a prompt written twice, and the
+# answer is validated against the skill's own contract. One implementation, 139
+# skills, and a skill's prompt cannot drift from its documentation because they
+# are the same bytes.
+
+JSON_BLOCK = re.compile(r"```(?:json)?\s*(.*?)```", re.S)
+
+
+def _first_json(text):
+    """The first JSON object in a model's reply, fenced or bare.
+
+    Models wrap JSON in prose and in fences, inconsistently and regardless of
+    instructions. Refusing anything but a bare object turns a good answer into
+    a failed run.
+    """
+    for candidate in ([m.group(1) for m in JSON_BLOCK.finditer(text)] + [text]):
+        candidate = candidate.strip()
+        start = candidate.find("{")
+        if start < 0:
+            continue
+        depth, in_str, esc = 0, False, False
+        for i, ch in enumerate(candidate[start:], start):
+            if in_str:
+                if esc:
+                    esc = False
+                elif ch == "\\":
+                    esc = True
+                elif ch == '"':
+                    in_str = False
+            elif ch == '"':
+                in_str = True
+            elif ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    try:
+                        return json.loads(candidate[start:i + 1])
+                    except json.JSONDecodeError:
+                        break
+    raise ValueError("the model returned no parseable JSON object:\n"
+                     + text[:800])
+
+
+def run_with_model(skill_md, task, *, max_tokens=1500, temperature=0.0):
+    """Run a skill by giving its own procedure and contract to the model.
+
+    `skill_md` is the text of the skill's SKILL.md; `task` is the input to
+    apply it to. Returns (instance, problems, kind, model) — the parsed answer,
+    the contract violations found in it, and which model answered.
+
+    The problems are returned rather than raised because an answer that misses
+    the contract is a finding a lesson should print, not an error that hides
+    what the model actually said.
+    """
+    meta, body = parse_skill(skill_md)
+    contract = contract_of(body)
+    system = ("You are executing a documented procedure exactly as written. "
+              "Follow the skill below. Reply with one JSON object matching the "
+              "output contract and nothing else — no prose, no explanation.")
+    prompt = (f"{body}\n\n"
+              f"---\n\n## The input to apply the procedure to\n\n{task}\n\n"
+              f"---\n\nReturn one JSON object matching the output contract "
+              f"above. Use the contract's exact keys.")
+    answer, kind, model = ask(prompt, system=system, max_tokens=max_tokens,
+                              temperature=temperature)
+    instance = _first_json(answer)
+    return instance, check(instance, contract), kind, model
 
 
 # ---------------------------------------------------------------- diagrams

@@ -71,58 +71,14 @@ R5 credential path OR link-local          2  1.000   1.000        1.0
 <li><strong>Setting the bar after seeing the results.</strong> That is choosing a winner.</li>
 <li><strong>Deploying a rule with an unrecorded field dependency.</strong> It fails silently
   when the field stops being populated.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
-model         : deterministic stand-in (no backend configured)
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-This lesson runs offline against a deterministic replay, which is why
-it works on a Kaggle kernel with the internet switched off. To run the
-identical code against a real model, serve an open-weight model from
-Kaggle Models and point the adapter at it:
+No model endpoint is configured, and every skill here needs one.
 
-   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
-           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
-   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
-          MODEL=qwen2.5-7b-instruct
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-   MODELS.md has the exact Kaggle download. There is no paid backend:
-   every model result in this repository was produced this way.
-history: 522 events, 2 true positives
-rule                                 alerts   prec  recall  alerts/TP
-----------------------------------------------------------------------
-R1 any http_get by an agent             301  0.003   0.500      301.0
-R2 http_get to a non-github host          1  1.000   0.500        1.0
-R3 link-local address                     1  1.000   0.500        1.0
-R4 any failed action                     20  0.000   0.000        inf
-R5 credential path OR link-local          2  1.000   1.000        1.0
-REJECT  R1 any http_get by an agent
-          · 301.0 alerts per true positive (budget 5)
-DEPLOY  R2 http_get to a non-github host
-DEPLOY  R3 link-local address
-REJECT  R4 any failed action
-          · no true positives
-          · inf alerts per true positive (budget 5)
-          · recall 0.0 below 0.5
-DEPLOY  R5 credential path OR link-local
-generated               5
-shipped                 3
-shipped_rules           [&#x27;R2 http_get to a non-github host&#x27;, &#x27;R3 link-local address&#x27;, &#x27;R5 credential path OR link-local&#x27;]
-queue_impact_per_day    4
-coverage                1.0
-
-The agent generated 5 rules in seconds. Scoring them against 521 real
-events took milliseconds and rejected 3. That scoring step is the job —
-without it, R1 ships and the SOC stops reading agent alerts within a week.
-backend used : replay
-model        : deterministic stand-in (no backend configured)
-prompt       : Write the detection condition for: a non-human identity listing mo...
-
-answer:
-   actor.type == &#x27;service_account&#x27;
-   and count_distinct(event.bucket, window=&#x27;5m&#x27;) &gt; 20
-   and not cidr_match(source.ip, actor.baseline_cidr)
-
-property checked : expresses a threshold
-held on replay       : True
-
-Same code, same assertions, two possible backends. Offline the answer is
-the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>All candidates detect the anomaly, but their firing volumes differ by orders of magnitude, and the deployable one is chosen by the volume it would add to the queue rather than by recall alone.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take a detection you are proud of and compute how many times it fired last month against how many were true. If you cannot, the rule is unmeasured, which is the same as untuned.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.6.ipynb</code></p></div><div class="pager"><a href="C1.5.html"><span class="k">← Previous</span><span class="t">C1.5 · Emergent swarms and multi-agent proliferation</span></a><a class="next" href="C1.7.html"><span class="k">Next →</span><span class="t">C1.7 · Triaging the non-deterministic swarm</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>All candidates detect the anomaly, but their firing volumes differ by orders of magnitude, and the deployable one is chosen by the volume it would add to the queue rather than by recall alone.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take a detection you are proud of and compute how many times it fired last month against how many were true. If you cannot, the rule is unmeasured, which is the same as untuned.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.6.ipynb</code></p></div><div class="pager"><a href="C1.5.html"><span class="k">← Previous</span><span class="t">C1.5 · Emergent swarms and multi-agent proliferation</span></a><a class="next" href="C1.7.html"><span class="k">Next →</span><span class="t">C1.7 · Triaging the non-deterministic swarm</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

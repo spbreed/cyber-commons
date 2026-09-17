@@ -21,7 +21,7 @@ real work; knowing which you are in is the first thing to establish.
 
 | | what it is | lives in |
 |---|---|---|
-| **Cyber Commons** | a 134-lesson curriculum on securing agentic AI, plus the static site at [cybercommons.ai](https://cybercommons.ai) | `scripts/`, `skills/`, `site/`, `curriculum/`, `labs/notebooks/` |
+| **Cyber Commons** | a 135-lesson curriculum on securing agentic AI, plus the static site at [cybercommons.ai](https://cybercommons.ai) | `scripts/`, `skills/`, `site/`, `curriculum/`, `labs/notebooks/` |
 | **vulnbench** | a benchmark that scores an AI security harness's findings against ground truth | `labs/b2.10-eval-harness/` |
 
 Most of this file is about the first. §8 is the second, and its rules are not
@@ -48,13 +48,13 @@ shipped it. Five functions ask different questions of that same system:
 Current shape, measured rather than typed — `check_claims.py` fails CI when any
 count in the docs drifts from the tree:
 
-    134 lessons · 14 chapters · 5 functions · 139 skills
+    135 lessons · 14 chapters · 5 functions · 140 skills
 
 **A lesson is three artefacts, not one.** The page (prose, rendered from
 source), the skill (`skills/<area>/<name>/SKILL.md` plus its script — the
 procedure), and the notebook (code only, which fetches the skills tree and runs
 that script). The notebook holds no procedure of its own: one fix to one file,
-not a rebuild of 134 copies.
+not a rebuild of 135 copies.
 
 ---
 

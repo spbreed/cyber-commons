@@ -84,53 +84,14 @@ what the published numbers say about the ceiling
    about a real repository, and do not read 59.9% as a failure: it is
    four times what the highest-precision system managed, on a class no
    pattern reaches at all.
-model backend : replay
-model         : deterministic stand-in (no backend configured)
+no model configured
 
-This lesson runs offline against a deterministic replay, which is why
-it works on a Kaggle kernel with the internet switched off. To run the
-identical code against a real model, serve an open-weight model from
-Kaggle Models and point the adapter at it:
+No model endpoint is configured, and every skill here needs one.
 
-   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \
-           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
-   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
-          MODEL=qwen2.5-7b-instruct
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-   MODELS.md has the exact Kaggle download. There is no paid backend:
-   every model result in this repository was produced this way.
-
-get_booking
-   model says   : MISSING CWE-639 at confidence 0.82
-   quoting      : def get_booking(session, booking_id):
-   -> HYPOTHESIS: quote verified, status hypothesis (not a finding)
-
-get_my_booking
-   model says   : PRESENT CWE-639 at confidence 0.77
-   quoting      : require_owner(session, row["owner_id"] if row else None)
-   -> NO CLAIM  : reviewed, nothing asserted, nothing to promote
-
-1 hypothesis · 0 rejected · 0 promoted
-
-property checked : MISSING on get_booking and PRESENT on get_my_booking - telling the unauthorised function from its authorised twin
-held on replay       : True
-
-the verifier, tested against a fabrication recorded from a smaller model
-   claim quotes : cur.execute("SELECT * FROM bookings WHERE owner = '" + use
-   in the file? : False
-   -> REJECTED  : the quote is not in the slice, so the claim dies here
-
-That check costs nothing and requires no judgement, and it is the single
-highest-yield filter available: a claim about a line that does not exist
-is provably wrong without a second opinion. B2.4 is the same check
-generalised into a stage.
-
-What the confidence number is worth: it is uncalibrated - 0.82 does not
-mean the claim is right 82% of the time - and it is unstable across runs.
-Sort a human's queue with it if you like. Do not let it decide anything
-on its own, and note that this run is one sample of it.
-
-Nothing here is promoted. This skill produces hypotheses; dedup,
-verification, reachability and dynamic validation decide which of them
-become findings. An audit stage that promotes its own output has removed
-the only independent step it had.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 """Prove every notebook prints the same thing on every machine.
 
+**What this can and cannot cover now.** Every skill in this commons is executed
+by a model, and a model is not deterministic — so this does not, and must not,
+claim that a lesson's findings reproduce byte for byte. What it checks is the
+harness around the model: the ordering, the formatting, the seeding, and the
+refusal a lesson prints when no endpoint is configured. Those are ours, they
+are deterministic, and a set iterated into a sort still breaks them.
+
+The lessons that call a model are run here with no endpoint, so what is
+compared across seeds is their refusal. A refusal that varies between runs is
+a real defect — it means something unordered reached the message.
+
 A lesson is only evidence if the reader's run matches the one on the page. Two
 notebooks shipped that did not, and neither failed locally, because a single
 local pass runs every notebook under one interpreter with one hash seed:
@@ -56,6 +67,14 @@ def outputs(path: Path, seeds: list[str], timeout: int) -> list[str]:
                    PYTHONPATH=f"{runtime}{os.pathsep}{prev}" if prev else runtime)
         p = subprocess.run([sys.executable, "-c", src], cwd=ROOT, env=env,
                            capture_output=True, text=True, timeout=timeout)
+        # Exit 2 with the refusal is correct, not broken: every skill here is
+        # executed by a model, and CI is deliberately given no endpoint. The
+        # refusal text itself is what gets compared across seeds, which is
+        # still a real check — it catches a refusal that varies, e.g. one that
+        # prints a dict or a set in its message.
+        if p.returncode == 2 and "no model" in p.stdout.lower():
+            out.append(p.stdout)
+            continue
         if p.returncode != 0:
             raise RuntimeError(f"exited {p.returncode} under PYTHONHASHSEED={seed}: "
                                f"{p.stderr.strip()[-400:]}")
