@@ -2,9 +2,14 @@ name: Deploy Cyber Commons site
 
 on:
   push:
-    # main is the normal source; the development branch is included so the site
-    # can be published before the branch is merged.
+    # master is the trunk and the branch every published link points at (see
+    # scripts/exercises/repo.py). `main` is kept only because it costs nothing
+    # and a repository that grows one later should still deploy. Development
+    # branches are included so the site can be published before a merge —
+    # without that, pushing master alone would have deployed nothing, because
+    # this list did not mention it.
     branches:
+      - master
       - main
       - 'claude/**'
     paths:
@@ -132,6 +137,14 @@ jobs:
       # that gate reads the site.
       - name: Check the chapter docs are in step with the curriculum
         run: python3 scripts/build_curriculum.py --check
+
+      # Every published link into this repository carries a branch name. One
+      # had drifted to a branch that has never existed on the remote and
+      # returned 404 as an ordinary-looking link — between check_docs (markdown,
+      # relative links) and check_claude_md (one file), nothing looked at an
+      # absolute GitHub URL inside a .py lesson source.
+      - name: Check every repository link pins the published branch
+        run: python3 scripts/check_repo_links.py --check
 
       # The recording scripts are generated from the lesson sources. If a
       # lesson changes and this is not regenerated, somebody records a script

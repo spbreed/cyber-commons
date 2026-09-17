@@ -57,9 +57,9 @@ sys.path.insert(0, str(ROOT / "scripts"))
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
 OUT = ROOT / "labs" / "notebooks"
-REPO = "https://github.com/spbreed/cyber-commons"
-BRANCH = "claude/vulnbench-setup-scheduling-81aqov"
-SITE = "https://spbreed.github.io/cyber-commons"
+# See scripts/exercises/repo.py — owner, repo and branch in one place.
+from exercises.repo import BRANCH, REPO  # noqa: E402
+SITE = "https://cybercommons.ai"
 
 from exercises import EXERCISES  # noqa: E402
 from exercises.about import ABOUT

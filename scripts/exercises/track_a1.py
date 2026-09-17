@@ -212,7 +212,7 @@ rather than an assumption."""),
   ("md", """## 4 \u00b7 The same map, as a repository
 
 This map is not only a diagram in this commons. It is committed as code, at
-[`cybertravels/`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/cybertravels)
+[`cybertravels/`](https://github.com/spbreed/cyber-commons/tree/master/cybertravels)
 \u2014 one directory per component on this map:
 
 ```
@@ -235,7 +235,7 @@ is visible in the tree rather than only in a sentence.
 Nine lessons later in Function B scan this tree rather than a fixture \u2014
 B2.3 runs Semgrep over it, B2.4 verifies findings against it, B2.5 walks its
 call graph \u2014 and
-[`cybertravels/LABELS.md`](https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/cybertravels/LABELS.md)
+[`cybertravels/LABELS.md`](https://github.com/spbreed/cyber-commons/blob/master/cybertravels/LABELS.md)
 is the key: eight defects and four correct functions, written by hand before
 any scanner ran. Clone it and read it now if you like; you will meet it
 again."""),

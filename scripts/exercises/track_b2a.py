@@ -257,13 +257,13 @@ pipeline as a hypothesis, and stages 8–12 are what turn one into a finding.
   ("md", """## 2 · The repository, and the key written before anything ran
 
 Everything this chapter scans is one tree:
-[`cybertravels/`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/cybertravels)
+[`cybertravels/`](https://github.com/spbreed/cyber-commons/tree/master/cybertravels)
 — the reference architecture from A1.1, as source. Ingress, orchestrator, the
 four agents, the tools, both MCP servers, knowledge, messaging. `egress/` is
 absent, because CyberTravels has no gateway.
 
 Eight defects, enumerated by hand in
-[`LABELS.md`](https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/cybertravels/LABELS.md)
+[`LABELS.md`](https://github.com/spbreed/cyber-commons/blob/master/cybertravels/LABELS.md)
 **before** any scanner saw it — a key written afterwards is a description of
 the scan. Four correct functions are in the key too, because a corpus where
 everything is broken cannot measure precision.
@@ -288,7 +288,7 @@ mind is the whole of this lesson."""),
 
 Not a forty-line taint engine written to fit in a lesson. Semgrep **1.176.0**,
 against that file, three configurations —
-[`run.sh`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/tools/semgrep-sast)
+[`run.sh`](https://github.com/spbreed/cyber-commons/tree/master/labs/tools/semgrep-sast)
 reproduces all three and the raw JSON is committed beside the skill.
 
 The third is a custom taint rule, which is what a real one looks like:
@@ -657,7 +657,7 @@ none of those change when somebody wires the function back up.
          "on a caller-supplied path, and an `os.system()` on a caller-supplied "
          "argument. Its answer is reproduced verbatim below "
          "([full run](https://github.com/spbreed/cyber-commons/blob/"
-         "claude/vulnbench-setup-scheduling-81aqov/labs/kimi/"
+         "master/labs/kimi/"
          "moonlight-16b-completion-prompt.txt))."),
 
   ("md", "## 9 · Read that output again\n\n"

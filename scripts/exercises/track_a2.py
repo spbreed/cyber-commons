@@ -229,7 +229,7 @@ notebook runs with the internet switched off. That proves RFC 8693 and RFC 8705
 work. It does not prove the product you are about to deploy implements them,
 which is a different question and has a different answer.
 
-[`labs/tools/keycloak-obo/`](https://github.com/spbreed/cyber-commons/tree/main/labs/tools/keycloak-obo)
+[`labs/tools/keycloak-obo/`](https://github.com/spbreed/cyber-commons/tree/master/labs/tools/keycloak-obo)
 downloads Keycloak 26.0.7, starts it with mTLS, configures this realm and runs
 the same three checks. Three of them behaved as the specifications describe:
 

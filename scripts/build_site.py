@@ -35,11 +35,10 @@ VIDEOS = json.loads((ROOT / "site" / "data" / "videos.json").read_text()).get("v
 NOTES_DIR = ROOT / "lessons"
 NB_DIR = ROOT / "labs" / "notebooks"
 OUT = ROOT / "site" / "lessons"
-REPO = "https://github.com/spbreed/cyber-commons"
-# The branch the content actually lives on. Links built against a branch that
-# has no such path are the bug this constant exists to prevent — CI checks it.
-BRANCH = "claude/vulnbench-setup-scheduling-81aqov"
-RAW = f"https://raw.githubusercontent.com/spbreed/cyber-commons/{BRANCH}"
+# Owner, repository, branch and the URLs built from them all live in one
+# module. Links built against a branch that has no such path are the bug that
+# constant exists to prevent, and scripts/check_repo_links.py enforces it.
+from exercises.repo import BRANCH, RAW, REPO  # noqa: E402
 
 # Execution evidence still gates CI — scripts/run_notebooks.py and
 # scripts/kaggle_verify.py must both pass — but it is no longer printed on the

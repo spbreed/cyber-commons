@@ -66,6 +66,7 @@ not a rebuild of 134 copies.
 |---|---|
 | `site/data/curriculum.json` — structure: functions → tracks → sessions | everything below |
 | `scripts/exercises/` — lesson bodies, framing, grounding, days, anchors | notebooks and pages |
+| `scripts/exercises/repo.py` — owner, repo and the **published branch** | every link a lesson renders into this repository |
 | `skills/<area>/<name>/` — `SKILL.md` and its script | the procedure a lesson runs |
 | `curriculum/labs.json` — the runnable command block per lesson | the lab block on a page |
 | `curriculum/frameworks.json` — OWASP / ATLAS / NIST / EU AI Act mapping | the labels on a page |
@@ -164,7 +165,7 @@ that are enforced or that get broken most.
 
 ## 5 · Pre-deployment testing
 
-Eighteen gates, in the order CI runs them. Each exists because of a specific
+Nineteen gates, in the order CI runs them. Each exists because of a specific
 failure — a gate whose reason is written down does not get deleted by the next
 person.
 
@@ -187,7 +188,8 @@ person.
 | 15 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that |
 | 16 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
 | 17 | `build_curriculum.py --check` | a chapter doc in `curriculum/` stale against `curriculum.json` — fifteen committed files that nothing compared against their source until a clarity fix reached the site and not them |
-| 18 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
+| 18 | `check_repo_links.py --check` | a link into this repository pinning a branch that is not the published one. The branch lives in `scripts/exercises/repo.py`; it was spelled out longhand in nine files and one had drifted to `main`, which has never existed on the remote |
+| 19 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
 
 Run the lot before pushing:
 

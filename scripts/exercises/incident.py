@@ -77,7 +77,7 @@ SOURCE_NOTE = """
 > the third-party production compromise that followed. Every count below is the
 > report's own figure, carried here as course material — none of it is
 > independently reproduced in this notebook. The register it produces is in
-> [`labs/incident-register/`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/incident-register).
+> [`labs/incident-register/`](https://github.com/spbreed/cyber-commons/tree/master/labs/incident-register).
 """
 
 from . import diagrams as D

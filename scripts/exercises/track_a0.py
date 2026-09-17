@@ -86,7 +86,7 @@ argument:
    why is the most common way a good lesson lands badly.
 4. **In CyberTravels** — the idea in the running case study.
 5. **The skill** — the `SKILL.md` as it exists in
-   [`skills/`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/skills).
+   [`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills).
    Frontmatter tells an agent when to load the procedure; the markdown reads as
    a checklist for a person.
 6. **Run it → Out** — one cell of about twenty lines, and the real recorded
