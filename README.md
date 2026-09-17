@@ -87,8 +87,11 @@ failures happen in the seams.
 | in GRC, risk, audit, or you carry the regulator | **E1**→**E3** — risk and control, regulatory, running the programme |
 
 **Recording or teaching this?** [LIGHTBOARD.md](LIGHTBOARD.md) is a speaking
-script for every lesson — five beats each, two to three minutes, generated from
-the same sources the lessons are.
+script for every lesson — a continuity line and five beats each, two to three
+minutes, generated from the same sources the lessons are. It tells you to
+record the six entry points first: those carry an extra ground-rules beat for
+somebody who has never shipped an agent, and every lesson after them assumes
+you said it.
 
 ---
 
