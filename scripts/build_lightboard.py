@@ -1,44 +1,48 @@
 #!/usr/bin/env python3
-"""Generate LIGHTBOARD.md — a speaking script for every lesson, to record from.
+"""Generate LIGHTBOARD.md — a word-for-word speaking script for every lesson.
 
-This is written to be **read aloud**, not read. Different job from the page:
-the page can be re-read, a recording cannot, so every line has to land the
-first time and sound like a person who has done the work rather than someone
-narrating a slide.
+This is written to be **read aloud verbatim**. That is a stronger promise than
+the earlier version made, and it changes what the generator has to emit: not
+beats to paraphrase, but finished sentences. Somebody recording 134 videos
+should be able to look at the page and talk, without translating notes into
+speech on camera.
 
-**Every lesson is a story with a position in a longer one.** That is the thing
-an earlier version of this file got wrong, and it got it wrong in a way that
-was worst exactly where it mattered most — the first recording somebody
-watches. Three bugs, all of them the same bug:
+Two rules follow from that, and they are the whole design:
 
-  - the grounding line said "CyberTravels, the same company we have been
-    following" on lesson one, where nobody has followed anything yet;
-  - "then we run it" sat directly above "nothing is computed here", because
-    the run was filed under the number rather than under the work;
-  - "that closes this chapter" was said on a chapter *opener*, because a
-    one-lesson chapter is both first and last.
+1. **Everything is a complete, speakable sentence.** The lesson sources are not
+   uniformly sentence-shaped — Day 1 is usually an imperative ("Run it in an
+   isolate…") and Day 2 is usually a bare noun phrase ("Share of tool calls
+   whose selecting text came from a trusted origin"). Neither can be joined to
+   a lead-in with a colon without producing something nobody can say. So every
+   frame here ends its own sentence first, and the fragment follows as its own
+   utterance, which is exactly how people talk.
 
-So position is computed rather than assumed. Every beat knows whether it is
-opening the curriculum, opening a function, mid-chapter, or closing one, and
-says the thing that is true there.
+2. **What you say and what you do are never mixed.** Spoken words are plain
+   paragraphs. Stage directions — draw this, run the cell, point at the output
+   — are in square brackets and italics, and the header says once that those
+   are the only things not read aloud.
 
-The shape per lesson is a fixed sequence, because a recurring shape is what
-lets somebody record 134 of these without each one becoming a fresh writing
-problem:
+**Every lesson is a story with a position in a longer one.** Position is
+computed rather than assumed, because assuming it produced three bugs that were
+worst exactly where they mattered most — the first recording somebody watches:
+the CyberTravels line said "the same company we have been following" on lesson
+one; "then we run it" printed above "nothing is computed here"; and "that
+closes this chapter" was said on a chapter *opener*, since a one-lesson chapter
+is both first and last.
 
-    WHERE WE ARE   one line of continuity. What the last one left you with.
-    ORIENT         only on the entry points — the ground rules for a newcomer.
-    1 OPEN         the scene, no preamble.
-    2 WHY IT COSTS Day 0, said out loud, then the same thing in CyberTravels.
-    3 WHAT WE BUILD Day 1 — the thing on the board, and the run.
-    4 THE NUMBER   Day 2 — what comes out, and what it means.
-    5 HAND OVER    the challenge, and the name of the next lesson.
+The shape per lesson:
 
-The content is pulled from the same sources the lesson is built from — the
-hook, the CyberTravels grounding, Day 0/1/2, what the run proves, the challenge,
-the chapter bridge — so a script cannot describe a lesson that no longer exists,
-and re-running this after an edit brings the script back in step. The connective
-phrasing is written here; the substance is the lesson's own.
+    ⓪ GROUND RULES  only on the six entry points — spoken, for a newcomer.
+    ① OPEN          the scene, no preamble.
+    ② WHY IT COSTS  Day 0, then the same thing inside CyberTravels.
+    ③ WHAT WE DO    Day 1 — the thing on the board, and the run.
+    ④ THE NUMBER    Day 2 — what comes out, and what it means.
+    ⑤ HAND OVER     the challenge, and the name of the next lesson.
+
+The substance is pulled from the same sources the lesson is built from — hook,
+grounding, Day 0/1/2, expected output, challenge, chapter bridge — so a script
+cannot describe a lesson that no longer exists. The connective sentences and
+the six orientation beats are written here.
 
     python3 scripts/build_lightboard.py            # write LIGHTBOARD.md
     python3 scripts/build_lightboard.py --check    # CI: fail if it is stale
@@ -63,82 +67,103 @@ from exercises.days import DAYS, FUNCTION_DAYS, FUNCTION_INTRO  # noqa: E402
 from exercises.framing import BRIDGES                        # noqa: E402
 
 SITE = "https://cybercommons.ai"
+WPM = 140          # unhurried delivery to camera, measured against a read-through
 
-# --- the entry points, and what a newcomer needs before the cold open --------
+# --- the six entry points ----------------------------------------------------
 #
-# This is the only substantive prose in this generator, and it is here rather
-# than in the lesson sources on purpose: it is direction for the person
-# recording, not content of the lesson. It exists because "start cold" is
-# excellent advice for lesson ninety and terrible advice for lesson one — a
-# viewer who has never shipped an agent does not need a scene, they need to
-# know what an agent is, and thirty seconds spent there is what makes every
-# later cold open land.
+# The only substantive prose in this generator, and it is here rather than in
+# the lesson sources on purpose: it is what the presenter says, not what the
+# page says. It exists because "start cold" is excellent advice for lesson
+# ninety and useless for lesson one — a viewer who has never shipped an agent
+# cannot be hooked by a scene about one, and thirty seconds spent on the
+# definition is what makes every later cold open land.
 #
-# Keyed by lesson id. A0.1 is the front door of the whole commons; the other
-# five are the function intros from FUNCTION_INTRO, which are where somebody
-# arriving from a search result actually lands.
+# Keyed by lesson id: A0.1 is the front door of the whole commons, and the
+# other five are FUNCTION_INTRO — where somebody arriving from a search result
+# actually lands. Written as words to say, in the first person, out loud.
 ORIENT = {
- "A0.1": (
-  "**Thirty seconds on what an agent is, before anything else.** Assume half "
-  "your viewers have never shipped one. A model that only answers questions is "
-  "a chatbot. Give it tools — let it call an API, read a file, move money — and "
-  "a loop that picks which tool to call next, and it is an agent. That is the "
-  "entire difference, and it is the entire problem: a chatbot that is wrong "
-  "says something wrong, an agent that is wrong *does* something wrong. "
-  "Everything in this commons follows from that one sentence.",
-  "**Then say what this is, plainly.** A hundred and thirty-four lessons, free, "
-  "no vendor and no paid account, and every one of them runs — you press a "
-  "button and the thing executes in your own account. Say that you are going to "
-  "use one made-up company for all of it, and that you will introduce it in the "
-  "next video.",
- ),
- "A1.0": (
-  "**Introduce CyberTravels properly — this is the one that has to land.** It is "
-  "a corporate travel company that does not exist: four agents, one of which can "
-  "issue refunds. It is invented on purpose, and say why out loud. Every lesson "
-  "in all five functions is grounded in the same company, so the refund limit an "
-  "attacker walks past in one lesson is the same limit a detection watches in "
-  "another and a report counts in a third. By the fourth function you are not "
-  "learning a fourth example — you are watching a system you already understand "
-  "fail in a new way.",
- ),
- "B2.0": (
-  "**If your viewer has done application security, tell them what is different, "
-  "or they will assume they can skip this.** The pipeline is not new. What is "
-  "new is that code now arrives faster than any human review can keep up with, "
-  "and some of it was written by an agent that cannot tell you why. Everything "
-  "in this chapter is that one pressure.",
- ),
- "C1.0": (
-  "**Say the distinction first, because most people hear “red team” and think "
-  "jailbreaks.** Getting a model to say something it should not is a prompt "
-  "result. Getting an *agent* to do something it should not — spend money, "
-  "touch a file, message another agent — is an incident. This chapter is the "
-  "second one, and it is the one nobody has a playbook for.",
- ),
- "D1.0": (
-  "**Open by granting that their SOC already works.** They have sensors, a lake, "
-  "rules, an on-call rota. None of that is wrong and none of it is being "
-  "replaced. The question this whole chapter asks is narrower and more "
-  "uncomfortable: when an agent is the thing that went wrong, would any of it "
+ "A0.1": [
+  "Before anything else, thirty seconds on what an agent actually is, because "
+  "if you have never shipped one, none of the rest of this will land properly.",
+  "A model that only answers questions is a chatbot. Give it tools — let it "
+  "call an API, read a file, move money — and give it a loop that decides "
+  "which tool to call next, and now it is an agent. That is the entire "
+  "difference. And it is also the entire problem. A chatbot that is wrong says "
+  "something wrong. An agent that is wrong does something wrong. Everything "
+  "here follows from that one sentence.",
+  "So, what this is. A hundred and thirty-four lessons. It is free, there is no "
+  "vendor, there is no paid account, and every single one of them runs — you "
+  "press a button and the code executes in your own account, not mine. I am "
+  "going to use one made-up company for all of it, and I will introduce you to "
+  "them in the next video.",
+ ],
+ "A1.0": [
+  "Let me introduce you to CyberTravels, because you are going to be seeing a "
+  "lot of them.",
+  "CyberTravels is a corporate travel company that does not exist. I made them "
+  "up. They run four agents, and one of those agents can issue refunds. I "
+  "invented them deliberately, and here is why.",
+  "Every lesson, in all five functions, is grounded in this same company. So "
+  "the refund limit an attacker walks straight past in one lesson is the same "
+  "limit a detection is watching in another, and the same limit a compliance "
+  "report is counting in a third. By the fourth function you are not learning a "
+  "fourth example. You are watching a system you already understand fail in a "
+  "new way.",
+ ],
+ "B2.0": [
+  "If you have done application security before, let me tell you what is "
+  "different here, because otherwise you will assume you can skip this chapter.",
+  "The pipeline is not new. What is new is that code now arrives faster than "
+  "any human review can keep up with, and some of it was written by an agent "
+  "that cannot tell you why it wrote it. Everything in this chapter comes out "
+  "of that one pressure.",
+ ],
+ "C1.0": [
+  "One distinction before we start, because most people hear red team and think "
+  "jailbreaks.",
+  "Getting a model to say something it should not say is a prompt result. "
+  "Getting an agent to do something it should not do — spend money, touch a "
+  "file, message another agent — is an incident. This chapter is about the "
+  "second one, and it is the one almost nobody has a playbook for.",
+ ],
+ "D1.0": [
+  "Let me say this up front: your SOC already works. You have sensors, you have "
+  "a lake, you have rules, you have an on-call rota. None of that is wrong, and "
+  "none of it is getting replaced here.",
+  "The question this whole chapter asks is narrower than that, and a bit more "
+  "uncomfortable. When an agent is the thing that went wrong — would any of it "
   "have fired?",
- ),
- "E1.0": (
-  "**Governance has a reputation, so beat the audience to it.** Say out loud "
-  "that most people hear this word and picture a spreadsheet nobody reads. Then "
-  "say what you actually mean: being able to show, later and to somebody "
-  "hostile, that a decision was made on purpose and by a named person. That is "
-  "an engineering problem, and it is the one that decides whether the thing you "
-  "built is allowed to stay switched on.",
- ),
+ ],
+ "E1.0": [
+  "Governance has a reputation, so let me get ahead of it. Most people hear "
+  "that word and picture a spreadsheet nobody reads.",
+  "Here is what I actually mean by it: being able to show, later, and to "
+  "somebody who is not on your side, that a decision was made on purpose and by "
+  "a named person. That is an engineering problem. And it is the one that "
+  "decides whether the thing you built is allowed to stay switched on.",
+ ],
 }
 
+# Substitutions applied to every spoken line. Each is here because the source
+# is written to be read on a page and this file is read into a microphone.
+SAY_SUBS = [
+    (re.compile(r"(\d)\s*%"), r"\1 percent"),          # "29%" -> "29 percent"
+    (re.compile(r"\s*→\s*"), ", then "),           # ingress -> agent_runtime
+    (re.compile(r"\s*->\s*"), ", then "),
+    (re.compile(r"\s*&\s*"), " and "),
+    (re.compile(r"~(\d)"), r"about \1"),
+    # Tool names are written as identifiers and said as words. issue_refund is
+    # "issue refund" out loud; nobody says the underscore.
+    (re.compile(r"\b([a-z]+)_([a-z_]+)\b"),
+     lambda m: m.group(0).replace("_", " ")),
+]
 
-def plain(text: str) -> str:
-    """Markdown stripped back to something you can say.
 
-    A script full of asterisks and backticks is a script somebody stumbles
-    over on the third take.
+def say(text: str) -> str:
+    """One spoken line: markdown stripped, and said the way a person says it.
+
+    A script full of asterisks, backticks and snake_case is a script somebody
+    stumbles over on the third take.
     """
     t = text.strip()
     t = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", t)     # links -> their text
@@ -147,18 +172,29 @@ def plain(text: str) -> str:
     t = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"\1", t)
     t = re.sub(r"^#+\s*", "", t, flags=re.M)
     t = re.sub(r"\s*\n\s*", " ", t)
-    return re.sub(r"\s{2,}", " ", t).strip()
+    for pat, rep in SAY_SUBS:
+        t = pat.sub(rep, t)
+    t = re.sub(r"\s{2,}", " ", t).strip()
+    # Every spoken line ends as a sentence. Several sources are fragments with
+    # no terminal stop, and a script that runs two of them together is a script
+    # that gets read as one breathless clause.
+    return t if not t or t[-1] in ".!?:—" else t + "."
 
 
-def first_sentences(text: str, n: int = 2, cap: int = 320) -> str:
-    """The opening of a block, cut at a sentence end rather than mid-clause.
+def drop_pointer(text: str) -> str:
+    """Strip a chapter bridge's own trailing "Next → A2.1, agent identity".
 
-    `expect` in particular is written for somebody reading terminal output and
-    runs to a thousand characters on the longest lessons. Read aloud in full it
-    is unspeakable — exit codes and tracebacks — so it is cut here and labelled
-    as what is on screen rather than as words to say.
+    Left in, it prints twice in one closing beat. It has to be removed from the
+    RAW text, before say(): the arrow substitution turns it into ", then A2.1"
+    first, and then there is no pointer left to match. The pointer is re-added
+    afterwards from the curriculum, where the id and the title cannot drift.
     """
-    parts = re.split(r"(?<=[.!?])\s+", plain(text))
+    return re.sub(r"\s*Next\s*(→|->).*$", "", text).strip()
+
+
+def sentences(text: str, n: int = 2, cap: int = 320) -> str:
+    """The opening of a block, cut at a sentence end rather than mid-clause."""
+    parts = re.split(r"(?<=[.!?])\s+", say(text))
     out = ""
     for p in parts[:n]:
         if out and len(out) + len(p) + 1 > cap:
@@ -170,9 +206,9 @@ def first_sentences(text: str, n: int = 2, cap: int = 320) -> str:
 def lessons() -> list[dict]:
     """Every lesson, flat, each knowing where it sits.
 
-    The neighbours are computed once here because three separate beats need
-    them — continuity at the top, the chapter close at the bottom, and whether
-    this is the first thing anybody watches.
+    The neighbours are computed once because three beats need them: continuity
+    at the top, the chapter close at the bottom, and whether this is the first
+    thing anybody watches.
     """
     flat = []
     for fn in CUR["functions"]:
@@ -186,8 +222,8 @@ def lessons() -> list[dict]:
         item["first_of_chapter"] = item["i"] == 0
         item["last_of_chapter"] = item["i"] == item["n"] - 1
         # A one-lesson chapter is both. It is never a close: there is nothing
-        # behind it to close, and saying so on the front door of the whole
-        # commons reads as an ending on the first video somebody watches.
+        # behind it to close, and saying so on the front door of the commons
+        # reads as an ending on the first video somebody watches.
         item["closes_chapter"] = item["last_of_chapter"] and item["n"] > 1
     return flat
 
@@ -199,185 +235,200 @@ def board(ex: dict) -> str:
     return head[0].strip() if head else "the component map"
 
 
-def minutes(runs: bool, oriented: bool) -> str:
-    """Honest length. An orientation beat and a live run both cost time."""
-    return "3–4 min" if oriented else ("2–3 min" if runs else "2 min")
-
-
-def grounding_line(sid: str, item: dict) -> str:
-    """The CyberTravels line, phrased for where the viewer actually is.
-
-    The lead-in used to be the same everywhere — "the same company we have been
-    following" — which is a lie on lesson one and the reason the opening of the
-    curriculum read as though the viewer had missed something.
-    """
-    g = GROUNDING.get(sid)
-    if not g:
-        return ""
-    if sid == "A0.1":
-        note = "you have not introduced it yet, so you are only planting the name"
-    elif sid == FUNCTION_INTRO.get(item["fn"]["id"]):
-        note = "name the company again — a lot of people start watching here"
-    else:
-        note = "same company, same four agents, new way of failing"
-    return f"**In CyberTravels** *({note})*\n\n{plain(g)}"
-
-
-def continuity(item: dict) -> str:
-    """One line saying what the viewer is walking in from.
+def opening(item: dict) -> list[tuple[str, str]]:
+    """The spoken bridge in from whatever the viewer just watched.
 
     A recording has no sidebar and no breadcrumb. Without this, lesson forty is
-    a stranger; with it, the series is one argument.
+    a stranger; with it, the series is one argument. It is deliberately short
+    mid-chapter — a bridge, not a recap — and does the real work at the
+    boundaries, where a viewer has just changed subject or changed function.
     """
-    sid = item["s"]["id"]
     if item["prev"] is None:
-        return ("**Where we are.** The very beginning — this is the first thing "
-                "anybody watches. Nothing to refer back to, so do not refer back.")
+        return []
     p = item["prev"]
-    if item["first_of_chapter"]:
-        b = BRIDGES.get(p["tr"]["id"], {})
-        gap = plain(b.get("gap", "")) if b else ""
-        # A new function is a bigger step than a new chapter and the viewer has
-        # to be told which one they just took — the whole question being asked
-        # of CyberTravels changes here, not just the subject matter.
-        if p["fn"]["id"] != item["fn"]["id"]:
-            opener = (f"**Where we are.** New function, not just a new chapter — "
-                      f"say so. Function {p['fn']['id']} asked one question of "
-                      f"CyberTravels and finished; Function {item['fn']['id']}, "
-                      f"{plain(item['fn']['title'])}, asks a different one of the "
-                      f"same company. Chapter {p['tr']['id']} left off here")
-        else:
-            opener = (f"**Where we are.** New chapter. Chapter {p['tr']['id']} ended "
-                      f"on what it could not do")
-        return (f"{opener}: “{first_sentences(gap, 1)}” That is what this "
-                f"one picks up." if gap else f"{opener}. This chapter picks it up.")
-    return (f"**Where we are.** Straight on from {p['s']['id']}, "
-            f"{plain(p['s']['title'])}. One sentence on that, then move — do not "
-            f"recap, the viewer either saw it or did not.")
+    if not item["first_of_chapter"]:
+        return [("say", f"Still inside chapter {item['tr']['id']}. Last one was "
+                        f"{say(p['s']['title'])}")]
 
-
-def handover(item: dict, ex: dict) -> list[str]:
-    """The last beat: their turn, then where they are going.
-
-    Always names the next lesson by id and title. A script that ends on "go and
-    try this" and nothing else is a script that ends the series every time.
-    """
+    gap = sentences(BRIDGES.get(p["tr"]["id"], {}).get("gap", ""), 1)
     out = []
-    if challenge := ex.get("challenge"):
-        out.append(first_sentences(challenge, 2))
-    else:
-        out.append("Go and try this against a system you actually run. That is "
-                   "where it stops being a lesson.")
-
-    final = item["next"] is None
-    if item["closes_chapter"]:
-        b = BRIDGES.get(item["tr"]["id"], {})
-        if gained := b.get("gained"):
-            out.append(f"**That closes Chapter {item['tr']['id']}.** "
-                       f"{first_sentences(gained, 2)}")
-        if gap := b.get("gap"):
-            # On the very last lesson there is no next chapter to sell, so the
-            # gap is the honest ending rather than a hook. Saying "the reason
-            # anybody clicks the next chapter" there points at nothing.
-            why = ("Say this part slowly — it is the honest ending, and it is "
-                   "better than pretending the subject is finished."
-                   if final else
-                   "Say this part slowly — it is the reason anybody clicks the "
-                   "next chapter.")
-            out.append(f"**And here is what it still cannot do.** "
-                       f"{first_sentences(gap, 2)} {why}")
-        if (nxt := b.get("next")) and not final:
-            # The bridge already ends with its own "Next → A2.1, agent identity"
-            # pointer. Left in, it prints twice in one line. Strip that tail and
-            # re-add the pointer below from the curriculum, so the id and the
-            # title are the real ones rather than a second copy that can drift.
-            body = re.sub(r"\s*Next\s*→.*$", "", plain(nxt)).strip()
-            out.append(f"**Then the next chapter.** {first_sentences(body, 2)}")
-
-    if n := item["next"]:
-        out.append(f"**Next →** {n['s']['id']} · {plain(n['s']['title'])}.")
-    else:
-        if last_word := BRIDGES.get(item["tr"]["id"], {}).get("next"):
-            out.append(f"**Leave them with this.** "
-                       f"{first_sentences(last_word, 2)}")
-        out.append("**That is the last lesson in the commons.** Say so, thank them, "
-                   # Not "on Monday morning". A weekday standing in for "soon"
-                   # is the house rule check_clarity.py enforces on every
-                   # rendered page, and it does not stop applying because this
-                   # file is read aloud instead of read.
-                   "and point at the one thing you would go and do first thing "
-                   "tomorrow — name a real thing, not “keep learning”.")
+    if p["fn"]["id"] != item["fn"]["id"]:
+        out.append(("say",
+                    f"That is Function {p['fn']['id']} done. Function "
+                    f"{item['fn']['id']} asks a different question of the same "
+                    f"company: {say(item['fn']['title'])}"))
+    if gap:
+        out.append(("say", f"Chapter {p['tr']['id']} left us here. {gap} "
+                           f"That is what this chapter picks up."))
+    elif not out:
+        out.append(("say", f"New chapter. Chapter {p['tr']['id']} is done, and "
+                           f"this one picks up where it stopped."))
     return out
 
 
-def script(item: dict) -> str:
-    fn, tr, s = item["fn"], item["tr"], item["s"]
+def grounding_line(sid: str, item: dict) -> list[tuple[str, str]]:
+    """The CyberTravels line, said the way it is true where the viewer is.
+
+    The lead-in used to be identical everywhere — "the same company we have
+    been following" — which is a lie on lesson one and the reason the opening
+    of the curriculum read as though the viewer had missed something.
+    """
+    g = GROUNDING.get(sid)
+    if not g:
+        return []
+    if sid == "A0.1":
+        lead = ("You have not met CyberTravels yet — that is the next video — "
+                "but here is where they come in.")
+    elif sid == FUNCTION_INTRO.get(item["fn"]["id"]):
+        lead = ("And this is CyberTravels again — the same company, because a lot "
+                "of people start watching here.")
+    else:
+        lead = "Same company, same four agents, new way of failing."
+    return [("say", f"{lead} {say(g)}")]
+
+
+def closing(item: dict, ex: dict) -> list[tuple[str, str]]:
+    """Their turn, then where they are going next.
+
+    Always names the next lesson. A script that ends on "go and try this" and
+    nothing else ends the series every time.
+    """
+    out = [("say", sentences(ex.get("challenge") or
+                             "Go and try this against a system you actually run. "
+                             "That is where it stops being a lesson.", 2))]
+    final = item["next"] is None
+
+    if item["closes_chapter"]:
+        b = BRIDGES.get(item["tr"]["id"], {})
+        if gained := b.get("gained"):
+            out.append(("say", f"That closes chapter {item['tr']['id']}. "
+                               f"{sentences(gained, 2)}"))
+        if gap := b.get("gap"):
+            out.append(("do", "Slow down here. This is the reason anybody clicks "
+                              "the next chapter." if not final else
+                              "Slow down here. This is the ending — do not "
+                              "rush it, and do not pretend the subject is "
+                              "finished."))
+            out.append(("say", f"And here is what it still cannot do. "
+                               f"{sentences(gap, 2)}"))
+        if (nxt := b.get("next")) and not final:
+            out.append(("say", sentences(drop_pointer(nxt), 2)))
+
+    if n := item["next"]:
+        out.append(("say", f"Next up: {n['s']['id']}, {say(n['s']['title'])}"))
+    else:
+        if last := BRIDGES.get(item["tr"]["id"], {}).get("next"):
+            out.append(("say", sentences(drop_pointer(last), 2)))
+        out.append(("do", "That is the last lesson in the commons. Thank them, "
+                          "and name one real thing you would go and do first "
+                          "thing tomorrow — a real thing, not “keep learning”."))
+    return out
+
+
+def beats(item: dict) -> list[tuple[str, str, str]]:
+    """The whole lesson as (heading, kind, text), kind being say or do."""
+    s = item["s"]
     sid = s["id"]
     ex = EXERCISES.get(sid, {})
     d0, d1, d2 = DAYS.get(sid, ("", "", ""))
     runs = any(k in ("py", "skill_script", "model")
                for k, _ in ex.get("steps", []))
-    orient = ORIENT.get(sid)
 
-    out = [f"### {sid} · {s['title']}", ""]
-    out.append(f"Chapter {tr['id']} · lesson {item['i'] + 1} of {item['n']} · "
-               f"{'runs a skill' if runs else 'reading lesson'} · "
-               f"{minutes(runs, bool(orient))} · "
-               f"[page]({SITE}/lessons/{sid}.html)")
-    out.append("")
-    out.append(continuity(item))
-    out.append("")
-    out.append(f"**On the board.** {board(ex)}")
-    out.append("")
+    rows: list[tuple[str, str, str]] = []
 
-    if orient:
-        out.append("#### ⓪ First, the ground rules *(30–45s — only on this lesson)*")
-        out.append("")
+    def add(head, kind, text):
+        rows.append((head, kind, text))
+
+    if orient := ORIENT.get(sid):
+        h = "⓪ Ground rules — only on this lesson"
+        add(h, "do", f"Draw nothing yet. Talk to camera.")
         for para in orient:
-            out.append(para)
-            out.append("")
+            add(h, "say", say(para))
 
-    out.append("#### ① Open — the scene *(15–20s)*")
-    out.append("")
-    out.append(plain(ex.get("hook", s.get("risk", ""))))
-    out.append("")
+    h = "① Open"
+    for kind, text in opening(item):
+        add(h, kind, text)
+    # The board line and the expected output are shown, not folded into the
+    # bracketed direction: both routinely contain square brackets themselves
+    # ("[ user ] --- ... ---> ingress", "[Errno 2]"), and a direction that
+    # nests brackets breaks the one rule this file has.
+    add(h, "do", "Draw this as you talk. Do not draw it first and then explain it.")
+    add(h, "draw", board(ex))
+    add(h, "say", say(ex.get("hook", s.get("risk", ""))))
 
-    out.append("#### ② Why it costs something — Day 0 *(20–30s)*")
-    out.append("")
-    out.append(plain(d0 or s.get("risk", "")))
-    if g := grounding_line(sid, item):
-        out.append("")
-        out.append(g)
-    out.append("")
+    h = "② Why it costs something"
+    add(h, "say", "Here is what that costs you.")
+    add(h, "say", say(d0 or s.get("risk", "")))
+    for kind, text in grounding_line(sid, item):
+        add(h, kind, text)
 
-    out.append("#### ③ What we build — Day 1 *(30–45s)*")
-    out.append("")
-    out.append(plain(d1 or s.get("control", "")))
+    h = "③ What we do about it"
+    add(h, "say", "So here is what we do in this lesson.")
+    add(h, "say", say(d1 or s.get("control", "")))
     # The run belongs here, with the work. It used to sit under the number,
     # which is how "then we run it" ended up printed directly above "nothing is
-    # computed in this lesson" on the lessons that produce no measurement.
+    # computed in this lesson" on every lesson that produces no measurement.
     if runs:
-        out.append("")
-        out.append("**Then run it on camera.** Not a screenshot — the real thing, "
-                   "and say that they can run the identical cell in their own "
-                   "Kaggle account in about a minute.")
-    out.append("")
+        add(h, "do", "Run the cell on camera now. Let it finish on screen.")
+        add(h, "say", "That is not a screenshot. It just ran, and you can run "
+                      "the identical cell in your own account in about a minute.")
 
-    out.append("#### ④ The number — Day 2 *(20–30s)*")
-    out.append("")
-    out.append(plain(d2 or "This one produces no number. Say that, and say what "
-                           "you count instead — it buys more than a figure you "
-                           "invented."))
+    h = "④ The number"
+    # Not every lesson produces one, and roughly a dozen say so in Day 2 itself
+    # — "Nothing is computed here", "No number yet". Announcing "here is the
+    # number" directly above that is the same contradiction that used to put
+    # "then we run it" above "nothing is computed", so the frame is chosen from
+    # what Day 2 actually says rather than assumed.
+    numberless = re.match(r"\s*(nothing|none|no\b|not yet)", (d2 or "").lower())
+    if d2 and not numberless:
+        add(h, "say", "And here is the number that tells you it worked.")
+    else:
+        add(h, "say", "Now, this one does not hand you a number, and I would "
+                      "rather say that out loud than invent one.")
+    add(h, "say", say(d2 or "So here is what you count instead: whether you can "
+                            "do the thing this lesson described, on a system you "
+                            "actually run."))
     if expect := ex.get("expect"):
-        out.append("")
-        out.append(f"*On screen (do not read this out, point at it):* "
-                   f"{first_sentences(expect, 2)}")
+        add(h, "do", "Point at the output on screen. Do not read it out.")
+        add(h, "show", sentences(expect, 2))
+
+    h = "⑤ Hand it over"
+    for kind, text in closing(item, ex):
+        add(h, kind, text)
+    return rows
+
+
+def script(item: dict) -> str:
+    s = item["s"]
+    sid = s["id"]
+    ex = EXERCISES.get(sid, {})
+    runs = any(k in ("py", "skill_script", "model")
+               for k, _ in ex.get("steps", []))
+    rows = beats(item)
+    words = sum(len(t.split()) for _, kind, t in rows if kind == "say")
+
+    out = [f"### {sid} · {s['title']}", ""]
+    out.append(f"Chapter {item['tr']['id']} · lesson {item['i'] + 1} of "
+               f"{item['n']} · {'runs a skill' if runs else 'reading lesson'} "
+               f"· {words} words, about {words / WPM:.1f} min spoken · "
+               f"[page]({SITE}/lessons/{sid}.html)")
     out.append("")
 
-    out.append("#### ⑤ Hand it over *(10–15s)*")
-    out.append("")
-    for para in handover(item, ex):
-        out.append(para)
+    head = None
+    for h, kind, text in rows:
+        if h != head:
+            head, _ = h, out.append(f"**{h}**")
+            out.append("")
+        if kind == "do":
+            out.append(f"*[{text}]*")
+        elif kind == "draw":
+            out.append("```")
+            out.append(text)
+            out.append("```")
+        elif kind == "show":
+            out.append(f"> {text}")
+        else:
+            out.append(text)
         out.append("")
 
     out.append("---")
@@ -385,17 +436,26 @@ def script(item: dict) -> str:
     return "\n".join(out)
 
 
-HEADER = """# LIGHTBOARD.md — what to say, lesson by lesson
+HEADER = """# LIGHTBOARD.md — the word-for-word script, lesson by lesson
 
-A recording script for all 134 lessons. Written to be **read aloud**, which is
-a different job from the page: a reader can go back, a viewer cannot, so every
-line has to land the first time.
+A recording script for all 134 lessons, written to be **read aloud exactly as
+written**. Open the lesson, talk. No translating notes into sentences while the
+camera is running.
+
+## The one rule
+
+**Read every plain line word for word. Never read a line in square brackets.**
+
+Square-bracketed italics are stage directions — draw this, run the cell, point
+at the output, slow down. Everything else is speech, already in sentences,
+already said the way a person says it: no asterisks, no backticks, "29 percent"
+rather than "29%", "issue refund" rather than `issue_refund`.
 
 ## Record these six first
 
 Do not start at lesson one and grind forwards. Record the **entry points**
 first, in this order, because they are where people actually arrive and they
-are the only ones that carry an orientation beat for somebody who has never
+are the only ones carrying a ground-rules beat for somebody who has never
 shipped an agent:
 
 | order | lesson | opens |
@@ -407,62 +467,55 @@ shipped an agent:
 | 5 | **D1.0** | Function D — the SOC |
 | 6 | **E1.0** | Function E — governance |
 
-Those six are three to four minutes each. Everything after them is two to
-three, because the ground rules are already laid and you never have to lay
-them again.
+Say the ground rules once, in those six, and never again. Every lesson after
+them assumes you said it.
 
 Then take a whole chapter at a time rather than jumping around. The chapter
-close is written as a close — it names what you gained, what it still cannot
-do, and the next chapter — and that only works if you recorded the chapter.
+close is written as a close — what you gained, what it still cannot do, and the
+next chapter — and that only works if you recorded the chapter.
 
 ## The shape of one lesson
 
-Each lesson is one continuity line and five beats. Say them in order and you
-have a recording.
-
-| beat | what it is | roughly |
+| beat | what happens | roughly |
 |---|---|---|
-| **Where we are** | one line. What the last lesson left them holding | 5–10s |
-| **① Open** | the scene. No preamble, no "in this lesson we will" | 15–20s |
-| **② Why it costs** | Day 0 — what goes wrong if you do nothing — then the same thing inside CyberTravels | 20–30s |
-| **③ What we build** | Day 1 — the thing you draw, and the run on camera | 30–45s |
+| **① Open** | one bridge line from the last lesson, then the scene | 20–30s |
+| **② Why it costs something** | Day 0 — what goes wrong if you do nothing — then CyberTravels | 20–30s |
+| **③ What we do about it** | Day 1, and the run on camera | 30–45s |
 | **④ The number** | Day 2 — what comes out, and what it means | 20–30s |
 | **⑤ Hand it over** | their turn, then the name of the next lesson | 10–15s |
 
-The six entry-point lessons add a **⓪ ground rules** beat before the open.
-Nothing else does — say it once and never again.
+The six entry points add a **⓪ ground rules** beat before the open. Nothing
+else does.
+
+Each lesson's heading gives its spoken word count and the time that comes to at
+an unhurried 140 words a minute. That is words only — it does not count the
+pause while the cell runs, so budget a little more on the lessons that execute
+something.
 
 ## Reading it well
 
-- **Do not read this word for word.** It is the beat, in your words on the day.
-  The one exception is a number: say those exactly.
-- **Start cold — after the first six.** No "hello and welcome". Somebody landed
-  here from a search result and gives you eight seconds. But on an entry point,
-  the ⓪ beat comes first: a viewer who does not know what an agent is cannot be
+- **The script is the floor, not the ceiling.** It is written to work read
+  straight. If a better sentence arrives on the day, take it — but the numbers
+  are exact, so say those as written.
+- **Start cold, after the first six.** No "hello and welcome". Somebody landed
+  here from a search result and gives you eight seconds. On an entry point the
+  ⓪ beat comes first: a viewer who does not know what an agent is cannot be
   hooked by a scene about one.
-- **Always say where you are.** The continuity line is not optional padding. A
-  recording has no sidebar and no breadcrumb, so without it lesson forty is a
-  stranger and with it the series is one argument.
-- **Name CyberTravels every time** — but check how. On the first lesson you are
-  planting the name, on a function opener you are re-introducing it, and
-  everywhere else it is the same company failing in a new way. Each lesson below
-  tells you which.
-- **Never oversell the number.** Where a lesson has a real measurement, say it
-  flatly and let it do the work. Where it does not, say that too — "this one
-  produces no number, and here is what you count instead" buys more credibility
-  than a number you invented.
-- **What is on screen is not what you say.** Where a lesson prints output, the
-  script marks it *on screen* — point at it, do not narrate exit codes.
-- **On the board:** the line given per lesson is the diagram's own first line.
-  Draw it as you talk; do not draw it first and then explain it.
+- **The bridge line is not padding.** A recording has no sidebar. Without it
+  lesson forty is a stranger; with it the series is one argument.
+- **Never oversell the number.** Where a lesson has a real measurement the
+  script says it flatly — let it do the work. Where there is none, the script
+  says so out loud, which buys more than a figure you invented.
+- **Draw while you talk**, not before. The board line is the lesson diagram's
+  own first line.
 
 ## Keeping it true
 
 Generated by `scripts/build_lightboard.py` from the same sources the lessons
-are built from — the hook, the CyberTravels grounding, Day 0/1/2, what the run
-proves, the challenge, and the chapter bridges. Edit a lesson and re-run it; do
-not hand-edit this file, it is overwritten. The connective phrasing and the six
-orientation beats are in the generator; everything else is each lesson's own.
+are built from — the hook, the CyberTravels grounding, Day 0/1/2, the expected
+output, the challenge, and the chapter bridges. Edit a lesson and re-run it; do
+not hand-edit this file, it is overwritten. The connective sentences and the six
+ground-rules beats live in the generator; everything else is each lesson's own.
 
 ---
 """
@@ -478,14 +531,14 @@ def build() -> str:
             fd = FUNCTION_DAYS.get(fn["id"], {})
             doc.append(f"\n## Function {fn['id']} — {fn['title']}\n")
             if who := fd.get("who"):
-                doc.append(f"**Who you are talking to.** {plain(who)}\n")
+                doc.append(f"*[Who is watching: {say(who)}]*\n")
             if d0 := fd.get("day0"):
-                doc.append(f"**The pitch for this whole function, in one breath.** "
-                           f"{first_sentences(d0, 2)}\n")
+                doc.append(f"*[The pitch for the whole function, if you need it "
+                           f"in one breath: {sentences(d0, 2)}]*\n")
             if intro := FUNCTION_INTRO.get(fn["id"]):
-                doc.append(f"**Record {intro} first.** It carries the ground-rules "
-                           f"beat for this function; every lesson after it assumes "
-                           f"you said it.\n")
+                doc.append(f"*[Record {intro} first. It carries the ground-rules "
+                           f"beat for this function, and every lesson after it "
+                           f"assumes you said it.]*\n")
             doc.append("---\n")
         doc.append(script(item))
     return "\n".join(doc).rstrip() + "\n"
@@ -508,10 +561,12 @@ def main() -> int:
         print(f"ok: LIGHTBOARD.md is up to date ({n} lesson scripts)")
         return 0
 
+    spoken = sum(len(t.split()) for item in lessons()
+                 for _, kind, t in beats(item) if kind == "say")
     OUT.write_text(text)
-    print(f"wrote {OUT.name} — {n} lesson scripts, {len(ORIENT)} with an "
-          f"orientation beat, {len(text.split())} words, "
-          f"about {n * 2.5 + len(ORIENT):.0f} minutes of recording")
+    print(f"wrote {OUT.name} — {n} word-for-word scripts, {len(ORIENT)} with a "
+          f"ground-rules beat, {spoken} spoken words, "
+          f"about {spoken / WPM / 60:.1f} hours of recording")
     return 0
 
 
