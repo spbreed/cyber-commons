@@ -31,7 +31,7 @@ Drive the real cybergym flow (per its README):
 2. Download task data (HuggingFace) — full or the 10-task subset.
 3. Start the submission server; `python -m cybergym.task.gen_task ... --difficulty level1`.
 4. Run an agent that reads the task and submits a PoC via `submit.sh`.
-5. Verify: `python scripts/verify_agent_result.py ...` → a results/verify JSONL.
+5. Verify, from inside the cloned cybergym repo — this is **their** script, not one of ours: `python cybergym/scripts/verify_agent_result.py ...` → a results/verify JSONL.
 
 ## Score the results (works anywhere, on results produced by the runner)
 ```bash

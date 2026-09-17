@@ -104,6 +104,16 @@ CLAIMS = [
      "notebooks", "the Kaggle verification claim"),
     ("README.md", r"and every one of the (\d+) carries\s*\n\s*a script", "skills",
      "the script-per-skill claim"),
+    # A0.1's "Expect" line describes what the preflight actually prints. It
+    # said "120 skills, 119 with a script" while the notebook printed 139/139 —
+    # a number a reader checks their own run against, which is the worst kind
+    # to have wrong. It also carried "at the time of writing, and the count
+    # moves as the commons grows", which is how a number gets permission to be
+    # wrong; the hedge is gone and the count is checked instead.
+    ("curriculum/labs.json", r"14 areas, (\d+) skills", "skills",
+     "A0.1's expected skill count"),
+    ("curriculum/labs.json", r"14 areas, \d+ skills, (\d+) with a script",
+     "skills_with_script", "A0.1's expected script count"),
     ("LESSON_DESIGN.md", r"Every one of the (\d+) lessons has the same shape",
      "sessions", "the authoring contract's opening"),
     ("skills/README.md", r"^(\d+) skills the curriculum teaches", "skills",

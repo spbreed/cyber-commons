@@ -1,18 +1,38 @@
-# Cyber Commons
+# vulnbench — the eval harness
 
-A free, open commons for Cyber AI: 12 tracks + Module 0 (104 sessions) teaching
-both "AI for Security" and "Security of AI", on CNCF/LF tooling and open-weight
-models (Llama, Kimi, GLM). See README.md and curriculum/.
+**Scope: this directory only.** For anything about the curriculum, the site or
+the build, read the repository's own [CLAUDE.md](../../CLAUDE.md) — it is the
+authority, and §8 of it carries the rules that govern this lab. Restating the
+curriculum here is how the two files drift, and they did: this one opened for
+months on a track count, a module name and a lesson count that had all been
+superseded, stated as confidently as the file that was right.
 
-Curriculum source of truth: `site/data/curriculum.json` + `curriculum/labs.json`
--> regenerate docs with `python3 scripts/build_curriculum.py`. The website
-(`site/`, deployed to GitHub Pages) renders the same JSON.
+vulnbench scores an AI security harness's findings against vulnerability ground
+truth. It is a **separate subsystem** from the curriculum — unrelated in code,
+sharing only the repository.
 
-## Lab B2.15 / E1.5 — the evaluation harness (this file's original scope)
+The lessons that drive it, measured from `curriculum/labs.json` rather than
+remembered: **C1.3** (run the comparison and see the inflated number), **E1.5**
+(read the output as audit evidence), **E3.5** and **E3.7** (the metrics, and
+building the capability). The directory is named `b2.10-eval-harness` for
+historical reasons; B2.10 is now a different lesson, and renaming the directory
+would break every committed path.
 
-The sections below document the eval harness, which is now ONE chapter of the
-curriculum (build it in B2.15, read it as audit evidence in E1.5, attack it in
-C1.6). Its implementation stays at the repo root; entrypoint `scripts/vulnbench.sh`.
+## The entrypoint, and why it is the only one
+
+```bash
+scripts/vulnbench.sh <command>     # doctor · setup · build · score · verify · compare
+```
+
+**Always use `vulnbench.sh`. Never hand-roll the Python calls.** The Claude Code
+skills in `.claude/skills/` and the Copilot prompts in `.github/prompts/` both
+call this same script, which is what makes every surface run identical steps.
+The raw module invocations are documented under Commands below as reference for
+reading the code, not as a route to run it.
+
+**Report accuracy, never conformance.** Conformance is schema validity — about
+100%, and structural. Accuracy is correctness. Presenting one as the other is
+the single most misleading thing you can do with this tool.
 
 ## Purpose
 
@@ -48,6 +68,9 @@ from two judges with MIN aggregation.
   run are replaced, and ground-truth rows are replaced per source.
 
 ## Commands
+
+What `vulnbench.sh` runs underneath. Read these to understand the pipeline; run
+`vulnbench.sh` to use it.
 
 ```bash
 python ingest/build_datasource.py            # build data/vulnbench.db (~552 rows)

@@ -118,6 +118,21 @@ jobs:
       - name: Check CLAUDE.md against the repository it describes
         run: python3 scripts/check_claude_md.py --check
 
+      # The other fifty-odd markdown files, which nothing covered: every
+      # relative link resolves, no link points at a retired lesson, every
+      # scripts/*.py named exists, and the site is cited at its own domain.
+      # Added after an audit found all four classes live in the tree at once.
+      - name: Check every markdown file against the tree it describes
+        run: python3 scripts/check_docs.py --check
+
+      # The fifteen chapter docs are generated from curriculum.json and
+      # committed, and until now nothing compared them against it. A fix to
+      # "a system that changed on Tuesday" reached the JSON and the rendered
+      # page and sat uncorrected here, where check_clarity could not see it —
+      # that gate reads the site.
+      - name: Check the chapter docs are in step with the curriculum
+        run: python3 scripts/build_curriculum.py --check
+
       # The recording scripts are generated from the lesson sources. If a
       # lesson changes and this is not regenerated, somebody records a script
       # for a lesson that no longer says that.

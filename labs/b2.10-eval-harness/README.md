@@ -1,8 +1,13 @@
-# Lab B2.15 / E1.5 — evaluating a security harness
+# vulnbench — evaluating a security harness
 
-**Chapters:** [B2.15](../../curriculum/track-b2.md) (build the eval) ·
-[E1.5](../../curriculum/track-e1.md) (read it as audit evidence) ·
-[C1.6](../../curriculum/track-c1.md) (attack it)
+**The lessons that drive it**, taken from `curriculum/labs.json` rather than
+remembered: [C1.3](../../curriculum/track-c1.md) (run the comparison and see the
+inflated number) · [E1.5](../../curriculum/track-e1.md) (read the output as
+audit evidence) · [E3.5](../../curriculum/track-e3.md) and
+[E3.7](../../curriculum/track-e3.md) (the metrics, and building the capability).
+
+The directory is named `b2.10-eval-harness` for historical reasons — B2.10 is a
+different lesson now, and renaming it would break every committed path.
 
 This is the most complete lab in the commons: a working benchmark that scores an
 AI security harness against real vulnerability ground truth, with committed
@@ -54,11 +59,11 @@ Three model backbones, same blind audit, three corpora:
 Ranking is **non-monotonic** — no backbone wins everywhere, which is precisely
 why you benchmark on *your* task rather than trusting a leaderboard.
 
-Evidence: [`docs/MODEL_COMPARISON.md`](../../docs/MODEL_COMPARISON.md),
-[`docs/REAL_MANTIS_RUN.md`](../../docs/REAL_MANTIS_RUN.md),
-[`work_mantis/failing_questions.md`](../../work_mantis/failing_questions.md)
+Evidence: [`docs/MODEL_COMPARISON.md`](docs/MODEL_COMPARISON.md),
+[`docs/REAL_MANTIS_RUN.md`](docs/REAL_MANTIS_RUN.md),
+[`work_mantis/failing_questions.md`](work_mantis/failing_questions.md)
 (every wrong answer), blinded corpora and held-out answer keys in
-[`work_mantis/`](../../work_mantis/README.md).
+[`work_mantis/`](work_mantis/README.md).
 
 ## Open-weight backbones
 
@@ -71,13 +76,14 @@ export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama
 for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M scripts/vulnbench.sh compare; done
 ```
 
-That reproduction — the same harness across three open-weight families — is the
-[C2.6](../../curriculum/track-c2.md) deliverable.
+That reproduction — the same harness across three open-weight families — is what
+[C1.3](../../curriculum/track-c1.md) runs to see the inflated number, and what
+[E1.5](../../curriculum/track-e1.md) captures as audit evidence.
 
 ## Execution-based benchmarks
 
 CyberGym / ExploitGym / CyberGym-E2E are integrated via
-[`bench/cybergym_adapter.py`](../../bench/cybergym_adapter.py) and scored on the
+[`bench/cybergym_adapter.py`](bench/cybergym_adapter.py) and scored on the
 same Expert-Accuracy scale. They need Docker + ~130GB of task data + Python ≥3.12;
 `cybergym-preflight` tells you honestly whether a host can run them. See
-[`docs/CYBERGYM_INTEGRATION.md`](../../docs/CYBERGYM_INTEGRATION.md).
+[`docs/CYBERGYM_INTEGRATION.md`](docs/CYBERGYM_INTEGRATION.md).

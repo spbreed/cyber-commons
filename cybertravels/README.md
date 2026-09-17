@@ -3,7 +3,7 @@
 The system the whole commons is taught on, as source you can scan.
 
 Every lesson names a component of the agentic reference architecture drawn in
-[A1.1](https://spbreed.github.io/cyber-commons/lessons/A1.1.html). Until now
+[A1.1](https://cybercommons.ai/lessons/A1.1.html). Until now
 each skill carried its own small fixture of that system inline, which meant a
 reader met a slightly different CyberTravels in every lesson. This is the one
 tree they all point at.

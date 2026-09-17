@@ -35,7 +35,7 @@ python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it
 
 ### E1.1 — From framework control to key control indicator
 
-- **Risk** — An annual review certifies nothing about a system that changed on Tuesday.
+- **Risk** — An annual review certifies nothing about a system that changed the week after it.
 - **Control** — Continuous assurance; control effectiveness redefined for probabilistic systems.
 - **Lab** — Change a prompt and show the control evidence going stale in real time.
 - **Tools** — `promptfoo`

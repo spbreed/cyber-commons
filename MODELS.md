@@ -255,4 +255,4 @@ genuinely open governance, no vendor lock, and the thing you'd actually deploy.
 If a lab ever *requires* a closed model to pass, that is a bug in the lab.
 There is no closed path to fall back on: `live_model_test.py` speaks to one
 OpenAI-compatible endpoint and the offline replay is the default.
-[Open an issue](../../issues).
+[Open an issue](https://github.com/spbreed/cyber-commons/issues).

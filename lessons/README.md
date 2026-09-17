@@ -4,14 +4,20 @@ Optional long-form notes for any lesson. Drop a file named after the session id
 and it appears on that lesson's page under the lab:
 
 ```
-lessons/M0.2.md   →  https://spbreed.github.io/cyber-commons/lessons/M0.2.html
-lessons/A2.5.md   →  .../lessons/A2.5.html
+lessons/A2.5.md   →  https://cybercommons.ai/lessons/A2.5.html
+lessons/D1.0.md   →  https://cybercommons.ai/lessons/D1.0.html
 ```
 
-Nothing here is required. A lesson page already renders its risk, control,
-runnable commands, tool chips, GitHub exercise link and video slot straight from
-the curriculum data — these notes are for the extra depth you want to write after
-recording (the lightboard script, gotchas, further reading).
+Nothing here is required, and nothing here is currently written — the folder is
+empty on purpose. A lesson page already renders its seven sections straight from
+`scripts/exercises/`: use case relevance, Day 0/1/2, the framework, the skill and
+its run, what you just proved, your turn, and where it leaves you. These notes
+are for depth that does not belong in any of those — a gotcha you only hit on
+particular hardware, further reading, a longer worked example.
+
+**The recording script is not this.** That is [LIGHTBOARD.md](../LIGHTBOARD.md),
+generated for all 134 lessons by `scripts/build_lightboard.py`. Do not hand-write
+one here; it will go stale against the lesson and nothing will tell you.
 
 ## Writing one
 
@@ -39,19 +45,24 @@ Draw the three planes first, left to right...
 
 ```bash
 python3 scripts/build_site.py     # regenerate the lesson pages
-git add lessons/ site/lessons/ && git commit -m "notes: M0.2" && git push
+git add lessons/ site/lessons/ && git commit -m "notes: A2.5" && git push
 ```
 
-CI rebuilds and deploys automatically. If you forget to run the build, the Pages
-workflow fails with a message telling you to — the site can never drift from the
-source.
+CI rebuilds and deploys automatically. If you forget to run the build,
+`build_site.py --check` fails with a message telling you to — the site can never
+drift from its source.
 
 ## Where each part of a lesson page comes from
 
 | Part of the page | Edit this |
 |---|---|
 | Title, risk, control, tools, models | `site/data/curriculum.json` |
+| The seven sections — hook, Day 0/1/2, framework, skill, proof, your turn | `scripts/exercises/` |
 | The runnable command block + "Expect" | `curriculum/labs.json` |
+| The OWASP / ATLAS / NIST / EU AI Act labels | `curriculum/frameworks.json` |
+| The procedure the lesson runs | `skills/<area>/<name>/` |
 | Long-form notes (this folder) | `lessons/<ID>.md` |
-| Video embed | `site/data/videos.json` — written for you by the recording pipeline |
-| Exercise button | derived from the lab's `cd labs/...` line |
+| Video embed | `site/data/videos.json` — written for you by `scripts/link_video.py` |
+
+[CLAUDE.md](../CLAUDE.md) is the full map of what is generated and what is hand
+written. Never hand-edit a `site/lessons/*.html`; it is overwritten.

@@ -101,7 +101,7 @@ Dependencies run downhill. After changing a source, run from its row down:
 python3 scripts/build_notebooks.py     # exercises      -> labs/notebooks/
 python3 scripts/run_notebooks.py       # notebooks      -> recorded output
 python3 scripts/render_diagrams.py     # emitted DOT    -> site/assets/diagrams/
-python3 scripts/build_curriculum.py    # curriculum.json-> curriculum/track-*.md
+python3 scripts/build_curriculum.py    # curriculum.json-> curriculum/track-*.md + README
 python3 scripts/build_site.py          # everything     -> site/lessons/
 ```
 
@@ -164,7 +164,7 @@ that are enforced or that get broken most.
 
 ## 5 · Pre-deployment testing
 
-Sixteen gates, in the order CI runs them. Each exists because of a specific
+Eighteen gates, in the order CI runs them. Each exists because of a specific
 failure — a gate whose reason is written down does not get deleted by the next
 person.
 
@@ -186,6 +186,8 @@ person.
 | 14 | `build_site.py --check` | a page that is stale against its source |
 | 15 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that |
 | 16 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
+| 17 | `build_curriculum.py --check` | a chapter doc in `curriculum/` stale against `curriculum.json` — fifteen committed files that nothing compared against their source until a clarity fix reached the site and not them |
+| 18 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
 
 Run the lot before pushing:
 
@@ -247,7 +249,7 @@ actually gone wrong.
 
 `.github/workflows/pages.yml`, on push to `main` or `claude/**`.
 
-- **`build`** runs the fourteen gates, then builds the site and uploads it.
+- **`build`** runs the gates in §5, then builds the site and uploads it.
 - **`deploy`** publishes to the `github-pages` environment.
 
 The framework **link** check is `continue-on-error` — an upstream site being
@@ -338,6 +340,10 @@ Every line here cost a debugging session. Read it before you spend the same one.
 - **A gate that reads the wrong artefact passes vacuously.** `check_clarity.py`
   read notebook markdown; when notebooks became code-only it would have passed
   134 lessons without reading a word. Point gates at what the reader sees.
-- **A code cell that executes nothing still counts as a lesson that runs a
-  skill.** Reading lessons carry a markdown cell instead, or the "131 of 134"
-  claim silently becomes 134.
+- **Never measure "runs a skill" by asking whether the notebook has a code
+  cell.** Every notebook is code-only now, including the three reading lessons,
+  whose single cell is a comment — counting cells reports all 134 as running a
+  skill and the "131 of 134" claim silently becomes false. `check_claims.py`
+  measures it from the lesson sources, restricted to ids the curriculum carries,
+  because `EXERCISES` still holds three orphans from the Function C trim
+  (C2.8–C2.10) that are not lessons.
