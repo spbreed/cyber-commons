@@ -63,6 +63,11 @@ building this instead of shipping one finished tree.
 4. **A `was` region is never empty, and every line in one is `#~`-commented.**
    Empty means "this did not exist before", which is what `add` says. An
    uncommented line means the committed tree is running code it should not be.
+5. **Every lab block asks for its own lesson's checkpoint.** The blocks are
+   near-identical across 134 lessons, so the failure mode is a copy-paste that
+   leaves `--at A1.2` on a Function D page. The reader then gets a tree from
+   forty lessons earlier, the exercise does not work, and nothing anywhere
+   says why.
 """
 from __future__ import annotations
 
@@ -269,6 +274,18 @@ def check(order: list[str]) -> list[str]:
                 "committed", "materialised", lineterm="", n=1))[:8]
             problems.append(f"{rel}: the final checkpoint is not the committed "
                             f"tree:\n      " + "\n      ".join(d))
+
+    # 5 — a lab block asks for its own checkpoint
+    labs = json.loads((ROOT / "curriculum/labs.json").read_text())["labs"]
+    asked = re.compile(r"checkpoint\.py --at (\S+)")
+    for sid, lab in sorted(labs.items()):
+        for line in lab.get("run", []):
+            m = asked.search(line)
+            if m and m.group(1) != sid:
+                problems.append(
+                    f"curriculum/labs.json: {sid}'s lab block asks for "
+                    f"checkpoint {m.group(1)} — a reader would get the tree "
+                    f"from the wrong lesson")
 
     # 2 — every checkpoint parses
     for sid in order:

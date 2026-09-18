@@ -28,11 +28,11 @@
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G2.0.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G2.0:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G2.0 --out work/cybertravels
-python3 scripts/checkpoint.py --at G2.0 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G2.0 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -42,12 +42,6 @@ python3 skills/threats/audit-answerability-check/scripts/audit_answerability_che
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* An investigation's questions put to what the run currently emits, and a named list of the ones it cannot answer. Expect most of them — that is why this runs first.
@@ -67,11 +61,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G2.1.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G2.1:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G2.1 --out work/cybertravels
-python3 scripts/checkpoint.py --at G2.1 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G2.1 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -81,12 +75,6 @@ python3 skills/response/run-replayability-audit/scripts/run_replayability_audit.
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* A run's spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it.
@@ -106,11 +94,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G2.2.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G2.2:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G2.2 --out work/cybertravels
-python3 scripts/checkpoint.py --at G2.2 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G2.2 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -120,12 +108,6 @@ python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_chec
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* Each of the four questions answered or explicitly not, from real audit rows — with the fourth likely failing, which is the finding to carry into Function D.
@@ -145,11 +127,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G2.3.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G2.3:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G2.3 --out work/cybertravels
-python3 scripts/checkpoint.py --at G2.3 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G2.3 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -159,12 +141,6 @@ python3 skills/research/eval-suite-health-check/scripts/eval_suite_health_check.
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* A score with a confidence interval, a control shown to move one surface and not the others, and the same suite scoring higher once easy cases are added.
@@ -184,11 +160,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G2.4.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G2.4:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G2.4 --out work/cybertravels
-python3 scripts/checkpoint.py --at G2.4 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G2.4 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -198,12 +174,6 @@ python3 skills/architecture/blast-radius-review/scripts/blast_radius_review.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* Objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports.

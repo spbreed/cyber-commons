@@ -28,10 +28,16 @@
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of A0.0:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at A0.0 --out work/cybertravels
+python3 scripts/checkpoint.py --at A0.0 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -54,10 +60,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of A0.1:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at A0.1 --out work/cybertravels
+python3 scripts/checkpoint.py --at A0.1 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
 
 # --- or install it into your own agent and ask in your own words ---

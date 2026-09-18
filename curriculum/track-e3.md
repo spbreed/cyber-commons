@@ -27,10 +27,16 @@
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.1:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.1 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.1 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/risk-translation-upward/scripts/risk_translation_upward.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -53,10 +59,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.2:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.2 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.2 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/autonomy-ladder-decisions/scripts/autonomy_ladder_decisions.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -79,10 +91,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.3:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.3 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.3 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/programme-sequencing/scripts/programme_sequencing.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -105,10 +123,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.4:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.4 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.4 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/ownership-seam-audit/scripts/ownership_seam_audit.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -132,10 +156,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.5:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.5 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.5 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/programme-metrics-selection/scripts/programme_metrics_selection.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -158,10 +188,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.6:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.6 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.6 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/conditional-approval-design/scripts/conditional_approval_design.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -184,10 +220,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.7:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.7 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.7 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/capability-build-order/scripts/capability_build_order.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -210,10 +252,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.8:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.8 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.8 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/programme/resilience-readiness-check/scripts/resilience_readiness_check.py
 
 # --- or install it into your own agent and ask in your own words ---

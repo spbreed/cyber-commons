@@ -28,11 +28,11 @@
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G1.0.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G1.0:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G1.0 --out work/cybertravels
-python3 scripts/checkpoint.py --at G1.0 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G1.0 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -42,12 +42,6 @@ python3 skills/architecture/agentic-architecture-map/scripts/agentic_architectur
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* Seven components, the edges between them, and the smaller subset where trust changes — which is the only part worth arguing about.
@@ -67,11 +61,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G1.1.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G1.1:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G1.1 --out work/cybertravels
-python3 scripts/checkpoint.py --at G1.1 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G1.1 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -81,12 +75,6 @@ python3 skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* The loop's three stages named, an exit condition that does not depend on the model agreeing, and the verifier identified as independent or flagged as not being so.
@@ -106,11 +94,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G1.2.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G1.2:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G1.2 --out work/cybertravels
-python3 scripts/checkpoint.py --at G1.2 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G1.2 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -120,12 +108,6 @@ python3 skills/attestation/agent-code-surface-analyzer/scripts/agent_code_surfac
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* Both MCP servers' tools enumerated with the audience and scope each requires, and any tool whose declared surface is wider than its implementation.
@@ -145,11 +127,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G1.3.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G1.3:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G1.3 --out work/cybertravels
-python3 scripts/checkpoint.py --at G1.3 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G1.3 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -159,12 +141,6 @@ python3 skills/identity/agent-identity-review/scripts/agent_identity_review.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* Three principals named and separated, the agent's identity distinguished from any credential it holds, and the human's token shown to grant nothing downstream.
@@ -184,11 +160,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G1.4.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G1.4:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G1.4 --out work/cybertravels
-python3 scripts/checkpoint.py --at G1.4 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G1.4 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -198,12 +174,6 @@ python3 skills/attestation/identity-chain-verifier/scripts/identity_chain_verifi
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* A delegated token whose subject is the human and whose actor is the agent, addressed to one audience with one scope — and a refusal, with its reason, when a traveller's role is asked to delegate a refund.
@@ -223,11 +193,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G1.5.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G1.5:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G1.5 --out work/cybertravels
-python3 scripts/checkpoint.py --at G1.5 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G1.5 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -237,12 +207,6 @@ python3 skills/threats/memory-scope-and-origin-audit/scripts/memory_scope_and_or
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* Entries carrying an origin and a trust flag, recall refusing to cross an owner boundary, and untrusted entries still labelled when rendered for the model.
@@ -262,11 +226,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G1.6.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G1.6:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G1.6 --out work/cybertravels
-python3 scripts/checkpoint.py --at G1.6 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G1.6 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -276,12 +240,6 @@ python3 skills/threats/peer-message-propagation-trace/scripts/peer_message_propa
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* A signed envelope naming its sender and the human it acts for, plus refusals on a tampered envelope and on one with no human in the chain.
@@ -301,11 +259,11 @@ python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of G1.7.
-#         Everything taught so far; nothing taught after it. The
-#         directory is named cybertravels/ so it imports. ---
+# --- 2 · your copy of CyberTravels as it stood at the END of G1.7:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
 mkdir -p work && python3 scripts/checkpoint.py --at G1.7 --out work/cybertravels
-python3 scripts/checkpoint.py --at G1.7 --diff      # what this lesson added
+python3 scripts/checkpoint.py --at G1.7 --diff      # what this lesson changed
 
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
@@ -315,12 +273,6 @@ python3 skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_c
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
-
-# --- 5 · and run your copy. 127.0.0.1 only: it is deliberately
-#         vulnerable. See cybertravels/LABELS.md. ---
-pip install -r work/cybertravels/requirements.txt
-cd work && python3 -m cybertravels.tests.smoke_test
-python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 ```
 
 *Expect:* A high-risk action pausing and naming its scope, an approval and a refusal both recorded, and a budget ceiling returning an incomplete result rather than a summary.

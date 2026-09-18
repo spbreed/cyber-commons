@@ -24,11 +24,20 @@
 **Run it** — Take one published agentic attack and list what you would need to reproduce it.
 
 ```bash
-# --- a reading lesson: no skill to run, so there is nothing to install ---
-# read the page, then take the next lesson in the chapter
-
-# --- when you get to one that does run a skill, this links them all in ---
+# --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · your copy of CyberTravels as it stood at the END of C1.0:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at C1.0 --out work/cybertravels
+python3 scripts/checkpoint.py --at C1.0 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 4 · a reading lesson: no skill to run. When you reach one
+#         that does, this links them all into your agent. ---
 python3 scripts/install_skills.py --all
 ```
 
@@ -54,10 +63,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of C1.2:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at C1.2 --out work/cybertravels
+python3 scripts/checkpoint.py --at C1.2 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/research/training-data-provenance-manifest/scripts/training_data_provenance_manifest.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -79,10 +94,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of C1.3:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at C1.3 --out work/cybertravels
+python3 scripts/checkpoint.py --at C1.3 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/research/technique-reproducibility-test/scripts/technique_reproducibility_test.py
 
 # --- or install it into your own agent and ask in your own words ---
@@ -104,10 +125,16 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+# --- 2 · your copy of CyberTravels as it stood at the END of C1.4:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at C1.4 --out work/cybertravels
+python3 scripts/checkpoint.py --at C1.4 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 3 · run the skill against its committed fixture ---
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_scoring.py
 
 # --- or install it into your own agent and ask in your own words ---
