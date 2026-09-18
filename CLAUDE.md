@@ -251,7 +251,27 @@ browser is not evidence of a broken page.
 **A green deploy is not a working site.** Every item here is something that has
 actually gone wrong.
 
-1. **Did the deploy land, or is it queued?** The workflow uses
+1. **Did the `deploy` job even start?** A green `build` is not a deploy. If
+   `deploy` fails in **one or two seconds with no runner, no steps and no
+   logs**, it was rejected before it ran, and the reason is only in the job's
+   *annotations* — not in the UI's log pane, which is empty:
+
+   ```bash
+   curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" \
+     https://api.github.com/repos/spbreed/cyber-commons/check-runs/<job-id>/annotations
+   ```
+
+   This has happened once and cost a session. Moving the trunk to `master`
+   froze the live site for five days: every push built green and every deploy
+   was refused with *"Branch "master" is not allowed to deploy to github-pages
+   due to environment protection rules."* The `github-pages` environment
+   carries its **own** deployment-branch rule, and it still named the old
+   `claude/**` branch. **Changing the repository's default branch does not
+   update that rule** — it was changed, and the next deploy failed identically.
+   The fix is Settings → Environments → `github-pages` → Deployment branches
+   and tags, and nothing in this repository can do it.
+
+2. **Did the deploy land, or is it queued?** The workflow uses
    `concurrency: group: pages, cancel-in-progress: false`. A stuck `deploy` job
    holds the lock and every later push waits behind it — one sat queued for 35
    minutes while the live site served the previous build. Cancel the stuck run
@@ -261,16 +281,16 @@ actually gone wrong.
    gh api repos/spbreed/cyber-commons/actions/runs?branch=<branch>\&per_page=3
    ```
 
-2. **Is the live page the page you built?** Diff it, do not eyeball it.
+3. **Is the live page the page you built?** Diff it, do not eyeball it.
 
    ```bash
    curl -sS https://cybercommons.ai/ | diff - site/index.html && echo identical
    ```
 
-3. **Do the assets resolve?** `favicon.ico`, `favicon.png`,
+4. **Do the assets resolve?** `favicon.ico`, `favicon.png`,
    `apple-touch-icon.png`, `logo-mark.png` under `/assets/`.
 
-4. **Does a reader's first command actually work?** The run block on every
+5. **Does a reader's first command actually work?** The run block on every
    lesson page is the whole product now. Clone into an empty directory and run
    one, exactly as the page prints it — including the install:
 
