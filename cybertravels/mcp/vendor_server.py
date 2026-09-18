@@ -16,6 +16,7 @@ rewrite a tool's description after you approved it, which is A1.9.
 
     python -m cybertravels.mcp.vendor_server
 """
+# step:file G1.2
 import json
 import sys
 from pathlib import Path

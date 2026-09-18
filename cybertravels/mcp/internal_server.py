@@ -19,6 +19,7 @@ Run standalone against an MCP inspector:
 
     python -m cybertravels.mcp.internal_server
 """
+# step:file G1.2
 import json
 import sys
 from pathlib import Path

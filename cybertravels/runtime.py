@@ -28,6 +28,7 @@ Four things are deliberate, and each is a lesson:
   "delegation denied" can explain itself. One that gets an exception explains
   nothing, and the operator reads a crash instead of a control working.
 """
+# step:file G1.1
 import asyncio
 import json
 import os
@@ -37,8 +38,16 @@ import uuid
 from contextlib import AsyncExitStack
 from pathlib import Path
 
-from . import config, db, identity, memory, observability
+from . import config, db, observability
+# step:G1.3 add
+from . import identity
+# step:G1.3 end
+# step:G1.5 add
+from . import memory
+# step:G1.5 end
+# step:G1.6 add
 from .a2a import protocol as a2a
+# step:G1.6 end
 
 SERVERS = {
     "internal": "cybertravels.mcp.internal_server",
@@ -122,6 +131,22 @@ def _json(text):
 # One tool call, with every control on the path
 # --------------------------------------------------------------------------- #
 class Budget:
+    # step:G1.7 was
+    #~ """No ceilings yet. The loop runs until the model says it is finished,
+    #~ which means an impossible task runs until somebody notices."""
+
+    #~ def __init__(self):
+        #~ self.steps = 0
+        #~ self.calls = 0
+
+    #~ def step(self):
+        #~ self.steps += 1
+        #~ return True
+
+    #~ def call(self):
+        #~ self.calls += 1
+        #~ return True
+    # step:G1.7 now
     """Steps and tool calls, both bounded. Hitting a ceiling returns an
     incomplete result rather than a summary of what it managed."""
 
@@ -136,6 +161,7 @@ class Budget:
     def call(self):
         self.calls += 1
         return self.calls <= config.MAX_TOOL_CALLS
+    # step:G1.7 end
 
 
 async def execute_tool(tool, args, user_token, agent_token, trace, q,
@@ -156,6 +182,7 @@ async def execute_tool(tool, args, user_token, agent_token, trace, q,
 
     await q.put(trace.plan(tool, args, scope, policy["high_risk"]))
 
+    # step:G1.7 add
     # --- human gate, for high-risk actions only --------------------------
     if policy["high_risk"]:
         approval_id = uuid.uuid4().hex
@@ -176,8 +203,15 @@ async def execute_tool(tool, args, user_token, agent_token, trace, q,
                      "human approver refused", trace.trace_id)
             await q.put(trace.denied(tool, "human approver refused", at="human"))
             return json.dumps({"error": "denied by the human approver"})
+    # step:G1.7 end
 
     # --- per-action token exchange ---------------------------------------
+    # step:G1.4 was
+    #~ # One long-lived development token, every scope, never expiring. It never
+    #~ # fails, which is exactly why it survives to production — and it is the
+    #~ # setting under which one sentence in a vendor document becomes a refund.
+    #~ delegated = "dev-token-all-scopes"
+    # step:G1.4 now
     try:
         ex = identity.token_exchange(user_token, agent_token, audience, scope)
     except identity.IdentityError as e:
@@ -187,12 +221,21 @@ async def execute_tool(tool, args, user_token, agent_token, trace, q,
         # Returned to the model as a result, not raised. See the module note.
         return json.dumps({"error": f"delegation denied: {e}"})
     await q.put(trace.token(tool, ex["claims"]))
+    delegated = ex["access_token"]
+    # step:G1.4 end
 
     # --- the call itself ---------------------------------------------------
     call_args = dict(args)
-    call_args["auth_token"] = ex["access_token"]
+    call_args["auth_token"] = delegated
     try:
+        # step:G1.2 was
+        #~ # In-process: the tool runs with whatever authority this loop has, and
+        #~ # the only place left for a check is inside the component an attacker
+        #~ # is trying to influence.
+        #~ result = json.dumps(_direct_call(tool, args))
+        # step:G1.2 now
         result = await _MANAGER.call(tool, call_args)
+        # step:G1.2 end
     except Exception as e:  # noqa: BLE001
         await q.put(trace.denied(tool, str(e), at="resource"))
         return json.dumps({"error": str(e)})

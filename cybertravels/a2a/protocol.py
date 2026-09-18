@@ -30,6 +30,7 @@ signature is an HMAC over the canonical JSON: enough to detect a forged sender
 inside one deployment, and explicitly not a substitute for real workload
 identity, which A2.1 builds.
 """
+# step:file G1.6
 import hashlib
 import hmac
 import json

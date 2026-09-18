@@ -16,6 +16,7 @@ PyJWT is the only non-stdlib import here, and it is only used to sign and
 verify. If it is missing the module still imports, so the tree can be scanned
 on a machine with nothing installed.
 """
+# step:file G1.3
 import time
 import uuid
 

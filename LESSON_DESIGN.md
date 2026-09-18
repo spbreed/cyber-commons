@@ -273,6 +273,49 @@ python3 scripts/build_curriculum.py && python3 scripts/build_site.py
 python3 scripts/build_lightboard.py
 ```
 
+## Checkpoints — what the reader's copy looks like at this lesson
+
+A reader does not start at lesson one. They arrive in the middle of a chapter,
+and the tree they need is **CyberTravels as it stood at the end of the previous
+lesson**: everything taught so far, nothing taught after it. Hand them the
+finished tree and every exercise between there and the end is spoilt.
+
+`cybertravels/` is the finished system and remains the source of truth — ten
+skills scan it and `check_labels.py` holds the ground-truth key to it. The
+checkpoints are **derived** from it by markers in the source, and
+`scripts/checkpoint.py` materialises any of the 148.
+
+**A file says when it appeared** with one comment near the top:
+
+    # step:file G1.4
+
+**A block says when it appeared** with four markers:
+
+    # step:G1.4 was
+    #~ delegated = "dev-token-all-scopes"
+    # step:G1.4 now
+    ex = identity.token_exchange(user_token, agent_token, audience, scope)
+    delegated = ex["access_token"]
+    # step:G1.4 end
+
+Three rules when authoring one, and each exists because of a specific failure:
+
+- **Every line of a `was` region is commented with `#~`.** The committed tree
+  has to be the tree that runs and the tree the scanners read, so both branches
+  cannot be live code in it. Left live, the naive assignment executes
+  immediately before the real one and the application breaks.
+- **`was` is not scaffolding — it is what the next function attacks.** A reader
+  at A1.2 should get the ingress with no provenance so the injection actually
+  works, and A2.6 flips the region so it stops. The vulnerability is real at
+  that checkpoint rather than described, which is the whole reason for the
+  mechanism.
+- **Use `add` when nothing existed before.** An empty `was` says the same thing
+  less clearly, and the gate refuses it.
+
+The increment has to be clean enough that stripping it leaves code that parses.
+That is a constraint on how a lesson is written, not just on the markers: if
+removing a lesson's block breaks the file, the lesson was doing two things.
+
 ## What a lesson may execute
 
 A lesson executes **one thing**: an agent skill from [`skills/`](skills), and it

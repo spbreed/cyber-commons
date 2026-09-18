@@ -114,6 +114,18 @@ jobs:
       - name: Check the documentation's counted claims against the tree
         run: python3 scripts/check_claims.py --check
 
+      # A reader opening the commons mid-curriculum needs cybertravels/ as it
+      # stood then — everything taught so far and nothing taught later. The
+      # checkpoints are derived from the finished tree by step: markers, so the
+      # way they rot is silent: the markers drift out of step with the code and
+      # every other gate still passes. This compares the last checkpoint with
+      # the committed tree using a second, deliberately dumb implementation of
+      # the same rule, parses all 148, and refuses a `was` branch that is not
+      # commented out — which would make the committed application run the
+      # naive code as well as the real code.
+      - name: Check every lesson checkpoint materialises
+        run: python3 scripts/checkpoint.py --check
+
       # LABELS.md is the hand-written key four AppSec skills score recall and
       # precision against, and those skills hard-code the unit names — a key
       # derived by running a scanner would not be a key. So a rename in
