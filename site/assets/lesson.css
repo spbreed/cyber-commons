@@ -185,107 +185,32 @@ footer .fin{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;just
 footer a{color:var(--text-dim);text-decoration:none}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 
-/* ---------------------------------------------------------------- notebook
-   The lesson renders the same .ipynb that runs on Kaggle, cell by cell, so the
-   page and the exercise cannot drift apart. */
+/* ------------------------------------------------------- running a lesson
+   The button through to the skill in the repository, and the collapsed note
+   saying what a run needs. Collapsed because the same few sentences appear on
+   every lesson page and a reader who has run one never needs them again. */
 .btn.k{background:var(--defend);color:#fff;border-color:var(--defend);font-weight:700}
 .btn.k:hover{color:#04101f;filter:brightness(1.08)}
-.kagnote{margin-top:10px;font-size:13.5px;line-height:1.55}
-.kagnote b{color:var(--text)}
+.runnote{margin-top:10px;font-size:13.5px;line-height:1.55}
+.runnote b{color:var(--text)}
 /* Collapsed by default: the same four sentences appear on every lesson page,
    and a reader who has run one never needs them again. */
-details.kagnote{margin-top:10px}
-details.kagnote>summary{cursor:pointer;list-style:none;display:inline-flex;
+details.runnote{margin-top:10px}
+details.runnote>summary{cursor:pointer;list-style:none;display:inline-flex;
   align-items:center;gap:6px;color:var(--text-faint);font-size:13px;
   padding:3px 0;user-select:none}
-details.kagnote>summary::-webkit-details-marker{display:none}
-details.kagnote>summary::before{content:"▸";font-size:11px;
+details.runnote>summary::-webkit-details-marker{display:none}
+details.runnote>summary::before{content:"▸";font-size:11px;
   transition:transform .12s ease;display:inline-block}
-details.kagnote[open]>summary::before{transform:rotate(90deg)}
-details.kagnote>summary:hover{color:var(--text)}
-details.kagnote>summary:focus-visible{outline:2px solid var(--accent,#4D9BFF);
+details.runnote[open]>summary::before{transform:rotate(90deg)}
+details.runnote>summary:hover{color:var(--text)}
+details.runnote>summary:focus-visible{outline:2px solid var(--accent,#4D9BFF);
   outline-offset:3px;border-radius:3px}
-.kagbody{padding:2px 0 0 16px;border-left:1px solid var(--line,#8A93A6);
+.runbody{padding:2px 0 0 16px;border-left:1px solid var(--line,#8A93A6);
   margin:6px 0 0 3px}
-.kagbody p{margin:0 0 8px}
-.kagbody p:last-child{margin-bottom:0}
+.runbody p{margin:0 0 8px}
+.runbody p:last-child{margin-bottom:0}
 
-.nbh{font-size:15px;margin:34px 0 12px;font-family:"IBM Plex Mono";font-weight:500;
-  letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint)}
-.nb{border:1px solid var(--line-soft);border-radius:12px;overflow:hidden;
-  background:var(--ink-2)}
-.nb>div+div{border-top:1px solid var(--line-soft)}
-
-.nbmd{padding:18px 20px}
-.nbmd>*:first-child{margin-top:0}
-.nbmd>*:last-child{margin-bottom:0}
-.nbmd h1{font-size:23px;margin:0 0 12px}
-.nbmd h2{font-size:19px;margin:20px 0 9px}
-.nbmd h3{font-size:16px;margin:18px 0 8px}
-.nbmd p{color:var(--text-dim);margin:0 0 12px}
-.nbmd strong{color:var(--text)}
-.nbmd ul,.nbmd ol{color:var(--text-dim);padding-left:22px;margin:0 0 12px}
-.nbmd li{margin-bottom:6px}
-.nbmd blockquote{border-left:2px solid var(--secure-soft);margin:14px 0;padding:2px 0 2px 15px;
-  color:var(--text-faint);font-size:14px}
-.nbmd table{width:100%;border-collapse:collapse;margin:0 0 12px;font-size:14px}
-.nbmd th,.nbmd td{border:1px solid var(--line-soft);padding:7px 11px;text-align:left}
-.nbmd th{background:var(--surface);font-family:"Rajdhani";font-weight:700}
-.nbmd hr{border:0;border-top:1px solid var(--line-soft);margin:16px 0}
-.nbmd code{font-size:13px}
-
-.nbcode{position:relative;background:var(--ink-2);border:1px solid var(--line);border-radius:10px}
-.nbcode pre{margin:0;border:0;border-radius:0;background:transparent;
-  padding:16px 20px 16px 54px;overflow-x:auto}
-.nbtag{position:absolute;top:16px;left:14px;font-family:"IBM Plex Mono";font-size:10.5px;
-  letter-spacing:.06em;color:var(--defend);opacity:.65;user-select:none}
-@media(max-width:640px){
-  .nbcode pre{padding:34px 16px 16px}
-  .nbtag{top:10px;left:16px}
-}
-
-/* A diagram a skill emitted, rendered by real Graphviz/PlantUML. The source is
-   text so the notebook stays dependency-free; the page shows the picture. */
-.nbdiag{margin:14px 0;padding:14px 14px 10px;border:1px solid var(--line);
-  border-radius:10px;background:var(--ink-2);overflow-x:auto}
-.nbdiag img{display:block;max-width:100%;height:auto;margin:0 auto}
-.nbdiag figcaption{margin-top:10px;padding-top:9px;border-top:1px solid var(--line-soft);
-  font-size:12px;color:var(--text-faint);text-align:left}
-.nbdiag figcaption code{font-size:11.5px}
-.nbdiag figcaption a{color:var(--text-dim)}
-.nbdiag figcaption a:hover{color:var(--accent)}
-
-/* ---------- the live Kaggle kernel, embedded --------------------------------
-   The lesson page shows the real notebook rather than a copy of its code:
-   cells, outputs, and Kaggle's own Copy & Edit. It only renders while the
-   kernel is public, which is what `kaggle_push.py --all --public` does — so
-   the byte-for-byte recorded run stays underneath in <details>, and a reader
-   with scripts blocked still gets the result. */
-.kembed{margin:18px 0 0;border:1px solid var(--line);border-radius:12px;
-  overflow:hidden;background:var(--ink-2)}
-.kbar{display:flex;align-items:center;gap:10px;padding:10px 14px;
-  background:var(--surface);border-bottom:1px solid var(--line);
-  font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--text-dim)}
-.kbar .kdot{width:8px;height:8px;border-radius:50%;background:var(--defend);
-  box-shadow:0 0 0 3px rgba(34,211,238,.18);flex:none}
-.kbar a{margin-left:auto;color:var(--defend);text-decoration:none;
-  text-transform:none;letter-spacing:0}
-.kbar a:hover{color:var(--defend-lt)}
-.kembed iframe{display:block;width:100%;height:680px;border:0;background:#fff}
-@media(max-width:720px){.kembed iframe{height:520px}}
-
-details.recorded{margin:12px 0 0;border:1px solid var(--line-soft);
-  border-radius:10px;background:var(--ink-2)}
-details.recorded>summary{cursor:pointer;padding:11px 14px;
-  font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text-dim);
-  list-style:none}
-details.recorded>summary::-webkit-details-marker{display:none}
-details.recorded>summary::before{content:"▸ ";color:var(--defend)}
-details.recorded[open]>summary::before{content:"▾ "}
-details.recorded>summary:hover{color:var(--text)}
-details.recorded .out{margin:0;border:0;border-top:1px solid var(--line-soft);
-  border-radius:0}
 
 /* ---------- the seven lesson sections ---------------------------------------
    Each is a card with its own hue and icon. The colour is not decoration: it

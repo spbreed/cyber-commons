@@ -479,9 +479,9 @@ def lesson_page(entry, prev, nxt) -> str:
         # sentences on every page — and a reader who has run one lesson never
         # needs it again, so it should not sit above the lesson every time.
         # <details> needs no JavaScript and stays keyboard-accessible.
-        parts.append('<details class="kagnote"><summary>What running a lesson '
+        parts.append('<details class="runnote"><summary>What running a lesson '
                      'needs</summary>'
-                     '<div class="kagbody"><p>Every skill here is carried out by '
+                     '<div class="runbody"><p>Every skill here is carried out by '
                      'a <b>model</b>; the script is the harness. Link the skills '
                      'store into your agent with '
                      '<code>python3 scripts/install_skills.py --all</code> and ask '
@@ -495,7 +495,7 @@ def lesson_page(entry, prev, nxt) -> str:
                      '<a href="A0.1.html">A0.1</a> explains how a lesson is '
                      'built.</p></div></details>')
     else:
-        parts.append('<p class="sub kagnote">This lesson is a reading lesson — '
+        parts.append('<p class="sub runnote">This lesson is a reading lesson — '
                      'diagrams and prose, no code to run.</p>')
 
     parts.append(lesson_body(entry))
