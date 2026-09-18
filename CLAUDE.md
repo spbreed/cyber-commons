@@ -266,10 +266,18 @@ actually gone wrong.
    was refused with *"Branch "master" is not allowed to deploy to github-pages
    due to environment protection rules."* The `github-pages` environment
    carries its **own** deployment-branch rule, and it still named the old
-   `claude/**` branch. **Changing the repository's default branch does not
-   update that rule** — it was changed, and the next deploy failed identically.
-   The fix is Settings → Environments → `github-pages` → Deployment branches
-   and tags, and nothing in this repository can do it.
+   `claude/**` branch.
+
+   **Changing the repository's default branch does not update that rule.** It
+   was changed to `master` and the next deploy was refused identically, which
+   is the part worth remembering — the obvious fix is not the fix.
+
+   What cleared it: **delete the `github-pages` environment** (Settings →
+   Environments) and run the workflow again. `actions/deploy-pages` recreates
+   it with no branch rule, and run 189 deployed on the first attempt. Editing
+   the rule in place works too; deleting is quicker and leaves nothing to have
+   drifted. Nothing in this repository can do either — it is a repository
+   setting, so an agent can only diagnose it and say so.
 
 2. **Did the deploy land, or is it queued?** The workflow uses
    `concurrency: group: pages, cancel-in-progress: false`. A stuck `deploy` job
