@@ -244,7 +244,15 @@ def _claude_cli_call(prompt, system, timeout=CLI_TIMEOUT):
     argument-length limit on some systems and would fail as a confusing
     "argument list too long" rather than as anything about models.
     """
-    cmd = [claude_cli(), "-p"]
+    # No tools. The harness has already put the fixture in the prompt, so there
+    # is nothing on disk for the model to go and find — and an agent left with
+    # Bash and Read will go looking anyway, which turns a one-shot completion
+    # into a multi-minute session and makes the answer depend on what it
+    # happened to read. Restricting the tool set is what makes this a model
+    # call rather than an agent run.
+    cmd = [claude_cli(), "-p",
+           "--disallowed-tools", "Bash", "Read", "Write", "Edit", "Glob",
+           "Grep", "WebFetch", "WebSearch", "Task", "NotebookEdit"]
     if system:
         cmd += ["--append-system-prompt", system]
     p = subprocess.run(cmd, input=prompt, capture_output=True, text=True,
