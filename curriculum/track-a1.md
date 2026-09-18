@@ -396,7 +396,7 @@ python3 skills/threats/unbounded-loop-cost-probe/scripts/unbounded_loop_cost_pro
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.
+*Expect:* An agent given an impossible task loops until the skill's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.
 
 ---
 

@@ -84,7 +84,7 @@ ANALYSER_WORDING = {
  "model review":"{unit} appears to pass user input to a dangerous sink; likely {cwe}",
 }
 
-# Verbatim output from Moonlight-16B-A3B on Kaggle, 2026-08-17.
+# Verbatim output from Moonlight-16B-A3B on a CPU, 2026-08-17.
 # Not a paraphrase and not a stand-in: this is what the model emitted.
 MODEL_OUTPUT = '''{"findings": [{"id": "F-01", "cwe": "CWE-89", "file": "report_api.py",
 "line": 22, "unit": "get_report",

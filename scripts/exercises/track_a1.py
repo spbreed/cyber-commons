@@ -777,7 +777,7 @@ one third of the triad regardless of how the outage was caused.
   *skill_steps('threats/unbounded-loop-cost-probe',
                "## 2 · The check, as a skill\n\nCyberTravels' agent does not know the task is impossible. The skill gives it one, measures the three costs, and reports the one that lands on somebody else: the downstream capacity its retries consumed."),
 ],
- "expect": "An agent given an impossible task loops until the notebook's own "
+ "expect": "An agent given an impossible task loops until the skill's own "
            "safety net stops it, spending hundreds of thousands of tokens and "
            "exhausting a downstream service's capacity — with the rejections "
            "landing on whoever else was using that service.",

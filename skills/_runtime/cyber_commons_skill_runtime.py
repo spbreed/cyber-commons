@@ -1,20 +1,17 @@
 """The Cyber Commons skill runtime — one library, used by every lesson.
 
-Every lesson in the commons executes an agent skill, and until this file existed
-each of the 117 notebooks carried its own copy of the sixty lines that parse a
-`SKILL.md` and the sixty that call a model. That was 9,730 lines of identical
-code — 34,112 lines of notebook code before this file existed, 24,382 after —
-and a fix to any of it meant rebuilding everything and hoping.
+Every lesson in the commons executes an agent skill, and each skill script once
+carried its own copy of the sixty lines that parse a `SKILL.md` and the sixty
+that call a model. That was 9,730 lines of identical code, and a fix to any of
+it meant editing 139 files and hoping.
 
-So it lives here once. On Kaggle it is attached to each notebook as a **utility
-script**, which is Kaggle's mechanism for exactly this; locally it is on the
-path. Either way a lesson's own cell is two lines:
+So it lives here once, and every skill script reaches it through `PYTHONPATH`:
 
     from cyber_commons_skill_runtime import run_skill
     meta, body = run_skill(SKILL_MD)
 
-Standard library only, and deterministic, because the notebooks that import it
-run on a CPU kernel with the internet switched off.
+Standard library only — nothing to install. The model is the one prerequisite;
+this file fetches nothing else.
 
 Two halves:
 

@@ -210,7 +210,7 @@ person.
 | 7 | `check_register.py --check` | the incident register's 40 controls — **its ids are `C1.1`–`C10.4`, syntactically identical to lesson ids**, and a blind lesson rename corrupts them |
 | 8 | `check_clarity.py --check` | weekday idioms and culture-specific phrasing, read from the rendered page |
 | 9 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |
-| 10 | `render_diagrams.py --check` | a diagram a skill emits that Graphviz or PlantUML will not render |
+| 10 | `render_diagrams.py --check` | a diagram source that Graphviz or PlantUML will not lay out — which ships as an empty or smeared SVG behind a green build. With a model reachable it runs the skills and also checks the committed source is fresh; in CI, where there is no model and every skill refuses, it validates the committed sources and says freshness is not covered. It used to fail every CI run with "no skill emitted a diagram", which is a gate nobody keeps |
 | 11 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
 | 12 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
 | 13 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |

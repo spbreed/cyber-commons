@@ -126,7 +126,7 @@
         "# --- or install it into your own agent and ask in your own words ---",
         "python3 scripts/install_skills.py --all"
       ],
-      "expect": "An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service."
+      "expect": "An agent given an impossible task loops until the skill's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service."
     },
     "A1.14": {
       "run": [

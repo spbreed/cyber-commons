@@ -144,7 +144,7 @@ Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 2 of 2 · runs a skill · 596 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · runs a skill · 609 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -198,7 +198,7 @@ Nothing is computed here. The check is that you can open any lesson in any funct
 
 **⑤ Hand it over**
 
-Run it on the other route. If you read this on Kaggle, clone the repository and run the same command locally; if you read it locally, press Run on Kaggle.
+Run it on the other route. If you ran the script by path, now run python3 scripts/install skills.py --all, open your agent anywhere on the machine and ask it for dev-environment-preflight by name; if you started with the agent, run the script directly.
 
 That closes chapter A0. You can run any lesson in the commons on either route, you know what the one code cell in it is doing, and you can tell a fetch failure from a procedure failure by reading one line of the error.
 
@@ -936,7 +936,7 @@ Runs stopped by their own ceiling rather than by a downstream system, and cost p
 
 *[Point at the output on screen. Do not read it out.]*
 
-> An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.
+> An agent given an impossible task loops until the skill's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.
 
 **⑤ Hand it over**
 

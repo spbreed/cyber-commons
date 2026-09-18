@@ -5,8 +5,8 @@ This is the executable half of the `budget-and-stop-condition-audit` skill: the 
 SKILL.md next to it describes, run against a synthetic CyberTravels
 estate so two runs can be diffed and the result argued with.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+Standard library only — nothing to install. The model is the one
+prerequisite; the script itself fetches nothing.
 """
 
 class Budget:

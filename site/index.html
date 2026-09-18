@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cyber Commons — Open training for Cyber AI</title>
-<meta name="description" content="An open curriculum for securing agentic AI, curated by practitioners working in regulated industries: agent architecture and risks, the AI SDLC and harness, AI red teaming, the agentic SOC, and AI GRC. 137 lessons that run in your own Kaggle account with nothing installed.">
+<meta name="description" content="An open curriculum for securing agentic AI, curated by practitioners working in regulated industries: agent architecture and risks, the AI SDLC and harness, AI red teaming, the agentic SOC, and AI GRC. 135 lessons that run on your own machine, in the agent CLI you already use.">
 <link rel="icon" href="assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Cyber Commons — Navigating Cyber Singularity">
@@ -12,7 +12,7 @@
 <meta property="og:image" content="assets/logo-full.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Cyber Commons — Navigating Cyber Singularity">
-<meta name="twitter:description" content="Five tracks for securing agentic AI, curated by practitioners in regulated industries. 137 lessons, runnable in your own Kaggle account.">
+<meta name="twitter:description" content="Five tracks for securing agentic AI, curated by practitioners in regulated industries. 135 lessons, runnable on your own machine.">
 <meta name="twitter:image" content="assets/logo-full.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -238,7 +238,7 @@
   <div class="wrap">
     <span class="eyebrow">Open source · Practitioner-curated</span>
     <h1>Democratizing defensive <span class="a">AI</span> cyber knowledge, <span class="a">before</span> the <span class="b">hackers outrun us</span>.</h1>
-    <p class="lede">An open curriculum for defending systems that now act on their own — <b>the architecture, the pipeline, the red team, the SOC and the governance</b>, taught in the order the work happens and runnable in your own Kaggle account with nothing installed.</p>
+    <p class="lede">An open curriculum for defending systems that now act on their own — <b>the architecture, the pipeline, the red team, the SOC and the governance</b>, taught in the order the work happens and runnable on your own machine, in the agent CLI you already use.</p>
     <div class="btns">
       <a class="btn p" href="lessons/index.html">Start the first lesson →</a>
       <a class="btn g" href="lessons/index.html">Browse all <span data-n="sessions">135</span> lessons</a>
@@ -390,10 +390,10 @@
   <div class="wrap">
     <span class="eyebrow">05 / How you learn it</span>
     <h2>Hands on, from the first minute. Nothing here is a slide.</h2>
-    <p class="say">You do not learn a control by reading about it. Every lesson opens as a notebook in your own Kaggle account, runs a real <b>agent skill</b> whose source you can read, and maps what it did back to the open frameworks your organisation already reports against. Then you change something and run it again, and watch the number move — which is the part that builds the instinct. No install, no GPU, no licence.</p>
+    <p class="say">You do not learn a control by reading about it. Every lesson runs a real <b>agent skill</b> whose source you can read — as a script, or inside the agent CLI you already use — and maps what it did back to the open frameworks your organisation already reports against. Then you change something and run it again, and watch the number move — which is the part that builds the instinct. No install, no GPU, no licence.</p>
 
     <figure class="fig rv">
-      <svg viewBox="0 0 820 224" role="img" aria-label="Three steps: open a lesson in your own Kaggle account with nothing installed, run an agent skill written in readable standard-library Python, and map the result to open frameworks. A dashed loop returns from the third step to the first.">
+      <svg viewBox="0 0 820 224" role="img" aria-label="Three steps: link the skills into your own agent CLI with one command, run an agent skill written in readable standard-library Python, and map the result to open frameworks. A dashed loop returns from the third step to the first.">
         <defs>
           <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
             <path d="M0 0 L10 5 L0 10 z" fill="var(--accent)"/>
@@ -405,17 +405,17 @@
           <rect x="572" y="28" width="248" height="96" rx="10"/>
         </g>
         <g class="g-lab" fill="var(--accent)">
-          <text x="20" y="52">Step 1 — Open</text>
+          <text x="20" y="52">Step 1 — Link</text>
           <text x="306" y="52">Step 2 — Run</text>
           <text x="592" y="52">Step 3 — Map</text>
         </g>
         <g class="g-val" font-size="15">
-          <text x="20" y="80">Kaggle, your account</text>
+          <text x="20" y="80">Your machine, your CLI</text>
           <text x="306" y="80">A real agent skill</text>
           <text x="592" y="80">Open frameworks</text>
         </g>
         <g class="g-txt">
-          <text x="20" y="104">Nothing installed, no GPU</text>
+          <text x="20" y="104">One command, no GPU</text>
           <text x="306" y="104">Readable stdlib Python</text>
           <text x="592" y="104">OWASP · ATLAS · NIST AI RMF</text>
         </g>
@@ -428,11 +428,11 @@
         <text class="g-lab" x="410" y="154" text-anchor="middle" fill="var(--accent)">Change the skill and run it again — that is the lesson</text>
         <text class="g-txt" x="410" y="200" text-anchor="middle">A skill is a small readable program. Editing one and watching the number move is what builds the instinct.</text>
       </svg>
-      <figcaption>All <span data-n="sessions">135</span> notebooks are executed in CI and re-run on a clean Kaggle kernel, then checked line for line against the committed output — so a lesson that claims a result has produced it. Nothing here is pseudo-code.</figcaption>
+      <figcaption>All <span data-n="skills">139</span> skills are executed in CI, and none of them is allowed to answer without a model — a script that returns a canned result in a model's place fails the build. Nothing here is pseudo-code.</figcaption>
     </figure>
 
     <ul class="pts">
-      <li><b>Evidence, not screenshots</b>Every lab is executed and its output committed, then re-run on a clean kernel and compared line for line. A result on this site has been produced, not described.</li>
+      <li><b>Evidence, not screenshots</b>Every skill is executed in CI with no model reachable, and has to refuse legibly rather than answer anyway. A result on this site was produced by a named model, not described.</li>
       <li><b>Skills, not slideware</b><span data-n="skills">139</span> agent skills, and <span data-n="run_a_skill">132</span> lessons execute one. You can open the source of every one of them, and edit it.</li>
       <li><b>Built on open source</b>CNCF and Linux Foundation projects for the control plane, open-weight models for the intelligence. Frontier models optional, never required.</li>
     </ul>

@@ -225,7 +225,7 @@ who asked, which is A1.6. **The issued scope is the intersection.**
 ("md", """## 5 · The same three layers, against real Keycloak
 
 Everything above is the protocol, modelled in the standard library so this
-notebook runs with the internet switched off. That proves RFC 8693 and RFC 8705
+skill runs with the internet switched off. That proves RFC 8693 and RFC 8705
 work. It does not prove the product you are about to deploy implements them,
 which is a different question and has a different answer.
 

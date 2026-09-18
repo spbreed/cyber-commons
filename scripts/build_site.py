@@ -225,7 +225,7 @@ def steps_html(sid: str, ex: dict) -> tuple[str, str]:
 
     A lesson's steps interleave explanation with the thing that runs. On the
     page the explanation belongs under the framework and the procedure under
-    execution, so they are split here rather than replayed in notebook order.
+    execution, so they are split here rather than replayed in source order.
     """
     prose, skill = [], []
     for kind, source in ex.get("steps", []):
@@ -513,7 +513,7 @@ def lesson_page(entry, prev, nxt) -> str:
         parts.append(f'<p class="sub toolslab">Tools used</p>'
                      f'<div class="chips">{chips}</div>')
 
-    parts.append(f'<p class="sub" style="margin-top:10px">Notebook source: '
+    parts.append(f'<p class="sub" style="margin-top:10px">Skill source: '
                  f'<code>{html.escape(ex_label)}</code></p>'
                  '</div>')
 
@@ -590,10 +590,10 @@ def home_numbers() -> dict[str, int]:
 
 # The homepage names the five functions in the language a reader arrives with,
 # which is not the language the curriculum stores. curriculum.json's titles are
-# embedded in 39 notebooks and in every lesson page's breadcrumb, so renaming
-# them there would mean rebuilding and re-verifying all 120 notebooks for a
-# copy change. The mapping lives here instead, and a function missing from it
-# fails the build rather than quietly falling back to the stored title.
+# the id every lesson page's breadcrumb and every cross-reference is built
+# from, so renaming them there for a copy change would ripple through the whole
+# tree. The mapping lives here instead, and a function missing from it fails
+# the build rather than quietly falling back to the stored title.
 TRACKS = {
     "A": ("Agent architecture &amp; risks",
           "One reference architecture for agentic systems, and every risk that "

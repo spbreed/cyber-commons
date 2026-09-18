@@ -2,9 +2,23 @@
 """Render every diagram a skill emits with the real Graphviz and PlantUML, and check the result is worth looking at.
 
 A skill emits diagram **source** — DOT or PlantUML — because source is text, so
-the skill stays standard library only and runs on a Kaggle kernel with nothing
-installed. This turns that source into SVG using the actual binaries, which is
-the half that needs a machine with tools on it.
+the skill stays standard library only with nothing to install. This turns that
+source into SVG using the actual binaries, which is the half that needs a
+machine with tools on it.
+
+**Two modes, and which one runs depends on whether a model is reachable.** Every
+skill is executed by a model now, so with no endpoint configured every skill
+refuses and emits nothing. That is CI's deliberate state, and it used to make
+this gate fail on every run with "no skill emitted a diagram" — a gate that
+cannot pass is not protection, it is noise somebody eventually deletes. So:
+
+  * **a model is reachable** — run the skills, take what they emit, and compare
+    it against the committed source. This is the full check, freshness included.
+  * **no model** — validate the committed sources instead. Freshness cannot be
+    checked, and this says so rather than implying it passed. What it still
+    catches is the failure that actually ships: a committed source Graphviz or
+    PlantUML will not lay out, which renders as an empty or unreadable SVG on
+    a lesson page with a green build behind it.
 
     python3 scripts/render_diagrams.py            # render and validate
     python3 scripts/render_diagrams.py --check    # CI: fail if any is stale
@@ -80,6 +94,20 @@ def emitted() -> list[tuple[str, str, str, str]]:
             else:
                 body = body[:body.rindex("@enduml") + 7] if "@enduml" in body else body
             found.append((ref, m.group(1), m.group(2), body))
+    return found
+
+
+def committed() -> list[tuple[str, str, str, str]]:
+    """The same tuples, read from the sources committed beside the SVGs.
+
+    The fallback when no model is configured. `ref` is the file itself rather
+    than a skill, because without running the skills there is nothing to say
+    which one emitted it.
+    """
+    found = []
+    for src in sorted(OUT.glob("*.dot")) + sorted(OUT.glob("*.puml")):
+        kind = "dot" if src.suffix == ".dot" else "puml"
+        found.append((f"committed/{src.name}", kind, src.stem, src.read_text()))
     return found
 
 
@@ -190,13 +218,25 @@ def main() -> int:
                   f"apt-get install graphviz plantuml", file=sys.stderr)
             return 1
 
-    items = emitted()
+    items, fresh = emitted(), True
     if not items:
-        print("no skill emitted a diagram", file=sys.stderr)
-        return 1
+        # No model, so every skill refused. Check what is committed instead,
+        # and be explicit that freshness is not covered — a gate that quietly
+        # narrows what it checks is worse than one that says so.
+        items, fresh = committed(), False
+        if not items:
+            print("::error::no diagram source emitted by a skill, and none "
+                  "committed in site/assets/diagrams/", file=sys.stderr)
+            return 1
 
     bad, stale = [], []
-    print(f"{len(items)} diagram(s) emitted by skills\n")
+    if fresh:
+        print(f"{len(items)} diagram(s) emitted by skills\n")
+    else:
+        print(f"no model configured, so no skill emitted anything — validating "
+              f"the {len(items)} committed source(s) instead.\n"
+              f"Freshness against the skills is NOT checked here; run this with "
+              f"a model reachable for that.\n")
     for ref, kind, stem, source in items:
         # Staleness is measured on the SOURCE, not the render. The source is
         # what the skill emits and it is deterministic; the SVG is not, because
@@ -204,7 +244,7 @@ def main() -> int:
         # Comparing rendered bytes failed CI on a diagram that was correct on
         # both machines and merely 10 bytes apart.
         src_path = OUT / f"{stem}.{kind}"
-        if not src_path.is_file() or src_path.read_text() != source:
+        if fresh and (not src_path.is_file() or src_path.read_text() != source):
             stale.append(stem)
             if not a.check:
                 src_path.write_text(source)

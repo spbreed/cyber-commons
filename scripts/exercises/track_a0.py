@@ -277,11 +277,10 @@ argument:
    [`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills).
    Frontmatter tells an agent when to load the procedure; the markdown reads as
    a checklist for a person.
-6. **Run it → Out** — one cell of about twenty lines, and the real recorded
-   output of running it. The notebook holds no procedure: it finds the skills
-   tree, cloning it if needed, and runs the script as a subprocess. That is why
-   a fix to a procedure is one edit to one file rather than a rebuild of every
-   notebook.
+6. **Run it** — the two commands that execute the skill on your own machine.
+   The page holds no procedure of its own: it runs the file in `skills/`, which
+   is the only copy that exists. That is why a fix to a procedure is one edit
+   to one file rather than a change in 135 places.
 7. **Your turn** — one input to change so a number moves. The lesson is in the
    difference between the two numbers, not in either one.
 
@@ -383,26 +382,30 @@ and a report counts in Function E.
          "indicative mappings, not a certification."),
 
   ("md", "## 5 · The two ways to run any of it\\n\\n"
-         "A lesson's procedure is a file in `skills/`, and the notebook fetches "
-         "and runs it. On your own machine the tree is already there because "
-         "you cloned it. On a hosted kernel it is not, and the fetch needs the "
-         "kernel's network switched on — one checkbox, and the only "
-         "prerequisite anybody gets stuck on.\\n\\n"
-         "**GitHub** — clone once, run anything, nothing to configure, no "
-         "network needed:\\n\\n"
+         "A lesson's procedure is a file in `skills/`, and there is exactly "
+         "one copy of it. Everything runs on your own machine; there is no "
+         "hosted kernel and nothing to sign up for.\\n\\n"
+         "**Run the script** — clone once, then run any skill against the "
+         "fixture committed beside it:\\n\\n"
          "```bash\\n"
-         "git clone https://github.com/spbreed/cyber-commons\\n"
+         "git clone --branch master https://github.com/spbreed/cyber-commons\\n"
          "cd cyber-commons\\n"
-         "python3 scripts/run_notebooks.py --session A0.1   # this lesson\\n"
-         "python3 scripts/run_notebooks.py                  # or all of them\\n"
+         "python3 skills/programme/dev-environment-preflight/scripts/"
+         "dev_environment_preflight.py\\n"
          "```\\n\\n"
-         "**Kaggle** — every lesson page carries a **Run on Kaggle** button. "
-         "Open it, switch **Internet** to *on* in the settings panel, run the "
-         "cell. Kaggle gates that toggle on a verified phone number; without "
-         "one, attach the dataset `cybercommons/cyber-commons-skills` in the "
-         "same panel and the cell finds the tree at the mount point instead. "
-         "The first run spends about three seconds on a shallow sparse clone; "
-         "every run after that is instant.\\n\\n"
+         "**Or ask your own agent** — one command links every skill into "
+         "whichever CLI you already use, and then you ask for one by name "
+         "instead of running a path:\\n\\n"
+         "```bash\\n"
+         "python3 scripts/install_skills.py --all    # claude, codex, gemini, "
+         "cursor, opencode, goose\\n"
+         "python3 scripts/install_skills.py --list   # what is linked where\\n"
+         "```\\n\\n"
+         "Those are **symlinks into your clone**, not copies, so `git pull` "
+         "updates every tool at once and an edit you make here is live in all "
+         "of them. A copy would be a fork with a friendly name: you would fix "
+         "a skill once and the other copies would keep the bug while still "
+         "loading, still validating and still answering.\\n\\n"
          "Every skill here is carried out by a **model**, so what you get is "
          "one model's answer, validated against that skill's own output "
          "contract. Run it twice and it will differ — that is the subject of "
@@ -431,13 +434,14 @@ and a report counts in Function E.
            "with twelve lines and a CRC when both conditions hold. `ready` is "
            "true only because both failures were reproduced; a preflight that "
            "shows only the success has tested one path in three.",
- "challenge": "Run it on the other route. If you read this on Kaggle, clone the "
-              "repository and run the same command locally; if you read it "
-              "locally, press **Run on Kaggle**. Compare the CRC on the last "
-              "line — it should be identical, because the procedure is the same "
-              "file in both cases. If it is not, you have found either a "
-              "non-determinism in the procedure or a difference between the "
-              "hosts, and both are worth an issue.",
+ "challenge": "Run it on the other route. If you ran the script by path, now "
+              "run `python3 scripts/install_skills.py --all`, open your agent "
+              "anywhere on the machine and ask it for "
+              "`dev-environment-preflight` by name; if you started with the "
+              "agent, run the script directly. Compare the CRC on the last "
+              "line — it should be identical, because the symlink means both "
+              "routes execute the same file. If it is not, the link is a copy "
+              "and something went wrong at install time.",
 },
 
 }

@@ -651,7 +651,7 @@ none of those change when somebody wires the function back up.
   ("md", "## 8 · The same failure, from a real model\n\n"
          "Everything above is constructed. Here is the identical failure "
          "produced by an actual open-weight model — **Moonlight-16B-A3B**, "
-         "Moonshot AI's MoE from the Kimi team — run on a Kaggle CPU kernel "
+         "Moonshot AI's MoE from the Kimi team — run on a CPU with no GPU, "
          "against this skill's output contract.\n\n"
          "It was given the contract and two vulnerable functions: an `open()` "
          "on a caller-supplied path, and an `os.system()` on a caller-supplied "

@@ -9,8 +9,8 @@ The point the numbers make: an agent platform is mostly an ordinary platform.
 Most of the controls below predate agents entirely, and a team that indexes only
 the agentic rows will report good coverage of a small part of its exposure.
 
-Standard library only, and deterministic, so it runs on a Kaggle kernel with the
-internet switched off.
+Standard library only — nothing to install. The model is the one
+prerequisite; the script itself fetches nothing.
 """
 
 from dataclasses import dataclass
