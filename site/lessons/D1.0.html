@@ -260,12 +260,16 @@ by which point most of what the actor was going to do is done. If those
   jobs do.</li>
 </ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-No model endpoint is configured, and every skill here needs one.
+No model is available, and every skill here needs one. Two ways, and
+the first needs no key and no endpoint:
 
-  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
-  export OPENAI_API_KEY=ollama          # any non-empty value locally
-  export MODEL=qwen2.5-7b-instruct
+  1. Claude Code, already signed in — nothing to configure. Install it
+     and run `claude` once to sign in; skills then use that session.
 
-Lesson A0.0 sets this up end to end on a free tier — a local model
-with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
-which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five behavioural signals for Alex and for CyberTravels' Workflow Agent over the same hour, with ratios in the hundreds. The volume rule tuned for human tempo does fire — 154 seconds into a sixty-minute run, leaving 3,446 seconds unmonitored. Five of the six things an agentic SOC needs are not in any application log.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8 and it is a telemetry problem rather than a detection one.</p></div></section><div class="expect"><b>Expect</b>Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.0.ipynb</code></p></div><div class="pager"><a href="C1.11.html"><span class="k">← Previous</span><span class="t">C1.11 · Institutional governance and compliance</span></a><a class="next" href="D1.1.html"><span class="k">Next →</span><span class="t">D1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+  2. Any OpenAI-compatible endpoint, local or hosted:
+       export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+       export OPENAI_API_KEY=ollama      # any non-empty value locally
+       export MODEL=qwen2.5:1.5b-instruct
+
+Lesson A0.0 sets both up end to end. MODELS.md lists which model suits
+which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five behavioural signals for Alex and for CyberTravels' Workflow Agent over the same hour, with ratios in the hundreds. The volume rule tuned for human tempo does fire — 154 seconds into a sixty-minute run, leaving 3,446 seconds unmonitored. Five of the six things an agentic SOC needs are not in any application log.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8 and it is a telemetry problem rather than a detection one.</p></div></section><div class="expect"><b>Expect</b>Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.0.ipynb</code></p></div><div class="pager"><a href="C1.11.html"><span class="k">← Previous</span><span class="t">C1.11 · Institutional governance and compliance</span></a><a class="next" href="D1.1.html"><span class="k">Next →</span><span class="t">D1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

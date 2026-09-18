@@ -114,12 +114,16 @@ sunset-agent                    2             False           —  ACTIVE CREDEN
 <li><strong>A sweep with no automatic consequence.</strong> It becomes a recurring report.</li>
 </ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-No model endpoint is configured, and every skill here needs one.
+No model is available, and every skill here needs one. Two ways, and
+the first needs no key and no endpoint:
 
-  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
-  export OPENAI_API_KEY=ollama          # any non-empty value locally
-  export MODEL=qwen2.5-7b-instruct
+  1. Claude Code, already signed in — nothing to configure. Install it
+     and run `claude` once to sign in; skills then use that session.
 
-Lesson A0.0 sets this up end to end on a free tier — a local model
-with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
-which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Four of six lifecycle events generate no reliable record at all. The identity review flags <code>sunset-agent</code> as critical — an active credential for a decommissioned service — plus two orphans with no authentication in 300+ days. The manifest diff shows the blast radius rising from 0 to 40, requiring re-tiering and a fresh control test.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Query your identity provider for non-human identities whose service is retired but which authenticated in the last 30 days. Every hit is either an undocumented dependency or someone else's foothold, and you cannot tell which from the directory alone.</p></div></section><div class="expect"><b>Expect</b>Re-indexing is a change-management event with a gate, not maintenance.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.9.ipynb</code></p></div><div class="pager"><a href="E1.8.html"><span class="k">← Previous</span><span class="t">E1.8 · Third-party and model supply chain risk</span></a><a class="next" href="E1.10.html"><span class="k">Next →</span><span class="t">E1.10 · The stakeholder map — who owns what</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+  2. Any OpenAI-compatible endpoint, local or hosted:
+       export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+       export OPENAI_API_KEY=ollama      # any non-empty value locally
+       export MODEL=qwen2.5:1.5b-instruct
+
+Lesson A0.0 sets both up end to end. MODELS.md lists which model suits
+which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Four of six lifecycle events generate no reliable record at all. The identity review flags <code>sunset-agent</code> as critical — an active credential for a decommissioned service — plus two orphans with no authentication in 300+ days. The manifest diff shows the blast radius rising from 0 to 40, requiring re-tiering and a fresh control test.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Query your identity provider for non-human identities whose service is retired but which authenticated in the last 30 days. Every hit is either an undocumented dependency or someone else's foothold, and you cannot tell which from the directory alone.</p></div></section><div class="expect"><b>Expect</b>Re-indexing is a change-management event with a gate, not maintenance.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.9.ipynb</code></p></div><div class="pager"><a href="E1.8.html"><span class="k">← Previous</span><span class="t">E1.8 · Third-party and model supply chain risk</span></a><a class="next" href="E1.10.html"><span class="k">Next →</span><span class="t">E1.10 · The stakeholder map — who owns what</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

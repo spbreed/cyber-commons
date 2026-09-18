@@ -20,11 +20,13 @@ Two halves:
 
   * **the skill runtime** — parse a SKILL.md, route between skills by
     description, read and check an output contract;
-  * **the model adapter** — one OpenAI-compatible backend, plus the labelled
-    offline replay that is the default. There is no paid path.
+  * **the model adapter** — two backends and no paid path. A signed-in Claude
+    Code CLI answers with **no API key and no endpoint**, which is the shortest
+    route for anyone already using an agentic editor; an OpenAI-compatible URL
+    covers everything else, local or hosted. With neither, a skill refuses.
 """
 
-import json, re
+import json, re, shutil, subprocess
 
 def parse_skill(md):
     """Split a SKILL.md into (frontmatter dict, body).
@@ -154,6 +156,10 @@ import json, os, urllib.error, urllib.request
 # the lessons' acceptance properties stop holding.
 OPEN_WEIGHT_DEFAULT = "qwen2.5-7b-instruct"
 TIMEOUT = 60
+# The CLI starts a whole agent session, so it is slower to first
+# token than a raw completions call. 300s is generous on purpose:
+# a timeout here reads as a broken skill rather than a slow model.
+CLI_TIMEOUT = 300
 
 class NoModelConfigured(RuntimeError):
     """Raised when a skill is run with no model endpoint configured.
@@ -167,23 +173,51 @@ class NoModelConfigured(RuntimeError):
     """
 
 
+def claude_cli():
+    """The path to a logged-in `claude` CLI, or None.
+
+    This is the backend that needs **no API key and no endpoint**. If you have
+    Claude Code installed and signed in, the CLI answers in headless mode
+    (`claude -p`) on your existing subscription — the same authentication the
+    editor uses. For anybody already working in Claude Code, Cursor or Copilot
+    that is the cheapest and shortest path to running every skill here, and it
+    was missing from the first version of this runtime, which assumed an HTTP
+    endpoint was the only way to reach a model.
+
+    Set CLAUDE_CLI=0 to skip it and force the HTTP path.
+    """
+    if os.environ.get("CLAUDE_CLI") == "0":
+        return None
+    return shutil.which(os.environ.get("CLAUDE_CLI_BIN", "claude"))
+
+
 def backend():
     """(kind, model). Configuration comes from the environment, never a literal.
+
+    Order matters, and it is: an explicitly configured endpoint first, because
+    somebody who set OPENAI_BASE_URL meant it; then the local Claude CLI, which
+    needs nothing at all; then a refusal.
 
     Raises NoModelConfigured when there is nothing to call.
     """
     if os.environ.get("OPENAI_BASE_URL"):
         return "open-weight", os.environ.get("MODEL", OPEN_WEIGHT_DEFAULT)
+    if claude_cli():
+        return "claude-cli", os.environ.get("MODEL", "claude (Claude Code CLI)")
     raise NoModelConfigured(
-        "No model endpoint is configured, and every skill here needs one.\n"
+        "No model is available, and every skill here needs one. Two ways, and\n"
+        "the first needs no key and no endpoint:\n"
         "\n"
-        "  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1\n"
-        "  export OPENAI_API_KEY=ollama          # any non-empty value locally\n"
-        "  export MODEL=qwen2.5-7b-instruct\n"
+        "  1. Claude Code, already signed in — nothing to configure. Install it\n"
+        "     and run `claude` once to sign in; skills then use that session.\n"
         "\n"
-        "Lesson A0.0 sets this up end to end on a free tier — a local model\n"
-        "with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists\n"
-        "which model suits which lab.")
+        "  2. Any OpenAI-compatible endpoint, local or hosted:\n"
+        "       export OPENAI_BASE_URL=http://127.0.0.1:11434/v1\n"
+        "       export OPENAI_API_KEY=ollama      # any non-empty value locally\n"
+        "       export MODEL=qwen2.5:1.5b-instruct\n"
+        "\n"
+        "Lesson A0.0 sets both up end to end. MODELS.md lists which model suits\n"
+        "which lab.")
 
 def _post(url, payload, headers):
     req = urllib.request.Request(url, data=json.dumps(payload).encode(),
@@ -202,6 +236,28 @@ def _openai_compatible(prompt, system, model, max_tokens, temperature):
                 {"authorization": f"Bearer {key}"})
     return out["choices"][0]["message"]["content"].strip()
 
+def _claude_cli_call(prompt, system, timeout=CLI_TIMEOUT):
+    """Headless `claude -p`, on the signed-in session. No key, no endpoint.
+
+    The prompt goes on **stdin**, not in argv: a skill's prompt is its whole
+    SKILL.md and routinely runs to several kilobytes, which is past the
+    argument-length limit on some systems and would fail as a confusing
+    "argument list too long" rather than as anything about models.
+    """
+    cmd = [claude_cli(), "-p"]
+    if system:
+        cmd += ["--append-system-prompt", system]
+    p = subprocess.run(cmd, input=prompt, capture_output=True, text=True,
+                       timeout=timeout)
+    if p.returncode != 0:
+        raise RuntimeError(
+            f"the claude CLI exited {p.returncode}: "
+            f"{(p.stderr or p.stdout).strip()[-400:]}\n"
+            f"If it is not signed in, run `claude` once interactively. Nothing "
+            f"is substituted for a model answer.")
+    return p.stdout.strip()
+
+
 def ask(prompt, *, system=None, max_tokens=512, temperature=0.0):
     """Answer `prompt` with the configured model. Returns (answer, kind, model).
 
@@ -214,6 +270,8 @@ def ask(prompt, *, system=None, max_tokens=512, temperature=0.0):
     is not determinism and nothing here pretends it is; see WHAT_CHANGED.md.
     """
     kind, model = backend()
+    if kind == "claude-cli":
+        return _claude_cli_call(prompt, system), kind, model
     try:
         return _openai_compatible(prompt, system, model, max_tokens,
                                   temperature), kind, model
@@ -253,7 +311,10 @@ def announce_backend():
         raise SystemExit(2)
     print(f"model backend : {kind}")
     print(f"model         : {model}")
-    print(f"endpoint      : {os.environ.get('OPENAI_BASE_URL')}")
+    # "endpoint: None" on the CLI path reads as something failing to resolve.
+    # Say which mechanism is answering instead.
+    print(f"endpoint      : "
+          f"{os.environ.get('OPENAI_BASE_URL') or claude_cli() + ' (no API key)'}")
     print()
     print("Everything below is this model's output, validated against the")
     print("skill's contract. Another model will answer differently; that is the")

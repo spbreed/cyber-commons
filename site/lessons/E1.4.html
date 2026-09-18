@@ -74,12 +74,16 @@ SB-1    preventive  2 clause(s): NIST AI RMF: MANAGE-2.1
   there is no answer.</li>
 </ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-No model endpoint is configured, and every skill here needs one.
+No model is available, and every skill here needs one. Two ways, and
+the first needs no key and no endpoint:
 
-  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
-  export OPENAI_API_KEY=ollama          # any non-empty value locally
-  export MODEL=qwen2.5-7b-instruct
+  1. Claude Code, already signed in — nothing to configure. Install it
+     and run `claude` once to sign in; skills then use that session.
 
-Lesson A0.0 sets this up end to end on a free tier — a local model
-with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
-which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The catalogue's 8 controls map to framework clauses across NIST AI RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier requires all 8 and satisfies 12 clauses; medium requires 5. Working framework-first leaves 3 of 7 clauses with no operating control. The evidence pack shows one artefact satisfying several clauses.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take one framework clause your programme claims to satisfy and ask which operating control produces its evidence. If the answer is a policy document, the clause is ticked and undefended.</p></div></section><div class="expect"><b>Expect</b>Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OSCAL</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.4.ipynb</code></p></div><div class="pager"><a href="E1.3.html"><span class="k">← Previous</span><span class="t">E1.3 · Risk tiering agentic use cases</span></a><a class="next" href="E1.5.html"><span class="k">Next →</span><span class="t">E1.5 · Evaluation output as audit evidence</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+  2. Any OpenAI-compatible endpoint, local or hosted:
+       export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+       export OPENAI_API_KEY=ollama      # any non-empty value locally
+       export MODEL=qwen2.5:1.5b-instruct
+
+Lesson A0.0 sets both up end to end. MODELS.md lists which model suits
+which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The catalogue's 8 controls map to framework clauses across NIST AI RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier requires all 8 and satisfies 12 clauses; medium requires 5. Working framework-first leaves 3 of 7 clauses with no operating control. The evidence pack shows one artefact satisfying several clauses.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take one framework clause your programme claims to satisfy and ask which operating control produces its evidence. If the answer is a policy document, the clause is ticked and undefended.</p></div></section><div class="expect"><b>Expect</b>Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OSCAL</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.4.ipynb</code></p></div><div class="pager"><a href="E1.3.html"><span class="k">← Previous</span><span class="t">E1.3 · Risk tiering agentic use cases</span></a><a class="next" href="E1.5.html"><span class="k">Next →</span><span class="t">E1.5 · Evaluation output as audit evidence</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

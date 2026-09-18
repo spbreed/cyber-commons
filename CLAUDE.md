@@ -142,7 +142,11 @@ that are enforced or that get broken most.
 ### Code
 
 - **Standard library only** in anything a lesson runs. There is nothing to
-  `pip install`; the one dependency is a model endpoint.
+  `pip install`; the one dependency is a model.
+- **Two ways to reach one.** A signed-in `claude` CLI on the PATH answers with
+  **no API key and no endpoint** — the first version of this runtime assumed an
+  HTTP endpoint was the only route, which was wrong and made the whole
+  curriculum look like it needed a key. `OPENAI_BASE_URL` still wins when set.
 - **Every skill is executed by a model.** The script is the harness, not the
   procedure: it assembles the fixture, hands the model that skill's own
   `SKILL.md` body and output contract, and validates the reply against the

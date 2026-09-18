@@ -32,26 +32,34 @@ context window, and what the free tier gets you), then installs, clones, and
 points the skill runtime at a model. It ends by running one skill end to end
 and printing which model answered.
 
+**If you already use Claude Code, you need no API key and no endpoint.** The
+runtime finds the signed-in `claude` CLI and runs every skill on that session —
+the same authentication your editor uses.
+
 ```bash
 git clone --branch master https://github.com/spbreed/cyber-commons.git
 cd cyber-commons
 
-curl -fsSL https://ollama.com/install.sh | sh   # local, free, no account
-ollama serve & ollama pull qwen2.5:7b-instruct
-
-export OPENAI_BASE_URL=http://127.0.0.1:11434/v1   # the /v1 is not optional
-export OPENAI_API_KEY=ollama
-export MODEL=qwen2.5:7b-instruct
+claude --version        # prints a version? then there is nothing to configure
 
 PYTHONPATH=skills/_runtime python3 \
   skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
 ```
 
-A hosted free tier works identically — Google AI Studio issues a key with no
-card, and only the three variables change. **Without an endpoint every skill
-exits 2 and says so**; nothing here substitutes a canned answer for a model's,
-because an answer of that kind has the right shape, passes the contract, and is
-not a model result.
+**Or bring your own model** — a local one, or any hosted free tier. Setting
+`OPENAI_BASE_URL` overrides the CLI, because somebody who set it meant it:
+
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama serve & ollama pull qwen2.5:1.5b-instruct
+export OPENAI_BASE_URL=http://127.0.0.1:11434/v1   # the /v1 is not optional
+export OPENAI_API_KEY=ollama
+export MODEL=qwen2.5:1.5b-instruct
+```
+
+**With neither, every skill exits 2 and says so.** Nothing here substitutes a
+canned answer for a model's: an answer of that kind has the right shape, passes
+the contract, and is not a model result.
 
 ## 2 · Read one page, then run a lesson
 
@@ -291,9 +299,10 @@ Keycloak, garak — the notebook models the *decision* that tool makes, and
 underneath as the full-infrastructure variant. Those variants are **not**
 executed in CI and are labelled as such.
 
-**One protocol, any model.** Every skill speaks OpenAI-compatible chat
-completions, so the same three variables point at a local server or a hosted
-free tier and nothing in the code changes:
+**Two backends, no paid path.** A signed-in Claude Code CLI answers with no key
+and no endpoint — which is also how the [agentskills.io](https://agentskills.io)
+format is meant to be used, an agent loading a `SKILL.md` and carrying out the
+procedure. For everything else, one protocol:
 
 ```bash
 # llama.cpp, Ollama, vLLM, or a hosted free tier — pick one

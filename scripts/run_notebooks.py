@@ -50,7 +50,11 @@ RUNTIME_DIR = ROOT / "skills" / "_runtime"
 def _env() -> dict:
     import os
     path = os.environ.get("PYTHONPATH", "")
-    return dict(os.environ,
+    # CLAUDE_CLI=0 pins this to the no-model path. A signed-in `claude` on the
+    # PATH is a model, so without it this gate would call one per notebook —
+    # slow, non-deterministic, and no longer testing that a lesson refuses
+    # legibly when there is nothing to call.
+    return dict(os.environ, CLAUDE_CLI="0",
                 PYTHONPATH=f"{RUNTIME_DIR}{os.pathsep}{path}" if path else str(RUNTIME_DIR))
 
 

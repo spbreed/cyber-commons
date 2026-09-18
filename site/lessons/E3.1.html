@@ -75,12 +75,16 @@ red-team attack success rate (containment surface): 25%
 <li><strong>No ask.</strong> An update with no decision requested gets noted.</li>
 </ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-No model endpoint is configured, and every skill here needs one.
+No model is available, and every skill here needs one. Two ways, and
+the first needs no key and no endpoint:
 
-  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
-  export OPENAI_API_KEY=ollama          # any non-empty value locally
-  export MODEL=qwen2.5-7b-instruct
+  1. Claude Code, already signed in — nothing to configure. Install it
+     and run `claude` once to sign in; skills then use that session.
 
-Lesson A0.0 sets this up end to end on a free tier — a local model
-with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
-which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The fleet's exposure totals 46 units, containment ASR is 25%, and control coverage is 50%. The findings-shaped update is shown with five specific problems. The board translation states exposure, likelihood, assurance and a decision, contains no mechanism jargon, carries the measured numbers, and explicitly offers written acceptance as an alternative.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Write these four lines for your highest-tier system. If you cannot fill the likelihood line with a measurement, that is the first thing to fund — an assessment is not a number.</p></div></section><div class="expect"><b>Expect</b>What can happen, how fast, who can stop it — with the engineering vocabulary stripped out.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.1.ipynb</code></p></div><div class="pager"><a href="E2.9.html"><span class="k">← Previous</span><span class="t">E2.9 · Regulator and auditor conversations</span></a><a class="next" href="E3.2.html"><span class="k">Next →</span><span class="t">E3.2 · Governing autonomy rather than approving tools</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+  2. Any OpenAI-compatible endpoint, local or hosted:
+       export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+       export OPENAI_API_KEY=ollama      # any non-empty value locally
+       export MODEL=qwen2.5:1.5b-instruct
+
+Lesson A0.0 sets both up end to end. MODELS.md lists which model suits
+which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The fleet's exposure totals 46 units, containment ASR is 25%, and control coverage is 50%. The findings-shaped update is shown with five specific problems. The board translation states exposure, likelihood, assurance and a decision, contains no mechanism jargon, carries the measured numbers, and explicitly offers written acceptance as an alternative.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Write these four lines for your highest-tier system. If you cannot fill the likelihood line with a measurement, that is the first thing to fund — an assessment is not a number.</p></div></section><div class="expect"><b>Expect</b>What can happen, how fast, who can stop it — with the engineering vocabulary stripped out.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.1.ipynb</code></p></div><div class="pager"><a href="E2.9.html"><span class="k">← Previous</span><span class="t">E2.9 · Regulator and auditor conversations</span></a><a class="next" href="E3.2.html"><span class="k">Next →</span><span class="t">E3.2 · Governing autonomy rather than approving tools</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

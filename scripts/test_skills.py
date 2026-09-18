@@ -69,6 +69,10 @@ STRIP = ("OPENAI_BASE_URL", "OPENAI_API_KEY", "MODEL", "ANTHROPIC_API_KEY",
 def clean_env() -> dict:
     env = {k: v for k, v in os.environ.items() if k not in STRIP}
     env["PYTHONHASHSEED"] = "0"
+    # CLAUDE_CLI=0 matters as much as stripping the variables: a
+    # signed-in `claude` on the PATH is a model, so without this the
+    # gate would quietly call one and stop testing the refusal at all.
+    env["CLAUDE_CLI"] = "0"
     # The shared runtime, the way Kaggle supplies it to a notebook. A script
     # that calls a model imports the adapter from there rather than carrying a
     # copy, so a standalone run has to be able to find it too.

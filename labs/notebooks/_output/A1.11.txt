@@ -1,11 +1,15 @@
 no model configured
 
-No model endpoint is configured, and every skill here needs one.
+No model is available, and every skill here needs one. Two ways, and
+the first needs no key and no endpoint:
 
-  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
-  export OPENAI_API_KEY=ollama          # any non-empty value locally
-  export MODEL=qwen2.5-7b-instruct
+  1. Claude Code, already signed in — nothing to configure. Install it
+     and run `claude` once to sign in; skills then use that session.
 
-Lesson A0.0 sets this up end to end on a free tier — a local model
-with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
-which model suits which lab.
+  2. Any OpenAI-compatible endpoint, local or hosted:
+       export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+       export OPENAI_API_KEY=ollama      # any non-empty value locally
+       export MODEL=qwen2.5:1.5b-instruct
+
+Lesson A0.0 sets both up end to end. MODELS.md lists which model suits
+which lab.

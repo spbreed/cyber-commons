@@ -8,9 +8,13 @@ not a model result.
 
 | Backend | How | What it costs |
 |---|---|---|
+| **Claude Code CLI** | nothing to set — a signed-in `claude` on your PATH | **no API key, no endpoint.** Your existing Claude Code session |
 | **open weight, local** | `OPENAI_BASE_URL` at Ollama, llama.cpp or vLLM | nothing, on your own hardware |
 | **open weight, hosted** | `OPENAI_BASE_URL` at any OpenAI-compatible free tier | nothing, within the tier's quota |
-| **nothing configured** | — | the skill refuses. That is the designed behaviour, not a failure |
+| **nothing available** | — | the skill refuses. That is the designed behaviour, not a failure |
+
+`OPENAI_BASE_URL` takes precedence over the CLI: somebody who set it meant it.
+`CLAUDE_CLI=0` forces the HTTP path even when the CLI is present.
 
 **There is no paid backend, deliberately.** A curriculum that is free to read
 should be free to run, so the adapter speaks one protocol — OpenAI-compatible

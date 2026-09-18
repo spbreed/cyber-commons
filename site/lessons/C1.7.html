@@ -96,12 +96,16 @@ the automation, and it belongs in every report about it.</p>
   becomes an incident.</li>
 </ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-No model endpoint is configured, and every skill here needs one.
+No model is available, and every skill here needs one. Two ways, and
+the first needs no key and no endpoint:
 
-  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
-  export OPENAI_API_KEY=ollama          # any non-empty value locally
-  export MODEL=qwen2.5-7b-instruct
+  1. Claude Code, already signed in — nothing to configure. Install it
+     and run `claude` once to sign in; skills then use that session.
 
-Lesson A0.0 sets this up end to end on a free tier — a local model
-with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
-which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The loop matches ground truth on the routine alerts, the severity floor converts every high closure into an escalation, and the closure sample routes a fraction to a human so the false-negative rate is measured rather than assumed.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Ask your SOC whether anyone checks, when an incident is confirmed, whether an earlier alert about it was auto-closed. If not, your loop's error rate is invisible.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>TheHive</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.7.ipynb</code></p></div><div class="pager"><a href="C1.6.html"><span class="k">← Previous</span><span class="t">C1.6 · High-concurrency detection engineering</span></a><a class="next" href="C1.8.html"><span class="k">Next →</span><span class="t">C1.8 · Defensive deception and threshold failures</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+  2. Any OpenAI-compatible endpoint, local or hosted:
+       export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+       export OPENAI_API_KEY=ollama      # any non-empty value locally
+       export MODEL=qwen2.5:1.5b-instruct
+
+Lesson A0.0 sets both up end to end. MODELS.md lists which model suits
+which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The loop matches ground truth on the routine alerts, the severity floor converts every high closure into an escalation, and the closure sample routes a fraction to a human so the false-negative rate is measured rather than assumed.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Ask your SOC whether anyone checks, when an incident is confirmed, whether an earlier alert about it was auto-closed. If not, your loop's error rate is invisible.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>TheHive</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.7.ipynb</code></p></div><div class="pager"><a href="C1.6.html"><span class="k">← Previous</span><span class="t">C1.6 · High-concurrency detection engineering</span></a><a class="next" href="C1.8.html"><span class="k">Next →</span><span class="t">C1.8 · Defensive deception and threshold failures</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

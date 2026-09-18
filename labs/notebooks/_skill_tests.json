@@ -11,8 +11,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.08,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -20,7 +20,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.06,
    "refused": true
   },
@@ -29,7 +29,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -38,8 +38,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -47,7 +47,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.06,
    "refused": true
   },
@@ -56,7 +56,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -65,7 +65,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -74,7 +74,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -83,8 +83,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.08,
    "refused": true
   },
   {
@@ -92,7 +92,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -101,7 +101,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.06,
    "refused": true
   },
@@ -110,8 +110,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -119,8 +119,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -128,7 +128,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -137,7 +137,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -146,7 +146,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -155,7 +155,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -164,7 +164,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -173,7 +173,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -182,7 +182,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -191,8 +191,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -209,7 +209,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -218,7 +218,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -227,8 +227,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -236,7 +236,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -245,8 +245,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -254,7 +254,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -263,8 +263,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -272,7 +272,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -281,7 +281,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -290,7 +290,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -299,7 +299,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -308,7 +308,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -317,7 +317,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -326,7 +326,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -335,7 +335,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -344,7 +344,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -353,8 +353,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -362,7 +362,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -371,8 +371,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -380,7 +380,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -389,7 +389,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -398,7 +398,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -407,8 +407,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -416,7 +416,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -425,7 +425,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -434,8 +434,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -443,8 +443,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -452,7 +452,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -461,7 +461,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -470,7 +470,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -479,7 +479,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -497,7 +497,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -506,8 +506,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -515,8 +515,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -533,8 +533,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -542,7 +542,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -551,8 +551,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -560,8 +560,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -569,8 +569,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -578,8 +578,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.08,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -587,8 +587,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.08,
    "refused": true
   },
   {
@@ -596,7 +596,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -605,7 +605,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -614,8 +614,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -623,8 +623,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -632,8 +632,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -641,7 +641,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -650,7 +650,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -659,8 +659,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -668,8 +668,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -677,7 +677,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -686,7 +686,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.06,
    "refused": true
   },
@@ -695,7 +695,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -704,7 +704,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -713,7 +713,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -722,7 +722,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -731,7 +731,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -740,8 +740,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.07,
    "refused": true
   },
   {
@@ -749,7 +749,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -759,7 +759,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.04,
+   "seconds": 0.03,
    "refused": false
   },
   {
@@ -767,8 +767,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -777,7 +777,7 @@
    "contract": true,
    "script": true,
    "lines": 41,
-   "seconds": 0.04,
+   "seconds": 0.03,
    "refused": false
   },
   {
@@ -785,8 +785,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -794,7 +794,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -803,8 +803,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -812,7 +812,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -821,7 +821,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -830,7 +830,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -839,7 +839,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -857,8 +857,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -866,8 +866,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -875,7 +875,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -884,7 +884,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -893,7 +893,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -902,7 +902,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -911,7 +911,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -920,8 +920,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -929,7 +929,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -938,7 +938,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -947,7 +947,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -956,8 +956,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -965,7 +965,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -974,7 +974,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -983,7 +983,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -992,7 +992,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1001,8 +1001,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1010,8 +1010,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1019,8 +1019,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1028,8 +1028,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.05,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -1046,7 +1046,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1055,7 +1055,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1064,7 +1064,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1073,8 +1073,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1082,8 +1082,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1091,8 +1091,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.06,
    "refused": true
   },
   {
@@ -1100,7 +1100,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1109,7 +1109,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1118,7 +1118,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1127,8 +1127,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.07,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1137,7 +1137,7 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.02,
+   "seconds": 0.01,
    "refused": false
   },
   {
@@ -1145,8 +1145,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1154,7 +1154,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1163,7 +1163,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1172,8 +1172,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1181,7 +1181,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1190,7 +1190,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1199,8 +1199,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
-   "seconds": 0.06,
+   "lines": 15,
+   "seconds": 0.05,
    "refused": true
   },
   {
@@ -1208,7 +1208,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1217,7 +1217,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1235,7 +1235,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1244,7 +1244,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1253,7 +1253,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   },
@@ -1262,7 +1262,7 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 11,
+   "lines": 15,
    "seconds": 0.05,
    "refused": true
   }
