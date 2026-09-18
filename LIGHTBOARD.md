@@ -8,7 +8,7 @@ camera is running.
 
 **Read every plain line word for word. Never read a line in square brackets.**
 
-Square-bracketed italics are stage directions — draw this, run the cell, point
+Square-bracketed italics are stage directions — draw this, run the skill, point
 at the output, slow down. Everything else is speech, already in sentences,
 already said the way a person says it: no asterisks, no backticks, "29 percent"
 rather than "29%", "issue refund" rather than `issue_refund`.
@@ -51,8 +51,8 @@ else does.
 
 Each lesson's heading gives its spoken word count and the time that comes to at
 an unhurried 140 words a minute. That is words only — it does not count the
-pause while the cell runs, so budget a little more on the lessons that execute
-something.
+pause while the skill runs, so budget a little more on the lessons that execute
+something. A model takes longer than a local computation did.
 
 ## Reading it well
 
@@ -120,9 +120,9 @@ So here is what we do in this lesson.
 
 Choose a developer AI tool against its real context window and cost, clone master, and point the skill runtime at a model on a free tier.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -144,7 +144,7 @@ Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 2 of 2 · runs a skill · 609 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · runs a skill · 608 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -154,7 +154,7 @@ Before anything else, thirty seconds on what an agent actually is, because if yo
 
 A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong. Everything here follows from that one sentence.
 
-So, what this is. A hundred and thirty-four lessons. It is free, there is no vendor, there is no paid account, and every single one of them runs — you press a button and the code executes in your own account, not mine. I am going to use one made-up company for all of it, and I will introduce you to them in the next video.
+So, what this is. A hundred and thirty-five lessons. It is free, there is no vendor, there is no paid account, and every single one of them runs — one command on your own machine, in whichever coding assistant you already use. I am going to use one made-up company for all of it, and I will introduce you to them in the next video.
 
 **① Open**
 
@@ -182,9 +182,9 @@ So here is what we do in this lesson.
 
 Learn the five audiences and the seven sections every lesson page is built from, and which of them answers the question you arrived with.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -300,9 +300,9 @@ So here is what we do in this lesson.
 
 Draw CyberTravels as components and trust boundaries, and compute the crossings from the levels rather than listing them by hand.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -352,9 +352,9 @@ So here is what we do in this lesson.
 
 Provenance at ingress and default-deny on the tool call. The system prompt is not a control.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -404,9 +404,9 @@ So here is what we do in this lesson.
 
 Mark provenance at ingress, and forbid untrusted spans from selecting a tool.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -456,9 +456,9 @@ So here is what we do in this lesson.
 
 Carry provenance into memory, and scope memory writes to the identity that made them.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -508,9 +508,9 @@ So here is what we do in this lesson.
 
 Default-deny per call on identity, tool, arguments and resource, plus authority issued just in time.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -560,9 +560,9 @@ So here is what we do in this lesson.
 
 Delegation that narrows, grants that expire, and default-deny underneath both.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -612,9 +612,9 @@ So here is what we do in this lesson.
 
 Per-workload identity with attestation, and a lifecycle that can revoke a single agent.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -664,9 +664,9 @@ So here is what we do in this lesson.
 
 Execute in an isolate with no ambient credentials and no default network, and control egress underneath it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -716,9 +716,9 @@ So here is what we do in this lesson.
 
 One provenance rule: content the pipeline read may never drive a state-changing tool.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -768,9 +768,9 @@ So here is what we do in this lesson.
 
 Validate and mark provenance on the inter-agent channel, on top of per-agent identity.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -820,9 +820,9 @@ So here is what we do in this lesson.
 
 A registry of approved agents, admission bound to a registered identity, and an audit trail per hop.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -872,9 +872,9 @@ So here is what we do in this lesson.
 
 Verify a claim against ground truth before it is allowed to propagate.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -924,9 +924,9 @@ So here is what we do in this lesson.
 
 Ceilings bound to the loop itself, terminating the run rather than degrading it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -976,9 +976,9 @@ So here is what we do in this lesson.
 
 Attribution carried on every hop, into a store the agent cannot write to.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1028,9 +1028,9 @@ So here is what we do in this lesson.
 
 Reserve approval for irreversible actions and bound everything else by policy.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1080,9 +1080,9 @@ So here is what we do in this lesson.
 
 An independent verifier that checks the outcome rather than the claim about it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1132,9 +1132,9 @@ So here is what we do in this lesson.
 
 Ceiling-bound delegation, attribution per hop, and machine-generated output marked as machine-generated.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1184,9 +1184,9 @@ So here is what we do in this lesson.
 
 Four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1236,9 +1236,9 @@ So here is what we do in this lesson.
 
 Index both eras in one table: the twelve controls that predate agents and the ten that arrived with them, each scored in place, partial or absent against what runs, with an owner per row.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1296,9 +1296,9 @@ So here is what we do in this lesson.
 
 One identity per workload, carrying the human principal alongside it, asserted on every call.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1348,9 +1348,9 @@ So here is what we do in this lesson.
 
 Exchange platform attestation for a short-lived, workload-bound credential.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1400,9 +1400,9 @@ So here is what we do in this lesson.
 
 Token exchange that intersects the presented scope with the actor's ceiling, and records the chain.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1452,9 +1452,9 @@ So here is what we do in this lesson.
 
 Short-lived, purpose-bound grants issued per task and expiring with it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1504,9 +1504,9 @@ So here is what we do in this lesson.
 
 A registry with a named owner, an expiry, and admission bound to a registered identity.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1556,9 +1556,9 @@ So here is what we do in this lesson.
 
 Tag provenance at every ingress point, and permit only trusted origins to select a tool.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1608,9 +1608,9 @@ So here is what we do in this lesson.
 
 Per-hop attribution written to an append-only store outside the agent's reach.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1660,9 +1660,9 @@ So here is what we do in this lesson.
 
 Out-of-band capture, a hash-chained write-once transcript store, and an isolated logging plane.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1720,9 +1720,9 @@ So here is what we do in this lesson.
 
 Evaluate policy per call on identity, tool, arguments and resource, denying unless a rule permits.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1772,9 +1772,9 @@ So here is what we do in this lesson.
 
 Run it in an isolate with no ambient credentials, a bounded filesystem and no network by default.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1824,9 +1824,9 @@ So here is what we do in this lesson.
 
 An allow-list at the network boundary, enforced where the agent cannot rewrite it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1876,9 +1876,9 @@ So here is what we do in this lesson.
 
 Ceilings bound to the loop, terminating the run rather than letting it degrade.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1928,9 +1928,9 @@ So here is what we do in this lesson.
 
 Schema validation plus an independent verifier before any claim propagates.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -1980,9 +1980,9 @@ So here is what we do in this lesson.
 
 Reserve approval for irreversible actions only, and label machine-generated content as such.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2032,9 +2032,9 @@ So here is what we do in this lesson.
 
 One enforcement point holding identity, policy, egress, budget and audit together.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2084,9 +2084,9 @@ So here is what we do in this lesson.
 
 Per-run namespaces bound to the run's workload identity, an immutable write-once cache, and signing.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2136,9 +2136,9 @@ So here is what we do in this lesson.
 
 An exemption gate the platform enforces, caps that tighten as coverage drops, and quotas on population growth.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2188,9 +2188,9 @@ So here is what we do in this lesson.
 
 A report-to-human tool that is cheap, non-terminal and signposted, plus a mandatory checkpoint on out-of-scope discovery.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2240,9 +2240,9 @@ So here is what we do in this lesson.
 
 Credential deny-lists and workspace confinement first — the strongest containment a developer does not notice.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2321,9 +2321,9 @@ So here is what we do in this lesson.
 
 Learn the line first — what can run before a deploy and what only works after one — then build the pipeline and its harness as one system.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2373,9 +2373,9 @@ So here is what we do in this lesson.
 
 Build an independent verifier, and a budget that stops the loop when it cannot pass.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2425,9 +2425,9 @@ So here is what we do in this lesson.
 
 Derive assets, entry points and attack vectors mechanically from the map the estate already holds.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2477,9 +2477,9 @@ So here is what we do in this lesson.
 
 Deterministic rules for what rules do well, then a model pass for what they cannot express.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2529,9 +2529,9 @@ So here is what we do in this lesson.
 
 Consolidate overlapping findings, then cross-reference each against syntax and call graph.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2581,9 +2581,9 @@ So here is what we do in this lesson.
 
 Decide whether an external caller can actually reach the sink before anyone is paged.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2633,9 +2633,9 @@ So here is what we do in this lesson.
 
 Replicate the application in an isolated, disposable runtime with no path to production.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2685,9 +2685,9 @@ So here is what we do in this lesson.
 
 Reconcile the SBOM against what is actually on disk, then recover strings, imports and egress from the binaries it missed.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2737,9 +2737,9 @@ So here is what we do in this lesson.
 
 Generate and run an actual exploit against the sandbox, so each finding is confirmed or dropped.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2789,9 +2789,9 @@ So here is what we do in this lesson.
 
 Combine validated findings into multi-step sequences where one's effect satisfies another's precondition.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2841,9 +2841,9 @@ So here is what we do in this lesson.
 
 Give the loop full target context, and enforce scope at the network layer rather than by asking the model to respect it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2893,9 +2893,9 @@ So here is what we do in this lesson.
 
 Enumerate paths from real entry points to sinks, and classify the predicate on each hop as authentication or authorisation.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2945,9 +2945,9 @@ So here is what we do in this lesson.
 
 Label every claim observed or inferred, keep the evidence beside it, and attach no severity to an inference.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -2997,9 +2997,9 @@ So here is what we do in this lesson.
 
 Fill a roles-by-objects-by-verbs matrix from one credential per role, and mark every cell tested, mismatched or untested.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3049,9 +3049,9 @@ So here is what we do in this lesson.
 
 Run a preflight that refuses to start until zero retention, sandboxing, egress control, secret management, human-in-the-loop and deterministic guardrails are all present.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3101,9 +3101,9 @@ So here is what we do in this lesson.
 
 Calibrate severity from sandbox evidence, and report per-stage economics rather than a single total.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3153,9 +3153,9 @@ So here is what we do in this lesson.
 
 Generate the fix, re-run the exploit against the patched build, and require a regression test that fails on the old one.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3205,9 +3205,9 @@ So here is what we do in this lesson.
 
 Slice on the source-to-sink path rather than on distance: the smallest context that still supports a severity call.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3257,9 +3257,9 @@ So here is what we do in this lesson.
 
 Scope every skill to one deployment identifier and emit a signed attestation whose predicate names what was checked.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3309,9 +3309,9 @@ So here is what we do in this lesson.
 
 Map its stages onto the pipeline you built, then score it against your own held-out key.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3438,9 +3438,9 @@ So here is what we do in this lesson.
 
 Assess each component on whether it can change without telling you, rather than on how popular it is.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3490,9 +3490,9 @@ So here is what we do in this lesson.
 
 Treat the embedding pipeline as an attack surface and build a provenance manifest: source, parser and digest per record.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3542,9 +3542,9 @@ So here is what we do in this lesson.
 
 Run the technique many times, varying seed and wording, rather than keeping the transcript that worked.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3594,9 +3594,9 @@ So here is what we do in this lesson.
 
 Wrap the gateway trace with identity, tool and arguments, then score actors on behaviour rather than on what they claim to be.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3646,9 +3646,9 @@ So here is what we do in this lesson.
 
 Work the case study across runs — shared mounts, child agents with no human above them — and map each behaviour to a control.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3698,9 +3698,9 @@ So here is what we do in this lesson.
 
 Generate candidates, then score each against real history on the one property that decides deployability — firing volume.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3750,9 +3750,9 @@ So here is what we do in this lesson.
 
 Run triage as a loop with a severity floor and a stable-seeded sample of whatever it auto-closed.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3802,9 +3802,9 @@ So here is what we do in this lesson.
 
 Place canary tokens and honeypot tasks where no legitimate task reaches, so a touch needs no threshold at all.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3854,9 +3854,9 @@ So here is what we do in this lesson.
 
 Build a zero-trust gatekeeper and a revocation path that isolates the whole fleet in one action.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3906,9 +3906,9 @@ So here is what we do in this lesson.
 
 Lock the four runtime constants — prompts, tool results, model version and seed — and replay inside an isolated lab.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -3958,9 +3958,9 @@ So here is what we do in this lesson.
 
 Hand it over as three things: the control it becomes, the owner who holds it, and an evaluation case that fails on the old build.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4039,9 +4039,9 @@ So here is what we do in this lesson.
 
 Learn the five intervals and the open-source stack that measures them, before building anything.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4091,9 +4091,9 @@ So here is what we do in this lesson.
 
 Score each sensor class on visibility rather than alerting, per agent action, and read the rows nothing covers.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4143,9 +4143,9 @@ So here is what we do in this lesson.
 
 Sign off a baseline, then watch the four surfaces that move without raising a ticket.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4195,9 +4195,9 @@ So here is what we do in this lesson.
 
 Score actors on regularity, rate and continuity, then decide per-field retention on the traces you inherit.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4255,9 +4255,9 @@ So here is what we do in this lesson.
 
 Tier each source by the fastest query that reads it, and price the result against indexing everything.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4307,9 +4307,9 @@ So here is what we do in this lesson.
 
 Detect change rather than activity — a tool never used before, a shifted mix, a scope newly exercised — and map each to ATT and CK and ATLAS.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4359,9 +4359,9 @@ So here is what we do in this lesson.
 
 Write detections whose subject is the platform: escape primitives, poisoned cache entries, silently expired exemptions.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4411,9 +4411,9 @@ So here is what we do in this lesson.
 
 Let the loop generate, then score every candidate against real historical telemetry before anything ships.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4463,9 +4463,9 @@ So here is what we do in this lesson.
 
 Score candidates against a benign corpus containing the hard cases — for a refund rule, legitimate refunds.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4515,9 +4515,9 @@ So here is what we do in this lesson.
 
 Place canaries and honeypot tasks where nothing legitimate has a reason to go.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4575,9 +4575,9 @@ So here is what we do in this lesson.
 
 Decide what the loop may conclude, what it may do unsupervised, and which sample of its closures a human reads.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4627,9 +4627,9 @@ So here is what we do in this lesson.
 
 Bound the investigating agent per investigation class before it runs: sources, forbidden fields, volume cap.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4679,9 +4679,9 @@ So here is what we do in this lesson.
 
 Add the three fields an agent alert needs on top of who, what and when.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4731,9 +4731,9 @@ So here is what we do in this lesson.
 
 Revoke the agent identity rather than disabling the account, read the plan rather than interviewing the user, and assume a chain rather than an actor.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4783,9 +4783,9 @@ So here is what we do in this lesson.
 
 Separate what the logs establish from what the reconstruction infers, and keep the evidence beside each claim.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4835,9 +4835,9 @@ So here is what we do in this lesson.
 
 Force a replan when evidence refutes, and keep the abandoned branch visible in the trace.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4887,9 +4887,9 @@ So here is what we do in this lesson.
 
 Scope along the delegation graph rather than the host list.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4939,9 +4939,9 @@ So here is what we do in this lesson.
 
 Move where the monitoring sits: a shared-artifact graph and four other cross-run signals.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4991,9 +4991,9 @@ So here is what we do in this lesson.
 
 Convert each indicator into a rule, or record why it cannot be one.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5043,9 +5043,9 @@ So here is what we do in this lesson.
 
 State a falsifiable hypothesis, name the population before running it, then promote, tune or discard.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5103,9 +5103,9 @@ So here is what we do in this lesson.
 
 Classify every action on reversibility and blast radius, and derive the tier from those two properties.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5155,9 +5155,9 @@ So here is what we do in this lesson.
 
 Time all three tiers against one incident, with the cost of acting on a bad signal beside the time to contain.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5207,9 +5207,9 @@ So here is what we do in this lesson.
 
 Pre-authorise automated revocation of non-human identities, which is safe precisely because they are not people.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5259,9 +5259,9 @@ So here is what we do in this lesson.
 
 Answer five questions with a name or a number each: who, what mechanism, how long, what breaks, who turns it back on.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5311,9 +5311,9 @@ So here is what we do in this lesson.
 
 One selector, one action, and revocation rather than termination.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5371,9 +5371,9 @@ So here is what we do in this lesson.
 
 Log at design time what a replay will need: prompts, tool results, model version, sampling.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5423,9 +5423,9 @@ So here is what we do in this lesson.
 
 Walk the control chain, mark each present, absent or present-but-wrong, and test that the statement names a control.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5475,9 +5475,9 @@ So here is what we do in this lesson.
 
 Choose among model, prompt, tool, policy, sandbox, identity and eval deliberately.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5527,9 +5527,9 @@ So here is what we do in this lesson.
 
 Re-measure the indicators the incident moved, automatically, on every fix rather than the memorable ones.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5579,9 +5579,9 @@ So here is what we do in this lesson.
 
 State the change as a policy diff with the incident's numbers as the reason, and name what the diff does not fix.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5631,9 +5631,9 @@ So here is what we do in this lesson.
 
 Run the first-hour checklist, with separate owners for containment and disclosure.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5760,9 +5760,9 @@ So here is what we do in this lesson.
 
 Turn a framework control into something computable, with a denominator and a target written before the measurement.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5812,9 +5812,9 @@ So here is what we do in this lesson.
 
 Reconcile three sources — model registry, procurement, and egress logs to provider domains.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5864,9 +5864,9 @@ So here is what we do in this lesson.
 
 Tier on autonomy, data reach and blast radius — what the system can do, not what it runs on.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5916,9 +5916,9 @@ So here is what we do in this lesson.
 
 Map control to framework, never the reverse, and let coverage fall out as an output.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -5968,9 +5968,9 @@ So here is what we do in this lesson.
 
 Report accuracy against a held-out key, with the sample size and an expiry.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6020,9 +6020,9 @@ So here is what we do in this lesson.
 
 Separate constraints on how the system runs from constraints on what results are acceptable.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6072,9 +6072,9 @@ So here is what we do in this lesson.
 
 Re-run the evidence collection inside a freshness window derived from how fast the thing actually changes.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6124,9 +6124,9 @@ So here is what we do in this lesson.
 
 Assess each component on whether it can change without telling you, and accept an attestation with an expiry where it can.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6176,9 +6176,9 @@ So here is what we do in this lesson.
 
 Govern the lifecycle events that raise no ticket, not the ones that do.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6228,9 +6228,9 @@ So here is what we do in this lesson.
 
 Map who asks what: liability, obligation, lawful basis, containment, fitness.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6280,9 +6280,9 @@ So here is what we do in this lesson.
 
 Re-read the three pillars for a model that calls tools.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6332,9 +6332,9 @@ So here is what we do in this lesson.
 
 Write a joint runbook per seam: one artefact, one owner, named consumers.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6384,9 +6384,9 @@ So here is what we do in this lesson.
 
 Compute the indicators from the repository at run time, and report gaps with the lesson that closes each.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6444,9 +6444,9 @@ So here is what we do in this lesson.
 
 Separate horizontal regulation, sector overlays and cross-cutting law, and map controls outward.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6496,9 +6496,9 @@ So here is what we do in this lesson.
 
 Resolve each regulatory theme down to a control from your own catalogue and let its evidence be the answer.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6548,9 +6548,9 @@ So here is what we do in this lesson.
 
 Pick a control-shaped framework as the spine and map outward from it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6600,9 +6600,9 @@ So here is what we do in this lesson.
 
 Find the clauses that catch agents: third-party risk, exit strategy, scope containment, minimum necessary.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6652,9 +6652,9 @@ So here is what we do in this lesson.
 
 Fix lawful basis, retention on the trace itself, and an erasure path that reaches it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6704,9 +6704,9 @@ So here is what we do in this lesson.
 
 Write the trigger criteria before they are needed, with separate owners for containment and disclosure.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6756,9 +6756,9 @@ So here is what we do in this lesson.
 
 Make every sentence name a control, an artefact and a date.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6808,9 +6808,9 @@ So here is what we do in this lesson.
 
 Capture the acting identity, the principal and the chain, plus enough to replay the run.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6860,9 +6860,9 @@ So here is what we do in this lesson.
 
 Bring the weakest number first, with its denominator and the gaps you already know about.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6920,9 +6920,9 @@ So here is what we do in this lesson.
 
 Drop the mechanism, keep three things, and offer written risk acceptance as a legitimate outcome.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6972,9 +6972,9 @@ So here is what we do in this lesson.
 
 Govern the autonomy level instead: four rungs, each with its own conditions.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -7024,9 +7024,9 @@ So here is what we do in this lesson.
 
 Sequence by dependency: inventory, identity, containment, evidence, evaluation, continuous.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -7076,9 +7076,9 @@ So here is what we do in this lesson.
 
 Name an owner for each seam before the incident rather than during it.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -7128,9 +7128,9 @@ So here is what we do in this lesson.
 
 Report five that degrade on their own: exposure, likelihood, assurance, coverage, speed.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -7180,9 +7180,9 @@ So here is what we do in this lesson.
 
 Say yes with conditions that are testable, proportionate, few and owned.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -7232,9 +7232,9 @@ So here is what we do in this lesson.
 
 Staff for the ability to turn a control into something computable, and accept an unglamorous first quarter.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -7284,9 +7284,9 @@ So here is what we do in this lesson.
 
 Judge it on three capabilities instead: notice, stop, recover.
 
-*[Run the cell on camera now. Let it finish on screen.]*
+*[Run the skill on camera now. Let it finish on screen.]*
 
-That is not a screenshot. It just ran, and you can run the identical cell in your own account in about a minute.
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 

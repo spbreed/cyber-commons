@@ -63,46 +63,58 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
   ("md", "## 2 · Pick a tool, against its real numbers"),
   ("html", D.table(
     ["tool", "free tier", "max context window", "paid, per month"],
-    [["<b>Anthropic Claude</b> / Claude Code",
+    [["<b><a href='https://claude.ai'>Anthropic Claude</a></b> / "
+      "<a href='https://console.anthropic.com'>Claude Code</a>",
       "Rolling message caps on the web app, resetting every 5 hours. $5 API "
       "trial credit on phone verification.",
       "<b>1M tokens</b> on paid plans with frontier models; 200k on the free "
       "web plan",
       "$20 Pro · $25 Max · usage-based API"],
-     ["<b>Google Antigravity</b>",
+     ["<b><a href='https://antigravity.google'>Google Antigravity</a></b>",
       "Perpetual public preview, free. Local orchestration across editor, "
       "terminal and browser.",
       "<b>1M–2M tokens</b> depending on the underlying Gemini model, with "
       "built-in state compression",
       "$0 preview · enterprise seats via Google Cloud"],
-     ["<b>Google AI Studio</b>",
+     ["<b><a href='https://aistudio.google.com/apikey'>Google AI Studio</a></b>",
       "Free API keys, 60 requests/minute on Gemini Flash, no billing details "
       "required",
       "<b>2M tokens</b> on Gemini Pro models",
       "Pay-as-you-go once the free quota is breached"],
-     ["<b>OpenAI ChatGPT</b> / Codex",
+     ["<b><a href='https://build.nvidia.com'>NVIDIA Build</a></b> (NIM)",
+      "Free account, no card. One key reaches the whole catalogue of "
+      "open-weight models, hosted on NVIDIA's own GPUs. <b>§4 Route C walks "
+      "through it.</b>",
+      "Varies by model — the catalogue carries several with 128k and above",
+      "Free for development; production via NVIDIA AI Enterprise"],
+     ["<b><a href='https://chatgpt.com'>OpenAI ChatGPT</a></b> / "
+      "<a href='https://platform.openai.com'>Codex</a>",
       "GPT-4o mini, code execution and data analysis. The legacy $5 API credit "
       "is largely phased out.",
       "128k tokens on standard frontier models; larger on API-only reasoning "
       "tasks",
       "$20 Plus · $200 Pro"],
-     ["<b>GitHub Copilot</b>",
+     ["<b><a href='https://github.com/features/copilot'>GitHub Copilot</a></b>",
       "2,000 completions + 50 chat messages a month. <b>Students get the "
-      "premium tier free.</b>",
+      "premium tier free</b> via the "
+      "<a href='https://education.github.com/pack'>Student Developer Pack</a>.",
       "32k–128k, scaled dynamically by which model serves the request",
       "$10 Pro (bundles $15 of AI credits) · $39 Pro+"],
-     ["<b>Cursor</b>",
+     ["<b><a href='https://cursor.com'>Cursor</a></b>",
       "Hobby: 2,000 completions + 50 slow requests a month. <b>Students get up "
-      "to a year of Pro.</b>",
+      "to a year of Pro</b> — "
+      "<a href='https://cursor.com/students'>cursor.com/students</a>.",
       "128k–200k mapped codebase context; up to 1M with your own API key",
       "$20 Pro · $40 Business"],
-     ["<b>Amazon Q Developer</b>",
+     ["<b><a href='https://aws.amazon.com/q/developer/'>Amazon Q Developer</a></b>",
       "50 agentic requests a month + 1,000 lines of code translation",
       "100k+ tokens of indexed codebase, mapped into the IDE panel",
       "$19 per user (Q Pro)"]],
-    caption="Free tiers and context windows as at the time of writing. If you "
-            "are a student, start at the two rows that say so — they are the "
-            "best value in the table by a wide margin.")),
+    caption="Every tool name links to its own sign-up page. Free tiers and "
+            "context windows as at the time of writing — they move, so check "
+            "the terms before you depend on one. If you are a student, start "
+            "at the two rows that say so; they are the best value in the table "
+            "by a wide margin.")),
 
   ("md", "## 3 · Install what you actually need\n\n"
          "```bash\n"
@@ -118,7 +130,7 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
          "There is nothing to `pip install`. Every script here is standard "
          "library only — the one dependency is a model, and that is the next "
          "step.\n\n"
-         "## 4 · Give it a model — two routes, both free\n\n"
+         "## 4 · Give it a model — three routes, all free\n\n"
          "### Route A — you already have Claude Code, Cursor or Copilot\n\n"
          "**Then you need no API key and no endpoint.** If the `claude` CLI is "
          "installed and signed in, the skill runtime finds it and uses that "
@@ -132,15 +144,80 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
          "how these skills are *meant* to be used: the "
          "[agentskills.io](https://agentskills.io) format exists so an agent "
          "can load a `SKILL.md` and carry out the procedure itself.\n\n"
-         "### Route B — a model you run or a free hosted tier\n\n"
+         "### Route B — a model you run yourself\n\n"
+         "[Ollama](https://ollama.com) is the shortest path to a model on your "
+         "own machine. Nothing leaves it, and there is no quota:\n\n"
          "```bash\n"
          "curl -fsSL https://ollama.com/install.sh | sh\n"
          "ollama serve &                 # not automatic on every platform\n"
          "ollama pull qwen2.5:1.5b-instruct\n"
          "```\n\n"
-         "Then set the three variables below. Setting `OPENAI_BASE_URL` "
-         "**overrides** Route A, because somebody who set it meant it.\n\n"
-         "### The three variables, for Route B"),
+         "The cost is your hardware. A 1.5B model answers in seconds on a "
+         "laptop and will fill a contract with plausible values it did not "
+         "derive; 7B is the size the acceptance criteria in this commons were "
+         "established at. If your machine cannot hold that, Route C is the "
+         "answer.\n\n"
+         "### Route C — NVIDIA's hosted catalogue, on somebody else's GPUs\n\n"
+         "A free [NVIDIA](https://build.nvidia.com) account gives you one API "
+         "key that reaches a catalogue of open-weight models — 70B and larger "
+         "included — running on NVIDIA's GPUs. It speaks the **same "
+         "OpenAI-compatible protocol** as Ollama, so it is the same three "
+         "variables and not one line of code changes. This is the route to "
+         "take if you want a large model and do not have a GPU.\n\n"
+         "**Sign up and get a key.** Four steps, no card:\n\n"
+         "1. Go to [build.nvidia.com](https://build.nvidia.com) and choose "
+         "*Sign in* / *Join*. Creating the account enrols you in the free "
+         "[NVIDIA Developer Program](https://developer.nvidia.com/developer-program) "
+         "— no company and no payment details.\n"
+         "2. Open "
+         "[build.nvidia.com/settings/api-keys](https://build.nvidia.com/settings/api-keys) "
+         "and generate a personal key. It begins `nvapi-`. **Copy it now** — "
+         "the full value is shown once.\n"
+         "3. Browse the catalogue and open the model you want. Each model page "
+         "carries a code sample, and the string after `model=` on that page is "
+         "the exact id to use. They are `publisher/name`, for example "
+         "`nvidia/nemotron-3-super-120b-a12b`.\n"
+         "4. Allowances are **per model and are not published**, and NVIDIA has "
+         "changed the scheme at least once — it was a flat credit count, then "
+         "per-model rate limits. Read the current terms on the model's own "
+         "page rather than trusting a number in a tutorial, this one included.\n\n"
+         "**Call it, and check the key works before you trust it.** One "
+         "request, no install — `curl` is enough:\n\n"
+         "```bash\n"
+         "export NVIDIA_API_KEY=nvapi-...          # your key, from step 2\n"
+         "\n"
+         "curl -sS https://integrate.api.nvidia.com/v1/chat/completions \\\n"
+         "  -H \"Authorization: Bearer $NVIDIA_API_KEY\" \\\n"
+         "  -H 'Content-Type: application/json' \\\n"
+         "  -d '{\"model\":\"nvidia/nemotron-3-super-120b-a12b\",\n"
+         "       \"messages\":[{\"role\":\"user\",\"content\":\"Reply with the "
+         "single word: ready\"}],\n"
+         "       \"max_tokens\":16}'\n"
+         "```\n\n"
+         "A JSON reply containing `ready` means the key, the endpoint and the "
+         "model id are all correct. A 401 is the key, a 404 is the model id, "
+         "and a 429 is the rate limit — three different problems that look "
+         "identical if you skip this and go straight to a skill.\n\n"
+         "**Then point the commons at it.** The same three variables as any "
+         "other route:\n\n"
+         "```bash\n"
+         "export OPENAI_BASE_URL=https://integrate.api.nvidia.com/v1\n"
+         "export OPENAI_API_KEY=$NVIDIA_API_KEY\n"
+         "export MODEL=nvidia/nemotron-3-super-120b-a12b\n"
+         "```\n\n"
+         "**And from your IDE.** Every editor that supports a custom "
+         "OpenAI-compatible provider — Cursor, Continue, Cline, Zed, "
+         "JetBrains AI — asks for exactly two fields, and you now have both: "
+         "the base URL `https://integrate.api.nvidia.com/v1` and the key. Put "
+         "the model id in the model field. The editor does not need to know it "
+         "is NVIDIA; it is speaking the protocol it already speaks.\n\n"
+         "> **The key is a credential.** It goes in your shell profile or your "
+         "editor's secret store, never in a file inside this repository and "
+         "never in a commit. `check_secrets.py` will stop you, but the habit "
+         "is the control and the gate is the backstop.\n\n"
+         "### The three variables, for Routes B and C\n\n"
+         "Setting `OPENAI_BASE_URL` **overrides** Route A, because somebody "
+         "who set it meant it."),
 
   ("html", D.table(
     ["variable", "what it is", "example"],

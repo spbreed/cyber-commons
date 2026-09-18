@@ -18,7 +18,7 @@ Two rules follow from that, and they are the whole design:
    utterance, which is exactly how people talk.
 
 2. **What you say and what you do are never mixed.** Spoken words are plain
-   paragraphs. Stage directions — draw this, run the cell, point at the output
+   paragraphs. Stage directions — draw this, run the skill, point at the output
    — are in square brackets and italics, and the header says once that those
    are the only things not read aloud.
 
@@ -91,11 +91,11 @@ ORIENT = {
   "difference. And it is also the entire problem. A chatbot that is wrong says "
   "something wrong. An agent that is wrong does something wrong. Everything "
   "here follows from that one sentence.",
-  "So, what this is. A hundred and thirty-four lessons. It is free, there is no "
-  "vendor, there is no paid account, and every single one of them runs — you "
-  "press a button and the code executes in your own account, not mine. I am "
-  "going to use one made-up company for all of it, and I will introduce you to "
-  "them in the next video.",
+  "So, what this is. A hundred and thirty-five lessons. It is free, there is no "
+  "vendor, there is no paid account, and every single one of them runs — one "
+  "command on your own machine, in whichever coding assistant you already use. "
+  "I am going to use one made-up company for all of it, and I will introduce "
+  "you to them in the next video.",
  ],
  "A1.0": [
   "Let me introduce you to CyberTravels, because you are going to be seeing a "
@@ -369,9 +369,10 @@ def beats(item: dict) -> list[tuple[str, str, str]]:
     # which is how "then we run it" ended up printed directly above "nothing is
     # computed in this lesson" on every lesson that produces no measurement.
     if runs:
-        add(h, "do", "Run the cell on camera now. Let it finish on screen.")
+        add(h, "do", "Run the skill on camera now. Let it finish on screen.")
         add(h, "say", "That is not a screenshot. It just ran, and you can run "
-                      "the identical cell in your own account in about a minute.")
+                      "the identical command on your own machine in about a "
+                      "minute.")
 
     h = "④ The number"
     # Not every lesson produces one, and roughly a dozen say so in Day 2 itself
@@ -446,7 +447,7 @@ camera is running.
 
 **Read every plain line word for word. Never read a line in square brackets.**
 
-Square-bracketed italics are stage directions — draw this, run the cell, point
+Square-bracketed italics are stage directions — draw this, run the skill, point
 at the output, slow down. Everything else is speech, already in sentences,
 already said the way a person says it: no asterisks, no backticks, "29 percent"
 rather than "29%", "issue refund" rather than `issue_refund`.
@@ -489,8 +490,8 @@ else does.
 
 Each lesson's heading gives its spoken word count and the time that comes to at
 an unhurried 140 words a minute. That is words only — it does not count the
-pause while the cell runs, so budget a little more on the lessons that execute
-something.
+pause while the skill runs, so budget a little more on the lessons that execute
+something. A model takes longer than a local computation did.
 
 ## Reading it well
 

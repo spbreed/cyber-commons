@@ -7,21 +7,21 @@ where something is actually computed, reproduced or asserted.
 
 Two shapes cover almost all of it:
 
-``table``  a definition or comparison laid out as a table. Renders everywhere,
-           including GitHub's notebook viewer, because it is plain HTML with no
-           dependence on styles surviving sanitisation.
-``svg``    a structural picture — boxes, arrows, boundaries. Renders in Jupyter,
-           on Kaggle and on the lesson pages.
+``table``  a definition or comparison laid out as a table. Plain HTML with no
+           dependence on styles surviving sanitisation, so it renders wherever
+           the lesson body is read.
+``svg``    a structural picture — boxes, arrows, boundaries.
 
-Both are emitted into a markdown cell, so they cost the notebook nothing at run
-time and nothing in dependencies.
+Both are emitted as lesson prose rather than as code, so they cost nothing at
+run time and nothing in dependencies.
 """
 from __future__ import annotations
 
 import html as _html
+import re as _re
 
-# One palette for every diagram. These render on a white Jupyter/Kaggle
-# notebook AND on the site's dark lesson pages, which is why the default is
+# One palette for every diagram. These render on the site's light lesson pages
+# and on any dark surround, which is why the default is
 # `currentColor` — it inherits whatever the surrounding page is using — and why
 # the accents are mid-tones rather than the near-black that reads well on only
 # one of the two.
@@ -32,6 +32,45 @@ DEFEND = "#0e7490"      # what you build and run
 SECURE = "#b45309"      # what an adversary reaches for
 BAD = "#b91c1c"
 GOOD = "#047857"
+
+
+
+# Inline tags an author may use inside a table cell. Everything else in a cell
+# is escaped, so a cell can still say `mitigated_by <what>` and have it read as
+# text rather than vanish into a tag the browser drops.
+#
+# The rule used to be "treat the cell as HTML if it STARTS with `<`", which is
+# a trap: markup in the middle of a sentence was escaped and rendered as
+# literal `<b>` on the page, with a green build behind it. Three lessons
+# shipped that way — A1.0 and D3.4 showed `<b>`, A3.11 showed `<code>` — and a
+# fourth was about to, with every student sign-up link in A0.0 printed as
+# angle-bracket source.
+_INLINE = ("b", "i", "em", "strong", "code", "a", "span", "br", "small", "sub", "sup")
+
+
+# An ampersand that is NOT already an entity. Cells are authored with entities
+# in them — "ATT&amp;CK" is written that way — and escaping those again gives
+# "&amp;amp;", which renders on the page as the literal "&amp;". Caught by
+# diffing all 135 pages after this function changed, which is the only way that
+# class of bug shows up: it is valid HTML and it builds green.
+_BARE_AMP = _re.compile(r"&(?!(?:[A-Za-z][A-Za-z0-9]*|#\d+|#[xX][0-9A-Fa-f]+);)")
+
+
+def _markup(text: str) -> str:
+    """Escape a cell, then restore the inline tags an author is allowed to use.
+
+    Quotes are left alone: they need escaping inside an attribute, not inside
+    text, and escaping them turns every apostrophe in the commons into
+    `&#x27;` for no gain.
+    """
+    out = _BARE_AMP.sub("&amp;", text).replace("<", "&lt;").replace(">", "&gt;")
+    for tag in _INLINE:
+        out = out.replace(f"&lt;{tag}&gt;", f"<{tag}>")
+        out = out.replace(f"&lt;/{tag}&gt;", f"</{tag}>")
+    # Opening tags carrying attributes, e.g. <a href='...'> or <span style="...">.
+    out = _re.sub(r"&lt;(" + "|".join(_INLINE) + r")(\s[^&]*?)&gt;",
+                  lambda m: f"<{m.group(1)}{m.group(2)}>", out)
+    return out
 
 
 def table(headers: list[str], rows: list[list[str]], *, caption: str = "",
@@ -55,8 +94,7 @@ def table(headers: list[str], rows: list[list[str]], *, caption: str = "",
     body = ""
     for r in rows:
         body += "<tr>" + "".join(
-            cell(c if c.startswith("<") else _html.escape(c),
-                 strong=(emphasise is not None and i == emphasise))
+            cell(_markup(c), strong=(emphasise is not None and i == emphasise))
             for i, c in enumerate(r)) + "</tr>"
     cap = (f'<div style="font-size:12px;color:{DIM};margin-top:6px">{caption}</div>'
            if caption else "")
