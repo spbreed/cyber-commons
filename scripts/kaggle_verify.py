@@ -7,9 +7,19 @@ output. A kernel that prints nothing at all also completes.
 
 This script closes that gap: it pulls the remote stdout for every pushed kernel
 and compares it line-for-line against a fresh local run of the same notebook.
-Byte-identical output on two independent machines is the actual evidence that a
-lesson runs — and, because the notebooks are deterministic by design, anything
-less is a finding.
+
+**What that comparison can and cannot mean now.** Every skill here is executed
+by a model, and a model is not deterministic — so two runs of the same lesson
+*with a model configured* will differ, and identity is the wrong test. What is
+still identical, and still worth proving, is the **harness**: with no model
+available a lesson refuses, legibly and in a fixed form, and that refusal must
+be the same on Kaggle as it is here.
+
+So both sides are run with `CLAUDE_CLI=0` and no endpoint. A mismatch then is a
+real finding — it means the harness itself, not the model, behaved differently
+on two machines. Verifying the *model* half is a different job: it needs a
+configured endpoint on both sides and a comparison of contract conformance
+rather than of bytes, because the bytes are supposed to differ.
 
     python3 scripts/kaggle_verify.py              # verify every pushed kernel
     python3 scripts/kaggle_verify.py --session A1.1
@@ -112,14 +122,17 @@ def local_output(session: str) -> str:
     nb = json.loads((NB_DIR / f"{session}.ipynb").read_text())
     src = "\n\n".join("".join(c["source"]) for c in nb["cells"]
                        if c["cell_type"] == "code")
-    # Hermetic, deliberately. A Kaggle kernel has no model credentials, so the
-    # lesson takes the replay path there. If the operator happens to have
-    # ANTHROPIC_API_KEY exported, the local side takes the frontier path
-    # instead and every model lesson "mismatches" — which is a fact about the
-    # shell, not about the notebook, and it makes the whole claim of this
-    # script ("the same thing on two machines") depend on who ran it.
+    # Hermetic, deliberately, and now more so. A Kaggle kernel has no model
+    # endpoint and no signed-in CLI, so every lesson refuses there. If the
+    # operator has a model configured locally — an endpoint, or just a
+    # signed-in `claude` on the PATH — the local side calls it and every lesson
+    # "mismatches", which is a fact about the shell rather than about the
+    # notebook. CLAUDE_CLI=0 matters as much as unsetting the variables: the
+    # CLI is a model, and it is present on exactly the machines most likely to
+    # run this.
     env = {k: v for k, v in os.environ.items()
            if k not in MODEL_ENV and not k.startswith("KAGGLE_")}
+    env["CLAUDE_CLI"] = "0"
     p = subprocess.run([sys.executable, "-c", src], cwd=ROOT, env=env,
                        capture_output=True, text=True, timeout=180)
     return p.stdout
@@ -205,9 +218,9 @@ def main() -> int:
 
         r_lines = normalise(remote)
         l_lines = normalise(local_output(sid))
-        # Identical content, compared after the same normalisation. This is the
-        # strong form: the two machines printed the same thing, not merely a
-        # similar amount of it.
+        # Identical content, compared after the same normalisation — of the
+        # refusal, which is the deterministic half. Not of a model's findings,
+        # which are supposed to differ and which this script does not check.
         identical = r_lines == l_lines
         runs_code = has_code(sid)
         # Empty remote output is a failure for a lesson that runs code — a
