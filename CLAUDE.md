@@ -195,7 +195,7 @@ that are enforced or that get broken most.
 
 ## 5 · Pre-deployment testing
 
-Twenty gates, in the order CI runs them. Each exists because of a specific
+Twenty-one gates, in the order CI runs them. Each exists because of a specific
 failure — a gate whose reason is written down does not get deleted by the next
 person.
 
@@ -211,16 +211,17 @@ person.
 | 8 | `check_clarity.py --check` | weekday idioms and culture-specific phrasing, read from the rendered page |
 | 9 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |
 | 10 | `render_diagrams.py --check` | a diagram source that Graphviz or PlantUML will not lay out — which ships as an empty or smeared SVG behind a green build. With a model reachable it runs the skills and also checks the committed source is fresh; in CI, where there is no model and every skill refuses, it validates the committed sources and says freshness is not covered. It used to fail every CI run with "no skill emitted a diagram", which is a gate nobody keeps |
-| 11 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
-| 12 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
-| 13 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
-| 14 | `build_curriculum.py --check` | a chapter doc in `curriculum/` stale against `curriculum.json` — fifteen committed files that nothing compared against their source until a clarity fix reached the site and not them |
-| 15 | `check_repo_links.py --check` | a link into this repository pinning a branch that is not the published one. The branch lives in `scripts/exercises/repo.py`; it was spelled out longhand in nine files and one had drifted to `main`, which has never existed on the remote |
-| 16 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that |
-| 17 | `check_frameworks.py` | a framework label that is not real |
-| 18 | `check_framework_links.py` | a framework label that links nowhere. `continue-on-error`: an upstream site being down must not hold the deploy |
-| 19 | `build_site.py` | a page stale against its source. It rebuilds and warns rather than failing, so a forgotten rebuild never blocks a deploy |
-| 20 | curriculum + videos data | `videos.json` naming a session id the curriculum does not carry |
+| 11 | `check_labels.py --check` | `cybertravels/LABELS.md` naming a file or unit that is no longer in the tree, or a skill scoring recall against one. The skills hard-code those names on purpose — a key derived from a scanner is a description of the scanner — so a rename would otherwise make every recall number wrong with nothing failing |
+| 12 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
+| 13 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
+| 14 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
+| 15 | `build_curriculum.py --check` | a chapter doc in `curriculum/` stale against `curriculum.json` — fifteen committed files that nothing compared against their source until a clarity fix reached the site and not them |
+| 16 | `check_repo_links.py --check` | a link into this repository pinning a branch that is not the published one. The branch lives in `scripts/exercises/repo.py`; it was spelled out longhand in nine files and one had drifted to `main`, which has never existed on the remote |
+| 17 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that |
+| 18 | `check_frameworks.py` | a framework label that is not real |
+| 19 | `check_framework_links.py` | a framework label that links nowhere. `continue-on-error`: an upstream site being down must not hold the deploy |
+| 20 | `build_site.py` | a page stale against its source. It rebuilds and warns rather than failing, so a forgotten rebuild never blocks a deploy |
+| 21 | curriculum + videos data | `videos.json` naming a session id the curriculum does not carry |
 
 Run the lot before pushing:
 
@@ -231,7 +232,8 @@ gates=(
   "install_skills.py --tool claude --dry-run"
   "check_lessons.py --check"            "check_register.py --check"
   "check_clarity.py --check"            "render_diagrams.py --check"
-  "check_claims.py --check"             "check_claude_md.py --check"
+  "check_labels.py --check"             "check_claims.py --check"
+  "check_claude_md.py --check"
   "check_docs.py --check"               "build_curriculum.py --check"
   "check_repo_links.py --check"         "build_lightboard.py --check"
   "check_frameworks.py"                 "build_site.py --check"

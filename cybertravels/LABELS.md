@@ -3,6 +3,19 @@
 Written by reading the tree, before any scanner ran. A key written after the
 scan is a description of the scan.
 
+**These defects now execute.** The tree used to be stubbed — `DB` returned
+nothing and the code was there to be parsed, not run. It runs now, against real
+SQLite rows, so row 3's injection returns every owner's bookings and rows 1 and
+4 hand back records belonging to somebody else. That is why the application
+binds to localhost and says so loudly in its README: it is a corpus you attack
+on your own machine, not a demo to deploy.
+
+`scripts/check_labels.py` holds this key to the tree in CI. Every file and unit
+named below has to exist, and so does every unit the skills score against —
+because the skills hard-code those names (a key derived by running a scanner
+would not be a key), and a rename would otherwise leave them measuring recall
+against functions that are not there, with nothing failing.
+
 Each row names the file, the function, the class, and — the column that decides
 what a scanner can possibly do — whether the defect is **expressible as a
 pattern**. Three values, and the middle one is the one teams underestimate:

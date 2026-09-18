@@ -35,6 +35,33 @@ from __future__ import annotations
 
 FUNCTION_DAYS: dict[str, dict[str, str]] = {
 
+"G": {
+ "who_short": "Anyone who will work on or around agentic systems — before any "
+              "of it is called a risk",
+ "who": "Engineers building an agentic feature, and equally the AppSec "
+        "engineers, red teamers, SOC analysts and GRC leads who will be handed "
+        "one. It assumes you can read a Python function. It assumes no security "
+        "background at all, and no prior agent work.",
+ "day0": "Every control in the other four functions attaches to a mechanism. "
+         "Hand somebody a control before they have built the mechanism and they "
+         "apply it as a sentence in a document — which is the single most "
+         "common reason agentic security guidance is read, agreed with, and not "
+         "implemented. This function removes that excuse by making the reader "
+         "the builder first.",
+ "day1": "Build CyberTravels end to end on your own machine: the reasoning loop "
+         "with an independent verifier, two MCP resource servers behind a "
+         "process boundary, a workload identity per agent, per-action delegation "
+         "the resource server actually enforces, memory that records where its "
+         "contents came from, signed agent-to-agent envelopes, a human gate and "
+         "a budget. Then the harness around it — spans, an audit trail, an "
+         "evaluation suite — and the blast radius of what you built.",
+ "day2": "The system runs, and four numbers say how well: scopes on a delegated "
+         "token (one), memory entries carrying an origin (all of them), audit "
+         "rows answering all four investigation questions (usually three, and "
+         "the fourth is the finding), and the blast radius you carry into "
+         "Function A. None of those is 'it worked once'.",
+},
+
 "A": {
  "who_short": "Security architects · product engineers shipping an agentic feature",
  "who": "Security architects, principal security engineers, and the product "
@@ -1165,4 +1192,106 @@ DAYS.update({
          "Containment, detection and recovery indicators — the same ones D5.4 "
          "re-reads after a fix. Prevention has no honest indicator here."),
 
+})
+
+
+# ---------------------------------------------------------------- Function G
+# The build chapters. Day 2 is harder to write honestly here than anywhere
+# else in the commons: a lesson about building something has an obvious
+# temptation to claim "it works" as the measurement, which is not a number and
+# does not survive the second run. Where a G lesson produces a real figure it
+# names it; where it does not, it names what you count instead.
+DAYS.update({
+ "G1.0": (
+   "Security guidance handed to somebody who has never built an agent lands as "
+   "a list of rules with no mechanism attached, and gets filed as paperwork.",
+   "Draw the seven components of the system you are about to build, and mark "
+   "the edges where trust changes.",
+   "Edges marked as trust boundaries, against total edges. The second number is "
+   "always larger, and the gap is the part worth arguing about."),
+ "G1.1": (
+   "A loop that accepts whatever the model says it did has no controls in it, "
+   "because there is nowhere to put one.",
+   "Write the loop in three stages — plan, act, verify — with the verifier "
+   "independent of the model.",
+   "Runs the verifier rejected. Zero means either the loop is perfect or the "
+   "verifier is not independent, and it is the second one."),
+ "G1.2": (
+   "A tool called in-process runs with the agent's authority, and the only "
+   "place left for a check is inside the component under attack.",
+   "Stand up two MCP resource servers, split by trust domain, each with its own "
+   "audience.",
+   "Tools reachable with a token minted for the other server. It should be "
+   "zero, and it is worth proving rather than assuming."),
+ "G1.3": (
+   "One shared key makes every action in the log identical, and 'which agent, "
+   "on whose behalf' has no answer at all.",
+   "Give each agent a workload identity, and the human a session token that "
+   "grants nothing downstream.",
+   "Audit rows that name both the human and the specific agent, as a fraction "
+   "of all rows. Anything below 100% is a row you cannot investigate."),
+ "G1.4": (
+   "An agent holding a long-lived token with every scope is one ambiguous "
+   "sentence away from using all of them.",
+   "Exchange a token per action — one audience, one scope, two minutes — and "
+   "verify it at the resource server rather than logging it.",
+   "Scopes a delegated token carries: one. And the count of refusals the "
+   "exchange produced for scopes the human's role may not delegate."),
+ "G1.5": (
+   "Text an agent read becomes a fact an agent learned, and one vendor sentence "
+   "outlives the request that fetched it.",
+   "Record origin with every memory entry, scope recall to one person, and "
+   "provide delete and export.",
+   "Entries carrying an origin: all of them. Cross-owner recalls: zero. Both "
+   "are assertions you can run rather than claims."),
+ "G1.6": (
+   "A peer's message read as a colleague's instruction turns one injected "
+   "document into four compromised agents.",
+   "Sign every agent-to-agent envelope, carry the human through each hop, and "
+   "cap the hops.",
+   "Tampered envelopes rejected: all. And the hop at which a cycle stops, which "
+   "is a number you choose rather than discover."),
+ "G1.7": (
+   "An unbounded loop against an impossible task spends until somebody notices, "
+   "and a gate nobody can approve fast enough gets removed.",
+   "Gate the irreversible actions on a named human, and bound both steps and "
+   "tool calls.",
+   "Approvals per reviewer per hour — the number that says whether the gate is "
+   "still a control — and the share of runs that hit a ceiling."),
+ "G2.0": (
+   "A demo promoted to production carries none of the machinery an incident "
+   "needs, and the first investigation finds that out at the worst moment.",
+   "Establish the gap first: put an investigation's questions to what your run "
+   "currently emits.",
+   "Questions the current record cannot answer. Expect most of them, which is "
+   "the point of measuring before building."),
+ "G2.1": (
+   "A run that emits only its answer is unreviewable, and a trace of successes "
+   "hides exactly the events worth alerting on.",
+   "Emit the run as spans, joined by a trace id, with tokens summarised and "
+   "refusals recorded with the boundary that produced them.",
+   "Spans per run carrying the trace id: all of them. Credentials appearing in "
+   "a span: zero, and worth grepping for rather than believing."),
+ "G2.2": (
+   "A record that names an action without naming its cause closes an incident "
+   "as 'the agent misbehaved'.",
+   "Hold every audit row to four questions: which human, which workload, which "
+   "call, and what motivated it.",
+   "Of the four, how many your rows answer. Three is common and the missing one "
+   "is almost always the fourth."),
+ "G2.3": (
+   "One successful run is an observation about one run, and an agent is not "
+   "deterministic.",
+   "Build a suite whose cases fail on the old build, score it with intervals, "
+   "and test it for dilution.",
+   "The score, with its interval — and the change in that score when thirty "
+   "easy cases are added, which should worry you."),
+ "G2.4": (
+   "A builder who has never seen their own system described adversarially "
+   "ships the same defect in the next one.",
+   "Re-read every component you built as an attack surface, and measure what "
+   "one run can reach and damage.",
+   "Blast radius: objects reachable, the subset writable, and the irreversible "
+   "actions among them. That number decides how much autonomy the agent can "
+   "carry into Function A."),
 })

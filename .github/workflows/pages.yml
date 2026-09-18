@@ -114,6 +114,14 @@ jobs:
       - name: Check the documentation's counted claims against the tree
         run: python3 scripts/check_claims.py --check
 
+      # LABELS.md is the hand-written key four AppSec skills score recall and
+      # precision against, and those skills hard-code the unit names — a key
+      # derived by running a scanner would not be a key. So a rename in
+      # cybertravels/ could leave them measuring against functions that no
+      # longer exist, with every number wrong and nothing failing.
+      - name: Check the ground-truth labels still describe the tree
+        run: python3 scripts/check_labels.py --check
+
       # A context file that has drifted is read with the same confidence as a
       # correct one. check_claims covers its numbers; this covers its structure
       # — every script it names exists, and its gate table and this workflow

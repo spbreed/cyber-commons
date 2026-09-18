@@ -679,3 +679,53 @@ for _k, _v in _NEW.items():
 # Function C rebuild.
 from .framing_c import GROUNDING as _C_GROUND  # noqa: E402
 GROUNDING.update(_C_GROUND)
+
+
+# ---------------------------------------------------------------- Function G
+# Function G is the one chapter where CyberTravels is not an example — it is
+# the thing being built. So the grounding line here says which file the reader
+# is writing rather than which part of the story the idea appears in.
+GROUNDING.update({
+ "G1.0": "This is CyberTravels itself, before it exists. The seven components "
+         "you map are the ones Alex shipped, and `cybertravels/README.md` is "
+         "the picture you are about to make true on your own machine.",
+ "G1.1": "The loop is `cybertravels/runtime.py`. `execute_tool` is the line "
+         "where the model stops proposing and CyberTravels' own code starts "
+         "deciding — every control in Function A attaches to it.",
+ "G1.2": "CyberTravels has two resource servers: `mcp/internal_server.py` for "
+         "bookings and payments, and `mcp/vendor_server.py`, which is a travel "
+         "vendor's process running on CyberTravels' host.",
+ "G1.3": "Four agents, four workload identities, in `cybertravels/config.py`. "
+         "Dana is a traveller, Alex runs agent operations, Priya is in finance "
+         "— and the difference between them is the whole of the next lesson.",
+ "G1.4": "`cybertravels/identity.py`. Sign in as Dana and ask for a refund: the "
+         "exchange refuses, because a traveller's role cannot delegate "
+         "`payments:refund`, and the resource server is never even asked.",
+ "G1.5": "`cybertravels/memory.py`. The vendor notice CyberTravels fetches for "
+         "a Northwind Rail booking contains an instruction aimed at automated "
+         "agents, and it is what gets written down if origin is not recorded.",
+ "G1.6": "CyberTravels' four agents hand work to each other. "
+         "`cybertravels/a2a/protocol.py` is the envelope; "
+         "`cybertravels/messaging/bus.py` is the version it replaces, still in "
+         "the tree because it is what A1.7 attacks.",
+ "G1.7": "Cancelling a booking and issuing a refund are CyberTravels' two "
+         "irreversible actions, and both are gated in "
+         "`cybertravels/config.py::TOOL_POLICY`. The budgets are two lines "
+         "above them.",
+ "G2.0": "Alex's prototype became CyberTravels' production platform without "
+         "anybody adding a trace, and the first disputed cancellation is where "
+         "that is discovered.",
+ "G2.1": "`cybertravels/observability.py`. Every span carries the trace id that "
+         "joins it to the audit row, which is the join Function D's detections "
+         "are written against.",
+ "G2.2": "CyberTravels' audit table is append-only and every row carries the "
+         "`human => agent` chain. The fourth question — what motivated the "
+         "action — is the one its rows still cannot answer, and A1.14 is where "
+         "that costs something.",
+ "G2.3": "The suite runs against the CyberTravels agent you just built, which "
+         "means a case that fails is a defect in your own work rather than in "
+         "an example.",
+ "G2.4": "The same CyberTravels architecture from G1.0, re-read by somebody who "
+         "wants it to fail. Every row in that table is a lesson in Function A, "
+         "by id.",
+})

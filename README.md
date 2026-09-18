@@ -5,9 +5,9 @@
 A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.
 
-**135 lessons across 14 chapters.** Every lesson is the idea, the diagram, the
+**148 lessons across 16 chapters.** Every lesson is the idea, the diagram, the
 control, and what it looks like in one running system — and then it **runs a
-skill**. 132 of the 135 do, and the skill is the deliverable: the page shows the
+skill**. 145 of the 148 do, and the skill is the deliverable: the page shows the
 `SKILL.md` as prose and you run that skill's own script out of
 [`skills/`](skills/), on your own machine, in whichever agent CLI you already
 use. Every skill is executed in CI before it ships. **Every skill is executed
@@ -100,7 +100,7 @@ the model, not a package tree.
 
 ## 3 · Then take the spine, then your chapter
 
-Nobody takes all 135. Everyone takes the **common spine** first — twenty
+Nobody takes all 148. Everyone takes the **common spine** first — twenty
 lessons, in order, that carry the vocabulary the rest runs on. Then the
 chapters for the chair you sit in, then one adjacent chapter, because the
 failures happen in the seams.
@@ -358,7 +358,7 @@ python3 scripts/build_site.py          # everything      -> site/lessons/
 python3 scripts/build_lightboard.py    # lessons         -> LIGHTBOARD.md
 ```
 
-CI re-runs all of it with `--check`. It runs 19 scripts, each of which
+CI re-runs all of it with `--check`. It runs 20 scripts, each of which
 exists because of a specific failure: the secret scan, the determinism gate
 across four hash seeds, skill contracts and a
 real offline run of every skill script, every diagram rendered by actual
@@ -381,7 +381,7 @@ file inside the tree. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 135 sessions, 14 chapters
+site/data/curriculum.json   source of truth: 148 sessions, 14 chapters
 curriculum/                 generated chapter docs + labs.json + frameworks.json
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: A1.1's architecture as source,

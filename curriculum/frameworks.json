@@ -61,6 +61,28 @@
     "Art. 55": "Obligations for GPAI models with systemic risk"
   },
   "tracks": {
+    "G1": {
+      "owasp": [],
+      "atlas": [],
+      "nist": [
+        "MAP"
+      ],
+      "euai": [
+        "Art. 9"
+      ],
+      "why_empty": "Building the system, with no adversary in it yet. NIST MAP is the honest mapping — context and components established — and Art. 9 because a risk-management system needs something to describe. An OWASP or ATLAS label here would be decorative: nothing is being attacked."
+    },
+    "G2": {
+      "owasp": [],
+      "atlas": [],
+      "nist": [
+        "MEASURE"
+      ],
+      "euai": [
+        "Art. 12"
+      ],
+      "why_empty": "The harness: traces, an audit trail and an evaluation. NIST MEASURE, and Art. 12 record-keeping, which is precisely what G2.2 builds. Still no adversary, so still no threat id."
+    },
     "A0": {
       "owasp": [],
       "atlas": [],

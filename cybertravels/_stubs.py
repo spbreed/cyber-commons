@@ -1,39 +1,31 @@
-"""Stubs, so the tree parses and imports without a network or a database.
+"""The edges of the system: the database handle, an HTTP client, a route decorator.
 
-A corpus for scanners has to be readable by a scanner, which means it has to be
-syntactically real. It does not have to work. Every external edge is a stub
-here, so nothing in this repository can reach anything.
+This module used to stub all three, because the tree was a corpus for scanners
+and nothing in it was meant to execute. It executes now — `DB` is a real SQLite
+connection — and that changes what the defects in `tools/` mean. They were
+descriptions of a vulnerability; they are the vulnerability.
+
+`HTTP` is still a stub, deliberately. `sync_vendor` disables TLS verification,
+and a corpus that actually made that request would be reaching a host on the
+internet with verification off, from a machine belonging to somebody who cloned
+a teaching repository. The defect stays readable and stays unexploitable, which
+is the right trade for that one.
 """
+from . import db as _db
 
-
-class _Cursor:
-    def execute(self, *a, **k):
-        return self
-
-    def fetchall(self):
-        return []
-
-    def fetchone(self):
-        return None
-
-
-class _DB:
-    def cursor(self):
-        return _Cursor()
-
-    def execute(self, *a, **k):
-        return _Cursor()
-
-
-DB = _DB()
+# The real thing. `DB.cursor()` returns a live sqlite3 cursor, so the SQL
+# injection in `search_bookings` is an injection rather than a picture of one.
+DB = _db
 
 
 class _HTTP:
-    def get(self, *a, **k):
-        return {}
+    """Deliberately inert — see the module docstring."""
 
-    def post(self, *a, **k):
-        return {}
+    def get(self, url, **kw):
+        return {"url": url, "verify": kw.get("verify", True), "body": "{}"}
+
+    def post(self, url, **kw):
+        return {"url": url, "verify": kw.get("verify", True), "body": "{}"}
 
 
 HTTP = _HTTP()

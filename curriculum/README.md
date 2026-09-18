@@ -6,6 +6,8 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 
 | Track | Role | Sessions | Function |
 |---|---|---|---|
+| [G1](track-g1.md) | Build the Agent — From a Loop to a Running Platform | 8 | G — Getting Started — Building Agentic AI |
+| [G2](track-g2.md) | Harness Engineering — Making a Demo Into a System | 5 | G — Getting Started — Building Agentic AI |
 | [A0](track-a0.md) | Introduction — What This Is, Who It Is For, and How to Use It | 2 | A — Securing AI Architectures |
 | [A1](track-a1.md) | CyberTravels' Architecture, and Every Risk It Carries | 20 | A — Securing AI Architectures |
 | [A2](track-a2.md) | Securing the Architecture — Identity and Ingress | 8 | A — Securing AI Architectures |

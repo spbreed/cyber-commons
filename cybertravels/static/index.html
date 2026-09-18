@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CyberTravels — operator console</title>
+<style>
+  :root{--ink:#0f172a;--dim:#475569;--line:#cbd5e1;--soft:#f1f5f9;
+        --defend:#0e7490;--adversary:#a16207;--bad:#b91c1c;--good:#047857}
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.55 ui-sans-serif,system-ui,sans-serif;color:var(--ink);background:#fff}
+  header{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;
+         gap:14px;align-items:center;flex-wrap:wrap}
+  header b{font-size:17px} .warn{color:var(--adversary);font-size:12.5px}
+  main{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:calc(100vh - 62px)}
+  section{padding:16px 20px;min-width:0}
+  section+section{border-left:1px solid var(--line)}
+  h2{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+  input,button,select{font:inherit;padding:7px 10px;border:1px solid var(--line);border-radius:7px}
+  button{background:var(--defend);color:#fff;border-color:var(--defend);cursor:pointer}
+  button.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+  .row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+  .span{border:1px solid var(--line);border-left-width:3px;border-radius:7px;
+        padding:8px 11px;margin-bottom:7px;font-size:13.5px;background:#fff}
+  .k{font:12px ui-monospace,monospace;color:var(--dim);letter-spacing:.05em}
+  pre{margin:5px 0 0;font:12px ui-monospace,monospace;white-space:pre-wrap;
+      word-break:break-word;color:var(--dim)}
+  .plan{border-left-color:var(--defend)}
+  .token_issued{border-left-color:var(--good)}
+  .denied{border-left-color:var(--bad)}
+  .approval{border-left-color:var(--adversary)}
+  .thought{border-left-color:var(--line);font-style:italic}
+  .final{border-left-color:var(--ink);font-weight:600}
+  .gate{border:2px solid var(--adversary);border-radius:9px;padding:12px;
+        margin-bottom:10px;background:#fffbeb}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  td,th{border-bottom:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:top}
+  th{color:var(--dim);font-weight:600}
+  .ok{color:var(--good)} .no{color:var(--bad)}
+</style></head><body>
+
+<header>
+  <b>CyberTravels</b>
+  <span class="warn">Deliberately vulnerable — see LABELS.md. Localhost only; never expose this.</span>
+  <span style="flex:1"></span>
+  <select id="who">
+    <option value="dana">Dana — traveller</option>
+    <option value="alex">Alex — agent operations</option>
+    <option value="priya">Priya — finance</option>
+  </select>
+  <button id="login">Sign in</button>
+  <span id="me" class="k"></span>
+</header>
+
+<main>
+  <section>
+    <h2>Ask the agent</h2>
+    <div class="row">
+      <input id="msg" style="flex:1;min-width:220px"
+             placeholder="e.g. refund booking 2  ·  cancel booking 1  ·  show my bookings">
+      <button id="go">Run</button>
+    </div>
+    <div id="gates"></div>
+    <h2>Trace</h2>
+    <div id="trace"></div>
+  </section>
+
+  <section>
+    <h2>Audit log — every call and every refusal</h2>
+    <button class="ghost" id="refresh">Refresh</button>
+    <table id="audit"><thead><tr><th>chain</th><th>tool</th><th>scope</th>
+      <th>outcome</th><th>detail</th></tr></thead><tbody></tbody></table>
+  </section>
+</main>
+
+<script>
+let TOKEN = null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+$('#login').onclick = async () => {
+  const r = await fetch('/login', {method:'POST',
+    headers:{'content-type':'application/json'},
+    body: JSON.stringify({username: $('#who').value})});
+  const d = await r.json();
+  if (!r.ok) { $('#me').textContent = d.detail || 'login failed'; return; }
+  TOKEN = d.token;
+  // What this person's role may delegate is shown on purpose: least privilege
+  // you cannot see is least privilege nobody checks.
+  $('#me').textContent = `${d.display} · may delegate: ${d.may_delegate.join(', ')}`;
+  loadAudit();
+};
+
+function addSpan(s) {
+  const el = document.createElement('div');
+  el.className = 'span ' + (s.kind || '');
+  const body = s.text || s.summary || s.reason || s.claims || s.args || '';
+  el.innerHTML = `<span class="k">${esc(s.kind || '')}${s.tool ? ' · ' + esc(s.tool) : ''}` +
+    `${s.at ? ' · refused at the ' + esc(s.at) : ''}</span>` +
+    (body ? `<pre>${esc(typeof body === 'string' ? body : JSON.stringify(body, null, 1))}</pre>` : '');
+  $('#trace').appendChild(el);
+  el.scrollIntoView({block:'nearest'});
+}
+
+function gate(s) {
+  const el = document.createElement('div');
+  el.className = 'gate';
+  el.innerHTML = `<b>Approval needed</b><pre>${esc(s.tool)} ${JSON.stringify(s.args)}
+scope requested: ${esc(s.scope)}</pre>`;
+  for (const [label, granted] of [['Approve', true], ['Refuse', false]]) {
+    const b = document.createElement('button');
+    b.textContent = label;
+    if (!granted) b.className = 'ghost';
+    b.style.marginRight = '7px';
+    b.onclick = async () => {
+      await fetch('/agent/approve', {method:'POST',
+        headers:{'content-type':'application/json','authorization':'Bearer '+TOKEN},
+        body: JSON.stringify({approval_id: s.approval_id, granted})});
+      el.remove();
+    };
+    el.appendChild(b);
+  }
+  $('#gates').appendChild(el);
+}
+
+$('#go').onclick = async () => {
+  if (!TOKEN) { alert('Sign in first'); return; }
+  $('#trace').innerHTML = ''; $('#gates').innerHTML = '';
+  // The token rides the Authorization header. A token in a query string is a
+  // token in every proxy log between here and the server.
+  const res = await fetch('/agent/run', {method:'POST',
+    headers:{'content-type':'application/json','authorization':'Bearer '+TOKEN},
+    body: JSON.stringify({message: $('#msg').value})});
+  const reader = res.body.getReader(); const dec = new TextDecoder();
+  let buf = '';
+  for (;;) {
+    const {value, done} = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, {stream:true});
+    let i;
+    while ((i = buf.indexOf('\n\n')) >= 0) {
+      const line = buf.slice(0, i).replace(/^data: /, ''); buf = buf.slice(i + 2);
+      if (!line) continue;
+      const s = JSON.parse(line);
+      if (s.kind === 'approval_required') gate(s); else addSpan(s);
+    }
+  }
+  loadAudit();
+};
+
+async function loadAudit() {
+  if (!TOKEN) return;
+  const r = await fetch('/audit', {headers:{'authorization':'Bearer '+TOKEN}});
+  const rows = await r.json();
+  $('#audit tbody').innerHTML = rows.map(a => `<tr>
+    <td class="k">${esc(a.chain)}</td><td>${esc(a.tool)}</td>
+    <td class="k">${esc(a.scope)}</td>
+    <td class="${a.outcome === 'ok' ? 'ok' : 'no'}">${esc(a.outcome)}</td>
+    <td class="k">${esc(a.detail || '')}</td></tr>`).join('');
+}
+$('#refresh').onclick = loadAudit;
+</script>
+</body></html>

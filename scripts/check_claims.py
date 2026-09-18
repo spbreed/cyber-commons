@@ -80,6 +80,11 @@ def facts() -> dict[str, int]:
 # (file, regex with ONE numeric group, fact key, what the sentence claims)
 # Keep this list short. A claim that needs an entry here is usually a claim
 # that should have been a printed count instead.
+# MODELS.md used to carry "The N model-facing lessons were run against two
+# sizes". It was removed rather than updated: the sentence describes one past
+# measurement, so a count that tracked the tree would have claimed every lesson
+# added afterwards was in a run it was not. That is the case this file's own
+# docstring calls for — delete the number, do not maintain it.
 CLAIMS = [
     ("README.md", r"\*\*(\d+) lessons across \d+ chapters\.\*\*", "sessions",
      "the headline lesson count"),
@@ -111,8 +116,6 @@ CLAIMS = [
      "the skills index"),
     ("skills/README.md", r"that (\d+) plausible tasks", "routing_cases",
      "the routing check's size"),
-    ("MODELS.md", r"The (\d+) model-facing lessons were run",
-     "model_facing", "how many lessons call a model"),
 ]
 
 WORDS = {"six": 6, "seven": 7, "eight": 8}

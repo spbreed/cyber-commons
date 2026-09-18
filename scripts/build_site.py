@@ -595,6 +595,10 @@ def home_numbers() -> dict[str, int]:
 # tree. The mapping lives here instead, and a function missing from it fails
 # the build rather than quietly falling back to the stored title.
 TRACKS = {
+    "G": ("Build an agentic system",
+          "Build CyberTravels end to end — the loop, MCP tools, identity and "
+          "delegation, memory, agent-to-agent, spans and an audit trail — "
+          "before any of it is called a risk."),
     "A": ("Agent architecture &amp; risks",
           "One reference architecture for agentic systems, and every risk that "
           "attaches to a component of it."),

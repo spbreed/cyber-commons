@@ -82,6 +82,705 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 ---
 
 
+## Function G — Getting Started — Building Agentic AI
+
+*[Who is watching: Engineers building an agentic feature, and equally the AppSec engineers, red teamers, SOC analysts and GRC leads who will be handed one. It assumes you can read a Python function. It assumes no security background at all, and no prior agent work.]*
+
+*[The pitch for the whole function, if you need it in one breath: Every control in the other four functions attaches to a mechanism. Hand somebody a control before they have built the mechanism and they apply it as a sentence in a document — which is the single most common reason agentic security guidance is read, agreed with, and not implemented.]*
+
+---
+
+### G1.0 · What an agent is, and what you are about to build
+
+Chapter G1 · lesson 1 of 8 · runs a skill · 272 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/G1.0.html)
+
+**① Open**
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+WHAT YOU ARE ABOUT TO BUILD
+```
+
+Alex has a working prototype: a model, a booking API, and a loop that joins them. It cancels the right flight four times out of five. The fifth time it cancels a different one, and there is no record of why it chose that booking, no way to stop it mid-run, and nothing to point at when somebody asks. The prototype is not the problem. The absence of everything around it is, and that absence is what this chapter fills in.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+Security guidance handed to somebody who has never built an agent lands as a list of rules with no mechanism attached, and gets filed as paperwork.
+
+Same company, same four agents, new way of failing. This is CyberTravels itself, before it exists. The seven components you map are the ones Alex shipped, and cybertravels/README.md is the picture you are about to make true on your own machine.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Draw the seven components of the system you are about to build, and mark the edges where trust changes.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Edges marked as trust boundaries, against total edges. The second number is always larger, and the gap is the part worth arguing about.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The seven components, the edges between them, and the subset of those edges where trust changes — which is a smaller set than the edge count and is the only part worth arguing about.
+
+**⑤ Hand it over**
+
+Add an eighth component: an egress gateway. CyberTravels does not have one, which is why A3.7 exists.
+
+Next up: G1.1, The loop — model, tools, and the step that turns text into an action.
+
+---
+
+### G1.1 · The loop — model, tools, and the step that turns text into an action
+
+Chapter G1 · lesson 2 of 8 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/G1.1.html)
+
+**① Open**
+
+Still inside chapter G1. Last one was What an agent is, and what you are about to build.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+PLAN, ACT, VERIFY
+```
+
+The difference between a demo and a system is one line. In the demo, the model decides to call a tool and the tool is called. In the system, the model proposes and separate code decides. Every control in the rest of this commons lives in the gap between those two sentences, and a loop written without the gap has nowhere to put any of them.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A loop that accepts whatever the model says it did has no controls in it, because there is nowhere to put one.
+
+Same company, same four agents, new way of failing. The loop is cybertravels/runtime.py. execute tool is the line where the model stops proposing and CyberTravels' own code starts deciding — every control in Function A attaches to it.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Write the loop in three stages — plan, act, verify — with the verifier independent of the model.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Runs the verifier rejected. Zero means either the loop is perfect or the verifier is not independent, and it is the second one.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The loop's three stages named, the exit condition stated explicitly, and the verifier identified as independent of the model or flagged as not being so.
+
+**⑤ Hand it over**
+
+Delete the verifier and run the same task. The loop still finishes and still reports success.
+
+Next up: G1.2, Tools over MCP — a resource server, and why it is a separate process.
+
+---
+
+### G1.2 · Tools over MCP — a resource server, and why it is a separate process
+
+Chapter G1 · lesson 3 of 8 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G1.2.html)
+
+**① Open**
+
+Still inside chapter G1. Last one was The loop — model, tools, and the step that turns text into an action.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+WHY THE TOOL IS A SEPARATE PROCESS
+```
+
+It is faster to import the booking client and let the agent call it directly. It works on the first afternoon and it is still working months later, which is the trap: the tool now runs with whatever authority the agent has, and the only place to add a check is inside the component an attacker is trying to influence.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A tool called in-process runs with the agent's authority, and the only place left for a check is inside the component under attack.
+
+Same company, same four agents, new way of failing. CyberTravels has two resource servers: mcp/internal server.py for bookings and payments, and mcp/vendor server.py, which is a travel vendor's process running on CyberTravels' host.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Stand up two MCP resource servers, split by trust domain, each with its own audience.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Tools reachable with a token minted for the other server. It should be zero, and it is worth proving rather than assuming.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Both servers' tools enumerated, each with its audience and the scope it requires, and any tool whose declared surface is wider than its implementation.
+
+**⑤ Hand it over**
+
+Change one tool's description to claim it is read-only while leaving it a write. Nothing in the protocol stops you.
+
+Next up: G1.3, Identity — the human, the workload, and the call.
+
+---
+
+### G1.3 · Identity — the human, the workload, and the call
+
+Chapter G1 · lesson 4 of 8 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G1.3.html)
+
+**① Open**
+
+Still inside chapter G1. Last one was Tools over MCP — a resource server, and why it is a separate process.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+THREE PRINCIPALS, NOT ONE
+```
+
+One API key in an environment variable, shared by four agents. Every action in the log reads service-account-prod. Nine weeks later somebody asks which agent issued a particular refund and on whose behalf, and the honest answer is that the system cannot tell — not slowly, not with effort. It never recorded it.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+One shared key makes every action in the log identical, and 'which agent, on whose behalf' has no answer at all.
+
+Same company, same four agents, new way of failing. Four agents, four workload identities, in cybertravels/config.py. Dana is a traveller, Alex runs agent operations, Priya is in finance — and the difference between them is the whole of the next lesson.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Give each agent a workload identity, and the human a session token that grants nothing downstream.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Audit rows that name both the human and the specific agent, as a fraction of all rows. Anything below 100 percent is a row you cannot investigate.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Three principals named, the agent's identity separated from any credential it holds, and the human's token shown to grant nothing beyond invoking an agent.
+
+**⑤ Hand it over**
+
+Give two agents the same workload identity. Everything still runs.
+
+Next up: G1.4, Delegation — one token per action.
+
+---
+
+### G1.4 · Delegation — one token per action
+
+Chapter G1 · lesson 5 of 8 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G1.4.html)
+
+**① Open**
+
+Still inside chapter G1. Last one was Identity — the human, the workload, and the call.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+ONE TOKEN, ONE ACTION
+```
+
+The token has every scope because that never fails. It is the setting that makes the demo smooth and it is also the setting under which one ambiguous sentence in a vendor document turns a read into a refund. The alternative costs a function call per action and closes the gap entirely.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+An agent holding a long-lived token with every scope is one ambiguous sentence away from using all of them.
+
+Same company, same four agents, new way of failing. cybertravels/identity.py. Sign in as Dana and ask for a refund: the exchange refuses, because a traveller's role cannot delegate payments:refund, and the resource server is never even asked.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Exchange a token per action — one audience, one scope, two minutes — and verify it at the resource server rather than logging it.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Scopes a delegated token carries: one. And the count of refusals the exchange produced for scopes the human's role may not delegate.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A delegated token whose subject is the human and whose actor is the agent, addressed to one audience with one scope — and a refusal, with the reason, when a traveller's role is asked to delegate a refund.
+
+**⑤ Hand it over**
+
+Take a token minted for the internal server and present it to the vendor server. Read the refusal.
+
+Next up: G1.5, Memory — what it remembers, and where that came from.
+
+---
+
+### G1.5 · Memory — what it remembers, and where that came from
+
+Chapter G1 · lesson 6 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/G1.5.html)
+
+**① Open**
+
+Still inside chapter G1. Last one was Delegation — one token per action.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+ORIGIN TRAVELS WITH CONTENT
+```
+
+The agent remembers that this traveller prefers aisle seats, which is useful. It also remembers a sentence it read in a vendor notice three weeks ago, which it now repeats with the same confidence. Nothing distinguishes the two, because when they were written down nothing recorded where either came from.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+Text an agent read becomes a fact an agent learned, and one vendor sentence outlives the request that fetched it.
+
+Same company, same four agents, new way of failing. cybertravels/memory.py. The vendor notice CyberTravels fetches for a Northwind Rail booking contains an instruction aimed at automated agents, and it is what gets written down if origin is not recorded.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Record origin with every memory entry, scope recall to one person, and provide delete and export.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Entries carrying an origin: all of them. Cross-owner recalls: zero. Both are assertions you can run rather than claims.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Entries carrying an origin and a trust flag, recall that refuses to cross an owner boundary, and the prompt block rendering untrusted entries with the label still attached.
+
+**⑤ Hand it over**
+
+Drop the origin column and re-render the prompt block. The vendor's instruction now reads exactly like the policy.
+
+Next up: G1.6, Agent to agent — handing work over without laundering authority.
+
+---
+
+### G1.6 · Agent to agent — handing work over without laundering authority
+
+Chapter G1 · lesson 7 of 8 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G1.6.html)
+
+**① Open**
+
+Still inside chapter G1. Last one was Memory — what it remembers, and where that came from.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+THE ENVELOPE
+```
+
+The retrieval advisor reads a vendor document and passes its conclusion to the workflow agent. The workflow agent treats it as an internal request, because it arrived from a peer. One sentence written by somebody outside the company is now an instruction inside it, and the log shows two agents doing their jobs correctly.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A peer's message read as a colleague's instruction turns one injected document into four compromised agents.
+
+Same company, same four agents, new way of failing. CyberTravels' four agents hand work to each other. cybertravels/a2a/protocol.py is the envelope; cybertravels/messaging/bus.py is the version it replaces, still in the tree because it is what A1.7 attacks.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Sign every agent-to-agent envelope, carry the human through each hop, and cap the hops.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Tampered envelopes rejected: all. And the hop at which a cycle stops, which is a number you choose rather than discover.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A signed envelope naming its sender and the human it acts for, a refusal on a tampered one, and a refusal on an envelope with no human in the chain.
+
+**⑤ Hand it over**
+
+Send a message with hops set one below the ceiling and let two agents bounce it. Count how many tool calls happen before the ceiling stops it, and multiply by your per-call cost.
+
+Next up: G1.7, The human gate, and the budget that stops the loop.
+
+---
+
+### G1.7 · The human gate, and the budget that stops the loop
+
+Chapter G1 · lesson 8 of 8 · runs a skill · 388 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/G1.7.html)
+
+**① Open**
+
+Still inside chapter G1. Last one was Agent to agent — handing work over without laundering authority.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+TWO CEILINGS, OPPOSITE FAILURES
+```
+
+The agent is asked to reconcile a booking that cannot be reconciled. It tries, rephrases, tries again. Six hours later it has spent four hundred thousand tokens and exhausted a vendor's rate limit for everybody else on that integration. Nothing failed. There was simply no number at which it was supposed to stop.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+An unbounded loop against an impossible task spends until somebody notices, and a gate nobody can approve fast enough gets removed.
+
+Same company, same four agents, new way of failing. Cancelling a booking and issuing a refund are CyberTravels' two irreversible actions, and both are gated in cybertravels/config.py::TOOL_POLICY. The budgets are two lines above them.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Gate the irreversible actions on a named human, and bound both steps and tool calls.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Approvals per reviewer per hour — the number that says whether the gate is still a control — and the share of runs that hit a ceiling.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A high-risk action pausing and naming its scope, an approval and a refusal both recorded as audit rows, and a budget ceiling returning an incomplete result rather than a summary.
+
+**⑤ Hand it over**
+
+Raise MAX_TOOL_CALLS to 500 and give the agent a task it cannot finish. Watch the cost, and then decide what the right number is for your own loop — it is not 500 and it is not 2.
+
+That closes chapter G1. A running agentic platform you built yourself: a reasoning loop with an independent verifier, two MCP resource servers behind a process boundary, a workload identity per agent, per-action delegation that a resource server actually enforces, memory that records where its contents came from, signed agent-to-agent envelopes, a human gate and a budget that binds.
+
+*[Slow down here. This is the reason anybody clicks the next chapter.]*
+
+And here is what it still cannot do. It runs, and you cannot yet tell anybody what it did. There is no trace, the audit rows cannot say what motivated an action, and the only evidence it works is that you watched it work once.
+
+G2.0 — why a demo is not a system, and the three things that separate them.
+
+Next up: G2.0, Why a demo is not a system — the harness around the loop.
+
+---
+
+### G2.0 · Why a demo is not a system — the harness around the loop
+
+Chapter G2 · lesson 1 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G2.0.html)
+
+**① Open**
+
+Chapter G1 left us here. It runs, and you cannot yet tell anybody what it did. That is what this chapter picks up.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+DEMO ──────────────────────► SYSTEM
+```
+
+The prototype is promoted with nobody changing a line of it. Three weeks later a traveller disputes a cancellation and the question is what the agent actually did. The answer is in a log line that says run completed. Everything needed to answer it was cheap to add and is now expensive, and none of it was ever a feature request.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A demo promoted to production carries none of the machinery an incident needs, and the first investigation finds that out at the worst moment.
+
+Same company, same four agents, new way of failing. Alex's prototype became CyberTravels' production platform without anybody adding a trace, and the first disputed cancellation is where that is discovered.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Establish the gap first: put an investigation's questions to what your run currently emits.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Questions the current record cannot answer. Expect most of them, which is the point of measuring before building.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The questions an investigation asks, checked against what your run currently emits, and a named list of the ones it cannot answer yet. Expect that list to be most of them — that is the point of running this first.
+
+**⑤ Hand it over**
+
+Answer the same questions about a system you actually work on. The gap is usually wider than for the agent you just built, because nobody chose it.
+
+Next up: G2.1, Observability — the run as spans.
+
+---
+
+### G2.1 · Observability — the run as spans
+
+Chapter G2 · lesson 2 of 5 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/G2.1.html)
+
+**① Open**
+
+Still inside chapter G2. Last one was Why a demo is not a system — the harness around the loop.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+THE RUN, AS SPANS
+```
+
+The run produced the right answer, so nobody looked further. The trace would have shown that it reached for the refund tool first, was refused by the policy, and tried a different route — which is a signal about the input it was given, not about that run. Emitting only the answer threw away the only interesting part.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A run that emits only its answer is unreviewable, and a trace of successes hides exactly the events worth alerting on.
+
+Same company, same four agents, new way of failing. cybertravels/observability.py. Every span carries the trace id that joins it to the audit row, which is the join Function D's detections are written against.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Emit the run as spans, joined by a trace id, with tokens summarised and refusals recorded with the boundary that produced them.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Spans per run carrying the trace id: all of them. Credentials appearing in a span: zero, and worth grepping for rather than believing.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A run's spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it.
+
+**⑤ Hand it over**
+
+Put the whole delegated token in a span instead of its claims. Nothing breaks, the trace is more useful, and you have just put a credential in your log pipeline.
+
+Next up: G2.2, The audit trail, and the four questions it has to answer.
+
+---
+
+### G2.2 · The audit trail, and the four questions it has to answer
+
+Chapter G2 · lesson 3 of 5 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/G2.2.html)
+
+**① Open**
+
+Still inside chapter G2. Last one was Observability — the run as spans.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+FOUR QUESTIONS AN AUDIT ROW MUST ANSWER
+```
+
+Every row in the audit log is correct and none of them is sufficient. They record that an agent issued a refund at 14:07. They do not record that the agent had, eleven seconds earlier, read a vendor notice containing an instruction to issue refunds. The action is visible and the cause is not, so the incident closes as an agent behaving oddly.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A record that names an action without naming its cause closes an incident as 'the agent misbehaved'.
+
+Same company, same four agents, new way of failing. CyberTravels' audit table is append-only and every row carries the human => agent chain. The fourth question — what motivated the action — is the one its rows still cannot answer, and A1.14 is where that costs something.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Hold every audit row to four questions: which human, which workload, which call, and what motivated it.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Of the four, how many your rows answer. Three is common and the missing one is almost always the fourth.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Each of the four questions answered or explicitly not, from real audit rows — and the fourth one probably failing, which is the finding worth carrying into Function D.
+
+**⑤ Hand it over**
+
+Add the motivating input and its origin to the audit row. Then re-run the check and notice that you have also just put traveller text into a long-lived store, which is E2.5's problem.
+
+Next up: G2.3, Evaluating what you built, before anybody attacks it.
+
+---
+
+### G2.3 · Evaluating what you built, before anybody attacks it
+
+Chapter G2 · lesson 4 of 5 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/G2.3.html)
+
+**① Open**
+
+Still inside chapter G2. Last one was The audit trail, and the four questions it has to answer.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+A SCORE THAT MEANS SOMETHING
+```
+
+The suite went from 71 percent to 88 percent and the team shipped. Nothing about the system changed that week; thirty straightforward cases were added to the corpus and every one of them passed. The number moved, the capability did not, and the decision it justified had already been made.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+One successful run is an observation about one run, and an agent is not deterministic.
+
+Same company, same four agents, new way of failing. The suite runs against the CyberTravels agent you just built, which means a case that fails is a defect in your own work rather than in an example.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Build a suite whose cases fail on the old build, score it with intervals, and test it for dilution.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+The score, with its interval — and the change in that score when thirty easy cases are added, which should worry you.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A score with a confidence interval, a control shown to move one surface and not the others, and the same suite scoring higher after easy cases are added — with the dilution named rather than celebrated.
+
+**⑤ Hand it over**
+
+Write one case for a behaviour you have not implemented yet. It should fail.
+
+Next up: G2.4, What you have built — and every way it can now go wrong.
+
+---
+
+### G2.4 · What you have built — and every way it can now go wrong
+
+Chapter G2 · lesson 5 of 5 · runs a skill · 368 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/G2.4.html)
+
+**① Open**
+
+Still inside chapter G2. Last one was Evaluating what you built, before anybody attacks it.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+SAME MAP, READ BY SOMEBODY ELSE
+```
+
+Everything in this system works. That sentence is true and it is the beginning of the next four functions rather than the end of this one — because 'works' was measured against what you intended, and nobody has yet measured it against somebody who intends otherwise.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A builder who has never seen their own system described adversarially ships the same defect in the next one.
+
+Same company, same four agents, new way of failing. The same CyberTravels architecture from G1.0, re-read by somebody who wants it to fail. Every row in that table is a lesson in Function A, by id.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Re-read every component you built as an attack surface, and measure what one run can reach and damage.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Blast radius: objects reachable, the subset writable, and the irreversible actions among them. That number decides how much autonomy the agent can carry into Function A.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The set of objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports — which will be lower than the one you gave it.
+
+**⑤ Hand it over**
+
+Remove the human gate and recompute. The radius grows by exactly the irreversible actions, which is the argument for the gate stated as a number rather than as a principle.
+
+That closes chapter G2. The harness around the loop: spans that join reasoning to actions, an audit trail measured against the four questions an investigation asks, an evaluation suite with intervals and a test for its own dilution, and the blast radius of the agent you built, as a number.
+
+*[Slow down here. This is the reason anybody clicks the next chapter.]*
+
+And here is what it still cannot do. Everything you have measured, you measured against what you intended. Nobody has yet read this system as somebody trying to make it do something else — and every component you added is, from that side, a way in.
+
+A1.0 — the same architecture, read adversarially, and the zero-trust rules that survive contact with agents.
+
+Next up: A0.0, Set up your machine — the AI tools, and the model every lesson runs on.
+
+---
+
+
 ## Function A — Securing AI Architectures
 
 *[Who is watching: Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship.]*
@@ -94,9 +793,13 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 ### A0.0 · Set up your machine — the AI tools, and the model every lesson runs on
 
-Chapter A0 · lesson 1 of 2 · runs a skill · 279 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+Chapter A0 · lesson 1 of 2 · runs a skill · 319 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
 
 **① Open**
+
+That is Function G done. Function A asks a different question of the same company: Securing AI Architectures.
+
+Chapter G2 left us here. Everything you have measured, you measured against what you intended. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 

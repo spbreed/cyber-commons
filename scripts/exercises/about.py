@@ -1064,3 +1064,52 @@ for _k, _v in _NEW.items():
 # Function C rebuild.
 from .framing_c import ABOUT as _C_ABOUT  # noqa: E402
 ABOUT.update(_C_ABOUT)
+
+
+# ---------------------------------------------------------------- Function G
+ABOUT.update({
+ "G1.0": "What an agent is — software that plans, calls tools and acts on what "
+         "it reads — and a map of the seven components you build across this "
+         "chapter, with the edges where trust changes marked before any of them "
+         "is written.",
+ "G1.1": "The reasoning loop in three stages: the model proposes, your code "
+         "disposes, and something independent of the model verifies. Plus the "
+         "exit condition, which cannot be the model agreeing that it is done.",
+ "G1.2": "Two MCP resource servers behind a process boundary, split by trust "
+         "domain rather than by convenience, each with its own audience — and "
+         "why a tool called in-process leaves nowhere to put a check.",
+ "G1.3": "Three principals in every agent action: the human who asked, the "
+         "workload that acted, and the individual call. Each gets a name, and "
+         "the human's token is shown to grant nothing downstream.",
+ "G1.4": "RFC 8693 token exchange: one audience, one scope, two minutes, minted "
+         "after the model has chosen and verified at the resource server — "
+         "with least privilege keyed to the human's role rather than the "
+         "agent's.",
+ "G1.5": "Agent memory built so it cannot become a persistence mechanism: "
+         "origin recorded with content, recall scoped to one person, and delete "
+         "and export both present.",
+ "G1.6": "Agent-to-agent messaging with a signed envelope that names its "
+         "sender, carries the human through every hop, labels a peer's text as "
+         "data, and stops at a hop ceiling.",
+ "G1.7": "The two ceilings on an agent loop — a human gate on irreversible "
+         "actions, and budgets on steps and tool calls — including what a run "
+         "returns when it hits one, and why a present-but-saturated gate is not "
+         "a control.",
+ "G2.0": "What separates a demo from a system: a trace, an audit trail and an "
+         "evaluation. The lesson measures the gap before building any of them, "
+         "because the list is shorter and more useful than \"add logging\".",
+ "G2.1": "The agent run as spans — which agent, which step, which tool, what "
+         "the delegated token said — with one trace id joining reasoning to "
+         "action, secrets summarised rather than carried, and refusals recorded "
+         "with the boundary that produced them.",
+ "G2.2": "The four questions an audit trail has to answer — which human, which "
+         "workload, which call, what motivated it — and what append-only "
+         "actually requires beyond a convention not to issue an UPDATE.",
+ "G2.3": "An evaluation suite over the agent you built: cases that fail on the "
+         "old build, scores with intervals, and a test for the dilution that "
+         "lifts a number without changing a system.",
+ "G2.4": "The handover into Function A. Every component built in this function "
+         "re-read as an attack surface, every control re-read as something with "
+         "a bypass, and the agent's blast radius measured as the number the "
+         "next function argues with.",
+})

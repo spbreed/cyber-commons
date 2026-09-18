@@ -2572,6 +2572,13 @@ BRIDGES.update(_NEW_BRIDGES)
 
 
 # Function C rebuild — override the ids the old C track used.
+from .framing_g import HOOKS as _G_HOOKS          # noqa: E402
+from .framing_g import DIAGRAMS as _G_DIAGRAMS    # noqa: E402
+from .framing_g import BRIDGES as _G_BRIDGES      # noqa: E402
+HOOKS.update(_G_HOOKS)
+DIAGRAMS.update(_G_DIAGRAMS)
+BRIDGES.update(_G_BRIDGES)
+
 from .framing_c import HOOKS as _C_HOOKS, DIAGRAMS as _C_DIAGRAMS  # noqa: E402
 HOOKS.update(_C_HOOKS)
 DIAGRAMS.update(_C_DIAGRAMS)

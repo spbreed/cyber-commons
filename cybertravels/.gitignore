@@ -1,0 +1,3 @@
+data/*.db
+data/invoices/
+__pycache__/

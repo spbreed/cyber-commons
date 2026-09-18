@@ -84,8 +84,12 @@ needs ~40GB RAM. If your laptop has 16GB, use the small variants
 (`llama3.2:3b`, `glm-4-9b`, `qwen2.5:7b`) — every lab's *mechanics* work on a
 small model.
 
-The 128 model-facing lessons were run against two sizes on 4 CPUs with no GPU,
-on GGUF weights served by llama.cpp. Each calls the model from inside its
+**The lessons that call a model were run against two sizes** on 4 CPUs with no
+GPU, on GGUF weights served by llama.cpp — the set as it stood at the time of
+that run, before Function G was added. The count is deliberately not given
+here: it would have to be maintained, and a number that tracks the tree would
+imply the newer lessons were in a measurement they were not. Each calls the
+model from inside its
 **skill's own script** — there is no adapter in a lesson — so what is tested
 here is the same file `scripts/test_skills.py` runs offline.
 

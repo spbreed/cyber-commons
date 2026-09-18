@@ -1925,6 +1925,292 @@
         "python3 scripts/install_skills.py --all"
       ],
       "expect": "Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged."
+    },
+    "G1.0": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/architecture/agentic-architecture-map/scripts/agentic_architecture_map.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "Seven components, the edges between them, and the smaller subset where trust changes — which is the only part worth arguing about."
+    },
+    "G1.1": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "The loop's three stages named, an exit condition that does not depend on the model agreeing, and the verifier identified as independent or flagged as not being so."
+    },
+    "G1.2": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/attestation/agent-code-surface-analyzer/scripts/agent_code_surface_analyzer.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "Both MCP servers' tools enumerated with the audience and scope each requires, and any tool whose declared surface is wider than its implementation."
+    },
+    "G1.3": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/identity/agent-identity-review/scripts/agent_identity_review.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "Three principals named and separated, the agent's identity distinguished from any credential it holds, and the human's token shown to grant nothing downstream."
+    },
+    "G1.4": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/attestation/identity-chain-verifier/scripts/identity_chain_verifier.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "A delegated token whose subject is the human and whose actor is the agent, addressed to one audience with one scope — and a refusal, with its reason, when a traveller's role is asked to delegate a refund."
+    },
+    "G1.5": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/threats/memory-scope-and-origin-audit/scripts/memory_scope_and_origin_audit.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "Entries carrying an origin and a trust flag, recall refusing to cross an owner boundary, and untrusted entries still labelled when rendered for the model."
+    },
+    "G1.6": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/threats/peer-message-propagation-trace/scripts/peer_message_propagation_trace.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "A signed envelope naming its sender and the human it acts for, plus refusals on a tampered envelope and on one with no human in the chain."
+    },
+    "G1.7": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_condition_audit.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "A high-risk action pausing and naming its scope, an approval and a refusal both recorded, and a budget ceiling returning an incomplete result rather than a summary."
+    },
+    "G2.0": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/threats/audit-answerability-check/scripts/audit_answerability_check.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "An investigation's questions put to what the run currently emits, and a named list of the ones it cannot answer. Expect most of them — that is why this runs first."
+    },
+    "G2.1": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/response/run-replayability-audit/scripts/run_replayability_audit.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "A run's spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it."
+    },
+    "G2.2": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_check.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "Each of the four questions answered or explicitly not, from real audit rows — with the fourth likely failing, which is the finding to carry into Function D."
+    },
+    "G2.3": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/research/eval-suite-health-check/scripts/eval_suite_health_check.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "A score with a confidence interval, a control shown to move one surface and not the others, and the same suite scoring higher once easy cases are added."
+    },
+    "G2.4": {
+      "run": [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---",
+        "claude --version        # prints a version? nothing else to configure",
+        "",
+        "# --- 3 · run the skill against its committed fixture ---",
+        "python3 skills/architecture/blast-radius-review/scripts/blast_radius_review.py",
+        "",
+        "# --- or install it into your own agent and ask in your own words ---",
+        "python3 scripts/install_skills.py --all",
+        "",
+        "# --- 4 · and see the system itself run. 127.0.0.1 only: it is",
+        "#         deliberately vulnerable. See cybertravels/LABELS.md. ---",
+        "pip install -r cybertravels/requirements.txt",
+        "python3 -m cybertravels.tests.smoke_test      # 8 control assertions",
+        "python3 -m uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000"
+      ],
+      "expect": "Objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports."
     }
   }
 }

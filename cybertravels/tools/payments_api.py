@@ -1,4 +1,6 @@
 """Payments — charge, and refund. The tool that moves money."""
+from pathlib import Path
+
 from .._stubs import DB
 from .bookings_api import require_owner
 
@@ -19,6 +21,9 @@ def get_receipt(session, payment_id):
     return row
 
 
+INVOICE_ROOT = str(Path(__file__).resolve().parent.parent / "data" / "invoices") + "/"
+
+
 def download_invoice(session, path):
     """Path traversal: the vendor's filename is trusted."""
-    return open("/var/invoices/" + path).read()
+    return open(INVOICE_ROOT + path).read()
