@@ -1,45 +1,33 @@
-# Running the skills against a Kimi model on Kaggle
+# Running the skills against a Kimi-family model on a CPU
 
 What actually happened when the AppSec skills were pointed at a Kimi-family
-model on Kaggle, including the parts that did not work. Every number here came
-from a run; nothing is estimated.
+open-weight model with no GPU, including the parts that did not work. Every
+number here came from a run; nothing is estimated.
+
+> **Provenance, stated once.** This run predates the move to local-only
+> execution and happened on a free hosted CPU notebook — 4 cores, 31 GiB RAM, no
+> accelerator. That is recorded because the timings only make sense against it,
+> not because it is a route this commons offers. Everything the curriculum runs
+> today runs on your own machine; see [MODELS.md](../../MODELS.md).
 
 ## The short version
 
-**A Kimi-family model runs on a Kaggle CPU kernel.** Prompted as a chat model
-it ignored the skill entirely, because the only Kimi-family model reachable
-from this account is a **base** model and base models complete text rather than
-obey instructions. Prompted as a base model — priming the output shape — it
-produced **contract-conforming output that is substantively wrong**: the right
-JSON, the wrong CWE, and the contract's own type placeholders copied in as
-values. That second result is now teaching material in B2.5.
-
-## What is reachable, and what is not
-
-| Path | Result |
-|---|---|
-| Kaggle **GPU** | **Unavailable.** `enableGpu: true` and `acceleratorType: nvidiaTeslaT4` are both *stored* by the API, and the kernel still comes up on `torch 2.10.0+cpu` with `cuda_available False`. |
-| Kaggle **internet** | **Unavailable.** `enableInternet: true` is stored; DNS fails inside the kernel (`Temporary failure in name resolution`), so nothing can be fetched from HuggingFace. |
-| Kaggle **Models** | **Works.** Model data sources mount read-only at `/kaggle/input` with no internet, which is the only way weights get in. |
-| Downloading weights locally | **Impractical here.** ~140 KiB/s to HuggingFace, and parallel range requests share that budget rather than multiplying it — about 20 hours for a 9.8 GiB quantised model. |
-
-Both Kaggle limits are the account's phone-verification gate. Note that unlike
-the public-notebook case, which fails loudly with
-`403 Phone verification is required`, **these two fail silently**: the setting
-is accepted, stored, and then not honoured at run time. Code that trusts the
-stored value will believe it has a GPU.
+**A Kimi-family model runs on a CPU with 31 GiB of RAM.** Prompted as a chat
+model it ignored the skill entirely, because the only Kimi-family model within
+reach is a **base** model and base models complete text rather than obey
+instructions. Prompted as a base model — priming the output shape — it produced
+**contract-conforming output that is substantively wrong**: the right JSON, the
+wrong CWE, and the contract's own type placeholders copied in as values. That
+second result is now teaching material in B2.5.
 
 ## Which Kimi model, and why
 
-Kaggle hosts `helium990/kimi-k3` (2.78T MoE) and
-`manojkumarcs28/moonlight-16b-series`. Kimi K2 and K3 are 1T and 2.78T
-parameters and cannot run on a CPU kernel at any quantisation, so the only
-candidate is **Moonlight-16B-A3B** — Moonshot AI's open-weight MoE from the
-Kimi team, 16B total with **3B active**. The MoE ratio is exactly what makes
-CPU inference arithmetically possible.
+Kimi K2 and K3 are 1T and 2.78T parameters and cannot run on a CPU at any
+quantisation, so the only candidate is **Moonlight-16B-A3B** — Moonshot AI's
+open-weight MoE from the Kimi team, 16B total with **3B active**. The MoE ratio
+is exactly what makes CPU inference arithmetically possible.
 
-It loads, and that is not obvious: 29.73 GiB of bf16 weights into a kernel with
-31 GiB of RAM.
+It loads, and that is not obvious: 29.73 GiB of bf16 weights into 31 GiB of RAM.
 
 ```
 model_type: deepseek_v3 | had auto_map: True
@@ -48,12 +36,13 @@ model loaded in 87s
 parameters: 16.0B
 ```
 
-Three things had to be true for that to work, each found by a failed run:
+Three things had to be true for that to work, each found by a failed run, and
+all three will bite anyone loading these weights anywhere:
 
-1. **The mount is named `Moonlight 16B`, with a space.** That is not a valid
-   Python module name, so `trust_remote_code` cannot import the bundled
-   modelling code from it. Symlink to a path without a space — do not copy,
-   the weights are larger than `/kaggle/working`.
+1. **The weights directory was named `Moonlight 16B`, with a space.** That is
+   not a valid Python module name, so `trust_remote_code` cannot import the
+   bundled modelling code from it. Symlink to a path without a space — do not
+   copy, the weights are larger than most scratch volumes.
 2. **The bundled `modeling_deepseek.py` targets transformers 4.x.** It imports
    `is_torch_fx_available`, which v5 removed. Transformers 5 ships DeepseekV3
    natively, so dropping `auto_map` from a local copy of `config.json` is
@@ -77,11 +66,11 @@ def run_import(request):
 `=== DOES THE MODEL'S OUTPUT SATISFY THE SKILL CONTRACT? === no JSON object in
 the output`
 
-That is textbook base-model behaviour, and the uploaded instance is indeed the
-base checkpoint: its own documentation says *"the default configuration loads
+That is textbook base-model behaviour, and the instance is indeed the base
+checkpoint: its own documentation says *"the default configuration loads
 Moonlight-16B-A3B; to use the chat-optimized model, change the model path to
-Moonlight-16B-A3B-Instruct"* — but only the base weights are in the instance
-(29.73 GiB is one model, not two).
+Moonlight-16B-A3B-Instruct"* — but only the base weights are present (29.73 GiB
+is one model, not two).
 
 Full output: [`moonlight-16b-chat-prompt.txt`](moonlight-16b-chat-prompt.txt).
 
@@ -118,7 +107,8 @@ Now read it:
 Three defects, zero schema violations. This is **conformance ≠ accuracy** —
 the thesis the curriculum keeps asserting — demonstrated by a real open-weight
 model on real hardware rather than by a constructed example. It is now the
-closing section of [B2.5](../notebooks/B2.5.ipynb), quoted verbatim.
+closing section of
+[B2.5](https://cybercommons.ai/lessons/B2.5.html), quoted verbatim.
 
 Worth noting which invariant catches it. Monotonicity passes: `[0,0,0,0]` is
 non-increasing. The check that fires is `counts.verified == len(findings)`, and
@@ -135,20 +125,17 @@ GENERATED 200 tokens in 1274s (0.157 tok/s)    # completion-style, 305-token pro
 ```
 
 **0.06 to 0.16 tokens per second**, depending on how much context it carries —
-between six and seventeen seconds per token. Either way a short answer takes
-20 to 70 minutes, so a Kaggle CPU kernel is a place to prove a model *loads and
-runs*, not a place to evaluate one. Any real evaluation of these
-skills against Kimi needs either a GPU (a phone-verified Kaggle account, or
-anywhere else) or a hosted endpoint.
+between six and seventeen seconds per token. Either way a short answer takes 20
+to 70 minutes, so a CPU at this size is a place to prove a model *loads and
+runs*, not a place to evaluate one. Any real evaluation of these skills against
+Kimi needs a GPU or a hosted endpoint.
+
+That is the reason the commons standardises on **Qwen2.5-7B-Instruct** for the
+acceptance criteria: it is the largest model that answers in seconds rather than
+hours on the hardware most readers have.
 
 ## Reproducing it
 
-The scripts are not committed, because they carry no lesson content and would
-be dead weight in the curriculum. The three fixes above are the whole trick,
-and the mount reference is:
-
-```
-manojkumarcs28/moonlight-16b-series/pyTorch/moonlight-16b-a3b/1
-```
-
-Credentials come from `~/.kaggle/kaggle.json` and never from this repository.
+The scripts are not committed, because they carry no lesson content and would be
+dead weight in the curriculum. The three fixes above are the whole trick, and
+the weights are `moonshotai/Moonlight-16B-A3B` on Hugging Face.

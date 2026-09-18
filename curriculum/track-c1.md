@@ -11,7 +11,7 @@
 
 **Deliverable:** One finding carried the whole distance — reproduced, turned into a detection, and handed over with an eval case that fails on the old build.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -24,9 +24,12 @@
 **Run it** — Take one published agentic attack and list what you would need to reproduce it.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.0.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.0   # run it headless and check it
+# --- a reading lesson: no skill to run, so there is nothing to install ---
+# read the page, then take the next lesson in the chapter
+
+# --- when you get to one that does run a skill, this links them all in ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The three attack surfaces of an agent print with what each covers, and the same claim scores as anecdote, measurement, result or evidence depending on whether it carries a rate, a control comparison and an independent reproduction.
@@ -48,14 +51,17 @@ python3 scripts/run_notebooks.py --session C1.0   # run it headless and check it
 **Run it** — Data-layer payloads that exploit parsers to reach code execution during automated embedding generation.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/c1-redteam
-python3 campaign.py --surfaces injection,identity,containment --n 200
-python3 campaign.py --report --include-benign-controls
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/research/training-data-provenance-manifest/scripts/training_data_provenance_manifest.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* No defence gives ASR 1.00. The keyword filter gives ASR 0.67 with false alarms on 2 of 4 benign security-writing cases. Provenance gives ASR 0.00 with no false alarms — until the payload is delivered through the principal channel, where ASR returns to 1.00. The same two numbers then score all three surfaces in one table.
@@ -70,15 +76,17 @@ python3 campaign.py --report --include-benign-controls
 **Run it** — Cross-prompt attention degradation and jailbreaks that strip safety while retaining tool use, scored on reproduction.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2.10-eval-harness
-python3 ../c1-redteam/game_eval.py --strategy sandbag
-python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
-./scripts/vulnbench.sh compare   # see the inflated number
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/research/technique-reproducibility-test/scripts/technique_reproducibility_test.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* You reproduce an inflated score, then patch the harness so the same trick fails.
@@ -93,14 +101,17 @@ python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
 **Run it** — JSON-wrapped model-gateway trace logging, and scoring actors to tell agent tool calls from human behaviour.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/c1-redteam
-python3 report.py --from-trace engagement/trace.jsonl --template agentic-finding.md
-python3 report.py --verify-reproducible --runs 10
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_scoring.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A finding with a reproduction rate (e.g. 7/10), not a claim of determinism the system cannot offer.

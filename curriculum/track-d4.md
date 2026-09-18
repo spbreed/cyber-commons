@@ -11,7 +11,7 @@
 
 **Deliverable:** A remediation policy and three runbooks, one per tier, each timed end to end against a measured breakout time.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -25,9 +25,17 @@
 **Run it** — Classify a set of remediation actions against the policy and see which tier each lands in, and why.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D4.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D4.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/remediation-policy-check/scripts/remediation_policy_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Classify a set of remediation actions against the policy and see which tier each lands in, and why.
@@ -44,9 +52,17 @@ python3 scripts/run_notebooks.py --session D4.1   # run it headless and check it
 **Run it** — Take one incident and run its response at all three tiers, comparing what each costs and what each risks.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D4.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D4.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/runbook-tier-assignment/scripts/runbook_tier_assignment.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Take one incident and run its response at all three tiers, comparing what each costs and what each risks.
@@ -63,15 +79,17 @@ python3 scripts/run_notebooks.py --session D4.2   # run it headless and check it
 **Run it** — Exercise the ladder against a live misbehaving agent.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D4.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D4.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-./misbehave.sh &                    # start the runaway agent
-./contain.sh --lever throttle && ./contain.sh --lever scope-reduce
-./contain.sh --lever revoke --agent reviewer   # one agent only
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/machine-speed-containment/scripts/machine_speed_containment.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Each lever is timed; revocation hits one agent without collateral (the A2.4 deliverable, proven here).
@@ -88,15 +106,17 @@ cd labs/d2-ir
 **Run it** — Time your own stop authority end to end.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D4.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D4.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-./misbehave.sh & echo $! > runaway.pid
-time ./stop.sh --workflow patch-agent --authority oncall
-python3 assert_stopped.py --within 60s
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/stop-authority-readiness/scripts/stop_authority_readiness.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A number in seconds, and a named holder. Untested stop authority is a diagram.
@@ -113,13 +133,17 @@ python3 assert_stopped.py --within 60s
 **Run it** — Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D4.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D4.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-./killswitch --selector experiment=exploitgym --snapshot --revoke
-./killswitch --test --partial-failure revocation-api
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/fleet-kill-switch-test/scripts/fleet_kill_switch_test.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed.

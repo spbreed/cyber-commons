@@ -11,7 +11,7 @@
 
 **Deliverable:** A sensor coverage matrix for your own estate, with the agent actions no sensor class covers listed by name.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -24,9 +24,17 @@
 **Run it** — Put one agent trace and one human session side by side and list what separates them.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.0.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.
@@ -54,15 +62,17 @@ python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
 **Run it** — Change the model underneath and catch the detection regression.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-promptfoo eval -c detection-regression.yaml --model llama3.3   # baseline
-promptfoo eval -c detection-regression.yaml --model glm-4.6    # after 'upgrade'
-python3 drift_report.py
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/behavioural-drift-monitor/scripts/behavioural_drift_monitor.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A rule that passed last month fails now. Nothing in your code changed.
@@ -79,14 +89,17 @@ python3 drift_report.py
 **Run it** — Ship OTEL agent traces into OpenSearch and query them.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl
-python3 agent_vs_human.py --classify live.jsonl
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_scoring.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A working classifier — your earliest Shadow Autonomy signal.

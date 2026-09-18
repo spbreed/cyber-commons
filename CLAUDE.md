@@ -50,11 +50,10 @@ count in the docs drifts from the tree:
 
     135 lessons · 14 chapters · 5 functions · 140 skills
 
-**A lesson is three artefacts, not one.** The page (prose, rendered from
-source), the skill (`skills/<area>/<name>/SKILL.md` plus its script — the
-procedure), and the notebook (code only, which fetches the skills tree and runs
-that script). The notebook holds no procedure of its own: one fix to one file,
-not a rebuild of 135 copies.
+**A lesson is two artefacts, not one.** The page (prose, rendered from source)
+and the skill (`skills/<area>/<name>/SKILL.md` plus its script — the procedure).
+The page embeds the skill verbatim at build time and prints the command that
+runs it; there is never a second copy of the procedure to correct.
 
 ---
 
@@ -70,7 +69,6 @@ not a rebuild of 135 copies.
 | `skills/<area>/<name>/` — `SKILL.md` and its script | the procedure a lesson runs |
 | `curriculum/labs.json` — the runnable command block per lesson | the lab block on a page |
 | `curriculum/frameworks.json` — OWASP / ATLAS / NIST / EU AI Act mapping | the labels on a page |
-| | `labs/notebooks/*.ipynb` |
 | | `site/lessons/*.html`, `site/lessons/index.html` |
 | | `curriculum/track-*.md`, `curriculum/README.md` |
 | | `site/assets/diagrams/*.svg` |
@@ -99,16 +97,31 @@ not a rebuild of 135 copies.
 Dependencies run downhill. After changing a source, run from its row down:
 
 ```bash
-python3 scripts/build_notebooks.py     # exercises      -> labs/notebooks/
-python3 scripts/run_notebooks.py       # notebooks      -> recorded output
 python3 scripts/render_diagrams.py     # emitted DOT    -> site/assets/diagrams/
 python3 scripts/build_curriculum.py    # curriculum.json-> curriculum/track-*.md + README
 python3 scripts/build_site.py          # everything     -> site/lessons/
+python3 scripts/build_lightboard.py    # lessons        -> LIGHTBOARD.md
 ```
 
-`build_site.py` renders the lesson body from `scripts/exercises/` directly —
-**not** from the notebook. The notebook is code only. Prose lived in both places
-once, and the copy inside the notebook was the one nobody could correct.
+`build_site.py` renders the lesson body from `scripts/exercises/` directly, and
+embeds the skill's own `SKILL.md`. Prose lived in two places once, and the
+generated copy was the one nobody could correct — hence one source, always.
+
+### Installing the skills
+
+The skills are a **central store with symlinks**, not copies. `skills/<area>/<name>/`
+is the only copy that exists; every agent CLI gets a link to it:
+
+```bash
+python3 scripts/install_skills.py --all     # claude, codex, gemini, cursor, opencode, goose
+python3 scripts/install_skills.py --list    # what is linked where
+```
+
+A copy is a fork with a friendly name: fix a skill once and the other copies
+keep the bug while still loading, still validating and still answering. The
+installer flattens `<area>/<name>` to `<name>`, which is the agentskills.io
+rule, and **refuses** if two areas ever claim one name rather than silently
+dropping one.
 
 ---
 
@@ -182,40 +195,49 @@ that are enforced or that get broken most.
 
 ## 5 · Pre-deployment testing
 
-Nineteen gates, in the order CI runs them. Each exists because of a specific
+Twenty gates, in the order CI runs them. Each exists because of a specific
 failure — a gate whose reason is written down does not get deleted by the next
 person.
 
 | # | gate | catches |
 |---|---|---|
 | 1 | `check_secrets.py` | a credential reaching the repo. Runs a self-test on shapes it must and must not match |
-| 2 | `run_notebooks.py` | a notebook that does not execute |
-| 3 | `check_skills.py --check` | a skill missing its activation condition, procedure, example, failure modes, or a parseable output contract |
-| 4 | `test_skills.py --check` | a skill that answers **without a model**. Runs each script with the model variables stripped: exit 2 with the refusal on stdout passes, exit 0 with output fails, and exit 2 with no explanation fails because the reader sees a broken repository rather than an unconfigured machine |
-| 5 | `check_determinism.py --seeds 4` | non-determinism in **the harness** — ordering, formatting, seeding, and a no-model refusal that varies between runs. It does not and must not claim a model's findings reproduce |
-| 6 | `build_notebooks.py --check` + `relink_labs.py --check` | a notebook or lab block out of sync with its source |
-| 7 | `check_lessons.py --check` | the authoring contract: Day 0/1/2, hook/diagram/concept, framework before code, chapter bridges, D/E anchors, chapter numbering |
-| 8 | `check_register.py --check` | the incident register's 40 controls — **its ids are `C1.1`–`C10.4`, syntactically identical to lesson ids**, and a blind lesson rename corrupts them |
-| 9 | `check_clarity.py --check` | weekday idioms and culture-specific phrasing, read from the rendered page |
-| 10 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |
-| 11 | `render_diagrams.py --check` | a diagram a skill emits that Graphviz or PlantUML will not render |
-| 12 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
-| 13 | `check_frameworks.py` + `check_framework_links.py` | a framework label that is not real, or links nowhere |
-| 14 | `build_site.py --check` | a page that is stale against its source |
-| 15 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that |
-| 16 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
-| 17 | `build_curriculum.py --check` | a chapter doc in `curriculum/` stale against `curriculum.json` — fifteen committed files that nothing compared against their source until a clarity fix reached the site and not them |
-| 18 | `check_repo_links.py --check` | a link into this repository pinning a branch that is not the published one. The branch lives in `scripts/exercises/repo.py`; it was spelled out longhand in nine files and one had drifted to `main`, which has never existed on the remote |
-| 19 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
+| 2 | `check_skills.py --check` | a skill missing its activation condition, procedure, example, failure modes, or a parseable output contract |
+| 3 | `test_skills.py --check` | a skill that answers **without a model**. Runs each script with the model variables stripped: exit 2 with the refusal on stdout passes, exit 0 with output fails, and exit 2 with no explanation fails because the reader sees a broken repository rather than an unconfigured machine |
+| 4 | `check_determinism.py --seeds 4` | non-determinism in **the harness** — ordering, formatting, seeding, and a no-model refusal that varies between runs. It does not and must not claim a model's findings reproduce |
+| 5 | `install_skills.py --tool claude --dry-run` | two areas claiming one skill name. The install is flat, so a collision would silently drop one of them |
+| 6 | `check_lessons.py --check` | the authoring contract: Day 0/1/2, hook/diagram/concept, framework before code, chapter bridges, D/E anchors, chapter numbering |
+| 7 | `check_register.py --check` | the incident register's 40 controls — **its ids are `C1.1`–`C10.4`, syntactically identical to lesson ids**, and a blind lesson rename corrupts them |
+| 8 | `check_clarity.py --check` | weekday idioms and culture-specific phrasing, read from the rendered page |
+| 9 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |
+| 10 | `render_diagrams.py --check` | a diagram a skill emits that Graphviz or PlantUML will not render |
+| 11 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
+| 12 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
+| 13 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
+| 14 | `build_curriculum.py --check` | a chapter doc in `curriculum/` stale against `curriculum.json` — fifteen committed files that nothing compared against their source until a clarity fix reached the site and not them |
+| 15 | `check_repo_links.py --check` | a link into this repository pinning a branch that is not the published one. The branch lives in `scripts/exercises/repo.py`; it was spelled out longhand in nine files and one had drifted to `main`, which has never existed on the remote |
+| 16 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that |
+| 17 | `check_frameworks.py` | a framework label that is not real |
+| 18 | `check_framework_links.py` | a framework label that links nowhere. `continue-on-error`: an upstream site being down must not hold the deploy |
+| 19 | `build_site.py` | a page stale against its source. It rebuilds and warns rather than failing, so a forgotten rebuild never blocks a deploy |
+| 20 | curriculum + videos data | `videos.json` naming a session id the curriculum does not carry |
 
 Run the lot before pushing:
 
 ```bash
-for c in check_secrets run_notebooks check_skills\ --check test_skills\ --check \
-         check_determinism\ --seeds\ 4 build_notebooks\ --check relink_labs\ --check \
-         check_lessons check_clarity\ --check check_register check_claims \
-         check_frameworks render_diagrams\ --check build_site\ --check; do
-  echo "== $c"; python3 scripts/${c}.py 2>/dev/null || python3 scripts/$c
+gates=(
+  "check_secrets.py"                    "check_skills.py --check"
+  "test_skills.py --check"              "check_determinism.py --seeds 4"
+  "install_skills.py --tool claude --dry-run"
+  "check_lessons.py --check"            "check_register.py --check"
+  "check_clarity.py --check"            "render_diagrams.py --check"
+  "check_claims.py --check"             "check_claude_md.py --check"
+  "check_docs.py --check"               "build_curriculum.py --check"
+  "check_repo_links.py --check"         "build_lightboard.py --check"
+  "check_frameworks.py"                 "build_site.py --check"
+)
+for g in "${gates[@]}"; do
+  echo "== $g"; python3 scripts/$g || echo "   ^^ FAILED"
 done
 ```
 
@@ -248,19 +270,17 @@ actually gone wrong.
 3. **Do the assets resolve?** `favicon.ico`, `favicon.png`,
    `apple-touch-icon.png`, `logo-mark.png` under `/assets/`.
 
-4. **Kaggle: push, then verify.** Pushing is not evidence; comparing is.
+4. **Does a reader's first command actually work?** The run block on every
+   lesson page is the whole product now. Clone into an empty directory and run
+   one, exactly as the page prints it — including the install:
 
    ```bash
-   python3 scripts/kaggle_push.py --all --wait
-   python3 scripts/kaggle_verify.py        # must report N/N identical
+   python3 scripts/install_skills.py --all
+   python3 skills/threats/instruction-channel-check/scripts/instruction_channel_check.py
    ```
 
-5. **Re-probe what is public and rebuild**, so newly-public kernels pick up
-   their live embed:
-
-   ```bash
-   python3 scripts/check_kaggle_public.py && python3 scripts/build_site.py
-   ```
+   With no model configured it must exit 2 *and say why*. A bare traceback
+   reads as a broken repository rather than an unconfigured machine.
 
 ---
 
@@ -329,12 +349,13 @@ labs/b2.10-eval-harness/scripts/vulnbench.sh <command>
 
 - **Secrets never enter the repo.** Keys live outside it and are sourced per
   command. `check_secrets.py` gates every commit and runs in CI.
-- **Kaggle publishes at most ~15 public notebooks per day.** This is a quota,
-  not a rate limit — backoff does not clear it, and it resets on the day
-  boundary. Filling in the remaining kernels is a job measured in days.
-- **The site degrades correctly while that happens.** A lesson whose kernel is
-  not public yet renders its verified recorded output inline; it flips to the
-  live embed on the next probe-and-build. Never embed unconditionally.
+- **Every lesson runs locally, and only locally.** There is no hosted notebook
+  route and no execution surface this repository does not own. A lesson's run
+  block is two commands: run the skill's script against its committed fixture,
+  or link the skills into your own agent CLI and ask for one by name.
+- **The skills store is one directory with symlinks out of it.** Never copy a
+  skill into a tool's directory to "make it work" — a copy is a fork, and the
+  next fix reaches one of them.
 - **Develop on the branch you were given**, commit with a message that says why,
   and push there.
 
@@ -344,14 +365,18 @@ labs/b2.10-eval-harness/scripts/vulnbench.sh <command>
 
 Every line here cost a debugging session. Read it before you spend the same one.
 
-- **Kaggle answers `HEAD` with 404 for a kernel that is public.** Probe with
-  `GET`. A `HEAD` probe reports every kernel private and silently disables every
-  embed.
-- **A private Kaggle kernel renders as an empty iframe with no error.** Green
-  build, finished-looking page, blank rectangle. Hence the conditional embed.
-- **A transient failure must never overwrite a ledger row.** A rate-limited push
-  once rewrote a verified `complete` into `ERROR`, and every later attempt kept
-  it there. A rate limit says nothing about the notebook.
+- **A quota rejection is not a skill failure, and it looks exactly like one.**
+  A sweep once reported 121 of 140 skills broken; every one was the account's
+  usage limit. The tell is latency — a real model call takes 30 to 160 seconds
+  and a rejection comes back in two. `ModelUnavailable` exists for precisely
+  this, and a sweep that hits it must abort rather than record results.
+- **A transient failure must never overwrite a recorded result.** A rate-limited
+  run once rewrote a verified `complete` into `ERROR`, and every later attempt
+  kept it there. A rate limit says nothing about the thing it interrupted.
+- **`pgrep -f` and `pkill -f` match their own command line.** A sweep-watcher
+  reported the sweep running when it had been killed mid-write, and the `pkill`
+  meant to stop it killed the shell issuing it. Write the script to a file and
+  match on its path.
 - **Never loop `re.sub` over sentinel-wrapped replacements to renumber ids.** The
   sentinel is not in `[A-Za-z0-9.]`, so a later lookbehind matches already
   renamed text and the renames chain. One `re.sub`, one alternation, a callback.
@@ -363,12 +388,16 @@ Every line here cost a debugging session. Read it before you spend the same one.
   with every rule individually fine. Read `check_contrast.py`, do not read the
   stylesheet.
 - **A gate that reads the wrong artefact passes vacuously.** `check_clarity.py`
-  read notebook markdown; when notebooks became code-only it would have passed
-  134 lessons without reading a word. Point gates at what the reader sees.
-- **Never measure "runs a skill" by asking whether the notebook has a code
-  cell.** Every notebook is code-only now, including the three reading lessons,
-  whose single cell is a comment — counting cells reports all 134 as running a
-  skill and the "131 of 134" claim silently becomes false. `check_claims.py`
-  measures it from the lesson sources, restricted to ids the curriculum carries,
-  because `EXERCISES` still holds three orphans from the Function C trim
-  (C2.8–C2.10) that are not lessons.
+  once read a generated intermediate rather than the page; when that
+  intermediate lost its prose the gate would have passed 134 lessons without
+  reading a word. Point gates at what the reader sees.
+- **Measure "runs a skill" from the lesson sources, never from a generated
+  artefact.** `check_claims.py` counts `EXERCISES` steps of kind `py`,
+  `skill_script` or `model`, restricted to ids the curriculum carries — because
+  `EXERCISES` still holds three orphans from the Function C trim (C2.8–C2.10)
+  that are not lessons, and counting them makes the "132 of 135" claim silently
+  false.
+- **A `--check` flag a script does not define is silently ignored.**
+  `build_curriculum.py` took no arguments and was run with `--check` for
+  months; it exited 0 every time without comparing anything, which is why a
+  clarity fix reached the site and never reached `curriculum/track-e1.md`.

@@ -19,8 +19,8 @@ not a model result.
 **There is no paid backend, deliberately.** A curriculum that is free to read
 should be free to run, so the adapter speaks one protocol — OpenAI-compatible
 chat completions — and every model result in this repository was established
-against open weights downloaded from Kaggle and served on a CPU. A hosted
-provider that speaks the same protocol works too; none is required.
+against open weights served locally on a CPU. A hosted provider that speaks the
+same protocol works too; none is required.
 
 ```bash
 # open weight, local
@@ -85,7 +85,7 @@ needs ~40GB RAM. If your laptop has 16GB, use the small variants
 small model.
 
 The 128 model-facing lessons were run against two sizes on 4 CPUs with no GPU,
-on weights pulled from Kaggle Models. Each calls the model from inside its
+on GGUF weights served by llama.cpp. Each calls the model from inside its
 **skill's own script** — there is no adapter in a lesson — so what is tested
 here is the same file `scripts/test_skills.py` runs offline.
 
@@ -119,7 +119,7 @@ worth knowing before you write your own acceptance property:
 
 Full transcripts, with `property_source` recording whether each verdict came
 from the script's printed property or its exit code, in
-[`labs/notebooks/_live_model.json`](labs/notebooks/_live_model.json); the
+[`labs/evidence/live_model.json`](labs/evidence); the
 write-up is in [`labs/tools/EVIDENCE.md`](labs/tools/EVIDENCE.md).
 
 **[llama.cpp](https://github.com/ggml-org/llama.cpp)** if you want GGUF control:
@@ -128,30 +128,20 @@ write-up is in [`labs/tools/EVIDENCE.md`](labs/tools/EVIDENCE.md).
 llama-server -hf unsloth/GLM-4.6-GGUF --port 11434 -c 8192
 ```
 
-### Weights from Kaggle, if you already have a Kaggle account
+### GGUF weights by hand, if you want one quantisation and not thirteen
 
-Kaggle hosts the open-weight families as **Models**, including GGUF builds, and
-the API will serve a single file rather than the whole instance — which matters,
-because a GGUF instance bundles every quantisation and the Qwen2.5-1.5B one is
-13 GB for what you actually want at 1.1 GB.
+A GGUF repository bundles every quantisation, and the Qwen2.5-1.5B one is 13 GB
+for the 1.1 GB file you actually want. Pull the single file:
 
 ```bash
-# list what a family ships, with sizes
-curl -sH "authorization: Bearer $KAGGLE_KEY" \
-  https://www.kaggle.com/api/v1/models/qwen-lm/qwen2.5/gguf/1.5b-instruct/1/files
-
 # pull exactly one quantisation
-curl -sSL -H "authorization: Bearer $KAGGLE_KEY" -o qwen2.5-1.5b-instruct-q4_k_m.gguf \
-  https://www.kaggle.com/api/v1/models/qwen-lm/qwen2.5/gguf/1.5b-instruct/1/download/qwen2.5-1.5b-instruct-q4_k_m.gguf
+curl -sSL -o qwen2.5-1.5b-instruct-q4_k_m.gguf \
+  https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf
 
 # serve it OpenAI-compatibly, CPU only
 python3 -m llama_cpp.server --model qwen2.5-1.5b-instruct-q4_k_m.gguf --port 11434
 export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=none MODEL=qwen2.5-1.5b-instruct
 ```
-
-The `framework` segment is lower-case in the API path (`gguf`) and capitalised
-in the web URL (`Gguf`); the API returns 404 for the capitalised form, which
-reads like the model does not exist.
 
 For 7B — the size the acceptance criteria need — the q4_k_m build is **split
 across two shards**. Download both, then point llama.cpp at the first; it opens
@@ -159,9 +149,8 @@ the rest itself:
 
 ```bash
 for p in 1 2; do
-  curl -sSL -H "authorization: Bearer $KAGGLE_KEY" \
-    -o qwen2.5-7b-instruct-q4_k_m-0000$p-of-00002.gguf \
-    https://www.kaggle.com/api/v1/models/qwen-lm/qwen2.5/gguf/7b-instruct/1/download/qwen2.5-7b-instruct-q4_k_m-0000$p-of-00002.gguf
+  curl -sSL -o qwen2.5-7b-instruct-q4_k_m-0000$p-of-00002.gguf \
+    https://huggingface.co/Qwen/Qwen2.5-7B-Instruct-GGUF/resolve/main/qwen2.5-7b-instruct-q4_k_m-0000$p-of-00002.gguf
 done
 python3 -m llama_cpp.server --model qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf \
   --model_alias qwen2.5-7b-instruct --port 11434 --n_ctx 4096 --chat_format qwen

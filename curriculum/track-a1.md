@@ -11,7 +11,7 @@
 
 **Deliverable:** A component map of one agentic system you run, with every applicable threat marked against the component it lands on.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -24,9 +24,12 @@
 **Run it** — Place the five functions of the commons on one diagram and find where your own work sits.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.0.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.0   # run it headless and check it
+# --- a reading lesson: no skill to run, so there is nothing to install ---
+# read the page, then take the next lesson in the chapter
+
+# --- when you get to one that does run a skill, this links them all in ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function A's component map. Function A itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
@@ -42,9 +45,17 @@ python3 scripts/run_notebooks.py --session A1.0   # run it headless and check it
 **Run it** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/architecture/agentic-architecture-map/scripts/agentic_architecture_map.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.
@@ -63,9 +74,17 @@ python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
 **Run it** — Send an override through the ingress component and watch the agent's goal change.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/instruction-channel-check/scripts/instruction_channel_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The same agent answers a normal question correctly and hands over its internal note when the user tells it to ignore its instructions — because both instructions arrived in one string with no channel separating them.
@@ -84,9 +103,17 @@ python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it
 **Run it** — Poison one retrieved document and watch the agent act on it with the user's authority.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/indirect-injection-path-trace/scripts/indirect_injection_path_trace.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The same payload steers the agent through all four untrusted entry components — retrieved knowledge, persisted memory, an MCP tool description and a tool result — and in every case the action runs with the requesting user's authority.
@@ -105,9 +132,17 @@ python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
 **Run it** — Write one poisoned fact into memory and watch it steer a later, unrelated session.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/memory-scope-and-origin-audit/scripts/memory_scope_and_origin_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A poisoned note extracted from one user's ticket is written to workspace memory, and days later steers an unrelated request from a different user — because memory is keyed by workspace rather than by the identity that wrote it, and the origin was discarded on write.
@@ -126,9 +161,17 @@ python3 scripts/run_notebooks.py --session A1.4   # run it headless and check it
 **Run it** — Call one over-scoped tool with attacker-chosen arguments and see what it reaches.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/tool-scope-abuse-probe/scripts/tool_scope_abuse_probe.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A single database tool, scoped for the widest job it ever performs, reads a signing key and empties the secrets table for requests it was never meant to serve — with the right identity, a familiar tool and well-formed arguments on every call.
@@ -145,9 +188,17 @@ python3 scripts/run_notebooks.py --session A1.5   # run it headless and check it
 **Run it** — Have an agent inherit a privileged token and reach something its requester never could.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/authorization-subject-check/scripts/authorization_subject_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A user holding only `reports:read` triggers a `db:admin` action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names `agent-svc` on every row, so the human who caused it cannot be recovered from it at all.
@@ -164,9 +215,17 @@ python3 scripts/run_notebooks.py --session A1.6   # run it headless and check it
 **Run it** — Have two agents share a credential, then try to work out which one made the call.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.7   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/shared-credential-attribution-check/scripts/shared_credential_attribution_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.
@@ -185,9 +244,17 @@ python3 scripts/run_notebooks.py --session A1.7   # run it headless and check it
 **Run it** — Execute model-authored code and enumerate what the process could touch.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.8   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/generated-code-reach-enumerator/scripts/generated_code_reach_enumerator.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address.
@@ -206,9 +273,17 @@ python3 scripts/run_notebooks.py --session A1.8   # run it headless and check it
 **Run it** — Fire four realistic payloads at the review harness and compare keyword filtering against provenance.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/content-derived-privilege-check/scripts/content_derived_privilege_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked.
@@ -225,9 +300,17 @@ python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it
 **Run it** — Send one poisoned inter-agent message and watch it propagate through the topology.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.10   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/peer-message-propagation-trace/scripts/peer_message_propagation_trace.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A single poisoned document read by one agent propagates through the topology as a peer message, and more than one agent acts on it — with the phrase identifying its source dropped on the first hop, because summarising is what the hand-off does.
@@ -244,9 +327,17 @@ python3 scripts/run_notebooks.py --session A1.10   # run it headless and check i
 **Run it** — Introduce an unregistered agent into the topology and have it receive delegated work.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.11   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/agent-registry-gap-check/scripts/agent_registry_gap_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Three agents are discovered, two are in the registry, and all three receive delegated work — including the narrowed user token. The unregistered agent can now act as the requesting user against any downstream that honours it.
@@ -265,9 +356,17 @@ python3 scripts/run_notebooks.py --session A1.11   # run it headless and check i
 **Run it** — Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.12   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/confidence-provenance-decay-check/scripts/confidence_provenance_decay_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears.
@@ -284,9 +383,17 @@ python3 scripts/run_notebooks.py --session A1.12   # run it headless and check i
 **Run it** — Run a loop with no ceiling and count what it consumes before anything notices.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.13   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/unbounded-loop-cost-probe/scripts/unbounded_loop_cost_probe.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.
@@ -303,9 +410,17 @@ python3 scripts/run_notebooks.py --session A1.13   # run it headless and check i
 **Run it** — Reconstruct who caused a deletion from a log that records only tool calls.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.14.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.14   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/audit-answerability-check/scripts/audit_answerability_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A complete-looking tool-call log answers none of the three questions an investigation needs — which user, what motivated it, which hop originated it — because the principal, the motivating input and the delegation chain were never recorded.
@@ -321,9 +436,17 @@ python3 scripts/run_notebooks.py --session A1.14   # run it headless and check i
 **Run it** — Push approval volume up and measure the point at which review quality collapses.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.15.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.15   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/approval-queue-saturation-model/scripts/approval_queue_saturation_model.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.
@@ -342,9 +465,17 @@ python3 scripts/run_notebooks.py --session A1.15   # run it headless and check i
 **Run it** — Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.16.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.16   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/objective-gaming-check/scripts/objective_gaming_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* An agent told to reduce open alerts closes all twenty for a quarter of its budget, meeting the objective exactly — while closing five real incidents unread, with each step defensible in isolation and no false statement anywhere in the transcript.
@@ -360,9 +491,17 @@ python3 scripts/run_notebooks.py --session A1.16   # run it headless and check i
 **Run it** — Launder a request through a delegation chain to reach something the requester was denied.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.17.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.17   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/threats/authority-composition-check/scripts/authority_composition_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does.
@@ -378,9 +517,17 @@ python3 scripts/run_notebooks.py --session A1.17   # run it headless and check i
 **Run it** — Roll the twelve risks up into families, find which agent carries each, and check that every row has an owner.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.18.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.18   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/risk-registry-integrator/scripts/risk_registry_integrator.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. Every risk has an owner, across more than fifteen lessons in four functions.
@@ -396,12 +543,17 @@ python3 scripts/run_notebooks.py --session A1.18   # run it headless and check i
 **Run it** — Score the twenty-two controls and read the two coverage lines separately — the gap between them is the finding.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.19.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.19   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- or run the skill directly, which is what the notebook does ---
-PYTHONPATH=skills/_runtime python3 skills/architecture/control-baseline-index/scripts/control_baseline_index.py
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/architecture/control-baseline-index/scripts/control_baseline_index.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Twenty-two controls indexed across two eras, each with a status and the lesson that owns it, then coverage scored per era: 50% on the twelve controls that predate agents and 10% on the ten that arrived with them.

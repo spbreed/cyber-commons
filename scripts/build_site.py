@@ -33,16 +33,15 @@ CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
 VIDEOS = json.loads((ROOT / "site" / "data" / "videos.json").read_text()).get("videos", {})
 NOTES_DIR = ROOT / "lessons"
-NB_DIR = ROOT / "labs" / "notebooks"
 OUT = ROOT / "site" / "lessons"
 # Owner, repository, branch and the URLs built from them all live in one
 # module. Links built against a branch that has no such path are the bug that
 # constant exists to prevent, and scripts/check_repo_links.py enforces it.
 from exercises.repo import BRANCH, RAW, REPO  # noqa: E402
 
-# Execution evidence still gates CI — scripts/run_notebooks.py and
-# scripts/kaggle_verify.py must both pass — but it is no longer printed on the
-# page. A badge on every lesson saying the notebook ran is a claim the reader
+# Execution evidence still gates CI — scripts/test_skills.py and
+# scripts/check_determinism.py must both pass — but it is no longer printed on
+# the page. A badge on every lesson saying the skill ran is a claim the reader
 # cannot check and stops reading after the third time.
 
 # Framework labels, resolved per lesson: a lesson takes its track's row from
@@ -162,33 +161,20 @@ def flatten():
 
 
 def exercise_link(sid: str) -> tuple[str, str]:
-    """(url, label) for the exercise behind a lesson.
+    """(url, label) for the skill behind a lesson.
 
-    Every session has a notebook — `build_notebooks.py` fails the build if one
-    is missing — so this always resolves to a path that exists. The previous
-    version guessed a lab directory out of the command block and pointed at
-    `main`, which produced 404s on two counts: most of those directories were
-    never created, and the content lives on a branch.
+    Resolved from the lesson's own steps, so it always points at a directory
+    that exists. An earlier version guessed a lab directory out of the command
+    block and pointed at `main`, which produced 404s on two counts: most of
+    those directories were never created, and the content lives on a branch.
     """
-    rel = f"labs/notebooks/{sid}.ipynb"
-    return f"{REPO}/blob/{BRANCH}/{rel}", rel
+    rel = "skills/" + (script_of(sid) or "").rsplit("/scripts/", 1)[0]
+    return f"{REPO}/tree/{BRANCH}/{rel}", rel
 
 
-def kaggle_url(sid: str) -> str:
-    """Kaggle's import-from-URL entry point.
-
-    Opening this signs the reader into their own Kaggle account and creates a
-    new kernel in it from the raw notebook — so the exercise lands in *their*
-    workspace, not ours. The notebook's own bootstrap cell then clones the
-    repository for the lab library.
-    """
-    return f"https://www.kaggle.com/kernels/welcome?src={RAW}/labs/notebooks/{sid}.ipynb"
-
-
-# The lesson body is rendered from the same sources the notebook is built from,
-# never from the notebook itself. The notebook now carries code and nothing
-# else — the prose lived in both places and the copy inside the notebook was
-# the one nobody could correct.
+# The lesson body is rendered from `scripts/exercises/` — the same sources the
+# skills and the recording scripts are built from. There is one copy of the
+# prose and one copy of the procedure, and neither lives on this page.
 sys.path.insert(0, str(ROOT / "scripts"))
 from exercises import EXERCISES                       # noqa: E402
 from exercises.about import ABOUT                     # noqa: E402
@@ -218,36 +204,6 @@ def sec_open(key: str, extra: str = "") -> str:
             f'<h2 class="lsh"><span class="lsi">{icon}</span>'
             f'{html.escape(title)}{extra}</h2>'
             f'<div class="lsb">')
-
-
-KAGGLE_OWNER = "cybercommons"
-
-# Which kernels a visitor can actually see. Written by
-# scripts/check_kaggle_public.py; missing or empty means embed nothing, which
-# is the safe direction — a private kernel renders as a blank frame, not an
-# error, so an unconditional embed fails silently on every page.
-_KP = NB_DIR / "_kaggle_public.json"
-KAGGLE_PUBLIC = set(
-    json.loads(_KP.read_text()).get("public", []) if _KP.is_file() else [])
-
-
-def kaggle_slug(sid: str) -> str:
-    """The kernel slug scripts/kaggle_push.py creates for a session."""
-    return f"cyber-commons-{sid.lower().replace('.', '-')}"
-
-
-def kaggle_embed(sid: str) -> str:
-    """The live Kaggle kernel for a lesson, as Kaggle's own embedded viewer."""
-    slug = kaggle_slug(sid)
-    return (
-        f'<div class="kembed">'
-        f'<div class="kbar"><span class="kdot"></span>'
-        f'<span>Live Kaggle notebook — {html.escape(sid)}</span>'
-        f'<a href="https://www.kaggle.com/code/{KAGGLE_OWNER}/{slug}" '
-        f'target="_blank" rel="noopener">open on Kaggle ↗</a></div>'
-        f'<iframe src="https://www.kaggle.com/embed/{KAGGLE_OWNER}/{slug}" '
-        f'title="Kaggle notebook {html.escape(sid)}" loading="lazy" '
-        f'frameborder="0" scrolling="auto"></iframe></div>')
 
 
 def skill_html(ref: str) -> str:
@@ -330,26 +286,18 @@ def lesson_body(entry: dict) -> str:
         out.append(f'<div class="how">{prose}</div>')
     out.append("</div></section>")
 
-    # 4 — the procedure, and the kernel that runs it
-    has_code = bool(NB_DIR.joinpath(f"{sid}.ipynb").is_file() and any(
-        c["cell_type"] == "code"
-        for c in json.loads((NB_DIR / f"{sid}.ipynb").read_text())["cells"]))
-    if skill or has_code:
+    # 4 — the procedure, and how to run it on your own machine
+    runs = has_code(sid)
+    if skill or runs:
         out.append(sec_open("skill"))
         if skill:
             out.append(f'<div class="skillmd">{skill}</div>')
-        if has_code:
-            if sid in KAGGLE_PUBLIC:
-                out.append(kaggle_embed(sid))
-                out.append('<details class="recorded"><summary>The recorded run, '
-                           'checked byte for byte against the Kaggle kernel above'
-                           '</summary>' + output_block(sid) + "</details>")
-            else:
-                out.append(output_block(sid))
+        if runs:
+            out.append(run_block(sid))
         out.append("</div></section>")
 
     # 5, 6, 7 — the result, the exercise, and the gap into the next chapter
-    if has_code and (expect := ex.get("expect")):
+    if runs and (expect := ex.get("expect")):
         out.append(sec_open("proved") + md_to_html(expect.strip()) + "</div></section>")
     if challenge := ex.get("challenge"):
         out.append(sec_open("turn") + md_to_html(challenge.strip()) + "</div></section>")
@@ -366,103 +314,69 @@ DIAGRAM_MARK = re.compile(r"^\[diagram:(dot|puml):([a-z0-9-]+)\]$", re.M)
 DIAGRAMS_DIR = ROOT / "site" / "assets" / "diagrams"
 
 
-def output_block(sid: str) -> str:
-    """The recorded stdout, with any emitted diagram source shown as the picture.
-
-    A skill that emits a graph prints DOT or PlantUML, because source is text
-    and the notebook has to stay standard-library-only. On the page that source
-    is forty lines of coordinates nobody reads, and the rendered SVG — produced
-    from exactly those bytes by `scripts/render_diagrams.py` with the real
-    binaries — is the thing worth looking at. So the source is replaced by its
-    render, and the rest of the output is untouched.
-    """
-    out = recorded_output(sid)
-    marks = list(DIAGRAM_MARK.finditer(out))
-    if not marks:
-        return (f'<div class="nbcode"><span class="nbtag">Out</span>'
-                f'<pre><code>{html.escape(out)}</code></pre></div>')
-
-    parts, cursor = [], 0
-    for i, m in enumerate(marks):
-        head = out[cursor:m.start()].rstrip()
-        if head.strip():
-            parts.append(f'<div class="nbcode"><span class="nbtag">Out</span>'
-                         f'<pre><code>{html.escape(head)}</code></pre></div>')
-        stem = m.group(2)
-        body_end = marks[i + 1].start() if i + 1 < len(marks) else len(out)
-        body = out[m.end():body_end]
-        terminator = "}" if m.group(1) == "dot" else "@enduml"
-        cut = body.rindex(terminator) + len(terminator) if terminator in body else 0
-        cursor = m.end() + cut
-        if (DIAGRAMS_DIR / f"{stem}.svg").is_file():
-            parts.append(
-                f'<figure class="nbdiag"><img src="../assets/diagrams/{stem}.svg" '
-                f'alt="{html.escape(stem.replace("-", " "))}" loading="lazy">'
-                f'<figcaption>Rendered from the skill\u2019s own '
-                f'{"Graphviz DOT" if m.group(1) == "dot" else "PlantUML"} output '
-                f'by <code>scripts/render_diagrams.py</code>. '
-                f'<a href="../assets/diagrams/{stem}.svg" target="_blank" '
-                f'rel="noopener">open full size</a></figcaption></figure>')
-        else:
-            parts.append(f'<div class="nbcode"><span class="nbtag">Out</span>'
-                         f'<pre><code>{html.escape(body[:cut])}</code></pre></div>')
-    tail = out[cursor:].strip()
-    if tail:
-        parts.append(f'<div class="nbcode"><span class="nbtag">Out</span>'
-                     f'<pre><code>{html.escape(tail)}</code></pre></div>')
-    return "".join(parts)
-
-
 FALLBACK_SCRIPT = "the skill\u2019s script"
 
 
 def script_of(sid: str) -> str | None:
-    """The skill script this lesson runs, read out of the built notebook.
+    """The skill script this lesson runs, as `<area>/<name>/scripts/<file>.py`.
 
-    Naming it on the page is the point of the change: the reader can open that
-    file in the repository and see the whole procedure, rather than scrolling a
-    notebook that used to inline it.
+    Read from the lesson's own steps. It used to be parsed back out of the
+    built notebook, which meant the page could only name a script after a
+    build had produced one; the sources are the answer and always were.
     """
-    f = NB_DIR / f"{sid}.ipynb"
-    if not f.is_file():
-        return None
-    for cell in json.loads(f.read_text()).get("cells", []):
-        if cell.get("cell_type") != "code":
-            continue
-        for line in cell.get("source", []):
-            if line.startswith("SCRIPT = "):
-                return line.split("=", 1)[1].strip().strip('"')
+    for kind, value in EXERCISES.get(sid, {}).get("steps", []):
+        if kind == "skill_script" and isinstance(value, str):
+            return value
     return None
 
-
-def recorded_output(sid: str) -> str:
-    """What this lesson printed when it ran — on Kaggle, verified against local.
-
-    `labs/notebooks/_output/<id>.txt` is written by `run_notebooks.py` on every
-    run, so it cannot show output from a lesson that has since changed —
-    which the previous source, refreshed only when kaggle_verify was passed
-    --save, silently did. `kaggle_verify.py` separately proves this same text
-    is what a Kaggle kernel printed.
-    """
-    f = ROOT / "labs" / "notebooks" / "_output" / f"{sid}.txt"
-    if f.is_file() and f.read_text().strip():
-        return f.read_text().rstrip()
-    return "(no output — this is a reading lesson)"
 
 
 def has_code(sid: str) -> bool:
     """Does this lesson actually have something to run?
 
     Several lessons — the function introductions, the architecture map — are
-    diagrams and prose end to end. Offering "Run on Kaggle" on those sends the
-    reader to a kernel with nothing in it to execute, which teaches them the
-    button is decorative everywhere else too.
+    diagrams and prose end to end. Offering a run command on those sends the
+    reader to something with nothing in it to execute, which teaches them the
+    instruction is decorative everywhere else too.
+
+    Measured from the lesson's own steps, which is where the answer lives now
+    that there are no notebooks to inspect.
     """
-    path = NB_DIR / f"{sid}.ipynb"
-    if not path.is_file():
-        return False
-    return any(c.get("cell_type") == "code" and "".join(c.get("source", [])).strip()
-               for c in json.loads(path.read_text()).get("cells", []))
+    ex = EXERCISES.get(sid, {})
+    return any(k in ("py", "skill_script", "model")
+               for k, _ in ex.get("steps", []))
+
+
+def run_block(sid: str) -> str:
+    """How to run this lesson's skill, on the reader's own machine.
+
+    Two routes, because they are genuinely different things. Installing the
+    skill into an agent is what the agentskills.io format is *for* — the agent
+    reads the SKILL.md and carries out the procedure itself. Running the script
+    is for when you want the same committed fixture every time, so two runs are
+    comparable. Both appear, in that order, because the first is the one a
+    reader will actually use and the second is the one a reviewer needs.
+    """
+    script = script_of(sid)
+    if not script:
+        return ""
+    name = script.split("/")[1]
+    return (
+        '<div class="runbox">'
+        '<p><b>Run it in your agent.</b> Link the skills store into whichever '
+        'CLI you use — Claude Code, Codex, Gemini and the rest read the same '
+        'format — then ask for the task in your own words.</p>'
+        '<pre><code>python3 scripts/install_skills.py --all\n'
+        f'# then, in your agent: ask for "{html.escape(name.replace("-", " "))}"'
+        '</code></pre>'
+        '<p><b>Or run the harness directly</b>, against the fixture committed '
+        'with the skill, so two runs are comparable:</p>'
+        f'<pre><code>python3 skills/{html.escape(script)}</code></pre>'
+        '<p class="runnote">Both need a model. A signed-in Claude Code CLI '
+        'needs no API key; any OpenAI-compatible endpoint works too. With '
+        'neither, the skill exits 2 and says so rather than inventing an '
+        'answer. <a href="A0.0.html">A0.0</a> sets this up.</p>'
+        '</div>')
 
 
 def video_block(sid: str, title: str) -> str:
@@ -552,36 +466,34 @@ def lesson_page(entry, prev, nxt) -> str:
     if s.get("lab"):
         parts.append(f'<p class="sub">{html.escape(s["lab"])}</p>')
 
-    # The buttons come first: the point of the page is that you can run it.
-    # Two buttons, and only on a lesson that has code — a reading lesson gets
-    # neither, because there is nothing on the other end of them.
+    # One button, and only on a lesson that has something to run — a reading
+    # lesson gets none, because there is nothing on the other end of it.
     if has_code(sid):
+        skill_dir = (script_of(sid) or "").rsplit("/scripts/", 1)[0]
         parts.append('<div class="cta-row">'
-                     f'<a class="btn k" href="{kaggle_url(sid)}" target="_blank" rel="noopener">'
-                     f'▶ Run on Kaggle</a>'
-                     f'<a class="btn p" href="{ex_url}" target="_blank" rel="noopener">'
-                     f'↗ Open the notebook on GitHub</a>'
+                     f'<a class="btn k" href="{REPO}/tree/{BRANCH}/skills/'
+                     f'{html.escape(skill_dir)}" target="_blank" rel="noopener">'
+                     f'↗ Open this skill in the repository</a>'
                      '</div>')
-        # Collapsed by default. It is prerequisite detail — the same four
-        # sentences on all 120 pages — and a reader who has run one lesson
-        # never needs it again, so it should not sit above the lesson every
-        # time. <details> needs no JavaScript and stays keyboard-accessible.
-        parts.append('<details class="kagnote"><summary>What “Run on Kaggle” '
-                     'does, and what it needs</summary>'
-                     '<div class="kagbody"><p>“Run on Kaggle” opens the notebook in '
-                     '<b>your own</b> Kaggle account as a new kernel. The notebook '
-                     'carries no procedure: it clones this repository — shallow '
-                     'and sparse, the skills directory only, about three seconds '
-                     '— and runs '
-                     f'<code>{html.escape(script_of(sid) or FALLBACK_SCRIPT)}</code> '
-                     'out of it. Switch <b>Internet</b> on in the notebook '
-                     'settings first; Kaggle gates that on a verified phone '
-                     'number, and without one you can attach the dataset '
-                     '<code>cybercommons/cyber-commons-skills</code> instead. '
-                     'The copy is yours to edit and re-run, and nothing is '
-                     'written back here.</p>'
-                     '<p>New here? <a href="A0.1.html">A0.1</a> walks the whole '
-                     'mechanism and runs it on itself.</p></div></details>')
+        # Collapsed by default. It is prerequisite detail — the same few
+        # sentences on every page — and a reader who has run one lesson never
+        # needs it again, so it should not sit above the lesson every time.
+        # <details> needs no JavaScript and stays keyboard-accessible.
+        parts.append('<details class="kagnote"><summary>What running a lesson '
+                     'needs</summary>'
+                     '<div class="kagbody"><p>Every skill here is carried out by '
+                     'a <b>model</b>; the script is the harness. Link the skills '
+                     'store into your agent with '
+                     '<code>python3 scripts/install_skills.py --all</code> and ask '
+                     'for the task in your own words, or run '
+                     f'<code>python3 skills/{html.escape(script_of(sid) or FALLBACK_SCRIPT)}</code> '
+                     'against the fixture committed with the skill.</p>'
+                     '<p>A signed-in Claude Code CLI needs <b>no API key</b>; any '
+                     'OpenAI-compatible endpoint works too. With neither, the '
+                     'skill exits 2 and says so rather than inventing an answer. '
+                     '<a href="A0.0.html">A0.0</a> sets it up, and '
+                     '<a href="A0.1.html">A0.1</a> explains how a lesson is '
+                     'built.</p></div></details>')
     else:
         parts.append('<p class="sub kagnote">This lesson is a reading lesson — '
                      'diagrams and prose, no code to run.</p>')
@@ -664,15 +576,15 @@ DAY_END = "<!-- DAYS:END -->"
 
 def home_numbers() -> dict[str, int]:
     """Every count the homepage is allowed to state, measured not typed."""
-    nb = list(NB_DIR.glob("*.ipynb"))
     return {
         "sessions": sum(len(t["sessions"]) for f in CUR["functions"] for t in f["tracks"]),
         "chapters": sum(len(f["tracks"]) for f in CUR["functions"]),
         "functions": len(CUR["functions"]),
         "skills": len(list((ROOT / "skills").rglob("SKILL.md"))),
-        "run_a_skill": sum(1 for f in nb
-                           if any(c["cell_type"] == "code"
-                                  for c in json.loads(f.read_text())["cells"])),
+        # Measured from the lesson sources — the steps that actually execute —
+        # which is where the answer lives now that there are no notebooks.
+        "run_a_skill": sum(1 for f in CUR["functions"] for t in f["tracks"]
+                           for s in t["sessions"] if has_code(s["id"])),
     }
 
 
@@ -792,15 +704,18 @@ def main() -> int:
 
     seq = flatten()
 
-    # Link integrity. Every "Open the exercise" button points at a path inside
-    # this repository, so a 404 is detectable here rather than by a reader.
-    # This is the check that was missing when those links shipped broken.
+    # Link integrity. Every "Open this skill" button points at a directory
+    # inside this repository, so a 404 is detectable here rather than by a
+    # reader. This is the check that was missing when those links shipped
+    # broken.
     broken = [e["s"]["id"] for e in seq
-              if not (NB_DIR / f"{e['s']['id']}.ipynb").is_file()]
+              if has_code(e["s"]["id"])
+              and not (ROOT / "skills" /
+                       (script_of(e["s"]["id"]) or "x").rsplit("/scripts/", 1)[0]
+                       ).is_dir()]
     if broken:
-        print(f"::error::{len(broken)} lesson(s) link to a notebook that does not "
-              f"exist: {broken[:8]}\nRun: python3 scripts/build_notebooks.py",
-              file=sys.stderr)
+        print(f"::error::{len(broken)} lesson(s) link to a skill directory that "
+              f"does not exist: {broken[:8]}", file=sys.stderr)
         return 1
 
     OUT.mkdir(parents=True, exist_ok=True)

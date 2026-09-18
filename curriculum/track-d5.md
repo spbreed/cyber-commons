@@ -11,7 +11,7 @@
 
 **Deliverable:** A closed incident record: root cause, layer, policy diff, and the indicators that did and did not come back.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -25,13 +25,17 @@
 **Run it** — Replay an agent run for a regulator-grade record.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/run-replayability-audit/scripts/run_replayability_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The run reproduces, or the tool tells you exactly which field was never logged to make replay possible.
@@ -47,9 +51,17 @@ python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 **Run it** — Build a root cause record from a reconstructed incident and check it names a control rather than a person.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/root-cause-record/scripts/root_cause_record.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Build a root cause record from a reconstructed incident and check it names a control rather than a person.
@@ -65,13 +77,17 @@ python3 scripts/run_notebooks.py --session D5.2   # run it headless and check it
 **Run it** — Pick the right layer for five real incidents.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir/postmortem
-for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/post-incident-change-surface/scripts/post_incident_change_surface.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Most land on the control plane — identity, policy, sandbox — not the prompt.
@@ -88,9 +104,17 @@ for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
 **Run it** — Re-run the KCI measurement against a fixed estate and show which indicators recovered and which did not.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/kci-fix-validation/scripts/kci_fix_validation.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Re-run the KCI measurement against a fixed estate and show which indicators recovered and which did not.
@@ -107,9 +131,17 @@ python3 scripts/run_notebooks.py --session D5.4   # run it headless and check it
 **Run it** — Generate a policy diff from a root cause record and review what it would have prevented.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/policy-change-proposal/scripts/policy_change_proposal.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Generate a policy diff from a root cause record and review what it would have prevented.
@@ -125,14 +157,17 @@ python3 scripts/run_notebooks.py --session D5.5   # run it headless and check it
 **Run it** — Run the first-hour checklist in a tabletop.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-python3 first_hour.py --case case-01 --checklist ../e2-compliance/notification.yaml
-python3 first_hour.py --case case-01 --materiality
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/regulatory-clock-check/scripts/regulatory_clock_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A materiality call and a notification clock started in hour one, feeding Track E2.

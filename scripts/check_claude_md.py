@@ -42,7 +42,10 @@ def scripts_named(text: str) -> set[str]:
     `check_foo.py` in the gate table, where the column is already narrow. Both
     are the same claim, so both count.
     """
-    return (set(re.findall(r"scripts/([a-z_0-9]+\.py)", text))
+    # The lookbehind matters: a skill's own script lives at
+    # skills/<area>/<name>/scripts/<name>.py, and without it every such path
+    # is read as a claim about scripts/ at the repo root and reported missing.
+    return (set(re.findall(r"(?<![\w/])scripts/([a-z_0-9]+\.py)", text))
             | set(re.findall(r"`([a-z_0-9]+\.py)[^`]*`", text)))
 
 

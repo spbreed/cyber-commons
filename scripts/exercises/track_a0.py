@@ -403,28 +403,25 @@ and a report counts in Function E.
          "same panel and the cell finds the tree at the mount point instead. "
          "The first run spends about three seconds on a shallow sparse clone; "
          "every run after that is instant.\\n\\n"
-         "The **Out** block on every lesson page is a real run, not a pasted "
-         "transcript: `run_notebooks.py` executes the notebook here, "
-         "`kaggle_verify.py` runs the same notebook on Kaggle, and the two are "
-         "compared byte for byte. If you get something else, one of us has a "
-         "bug worth reporting."),
+         "Every skill here is carried out by a **model**, so what you get is "
+         "one model's answer, validated against that skill's own output "
+         "contract. Run it twice and it will differ — that is the subject of "
+         "the whole commons, not a defect. What does not differ is the "
+         "harness: `check_determinism.py` runs every skill across several hash "
+         "seeds and fails if the deterministic half varies."),
 
-  *skill_steps("programme/lesson-preflight",
+  *skill_steps("programme/dev-environment-preflight",
                "## 6 · The whole mechanism, demonstrated on itself\\n\\n"
                "The rest of this lesson is the mechanism running. The skill "
-               "below is a preflight: it inventories the tree this host "
-               "fetched, then runs a real lesson's procedure three times — "
-               "twice in the two ways it actually breaks, once correctly.\\n\\n"
-               "The two failures are the two you will meet. **(a)** is a host "
-               "with no network and nothing fetched. **(b)** is a tree that "
-               "arrived but a shared library that is not on the import path: "
-               "some skills import the runtime rather than carrying a copy, "
-               "and the lesson cell is what puts it there.\\n\\n"
-               "Every number below is counted from the tree that was actually "
-               "fetched rather than written into this page — which is why "
-               "they move as the commons grows.\\n\\n"
-               "The procedure it runs correctly in **(c)** is A1.2's, so what "
-               "you see below is literally a later lesson's output."),
+               "below is a preflight: it reports the runtime and the model "
+               "that is about to answer, **causes the unconfigured failure on "
+               "purpose** in a child process so you meet that message here "
+               "rather than on lesson forty, then makes one real model call "
+               "and validates the reply against its own output contract.\\n\\n"
+               "That is the shape of every lesson in the commons. The skill "
+               "is the procedure, the model carries it out, and the contract "
+               "is what decides whether the answer is usable.\\n\\n"
+               "### The skill"),
  ],
  "expect": "The tree, inventoried from disk rather than asserted — fourteen "
            "areas and every skill in them, counted from what was fetched. Then "

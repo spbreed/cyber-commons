@@ -85,7 +85,7 @@ def render() -> dict[Path, str]:
                   f"**What changes:** {tr.get('changes','')}", "",
                   f"**Autonomy focus:** {tr.get('autonomy','')}", "",
                   f"**Deliverable:** {tr.get('deliverable','')}", "",
-                  "> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.", "",
+                  "> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.", "",
                   "---", ""]
             for s in tr["sessions"]:
                 md.append(session_md(s))

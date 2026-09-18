@@ -11,7 +11,7 @@
 
 **Deliverable:** One agentic incident understood end to end, plus one scored hunt with its hypothesis and population stated up front.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -27,15 +27,17 @@
 **Run it** — Run a triage loop over Wazuh alerts and supervise by exception.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-docker compose up -d wazuh opensearch
-./seed-alerts.sh                       # replayable alert corpus
-python3 triage_loop.py --model $MODEL --escalate-on high
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/triage-loop-with-floor/scripts/triage_loop_with_floor.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The loop clears the known-benign and escalates the rest with its reasoning attached.
@@ -52,9 +54,17 @@ python3 triage_loop.py --model $MODEL --escalate-on high
 **Run it** — Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/secops/investigation-admission-rules/scripts/investigation_admission_rules.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded.
@@ -73,15 +83,17 @@ python3 scripts/run_notebooks.py --session D3.2   # run it headless and check it
 **Run it** — A/B a generic prompt vs a context-loaded one on the same alert set.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-python3 triage_loop.py --context none     --alerts alerts.jsonl --score
-python3 triage_loop.py --context loaded   --alerts alerts.jsonl --score   # baseline+FPs+crown jewels
-python3 compare.py
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/secops/detection-triage/scripts/detection_triage.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The generic loop underperforms your worst analyst; the loaded one does not. Same model both times.
@@ -98,14 +110,17 @@ python3 compare.py
 **Run it** — Attribute an incident through the A2 `act` chain.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-./replay-incident.sh case-01
-python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/agent-actor-containment/scripts/agent_actor_containment.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it.
@@ -124,15 +139,17 @@ python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
 **Run it** — Reconstruct a timeline from raw logs with a context-loaded agent.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-python3 reconstruct.py --case case-01 --preload logs,telemetry,segmentation,playbooks --model $MODEL
-python3 reconstruct.py --case case-01 --preload none --model $MODEL
-diff <(jq -r .timeline[] preloaded.json) <(jq -r .timeline[] cold.json)
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/response/incident-reconstruction-check/scripts/incident_reconstruction_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered.
@@ -149,9 +166,17 @@ diff <(jq -r .timeline[] preloaded.json) <(jq -r .timeline[] cold.json)
 **Run it** — Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/secops/investigation-replan-trace/scripts/investigation_replan_trace.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded.
@@ -170,14 +195,17 @@ python3 scripts/run_notebooks.py --session D3.6   # run it headless and check it
 **Run it** — Scope a multi-agent incident end to end.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.7   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-./replay-incident.sh case-02   # multi-agent
-python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/secops/incident-scoping/scripts/incident_scoping.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The action-plane actor is a sub-agent two hops from the prompt that started it.
@@ -194,13 +222,17 @@ python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
 **Run it** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.8   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-python3 fleet_graph.py --window 24h --min-unrelated-readers 2
-python3 fleet_graph.py --signatures vocab,pivot,role
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/fleet-correlation-analysis/scripts/fleet_correlation_analysis.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.
@@ -219,15 +251,17 @@ python3 fleet_graph.py --signatures vocab,pivot,role
 **Run it** — Build a synthesis loop that must cite or abstain.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.9   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc/intel
-docker compose up -d opencti
-python3 synthesise.py --topic 'agentic malware' --require-source --model $MODEL
-python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch confidence appear from nowhere
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/threat-intel-to-rules/scripts/threat_intel_to_rules.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
@@ -244,9 +278,17 @@ python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch co
 **Run it** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.10   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/agent-telemetry-hunt/scripts/agent_telemetry_hunt.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Run three hypotheses over a labelled trace corpus and score what each one catches and misses.

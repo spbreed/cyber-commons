@@ -38,8 +38,6 @@ from exercises import EXERCISES  # noqa: E402
 
 def facts() -> dict[str, int]:
     """What is actually true, measured from the tree."""
-    nb = sorted(glob.glob(str(ROOT / "labs/notebooks/*.ipynb")))
-    cells = [json.loads(Path(f).read_text())["cells"] for f in nb]
     cur = json.loads((ROOT / "site/data/curriculum.json").read_text())
     routing = (ROOT / "scripts/check_skills.py").read_text()
     cases = routing.split("ROUTING_CASES = [", 1)[1].split("\n]", 1)[0]
@@ -47,7 +45,6 @@ def facts() -> dict[str, int]:
                              "--list"], capture_output=True, text=True)
     return {
         "skills": len(list((ROOT / "skills").rglob("SKILL.md"))),
-        "notebooks": len(nb),
         # Measured from the lesson sources, not from "does the notebook have a
         # code cell". Every notebook is code-only now, including the reading
         # lessons whose single cell is a comment — counting cells would report
@@ -92,20 +89,10 @@ CLAIMS = [
      "how many lessons execute something"),
     ("README.md", r"It runs (\d+) scripts, each of which", "ci_scripts",
      "how many check scripts CI runs"),
-    ("README.md", r"Every one of the (\d+) is executed in CI", "notebooks",
-     "the CI coverage claim"),
     ("README.md", r"skills/\s+(\d+) agent skills", "skills",
-     "the layout listing"),
-    ("README.md", r"labs/notebooks/\s+(\d+) generated notebooks", "notebooks",
      "the layout listing"),
     ("README.md", r"source of truth: (\d+) sessions", "sessions",
      "the layout listing"),
-    # The old claim was "run twice … and printed exactly the same bytes". That
-    # stopped being true when every skill became model-backed, so the guard
-    # follows the sentence that replaced it rather than protecting a promise
-    # the repository no longer makes.
-    ("README.md", r"\*\*Every one of the (\d+) notebooks executes in CI",
-     "notebooks", "the CI execution claim"),
     ("README.md", r"every one of the (\d+) carries a script the lesson runs", "skills",
      "the script-per-skill claim"),
     # A0.1's "Expect" line describes what the preflight actually prints. It

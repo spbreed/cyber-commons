@@ -49,14 +49,14 @@ duplicates the curriculum it lands in is worse than one that maps onto it.
 
 | Lesson | Controls |
 |---|---|
-| [A2.8](../notebooks/A2.8.ipynb) An audit trail the workload cannot forge | C1.1 C1.2 C1.3 |
-| [A3.8](../notebooks/A3.8.ipynb) Shared infrastructure between agent runs | C2.1 C2.2 C5.1 C5.2 C5.3 C10.4 |
-| [A3.9](../notebooks/A3.9.ipynb) Turning a control off without turning the system into an experiment | C6.1 C6.2 C6.4 C8.2 |
-| [A3.10](../notebooks/A3.10.ipynb) The agent's escalation path | C9.1 C9.4 C10.2 |
-| [D2.3](../notebooks/D2.3.ipynb) Detections whose subject is the agent platform | C1.4 C3.4 C4.1 C5.4 C6.3 |
-| [D2.6](../notebooks/D2.6.ipynb) Honeypots, canaries and deception | C4.4 C10.3 |
-| [D3.8](../notebooks/D3.8.ipynb) Fleet-level correlation — seeing a swarm | C2.3 C2.4 C7.4 C8.1 C8.4 C9.2 C9.3 |
-| [D4.5](../notebooks/D4.5.ipynb) The fleet kill switch | C8.3 |
+| [A2.8](https://cybercommons.ai/lessons/A2.8.html) An audit trail the workload cannot forge | C1.1 C1.2 C1.3 |
+| [A3.8](https://cybercommons.ai/lessons/A3.8.html) Shared infrastructure between agent runs | C2.1 C2.2 C5.1 C5.2 C5.3 C10.4 |
+| [A3.9](https://cybercommons.ai/lessons/A3.9.html) Turning a control off without turning the system into an experiment | C6.1 C6.2 C6.4 C8.2 |
+| [A3.10](https://cybercommons.ai/lessons/A3.10.html) The agent's escalation path | C9.1 C9.4 C10.2 |
+| [D2.3](https://cybercommons.ai/lessons/D2.3.html) Detections whose subject is the agent platform | C1.4 C3.4 C4.1 C5.4 C6.3 |
+| [D2.6](https://cybercommons.ai/lessons/D2.6.html) Honeypots, canaries and deception | C4.4 C10.3 |
+| [D3.8](https://cybercommons.ai/lessons/D3.8.html) Fleet-level correlation — seeing a swarm | C2.3 C2.4 C7.4 C8.1 C8.4 C9.2 C9.3 |
+| [D4.5](https://cybercommons.ai/lessons/D4.5.html) The fleet kill switch | C8.3 |
 
 ## The one structural point worth keeping
 
@@ -78,5 +78,5 @@ And two observations that change how an assurance argument is worded:
 
 ```bash
 python3 scripts/check_register.py            # owners, ids, and the embedded copy
-python3 scripts/run_notebooks.py --session D3.8   # the largest single owner
+python3 skills/detection/fleet-correlation-analysis/scripts/fleet_correlation_analysis.py   # D3.8, the largest single owner
 ```

@@ -11,7 +11,7 @@
 
 **Deliverable:** One control set mapped to three regimes, plus an evidence pack for a single high-risk agentic workflow.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -25,14 +25,17 @@
 **Run it** — Build the crosswalk for your own sector.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e2-compliance
-python3 crosswalk.py --regimes horizontal-ai,privacy,sector --controls ../e1-grc/control-library.yaml
-python3 crosswalk.py --show-orphans   # obligations no control answers
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/obligation-mapping/scripts/obligation_mapping.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* One spine, several overlays. Orphans are your programme backlog.
@@ -48,14 +51,17 @@ python3 crosswalk.py --show-orphans   # obligations no control answers
 **Run it** — Classify three workflows and defend the boundary cases.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e2-compliance
-python3 classify_risk.py --workflows ../e1-grc/workflows.yaml --explain
-python3 classify_risk.py --deployer-vs-provider
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/horizontal-requirement-to-control/scripts/horizontal_requirement_to_control.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Shows where 'we only deployed it' holds and where agentic deployment pulls you into provider obligations.
@@ -72,14 +78,17 @@ python3 classify_risk.py --deployer-vs-provider
 **Run it** — Hang two regulator mappings off one framework spine.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e2-compliance
-python3 spine.py --framework nist-ai-rmf --overlay regime-a --overlay regime-b --out oscal/
-oscal-cli validate oscal/system-security-plan.json
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/framework-spine-selection/scripts/framework_spine_selection.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Valid OSCAL, one spine, two overlays — instead of two disconnected programmes.
@@ -95,13 +104,17 @@ oscal-cli validate oscal/system-security-plan.json
 **Run it** — Map one agent to existing model-risk obligations.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e2-compliance
-python3 sector_overlay.py --agent patch-agent --sector financial-services --check model-risk
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/sector-overlay-assessment/scripts/sector_overlay_assessment.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The agent is often already a 'model' under rules you already comply with. Cheaper than inventing a new programme.
@@ -118,15 +131,17 @@ python3 sector_overlay.py --agent patch-agent --sector financial-services --chec
 **Run it** — Run PII redaction inside the trust boundary with Presidio before anything crosses out.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install presidio-analyzer presidio-anonymizer
-cd labs/e2-compliance
-python3 redact_gateway.py --listen 8088 --upstream $OPENAI_BASE_URL
-curl -s localhost:8088/v1/chat/completions -d @with-pii.json | jq
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/trace-personal-data-audit/scripts/trace_personal_data_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* PII is removed before egress; the redaction decision is logged as evidence for E2.7.
@@ -142,14 +157,17 @@ curl -s localhost:8088/v1/chat/completions -d @with-pii.json | jq
 **Run it** — Draft the notification for an agentic incident.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e2-compliance
-python3 notify.py --incident ../d2-ir/case-01 --regime <your-regime> --draft
-python3 notify.py --incident ../d2-ir/case-01 --materiality-worksheet
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/disclosure-phase-breakdown/scripts/disclosure_phase_breakdown.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A draft that names the agent, the authority and the containment — the questions a supervisor asks first.
@@ -166,15 +184,17 @@ python3 notify.py --incident ../d2-ir/case-01 --materiality-worksheet
 **Run it** — Assemble the pack for one high-risk workflow.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.7   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e2-compliance
-python3 evidence_pack.py --workflow patch-agent \
-  --include system-doc,data-lineage,eval-records,oversight,decision-logs --out pack/
-python3 evidence_pack.py --audit-self pack/   # what a supervisor would find missing
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/supervisory-documentation-score/scripts/supervisory_documentation_score.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A pack with a self-audit attached, including an honest statement of what 'explainability' can mean here.
@@ -191,13 +211,17 @@ python3 evidence_pack.py --audit-self pack/   # what a supervisor would find mis
 **Run it** — Produce an audit trail from the A2 chain that names authority at every hop.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.8   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e2-compliance
-python3 audit_trail.py --from-keycloak --workflow patch-agent --out trail.json
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/autonomous-action-auditability/scripts/autonomous_action_auditability.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Which agent, under whose authority, in what scope, verified by which control, reviewable by whom — all from the `act` chain.
@@ -213,13 +237,17 @@ python3 audit_trail.py --from-keycloak --workflow patch-agent --out trail.json
 **Run it** — Defend one workflow in a mock supervisory conversation.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E2.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E2.9   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e2-compliance
-python3 mock_supervisor.py --workflow patch-agent --pack pack/ --model $MODEL --adversarial
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/regulatory/assurance-conversation-prep/scripts/assurance_conversation_prep.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* You get asked the real questions. Overclaiming control is scored as harshly as underclaiming.

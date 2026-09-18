@@ -11,7 +11,7 @@
 
 **Deliverable:** A delegation chain for one agent that an auditor can follow from human to action.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -25,9 +25,17 @@
 **Run it** — Separate the three identities and show a downstream service authorising on the agent while attributing to the human.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/identity/agent-identity-review/scripts/agent_identity_review.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Authorization resolves against the workload ceiling and refuses `db:admin` no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another's.
@@ -44,9 +52,17 @@ python3 scripts/run_notebooks.py --session A2.1   # run it headless and check it
 **Run it** — Exchange an attestation for a credential, then show a copied secret failing the same exchange.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/identity/workload-attestation-check/scripts/workload_attestation_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.
@@ -63,9 +79,17 @@ python3 scripts/run_notebooks.py --session A2.2   # run it headless and check it
 **Run it** — Run both narrowing rules against a request that passes one and fails the other.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/identity-chain-verifier/scripts/identity_chain_verifier.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A two-hop delegation narrows to `reports:read` and records the chain `dana → orchestrator → patch-agent`. A privileged user's request for `db:admin` passes subset-of-presented and still issues nothing, because the receiving agent's ceiling is empty of it.
@@ -82,9 +106,17 @@ python3 scripts/run_notebooks.py --session A2.3   # run it headless and check it
 **Run it** — Issue a scoped grant, use it, then replay it after expiry and after the task closed.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/entitlement-overprivilege-analyzer/scripts/entitlement_overprivilege_analyzer.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires.
@@ -101,9 +133,17 @@ python3 scripts/run_notebooks.py --session A2.4   # run it headless and check it
 **Run it** — Admit agents against a registry and show an unregistered one refused at the door.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/identity/nhi-lifecycle-audit/scripts/nhi_lifecycle_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Four agents present identities and one is admitted: the unregistered one is refused, the lapsed registration is refused, and the orphaned entry with no owner is refused. Revoking a single agent then leaves the others running.
@@ -122,9 +162,17 @@ python3 scripts/run_notebooks.py --session A2.5   # run it headless and check it
 **Run it** — Tag every span at ingress, then show the same payload refused through six different entry paths.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/input-injection-screening-verifier/scripts/input_injection_screening_verifier.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The same payload is refused through all five untrusted ingress components and through two rewordings, the user's own request still reaches the tool, and a memory record written from an untrusted document is still refused a week later because the origin was stored with it.
@@ -141,9 +189,17 @@ python3 scripts/run_notebooks.py --session A2.6   # run it headless and check it
 **Run it** — Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused.
@@ -160,15 +216,17 @@ python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it
 **Run it** — Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.8   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-falco --rules host-escape.yaml    # out-of-band, on the host
-python3 chain_verify.py --bucket agent-transcripts --since 24h
-aws iam simulate-principal-policy --policy-source-arn $AGENT_ROLE \
-  --action-names s3:PutObject --resource-arns arn:aws:s3:::agent-transcripts/*
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/identity/tamper-evident-log-check/scripts/tamper_evident_log_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.

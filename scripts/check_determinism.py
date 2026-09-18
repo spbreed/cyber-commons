@@ -1,145 +1,115 @@
 #!/usr/bin/env python3
-"""Prove every notebook prints the same thing on every machine.
+"""Prove the skill harness prints the same thing on every machine.
 
-**What this can and cannot cover now.** Every skill in this commons is executed
-by a model, and a model is not deterministic — so this does not, and must not,
-claim that a lesson's findings reproduce byte for byte. What it checks is the
-harness around the model: the ordering, the formatting, the seeding, and the
-refusal a lesson prints when no endpoint is configured. Those are ours, they
-are deterministic, and a set iterated into a sort still breaks them.
+**What this can and cannot cover.** Every skill in this commons is executed by
+a model, and a model is not deterministic — so this does not, and must not,
+claim that a lesson's findings reproduce byte for byte. Saying otherwise would
+be the most misleading thing in the repository.
 
-The lessons that call a model are run here with no endpoint, so what is
-compared across seeds is their refusal. A refusal that varies between runs is
-a real defect — it means something unordered reached the message.
+What it checks is the half that *is* ours: the harness. With no model
+available every skill refuses, legibly and in a fixed form, and that refusal
+has to be identical across runs. A refusal that varies means something
+unordered reached the message — a set iterated into a sort, a dict printed
+directly, an address in a repr — and the same defect would make every real
+result undiffable too.
 
-A lesson is only evidence if the reader's run matches the one on the page. Two
-notebooks shipped that did not, and neither failed locally, because a single
-local pass runs every notebook under one interpreter with one hash seed:
+Each script is run under several `PYTHONHASHSEED` values, which is what
+surfaces it: Python randomises string hashing per process, so a set or a dict
+built from strings iterates differently on every run unless something orders
+it.
 
-  * B2.2 iterated a set difference into a stable sort. With tied scores the
-    sort preserved set-iteration order, which PYTHONHASHSEED randomises.
-  * D3.1 seeded a sampling RNG from hash(str), which PYTHONHASHSEED also
-    randomises.
-
-Both surfaced only when Kaggle ran them on a different machine. This script
-makes that a local, cheap check instead: run each notebook under several
-deliberately different hash seeds and require byte-identical stdout.
-
-    python3 scripts/check_determinism.py            # all notebooks
-    python3 scripts/check_determinism.py --session B2.2 --seeds 8
-
-Exit status is non-zero if any notebook varies, so CI can gate on it.
+    python3 scripts/check_determinism.py             # every skill, 3 seeds
+    python3 scripts/check_determinism.py --seeds 4
+    python3 scripts/check_determinism.py --skill grc/control-evidence
 """
 from __future__ import annotations
 
 import argparse
-import concurrent.futures
-import json
 import os
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-NB_DIR = ROOT / "labs" / "notebooks"
-
-# 0 disables randomisation entirely; the rest are arbitrary distinct seeds. A
-# seed of 0 alone would hide exactly the bugs this script exists to catch.
-SEEDS = ["0", "1", "12345", "99991", "524287", "7", "31337", "8191"]
+RUNTIME = ROOT / "skills" / "_runtime"
 
 
-def code_of(path: Path) -> str:
-    nb = json.loads(path.read_text())
-    return "\n\n".join("".join(c["source"]) for c in nb["cells"]
-                       if c["cell_type"] == "code")
+def scripts() -> list[Path]:
+    return sorted(ROOT.glob("skills/*/*/scripts/*.py"))
+
+
+def ref(p: Path) -> str:
+    return f"{p.parents[2].name}/{p.parents[1].name}"
 
 
 def outputs(path: Path, seeds: list[str], timeout: int) -> list[str]:
-    """stdout of the notebook once per hash seed, in seed order."""
-    src = code_of(path)
+    """stdout once per hash seed, in seed order."""
     out = []
     for seed in seeds:
-        # PYTHONPATH carries the shared skill runtime, which Kaggle supplies as
-        # an attached utility script and a local run has to point at.
-        runtime = str(ROOT / "skills" / "_runtime")
         prev = os.environ.get("PYTHONPATH", "")
-        env = dict(os.environ, CLAUDE_CLI="0", PYTHONHASHSEED=seed,
-                   PYTHONPATH=f"{runtime}{os.pathsep}{prev}" if prev else runtime)
-        p = subprocess.run([sys.executable, "-c", src], cwd=ROOT, env=env,
+        # CLAUDE_CLI=0 and no endpoint: this gate is about the refusal, which
+        # is deterministic. With a model reachable every run would differ and
+        # the check would be measuring the model instead of the harness.
+        env = dict(os.environ, PYTHONHASHSEED=seed, CLAUDE_CLI="0",
+                   PYTHONPATH=f"{RUNTIME}{os.pathsep}{prev}" if prev else str(RUNTIME))
+        for k in ("OPENAI_BASE_URL", "OPENAI_API_KEY", "MODEL"):
+            env.pop(k, None)
+        p = subprocess.run([sys.executable, str(path)], cwd=ROOT, env=env,
                            capture_output=True, text=True, timeout=timeout)
-        # Exit 2 with the refusal is correct, not broken: every skill here is
-        # executed by a model, and CI is deliberately given no endpoint. The
-        # refusal text itself is what gets compared across seeds, which is
-        # still a real check — it catches a refusal that varies, e.g. one that
-        # prints a dict or a set in its message.
-        if p.returncode == 2 and "no model" in p.stdout.lower():
-            out.append(p.stdout)
-            continue
-        if p.returncode != 0:
-            raise RuntimeError(f"exited {p.returncode} under PYTHONHASHSEED={seed}: "
-                               f"{p.stderr.strip()[-400:]}")
+        # Exit 2 with the refusal is the expected outcome here, not a failure.
+        if p.returncode not in (0, 2):
+            raise RuntimeError(f"exited {p.returncode} under PYTHONHASHSEED="
+                               f"{seed}: {p.stderr.strip()[-400:]}")
         out.append(p.stdout)
     return out
-
-
-def first_difference(a: str, b: str) -> str:
-    """The first line where two runs disagree, quoted for a bug report."""
-    al, bl = a.split("\n"), b.split("\n")
-    for i, (x, y) in enumerate(zip(al, bl), 1):
-        if x != y:
-            return f"line {i}:\n    seed A: {x!r}\n    seed B: {y!r}"
-    return f"one run has {len(al)} lines, the other {len(bl)}"
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--session", help="check a single session id, e.g. B2.2")
-    ap.add_argument("--seeds", type=int, default=4,
-                    help=f"how many hash seeds to try (max {len(SEEDS)}, default 4)")
-    ap.add_argument("--timeout", type=int, default=120, help="seconds per run")
-    ap.add_argument("--jobs", type=int, default=os.cpu_count() or 4)
-    ap.add_argument("--quiet", action="store_true", help="report failures only")
+    ap.add_argument("--seeds", type=int, default=3)
+    ap.add_argument("--skill", help="one skill, e.g. grc/control-evidence")
+    ap.add_argument("--timeout", type=int, default=120)
+    ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args()
 
-    seeds = SEEDS[:max(2, min(a.seeds, len(SEEDS)))]
-    paths = ([NB_DIR / f"{a.session}.ipynb"] if a.session
-             else sorted(NB_DIR.glob("*.ipynb")))
-    if missing := [p for p in paths if not p.is_file()]:
-        sys.exit(f"no such notebook: {missing[0]}")
+    paths = scripts()
+    if a.skill:
+        paths = [p for p in paths if ref(p) == a.skill]
+        if not paths:
+            sys.exit(f"no such skill: {a.skill}")
 
-    print(f"checking {len(paths)} notebook(s) under {len(seeds)} hash seeds "
-          f"({', '.join(seeds)})\n")
+    seeds = [str(s) for s in range(a.seeds)]
+    if not a.quiet:
+        print(f"checking {len(paths)} skill(s) under {len(seeds)} hash seeds "
+              f"— the no-model refusal, which is the deterministic half\n")
 
-    varying, broken = [], []
-    with concurrent.futures.ThreadPoolExecutor(max_workers=a.jobs) as pool:
-        futures = {pool.submit(outputs, p, seeds, a.timeout): p for p in paths}
-        for fut in concurrent.futures.as_completed(futures):
-            sid = futures[fut].stem
-            try:
-                runs = fut.result()
-            except Exception as e:                              # noqa: BLE001
-                broken.append(sid)
-                print(f"  ERR  {sid:8s} {e}", file=sys.stderr)
-                continue
-            if len(set(runs)) == 1:
-                if not a.quiet:
-                    print(f"  ok   {sid:8s} identical across {len(seeds)} seeds")
-                continue
-            varying.append(sid)
-            distinct = sorted(set(runs), key=runs.index)
-            print(f"  VARY {sid:8s} {len(distinct)} distinct outputs — "
-                  f"{first_difference(distinct[0], distinct[1])}", file=sys.stderr)
+    varied, broken = [], []
+    for p in paths:
+        try:
+            outs = outputs(p, seeds, a.timeout)
+        except (RuntimeError, subprocess.TimeoutExpired) as e:
+            broken.append(ref(p))
+            print(f"  FAIL {ref(p):48s} {str(e)[:90]}")
+            continue
+        if len(set(outs)) == 1:
+            if not a.quiet:
+                print(f"  ok   {ref(p):48s} identical across {len(seeds)} seeds")
+        else:
+            varied.append(ref(p))
+            first = next((i for i, (x, y) in
+                          enumerate(zip(outs[0].splitlines(), outs[1].splitlines()))
+                          if x != y), 0)
+            print(f"  VARY {ref(p):48s} first differs at line {first + 1}")
 
-    print(f"\n{len(paths) - len(varying) - len(broken)}/{len(paths)} notebooks are "
-          f"deterministic across {len(seeds)} hash seeds")
-    if varying:
-        print(f"::error::output depends on PYTHONHASHSEED: {varying}. Seed sampling "
-              f"from zlib.crc32 rather than hash(), and give every sort a full "
-              f"tiebreak so equal keys cannot reorder.", file=sys.stderr)
+    ok = len(paths) - len(varied) - len(broken)
+    print(f"\n{ok}/{len(paths)} skills are deterministic across "
+          f"{len(seeds)} hash seeds")
+    if varied:
+        print(f"::error::output varies between runs: {varied}", file=sys.stderr)
     if broken:
         print(f"::error::failed to run: {broken}", file=sys.stderr)
-    return 1 if varying or broken else 0
+    return 1 if (varied or broken) else 0
 
 
 if __name__ == "__main__":

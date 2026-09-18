@@ -7,15 +7,16 @@ secure the AI *itself*.
 
 **135 lessons across 14 chapters.** Every lesson is the idea, the diagram, the
 control, and what it looks like in one running system — and then it **runs a
-skill**. 132 of the 135 do, and the code is not in the notebook: the page shows
-the `SKILL.md` as prose and the notebook runs that skill's own script out of
-[`skills/`](skills/). Every one of the 135 is executed in CI before it ships,
-and so is every skill. **Every skill is executed by a language model** — the
+skill**. 132 of the 135 do, and the skill is the deliverable: the page shows the
+`SKILL.md` as prose and you run that skill's own script out of
+[`skills/`](skills/), on your own machine, in whichever agent CLI you already
+use. Every skill is executed in CI before it ships. **Every skill is executed
+by a language model** — the
 script is the harness, not the procedure — so there is one prerequisite, and
 [A0.0](https://cybercommons.ai/lessons/A0.0.html) sets it up on a free tier. No
 licence, no vendor, no paid plan required.
 
-🌐 **[cybercommons.ai](https://cybercommons.ai)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md) · 🎙 [Recording scripts](LIGHTBOARD.md)
+🌐 **[cybercommons.ai](https://cybercommons.ai)** · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md) · 🎙 [Recording scripts](LIGHTBOARD.md)
 
 ---
 
@@ -69,30 +70,33 @@ first, and what Day 0/1/2 mean. Then
 **[A1.0](https://cybercommons.ai/lessons/A1.0.html)**, which introduces
 CyberTravels — the one system every lesson is grounded in.
 
+Every lesson page carries the exact command. Run it against the skill's
+committed fixture:
+
 ```bash
-python3 scripts/run_notebooks.py --session A1.2   # prompt injection
+python3 skills/threats/instruction-channel-check/scripts/instruction_channel_check.py   # A1.2, prompt injection
 ```
 
-Or press **▶ Run on Kaggle** on any lesson page: the notebook opens as a new
-kernel in *your* account, and you set the same three variables there.
-
-**Taking the skills instead of the lessons?** Each is a real agent skill in the
-[agentskills.io](https://agentskills.io) format, which any skills-compatible
-agent loads:
+**Or install the skills into your own agent and ask in your own words.** Each
+is a real agent skill in the [agentskills.io](https://agentskills.io) format,
+which any skills-compatible agent loads. One command links all of them into
+every CLI you have:
 
 ```bash
-cp -r skills/appsec/appsec-vuln-audit ~/.claude/skills/
-python3 scripts/check_skills.py --check   # what CI checks them against
+python3 scripts/install_skills.py --all     # Claude Code, Codex, Gemini, Cursor, opencode, goose
+python3 scripts/install_skills.py --list    # what is linked where
+```
+
+These are **symlinks into this repository**, not copies — `git pull` updates
+every tool at once, and a fix you make here is live in all of them with no sync
+step. Then open your agent in any directory and ask for the skill by name:
+
+```
+> use instruction-channel-check on this MCP tool description
 ```
 
 Standard library only — there is nothing to `pip install`. The dependency is
 the model, not a package tree.
-
-> **If the Kaggle clone fails with `Could not resolve host: github.com`**, that
-> is the kernel, not the lesson: a Kaggle kernel starts with no network.
-> Internet is gated on a verified phone number. Without one, attach the dataset
-> [`cybercommons/cyber-commons-skills`](https://www.kaggle.com/datasets/cybercommons/cyber-commons-skills)
-> instead — same tree, nothing fetched at all.
 
 ## 3 · Then take the spine, then your chapter
 
@@ -152,9 +156,9 @@ most common way a good lesson lands badly, so
 precedes the framework. [LESSON_DESIGN.md](LESSON_DESIGN.md) is the full
 contract.
 
-**Notebooks are code only.** The prose lives on the page and nowhere else — it
-was in both once, and the copy inside the notebook was the one nobody could
-correct.
+**The prose lives on the page and nowhere else.** It was duplicated into a
+generated artefact once, and the copy nobody could correct was the one readers
+found first.
 
 ## What you actually build
 
@@ -166,7 +170,7 @@ Every procedure is packaged as a real agent skill in [`skills/`](skills), in
 the [agentskills.io](https://agentskills.io) format — `SKILL.md` with
 frontmatter, which any skills-compatible agent loads. Each declares an **output
 contract**, which is what makes a skill checkable rather than aspirational, and
-every one of the 140 carries a script the lesson runs.
+every one of the 139 carries a script the lesson runs.
 
 **The script is the harness, not the procedure.** It assembles the fixture,
 hands the model that skill's own `SKILL.md` and contract, and validates the
@@ -204,7 +208,7 @@ result. So there is no stand-in.
 | [`redteam/`](skills/redteam) · [`research/`](skills/research) | 14 — campaigns, reproducibility, corpus integrity, supply chain, published incidents |
 | [`detection/`](skills/detection) · [`response/`](skills/response) · [`secops/`](skills/secops) | 21 — agent tempo, drift, fleet correlation, canaries, containment, stop authority |
 | [`grc/`](skills/grc) · [`regulatory/`](skills/regulatory) · [`programme/`](skills/programme) | 27 — tiering, control mapping, obligations, disclosure, sequencing, metrics |
-| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 14 — turn a control claim into a signed statement bound to one deployment ([B2.18](labs/notebooks/B2.18.ipynb), run against 10 real OSS agent/MCP repos) |
+| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 14 — turn a control claim into a signed statement bound to one deployment ([B2.18](https://cybercommons.ai/lessons/B2.18.html), run against 10 real OSS agent/MCP repos) |
 
 ## The programme
 
@@ -246,8 +250,8 @@ Two chapters carry a single artefact end to end:
   and A3 are those controls.
 - **[B2](curriculum/track-b2.md)** is the AI SDLC itself — a five-phase,
   fifteen-stage agentic AppSec pipeline built over seventeen sessions, attested in
-  [B2.18](labs/notebooks/B2.18.ipynb) and closed in
-  [B2.19](labs/notebooks/B2.19.ipynb) by scoring Google's Mantis against a
+  [B2.18](https://cybercommons.ai/lessons/B2.18.html) and closed in
+  [B2.19](https://cybercommons.ai/lessons/B2.19.html) by scoring Google's Mantis against a
   held-out key — a reference implementation is something you evaluate, not
   something you trust.
 
@@ -262,7 +266,7 @@ label exists upstream and that the link resolves.
 
 ## Why you can trust the output
 
-**Every one of the 135 notebooks executes in CI, and none of them is allowed to
+**Every one of the 139 skills executes in CI, and none of them is allowed to
 answer without a model.**
 
 That second half is the claim worth making. CI is given no model endpoint on
@@ -272,8 +276,8 @@ answer returned in a model's place is the one failure nothing downstream can
 catch: it has the right shape, it passes the contract, and it is not a model
 result. So there is no canned answer.
 
-**What this repository no longer claims.** It used to say every notebook had
-been run twice, here and on Kaggle, and printed exactly the same bytes. That was
+**What this repository no longer claims.** It used to say every lesson had
+been run twice, on two machines, and printed exactly the same bytes. That was
 true when the skills computed their own answers. It is not true now: a model is
 not deterministic, and two runs of the same skill against the same fixture will
 differ. Saying otherwise would be the most misleading thing on this page.
@@ -282,7 +286,7 @@ What is still checked, and still worth checking:
 
 - **The harness is deterministic.** Ordering, formatting, seeding, and the
   refusal itself. [`check_determinism.py`](scripts/check_determinism.py) runs
-  every notebook across four hash seeds and compares — a refusal that varies
+  every skill script across four hash seeds and compares — a refusal that varies
   means something unordered reached the message. Seed from `zlib.crc32`, not
   `hash()`; give every sort a full tiebreak.
 - **Every reply is validated against the skill's own output contract**, and the
@@ -294,7 +298,7 @@ What is still checked, and still worth checking:
   that a different model answers differently.
 
 Where a lesson names a tool you would really deploy — SPIRE, OPA, Falco,
-Keycloak, garak — the notebook models the *decision* that tool makes, and
+Keycloak, garak — the skill models the *decision* that tool makes, and
 [`curriculum/labs.json`](curriculum/labs.json) keeps the real invocation
 underneath as the full-infrastructure variant. Those variants are **not**
 executed in CI and are labelled as such.
@@ -321,9 +325,8 @@ return prose where JSON was asked for. That is visible in the output, it is
 counted in the contract violations, and it is the reason every finding names
 the model that produced it.
 
-See [MODELS.md](MODELS.md) for which model suits which lab, and
-[labs/kimi/](labs/kimi) for what happened when these skills were run against a
-Kimi-family model on Kaggle — including the parts that did not work.
+See [MODELS.md](MODELS.md) for which model suits which lab, and what each one
+costs you in contract violations.
 
 ## Contributing, or changing a lesson
 
@@ -331,8 +334,8 @@ Kimi-family model on Kaggle — including the parts that did not work.
 build order, the gates, and the failures each one exists to prevent. Read it
 before your first change.
 
-There is **one source of truth** and the notebooks, chapters and site pages are
-all generated from it. Never hand-edit an `.ipynb`, a `curriculum/*.md`, a
+There is **one source of truth** and the chapters, site pages and recording
+script are all generated from it. Never hand-edit a `curriculum/*.md`, a
 `site/lessons/*.html` or `LIGHTBOARD.md`.
 
 | To change… | Edit |
@@ -349,17 +352,15 @@ all generated from it. Never hand-edit an `.ipynb`, a `curriculum/*.md`, a
 Dependencies run downhill — after changing a source, run from its row down:
 
 ```bash
-python3 scripts/build_notebooks.py     # exercises       -> labs/notebooks/
-python3 scripts/run_notebooks.py       # notebooks       -> recorded output
 python3 scripts/render_diagrams.py     # emitted DOT     -> site/assets/diagrams/
 python3 scripts/build_curriculum.py    # curriculum.json -> curriculum/track-*.md
 python3 scripts/build_site.py          # everything      -> site/lessons/
 python3 scripts/build_lightboard.py    # lessons         -> LIGHTBOARD.md
 ```
 
-CI re-runs all of it with `--check`. It runs 21 scripts, each of which
-exists because of a specific failure: the secret scan, all 134 notebooks
-executed, the determinism gate across four hash seeds, skill contracts and a
+CI re-runs all of it with `--check`. It runs 19 scripts, each of which
+exists because of a specific failure: the secret scan, the determinism gate
+across four hash seeds, skill contracts and a
 real offline run of every skill script, every diagram rendered by actual
 Graphviz and PlantUML, a clarity pass over the *rendered* page, a contrast pass
 that measures text against the background actually painted behind it, and
@@ -369,10 +370,9 @@ repository goes stale silently; that gate exists because it kept happening.
 
 Pushing to `main` or `claude/**` deploys the site.
 
-**Credentials and personal identifiers never go in this repository.** Kaggle
-tokens live in `~/.kaggle/kaggle.json` or `$KAGGLE_USERNAME`/`$KAGGLE_KEY`, and
-the push client refuses to read a credential file inside the tree. Install the
-guard once:
+**Credentials and personal identifiers never go in this repository.** An API
+key for a hosted model lives in your shell, sourced per command, and never in a
+file inside the tree. Install the guard once:
 
 ```bash
 ./scripts/install-hooks.sh        # pre-commit scan; also gate 1 in CI
@@ -386,11 +386,11 @@ curriculum/                 generated chapter docs + labs.json + frameworks.json
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: A1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
-skills/                     140 agent skills, plus _runtime/ — the one shared library
-labs/notebooks/             135 generated notebooks + execution and Kaggle evidence
-labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
+skills/                     139 agent skills, plus _runtime/ — the one shared library
+labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation
+labs/evidence/              the recorded offline run of every skill script
 site/                       the website (index + generated lesson pages)
-scripts/                    build_* · run_notebooks · check_* · kaggle_*
+scripts/                    build_* · check_* · install_skills.py
 CLAUDE.md                   how to work in this repo · LESSON_DESIGN.md — the authoring contract
 LIGHTBOARD.md               generated recording script, one per lesson
 ```

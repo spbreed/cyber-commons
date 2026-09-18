@@ -16,7 +16,7 @@ on:
       # anything that can change what the site shows
       - 'site/**'
       - 'lessons/**'
-      - 'labs/notebooks/**'
+      - 'skills/**'
       - 'labs/cybercommons/**'
       - 'curriculum/labs.json'
       - 'scripts/**'
@@ -46,13 +46,6 @@ jobs:
       - name: Secret scan
         run: python3 scripts/check_secrets.py
 
-      # Every notebook actually runs, top to bottom, self-contained. This is
-      # the evidence behind the "✓ Executed" badge on each lesson page, and it
-      # is the only correctness gate the labs need now that each notebook
-      # carries its own code.
-      - name: Execute every notebook
-        run: python3 scripts/run_notebooks.py --quiet
-
       # The skills are lesson material and real agent configuration at once.
       # A skill whose frontmatter will not parse cannot be loaded, and two
       # skills whose descriptions collide route by sort order rather than by
@@ -67,17 +60,21 @@ jobs:
       - name: Execute every agent skill
         run: python3 scripts/test_skills.py --check
 
-      # Running clean is not enough — a lesson is only evidence if the
-      # reader's run matches the one on the page. Two notebooks once printed
-      # different things on Kaggle than they did locally because their output
-      # depended on PYTHONHASHSEED, which a single local pass cannot reveal.
-      - name: Check every notebook is deterministic
+      # A model is not deterministic, so this does not claim a lesson's
+      # findings reproduce. What it checks is the half that is ours: with no
+      # model reachable every skill refuses, and that refusal must be identical
+      # across hash seeds. One that varies means something unordered reached
+      # the message — a set iterated into a sort, a dict printed directly — and
+      # the same defect would make every real result undiffable too.
+      - name: Check the skill harness is deterministic
         run: python3 scripts/check_determinism.py --seeds 4 --quiet
 
-      - name: Check notebooks and lab blocks are in sync
-        run: |
-          python3 scripts/build_notebooks.py --check
-          python3 scripts/relink_labs.py --check
+      # The skills are symlinked into each agent CLI, flattened, so two areas
+      # claiming one skill name would silently drop one of them at install
+      # time. The installer refuses rather than guessing; this runs that check
+      # without writing anything.
+      - name: Check the skills install cleanly into an agent CLI
+        run: python3 scripts/install_skills.py --tool claude --dry-run
 
       # Every lesson carries a hook, a diagram rendered before any code, and —
       # if it closes a chapter — a bridge naming what it still cannot do. See
@@ -87,7 +84,8 @@ jobs:
 
       # The incident register assigns every control from the source report to a
       # lesson that teaches it. Renumber a lesson and the register points at
-      # nothing; edit one copy of it and the notebook disagrees with the file.
+      # nothing; edit one copy of it and the embedded copy disagrees with the
+      # file. Its ids are C1.1-C10.4, syntactically identical to lesson ids.
       - name: Check the incident control register
         run: python3 scripts/check_register.py --check
 

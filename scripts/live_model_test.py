@@ -37,7 +37,7 @@ to the evidence file, and `scripts/check_secrets.py` blocks anything
 credential-shaped from being committed. This script is not run in CI — CI runs
 the offline path, which is the one that has to be deterministic.
 
-The evidence it writes (`labs/notebooks/_live_model.json`) records the model id,
+The evidence it writes (`labs/evidence/live_model.json`) records the model id,
 the per-lesson verdict and what came back, so a reader can see what a real model
 said rather than taking the claim on trust.
 """
@@ -52,7 +52,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-NB = ROOT / "labs" / "notebooks"
+EVIDENCE = ROOT / "labs" / "evidence"
 RUNTIME = ROOT / "skills" / "_runtime"
 
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -208,7 +208,8 @@ def main() -> int:
         print(f"never reached the backend: {unreached}", file=sys.stderr)
 
     if a.save:
-        out_path = NB / "_live_model.json"
+        out_path = EVIDENCE / "live_model.json"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
         prev = {}
         if out_path.is_file():
             prev = json.loads(out_path.read_text()).get("runs", {})

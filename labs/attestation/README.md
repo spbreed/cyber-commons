@@ -5,7 +5,7 @@ document into a signed statement about a specific deployment — plus a working
 analyser for the part of it that can be done from source alone, and the results
 of running that analyser against ten widely-deployed open-source repositories.
 
-Taught in **[B2.18](../notebooks/B2.18.ipynb)**.
+Taught in **[B2.18](https://cybercommons.ai/lessons/B2.18.html)**.
 
 ## The distinction the whole thing rests on
 

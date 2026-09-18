@@ -13,7 +13,7 @@ Rules, each one here because breaking it made a lesson worse:
    that has to be read twice is a summary.
 
 2. **The picture before the terminal.** The framework cell is rendered before
-   the first code cell in every built notebook. Teaching the "how" before the
+   the run block on every built page. Teaching the "how" before the
    "why" is the most common way a good lesson lands badly.
 
 3. **Grounded in CyberTravels.** Every lesson says what its idea looks like in
@@ -59,7 +59,6 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
-NB = ROOT / "labs" / "notebooks"
 PAGES = ROOT / "site" / "lessons"
 
 from exercises import EXERCISES  # noqa: E402
@@ -141,12 +140,6 @@ def main() -> int:
         # code and nothing else, and the lesson is rendered from source by
         # build_site.py. The rule is unchanged — the framework has to come
         # before anything that runs — only where it is enforced moved.
-        path = NB / f"{sid}.ipynb"
-        if not path.is_file():
-            problems.append(f"{sid}: notebook not built")
-            continue
-        cells = json.loads(path.read_text())["cells"]
-        kinds = [c["cell_type"] for c in cells]
         page_f = PAGES / f"{sid}.html"
         if not page_f.is_file():
             problems.append(f"{sid}: lesson page not built — run build_site.py")
@@ -180,7 +173,9 @@ def main() -> int:
 
         # 7 — realistic demos (reported, not enforced)
         body = page.lower()
-        if (kinds.count("code") and s.get("kind") not in EXEMPT_KINDS
+        # "Does this lesson run something" is read from the page's own run
+        # block now, not from a notebook's code cells.
+        if ("runbox" in page and s.get("kind") not in EXEMPT_KINDS
                 and not any(w in body for w in FAILURE_WORDS)):
             happy_path_only.append(sid)
 

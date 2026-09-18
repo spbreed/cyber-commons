@@ -11,7 +11,7 @@
 
 **Deliverable:** A one-page autonomy governance policy and a board-level narrative for one agentic programme.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -24,14 +24,17 @@
 **Run it** — Convert one blast-radius measurement into a board paragraph.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E3.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E3.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e3-ciso
-python3 translate.py --input ../a1-control-plane/blast.md --audience board
-python3 translate.py --input ../a1-control-plane/blast.md --audience board --check-jargon
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/risk-translation-upward/scripts/risk_translation_upward.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* What can happen, how fast, who can stop it — with the engineering vocabulary stripped out.
@@ -47,13 +50,17 @@ python3 translate.py --input ../a1-control-plane/blast.md --audience board --che
 **Run it** — Write the delegated-authority policy.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E3.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E3.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cp curriculum/templates/autonomy-policy.md labs/e3-ciso/policy.md
-cd labs/e3-ciso && python3 policy_lint.py --policy policy.md --require promotion-criteria,demotion-authority,action-class-limits
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/autonomy-ladder-decisions/scripts/autonomy_ladder_decisions.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The linter rejects aspirational language and demands named authority.
@@ -69,13 +76,17 @@ cd labs/e3-ciso && python3 policy_lint.py --policy policy.md --require promotion
 **Run it** — Sequence your first three workflows and name the no.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E3.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E3.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e3-ciso
-python3 sequence.py --candidates ../e1-grc/workflows.yaml --maturity agent --out roadmap.md
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/programme-sequencing/scripts/programme_sequencing.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Ordered by winnability × risk retired, with one explicit refusal. A programme without a 'no' has no policy.
@@ -91,14 +102,17 @@ python3 sequence.py --candidates ../e1-grc/workflows.yaml --maturity agent --out
 **Run it** — Draw your org's ownership map against the topic matrix.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E3.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E3.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e3-ciso
-python3 ownership.py --matrix ../../curriculum/templates/ownership-map.csv --org my-org.yaml
-python3 ownership.py --find-gaps
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/ownership-seam-audit/scripts/ownership_seam_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Every topic cluster with zero owners or two owners is a finding — usually harness engineering and research.
@@ -115,13 +129,17 @@ python3 ownership.py --find-gaps
 **Run it** — Instrument the six metrics from your lab stack.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E3.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E3.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e3-ciso
-python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2.10-eval-harness/work_mantis/comparison_results.json
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/programme-metrics-selection/scripts/programme_metrics_selection.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.
@@ -137,14 +155,17 @@ python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2
 **Run it** — Write one enforceable conditional approval.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E3.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E3.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e3-ciso
-python3 conditional.py --workflow patch-agent --conditions eval-gate>=0.85,hitl-on-merge,90d-review
-python3 conditional.py --verify patch-agent   # checks the conditions are machine-checkable
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/conditional-approval-design/scripts/conditional_approval_design.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Any condition that cannot be automatically verified is flagged. 'They'll be careful' does not compile.
@@ -160,14 +181,17 @@ python3 conditional.py --verify patch-agent   # checks the conditions are machin
 **Run it** — Write the interview loop for an agentic security engineer.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E3.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E3.7   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e3-ciso
-python3 interview.py --role agentic-security-engineer --generate-loop
-python3 interview.py --calibrate --against ../b2.10-eval-harness   # ask them to read a real eval report
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/capability-build-order/scripts/capability_build_order.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Questions with artefacts attached. Handing a candidate a real eval report separates the two groups fast.
@@ -183,14 +207,17 @@ python3 interview.py --calibrate --against ../b2.10-eval-harness   # ask them to
 **Run it** — Re-score your programme on the resilience axis.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E3.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E3.8   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e3-ciso
-python3 resilience.py --score --axes containment,detection,recovery --evidence ../
-python3 resilience.py --compare-to prevention-only
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/resilience-readiness-check/scripts/resilience_readiness_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged.

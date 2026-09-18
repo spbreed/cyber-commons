@@ -11,7 +11,7 @@
 
 **Deliverable:** A machine that can run any lesson in the commons — a model endpoint configured and proven — and a route through it chosen for your role.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -25,23 +25,17 @@
 **Run it** — Configure a model endpoint, then run one skill and read back which model answered.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A0.0.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A0.0   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-# --- 2 · a model that answers. Local and free: ---
-curl -fsSL https://ollama.com/install.sh | sh
-ollama serve &
-ollama pull qwen2.5:7b-instruct
-export OPENAI_BASE_URL=http://127.0.0.1:11434/v1   # the /v1 is not optional
-export OPENAI_API_KEY=ollama
-export MODEL=qwen2.5:7b-instruct
-# --- 3 · prove it, by running one skill end to end ---
-PYTHONPATH=skills/_runtime python3 \
-  skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The runtime resolving from skills/_runtime, your endpoint and model named, and the key reported as present rather than printed. Then exit code 2 from a deliberate unconfigured run, so you meet that refusal here rather than on lesson forty. Then one real model call: which model answered, how many contract violations were in its reply, and the filled-in contract as JSON.
@@ -57,19 +51,19 @@ PYTHONPATH=skills/_runtime python3 \
 **Run it** — Run the preflight on both routes and compare the output checksum.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A0.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- route one, from nothing: clone once and nothing is fetched afterwards ---
-git clone https://github.com/spbreed/cyber-commons && cd cyber-commons
-PYTHONPATH=skills/_runtime python3 \
-  skills/programme/lesson-preflight/scripts/lesson_preflight.py
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
 
-# --- route two: press 'Run on Kaggle' on the lesson page, then switch
-#     Internet on in the settings panel (Kaggle needs a verified phone). ---
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The tree inventoried from disk — 14 areas, 140 skills, 140 with a script — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file.
+*Expect:* The tree inventoried from disk — 14 areas, 139 skills, 139 with a script — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file.
 
 ---

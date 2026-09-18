@@ -1,6 +1,6 @@
 # Agent skills
 
-140 skills the curriculum teaches you to write, and then uses. Each one is a
+139 skills the curriculum teaches you to write, and then uses. Each one is a
 real `SKILL.md` — markdown with YAML frontmatter, the format a coding agent
 actually loads — not an illustration of one. 132 of them carry a script
 the lesson executes, and `test_skills.py` runs every one of those on every
@@ -125,17 +125,28 @@ this on every push.
 
 ## Editing them
 
-The files here are the single source of truth. `build_notebooks.py` embeds them
-verbatim into the lessons that use them, so a skill and the lesson teaching it
-cannot drift — change a skill and the notebook is stale until rebuilt, which CI
-fails on.
+The files here are the single source of truth, and there is exactly one copy of
+each. `build_site.py` embeds a skill verbatim into the lesson page that teaches
+it, so a skill and its lesson cannot drift — change a skill and the page is
+stale until rebuilt, which CI fails on.
 
 ```bash
-python3 scripts/build_notebooks.py   # re-embed
-python3 scripts/run_notebooks.py     # prove the lessons still run
+python3 scripts/build_site.py --check   # is any page stale against its skill?
+python3 scripts/test_skills.py --check  # does every script still run?
 ```
 
-The sixty-line runtime the lessons use to parse, route and check skills lives in
-[`scripts/exercises/skills.py`](../scripts/exercises/skills.py) and is emitted
-into the notebooks as literal source, because a notebook carries every line it
-runs.
+Every agent CLI gets a **symlink** to this directory rather than a copy, so the
+same edit reaches all of them at once:
+
+```bash
+python3 scripts/install_skills.py --all    # link into every CLI you have
+python3 scripts/install_skills.py --list   # what is linked where
+```
+
+A copy would be a fork with a friendly name: fix a skill once and the other
+copies keep the bug while still loading, still validating and still answering.
+
+The shared runtime every skill script imports — the model adapter, the contract
+parser and checker — lives in
+[`skills/_runtime/`](_runtime), which is a library rather than a skill and is
+skipped by the installer.

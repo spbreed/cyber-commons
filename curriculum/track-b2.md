@@ -11,7 +11,7 @@
 
 **Deliverable:** A five-phase AppSec pipeline running as a CI gate, with confirmed-by-exploitation severity and published precision and escape metrics.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -25,9 +25,17 @@
 **Run it** — Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.0.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/sdlc-control-placement/scripts/sdlc_control_placement.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The loop runs with a real model behind `ask()` — a labelled replay offline, a frontier or open-weight call when one is configured. Without a verifier it accepts whatever came back and reports `verified: None`. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in `escape()` is refused, because it is still concatenation.
@@ -43,9 +51,17 @@ python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
 **Run it** — Run the same loop twice — once with no verifier, once with one.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Without a verifier the loop accepts whatever the model returned and reports verified: None. With one, the same model and prompt produce an accepted parameterised line, a too-narrow verifier is shown rejecting a correct fix, and an answer that wraps the input in escape() is refused because it is still concatenation.
@@ -64,9 +80,17 @@ python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it
 **Run it** — Turn an architecture map into a ranked threat model, then diff it after one entry point is added.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/threat-model-stride/scripts/threat_model.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.
@@ -85,15 +109,17 @@ python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
 **Run it** — Score grep, taint rules and model review against the same corpus, then combine them behind a confidence gate.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b1-appsec
-git apply injected-pr.diff       # a PR containing an instruction to the reviewer
-python3 triage.py --candidates candidates.json --model $MODEL   # obeys it
-python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   # ignores it
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/sast-semgrep-deterministic/scripts/sast_semgrep_deterministic.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The unprotected run emits the attacker's verdict; the tagged run does not.
@@ -112,15 +138,17 @@ python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   
 **Run it** — Deduplicate findings across three analysis tracks, then verify each against the AST and drop the ones that reference code that is not there.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install 'litellm[proxy]' && cd labs/shared
-litellm --config litellm.config.yaml &   # llama executor, glm reasoner, kimi advisor
-cd ../m0-agent-loop && MODEL=router python3 loop.py --task fix-tests --json | jq '.tokens'
-python3 ../shared/spend_report.py --by-run
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/finding-dedup-and-verification/scripts/finding_dedup_and_verification.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Per-run, per-tier spend attribution. Escalation happens only at decision points.
@@ -139,14 +167,17 @@ python3 ../shared/spend_report.py --by-run
 **Run it** — Build a call graph from entry points and partition findings into reachable, unreachable and unknown.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-python3 subagent.py --depth 3 --parent-scope repo:read
-python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/appsec-vuln-audit/scripts/appsec_vuln_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Recursion budget caps depth; the escalation attempt is refused by the token, not by a check.
@@ -165,14 +196,17 @@ python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate
 **Run it** — Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop/traces
-python3 ../classify_failure.py --trace divergence.jsonl
-for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t --quiet; done
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/exploit-replica-isolation-check/scripts/exploit_replica_isolation_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Loop divergence, objective drift, reward hacking, silent truncation, tool thrash — one per trace.
@@ -188,12 +222,17 @@ for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t -
 **Run it** — Scan an SBOM, then decompile the closed-source library it never mentions.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the artefact is a real compiled class; this is how it was built ---
-javac -d /tmp/vt skills/appsec/supply-chain-decompile/evidence/provenance/VendorTelemetry.java
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/supply-chain-decompile/scripts/supply_chain_decompile.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Three of five declared components carry advisories, including Text4Shell in commons-text 1.9 — which only appears because the version comparison is numeric. Reconciliation finds one artefact on disk in no manifest; decompiling its constant pool recovers a hardcoded telemetry endpoint with the licence key folded into the same literal, an AES/ECB cipher spec, and network-egress and cryptography capabilities. unassessable_by_sbom: 1.
@@ -212,14 +251,17 @@ javac -d /tmp/vt skills/appsec/supply-chain-decompile/evidence/provenance/Vendor
 **Run it** — Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop
-python3 evolve.py --generations 5 --sandbox docker --fitness pytest-pass-rate
-python3 evolve.py --show-lineage   # what changed, what was kept, what was reverted
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/dynamic-exploitation-probe/scripts/dynamic_exploitation_probe.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Only mutations the deterministic oracle confirms survive. Pin the fitness function — it is now the security control.
@@ -238,14 +280,17 @@ python3 evolve.py --show-lineage   # what changed, what was kept, what was rever
 **Run it** — Chain individually-medium findings into a critical path and show the severity the chain earns.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop
-python3 loop.py --task fix-tests --json > run.json
-python3 replay.py --trace run.json --assert-identical
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/appsec-exploit-validate/scripts/appsec_exploit_validate.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Either it reproduces, or the tool names the field you failed to log. Anything you cannot replay you cannot investigate.
@@ -264,14 +309,17 @@ python3 replay.py --trace run.json --assert-identical
 **Run it** — Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/c1-redteam
-./airgap.sh up   # isolated docker network, no default route
-./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/redteam/offensive-agent-containment/scripts/offensive_agent_containment.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Severity sorting puts 2 of 3 exploitable findings in the top 3; model triage puts 3 of 3, and correctly reasons that the partner CDN is out of scope. With the model adversarially convinced that the out-of-scope host is critical, the unenforced harness acts on it and the enforced harness refuses. Underneath the harness the sandbox refuses three requests for three different reasons — rate limit, engagement boundary, and cloud metadata — without consulting the model at all.
@@ -325,9 +373,17 @@ cd labs/c1-redteam
 **Run it** — Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.15.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.15   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/appsec-triage-report/scripts/appsec_triage_report.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely.
@@ -346,14 +402,17 @@ python3 scripts/run_notebooks.py --session B2.15   # run it headless and check i
 **Run it** — Validate four candidate patches on three axes and show which of them only made the scanner green.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.16.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.16   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2-harness
-python3 domain_harness.py --domain sast   --oracle reachability+test
-python3 domain_harness.py --domain pentest --require-signed-scope
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/patch-validation-harness/scripts/patch_validation_harness.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* One skeleton runs all four domains unchanged. With each domain's own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model's own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness.
@@ -372,9 +431,17 @@ python3 domain_harness.py --domain pentest --require-signed-scope
 **Run it** — Compare four context strategies against one bug and measure which are decidable and at what size.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.17.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.17   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/context-window-sizing/scripts/context_window_sizing.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.
@@ -393,12 +460,17 @@ python3 scripts/run_notebooks.py --session B2.17   # run it headless and check i
 **Run it** — Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.18.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.18   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against real repositories ---
-python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/agent-code-surface-analyzer/scripts/agent_code_surface_analyzer.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification's destructive, open-world default.
@@ -417,9 +489,17 @@ python3 labs/attestation/control_intent.py --corpus /path/to/clones --out result
 **Run it** — Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.18.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.18   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/reference-pipeline-scoring/scripts/reference_pipeline_scoring.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.

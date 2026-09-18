@@ -72,18 +72,18 @@ in [`scripts/exercises/diagrams.py`](scripts/exercises/diagrams.py) as an
 picture, `flow()`/`column()`/`card()` for an architecture — and let colour and
 an icon do the work a legend would otherwise do. Every rule there is an inline
 style on the element it applies to, because a `<style>` block does not survive
-Jupyter, Kaggle and the dark lesson page alike; the palette leans on
-`currentColor` for the same reason.
+every context a lesson's HTML is read in; the palette leans on `currentColor`
+for the same reason.
 
 Hooks, diagrams and chapter bridges all live in
 [`scripts/exercises/framing.py`](scripts/exercises/framing.py), apart from the
 lesson bodies, because keeping all 134 of each in one file is the only way to
 see whether they are consistent with one another.
 
-**A lesson with no code cell gets no Kaggle button.** The site suppresses both
-buttons when the built notebook contains nothing executable, and the lesson
-says plainly that it is a reading lesson. Offering "Run on Kaggle" on a page of
-diagrams teaches the reader that the button is decorative everywhere else too.
+**A lesson with no skill gets no run block.** The site suppresses it when the
+lesson has nothing executable, and the page says plainly that it is a reading
+lesson. Offering a command on a page of diagrams teaches the reader that the
+command is decorative everywhere else too.
 
 Three lessons are in that state, and all three are function
 introductions. A1.1 used to be a fifth — a drawing lesson — until its map
@@ -266,12 +266,11 @@ DIAGRAMS["B2.3"] = """..."""  # ASCII, ~60 columns
 Then:
 
 ```bash
-python3 scripts/build_notebooks.py
-python3 scripts/run_notebooks.py --session B2.3
 python3 scripts/check_lessons.py
-python3 scripts/check_determinism.py --session B2.3
+python3 scripts/check_determinism.py --skill appsec/<the-skill>
 python3 scripts/test_skills.py --skill appsec/<the-skill>
 python3 scripts/build_curriculum.py && python3 scripts/build_site.py
+python3 scripts/build_lightboard.py
 ```
 
 ## What a lesson may execute
@@ -285,27 +284,25 @@ runs the file rather than a copy of it.
 2. **The `SKILL.md`, as markdown.** The procedure is prose and renders as
    prose. It used to be embedded as `SKILL_MD = r"""…"""`, which put the whole
    procedure inside a code cell and made a lesson page look like source.
-3. **One code cell** that finds the skills tree and runs
-   `skills/<ref>/scripts/<name>.py` as a subprocess, printing its stdout. Eight
-   lines, identical in every lesson, and none of them is the procedure.
+3. **The run block** — the two routes to executing it, which the page prints
+   verbatim: run `skills/<ref>/scripts/<name>.py` against its committed
+   fixture, or `python3 scripts/install_skills.py --all` and ask for the skill
+   by name in whichever agent CLI you use. Both execute the same file; neither
+   is a copy of the procedure.
 
-The tree is found in the checkout if there is one, and otherwise **cloned** —
-`--depth 1 --filter=blob:none --sparse`, then `sparse-checkout set skills`, so a
-kernel fetches the skills directory rather than the repository. That needs the
-kernel's internet on, which Kaggle gates on a verified phone number; the cell's
-failure message names the dataset `cybercommons/cyber-commons-skills` as the
-fallback for an account without one.
+The skills are **symlinked** into each agent's skills directory rather than
+copied, so a reader who edits a `SKILL.md` here sees the change in every tool at
+once. `install_skills.py` refuses to install if two areas ever claim one skill
+name, because the flat layout an agent expects would silently drop one of them.
 
 **Model calls happen inside skill scripts.** A lesson does not emit an adapter,
-and neither does a script: the six skills that call a model import `ask()` from
-`skills/_runtime/`, which the subprocess reaches through `PYTHONPATH`. There is
-one backend — an OpenAI-compatible endpoint, which is how an open-weight model
-from Kaggle is served — plus the labelled offline replay that is the default.
-
-**A lesson page shows the output, not the code.** `run_notebooks.py` writes each
-lesson's stdout to `labs/notebooks/_output/`, and the site renders that;
-`kaggle_verify.py` separately proves the same text is what a Kaggle kernel
-printed.
+and neither does a script: every skill imports `run_with_model()` from
+`skills/_runtime/`, which the subprocess reaches through `PYTHONPATH`. There are
+two backends — a signed-in Claude Code CLI, which needs no key and no endpoint,
+and any OpenAI-compatible endpoint, which is how an open-weight model is served.
+With neither, the script exits 2 and says so. There is no offline replay and no
+stand-in: an answer returned in a model's place has the right shape, passes the
+contract, and is not a model result.
 
 Code is **standard library only** and must be **deterministic**: seed from
 `zlib.crc32` rather than `hash()`, sort before iterating a set, and give every

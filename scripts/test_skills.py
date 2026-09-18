@@ -165,7 +165,7 @@ def main() -> int:
     for pr in problems:
         print(f"::error::{pr}", file=sys.stderr)
 
-    (ROOT / "labs" / "notebooks" / "_skill_tests.json").write_text(json.dumps({
+    (ROOT / "labs" / "evidence" / "_skill_tests.json").write_text(json.dumps({
         "generated_by": "scripts/test_skills.py",
         "note": ("Each row is one skill: whether its frontmatter and output "
                  "contract parse, and whether its own script runs to completion "

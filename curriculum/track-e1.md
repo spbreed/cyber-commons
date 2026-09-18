@@ -11,7 +11,7 @@
 
 **Deliverable:** A risk-tiered agent register with mapped controls and one fully evidenced control assertion.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -24,9 +24,12 @@
 **Run it** — Take the seven properties and assign each an owner in your own organisation. The gaps are the programme.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.0.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it
+# --- a reading lesson: no skill to run, so there is nothing to install ---
+# read the page, then take the next lesson in the chapter
+
+# --- when you get to one that does run a skill, this links them all in ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Seven trustworthy-AI properties print with a typical owner each. Security owns exactly one outright and contributes evidence to the other six — which is the reason this function exists as more than a security document.
@@ -43,15 +46,17 @@ python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it
 **Run it** — Change a prompt and show the control evidence going stale in real time.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e1-grc
-python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # PASS
-sed -i 's/refuse/consider/' ../m0-agent-loop/system-prompt.txt
-python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # now FAIL
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/attestation-signer-lifecycle/scripts/attestation_signer_lifecycle.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* One prompt edit invalidated an annual assessment. That is why point-in-time testing fails for AI.
@@ -68,14 +73,17 @@ python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # now FA
 **Run it** — Discover agents from gateway and identity telemetry; build the register.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e1-grc
-python3 discover.py --from-gateway http://localhost:15000/stats --from-spire
-python3 register.py --out agent-register.csv
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/deployment-inventory-resolver/scripts/deployment_inventory_resolver.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* A register built from telemetry rather than from a survey nobody answered.
@@ -91,14 +99,17 @@ python3 register.py --out agent-register.csv
 **Run it** — Tier ten real workflows and assign approval authority.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e1-grc
-python3 tier.py --workflows workflows.yaml --axes autonomy,action-class,data-sensitivity
-python3 tier.py --show-approvers
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/agentic-risk-tiering/scripts/agentic_risk_tiering.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Two workflows on the same model land in different tiers — which is the point.
@@ -115,13 +126,17 @@ python3 tier.py --show-approvers
 **Run it** — Map the A2/A3 controls onto your control library.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e1-grc
-python3 map_controls.py --new agent-controls.yaml --existing control-library.yaml --out gap.md
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/control-to-framework-mapping/scripts/control_to_framework_mapping.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.
@@ -138,15 +153,17 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 **Run it** — Take the B2.19 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2.10-eval-harness
-./scripts/vulnbench.sh compare > evidence/raw-results.txt
-python3 ../e1-grc/evidence_pack.py --results evidence/raw-results.txt --control AI-EVAL-01
-python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three ways this misleads
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/control-evidence/scripts/control_evidence.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* An OSCAL-shaped evidence pack, plus a written challenge: best-of-k reporting, conformance-as-accuracy, and judge dependence.
@@ -165,14 +182,17 @@ python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three way
 **Run it** — Classify your own guardrails into the two buckets.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e1-grc
-python3 classify_guardrails.py --config ../m0-agent-loop/guardrails.yaml
-python3 classify_guardrails.py --gap-analysis   # which regulator question is unanswered
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/guardrail-specification/scripts/guardrail_specification.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Frameworks specify how the system works; regulators ask what it produced. Most orgs are long on the first.
@@ -191,14 +211,17 @@ python3 classify_guardrails.py --gap-analysis   # which regulator question is un
 **Run it** — Automate one evidence package on a schedule.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.7   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e1-grc
-python3 collect_evidence.py --control-set controls.yaml --schedule daily
-python3 drift.py --baseline evidence/2026-08-01 --current evidence/today
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/aws-runtime-posture-collector/scripts/aws_runtime_posture_collector.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Control drift surfaces as a diff; a human still decides what it means.
@@ -215,14 +238,17 @@ python3 drift.py --baseline evidence/2026-08-01 --current evidence/today
 **Run it** — Run a real AIBOM against a vendor model artefact.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.8   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e1-grc
-python3 aibom.py --model-dir ~/.ollama/models --out aibom.json
-cosign verify-blob --bundle model.sig model.gguf   # provenance where signed
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/third-party-ai-assessment/scripts/third_party_ai_assessment.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* An artefact inventory with provenance status per component — and an honest 'unsigned' where that is the truth.
@@ -238,14 +264,17 @@ cosign verify-blob --bundle model.sig model.gguf   # provenance where signed
 **Run it** — Write the gate that a re-index has to pass.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.9   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/e1-grc
-python3 lifecycle_gate.py --event reindex --require eval-pass,owner-approval,rollback-plan
-python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/agent-lifecycle-governance/scripts/agent_lifecycle_governance.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Re-indexing is a change-management event with a gate, not maintenance.
@@ -262,9 +291,17 @@ python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked
 **Run it** — Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.10   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/stakeholder-seam-map/scripts/stakeholder_seam_map.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Five stakeholder functions print with the question each is asking and the controls each operates — 22 controls in total. Four seam failures are shown as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned.
@@ -281,9 +318,17 @@ python3 scripts/run_notebooks.py --session E1.10   # run it headless and check i
 **Run it** — Take a validated model, add one tool, and show which parts of the validation are now void.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.11   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/model-risk-validation-scope/scripts/model_risk_validation_scope.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The three SR 11-7 pillars print with the assumption each makes. A system validated with no tools at L1 is shown deployed with three tools at L3 — same model, same version — and the validation no longer covers it. Monitoring reports 200 clean runs of summarisation accuracy while four action-level metrics have no threshold at all, and four revalidation triggers classical MRM would miss are named.
@@ -300,9 +345,17 @@ python3 scripts/run_notebooks.py --session E1.11   # run it headless and check i
 **Run it** — Trace one artefact across three functions and find the consumer who never received it.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.12   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/programme/handoff-delivery-check/scripts/handoff_delivery_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero.
@@ -318,9 +371,17 @@ python3 scripts/run_notebooks.py --session E1.12   # run it headless and check i
 **Run it** — Measure six indicators against the CyberTravels tree and read the five gaps it reports.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/E1.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session E1.13   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/grc/kci-control-measurement/scripts/kci_control_measurement.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Measure six indicators against the CyberTravels tree and read the five gaps it reports.

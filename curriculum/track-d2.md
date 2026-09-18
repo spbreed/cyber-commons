@@ -11,7 +11,7 @@
 
 **Deliverable:** A detection pack for agent behaviour, every rule carrying a MITRE technique and a measured false-positive rate.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -34,14 +34,17 @@
 **Run it** — Write five detections for agent misbehaviour and fire each one.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc/detections
-./install-sigma.sh   # scope drift, tool-sequence anomaly, off-hours autonomy, retrieval anomaly, NHI-at-human-time
-./fire-each.sh       # deliberately trigger all five
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/agent-aware-rule-review/scripts/agent_aware_rule_review.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* All five fire on synthetic-but-real agent telemetry from the A3/B2 labs.
@@ -58,14 +61,17 @@ cd labs/d1-soc/detections
 **Run it** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-falco --rules agent-escape.yaml --validate
-python3 cache_diff.py --manifest build-manifest.json --repo artifactory
-gitleaks detect --redact --report-format sarif
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/agent-platform-detections/scripts/agent_platform_detections.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.
@@ -84,15 +90,17 @@ gitleaks detect --redact --report-format sarif
 **Run it** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install sigma-cli && cd labs/d1-soc/detections
-python3 gen_rule.py --technique T1059 --model $MODEL --out rules/t1059.yml
-sigma check rules/t1059.yml && python3 test_rule.py --rule rules/t1059.yml --positives pos/ --negatives neg/
-python3 coverage.py --map-to attack
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/detection-rule-deployability/scripts/detection_rule_deployability.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.
@@ -109,9 +117,17 @@ python3 coverage.py --map-to attack
 **Run it** — Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/detection-rule-synthesis/scripts/detection_rule_synthesis.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
@@ -130,13 +146,17 @@ python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
 **Run it** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-python3 canary.py --place worker-env,docs,artifact-metadata
-python3 honeypot.py --salt benchmark/ --ratio 0.15 --rotate-days 21
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/detection/canary-and-honeypot-design/scripts/canary_and_honeypot_design.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.

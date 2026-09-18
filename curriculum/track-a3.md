@@ -11,7 +11,7 @@
 
 **Deliverable:** A gateway policy that denies one high-consequence outcome at four independent layers.
 
-> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
@@ -25,9 +25,17 @@
 **Run it** — Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.1   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/iam-least-privilege-verifier/scripts/iam_least_privilege_verifier.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Five tool calls are evaluated twice. Under allow-by-default four succeed, each one a Chapter 1 risk walking through. Under default-deny only the intended call survives — including a refusal on the verb for an otherwise-permitted identity, tool and resource.
@@ -44,9 +52,17 @@ python3 scripts/run_notebooks.py --session A3.1   # run it headless and check it
 **Run it** — Run the same code inside and outside the sandbox and enumerate what each could reach.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/runtime/sandbox-containment-probe/scripts/sandbox_containment_probe.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it.
@@ -63,9 +79,17 @@ python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it
 **Run it** — Attempt exfiltration to several destinations under an allow-list and see which survive.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.3   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifier.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs.
@@ -82,16 +106,17 @@ python3 scripts/run_notebooks.py --session A3.3   # run it headless and check it
 **Run it** — Run a looping agent against each ceiling and record which one fires first.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop
-python3 loop.py --task impossible --max-steps 5
-python3 loop.py --task impossible --timeout 60
-python3 loop.py --task impossible --token-ceiling 20000
-python3 loop.py --task impossible --spend-cap 0.50
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_condition_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Four different stop reasons, all recorded in the trace. 'It finished' is never one of them.
@@ -108,9 +133,17 @@ python3 loop.py --task impossible --spend-cap 0.50
 **Run it** — Pass a fabricated claim through a schema check and then through a ground-truth verifier.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.5   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/runtime/tool-return-validation-check/scripts/tool_return_validation_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Four messages are checked twice. A schema-perfect, high-confidence claim is refuted by the oracle; a claim with no oracle stops with `unverifiable` rather than silently becoming true; a malformed message is caught by the schema; and only the verified claim propagates.
@@ -126,9 +159,17 @@ python3 scripts/run_notebooks.py --session A3.5   # run it headless and check it
 **Run it** — Route actions by reversibility and measure how many reach a human under each policy.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.6   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/architecture/blast-radius-review/scripts/blast_radius_review.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it.
@@ -145,9 +186,17 @@ python3 scripts/run_notebooks.py --session A3.6   # run it headless and check it
 **Run it** — Route every call through one gateway and show the same policy holding for agents that never implemented it.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/attestation/llm-gateway-guardrail-verifier/scripts/llm_gateway_guardrail_verifier.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent.
@@ -164,14 +213,17 @@ python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it
 **Run it** — Pass a message between two 'isolated' runs through a shared cache, then close it with namespacing and watch the same write be denied.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.8   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-cosign verify --certificate-identity-regexp '.*' libtarget-1.4.jar
-kubectl apply -f kyverno/verify-images.yaml   # fail closed at admission
-./ns-probe.sh --from run-B --to run-A         # must be denied and logged
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/runtime/shared-surface-channel-audit/scripts/shared_surface_channel_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* Six of seven shared surfaces qualify as channels, and only two of them look like storage. Two runs with no network path between them exchange a message through repository properties. Namespacing, immutable tags, trusted-builder publishing and fail-closed signature verification then produce five refusals for five different reasons, and the workload can reach neither the admin API nor the transcript store.
@@ -188,13 +240,17 @@ kubectl apply -f kyverno/verify-images.yaml   # fail closed at admission
 **Run it** — Disable a classifier without an approved exemption and watch the platform refuse; then launch 50,000 agents under one that is approved.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.9   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-opa eval -d exemptions.rego -i launch.json 'data.launch.allow'
-./orchestrator launch --agents 50000 --exemption EX-118   # expect refusal
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/runtime/control-exemption-audit/scripts/control_exemption_audit.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25.
@@ -213,13 +269,17 @@ opa eval -d exemptions.rego -i launch.json 'data.launch.allow'
 **Run it** — Plant a finding, run the agent with and without the tool, and compare what it does with what it says it wants to do.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.10   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- the full variant, against the real tooling (needs a container registry) ---
-python3 escalation_eval.py --planted credentials --runs 50
-python3 escalation_eval.py --report-rate --by-reason
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/runtime/escalation-path-review/scripts/escalation_path_review.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.
@@ -238,9 +298,17 @@ python3 escalation_eval.py --report-rate --by-reason
 **Run it** — Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
 
 ```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.11   # run it headless and check it
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 3 · run the skill against its committed fixture ---
+python3 skills/appsec/coding-agent-hardening/scripts/coding_agent_hardening.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
 ```
 
 *Expect:* The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.
