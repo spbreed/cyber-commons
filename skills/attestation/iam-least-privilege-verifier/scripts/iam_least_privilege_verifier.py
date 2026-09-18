@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # One agent's entire entitlement. Not "the Workflow Agent may query" - this
 # SPIFFE ID, these tools, these resources, these verbs. Anything not written
 # here is refused, so the file is also the complete answer to "what can this

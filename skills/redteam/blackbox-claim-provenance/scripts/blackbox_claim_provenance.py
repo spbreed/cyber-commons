@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # Everything a black-box engagement is allowed to look at. The list is short on
 # purpose: that is the whole constraint of the mode.
 DATA_SOURCES = [

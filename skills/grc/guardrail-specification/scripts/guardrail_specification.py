@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 RULES = [
  ("all agent egress goes through the gateway", False, True),
  ("privileged tools require approval below L3", False, True),

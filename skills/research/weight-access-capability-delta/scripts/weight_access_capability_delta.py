@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 REPLACEMENTS = {
  "rate limiting":            ("A2.7 choke point / A3.6 runtime levers",
                               "bound attempts per identity per window"),

@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # (technique, side, what the OTHER side sees that this cannot, can it block a merge)
 TECHNIQUES = [
     ("SAST / code analysis",        "pre",  "whether the vulnerable path is reached with real traffic", True),

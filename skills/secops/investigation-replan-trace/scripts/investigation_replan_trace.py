@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # Evidence arrives in order. Some of it refutes the working hypothesis.
 EVIDENCE = [
     ("gateway", "refund issued for BK-772 at 03:14", {"agent-misuse", "credential-theft"}),

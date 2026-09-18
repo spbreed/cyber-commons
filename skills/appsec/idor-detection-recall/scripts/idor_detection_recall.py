@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # The key, from cybertravels/LABELS.md — the five units missing an ownership
 # check. Two of them carry a second defect as well: search_bookings also
 # concatenates SQL and download_invoice also traverses a path. Semgrep finds

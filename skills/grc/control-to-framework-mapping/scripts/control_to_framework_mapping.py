@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 FRAMEWORK_CLAUSES = [
  "NIST AI RMF: GOVERN-1.1 policies are documented",
  "NIST AI RMF: GOVERN-1.2 roles and responsibilities are defined",

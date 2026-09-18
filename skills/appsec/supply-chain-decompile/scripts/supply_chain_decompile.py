@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # --------------------------------------- 3 · read the artefact nobody declared
 # The JVM constant pool: tag byte, then a fixed or length-prefixed payload.
 # Longs and doubles take two slots, which is the one rule that breaks a naive

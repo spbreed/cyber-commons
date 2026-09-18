@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 LEGACY_DB_CREDENTIAL = "static-service-password"     # never leaves the gateway
 
 REGISTRY = {"spiffe://corp/reports-agent": {"owner": "sam@corp", "expires": 9000}}

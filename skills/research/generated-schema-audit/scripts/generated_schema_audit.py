@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 SCAFFOLD = [
  "create table profiles (id uuid primary key, email text, api_key text);",
  "create table posts    (id uuid primary key, author uuid, body text);",

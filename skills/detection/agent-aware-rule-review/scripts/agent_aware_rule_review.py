@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 WEEKS = {
  "week 1 (baseline)":   ([("read_file", 850), ("search", 150)], {"repo:read"}),
  "week 4 (new prompt)": ([("read_file", 700), ("search", 200), ("write_file", 100)],

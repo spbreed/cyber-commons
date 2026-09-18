@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 SYSTEMS = {
  "primary CRM":        {"has_index": True,  "retention_days": 2555},
  "data warehouse":     {"has_index": True,  "retention_days": 1095},

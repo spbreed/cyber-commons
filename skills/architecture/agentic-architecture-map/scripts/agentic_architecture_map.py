@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # Step 1 — all nine, present or not. An absent box is a decision, not a gap.
 # (trust level, holds authority, present at CyberTravels)
 COMPONENTS = {

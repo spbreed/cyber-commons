@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 PLATFORM_TRUTH = {          # only the platform can observe these
  "proc-1": {"image": "reports-agent@sha256:aa11", "namespace": "prod", "node": "n-7"},
  "proc-2": {"image": "billing-agent@sha256:bb22", "namespace": "prod", "node": "n-7"},

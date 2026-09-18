@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 KNOWN_GOOD = {"requests", "urllib3", "numpy", "pandas", "cryptography",
               "pytest", "flask", "colorama", "langchain"}
 

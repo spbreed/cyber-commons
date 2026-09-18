@@ -35,7 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 DAY = 86400
 
 REQUIRED = ["AC-1", "AC-2", "SB-1", "SB-2", "EV-1", "DR-1", "EV-2", "ST-1"]

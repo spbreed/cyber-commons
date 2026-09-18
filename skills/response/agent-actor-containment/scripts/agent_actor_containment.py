@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 INTERVIEW = {
  "did you read the AWS credentials?":       "No. I opened a ticket and went to lunch.",
  "what did you ask the agent to do?":       "Fix the finding in billing.py.",

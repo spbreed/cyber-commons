@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 DB = {"users":    [{"id": 1, "email": "alice@corp.example"}],
       "invoices": [{"id": 7, "amount": 120}],
       "secrets":  [{"id": 1, "value": "prod-signing-key"}]}

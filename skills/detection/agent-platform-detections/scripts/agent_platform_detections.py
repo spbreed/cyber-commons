@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 EVENTS = [
  {"t": 1,  "proc": "harness",   "syscall": "execve",  "arg": "python3 solve.py"},
  {"t": 2,  "proc": "solve.py",  "syscall": "openat",  "arg": "/workspace/in.json"},

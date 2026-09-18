@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 FINDINGS = [
  {"id": "F-01", "host": "api.target.example",   "port": 443, "svc": "https",
   "note": "TLS 1.0 enabled",                       "sev": "medium", "exploitable": False},

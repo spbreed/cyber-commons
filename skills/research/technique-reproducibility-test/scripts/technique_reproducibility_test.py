@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # ground-truth landing probabilities for three injection techniques
 TECHNIQUES = {"direct override": 0.05, "context reframe": 0.35, "task nesting": 0.62}
 # ------------------------------------------------------------------------ run

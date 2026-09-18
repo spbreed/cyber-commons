@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # Small enough to be cheap on any tier, specific enough that a wrong answer is
 # obvious rather than plausible. The model is asked to apply this skill's own
 # procedure, which is also the mechanism every other skill uses.

@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # A SCIM resource for an agent. The protocol is RFC 7644; the schema URN is
 # your own extension, in exactly the way the enterprise extension declares
 # "manager" for users. Note what "owner" is: a REFERENCE, not a name.

@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 AGENTS = [
  {"id": "a-0001", "owner": "dana@example",  "handle": "@researchbot",
   "provider_key": "sk-REDACTED-openai",     "claim_token": "clm_8fA2"},

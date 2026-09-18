@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 TESTS = [
  ("Q1", True,  4.2, "full fleet, clean conditions"),
  ("Q2", True,  4.9, "full fleet, one region degraded"),

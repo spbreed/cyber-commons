@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 HOST = {"fs": ["/home/agent/work/data.csv", "/home/agent/.ssh/id_ed25519",
                 "/etc/passwd"],
         "env": {"AWS_ACCESS_KEY_ID": "AKIA-EXAMPLE-NOT-REAL",

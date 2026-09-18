@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # The format names its own tokens. An earlier version wrote the first field as
 # "VERDICT", and a served Qwen2.5-7B returned the literal string VERDICT — it
 # read the placeholder as the answer. The ask is the part you own, and that is

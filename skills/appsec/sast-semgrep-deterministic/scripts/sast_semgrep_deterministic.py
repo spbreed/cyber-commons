@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # Step 1 — the key, from cybertravels/LABELS.md, written by reading the tree
 # before any scan. `expressible` is the question that decides what a scanner
 # could ever do, and it has three values rather than two.

@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # The incident, reconstructed. One agent, one sequence, one outcome.
 INCIDENT = [
     {"agent": "workflow", "tool": "booking.read",    "arg": "BK-771"},

@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 MODEL_PROVIDER_DOMAINS = {"api.openai.com", "api.anthropic.com",
                           "generativelanguage.googleapis.com",
                           "api.mistral.ai", "api.together.xyz"}

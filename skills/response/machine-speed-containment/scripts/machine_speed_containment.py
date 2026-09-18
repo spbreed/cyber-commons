@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 PATH = [
  ("detection fires",              8,   "rule evaluation + SIEM ingestion lag"),
  ("analyst picks it up",          240, "queue depth at 02:00"),

@@ -145,10 +145,27 @@ def fixtures_of(src: str) -> list[tuple[str, str]]:
         # Take any comment block immediately above: it says what the fixture is
         # and why it has the values it has, which is exactly what a reader of
         # the converted script needs and what a plain slice would throw away.
+        # Walk up over the comment block that explains the fixture — but stop
+        # at this template's own banner rule. Converting an already-converted
+        # file otherwise swallows the banner into the fixture and re-emits it
+        # above the new one, so every re-run adds another copy. Three had
+        # accumulated before anybody looked.
         start = node.lineno - 1
-        while start > 0 and lines[start - 1].lstrip().startswith("#"):
+        while start > 0:
+            above = lines[start - 1].lstrip()
+            if not above.startswith("#") or set(above) <= set("#- "):
+                break
             start -= 1
-        block = "\n".join(lines[start:node.end_lineno])
+        # Drop this template's own banner rules wherever they appear in the
+        # captured block. Stopping the walk-up at one was not enough: earlier
+        # runs had already baked copies *into* the fixture comment, so they
+        # were no longer the adjacent line and survived. Filtering is
+        # idempotent — converting a converted file is a no-op.
+        block = "\n".join(l for l in lines[start:node.end_lineno]
+                          if not (l.lstrip().startswith("#")
+                                  and l.rstrip().endswith("the fixture")
+                                  and set(l.split("#", 1)[1].split("the")[0])
+                                  <= set("- ")))
 
         # A source slice keeps the original formatting and the comment above
         # it, which is worth having — but only when the slice is *exactly* this

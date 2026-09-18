@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 RULE_SEV = {"low":1,"medium":2,"high":3,"critical":4}
 
 CHAIN_SEV = {"": 0, "data_exposure": 3, "account_takeover": 4, "admin_actions": 4}

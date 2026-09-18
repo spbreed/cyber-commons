@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 CANARIES = {
  "hf_CANARY7Fq2mXvLpR8s": {"placed": "worker env listing",  "rotated_day": 0},
  "ghp_CANARY4mZk1TbNwQ9x": {"placed": "docs/DEPLOY.md",     "rotated_day": 0},

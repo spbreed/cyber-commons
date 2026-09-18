@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # KCI, what it measures, target, and three readings: healthy, during, after fix.
 KCIS = [
     ("KCI-01", "tool calls carrying provenance",        ">= 0.99", 1.00, 0.41, 1.00),

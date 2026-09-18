@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 USERS = {"dana":  {"scopes": {"reports:read"}},
          "priya": {"scopes": {"reports:read", "reports:write", "db:admin"}}}
 

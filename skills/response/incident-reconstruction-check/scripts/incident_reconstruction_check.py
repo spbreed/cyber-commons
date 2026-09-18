@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 NARRATIVE = """
 At 14:02 dana@corp authenticated via SSO and opened ticket SEC-4471. Eighteen
 seconds later the same account read billing.py, then read the application's AWS

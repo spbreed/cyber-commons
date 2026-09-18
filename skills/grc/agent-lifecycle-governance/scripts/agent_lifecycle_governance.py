@@ -35,7 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 DAY = 86400
 
 SCOPE_WEIGHT = {"self": 1, "project": 3, "tenant": 8, "org": 20}

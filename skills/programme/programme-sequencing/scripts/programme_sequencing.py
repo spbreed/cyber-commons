@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 STEPS = {
  1: ("inventory",   [],     ["you can now tier and assign owners"]),
  2: ("identity",    [1],    ["per-agent revocation", "attribution in logs"]),

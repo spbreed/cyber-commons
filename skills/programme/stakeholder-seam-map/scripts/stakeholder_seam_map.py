@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # The five control functions from the table above, with the count of
 # controls each one operates. Everything here is true, and self-reported.
 OPERATES = {"legal": 4, "compliance": 4, "privacy": 4, "cyber": 6, "model_risk": 4}

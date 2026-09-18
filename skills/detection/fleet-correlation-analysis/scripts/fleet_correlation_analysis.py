@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 RUNS = {
  "run-01": {"objective": "exploit target 14", "wrote": ["obj-A"], "read": ["obj-A"],
             "vocab": ["HOLD", "VETO"], "pivot_hour": 6},

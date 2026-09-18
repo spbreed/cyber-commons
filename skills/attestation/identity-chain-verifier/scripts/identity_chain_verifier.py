@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # --- layer 2: RFC 8693 token exchange --------------------------------------
 CEILINGS = {                        # what each actor may EVER hold
  "alice@cybertravels.com":

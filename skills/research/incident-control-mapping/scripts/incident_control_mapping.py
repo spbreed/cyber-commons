@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # The incident's control register, embedded verbatim. It is the same list
 # `labs/incident-register/register.json` holds and `check_register.py`
 # keeps in step, so the mapping below is against real rows rather than

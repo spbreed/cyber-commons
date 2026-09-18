@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 SCOPE_WEIGHT = {"self": 1, "project": 3, "tenant": 8, "org": 20}
 
 BEFORE = [("read_file", "self", True), ("write_file", "project", True),

@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 # a stand-in for the process the agent's code runs inside
 PROCESS_ENV = {
  "AWS_ACCESS_KEY_ID": "AKIA-EXAMPLE-NOT-REAL",

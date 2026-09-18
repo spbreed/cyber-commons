@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 ALLOW = {"api.corp.example", "reports-db.corp.example"}
 
 DENY_SUFFIXES = {".evil.example"}          # the deny-list, for comparison

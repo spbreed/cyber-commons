@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 LOG = [
  {"ts": "09:14:02", "actor": "agent-svc", "tool": "search",     "args": {"q": "invoice 8812"}},
  {"ts": "09:14:07", "actor": "agent-svc", "tool": "fetch_doc",  "args": {"id": "wiki/473"}},

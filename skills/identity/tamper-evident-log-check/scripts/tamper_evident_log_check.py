@@ -35,8 +35,6 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
-# ---------------------------------------------------------------- the fixture
 RUN = [
  {"trace": "t-01", "harness_says": "ls /workspace",          "host_saw": "ls /workspace"},
  {"trace": "t-02", "harness_says": "cat report.md",          "host_saw": "cat report.md"},
