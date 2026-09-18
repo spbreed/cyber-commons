@@ -30,10 +30,11 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
 from cyber_commons_skill_runtime import (  # noqa: E402
-    announce_backend, run_with_model)
+    announce_backend, jsonable, run_with_model)
 
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
+# ---------------------------------------------------------------- the fixture
 # ---------------------------------------------------------------- the fixture
 # ---------------------------------------------------------------- the fixture
 # Grey box is defined by what you are given, and this is the list. One
@@ -112,7 +113,8 @@ BLAST = {"booking(other)": 3, "refund": 4, "profile(other)": 4, "audit_log": 5,
 def task() -> str:
     """The fixture, as the model sees it."""
     return "\n\n".join(
-        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        f"### {name}\n\n```json\n"
+        f"{json.dumps(jsonable(value), indent=2, default=str)}\n```"
         for name, value in FIXTURE.items())
 
 

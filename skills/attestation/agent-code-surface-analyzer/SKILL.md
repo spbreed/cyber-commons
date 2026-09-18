@@ -80,8 +80,8 @@ The run continues past this. The script is the example: `test_skills.py` execute
   "deployment_id": "str",
   "tools": [
     {"name": "str", "capability_class": ["process|filesystem|network|credential|destructive"],
-     "annotations": {"readOnlyHint": false, "destructiveHint": true,
-                     "idempotentHint": false, "openWorldHint": true},
+     "annotations": {"readOnlyHint": "bool|null", "destructiveHint": "bool|null",
+                     "idempotentHint": "bool|null", "openWorldHint": "bool|null"},
      "annotations_present": true,
      "declared_vs_actual": "match|understated|overstated",
      "evidence": [{"file": "str", "line": 0, "sink": "str"}],

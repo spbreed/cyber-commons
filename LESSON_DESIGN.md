@@ -312,3 +312,21 @@ Code is **standard library only** and must be **deterministic**: seed from
 sort a full tiebreak. Both are gates in CI, and so is
 [`test_skills.py`](scripts/test_skills.py), which executes every skill script in
 a stripped environment — a script that runs and prints nothing is a failure.
+
+### Placeholders a contract may use
+
+The JSON under `## Output contract` is an **example**, and a few values in it
+are read as types rather than as literals. Each of these exists because reading
+the example literally produced a false violation against a correct answer:
+
+| in the contract | means | why |
+|---|---|---|
+| `"str"`, `0`, `0.0`, `true` | a value of that type | the ordinary case |
+| `"a\|b\|c"` | one of these literals | an enumeration |
+| `"bool\|null"` | that type, **or absent** | an MCP tool that declares no annotations cannot be described by inventing four booleans |
+| `null` | unspecified — anything passes | a contract written `"verified": null` once demanded NoneType forever, and counted a real boolean as a violation |
+| `{"str": 0}` | a mapping from string to int | the key is a placeholder, not a key spelled `str` |
+
+`scripts/check_skills.py` parses the block; `skills/_runtime`'s `check()`
+applies these rules. If you find yourself wanting a new one, prefer making the
+contract more specific over making the checker more permissive.

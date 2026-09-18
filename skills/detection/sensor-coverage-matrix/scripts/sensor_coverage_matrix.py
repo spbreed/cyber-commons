@@ -30,10 +30,11 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
 from cyber_commons_skill_runtime import (  # noqa: E402
-    announce_backend, run_with_model)
+    announce_backend, jsonable, run_with_model)
 
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
+# ---------------------------------------------------------------- the fixture
 # ---------------------------------------------------------------- the fixture
 # ---------------------------------------------------------------- the fixture
 # Four sensor classes almost every estate has bought, with an open-source
@@ -70,7 +71,8 @@ MARK = {"full": "##", "partial": "..", "none": "  "}
 def task() -> str:
     """The fixture, as the model sees it."""
     return "\n\n".join(
-        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        f"### {name}\n\n```json\n"
+        f"{json.dumps(jsonable(value), indent=2, default=str)}\n```"
         for name, value in FIXTURE.items())
 
 

@@ -26,7 +26,7 @@ Two halves:
     covers everything else, local or hosted. With neither, a skill refuses.
 """
 
-import json, re, shutil, subprocess
+import json, re, shutil, subprocess, time
 
 def parse_skill(md):
     """Split a SKILL.md into (frontmatter dict, body).
@@ -91,6 +91,29 @@ def contract_of(body):
         raise ValueError("skill declares no output contract")
     return json.loads(m.group(1))
 
+# Placeholder names a contract may use where a literal would be meaningless.
+# These are the repository's own convention, already used for values; the
+# checker now honours them for keys and in alternations too.
+TYPE_NAMES = {"str", "int", "float", "bool", "null"}
+_TYPES = {"str": str, "int": int, "float": (int, float), "bool": bool}
+
+
+def _matches_any_type(value, options):
+    for o in options:
+        if o == "null" and value is None:
+            return True
+        if o == "bool" and isinstance(value, bool):
+            return True
+        if o in ("int", "float") and not isinstance(value, bool) \
+                and isinstance(value, _TYPES[o]):
+            return True
+        if o == "str" and isinstance(value, str):
+            return True
+        if o not in TYPE_NAMES and value == o:
+            return True
+    return False
+
+
 def check(instance, contract, path="$"):
     """Structural conformance of an instance against a contract template.
 
@@ -99,9 +122,27 @@ def check(instance, contract, path="$"):
     conforms perfectly and tells you nothing.
     """
     problems = []
+
+    # A `null` in a contract example means "unspecified or nullable", not "this
+    # must always be null". Read literally it demanded NoneType forever, so a
+    # skill whose example had `"verified": null` counted a real boolean as a
+    # violation — the model was right and the checker was wrong.
+    if contract is None:
+        return []
+
     if isinstance(contract, dict):
         if not isinstance(instance, dict):
             return [f"{path}: expected an object, got {type(instance).__name__}"]
+        # `{"str": 0}` is this repository's way of writing "a mapping from
+        # string to int" — the same placeholder convention the contracts
+        # already use for values (`"kind": "str"`). Read literally it demanded
+        # a key spelled "str". Check every key's value against the template
+        # instead.
+        if len(contract) == 1 and next(iter(contract)) in TYPE_NAMES:
+            template = next(iter(contract.values()))
+            for k in sorted(instance):
+                problems += check(instance[k], template, f"{path}.{k}")
+            return problems
         for k, v in sorted(contract.items()):
             if k not in instance:
                 problems.append(f"{path}.{k}: missing")
@@ -113,7 +154,16 @@ def check(instance, contract, path="$"):
         for i, item in enumerate(instance):          # every element, same template
             problems += check(item, contract[0], f"{path}[{i}]")
     elif isinstance(contract, str) and "|" in contract:
-        if instance not in contract.split("|"):
+        options = contract.split("|")
+        # An alternation may name types rather than literals — "bool|null" is
+        # how a contract says "a boolean, or absent". Without this, a field
+        # that is legitimately unknown (an MCP tool that declares no
+        # annotations) could only be filled in by inventing a value.
+        if any(o in TYPE_NAMES for o in options):
+            if not _matches_any_type(instance, options):
+                problems.append(f"{path}: {type(instance).__name__} is not one "
+                                f"of {contract}")
+        elif instance not in options:
             problems.append(f"{path}: {instance!r} is not one of {contract}")
     elif isinstance(contract, bool):                  # before the numeric case:
         if not isinstance(instance, bool):            # bool is a subclass of int
@@ -160,6 +210,20 @@ TIMEOUT = 60
 # token than a raw completions call. 300s is generous on purpose:
 # a timeout here reads as a broken skill rather than a slow model.
 CLI_TIMEOUT = 300
+
+class ModelUnavailable(RuntimeError):
+    """The model could not answer for a reason that is not about the skill.
+
+    A usage limit, a rate limit or an overloaded backend says **nothing** about
+    the skill that happened to be running when it hit. Conflating the two is
+    how a sweep reports 121 broken skills that are all fine: the calls came
+    back in two seconds each, which is a quota rejection wearing the shape of a
+    model reply, and the harness recorded them as contract failures.
+
+    So it is a distinct exception. A caller sweeping many skills must stop when
+    it sees this, not record a result.
+    """
+
 
 class NoModelConfigured(RuntimeError):
     """Raised when a skill is run with no model endpoint configured.
@@ -255,8 +319,27 @@ def _claude_cli_call(prompt, system, timeout=CLI_TIMEOUT):
            "Grep", "WebFetch", "WebSearch", "Task", "NotebookEdit"]
     if system:
         cmd += ["--append-system-prompt", system]
+    started = time.monotonic()
     p = subprocess.run(cmd, input=prompt, capture_output=True, text=True,
                        timeout=timeout)
+    elapsed = time.monotonic() - started
+    blob = f"{p.stdout}\n{p.stderr}".lower()
+
+    # A quota rejection is fast and it is not an answer. Both halves matter:
+    # the wording varies between "usage limit", "rate limit" and "overloaded",
+    # and a genuine short reply is possible — but a reply that arrives in under
+    # five seconds *and* carries none of a JSON object is a rejection, because
+    # a real call to this backend takes tens of seconds.
+    quota = any(s in blob for s in ("usage limit", "rate limit", "quota",
+                                    "too many requests", "overloaded",
+                                    "429", "limit reached"))
+    if quota or (elapsed < 5 and "{" not in p.stdout):
+        raise ModelUnavailable(
+            f"the model did not answer, and this is not about the skill: "
+            f"{(p.stderr or p.stdout).strip()[:300] or 'empty reply'} "
+            f"(after {elapsed:.1f}s). Wait for the limit to reset and run it "
+            f"again — do not record this as a result.")
+
     if p.returncode != 0:
         raise RuntimeError(
             f"the claude CLI exited {p.returncode}: "
@@ -339,6 +422,26 @@ def announce_backend():
 # answer is validated against the skill's own contract. One implementation, 139
 # skills, and a skill's prompt cannot drift from its documentation because they
 # are the same bytes.
+
+def jsonable(obj):
+    """A structure json.dumps will accept, preserving what the keys meant.
+
+    `default=str` handles unserialisable *values* and does nothing for keys, so
+    a fixture keyed by tuples — `{("agent", "db"): "allow"}`, which is the
+    natural shape for a permission matrix — died with "keys must be str, int,
+    float, bool or None, not tuple" before any model was called. Three skills
+    had exactly that. Tuple keys become "a | b", which is what they read as in
+    the source anyway.
+    """
+    if isinstance(obj, dict):
+        return {(" | ".join(map(str, k)) if isinstance(k, tuple) else
+                 k if isinstance(k, (str, int, float, bool)) or k is None
+                 else str(k)): jsonable(v)
+                for k, v in obj.items()}
+    if isinstance(obj, (list, tuple, set)):
+        return [jsonable(v) for v in obj]
+    return obj
+
 
 JSON_BLOCK = re.compile(r"```(?:json)?\s*(.*?)```", re.S)
 

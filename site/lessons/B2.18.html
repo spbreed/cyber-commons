@@ -224,8 +224,8 @@ INTENT_EVIDENCED, and two controls cannot exceed PARTIAL at all.
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;tools&quot;: [
     {&quot;name&quot;: &quot;str&quot;, &quot;capability_class&quot;: [&quot;process|filesystem|network|credential|destructive&quot;],
-     &quot;annotations&quot;: {&quot;readOnlyHint&quot;: false, &quot;destructiveHint&quot;: true,
-                     &quot;idempotentHint&quot;: false, &quot;openWorldHint&quot;: true},
+     &quot;annotations&quot;: {&quot;readOnlyHint&quot;: &quot;bool|null&quot;, &quot;destructiveHint&quot;: &quot;bool|null&quot;,
+                     &quot;idempotentHint&quot;: &quot;bool|null&quot;, &quot;openWorldHint&quot;: &quot;bool|null&quot;},
      &quot;annotations_present&quot;: true,
      &quot;declared_vs_actual&quot;: &quot;match|understated|overstated&quot;,
      &quot;evidence&quot;: [{&quot;file&quot;: &quot;str&quot;, &quot;line&quot;: 0, &quot;sink&quot;: &quot;str&quot;}],
