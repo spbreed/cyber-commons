@@ -77,38 +77,14 @@ task nesting          0.660    (0.594, 0.726)  reproducible
 <li><strong>Computing the sample size afterwards.</strong> That is choosing the number that
   fits.</li>
 <li><strong>Rounding flaky up to works.</strong> It is the finding, not a rough edge.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>technique              rate              ci95  verdict
-------------------------------------------------------------
-direct override       0.055    (0.023, 0.087)  flaky
-context reframe       0.395    (0.327, 0.463)  flaky
-task nesting          0.660    (0.594, 0.726)  reproducible
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-&#x27;It worked&#x27; is true for all three. Only one is reproducible.
-     n            before             after  conclusion
---------------------------------------------------------------------
-    20    (0.385, 0.815)    (0.281, 0.719)  NOT demonstrated
-   100    (0.557, 0.743)    (0.463, 0.657)  NOT demonstrated
-  1000    (0.579, 0.639)     (0.45, 0.512)  improvement holds
+No model endpoint is configured, and every skill here needs one.
 
-The true effect is identical in all three rows. Only sample size changed.
-At n=20 you would report a 23% reduction you cannot support.
-effect you want to detect          n required
------------------------------------------------
-62% → 10%                                   7
-62% → 31%                                  20
-62% → 48%                                  98
-62% → 58%                                1153
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Detecting a halving is cheap. Detecting a 14-point move is not, and
-detecting a 4-point move is a research project in itself.
-
-re-run at the computed n=98: before (0.548, 0.738), after (0.473, 0.669), overlap=True
-task nesting, after provenance mitigation
-   before  0.60 (95% CI (0.385, 0.815), n=20)
-   after   0.50 (95% CI (0.281, 0.719), n=20)
-   verdict no demonstrated change — intervals overlap
-
-task nesting, after provenance mitigation
-   before  0.61 (95% CI (0.579, 0.639), n=1000)
-   after   0.48 (95% CI (0.45, 0.512), n=1000)
-   verdict reduction demonstrated</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The technique reproduces on a measurable fraction of attempts rather than all or none, and the report is that rate with its denominator, not the single best transcript.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take any jailbreak you have seen shared as a screenshot and run it twenty times. The reproduction rate is the finding; the screenshot was marketing.</p></div></section><div class="expect"><b>Expect</b>You reproduce an inflated score, then patch the harness so the same trick fails.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Inspect</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.3.ipynb</code></p></div><div class="pager"><a href="C1.2.html"><span class="k">← Previous</span><span class="t">C1.2 · Weaponizing the ingestion path</span></a><a class="next" href="C1.4.html"><span class="k">Next →</span><span class="t">C1.4 · Establishing telemetry and detecting the actor</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The technique reproduces on a measurable fraction of attempts rather than all or none, and the report is that rate with its denominator, not the single best transcript.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take any jailbreak you have seen shared as a screenshot and run it twenty times. The reproduction rate is the finding; the screenshot was marketing.</p></div></section><div class="expect"><b>Expect</b>You reproduce an inflated score, then patch the harness so the same trick fails.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Inspect</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.3.ipynb</code></p></div><div class="pager"><a href="C1.2.html"><span class="k">← Previous</span><span class="t">C1.2 · Weaponizing the ingestion path</span></a><a class="next" href="C1.4.html"><span class="k">Next →</span><span class="t">C1.4 · Establishing telemetry and detecting the actor</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

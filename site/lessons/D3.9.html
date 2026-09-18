@@ -77,33 +77,14 @@ agents reading ~/.aws/credentials             technique    0.88  RULE — conver
 <li><strong>Converting narratives.</strong> They do not match on anything.</li>
 <li><strong>Rules with no response.</strong> The alert lands and stops.</li>
 <li><strong>Reporting alerts rather than actions.</strong> Alerts are cheap to produce.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>indicator                                     kind         conf  verdict
-----------------------------------------------------------------------------------------
-collect.example.com                           host         0.95  RULE — convertible to a rule
-169.254.169.254                               host         0.99  RULE — convertible to a rule
-a1b2c3d4e5f6                                  hash         0.72  RULE — convertible to a rule
-pastebin.example                              host         0.55  drop — confidence 0.55 below floor 0.7
-adversaries increasingly use agentic tooling  narrative    0.40  drop — narrative is not matchable in telemetry
-agents reading ~/.aws/credentials             technique    0.88  RULE — convertible to a rule
-threat actor GOLDEN-OTTER is targeting finte  narrative    0.60  drop — narrative is not matchable in telemetry
-7 indicators → 4 deployable rules (57% conversion)
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-   [critical] intel:host:collect.example.com
-   [critical] intel:host:169.254.169.254
-   [high    ] intel:hash:a1b2c3d4e5f6
-   [high    ] intel:technique:agents reading ~/.aws/cred
-alerts generated from the feed:
-   [critical] intel:host:collect.example.com
-        actor=patch-agent  → block egress, revoke the agent&#x27;s token, hunt back 30d (vendor-a)
-   [high] intel:hash:a1b2c3d4e5f6
-        actor=build-agent  → quarantine the artefact, check the supply chain (vendor-b)
-   [high] intel:technique:agents reading ~/.aws/cred
-        actor=patch-agent  → revoke, rotate the cloud role, audit reads (internal-ir)
+No model endpoint is configured, and every skill here needs one.
 
-the three numbers that matter:
-   indicators received : 7
-   rules deployed      : 4  (57% of the feed)
-   alerts fired        : 3
-   alerts actioned     : 2  (67%)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-The third number is the one that decides whether the subscription renews.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Four of seven indicators convert to rules — the two narratives and the low-confidence host are dropped with reasons. The rules fire on three of five events with concrete responses. The three-number summary shows a 57% conversion rate and 67% of alerts actioned, and the source table ranks internal sources highest.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Compute your own three numbers for last quarter: indicators received, rules deployed, alerts actioned. The ratio between the first and third is the honest value of the programme.</p></div></section><div class="expect"><b>Expect</b>With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>MISP</span><span>OpenCTI</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.9.ipynb</code></p></div><div class="pager"><a href="D3.8.html"><span class="k">← Previous</span><span class="t">D3.8 · Fleet-level correlation — seeing a swarm</span></a><a class="next" href="D3.10.html"><span class="k">Next →</span><span class="t">D3.10 · Hunting in agent telemetry</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Four of seven indicators convert to rules — the two narratives and the low-confidence host are dropped with reasons. The rules fire on three of five events with concrete responses. The three-number summary shows a 57% conversion rate and 67% of alerts actioned, and the source table ranks internal sources highest.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Compute your own three numbers for last quarter: indicators received, rules deployed, alerts actioned. The ratio between the first and third is the honest value of the programme.</p></div></section><div class="expect"><b>Expect</b>With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>MISP</span><span>OpenCTI</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.9.ipynb</code></p></div><div class="pager"><a href="D3.8.html"><span class="k">← Previous</span><span class="t">D3.8 · Fleet-level correlation — seeing a swarm</span></a><a class="next" href="D3.10.html"><span class="k">Next →</span><span class="t">D3.10 · Hunting in agent telemetry</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Show which principal authorisation is actually evaluated against, and what the audit trail can name afterwards.
 
-This is the executable half of the `authorization-subject-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/threats/authorization-subject-check/scripts/authorization_subject_check.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 USERS = {"dana":  {"scopes": {"reports:read"}},
          "priya": {"scopes": {"reports:read", "reports:write", "db:admin"}}}
 
@@ -16,29 +43,43 @@ USERS = {"dana":  {"scopes": {"reports:read"}},
 AGENT_SVC = {"name": "agent-svc", "scopes": {"reports:read", "reports:write", "db:admin"}}
 
 AUDIT = []
+# ------------------------------------------------------------------------ run
 
-def call_tool(caller_identity, on_behalf_of, tool, required_scope):
-    """Authorization is checked against the CALLER - which is the agent."""
-    allowed = required_scope in caller_identity["scopes"]
-    AUDIT.append({"actor": caller_identity["name"], "tool": tool,
-                  "allowed": allowed})          # note: no human principal
-    return allowed
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-print(f"{'requester':8s}{'their scopes':44s}{'asked for':16s}allowed?")
-for user in sorted(USERS):
-    ok = call_tool(AGENT_SVC, user, "drop_table", "db:admin")
-    print(f"{user:8s}{str(sorted(USERS[user]['scopes'])):44s}{'db:admin':16s}{ok}")
 
-print("\nAUDIT TRAIL")
-for a in AUDIT:
-    print(f"   actor={a['actor']:10s} tool={a['tool']:12s} allowed={a['allowed']}")
+FIXTURE = {"USERS": USERS, "AGENT_SVC": AGENT_SVC, "AUDIT": AUDIT}
 
-print("\ndana holds reports:read only, and her request reached db:admin.")
-print("The authorization decision was made about the agent, not about her.")
-print()
-print("Now answer 'which user caused the table to be dropped' from that trail.")
-print("You cannot: every row says agent-svc. Privilege and attribution failed")
-print("in the same step, which is what makes this different from a human with")
-print("too much access.")
-assert all(a["allowed"] for a in AUDIT)
-assert all("dana" not in str(a) for a in AUDIT)
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

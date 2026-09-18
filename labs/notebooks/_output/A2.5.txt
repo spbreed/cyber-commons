@@ -1,60 +1,11 @@
-POST /scim/v2/Agents
-{
- "active": true,
- "displayName": "pricing-agent",
- "externalId": "spiffe://cybertravels.com/ns/prod/sa/pricing-agent",
- "id": "b7f3a1c2",
- "meta": {
-  "created": "2026-01-14T09:02:00Z",
-  "lastModified": "2026-01-14T09:02:00Z",
-  "resourceType": "Agent",
-  "version": "W/\"1\""
- },
- "owner": {
-  "$ref": "https://idp.cybertravels.com/scim/v2/Users/sam-2291",
-  "display": "sam@cybertravels.com",
-  "value": "sam-2291"
- },
- "registrationExpires": 9000,
- "schemas": [
-  "urn:cybertravels:params:scim:schemas:extension:agent:2.0:Agent"
- ]
-}
-presenting at the orchestrator:
-   pricing-agent         admitted  owner sam@cybertravels.com
-   billing-agent         REFUSED   registration lapsed
-   legacy-agent          REFUSED   no accountable owner
-   reporting-agent-v2    REFUSED   not registered
-   -> 1 of 4 admitted
+no model configured
 
-reporting-agent-v2 is A1.11's rogue: a real process, answering the
-protocol correctly, refused because nothing registered it. legacy-agent
-is the more common case - registered, running, owned by nobody.
-PATCH /scim/v2/Users/sam-2291
-   {'status': 200, 'id': 'sam-2291', 'active': False}
+No model endpoint is configured, and every skill here needs one.
 
-owner stored as a string  -> still admitted: ['pricing-agent']
-   Sam left this afternoon. His agent holds bookings scope tomorrow,
-   next quarter, and until somebody runs an access review.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-owner stored as a $ref -> resolved at admission:
-   pricing-agent         REFUSED   owner sam@cybertravels.com has left
-   billing-agent         REFUSED   registration lapsed
-   legacy-agent          REFUSED   no accountable owner
-   reporting-agent-v2    REFUSED   not registered
-   -> 0 of 4 admitted
-
-pricing-agent was admitted an hour ago and is refused now, on the
-strength of an HR event nobody forwarded to the agent platform.
-
-GET /scim/v2/Agents?filter=active eq true and owner pr false
-   1 result(s): ['legacy-agent']
-
-PATCH /scim/v2/Agents/billing-agent
-after retiring exactly one agent:
-   pricing-agent         REFUSED   owner sam@cybertravels.com has left
-   billing-agent         REFUSED   deprovisioned (active: false)
-   legacy-agent          REFUSED   no accountable owner
-   reporting-agent-v2    REFUSED   not registered
-   -> 0 of 4 admitted
-
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

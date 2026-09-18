@@ -1,45 +1,85 @@
 #!/usr/bin/env python3
 """Count the change surfaces that bypass change management and check which post-incident actions are still verifiable weeks later.
 
-This is the executable half of the `post-incident-change-surface` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/response/post-incident-change-surface/scripts/post_incident_change_surface.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 SCOPE_WEIGHT = {"self": 1, "project": 3, "tenant": 8, "org": 20}
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n, s, rev in tools if n not in gated)
 
 BEFORE = [("read_file", "self", True), ("write_file", "project", True),
           ("http_post", "org", False)]
+
 AFTER  = [("read_file", "self", True), ("write_file", "project", True),
           ("http_post", "org", False)]
-gated_after = {"http_post"}
+# ------------------------------------------------------------------------ run
 
-print(f"blast before {blast(BEFORE)}  after {blast(AFTER, gated_after)}")
-print("the manifest diff records the change even though no PR was raised.\n")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-def action_record(action, surface, control_type, owner, verify_by):
-    is_control = control_type in ("preventive", "detective")
-    return {"action": action, "surface": surface, "type": control_type,
-            "owner": owner, "verify_by": verify_by,
-            "acceptable": is_control and bool(owner) and bool(verify_by)}
 
-RECORDS = [
- action_record("gate http_post behind approval", "tool manifest", "preventive",
-               "platform-sec", "2026-09-30"),
- action_record("alert on credential-path reads", "detection", "detective",
-               "soc", "2026-09-15"),
- action_record("update the prompt to warn the model", "prompt", "guidance",
-               "", ""),
-]
-for r in RECORDS:
-    print(f"{'OK  ' if r['acceptable'] else 'WEAK'} {r['action']:42s}"
-          f"type={r['type']:11s} owner={r['owner'] or '—':14s} verify_by={r['verify_by'] or '—'}")
-weak = [r for r in RECORDS if not r["acceptable"]]
-print(f"\n{len(weak)} action(s) are guidance rather than controls: "
-      f"{[r['action'] for r in weak]}")
-assert weak
+FIXTURE = {"SCOPE_WEIGHT": SCOPE_WEIGHT, "BEFORE": BEFORE, "AFTER": AFTER}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

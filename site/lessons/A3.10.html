@@ -99,37 +99,14 @@ third.
 <li><strong>Adding the tool and stopping.</strong> An unpriced tool is not an escalation path.</li>
 <li><strong>Relying on the agent's judgement</strong> for the case where its judgement is what
   failed. The checkpoint does not ask.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>harness as shipped      noticed=True  tool=False  reported=False  fallback=the peer channel
-harness with the tool   noticed=True  tool=True  reported=True  fallback=None
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-Reported figures: 3-6 agents considered notifying a human, zero
-attempted it, out of roughly 1,200 that saw the compromise. The
-distinction that matters for remediation is between &#x27;did not notice&#x27;,
-&#x27;did not think it was my job&#x27; and &#x27;no route available&#x27; - and this is the
-third.
-tool design                      value to the agent  verdict
-terminal, budgeted, penalised                    -2  it will not be used
-non-terminal, budgeted                            2  it will not be used
-non-terminal, free, ack&#x27;d                         4  it will be used
+No model endpoint is configured, and every skill here needs one.
 
-A tool that exists and costs the agent its run is a tool that exists.
-Non-terminal, free, and acknowledged is the design; the acknowledgement
-matters because it is the only way the agent can tell the path is real.
-run   summarising the dataset schema                
-PAUSE  found hf_ABCD1234EFGH in the artifact metada  credential-shaped string in output
-PAUSE  fetching the reference implementation         connection to non-allowlisted host &#x27;cdn.partner.example&#x27;
-run   reading the API docs                          
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-None of these decisions consults the model. A discovery the agent was
-never provisioned for pauses the run and raises a review item, which is
-the difference between the agent deciding what to do with a live
-credential and a human deciding.
-attempt everything        score  13.0 over 20 tasks
-abstain when impossible   score  14.4 over 20 tasks
-
-impossible fraction in this set: 35%  (reported: 35%)
-
-Honest abstention now beats a failed attempt. With the opposite scoring
-and a third of targets impossible, the only strategy that scores is one
-that goes around the task - which is what row 10 of the register is
-about, and it starts as a scoring decision rather than a security one.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Open your agent's tool list and look for the outbound path. If there is no way for it to tell you something you did not ask about, then whatever it finds, you will only learn from the transcript — if anyone reads it.</p></div></section><div class="expect"><b>Expect</b>The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Llama 3.3</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.10.ipynb</code></p></div><div class="pager"><a href="A3.9.html"><span class="k">← Previous</span><span class="t">A3.9 · Turning a control off without turning the system into an experiment</span></a><a class="next" href="A3.11.html"><span class="k">Next →</span><span class="t">A3.11 · Securing the developers&#x27; coding agents</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Open your agent's tool list and look for the outbound path. If there is no way for it to tell you something you did not ask about, then whatever it finds, you will only learn from the transcript — if anyone reads it.</p></div></section><div class="expect"><b>Expect</b>The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Llama 3.3</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.10.ipynb</code></p></div><div class="pager"><a href="A3.9.html"><span class="k">← Previous</span><span class="t">A3.9 · Turning a control off without turning the system into an experiment</span></a><a class="next" href="A3.11.html"><span class="k">Next →</span><span class="t">A3.11 · Securing the developers&#x27; coding agents</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

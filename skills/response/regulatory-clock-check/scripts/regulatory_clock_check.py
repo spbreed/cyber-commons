@@ -1,40 +1,42 @@
 #!/usr/bin/env python3
 """Run the disclosure clock from each candidate awareness point and find which scoping delays miss the deadline.
 
-This is the executable half of the `regulatory-clock-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/response/regulatory-clock-check/scripts/regulatory_clock_check.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import time
+import json
+import pathlib
+import sys
 
-def clock(awareness, containment, report, deadline_hours=72):
-    to_contain = (containment - awareness) / 3600
-    to_report  = (report - awareness) / 3600
-    return {"hours_to_containment": round(to_contain, 1),
-            "hours_to_report": round(to_report, 1),
-            "deadline": deadline_hours,
-            "met": to_report <= deadline_hours,
-            "margin": round(deadline_hours - to_report, 1)}
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-t0 = time.time()
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 H = 3600
-SCENARIOS = {
- "fast containment, slow scoping": (t0 + 1*H,  t0 + 80*H),
- "slow containment, fast reporting": (t0 + 40*H, t0 + 60*H),
- "both fast":                      (t0 + 2*H,  t0 + 20*H),
- "attribution broken (D3.5)":      (t0 + 6*H,  t0 + 92*H),
-}
-print(f"{'scenario':34s}{'contain':>9}{'report':>9}{'met':>6}{'margin':>9}")
-print("-" * 68)
-for name, (c, r) in SCENARIOS.items():
-    k = clock(t0, c, r)
-    print(f"{name:34s}{k['hours_to_containment']:>9.1f}{k['hours_to_report']:>9.1f}"
-          f"{str(k['met']):>6}{k['margin']:>9.1f}")
-print("\nThe first row contained in ONE HOUR and still missed the deadline.")
 
 TIMELINE = [
  ("alert fires",                          0,  False),
@@ -43,20 +45,6 @@ TIMELINE = [
  ("scope established",                    40, True),
  ("legal confirms it is reportable",      55, True),
 ]
-print(f"{'event':40s}{'t+h':>6}  could a regulator call this awareness?")
-print("-" * 84)
-for name, h, aware in TIMELINE:
-    print(f"{name:40s}{h:>6}  {aware}")
-
-report_at = 76
-for label, start_h in (("clock from analyst suspicion", 3),
-                       ("clock from IR confirmation", 9),
-                       ("clock from legal determination", 55)):
-    hours = report_at - start_h
-    print(f"\n{label:34s} elapsed {hours:>3}h  "
-          f"{'MET' if hours <= 72 else 'MISSED'} (72h deadline)")
-print("\nThe same incident, the same report time, three different answers.")
-print("Pick the earliest defensible start. A regulator will.")
 
 OBLIGATIONS = {
  "GDPR (personal data breach)":     (72,  "supervisory authority"),
@@ -65,26 +53,43 @@ OBLIGATIONS = {
  "PCI DSS (card data)":             (24,  "acquirer/brands"),
  "contractual (major client)":      (12,  "client security contact"),
 }
-print(f"{'obligation':36s}{'deadline (h)':>14}  notify")
-print("-" * 76)
-for name, (hours, who) in sorted(OBLIGATIONS.items(), key=lambda kv: kv[1][0]):
-    print(f"{name:36s}{hours:>14}  {who}")
-shortest = min(OBLIGATIONS.items(), key=lambda kv: kv[1][0])
-print(f"\nyour real deadline is the shortest: {shortest[0]} at {shortest[1][0]}h")
+# ------------------------------------------------------------------------ run
 
-def runbook_check(containment_owner, disclosure_owner, clock_starts_at):
-    problems = []
-    if containment_owner == disclosure_owner:
-        problems.append("one owner for both workstreams — they compete for the "
-                        "same person under time pressure")
-    if clock_starts_at != "awareness":
-        problems.append(f"clock starts at {clock_starts_at!r}, not at awareness — "
-                        f"a regulator will use the earlier point")
-    return (not problems), problems
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-for label, args in (("as usually written", ("IR lead", "IR lead", "confirmation")),
-                    ("corrected", ("IR lead", "legal/compliance lead", "awareness"))):
-    ok, problems = runbook_check(*args)
-    print(f"\n{label}: sound={ok}")
-    for p in problems: print(f"   ⚠ {p}")
-assert runbook_check("IR lead", "legal/compliance lead", "awareness")[0]
+
+FIXTURE = {"H": H, "TIMELINE": TIMELINE, "OBLIGATIONS": OBLIGATIONS}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

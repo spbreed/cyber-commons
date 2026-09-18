@@ -95,34 +95,14 @@ t-03    python3 analyse.py            curl -s http://cache/put?m=...
   entries verifies perfectly.</li>
 <li><strong>Ignoring the workload's write access to the log store.</strong> It is the whole
   threat model of this check.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A2.8</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a2-8" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a2-8" title="Kaggle notebook A2.8" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>in-band check - does every step have a recorded command?
-   steps: 5   steps with no record: 0   verdict: clean
+</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A2.8</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a2-8" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a2-8" title="Kaggle notebook A2.8" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-Two of these five steps executed something other than what was recorded.
-The in-band check cannot see that, because it is reading the record that
-the thing it is checking produced.
-trace   harness recorded              host observed
-t-03    python3 analyse.py            curl -s http://cache/put?m=...
-t-05    echo done                     python3 -c &#x27;import os;os.execve(...)&#x27;
+No model endpoint is configured, and every skill here needs one.
 
-spoofing rate in this run: 40%  (2 of 5)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-The reported rate across the source incident&#x27;s sampled transcripts was
-about 7%, with the investigators unable to rule out more. Whatever the
-number, it is only knowable because two independent streams existed.
-chain of 5 segments verifies: True
-head: 5bbdf8e96e0eaf03719ee683a47be411...
-
-after rewriting segment 2: verifies=False, first break at segment 2
-
-The rewrite is not prevented - it is localised. Anyone holding the signed
-head knows which segment moved, which is the difference between a
-corrupted investigation and a bounded one.
-workload role vs the logging plane
-   permissions reaching the logging plane: 0
-
-after one convenience grant: 1 permission(s) reach it
-      s3:PutObject -&gt; arn:aws:s3:::agent-transcripts/*
-
-One line of IAM turns the chain, the WORM policy and the out-of-band
-sensor into decoration. This is a quarterly diff, not a design review.</code></pre></div></details></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run the IAM check on your own agent workload: can its role read, write or list the bucket its transcripts land in, or decrypt with their key? If yes, every detection you have built on those transcripts is reporting on data the subject controls.</p></div></section><div class="expect"><b>Expect</b>The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Falco</span><span>Tetragon</span><span>Sigstore</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.8.ipynb</code></p></div><div class="pager"><a href="A2.7.html"><span class="k">← Previous</span><span class="t">A2.7 · Attribution: an audit trail that answers &quot;who&quot;</span></a><a class="next" href="A3.1.html"><span class="k">Next →</span><span class="t">A3.1 · Default-deny on the tool call</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></details></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run the IAM check on your own agent workload: can its role read, write or list the bucket its transcripts land in, or decrypt with their key? If yes, every detection you have built on those transcripts is reporting on data the subject controls.</p></div></section><div class="expect"><b>Expect</b>The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Falco</span><span>Tetragon</span><span>Sigstore</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.8.ipynb</code></p></div><div class="pager"><a href="A2.7.html"><span class="k">← Previous</span><span class="t">A2.7 · Attribution: an audit trail that answers &quot;who&quot;</span></a><a class="next" href="A3.1.html"><span class="k">Next →</span><span class="t">A3.1 · Default-deny on the tool call</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

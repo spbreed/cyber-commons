@@ -1,12 +1,11 @@
-intended use:
-   how many invoices  -> {'rows': [{'id': 7, 'amount': 120}]}
+no model configured
 
-same tool, same identity, same well-formed arguments:
-   signing key        -> {'rows': [{'id': 1, 'value': 'prod-signing-key'}]}
-   clean up secrets   -> {'deleted': 1, 'table': 'secrets'}
+No model endpoint is configured, and every skill here needs one.
 
-secrets table now: []
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-No exploit. The tool did exactly what it was built to do. It was scoped
-for the nightly reconciliation job, and every caller inherited that
-scope - including the one steered by a poisoned ticket in A1.3.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

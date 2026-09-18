@@ -1,16 +1,41 @@
 #!/usr/bin/env python3
 """Pick the framework that covers the most controls as a spine, and supply the remainder from the others rather than building per-framework.
 
-This is the executable half of the `framework-spine-selection` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/regulatory/framework-spine-selection/scripts/framework_spine_selection.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-from collections import defaultdict
+import json
+import pathlib
+import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 CONTROLS = {
  "AC-1": ("NIST AI RMF: GOVERN-1.2", "ISO 42001: 6.1", "EU AI Act: Art.14"),
  "AC-2": ("NIST AI RMF: MANAGE-2.2", "ISO 42001: 8.1"),
@@ -21,66 +46,43 @@ CONTROLS = {
  "DR-1": ("NIST AI RMF: MEASURE-2.4", "ISO 42001: 9.1"),
  "ST-1": ("EU AI Act: Art.14", "DORA: Art.11"),
 }
-by_fw = defaultdict(set)
-for cid, fws in CONTROLS.items():
-    for f in fws:
-        by_fw[f.split(":")[0]].add(cid)
+# ------------------------------------------------------------------------ run
 
-print(f"{'framework':18s}{'covers':>8}  controls")
-print("-" * 62)
-for fw, cids in sorted(by_fw.items(), key=lambda kv: -len(kv[1])):
-    print(f"{fw:18s}{len(cids):>8}  {sorted(cids)}")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-spine = max(by_fw, key=lambda f: len(by_fw[f]))
-gaps = sorted(set(CONTROLS) - by_fw[spine])
-print(f"\nbest spine: {spine} covering {len(by_fw[spine])}/{len(CONTROLS)}")
-print(f"not reached by the spine: {gaps}")
 
-def per_regulation(controls):
-    """Build a separate control set for each instrument. The usual approach."""
-    sets = defaultdict(set)
-    for cid, fws in controls.items():
-        for f in fws:
-            sets[f.split(":")[0]].add(cid)
-    return sets
+FIXTURE = {"CONTROLS": CONTROLS}
 
-sets = per_regulation(CONTROLS)
-total_implementations = sum(len(v) for v in sets.values())
-distinct_controls = len(CONTROLS)
-print(f"distinct controls actually needed : {distinct_controls}")
-print(f"control implementations if built per-framework : {total_implementations}")
-print(f"duplication factor : {total_implementations/distinct_controls:.1f}×")
 
-print("\ncontrols claimed by more than one framework:")
-for cid, fws in CONTROLS.items():
-    if len(fws) > 1:
-        print(f"   {cid}  {len(fws)} frameworks: {[f.split(':')[0] for f in fws]}")
-print("\nBuilt separately, these drift: the ISO version of AC-1 and the AI Act")
-print("version diverge, evidence is produced twice, and neither is trusted.")
-assert total_implementations > distinct_controls
+def main() -> int:
+    announce_backend()
 
-def spine_plan(controls, spine):
-    covered = {c for c, fws in controls.items() if any(f.startswith(spine) for f in fws)}
-    gaps = sorted(set(controls) - covered)
-    secondary = defaultdict(list)
-    for g in gaps:
-        for f in controls[g]:
-            secondary[f.split(":")[0]].append(g)
-    return {"spine": spine, "covered": sorted(covered), "gaps": gaps,
-            "secondary_sources": {k: v for k, v in secondary.items()
-                                  if not k.startswith(spine)}}
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-plan = spine_plan(CONTROLS, "NIST AI RMF")
-print(f"spine              {plan['spine']}")
-print(f"covered by spine   {len(plan['covered'])}/{len(CONTROLS)}  {plan['covered']}")
-print(f"gaps               {plan['gaps']}")
-print("secondary sources needed for the gaps:")
-for fw, cids in plan["secondary_sources"].items():
-    print(f"   {fw:20s} supplies {cids}")
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-print("\nstatement for the assessor:")
-print(f"   'We operate {len(CONTROLS)} AI controls, built against {plan['spine']}.")
-print(f"    {len(plan['covered'])} map directly to it; {len(plan['gaps'])} come from")
-print(f"    {list(plan['secondary_sources'])}. Each control produces one artefact,")
-print("    which satisfies every clause it maps to.'")
-assert plan["gaps"]
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

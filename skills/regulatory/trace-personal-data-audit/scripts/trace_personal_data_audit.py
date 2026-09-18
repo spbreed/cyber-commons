@@ -1,46 +1,41 @@
 #!/usr/bin/env python3
 """Find personal data nobody placed in an agent trace deliberately, and run an erasure request through every system that holds it.
 
-This is the executable half of the `trace-personal-data-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/regulatory/trace-personal-data-audit/scripts/trace_personal_data_audit.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import re, hashlib
-from dataclasses import dataclass, field
+import json
+import pathlib
+import sys
 
-@dataclass
-class Step:
-    n: int; tool: str; target: str; result: str
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-RUN = [
- Step(1, "read_ticket", "SUP-4471",
-      "Customer J. Okonkwo (dana.okonkwo@example.com, acct 8812) reports a "
-      "double charge on card 4111111111111111."),
- Step(2, "search_orders", "acct=8812",
-      "3 orders found for account 8812, total GBP 412.90"),
- Step(3, "post_reply", "SUP-4471", "Refund issued for the duplicate charge."),
-]
-DETECTORS = {
- "email": re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
- "payment card": re.compile(r"\b4[0-9]{12}(?:[0-9]{3})?\b"),
- "account number": re.compile(r"\bacct \d{4}\b"),
- "name": re.compile(r"\b[A-Z]\. [A-Z][a-z]+\b"),
-}
-found = []
-for s in RUN:
-    for kind, pat in DETECTORS.items():
-        for m in pat.finditer(s.result):
-            found.append((s.n, kind, m.group(0)))
-print("personal data present in the agent trace:")
-for n, kind, val in found:
-    print(f"   step {n}  {kind:16s}{val}")
-print(f"\n{len(found)} items. Nobody put them there deliberately — the agent read")
-print("a support ticket, which is exactly what it was asked to do.")
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 SYSTEMS = {
  "primary CRM":        {"has_index": True,  "retention_days": 2555},
  "data warehouse":     {"has_index": True,  "retention_days": 1095},
@@ -49,73 +44,48 @@ SYSTEMS = {
  "fine-tuning set":    {"has_index": False, "retention_days": 9999},
  "backups":            {"has_index": True,  "retention_days": 90},
 }
+
 SUBJECT = "dana.okonkwo@example.com"
-
-print(f"erasure request for {SUBJECT}\n")
-print(f"{'system':22s}{'can locate?':>13}{'retention (d)':>15}  outcome")
-print("-" * 76)
-unreachable = []
-for name, s in SYSTEMS.items():
-    if s["has_index"]:
-        outcome = "erased"
-    else:
-        outcome = "CANNOT LOCATE — request cannot be completed"
-        unreachable.append(name)
-    print(f"{name:22s}{str(s['has_index']):>13}{s['retention_days']:>15}  {outcome}")
-print(f"\n{len(unreachable)} system(s) where the request fails: {unreachable}")
-print("The response to the data subject says 'erased'. It is not true in three")
-print("systems, two of which retain indefinitely.")
-assert unreachable
-
-def content_hash(text): return hashlib.sha256(text.encode()).hexdigest()[:16]
-
-def index_trace(run, detectors):
-    """A subject index: which steps contain data about whom."""
-    idx = {}
-    for s in run:
-        for kind, pat in detectors.items():
-            for m in pat.finditer(s.result):
-                subj = m.group(0)
-                idx.setdefault(subj, []).append(
-                    {"step": s.n, "kind": kind, "hash": content_hash(s.result)})
-    return idx
-
-IDX = index_trace(RUN, DETECTORS)
-print("subject index built from the trace:")
-for subj, entries in IDX.items():
-    print(f"   {subj:36s}{len(entries)} occurrence(s) in steps "
-          f"{sorted({e['step'] for e in entries})}")
-
-def erase(run, idx, subject):
-    steps = sorted({e["step"] for e in idx.get(subject, [])})
-    out = []
-    for s in run:
-        if s.n in steps:
-            out.append(Step(s.n, s.tool, s.target,
-                            f"[erased on request; original sha256={content_hash(s.result)}]"))
-        else:
-            out.append(s)
-    return out, steps
-
-erased, touched = erase(RUN, IDX, SUBJECT)
-print(f"\nerasure for {SUBJECT}: steps {touched}")
-for s in erased:
-    print(f"   step {s.n}: {s.result[:66]}")
-
-remaining = [(n, k, v) for s in erased for k, pat in DETECTORS.items()
-             for m in pat.finditer(s.result) for n, v in [(s.n, m.group(0))]]
-print(f"\npersonal data remaining in the trace: {remaining or 'none'}")
-assert not remaining
-print("The hash is retained, so if the original surfaces in a backup you can")
-print("still prove it is the same content — which is what makes the erasure auditable.")
 
 # Per-field retention: keep the forensically useful parts, drop the rest early.
 RETENTION = {"n": 400, "tool": 400, "target": 400, "result": 7}
-print(f"{'field':10s}{'days':>6}  rationale")
-print("-" * 62)
-for f, d in RETENTION.items():
-    why = ("tool output — highest sensitivity, lowest retention" if f == "result"
-           else "cheap, high forensic value, no personal data")
-    print(f"{f:10s}{d:>6}  {why}")
-print("\nAt 7 days the result field is gone and the trace is still forensically")
-print("useful: you know what the agent did, to what, and when.")
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"SYSTEMS": SYSTEMS, "SUBJECT": SUBJECT, "RETENTION": RETENTION}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

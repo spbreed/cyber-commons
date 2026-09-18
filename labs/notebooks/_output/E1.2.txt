@@ -1,34 +1,11 @@
-asset                             kind              autonomy  owner         found via
---------------------------------------------------------------------------------------------
-fraud-scoring-model               model             L1        risk-eng      registry
-support-summariser                copilot           L1        support-eng   registry
-vendor-contract-analyser          embedded-feature  L1        —             expense report
-unknown-openai-usage-marketing    copilot           L1        —             egress logs
-pr-remediation-agent              agent             L2.5      —             egress logs
-agent-worker-7f3c                 agent             L2.5      —             egress logs
+no model configured
 
-registry found 2; the other two sources found 4 more.
-assets                    6
-no named owner            4  ['vendor-contract-analyser', 'unknown-openai-usage-marketing', 'pr-remediation-agent', 'agent-worker-7f3c']
-never registered          4
-L2.5+ with no owner       2  ['pr-remediation-agent', 'agent-worker-7f3c']
+No model endpoint is configured, and every skill here needs one.
 
-gaps in detail:
-   vendor-contract-analyser          no named owner — nobody can accept the risk or recertify it
-   vendor-contract-analyser          not registered — found via expense report
-   unknown-openai-usage-marketing    no named owner — nobody can accept the risk or recertify it
-   unknown-openai-usage-marketing    not registered — found via egress logs
-   pr-remediation-agent              no named owner — nobody can accept the risk or recertify it
-   pr-remediation-agent              not registered — found via egress logs
-   pr-remediation-agent              acts semi-autonomously with nobody accountable
-   agent-worker-7f3c                 no named owner — nobody can accept the risk or recertify it
-   agent-worker-7f3c                 not registered — found via egress logs
-   agent-worker-7f3c                 acts semi-autonomously with nobody accountable
-marketing-workstation-14      api.openai.com                       240,000 bytes
-                              AI usage not present in the inventory
-svc-pr-remediation            api.anthropic.com                  8,400,000 bytes
-                              AI usage not present in the inventory
-agent-worker-7f3c             api.together.xyz                   1,200,000 bytes
-                              AI usage not present in the inventory
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-{'total': 6, 'owned': 2, 'registered': 2, 'coverage': 0.33}
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

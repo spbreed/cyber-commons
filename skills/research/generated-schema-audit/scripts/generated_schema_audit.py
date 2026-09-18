@@ -1,49 +1,47 @@
 #!/usr/bin/env python3
 """Audit a generated database scaffold for tables that hold secrets and carry no policy, using the catalogue rather than the application.
 
-This is the executable half of the `generated-schema-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/research/generated-schema-audit/scripts/generated_schema_audit.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 SCAFFOLD = [
  "create table profiles (id uuid primary key, email text, api_key text);",
  "create table posts    (id uuid primary key, author uuid, body text);",
  "alter table posts enable row level security;",
  "create policy p_read on posts for select using (true);",
 ]
-
-def audit(statements):
-    """The check a generator does not run, expressed as three questions."""
-    tables = [s.split()[2] for s in statements if s.startswith("create table")]
-    rls_on = {s.split()[2] for s in statements if "enable row level security" in s}
-    permissive = [s.split()[2] for s in statements
-                  if s.startswith("create policy") and "using (true)" in s]
-    findings = []
-    for tbl in tables:
-        if tbl not in rls_on:
-            findings.append((tbl, "critical", "RLS disabled - open via the public API"))
-    for s in statements:
-        if s.startswith("create policy") and "using (true)" in s:
-            findings.append((s.split()[4], "high", "policy matches every row"))
-    return tables, findings
-
-tables, findings = audit(SCAFFOLD)
-print(f"tables created : {', '.join(tables)}")
-print(f"findings       : {len(findings)}\n")
-print(f"{'table':12s}{'severity':11s}why")
-for tbl, sev, why in findings:
-    print(f"{tbl:12s}{sev:11s}{why}")
-
-print()
-print("The application works. Every feature passes. `profiles` holds an api_key")
-print("column and has no policy at all, and nothing in the test suite is shaped")
-print("like the question that would find it.")
-assert any(f[1] == "critical" for f in findings)
-assert "profiles" in [f[0] for f in findings]
 
 # One query answers the critical half, across every table at once.
 CATALOG = [                       # what pg_class would return
@@ -52,20 +50,45 @@ CATALOG = [                       # what pg_class would return
  {"relname": "sessions", "relrowsecurity": False},
  {"relname": "audit",    "relrowsecurity": True},
 ]
+
 SENSITIVE = {"profiles", "sessions", "audit"}
+# ------------------------------------------------------------------------ run
 
-open_tables = sorted(r["relname"] for r in CATALOG if not r["relrowsecurity"])
-print("select relname from pg_class where relrowsecurity = false;")
-for name in open_tables:
-    mark = "  <- holds credentials or session state" if name in SENSITIVE else ""
-    print(f"   {name}{mark}")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-print(f"\ntables open via the public API : {len(open_tables)} of {len(CATALOG)}")
-exposed_sensitive = [t for t in open_tables if t in SENSITIVE]
-print(f"of those, sensitive             : {len(exposed_sensitive)} "
-      f"({', '.join(exposed_sensitive)})")
-print()
-print("This is a one-line query and it is the highest-value one in the whole")
-print("pattern. It is also not something an application test can express, which")
-print("is why it belongs in CI against the schema rather than in the test suite.")
-assert exposed_sensitive == ["profiles", "sessions"]
+
+FIXTURE = {"SCAFFOLD": SCAFFOLD, "CATALOG": CATALOG, "SENSITIVE": SENSITIVE}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

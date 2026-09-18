@@ -181,19 +181,7 @@ ready: this machine can run any skill in the commons
 <p><code>ready</code> is true only when all three conditions held <strong>and</strong> the model answered
 in contract. Anything else is false with the failing condition named — a
 preflight that reports success on an untested endpoint is worse than no
-preflight.</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>
-[1] the runtime
----------------
-runtime       : cyber_commons_skill_runtime
-resolved from : /home/user/Cyber-harness-eval/skills/_runtime
-
-[2] the configuration
----------------------
-endpoint      : (not set)
-model         : (not set)
-api key set   : no
-
-Nothing is configured, so there is nothing to prove. The refusal below is what every skill will print:
+preflight.</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
 No model endpoint is configured, and every skill here needs one.
 

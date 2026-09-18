@@ -1,17 +1,11 @@
-    when  event                       drift  new tools
-------------------------------------------------------------------
-    90d  control signed off          0.000  []
-    60d  prompt edited               0.100  []
-    30d  tool added (no PR)          0.330  ['run_shell']
-     5d  model upgraded by vendor    0.550  ['run_shell']
-observed drift rate  0.00647 TVD/day
-tolerance            0.25
-→ freshness window   38 days (a control test older than this is unevidenced, not passing)
+no model configured
 
-control     age (d)     state
-------------------------------
-SB-1             90     STALE
-SB-2             10      PASS
-DR-1              0      FAIL
+No model endpoint is configured, and every skill here needs one.
 
-currently evidenced: 1/3
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
+
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

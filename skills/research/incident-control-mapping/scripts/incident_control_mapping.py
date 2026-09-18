@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Map each control failure in a published incident to the control that would have closed it, and count preventive against detective.
 
-This is the executable half of the `incident-control-mapping` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/research/incident-control-mapping/scripts/incident_control_mapping.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # The incident's control register, embedded verbatim. It is the same list
 # `labs/incident-register/register.json` holds and `check_register.py`
 # keeps in step, so the mapping below is against real rows rather than
@@ -68,54 +95,8 @@ SURFACE_USED_BY = {
  "benchmark scoring":   [10],
 }
 
-print(f"{'shared surface':22s}{'rows':12s}reading")
-for surface in sorted(SURFACE_USED_BY):
-    rows = SURFACE_USED_BY[surface]
-    reading = ("one chain, not separate findings" if len(rows) > 2
-               else "linked" if len(rows) == 2 else "single row")
-    print(f"{surface:22s}{str(rows):12s}{reading}")
-
-chain = [s for s, r in sorted(SURFACE_USED_BY.items()) if len(r) > 2]
-print(f"\nsurfaces implicated in three or more rows: {chain}")
-print()
-print("Filed as three findings, three teams each fix their third and the")
-print("repository stays a shared mutable surface. Filed as one chain, the")
-print("remediation is a single workstream - which is why the register keeps")
-print("the note rather than the tidy row numbering.")
-assert chain == ["artifact repository"]
-
-from collections import Counter
-
 FUNCTION = {"A": "securing the architecture", "C": "red teaming and research",
             "D": "the agentic SOC"}
-
-by_fn = Counter(c[4][0] for c in REGISTER)
-print(f"{'function':10s}{'controls':>9}  what it owns")
-for f in sorted(by_fn):
-    print(f"{f:10s}{by_fn[f]:>9}  {FUNCTION[f]}")
-
-print()
-new = {"A2.8", "A3.8", "A3.9", "A3.10", "D2.6", "C1.2", "D2.3", "D3.8", "D4.5"}
-existing = sorted({c[4] for c in REGISTER} - new)
-print(f"controls landing on lessons that already existed: "
-      f"{sum(1 for c in REGISTER if c[4] in existing)}")
-for lesson in existing:
-    ids = [c[0] for c in REGISTER if c[4] == lesson]
-    print(f"   {lesson:7s}{', '.join(ids)}")
-
-orphans = [c[0] for c in REGISTER if not c[4]]
-print(f"\ncontrols with no owning lesson: {len(orphans)}")
-print()
-print("Nothing is unowned. Note which functions do NOT appear: the register")
-print("is preventive, detective and investigative, and none of its forty")
-print("controls is a code-review control - the pipeline in Function B reviews")
-print("code, and no amount of code review would have caught any of this.")
-print()
-print("Six of the forty needed no new lesson at all -")
-print("parser sandboxing was already A3.2, micro-segmentation A3.3, short-lived")
-print("credentials A2.4. A register that duplicates what you have is worse than")
-print("one that maps onto it.")
-assert not orphans and set(by_fn) == {"A", "C", "D"}
 
 PRECONDITIONS = {
  "parallel agents on one task":        ("present", "R8"),
@@ -128,19 +109,43 @@ PRECONDITIONS = {
  "detective control switched off":     ("present", "R2"),
  "tens of thousands of agents at once":("not yet",  "-"),
 }
-present = [k for k, (s, _) in PRECONDITIONS.items() if s == "present"]
-print(f"preconditions the incident needed : {len(PRECONDITIONS)}")
-print(f"already true at CyberTravels      : {len(present)}")
-print(f"still missing                     : "
-      f"{len(PRECONDITIONS) - len(present)}  (scale)")
-print()
-covered = {r for _, (_, rows) in PRECONDITIONS.items()
-           for r in rows.replace(" ", "").split(",") if r != "-"}
-print(f"register rows implicated: {len(covered)}  "
-      f"({', '.join(sorted(covered, key=lambda x: int(x[1:])))})")
-print()
-print("Read the incident as a story about an AI lab and it is a curiosity. Read")
-print("it as a list of preconditions and eight of nine are already sitting in a")
-print("travel company's booking platform. The ninth is a scaling decision")
-print("somebody will make for good reasons, as routine engineering work.")
-assert len(present) == 8 and len(covered) == 9
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"REGISTER": REGISTER, "SURFACE_USED_BY": SURFACE_USED_BY, "FUNCTION": FUNCTION, "PRECONDITIONS": PRECONDITIONS}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

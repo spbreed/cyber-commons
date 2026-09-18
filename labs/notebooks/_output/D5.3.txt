@@ -1,8 +1,11 @@
-blast before 44  after 4
-the manifest diff records the change even though no PR was raised.
+no model configured
 
-OK   gate http_post behind approval            type=preventive  owner=platform-sec   verify_by=2026-09-30
-OK   alert on credential-path reads            type=detective   owner=soc            verify_by=2026-09-15
-WEAK update the prompt to warn the model       type=guidance    owner=—              verify_by=—
+No model endpoint is configured, and every skill here needs one.
 
-1 action(s) are guidance rather than controls: ['update the prompt to warn the model']
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
+
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

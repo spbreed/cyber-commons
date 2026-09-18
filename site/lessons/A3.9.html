@@ -96,34 +96,14 @@ checked one decision at a time:
   wrong.</li>
 <li><strong>No expiry.</strong> A permanent exemption is a policy change made by whoever was
   on call.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>day  12  disable cyber-classifier    ALLOW via EX-118
-day  44  disable cyber-classifier    REFUSE - no approved exemption
-day  12  disable transcript-signing  REFUSE - no approved exemption
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-The record is the mechanism, not a wiki page describing one. An
-exemption the platform cannot express is an exemption you cannot grant.
-checked one decision at a time:
-   exemption valid : True
-   launch approved : True  (50,000 agents)
+No model endpoint is configured, and every skill here needs one.
 
-Both answers are correct. Turning the classifier off was justified and
-approved; launching at scale was a normal request. Nothing in the path
-required the two to be considered in the same sentence, and the report
-assesses the classifier would likely have blocked many of the actions
-that followed.
-all controls on   class=none              cap=50,000 agents  LAUNCH
-classifier off    class=one-detective-off cap=   200 agents  REFUSED: agents,runtime_hours,egress
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-same exemption, 200 agents for 8h on an allowlist: LAUNCH
-
-The exemption did not become unavailable. Its price became visible, and
-the orchestrator charges it rather than asking someone to remember.
-state                       class                agent cap  runtime
-classifiers on              none                    50,000      72h
-classifier off              one-detective-off          200       8h
-classifier + signing off    two-or-more-off             25       2h
-
-50,000 -&gt; 200 -&gt; 25. The second exemption costs an order of magnitude
-more than the first, which is the correct shape: compounding is where
-the incident&#x27;s risk sat, and it is the case a human reviewer is worst at
-holding in their head.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Find one control currently disabled in your environment and ask three questions: who approved it, when does it expire, and what cap came with it. The third question is the one that usually has no answer.</p></div></section><div class="expect"><b>Expect</b>An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OPA</span><span>Kyverno</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.9.ipynb</code></p></div><div class="pager"><a href="A3.8.html"><span class="k">← Previous</span><span class="t">A3.8 · Shared infrastructure between agent runs</span></a><a class="next" href="A3.10.html"><span class="k">Next →</span><span class="t">A3.10 · The agent&#x27;s escalation path</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Find one control currently disabled in your environment and ask three questions: who approved it, when does it expire, and what cap came with it. The third question is the one that usually has no answer.</p></div></section><div class="expect"><b>Expect</b>An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OPA</span><span>Kyverno</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.9.ipynb</code></p></div><div class="pager"><a href="A3.8.html"><span class="k">← Previous</span><span class="t">A3.8 · Shared infrastructure between agent runs</span></a><a class="next" href="A3.10.html"><span class="k">Next →</span><span class="t">A3.10 · The agent&#x27;s escalation path</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

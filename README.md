@@ -154,12 +154,17 @@ A skill, in the sense this repository means it, is a **procedure an agent can
 execute and you can check** — not a topic you have read about. So every lesson
 ends in something that runs, and the curriculum ends in artefacts you keep.
 
-Every procedure is packaged as a real agent skill in [`skills/`](skills) —
-`SKILL.md` files with frontmatter, the format a coding agent loads. Each
-declares an **output contract**, which is what makes a skill checkable rather
-than aspirational. Every skill lesson embeds its skill verbatim at build time —
-so the lesson can never drift from the skill — and every one of the 140 carries
-a script the lesson runs.
+Every procedure is packaged as a real agent skill in [`skills/`](skills), in
+the [agentskills.io](https://agentskills.io) format — `SKILL.md` with
+frontmatter, which any skills-compatible agent loads. Each declares an **output
+contract**, which is what makes a skill checkable rather than aspirational, and
+every one of the 140 carries a script the lesson runs.
+
+**The script is the harness, not the procedure.** It assembles the fixture,
+hands the model that skill's own `SKILL.md` and contract, and validates the
+reply against the same contract. The documentation and the prompt are the same
+bytes, so a skill cannot be well written and do something else. Every lesson
+embeds its skill verbatim at build time, so the page cannot drift either.
 
 Several build the contract shape from the data they just produced and validate
 it, then show what the contract *cannot* see: **an empty result conforms
@@ -171,9 +176,16 @@ python3 scripts/check_skills.py --check  # parses, names, tools, contracts, rout
 python3 scripts/test_skills.py  --check  # runs every script, offline, stripped env
 ```
 
-Both gate CI. The second one exists because loading a skill is not running it:
-it executes each script in a subprocess with the model and cloud variables
-removed, and a script that runs and prints nothing counts as a failure.
+Both gate CI, and the second one changed meaning when every skill became
+model-backed. **CI is given no model endpoint on purpose**, so what it proves
+now is that no skill answers without one: each script must exit 2 *having said
+why*. Exiting 0 with output fails, and exiting 2 with no explanation fails too
+— a reader who sees a bare traceback concludes the repository is broken rather
+than that their machine is unconfigured.
+
+A stand-in that is allowed to answer is the one failure nothing downstream
+catches: it has the right shape, it passes the contract, and it is not a model
+result. So there is no stand-in.
 
 | area | what it holds |
 |---|---|
@@ -242,28 +254,36 @@ label exists upstream and that the link resolves.
 
 ## Why you can trust the output
 
-**Every one of the 135 notebooks has been run twice — here, and again on Kaggle
-on a different machine — and printed exactly the same bytes.**
+**Every one of the 135 notebooks executes in CI, and none of them is allowed to
+answer without a model.**
 
-That second run is the claim worth making, because a kernel that prints nothing
-also reports `complete`.
-[`scripts/kaggle_verify.py`](scripts/kaggle_verify.py) compares each kernel's
-remote stdout line-for-line against a fresh local run
-([evidence](labs/notebooks/_kaggle_verified.json)). It caught two lessons whose
-output depended on `PYTHONHASHSEED`; both are fixed, and
-[`check_determinism.py`](scripts/check_determinism.py) now gates CI so the next
-one is caught in nine seconds instead of after 134 remote pushes.
+That second half is the claim worth making. CI is given no model endpoint on
+purpose, so every skill refuses there — legibly, with the reason — and
+`test_skills.py` fails any script that exits 0 with output instead. A canned
+answer returned in a model's place is the one failure nothing downstream can
+catch: it has the right shape, it passes the contract, and it is not a model
+result. So there is no canned answer.
 
-Two properties make that possible, and both are enforced by the build:
+**What this repository no longer claims.** It used to say every notebook had
+been run twice, here and on Kaggle, and printed exactly the same bytes. That was
+true when the skills computed their own answers. It is not true now: a model is
+not deterministic, and two runs of the same skill against the same fixture will
+differ. Saying otherwise would be the most misleading thing on this page.
 
-- **The code is in the repository.** A notebook carries one cell that runs a
-  skill's script out of the skills tree — the dataset attached to the Kaggle
-  kernel, or the checkout. No library, nothing to install, no `pip install`. So
-  it runs air-gapped, and you can lift one cell into your own repository
-  without inheriting a dependency.
-- **Deterministic.** Seed from `zlib.crc32`, not `hash()`; give every sort a
-  full tiebreak. Byte-identical output from two machines is what makes drift a
-  finding rather than noise.
+What is still checked, and still worth checking:
+
+- **The harness is deterministic.** Ordering, formatting, seeding, and the
+  refusal itself. [`check_determinism.py`](scripts/check_determinism.py) runs
+  every notebook across four hash seeds and compares — a refusal that varies
+  means something unordered reached the message. Seed from `zlib.crc32`, not
+  `hash()`; give every sort a full tiebreak.
+- **Every reply is validated against the skill's own output contract**, and the
+  violations are printed rather than raised. What the model actually said is
+  the evidence; hiding it behind a traceback removes the only thing worth
+  looking at.
+- **Every finding names the model that produced it.** A result that does not say
+  which model answered cannot be reproduced or compared — and the whole point is
+  that a different model answers differently.
 
 Where a lesson names a tool you would really deploy — SPIRE, OPA, Falco,
 Keycloak, garak — the notebook models the *decision* that tool makes, and
@@ -271,24 +291,26 @@ Keycloak, garak — the notebook models the *decision* that tool makes, and
 underneath as the full-infrastructure variant. Those variants are **not**
 executed in CI and are labelled as such.
 
-**Where a skill calls a model, the same code runs two ways.** Offline it uses a
-deterministic stand-in, labelled as a stand-in everywhere it appears and never
-presented as a model's output — which is what lets it run on Kaggle with the
-replay and keeps the determinism gate meaningful. Set one environment
-variable and the identical code calls a real model:
+**One protocol, any model.** Every skill speaks OpenAI-compatible chat
+completions, so the same three variables point at a local server or a hosted
+free tier and nothing in the code changes:
 
 ```bash
-# any OpenAI-compatible endpoint — llama.cpp, Ollama, vLLM, a free hosted tier
-export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 OPENAI_API_KEY=local MODEL=qwen2.5-7b-instruct
+# llama.cpp, Ollama, vLLM, or a hosted free tier — pick one
+export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 OPENAI_API_KEY=ollama MODEL=qwen2.5:1.5b-instruct
 ```
 
-**There is no paid backend.** A curriculum that is free to read should be free
-to run, so there is one protocol and the weights come from Kaggle Models. The
-adapter is standard library only, lives inside the seven skill scripts that
-call a model rather than in any lesson, and **never silently substitutes**: if a
-backend is configured and the call fails, the lesson says so and labels what it
-used. `scripts/live_model_test.py` runs all seven against a served endpoint and
-records what came back.
+**There is no paid backend, and no silent substitute.** A curriculum that is
+free to read should be free to run, so the default path is an open-weight model
+you serve yourself. If the endpoint is missing the skill exits 2 and says so; if
+the call fails it raises with what the server actually returned. It never
+answers in the model's place.
+
+**Small models are part of the lesson, not a compromise.** A 1.5B model will
+fill a contract with plausible values it did not derive, and will sometimes
+return prose where JSON was asked for. That is visible in the output, it is
+counted in the contract violations, and it is the reason every finding names
+the model that produced it.
 
 See [MODELS.md](MODELS.md) for which model suits which lab, and
 [labs/kimi/](labs/kimi) for what happened when these skills were run against a

@@ -1,16 +1,41 @@
 #!/usr/bin/env python3
 """Score a paragraph on how many of its sentences are checkable, and test it against the follow-up questions a supervisor asks.
 
-This is the executable half of the `supervisory-documentation-score` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/regulatory/supervisory-documentation-score/scripts/supervisory_documentation_score.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import re, time
-now = time.time(); DAY = 86400
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+DAY = 86400
 
 WEAK = """
 Our AI systems are subject to appropriate oversight and controls. Access is
@@ -30,57 +55,43 @@ refuses widening; regression cases IDN-01/IDN-04 run on every release, last run
 Autonomy above L2 requires approval for privileged tools (SB-2). Evidence: tool
 policy in git; 90-day denial log attached, last reviewed 2026-07-06.
 """
+# ------------------------------------------------------------------------ run
 
-CONTROL_RE = re.compile(r"\b([A-Z]{2}-\d)\b")
-DATE_RE    = re.compile(r"\b20\d{2}-\d{2}-\d{2}\b")
-ARTEFACT_RE = re.compile(r"\b(log|logs|sample|report|test|cases|policy|record)\b", re.I)
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-def score_paragraph(text):
-    sentences = [s.strip() for s in text.split(".") if s.strip()]
-    rows = []
-    for s in sentences:
-        rows.append({"has_control": bool(CONTROL_RE.search(s)),
-                     "has_artefact": bool(ARTEFACT_RE.search(s)),
-                     "has_date": bool(DATE_RE.search(s)),
-                     "text": s[:56]})
-    checkable = [r for r in rows if r["has_control"] and r["has_artefact"]]
-    return rows, len(checkable), len(rows)
 
-for label, text in (("WEAK", WEAK), ("STRONG", STRONG)):
-    rows, checkable, total = score_paragraph(text)
-    print(f"=== {label} — {checkable}/{total} sentences checkable ===")
-    for r in rows:
-        marks = ("C" if r["has_control"] else "-") + \
-                ("A" if r["has_artefact"] else "-") + \
-                ("D" if r["has_date"] else "-")
-        print(f"   [{marks}] {r['text']}")
+FIXTURE = {"DAY": DAY, "WEAK": WEAK, "STRONG": STRONG}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
     print()
-print("C = names a control · A = names an artefact · D = carries a date")
 
-from dataclasses import dataclass
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; tested_at: float; valid_for_days: float
-    def state(self, at):
-        if (at - self.tested_at)/DAY > self.valid_for_days: return "STALE"
-        return "PASS" if self.passed else "FAIL"
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-TESTS = {t.cid: t for t in [
- ControlTest("AC-1", True, now -  3*DAY, 30),
- ControlTest("AC-2", True, now -  1*DAY, 30),
- ControlTest("SB-2", True, now - 40*DAY, 30)]}
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
 
-cited = CONTROL_RE.findall(STRONG)
-print(f"controls cited in the document: {sorted(set(cited))}\n")
-print(f"{'control':9s}{'state now':12s}{'document claim still true?':>28}")
-print("-" * 52)
-stale = []
-for cid in sorted(set(cited)):
-    st = TESTS[cid].state(now) if cid in TESTS else "NO EVIDENCE"
-    ok = st == "PASS"
-    if not ok: stale.append(cid)
-    print(f"{cid:9s}{st:12s}{str(ok):>28}")
-print(f"\n{len(stale)} cited control(s) no longer evidenced: {stale}")
-print("A document that cites controls can be CHECKED against live state.")
-print("A document of intent cannot go stale, because it never said anything.")
-assert stale
+
+if __name__ == "__main__":
+    sys.exit(main())

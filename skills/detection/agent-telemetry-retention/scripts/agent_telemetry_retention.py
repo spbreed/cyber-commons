@@ -1,67 +1,41 @@
 #!/usr/bin/env python3
 """Scan an agent run record for sensitive content it read legitimately, and retain per field rather than per record.
 
-This is the executable half of the `agent-telemetry-retention` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/detection/agent-telemetry-retention/scripts/agent_telemetry_retention.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import time, hashlib
-from dataclasses import dataclass, field
+import json
+import pathlib
+import sys
 
-@dataclass
-class Step:
-    n: int; tool: str; target: str; verifier: str; ok: bool
-    prompt: str = ""; result: str = ""
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-RUN = [
- Step(1, "read_file", "/work/repo/billing.py", "n/a", True,
-      prompt="Investigate finding SEC-4471 in billing.py",
-      result="def charge(card_number, amount):  # card_number = 4111111111111111"),
- Step(2, "search_code", "charge(", "n/a", True,
-      prompt="find callers of charge()",
-      result="api/checkout.py:88 charge(user.card, total)"),
- Step(3, "write_file", "/work/repo/billing.py", "tests pass", True,
-      prompt="apply the fix", result="patch applied"),
-]
-def render(steps, fields):
-    out = []
-    for s in steps:
-        row = {k: getattr(s, k) for k in fields}
-        out.append(row)
-    return out
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-print("full record (everything the harness saw):")
-for r in render(RUN, ["n", "tool", "target", "verifier", "ok", "prompt", "result"]):
-    print("   ", r)
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-import re
-SENSITIVE = {
- "payment card": re.compile(r"\b4[0-9]{12}(?:[0-9]{3})?\b"),
- "email":        re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),
- "aws key":      re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
-}
-def scan_record(steps):
-    hits = []
-    for s in steps:
-        for field in ("prompt", "result"):
-            text = getattr(s, field)
-            for name, pat in SENSITIVE.items():
-                if pat.search(text):
-                    hits.append((s.n, field, name))
-    return hits
-
-hits = scan_record(RUN)
-print("sensitive content found in the trace:")
-for n, field, kind in hits:
-    print(f"   step {n}  {field:8s} {kind}")
-print("\nNobody put a card number in the trace deliberately. The agent read a")
-print("source file, and the file contained a test fixture with a real-shaped PAN.")
-print("The trace is now in scope for PCI, and it is in your SIEM for 400 days.")
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 RETENTION = {
  "n":        (400, "low",  "cheap, high forensic value"),
  "tool":     (400, "low",  "cheap, high forensic value"),
@@ -71,39 +45,43 @@ RETENTION = {
  "prompt":   (30,  "high", "may contain anything the task included"),
  "result":   (7,   "high", "tool output — the highest-risk field"),
 }
-print(f"{'field':10s}{'days':>6}{'sensitivity':>13}  rationale")
-print("-" * 74)
-for f, (days, sens, why) in RETENTION.items():
-    print(f"{f:10s}{days:>6}{sens:>13}  {why}")
+# ------------------------------------------------------------------------ run
 
-def age_record(steps, age_days):
-    """What survives after N days."""
-    keep = [f for f, (d, _, _) in RETENTION.items() if d >= age_days]
-    out = []
-    for s in steps:
-        row = {k: getattr(s, k) for k in keep}
-        for f in ("prompt", "result"):
-            if f not in keep and getattr(s, f):
-                row[f + "_sha256"] = hashlib.sha256(
-                    getattr(s, f).encode()).hexdigest()[:16]
-        out.append(row)
-    return out
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-for age in (1, 14, 90):
-    aged = age_record(RUN, age)
-    print(f"\nafter {age} days — step 1 record:")
-    print("   ", aged[0])
 
-# Verify: the aged record is still forensically useful and no longer sensitive.
-aged = age_record(RUN, 90)
-class Fake:
-    def __init__(self, d): self.__dict__.update(d); self.prompt = d.get("prompt",""); self.result = d.get("result","")
-remaining = scan_record([Fake(r) for r in aged])
-print(f"sensitive content after 90 days: {remaining or 'none'}")
-assert not remaining
+FIXTURE = {"RETENTION": RETENTION}
 
-can_answer = all("verifier" in r and "tool" in r and "target" in r for r in aged)
-print(f"can still answer 'what did it do and what did the harness believe?': {can_answer}")
-assert can_answer
-print("\nThe hash is retained, so if the original is recovered from a backup you")
-print("can still prove it is the same content the agent saw.")
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

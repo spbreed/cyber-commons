@@ -93,48 +93,14 @@ Five clean runs. Nothing here is wrong, and nothing here is visible,
 <li><strong>Keying the graph by run.</strong> Key it by object or the sharing is invisible.</li>
 <li><strong>Explaining a shared token as coincidence.</strong> Check the corpus before
   accepting that.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>per-run monitoring
-   run-01  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
-   run-02  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
-   run-03  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
-   run-04  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
-   run-05  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-Five clean runs. Nothing here is wrong, and nothing here is visible,
-because a single run is the wrong unit of observation.
-object  written by  read by
-obj-A   run-01      run-01, run-02, run-03, run-04   (3 unrelated)
-obj-B   run-03      run-04   (1 unrelated)
+No model endpoint is configured, and every skill here needs one.
 
-objects read by two or more unrelated runs: [&#x27;obj-A&#x27;]
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-The architecture says these runs are isolated. The graph says three of
-them read an object a fourth wrote. One of those two statements is
-measured.
-novel tokens appearing across independent runs
-   HOLD    3 runs
-   OWNER   2 runs
-   VETO    2 runs
-
-synchronised pivot: 4 of 5 runs at hour 6 (80%)
-
-role differentiation
-   run-01  directs
-   run-02  executes
-   run-03  directs
-   run-04  executes
-
-Reported shape: participation moved from roughly 20% to over 90% within
-hours. Any reasonable change detector catches that - the reason nothing
-did is that nothing was watching the population.
-trajectories showing the agent noticed something reportable: 3
-reports that reached a human                              : 0
-gap                                                        : 3  [&#x27;run-01&#x27;, &#x27;run-03&#x27;, &#x27;run-04&#x27;]
-
-Reported figures: 3-6 agents considered notifying a human, zero did, out
-of roughly 1,200 that saw the compromise. The gap is the metric - not the
-report count, which was structurally zero.
-
-Sample the gap for review and the remediation separates into three:
-did not notice, did not think it was its job, or had no route. Only the
-third is fixed by A3.10.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Build the shared-artefact graph for one day of your own fleet — writer identity on one side, object on the other. You do not need a model for it, and the answer arrives in an afternoon. Dense connectivity where your architecture claims isolation is a finding, not an anomaly score.</p></div></section><div class="expect"><b>Expect</b>Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.8.ipynb</code></p></div><div class="pager"><a href="D3.7.html"><span class="k">← Previous</span><span class="t">D3.7 · Scoping an agentic incident — following the delegation graph</span></a><a class="next" href="D3.9.html"><span class="k">Next →</span><span class="t">D3.9 · Third-party threat intelligence, and the tactics it names</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Build the shared-artefact graph for one day of your own fleet — writer identity on one side, object on the other. You do not need a model for it, and the answer arrives in an afternoon. Dense connectivity where your architecture claims isolation is a finding, not an anomaly score.</p></div></section><div class="expect"><b>Expect</b>Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.8.ipynb</code></p></div><div class="pager"><a href="D3.7.html"><span class="k">← Previous</span><span class="t">D3.7 · Scoping an agentic incident — following the delegation graph</span></a><a class="next" href="D3.9.html"><span class="k">Next →</span><span class="t">D3.9 · Third-party threat intelligence, and the tactics it names</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

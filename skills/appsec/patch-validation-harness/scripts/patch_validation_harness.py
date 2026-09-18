@@ -1,72 +1,48 @@
 #!/usr/bin/env python3
 """Accept a patch only when behaviour is unchanged, the exploit stops working, and the fix is proved against the old build.
 
-This is the executable half of the `patch-validation-harness` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/appsec/patch-validation-harness/scripts/patch_validation_harness.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-# --- model backend: replay by default, a Kaggle open-weight model when served -
-# One URL and one header shape, no vendor SDK. Standard library only, so the
-# notebook stays self-contained.
-# The model adapter comes from the shared runtime, not from a copy in this
-# file. In a lesson notebook the cell above has already loaded it; standalone,
-# find it the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import announce_backend, ask
+import json
+import pathlib
+import sys
 
-announce_backend()
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-import re, sqlite3
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 VULNERABLE = '''
 def get_user(conn, name):
     return conn.execute("SELECT id, name FROM users WHERE name = '" + name + "'").fetchall()
 '''
 
-def build_db():
-    conn = sqlite3.connect(":memory:")
-    conn.execute("CREATE TABLE users(id INTEGER, name TEXT)")
-    conn.executemany("INSERT INTO users VALUES (?,?)",
-                     [(1,"dana"),(2,"sam"),(3,"o'brien")])
-    return conn
-
-def load(src):
-    ns = {}; exec(compile(src, "<patch>", "exec"), ns); return ns["get_user"]
-
 BEHAVIOUR = [("dana",[(1,"dana")]), ("sam",[(2,"sam")]),
              ("nobody",[]), ("o'brien",[(3,"o'brien")])]
-
-def behaviour_ok(fn):
-    conn = build_db(); rows = []
-    for name, expected in BEHAVIOUR:
-        try: got = fn(conn, name)
-        except Exception as e: rows.append((name, f"raised {type(e).__name__}", False)); continue
-        rows.append((name, got, got == expected))
-    return rows
-
-def exploit_works(fn):
-    """The stage-12 probe, reused as the acceptance test."""
-    conn = build_db()
-    try: rows = fn(conn, "x' OR '1'='1")
-    except Exception: return False, "probe raised — not exploitable this way"
-    return len(rows) > 1, f"probe returned {len(rows)} rows"
-
-def scanner_fires(src):
-    return bool(re.search(r"execute\(\s*[\"\'][^\"\']*[\"\']\s*\+", src))
-
-fn = load(VULNERABLE)
-print("behaviour of the vulnerable build:")
-for name, got, ok in behaviour_ok(fn):
-    print(f"   get_user({name!r:10s}) → {str(got):18s} {'ok' if ok else 'FAILS'}")
-ex, why = exploit_works(fn)
-print(f"\nexploit works: {ex} — {why}")
-print(f"scanner fires: {scanner_fires(VULNERABLE)}")
 
 CANDIDATES = {
  "A · parameterise (the real fix)": '''
@@ -88,84 +64,47 @@ def get_user(conn, name):
     return conn.execute("SELECT id, name FROM users WHERE name = '" + safe + "'").fetchall()
 ''',
 }
-print(f"{'candidate':34s}{'scanner green':>15}")
-print("-" * 50)
-for name, src in CANDIDATES.items():
-    print(f"{name:34s}{str(not scanner_fires(src)):>15}")
-print("\nThree of four are green. Only one of those is a fix.")
-
-def validate(src):
-    fn = load(src)
-    green = not scanner_fires(src)
-    beh = behaviour_ok(fn)
-    preserved = all(ok for _, _, ok in beh)
-    still_exploitable, _ = exploit_works(fn)
-    reasons = []
-    if not green:            reasons.append("scanner still fires")
-    if not preserved:        reasons.append("behaviour changed")
-    if still_exploitable:    reasons.append("STILL EXPLOITABLE (stage-12 probe passes)")
-    return (not reasons), green, preserved, still_exploitable, reasons
-
-print(f"{'candidate':34s}{'scan':6s}{'behaviour':11s}{'exploitable':13s}verdict")
-print("-" * 84)
-accepted = []
-for name, src in CANDIDATES.items():
-    ok, g, b, x, reasons = validate(src)
-    if ok: accepted.append(name)
-    print(f"{name:34s}{str(g):6s}{str(b):11s}{str(x):13s}"
-          f"{'ACCEPT' if ok else 'REJECT — ' + ', '.join(reasons)}")
-print(f"\naccepted: {accepted}")
-assert "A · parameterise (the real fix)" in accepted
-assert "B · delete the feature" not in accepted
-assert "C · evade the scanner" not in accepted
-
-# The proof-of-fix clause: the exploit must fail on the new build and
-# succeed on the old one. Without both halves, "fixed" is a claim.
-def proof_of_fix(old_src, new_src):
-    old_ex, _ = exploit_works(load(old_src))
-    new_ex, _ = exploit_works(load(new_src))
-    return (old_ex and not new_ex), f"exploit on old={old_ex}, on new={new_ex}"
-
-for name in accepted:
-    ok, detail = proof_of_fix(VULNERABLE, CANDIDATES[name])
-    print(f"{name:34s} proof of fix: {ok}  ({detail})")
-
-print("\nCandidate D passes every automated check and is still the wrong answer:")
-print("it reimplements the driver's escaping and will be wrong for the next")
-print("input class or the next database. Nothing except a rule about MECHANISM")
-print("catches that — which is the part of remediation that does not automate.")
-
-# ------------------------------------ the same task, against a real model
-# Offline this is a labelled replay; with an open-weight model served
-# from Kaggle it is the same code calling a real one.
 
 TASK = 'Fix this without changing the function\'s behaviour for valid input. Return only the patched function.\n\ndef report(request):\n    q = "SELECT * FROM orders WHERE ref = \'" + request.args[\'ref\'] + "\'"\n    return db.execute(q)'
 
 REPLAY = 'def report(request):\n    q = "SELECT * FROM orders WHERE ref = ?"\n    return db.execute(q, (request.args[\'ref\'],))'
+# ------------------------------------------------------------------------ run
 
-answer, used, model = ask(TASK, replay=REPLAY,
-            system='You are a remediation engineer. Output code only, no explanation.',
-            max_tokens=300)
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-print(f"backend used : {used}")
-print(f"model        : {model}")
-print(f"prompt       : {TASK[:66]}...")
-print()
-print("answer:")
-for line in (answer.splitlines() or [answer]):
-    print(f"   {line}")
 
-# Two assertions that must hold on every backend, and one property that is
-# reported rather than asserted - a real model failing it is a finding about
-# the model, not a broken notebook.
-assert answer.strip(), "the configured backend returned nothing"
-if used == "replay":
-    assert answer == REPLAY, "the offline path must return the replay verbatim"
+FIXTURE = {"VULNERABLE": VULNERABLE, "BEHAVIOUR": BEHAVIOUR, "CANDIDATES": CANDIDATES, "TASK": TASK, "REPLAY": REPLAY}
 
-label, held = ("parameterises the query", "?" in answer or "%s" in answer or ":ref" in answer)
-print()
-print(f"property checked : {label}")
-print(f"held on {used:12s} : {held}")
-print()
-print("Same code, same assertions, two possible backends. Offline the answer is")
-print("the replay and is labelled as one; with a served model it is the model's.")
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,38 +1,11 @@
-the sensor estate, as bought
-  EDR    Wazuh agent            process, file and network activity on a host
-  DLP    regex + Wazuh FIM      sensitive content leaving a monitored channel
-  CSPM   Prowler / ScoutSuite   cloud configuration, evaluated periodically
-  CNAPP  Falco + Trivy          container runtime syscalls and image contents
+no model configured
 
-coverage of what the agents actually do  (## full  .. partial  blank none)
+No model endpoint is configured, and every skill here needs one.
 
-  action                                          EDR    DLP    CSPM   CNAPP
-  write a file into the agent workdir             ##                   ##   
-  open an outbound TLS session to a model API     ..                   ..   
-  read a customer record through an internal API                            
-  place 900 tokens of that record in a prompt                               
-  call a vendor MCP tool                                                    
-  issue a refund through the payments API                                   
-  assume a wider IAM role                                       ..          
-  spawn a child agent process                     ##                   ##   
-  exfiltrate to an allowed SaaS domain            ..     ..            ..   
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-per-sensor coverage of the agent's day
-  EDR     3.0 / 9   33%
-  DLP     0.5 / 9   6%
-  CSPM    0.5 / 9   6%
-  CNAPP   3.0 / 9   33%
-
-  best single sensor   EDR
-  all four combined    3.5 / 9   39%
-
-4 of 9 actions are seen by NO sensor class:
-  - read a customer record through an internal API
-  - place 900 tokens of that record in a prompt
-  - call a vendor MCP tool
-  - issue a refund through the payments API
-
-note what they have in common: every one of them happens inside the
-agent's reasoning loop or behind an API the host never observes.
-buying a fifth product of the same four kinds does not move this column.
-D1.3 is the source that does, and D2.1 is where it has to land.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

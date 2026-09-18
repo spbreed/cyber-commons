@@ -79,33 +79,14 @@ monitored for anomalous behaviour and we main
 <li><strong>Editing for tone.</strong> The problem is not the prose.</li>
 <li><strong>Making every sentence checkable.</strong> Only the load-bearing ones need it.</li>
 <li><strong>Naming an artefact you did not attach.</strong> The follow-up arrives immediately.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>=== WEAK — 0/3 sentences checkable ===
-   [---] Our AI systems are subject to appropriate oversight and 
-   [---] Access is
-granted on a least-privilege basis and reviewe
-   [---] Agents are
-monitored for anomalous behaviour and we main
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-=== STRONG — 0/6 sentences checkable ===
-   [C--] Agent identities are distinct from human identities (AC-
-   [-AD] Evidence: gateway
-logs containing an act chain for every
-   [C--] Delegated authority narrows at every hop (AC-2)
-   [-AD] Evidence: the token exchange
-refuses widening; regressio
-   [C--] Autonomy above L2 requires approval for privileged tools
-   [-AD] Evidence: tool
-policy in git; 90-day denial log attached
+No model endpoint is configured, and every skill here needs one.
 
-C = names a control · A = names an artefact · D = carries a date
-controls cited in the document: [&#x27;AC-1&#x27;, &#x27;AC-2&#x27;, &#x27;SB-2&#x27;]
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-control  state now     document claim still true?
-----------------------------------------------------
-AC-1     PASS                                True
-AC-2     PASS                                True
-SB-2     STALE                              False
-
-1 cited control(s) no longer evidenced: [&#x27;SB-2&#x27;]
-A document that cites controls can be CHECKED against live state.
-A document of intent cannot go stale, because it never said anything.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The weak paragraph has zero checkable sentences; the strong one has three, each naming a control, an artefact and a date. Three of four supervisor follow-ups are unanswerable from the weak version. Verifying the strong document against live control state finds SB-2 stale, so one of its claims is no longer true — which is only detectable because the document named a control.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Rewrite one paragraph of your AI policy in the strong shape. Any sentence that cannot name an artefact is intent — label it as such rather than deleting it, and the document gets more credible.</p></div></section><div class="expect"><b>Expect</b>A pack with a self-audit attached, including an honest statement of what &#x27;explainability&#x27; can mean here.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OSCAL</span><span>Model Cards</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E2.7.ipynb</code></p></div><div class="pager"><a href="E2.6.html"><span class="k">← Previous</span><span class="t">E2.6 · Incident and disclosure obligations</span></a><a class="next" href="E2.8.html"><span class="k">Next →</span><span class="t">E2.8 · Auditability of autonomous action</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The weak paragraph has zero checkable sentences; the strong one has three, each naming a control, an artefact and a date. Three of four supervisor follow-ups are unanswerable from the weak version. Verifying the strong document against live control state finds SB-2 stale, so one of its claims is no longer true — which is only detectable because the document named a control.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Rewrite one paragraph of your AI policy in the strong shape. Any sentence that cannot name an artefact is intent — label it as such rather than deleting it, and the document gets more credible.</p></div></section><div class="expect"><b>Expect</b>A pack with a self-audit attached, including an honest statement of what &#x27;explainability&#x27; can mean here.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OSCAL</span><span>Model Cards</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E2.7.ipynb</code></p></div><div class="pager"><a href="E2.6.html"><span class="k">← Previous</span><span class="t">E2.6 · Incident and disclosure obligations</span></a><a class="next" href="E2.8.html"><span class="k">Next →</span><span class="t">E2.8 · Auditability of autonomous action</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

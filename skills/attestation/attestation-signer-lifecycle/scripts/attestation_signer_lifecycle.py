@@ -1,70 +1,43 @@
 #!/usr/bin/env python3
 """Read the same evidence as a point-in-time test and as a continuous one, and derive a freshness window per control from observed drift.
 
-This is the executable half of the `attestation-signer-lifecycle` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/attestation/attestation-signer-lifecycle/scripts/attestation_signer_lifecycle.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import time
-from dataclasses import dataclass, field
+import json
+import pathlib
+import sys
 
-now = time.time(); DAY = 86400
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-@dataclass
-class ControlTest:
-    cid: str
-    passed: bool
-    evidence: str
-    tested_at: float
-    valid_for_days: float = 30
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-    def age_days(self, at): return (at - self.tested_at) / DAY
-    def point_in_time(self, at): return "PASS" if self.passed else "FAIL"
-    def continuous(self, at):
-        if self.age_days(at) > self.valid_for_days: return "STALE"
-        return "PASS" if self.passed else "FAIL"
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-TESTS = [
- ControlTest("AC-1", True,  "act chain sampled from gateway logs", now -   3*DAY),
- ControlTest("AC-2", True,  "delegation refusal regression suite", now -   9*DAY),
- ControlTest("SB-1", True,  "egress denial evidence",              now -  45*DAY),
- ControlTest("SB-2", True,  "approval gate screenshot",            now - 210*DAY),
- ControlTest("EV-1", True,  "audit sample of 50 agent actions",    now -   5*DAY),
- ControlTest("DR-1", False, "drift alerting not deployed",         now),
-]
+# ---------------------------------------------------------------- the fixture
+DAY = 86400
+
 REQUIRED = ["AC-1", "AC-2", "SB-1", "SB-2", "EV-1", "DR-1", "EV-2", "ST-1"]
-
-print(f"{'control':9s}{'age (days)':>12}{'point-in-time':>16}{'continuous':>13}")
-print("-" * 52)
-by_id = {t.cid: t for t in TESTS}
-for cid in REQUIRED:
-    t = by_id.get(cid)
-    if t is None:
-        print(f"{cid:9s}{'—':>12}{'(not tested)':>16}{'NO EVIDENCE':>13}")
-        continue
-    print(f"{cid:9s}{t.age_days(now):>12.0f}{t.point_in_time(now):>16}{t.continuous(now):>13}")
-
-def posture(tests, required, at, mode):
-    by_id = {t.cid: t for t in tests}
-    passing = 0
-    for cid in required:
-        t = by_id.get(cid)
-        if t is None: continue
-        state = t.point_in_time(at) if mode == "point-in-time" else t.continuous(at)
-        passing += state == "PASS"
-    return passing, round(passing/len(required), 3)
-
-for mode in ("point-in-time", "continuous"):
-    n, pct = posture(TESTS, REQUIRED, now, mode)
-    print(f"{mode:16s} {n}/{len(REQUIRED)} controls passing = {pct:.0%}")
-
-print("\nThe difference is entirely SB-1 and SB-2, which nobody did anything")
-print("wrong to. Time simply passed, and the agent they were tested against")
-print("has had two model upgrades since.")
 
 DRIFT_RATE = {          # observed TVD/day for what each control depends on
  "AC-1": 0.0005,        # identity model changes slowly
@@ -74,26 +47,45 @@ DRIFT_RATE = {          # observed TVD/day for what each control depends on
  "EV-1": 0.0010,
  "DR-1": 0.0090,
 }
+
 TOLERANCE = 0.25
+# ------------------------------------------------------------------------ run
 
-def window(cid):
-    r = DRIFT_RATE.get(cid)
-    return int(TOLERANCE / r) if r else 90
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-print(f"{'control':9s}{'drift/day':>12}{'window (days)':>15}{'current age':>13}{'state':>9}")
-print("-" * 60)
-for cid in REQUIRED:
-    t = by_id.get(cid)
-    w = window(cid)
-    if t is None:
-        print(f"{cid:9s}{'—':>12}{w:>15}{'—':>13}{'NO EVIDENCE':>9}")
-        continue
-    t.valid_for_days = w
-    print(f"{cid:9s}{DRIFT_RATE.get(cid, 0):>12.4f}{w:>15}{t.age_days(now):>13.0f}"
-          f"{t.continuous(now):>9}")
 
-n, pct = posture(TESTS, REQUIRED, now, "continuous")
-print(f"\nwith drift-derived windows: {n}/{len(REQUIRED)} = {pct:.0%} currently evidenced")
-assert pct < 0.6
-print("\nSB-2 tests a tool manifest that changes weekly; a 210-day-old screenshot")
-print("cannot evidence it. Saying so is the control, not a criticism of anyone.")
+FIXTURE = {"DAY": DAY, "REQUIRED": REQUIRED, "DRIFT_RATE": DRIFT_RATE, "TOLERANCE": TOLERANCE}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

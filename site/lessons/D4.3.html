@@ -78,37 +78,14 @@ At 300/min an 8-minute approval costs 2,400 further actions.
   magnitude.</li>
 <li><strong>Auto-revoking on a low-precision signal.</strong> Precision is the entry
   requirement.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   agent rate   human 8min   auto 12s   ratio
-----------------------------------------------
-       30/min          240          6    40.0×
-      120/min          960         24    40.0×
-      300/min         2400         60    40.0×
-     1200/min         9600        240    40.0×
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-At 300/min an 8-minute approval costs 2,400 further actions.
-step                            seconds  why
---------------------------------------------------------------------------
-detection fires                       8  rule evaluation + SIEM ingestion lag
-analyst picks it up                 240  queue depth at 02:00
-analyst decides to contain          180  confirming it is not a false positive
-approval requested                  480  on-call manager, out of hours
-revocation executed                  12  the only step anyone measures
-TOTAL                               920  = 15 minutes
+No model endpoint is configured, and every skill here needs one.
 
-at 300 actions/min that is 4,600 further actions.
-The 12-second revocation is 1.3% of the elapsed time. Optimising it
-is not where the win is.
-reached the cloud metadata service          AUTO-REVOKE (confidence 0.99) — no approval in the path
-read a path matching */.ssh/* or */.aws/*   AUTO-REVOKE (confidence 0.97) — no approval in the path
-egress to a host not on the allowlist       AUTO-REVOKE (confidence 0.90) — no approval in the path
-tool-call rate 20× its own baseline         AUTO-REVOKE (confidence 0.75) — no approval in the path
-activity outside usual hours                alert only (confidence 0.30 &lt; 0.7)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-same signal, human subject                  page on-call (confidence 0.99) — human lockout needs a person
-
-automated path: 21s vs manual 920s (44× faster)
-actions prevented at 300/min: 4,495
-human subject         high      person locked out mid-shift
-non-human identity    low       task fails, agent re-requests with a reason (A2.4)
-
-That asymmetry is the entire justification for two different policies.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The race table shows 2,400 versus 60 actions at 300/min for an eight-minute approval. The full containment path totals about 920 seconds, of which the revocation itself is 12. Four of five signals auto-revoke for non-human identities and none do for a human subject, cutting the path to 21 seconds and preventing roughly 4,500 actions.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Time your own containment path end to end, step by step. The revocation is almost never the slow part — queue depth and approval are, and both are policy choices rather than technical limits.</p></div></section><div class="expect"><b>Expect</b>Each lever is timed; revocation hits one agent without collateral (the A2.4 deliverable, proven here).</div><p class="sub toolslab">Tools used</p><div class="chips"><span>agentgateway</span><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D4.3.ipynb</code></p></div><div class="pager"><a href="D4.2.html"><span class="k">← Previous</span><span class="t">D4.2 · Runbook tiers — fully automated, human in the loop, manual</span></a><a class="next" href="D4.4.html"><span class="k">Next →</span><span class="t">D4.4 · Stop authority — who halts a fleet, and how long it takes</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The race table shows 2,400 versus 60 actions at 300/min for an eight-minute approval. The full containment path totals about 920 seconds, of which the revocation itself is 12. Four of five signals auto-revoke for non-human identities and none do for a human subject, cutting the path to 21 seconds and preventing roughly 4,500 actions.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Time your own containment path end to end, step by step. The revocation is almost never the slow part — queue depth and approval are, and both are policy choices rather than technical limits.</p></div></section><div class="expect"><b>Expect</b>Each lever is timed; revocation hits one agent without collateral (the A2.4 deliverable, proven here).</div><p class="sub toolslab">Tools used</p><div class="chips"><span>agentgateway</span><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D4.3.ipynb</code></p></div><div class="pager"><a href="D4.2.html"><span class="k">← Previous</span><span class="t">D4.2 · Runbook tiers — fully automated, human in the loop, manual</span></a><a class="next" href="D4.4.html"><span class="k">Next →</span><span class="t">D4.4 · Stop authority — who halts a fleet, and how long it takes</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

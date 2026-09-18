@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Turn stop authority from a vague answer into a named mechanism with a measured time-to-stop and a known cost.
 
-This is the executable half of the `stop-authority-readiness` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/response/stop-authority-readiness/scripts/stop_authority_readiness.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 VAGUE = {
  "who":       "the security team",
  "mechanism": "we can turn off the agents",
@@ -16,6 +43,7 @@ VAGUE = {
  "breaks":    "not much",
  "restart":   "when it's safe",
 }
+
 CONCRETE = {
  "who":       "on-call SRE, no approval required for non-human identities",
  "mechanism": "revoke the SPIFFE identity at the gateway (survives restart)",
@@ -24,34 +52,6 @@ CONCRETE = {
               "agreed with the service owner 2026-05-11",
  "restart":   "security lead, after the C1.2 containment suite passes on the new build",
 }
-for k in VAGUE:
-    print(f"{k:11s} VAGUE    {VAGUE[k]}")
-    print(f"{'':11s} CONCRETE {CONCRETE[k]}\n")
-
-from dataclasses import dataclass
-
-@dataclass
-class Agent:
-    name: str; running: bool = True; identity_valid: bool = True
-    def can_act(self): return self.running and self.identity_valid
-
-MECHANISMS = {
- "kill the process":      (2,   lambda a: setattr(a, "running", False)),
- "network quarantine":    (5,   lambda a: None),
- "revoke the identity":   (12,  lambda a: setattr(a, "identity_valid", False)),
- "rotate the credential": (420, lambda a: setattr(a, "identity_valid", False)),
-}
-print(f"{'mechanism':24s}{'secs':>6}{'stops it':>10}{'survives restart':>19}")
-print("-" * 60)
-for name, (secs, apply) in MECHANISMS.items():
-    a = Agent("patch-agent")
-    apply(a)
-    stopped = not a.can_act()
-    a.running = True                      # a supervisor restarts the process
-    survives = not a.can_act()
-    print(f"{name:24s}{secs:>6}{str(stopped):>10}{str(survives):>19}")
-print("\nThe fastest mechanism is the one that does not survive a restart.")
-print("Speed without persistence is a pause, not a stop.")
 
 GAME_DAY = [
  ("decision made",                    0),
@@ -61,32 +61,43 @@ GAME_DAY = [
  ("agent's next call fails",          12),
  ("confirmed in telemetry",           38),
 ]
-print(f"{'step':38s}{'t+s':>6}")
-print("-" * 46)
-for step, t in GAME_DAY: print(f"{step:38s}{t:>6}")
-mttstop = GAME_DAY[4][1]
-print(f"\nmeasured time-to-stop: {mttstop}s")
-print(f"time-to-confirm:       {GAME_DAY[-1][1]}s")
+# ------------------------------------------------------------------------ run
 
-def cost_of_stop(rate_per_min, seconds):
-    return round(rate_per_min * seconds / 60)
-for rate in (60, 300, 1200):
-    print(f"   at {rate:>5}/min a {mttstop}s stop still permits "
-          f"{cost_of_stop(rate, mttstop):>4} further actions")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-def stop_authority_ready(answers, measured_seconds, tested_days_ago):
-    problems = []
-    if any(len(v.split()) < 4 for v in answers.values()):
-        problems.append("at least one answer is not specific")
-    if measured_seconds is None:
-        problems.append("time-to-stop has never been measured")
-    if tested_days_ago is None or tested_days_ago > 180:
-        problems.append("not tested in the last 180 days")
-    return (not problems), problems
 
-for label, ans, secs, days in (("as usually documented", VAGUE, None, None),
-                               ("after a game day", CONCRETE, 12, 41)):
-    ok, problems = stop_authority_ready(ans, secs, days)
-    print(f"\n{label}: ready={ok}")
-    for p in problems: print(f"   ⚠ {p}")
-assert stop_authority_ready(CONCRETE, 12, 41)[0]
+FIXTURE = {"VAGUE": VAGUE, "CONCRETE": CONCRETE, "GAME_DAY": GAME_DAY}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

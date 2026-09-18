@@ -1,27 +1,41 @@
 #!/usr/bin/env python3
 """Race an agent's action rate against an approval delay, time the whole containment path, and decide what may auto-revoke.
 
-This is the executable half of the `machine-speed-containment` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/response/machine-speed-containment/scripts/machine_speed_containment.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-def race(actions_per_min, human_minutes, auto_seconds=12):
-    manual = actions_per_min * human_minutes
-    auto   = actions_per_min * (auto_seconds/60)
-    return {"manual": round(manual), "auto": round(auto),
-            "ratio": round(manual/max(auto, 1e-9), 1)}
+import json
+import pathlib
+import sys
 
-print(f"{'agent rate':>13}{'human 8min':>13}{'auto 12s':>11}{'ratio':>8}")
-print("-" * 46)
-for rate in (30, 120, 300, 1200):
-    r = race(rate, 8)
-    print(f"{rate:>9}/min{r['manual']:>13}{r['auto']:>11}{r['ratio']:>8}×")
-print("\nAt 300/min an 8-minute approval costs 2,400 further actions.")
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 PATH = [
  ("detection fires",              8,   "rule evaluation + SIEM ingestion lag"),
  ("analyst picks it up",          240, "queue depth at 02:00"),
@@ -29,15 +43,6 @@ PATH = [
  ("approval requested",           480, "on-call manager, out of hours"),
  ("revocation executed",          12,  "the only step anyone measures"),
 ]
-total = sum(s for _, s, _ in PATH)
-print(f"{'step':30s}{'seconds':>9}  why")
-print("-" * 74)
-for name, secs, why in PATH:
-    print(f"{name:30s}{secs:>9}  {why}")
-print(f"{'TOTAL':30s}{total:>9}  = {total/60:.0f} minutes")
-print(f"\nat 300 actions/min that is {300*total/60:,.0f} further actions.")
-print("The 12-second revocation is 1.3% of the elapsed time. Optimising it")
-print("is not where the win is.")
 
 SIGNALS = {
  "reached the cloud metadata service": 0.99,
@@ -46,41 +51,45 @@ SIGNALS = {
  "tool-call rate 20× its own baseline": 0.75,
  "activity outside usual hours": 0.30,
 }
+
 THRESHOLD = 0.70
+# ------------------------------------------------------------------------ run
 
-def policy(signal, subject_is_human):
-    conf = SIGNALS[signal]
-    if subject_is_human:
-        return f"page on-call (confidence {conf:.2f}) — human lockout needs a person"
-    if conf >= THRESHOLD:
-        return f"AUTO-REVOKE (confidence {conf:.2f}) — no approval in the path"
-    return f"alert only (confidence {conf:.2f} < {THRESHOLD})"
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-for s in SIGNALS:
-    print(f"{s:44s}{policy(s, False)}")
-print()
-print(f"{'same signal, human subject':44s}"
-      f"{policy('reached the cloud metadata service', True)}")
 
-auto_path = [("detection fires", 8), ("policy evaluates", 1), ("revocation executed", 12)]
-auto_total = sum(s for _, s in auto_path)
-print(f"\nautomated path: {auto_total}s vs manual {total}s "
-      f"({total/auto_total:.0f}× faster)")
-print(f"actions prevented at 300/min: {300*(total-auto_total)/60:,.0f}")
-assert auto_total < total / 10
+FIXTURE = {"PATH": PATH, "SIGNALS": SIGNALS, "THRESHOLD": THRESHOLD}
 
-# Verify: model the cost of getting it wrong, which is what makes it safe.
-def cost_of_false_revocation(subject_is_human, agent_can_rerequest=True):
-    if subject_is_human:
-        return {"impact": "person locked out mid-shift", "recovery": "helpdesk, 20-60 min",
-                "cost": "high"}
-    if agent_can_rerequest:
-        return {"impact": "task fails, agent re-requests with a reason (A2.4)",
-                "recovery": "seconds to minutes", "cost": "low"}
-    return {"impact": "agent stops until an on-call re-enables it",
-            "recovery": "minutes", "cost": "moderate"}
 
-for label, human in (("human subject", True), ("non-human identity", False)):
-    c = cost_of_false_revocation(human)
-    print(f"{label:22s}{c['cost']:10s}{c['impact']}")
-print("\nThat asymmetry is the entire justification for two different policies.")
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

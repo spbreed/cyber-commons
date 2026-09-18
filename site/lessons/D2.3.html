@@ -96,34 +96,14 @@ generic anomaly score for this run: 0.07  (seven syscalls is unremarkable)
 <li><strong>Rules whose inputs nobody collects.</strong> Check the pipeline, not the rule.</li>
 <li><strong>One rule for "escape".</strong> Escape is several mechanisms with different
   evidence.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>  t  rule                                process
-  3  ptrace attach to a non-child        solve.py
-  4  LD_PRELOAD on a spawned process     solve.py
-  5  non-harness write to the RPC path   x.so
-  5  process outside the baseline tree   x.so
-  7  process outside the baseline tree   sidecar
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-generic anomaly score for this run: 0.07  (seven syscalls is unremarkable)
-named rules fired: 5
+No model endpoint is configured, and every skill here needs one.
 
-The escape is four ordinary-looking events. Volume scoring cannot see it
-because nothing about the volume is unusual.
-processes surviving the tool call that spawned them:
-   call 2: sidecar
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-A background process that outlives its tool call is how a substituted
-command stays in place for the next one. This single rule is the cheapest
-detection in the set and it is specific enough to page on.
-cache integrity diff (C5.4)
-   extra-0.1.jar         UNEXPECTED - not in the manifest
-   fixtures-9.zip        MISSING - expected artifact removed
-   libtarget-1.4.jar     MODIFIED - hash mismatch
-
-credential exposure to revocation (C4.1)
-   human in the loop   hf_liveToken    public dataset card    240 min
-   automated           hf_liveToken    public dataset card      2 min
-   reported interval from discovery to redistribution: minutes
-
-exemption-state reconciliation (C6.3), day 44
-   cyber-classifier    disabled  P1 - exemption expired on day 30, auto re-enable
-   egress-allowlist    disabled  P1 - disabled with no approved exemption</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pick the orphaned-process rule and write it for your own platform. It is one query, it has a low false-positive rate, and on most agent platforms nobody has ever run it.</p></div></section><div class="expect"><b>Expect</b>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Falco</span><span>Gitleaks</span><span>Sigstore</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.3.ipynb</code></p></div><div class="pager"><a href="D2.2.html"><span class="k">← Previous</span><span class="t">D2.2 · Detections whose subject is the agent — mapped to ATT&amp;CK and ATLAS</span></a><a class="next" href="D2.4.html"><span class="k">Next →</span><span class="t">D2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pick the orphaned-process rule and write it for your own platform. It is one query, it has a low false-positive rate, and on most agent platforms nobody has ever run it.</p></div></section><div class="expect"><b>Expect</b>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Falco</span><span>Gitleaks</span><span>Sigstore</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.3.ipynb</code></p></div><div class="pager"><a href="D2.2.html"><span class="k">← Previous</span><span class="t">D2.2 · Detections whose subject is the agent — mapped to ATT&amp;CK and ATLAS</span></a><a class="next" href="D2.4.html"><span class="k">Next →</span><span class="t">D2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

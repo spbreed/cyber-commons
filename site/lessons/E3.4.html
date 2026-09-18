@@ -103,28 +103,14 @@ AppSec ↔ SOC                detection engineering           D2.2
 <li><strong>Two owners.</strong> It resolves as slowly as none.</li>
 <li><strong>Reporting the seam without the hours.</strong> It reads as a governance
   preference.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>seam                        owner                           lesson
-------------------------------------------------------------------------------
-AppSec ↔ Platform           platform-security               A3.1
-Identity ↔ SecOps           on-call SRE, pre-authorised     A3.6
-GRC ↔ Engineering           ⚠ NOBODY                        E3.2
-SOC ↔ Data                  ⚠ NOBODY                        D1.3
-CISO office ↔ Legal         legal, on IR notification       E2.6
-AppSec ↔ SOC                detection engineering           D2.2
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-2/6 seams have no named owner:
-   who decides an autonomy rung?
-   who retains agent traces, and for how long?
-step                                  seam                  owned   hours
-----------------------------------------------------------------------------
-detection fires                       SOC                    True     0.2
-agent identified as the actor         SOC                    True     1.0
-decision to revoke the identity       Identity ↔ SecOps      True     0.3
-decide trace retention for evidence   SOC ↔ Data            False    14.0   ← stalls
-re-tier the agent post-incident       GRC ↔ Engineering     False    21.0   ← stalls
+No model endpoint is configured, and every skill here needs one.
 
-total elapsed: 36.5 hours
-if every seam were owned: 1.5 hours (24× faster)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-The two unowned steps account for 96% of the elapsed time, and both are
-decisions rather than work.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Two of six seams have no named owner — autonomy rung decisions and trace retention. The simulated incident takes 36.5 hours, of which 35 are the two unowned decision steps, roughly 24× slower than if every seam were owned. The role analysis shows the identity engineer unblocks the most downstream capability while the harness engineer is hired first most often.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Put a name against each of the six seams this week. Any seam where two people both say "them" is the one that will stall your next incident, and finding it now costs one meeting.</p></div></section><div class="expect"><b>Expect</b>Every topic cluster with zero owners or two owners is a finding — usually harness engineering and research.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.4.ipynb</code></p></div><div class="pager"><a href="E3.3.html"><span class="k">← Previous</span><span class="t">E3.3 · Sequencing the programme</span></a><a class="next" href="E3.5.html"><span class="k">Next →</span><span class="t">E3.5 · The metrics that matter at your level</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Two of six seams have no named owner — autonomy rung decisions and trace retention. The simulated incident takes 36.5 hours, of which 35 are the two unowned decision steps, roughly 24× slower than if every seam were owned. The role analysis shows the identity engineer unblocks the most downstream capability while the harness engineer is hired first most often.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Put a name against each of the six seams this week. Any seam where two people both say "them" is the one that will stall your next incident, and finding it now costs one meeting.</p></div></section><div class="expect"><b>Expect</b>Every topic cluster with zero owners or two owners is a finding — usually harness engineering and research.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.4.ipynb</code></p></div><div class="pager"><a href="E3.3.html"><span class="k">← Previous</span><span class="t">E3.3 · Sequencing the programme</span></a><a class="next" href="E3.5.html"><span class="k">Next →</span><span class="t">E3.5 · The metrics that matter at your level</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Enumerate a deployment's declared tools and dangerous actions from its repository.
 
-This is the executable half of the `agent-code-surface-analyzer` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/attestation/agent-code-surface-analyzer/scripts/agent_code_surface_analyzer.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 SIGNALS = {
  "C1_default_deny_least_privilege": ["default_deny", "allowlist", "policy engine",
                                      "authorisation check"],
@@ -20,31 +47,16 @@ SIGNALS = {
  "C5_injection_screening":          ["injection detector", "sanitisation",
                                      "provenance tagging"],
 }
+
 CEILINGS = {
  "C2_sandbox_no_egress": "absence of a covert channel is not provable from source",
  "C5_injection_screening": "detector presence is verifiable; robustness is not",
 }
+
 RUNTIME_ONLY = {
  "C1_default_deny_least_privilege": "observed usage and the effective role policy",
  "C4_gateway_guardrails": "reachability testing from the deployment network",
 }
-
-def verdict(control, hits):
-    if not hits:
-        return "NO_INTENT_FOUND", "no signal for this control in the source"
-    if control in CEILINGS:
-        return "PARTIAL", CEILINGS[control]
-    if control in RUNTIME_ONLY:
-        return "INTENT_EVIDENCED", f"runtime verdict needs {RUNTIME_ONLY[control]}"
-    return "INTENT_EVIDENCED", f"{len(hits)} signals; enforcement not shown"
-
-for c in sorted(SIGNALS):
-    v, why = verdict(c, SIGNALS[c])
-    print(f"{c:34s}{v:18s}{why[:44]}")
-print()
-print("PASS is not in the vocabulary. The strongest static verdict is")
-print("INTENT_EVIDENCED, and two controls cannot exceed PARTIAL at all.")
-assert "PASS" not in {verdict(c, SIGNALS[c])[0] for c in SIGNALS}
 
 CORPUS = [
  {
@@ -199,70 +211,44 @@ CORPUS = [
  }
 ]
 
-print(f"{'repository':36s}{'kind':7s}{'files':>6}{'tools':>7}{'sinks':>6}  C1   C2   C3   C4   C5")
 SHORT = {"INTENT_EVIDENCED": "INT", "PARTIAL": "PART", "NO_INTENT_FOUND": "-"}
-for r in CORPUS:
-    v = "".join(f"{SHORT[r['verdicts'][c]]:>5}" for c in ("C1","C2","C3","C4","C5"))
-    print(f"{r['repo']:36s}{r['kind']:7s}{r['files']:>6}{r['tool_sites']:>7}{r['sinks']:>6}{v}")
+# ------------------------------------------------------------------------ run
 
-evals = [r["verdicts"][c] for r in CORPUS for c in ("C1","C2","C3","C4","C5")]
-print(f"\ncontrol evaluations : {len(evals)}")
-for k in ("INTENT_EVIDENCED", "PARTIAL", "NO_INTENT_FOUND"):
-    print(f"   {k:20s}{evals.count(k)}")
-print(f"   {'PASS':20s}{evals.count('PASS')}   <- static evidence cannot prove enforcement")
-assert evals.count("PASS") == 0
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-unannotated = [r for r in CORPUS if r["kind"] == "mcp" and not r["annotated"]]
-print("1. MCP servers shipping NO tool annotations:")
-for r in unannotated:
-    print(f"   {r['repo']:36s}{r['tool_sites']} tool declaration sites")
-print("   The specification is explicit that annotations are hints, not")
-print("   guarantees - and that an UNANNOTATED tool must be assumed")
-print("   destructiveHint=true and openWorldHint=true. Every one of those")
-print("   tool sites inherits that pessimistic default.")
 
-gaps = [(r["repo"], c) for r in CORPUS for c in ("C1","C2","C3","C4","C5")
-        if r["verdicts"][c] == "NO_INTENT_FOUND"]
-print(f"\n2. Controls with no intent anywhere in the source: {len(gaps)}")
-for repo, c in gaps:
-    print(f"   {repo:36s}{c}")
+FIXTURE = {"SIGNALS": SIGNALS, "CEILINGS": CEILINGS, "RUNTIME_ONLY": RUNTIME_ONLY, "CORPUS": CORPUS, "SHORT": SHORT}
 
-capped = [c for r in CORPUS for c in ("C2","C5") if r["verdicts"][c] == "PARTIAL"]
-print(f"\n3. Verdicts capped at PARTIAL by the ceiling rule: {len(capped)}")
-print("   Not because the evidence was weak - because the claim is not")
-print("   provable. An attestation that reported PASS here would be a")
-print("   signed, tamper-evident overstatement, which is worse than none.")
-assert unannotated and gaps and capped
 
-import json
+def main() -> int:
+    announce_backend()
 
-def attestation(repo_row, commit="c9e71f7"):
-    controls = []
-    for c in ("C1","C2","C3","C4","C5"):
-        full = [k for k in SIGNALS if k.startswith(c)][0]
-        controls.append({
-            "id": full,
-            "verdict": repo_row["verdicts"][c],
-            "confidence": "CAPPED" if full in CEILINGS else "STATIC",
-            "evidence": [{"skill": "agent-code-surface-analyzer",
-                          "uri": f"labs/attestation/oss-corpus-results.json#{repo_row['repo']}"}],
-        })
-    return {
-      "_type": "https://in-toto.io/Statement/v1",
-      "subject": [{"name": repo_row["repo"], "digest": {"gitCommit": commit}}],
-      "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
-      "predicate": {"deployment_id": repo_row["repo"],
-                    "scope": "static source analysis only",
-                    "controls": controls,
-                    "drift": {"since": None, "changed": []}},
-      "signatures": [],
-    }
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-a = attestation(CORPUS[0])
-print(json.dumps(a, indent=1)[:600])
-print("   ...")
-print()
-print("`signatures` is empty and says so. A relying party MUST fail closed on a")
-print("missing or unsigned attestation: a signed file can be deleted, and")
-print("absence must never be read as a pass.")
-assert a["signatures"] == [] and a["predicate"]["scope"].startswith("static")
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

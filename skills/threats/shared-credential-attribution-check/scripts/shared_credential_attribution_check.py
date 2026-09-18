@@ -1,46 +1,81 @@
 #!/usr/bin/env python3
 """Show what a shared credential does to attribution and to containment when one holder misbehaves.
 
-This is the executable half of the `shared-credential-attribution-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/threats/shared-credential-attribution-check/scripts/shared_credential_attribution_check.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 SHARED_KEY = "svc-agent-7f3a1c"
 
-AGENTS = {"triage-agent":  {"key": SHARED_KEY},
-          "patch-agent":   {"key": SHARED_KEY},
-          "deploy-agent":  {"key": SHARED_KEY}}
-
 CALLS = []
+# ------------------------------------------------------------------------ run
 
-def downstream(api_key, action, resource):
-    """A downstream service sees only the credential presented."""
-    CALLS.append({"presented": api_key, "action": action, "resource": resource})
-    return {"ok": True, "caller": api_key}
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-for name in sorted(AGENTS):
-    downstream(AGENTS[name]["key"], "read", "reports")
-downstream(SHARED_KEY, "delete", "prod.customers")     # one of them did this
 
-print("what the downstream service recorded:")
-for c in CALLS:
-    print(f"   caller={c['presented']}  {c['action']:7s} {c['resource']}")
+FIXTURE = {"SHARED_KEY": SHARED_KEY, "CALLS": CALLS}
 
-incident = [c for c in CALLS if c["action"] == "delete"]
-candidates = sorted(AGENTS)
-print(f"\nincident: {incident[0]['action']} on {incident[0]['resource']}")
-print(f"which agent did it? candidates: {candidates}")
-print(f"distinguishable from the record? {len({c['presented'] for c in CALLS}) > 1}")
 
-print("\ncontainment options:")
-print(f"   rotate {SHARED_KEY} -> stops the incident, and stops "
-      f"{len(AGENTS)} agents including {len(AGENTS)-1} innocent ones")
-print("   rotate only the culprit -> not available; there is no 'only'")
-print()
-print("No attacker forged anything. Impersonation is the resting state of a")
-print("system where identity was never per-workload.")
-assert len({c["presented"] for c in CALLS}) == 1
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

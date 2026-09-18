@@ -74,11 +74,14 @@ def _script_of(ex: dict) -> str | None:
             src = path.read_text()
         except OSError:
             continue
-        # Scripts import `ask` from the shared runtime; they used to define
-        # their own `def ask(`. Accept both, or this finds nothing at all.
-        head = src.split("import", 1)[1][:200] if "import" in src else ""
-        if "def ask(" in src or ("cyber_commons_skill_runtime import" in src
-                                 and "ask" in head):
+        # Every skill is model-backed now: the script hands the model the
+        # skill's own SKILL.md through run_with_model(), or calls ask()
+        # directly. A detector that only knew the old `ask(..., replay=...)`
+        # shape reported zero model-facing lessons the moment the replay was
+        # removed — which is the kind of silence a gate has to be immune to,
+        # so all three spellings count.
+        if ("run_with_model" in src or "def ask(" in src
+                or "import ask" in src or ", ask" in src):
             return source
     return None
 

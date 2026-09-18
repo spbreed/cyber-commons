@@ -1,26 +1,11 @@
-   charge_card payments:booking          ['CHARGE']
-   run_query   table:bookings            ['SELECT', 'UPDATE']
-   send_email  domain:cybertravels.com   ['*']
-allow-by-default:
-   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
-   run_query   table:customer_pii            SELECT ALLOW allowed by default
-   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only ['CHARGE'])
-   send_email  domain:archive.evil.example   *      ALLOW allowed by default
-   drop_table  table:bookings                *      ALLOW allowed by default
-   -> 4/5 permitted
+no model configured
 
-DEFAULT-DENY:
-   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
-   run_query   table:customer_pii            SELECT deny  resource outside the entitlement
-   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only ['CHARGE'])
-   send_email  domain:archive.evil.example   *      deny  resource outside the entitlement
-   drop_table  table:bookings                *      deny  no entitlement for this identity+tool
-   -> 1/5 permitted
+No model endpoint is configured, and every skill here needs one.
 
-Only the first call should succeed. Under allow-by-default four do, and
-each one is a real risk from Chapter 1 walking through.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Row three is the one to sit with: same identity, same tool, same
-resource, refused on the VERB. An entitlement attached to the tool
-instead of the call cannot express that distinction at all - and the
-distance between CHARGE and REFUND is the whole of R1.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

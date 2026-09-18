@@ -88,42 +88,14 @@ your controls were tested against a model that changed 5 days ago:
   model.</li>
 <li><strong>Missing embedded AI features.</strong> They arrived with a product you already
   own.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>component                               kind          tier    flags
-------------------------------------------------------------------------------------------------
-cryptography==42.0.5                    library       low     —
-langchain==0.2.1                        library       medium  unsigned
-hosted GLM-4.6 endpoint                 hosted model  high    unsigned, not version-pinned, CAN CHANGE WITHOUT NOTICE
-local glm-4.6 weights (pinned digest)   weights       low     —
-mcp-jira-connector==0.0.3               tool package  high    unsigned, runs with agent authority
-your controls were tested against a model that changed 5 days ago:
-   SB-2  tested 20d ago  INVALIDATED by the model change
-   EV-2  tested 20d ago  INVALIDATED by the model change
-   DR-1  tested 20d ago  INVALIDATED by the model change
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-3/3 control tests invalidated by a change you did not make and were not told about.
-Q: Can this component change without notifying us?
-   → if yes, every control test has an implicit expiry tied to the vendor
+No model endpoint is configured, and every skill here needs one.
 
-Q: Does it execute with our agent&#x27;s authority?
-   → if yes, assess it as code, not as a dependency
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Q: Can we pin a digest, and do we?
-   → the difference between a supply chain and a subscription
-
-Q: What is our exit if we stop using it?
-   → DORA Art.11 asks this directly; most AI contracts have no answer
-
-artefact class     signals available  unavailable
---------------------------------------------------------------------------
-library                          4/4  —
-hosted model                     0/4  [&#x27;signature&#x27;, &#x27;downloads&#x27;, &#x27;pinning&#x27;, &#x27;lineage&#x27;]
-weights                          2/4  [&#x27;downloads&#x27;, &#x27;lineage&#x27;]
-tool package                     1/4  [&#x27;signature&#x27;, &#x27;downloads&#x27;, &#x27;lineage&#x27;]
-
-  library: assessed on 4/4 signals. none unavailable for this artefact class.
-  hosted model: assessed on 0/4 signals. signature, downloads, pinning, lineage unavailable for this artefact class.
-  weights: assessed on 2/4 signals. downloads, lineage unavailable for this artefact class.
-  tool package: assessed on 1/4 signals. signature, downloads, lineage unavailable for this artefact class.
-
-That last sentence is the deliverable. A rating that hides which signals
-were unavailable is a number someone will later rely on.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The hosted model and the MCP tool package both tier high — one for silent change, one for running with agent authority. The silent model change invalidates all three control tests taken before it. The signal table shows libraries with 4 of 4 signals available and hosted models with 0 of 4, and each assessment statement names what was unavailable.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Add "can this change without notifying us?" to your third-party assessment form. For hosted models the answer is usually yes, and it should carry an explicit control-test expiry.</p></div></section><div class="expect"><b>Expect</b>An artefact inventory with provenance status per component — and an honest &#x27;unsigned&#x27; where that is the truth.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP AIBOM</span><span>Sigstore</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.8.ipynb</code></p></div><div class="pager"><a href="E1.7.html"><span class="k">← Previous</span><span class="t">E1.7 · Continuous control verification</span></a><a class="next" href="E1.9.html"><span class="k">Next →</span><span class="t">E1.9 · Model and agent lifecycle governance</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The hosted model and the MCP tool package both tier high — one for silent change, one for running with agent authority. The silent model change invalidates all three control tests taken before it. The signal table shows libraries with 4 of 4 signals available and hosted models with 0 of 4, and each assessment statement names what was unavailable.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Add "can this change without notifying us?" to your third-party assessment form. For hosted models the answer is usually yes, and it should carry an explicit control-test expiry.</p></div></section><div class="expect"><b>Expect</b>An artefact inventory with provenance status per component — and an honest &#x27;unsigned&#x27; where that is the truth.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP AIBOM</span><span>Sigstore</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.8.ipynb</code></p></div><div class="pager"><a href="E1.7.html"><span class="k">← Previous</span><span class="t">E1.7 · Continuous control verification</span></a><a class="next" href="E1.9.html"><span class="k">Next →</span><span class="t">E1.9 · Model and agent lifecycle governance</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

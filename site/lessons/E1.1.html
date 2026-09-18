@@ -177,34 +177,14 @@ DR-1                0            FAIL         FAIL
   tamper-evident document full of dead links.</li>
 <li><strong>Attesting once.</strong> Without drift-triggered re-attestation the artefact
   describes a deployment that may no longer exist.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>control    age (days)   point-in-time   continuous
-----------------------------------------------------
-AC-1                3            PASS         PASS
-AC-2                9            PASS         PASS
-SB-1               45            PASS        STALE
-SB-2              210            PASS        STALE
-EV-1                5            PASS         PASS
-DR-1                0            FAIL         FAIL
-EV-2                —    (not tested)  NO EVIDENCE
-ST-1                —    (not tested)  NO EVIDENCE
-point-in-time    5/8 controls passing = 62%
-continuous       3/8 controls passing = 38%
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-The difference is entirely SB-1 and SB-2, which nobody did anything
-wrong to. Time simply passed, and the agent they were tested against
-has had two model upgrades since.
-control     drift/day  window (days)  current age    state
-------------------------------------------------------------
-AC-1           0.0005            500            3     PASS
-AC-2           0.0005            500            9     PASS
-SB-1           0.0020            125           45     PASS
-SB-2           0.0090             27          210    STALE
-EV-1           0.0010            250            5     PASS
-DR-1           0.0090             27            0     FAIL
-EV-2                —             90            —NO EVIDENCE
-ST-1                —             90            —NO EVIDENCE
+No model endpoint is configured, and every skill here needs one.
 
-with drift-derived windows: 4/8 = 50% currently evidenced
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-SB-2 tests a tool manifest that changes weekly; a 210-day-old screenshot
-cannot evidence it. Saying so is the control, not a criticism of anyone.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape, and its failure modes are the governance lesson stated as engineering: the relying party must fail closed on a missing attestation, because reading absence as a pass is exactly the annual-test habit arriving in a new format. Drift against the digest and the manifest is what re-triggers it, not the calendar.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pick your three most important AI controls and set a freshness window for each from the observed change rate of what it tests. Then recompute your posture. The number will drop, and it will be the first honest one you have had.</p></div></section><div class="expect"><b>Expect</b>One prompt edit invalidated an annual assessment. That is why point-in-time testing fails for AI.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>promptfoo</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.1.ipynb</code></p></div><div class="pager"><a href="E1.0.html"><span class="k">← Previous</span><span class="t">E1.0 · Start here — what AI governance means</span></a><a class="next" href="E1.2.html"><span class="k">Next →</span><span class="t">E1.2 · Building the AI and agent inventory</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape, and its failure modes are the governance lesson stated as engineering: the relying party must fail closed on a missing attestation, because reading absence as a pass is exactly the annual-test habit arriving in a new format. Drift against the digest and the manifest is what re-triggers it, not the calendar.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pick your three most important AI controls and set a freshness window for each from the observed change rate of what it tests. Then recompute your posture. The number will drop, and it will be the first honest one you have had.</p></div></section><div class="expect"><b>Expect</b>One prompt edit invalidated an annual assessment. That is why point-in-time testing fails for AI.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>promptfoo</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.1.ipynb</code></p></div><div class="pager"><a href="E1.0.html"><span class="k">← Previous</span><span class="t">E1.0 · Start here — what AI governance means</span></a><a class="next" href="E1.2.html"><span class="k">Next →</span><span class="t">E1.2 · Building the AI and agent inventory</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -100,9 +100,13 @@ CLAIMS = [
      "the layout listing"),
     ("README.md", r"source of truth: (\d+) sessions", "sessions",
      "the layout listing"),
-    ("README.md", r"\*\*Every one of the (\d+) notebooks has been run twice",
-     "notebooks", "the Kaggle verification claim"),
-    ("README.md", r"and every one of the (\d+) carries\s*\n\s*a script", "skills",
+    # The old claim was "run twice … and printed exactly the same bytes". That
+    # stopped being true when every skill became model-backed, so the guard
+    # follows the sentence that replaced it rather than protecting a promise
+    # the repository no longer makes.
+    ("README.md", r"\*\*Every one of the (\d+) notebooks executes in CI",
+     "notebooks", "the CI execution claim"),
+    ("README.md", r"every one of the (\d+) carries a script the lesson runs", "skills",
      "the script-per-skill claim"),
     # A0.1's "Expect" line describes what the preflight actually prints. It
     # said "120 skills, 119 with a script" while the notebook printed 139/139 —
@@ -120,7 +124,7 @@ CLAIMS = [
      "the skills index"),
     ("skills/README.md", r"that (\d+) plausible tasks", "routing_cases",
      "the routing check's size"),
-    ("MODELS.md", r"The (six|seven|eight) model-facing lessons were run",
+    ("MODELS.md", r"The (\d+) model-facing lessons were run",
      "model_facing", "how many lessons call a model"),
 ]
 

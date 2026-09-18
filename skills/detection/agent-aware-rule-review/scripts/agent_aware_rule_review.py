@@ -1,70 +1,41 @@
 #!/usr/bin/env python3
 """Run classic detection rules against an agent doing its job, and measure behavioural drift against a signed-off baseline.
 
-This is the executable half of the `agent-aware-rule-review` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/detection/agent-aware-rule-review/scripts/agent_aware_rule_review.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import statistics, time
-from dataclasses import dataclass
+import json
+import pathlib
+import sys
 
-@dataclass
-class Event:
-    ts: float; actor: str; action: str; target: str = ""
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-now = time.time()
-AGENT = [Event(now + i*0.2, "patch-agent", "read_file", f"/work/{i}.py")
-         for i in range(300)]
-HUMAN = [Event(now + t, "dana@corp", "read_file", "/work/a.py")
-         for t in (0, 12, 30, 95, 240, 600, 1500)]
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-CLASSIC = {
- "rate > 30 actions/min":
-   lambda ev: (len(ev) / max((ev[-1].ts - ev[0].ts)/60, 1e-9)) > 30,
- "activity outside 09:00-18:00":
-   lambda ev: True,                     # agents run continuously
- "same action > 100 times":
-   lambda ev: max((sum(1 for e in ev if e.action == a) for a in {x.action for x in ev}),
-                  default=0) > 100,
-}
-print(f"{'classic rule':34s}{'fires on agent':16s}fires on human")
-print("-" * 66)
-for name, rule in CLASSIC.items():
-    print(f"{name:34s}{str(rule(AGENT)):16s}{rule(HUMAN)}")
-print("\nAll three fire on an agent doing exactly its job. Deployed as-is, they")
-print("produce continuous noise and are disabled within a week.")
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-@dataclass
-class Baseline:
-    """What normal looked like when the control was signed off."""
-    tool_mix: dict
-    actions_per_hour: float
-    scopes_used: set
-
-    def compare(self, events, scopes_used, hours=1.0):
-        counts = {}
-        for e in events:
-            counts[e.action] = counts.get(e.action, 0) + 1
-        total = sum(counts.values()) or 1
-        now_mix = {k: v/total for k, v in counts.items()}
-        keys = set(now_mix) | set(self.tool_mix)
-        tvd = sum(abs(now_mix.get(k, 0) - self.tool_mix.get(k, 0)) for k in keys) / 2
-        new_tools = sorted(set(now_mix) - set(self.tool_mix))
-        new_scopes = sorted(scopes_used - self.scopes_used)
-        return {"drift": round(tvd, 3), "new_tools": new_tools,
-                "new_scopes": new_scopes,
-                "rate_ratio": round((total/hours) / self.actions_per_hour, 2),
-                "verdict": ("SIGNIFICANT — re-test the controls"
-                            if tvd > 0.25 or new_tools or new_scopes
-                            else "within tolerance")}
-
-base = Baseline(tool_mix={"read_file": 0.85, "search": 0.15},
-                actions_per_hour=1200, scopes_used={"repo:read"})
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 WEEKS = {
  "week 1 (baseline)":   ([("read_file", 850), ("search", 150)], {"repo:read"}),
  "week 4 (new prompt)": ([("read_file", 700), ("search", 200), ("write_file", 100)],
@@ -72,28 +43,43 @@ WEEKS = {
  "week 8 (upgrade)":    ([("read_file", 300), ("search", 100), ("write_file", 200),
                           ("run_shell", 400)], {"repo:read", "repo:write", "exec"}),
 }
-for label, (mix, scopes) in WEEKS.items():
-    ev = [Event(now, "patch-agent", tool) for tool, n in mix for _ in range(n)]
-    d = base.compare(ev, scopes)
-    print(f"{label:22s} drift={d['drift']:.3f}  rate×{d['rate_ratio']}  {d['verdict']}")
-    if d["new_tools"]:  print(f"{'':22s} new tools:  {d['new_tools']}")
-    if d["new_scopes"]: print(f"{'':22s} new scopes: {d['new_scopes']}")
+# ------------------------------------------------------------------------ run
 
-def alert_text(agent, d):
-    if d["verdict"].startswith("within"): return None
-    changes = []
-    if d["new_tools"]:  changes.append(f"began using {d['new_tools']}")
-    if d["new_scopes"]: changes.append(f"exercised new scopes {d['new_scopes']}")
-    if d["drift"] > 0.25: changes.append(f"tool mix shifted (TVD {d['drift']})")
-    return (f"[{agent}] behaviour changed from the signed-off baseline\n"
-            f"   what changed : {'; '.join(changes)}\n"
-            f"   why it matters: the controls in A3 were tested against the old\n"
-            f"                   behaviour; a new tool may not be covered\n"
-            f"   do this      : confirm a manifest change was reviewed (A1.1),\n"
-            f"                   then re-run the containment suite (C1.2)")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-ev = [Event(now, "patch-agent", tool) for tool, n in WEEKS["week 8 (upgrade)"][0]
-      for _ in range(n)]
-d = base.compare(ev, WEEKS["week 8 (upgrade)"][1])
-print(alert_text("patch-agent", d))
-assert d["new_tools"] and d["new_scopes"]
+
+FIXTURE = {"WEEKS": WEEKS}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

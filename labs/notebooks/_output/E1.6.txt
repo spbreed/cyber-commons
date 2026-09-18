@@ -1,31 +1,11 @@
-rule                                                        kind        enforceable
---------------------------------------------------------------------------------------
-all agent egress goes through the gateway                   operating          True
-privileged tools require approval below L3                  operating          True
-every action is logged with the acting identity             operating          True
-agent identities are separately revocable                   operating          True
-no agent action causes unrecoverable customer data loss     outcome           False
-automated remediation does not increase customer-facing incidentsoutcome            True
-model outputs do not produce disparate outcomes across segmentsoutcome           False
-operating guardrails : 4  all enforceable today
-outcome guardrails   : 3  of which enforceable: 1
+no model configured
 
-'guardrail coverage' if you count only what you shipped: 4/4 = 100%
-coverage across ALL agreed guardrails: 5/7 = 71%
+No model endpoint is configured, and every skill here needs one.
 
-The first number is what usually reaches a steering committee.
-automated remediation does not increase customer-facing incidents
-   metric   customer-facing SEV1+SEV2 per 1000 remediations
-   threshold 1.2
-   source   incident management system
-   status   enforceable
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-no agent action causes unrecoverable customer data loss
-   metric   —
-   threshold —
-   source   —
-   status   ASPIRATION — label it as such
-
-5/7 guardrails are enforceable today.
-The following are agreed but UNMEASURED, and are not counted as coverage:
-   - no agent action causes unrecoverable customer data loss
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

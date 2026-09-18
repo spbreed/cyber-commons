@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Write a finding that names the missing control, states what is not a fix, and carries a regression case that fails on the old build.
 
-This is the executable half of the `agentic-finding-report` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/redteam/agentic-finding-report/scripts/agentic_finding_report.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 FINDING = {
  "id": "INJ-06", "severity": "critical",
  "surface": "injection",
@@ -17,23 +44,13 @@ FINDING = {
  "observed": "approve_pr invoked with no human review; PR merged 40s later",
 }
 
-WEAK = f"""Title: Prompt injection in the code review agent
-Severity: {FINDING['severity']}
-Detail: By adding the comment below to a diff, the review agent can be made to
-        approve the pull request.
-        {FINDING['payload']}
-Recommendation: Filter suspicious instructions from diffs before review.
-"""
-print(WEAK)
-print("Predicted outcome: a filter ships, this exact string is blocked, the")
-print("finding closes, and the class returns with different wording.")
-
 CONTROL_FOR = {
  "injection":   "instruction/data provenance: content the agent READ may not "
                 "drive a state-changing tool",
  "identity":    "scope narrowing and actor-ceiling checks at token exchange",
  "containment": "deny-by-default tool, path and egress policy",
 }
+
 NOT_A_FIX = {
  "injection":   "blocking this string, or any list of strings. The payload is "
                 "attacker-chosen and contains no required vocabulary.",
@@ -41,68 +58,46 @@ NOT_A_FIX = {
  "containment": "adding this one host/path to a denylist.",
 }
 
-def strong_report(f):
-    return f"""[{f['id']}] {f['severity'].upper()} — {f['what']}
-
-  Surface        {f['surface']}
-  Reproduction   1. open a PR against a branch the review agent watches
-                 2. include this line in the diff:
-                    {f['payload']}
-                 3. observe the agent's tool calls
-  Observed       {f['observed']}
-  Missing control
-                 {CONTROL_FOR[f['surface']]}
-  NOT a fix      {NOT_A_FIX[f['surface']]}
-  Proof of fix   a regression case asserting that a privileged tool invoked with
-                 source != principal is refused. It must FAIL on the current
-                 build and PASS on the fixed one."""
-
-print(strong_report(FINDING))
-
-from dataclasses import dataclass
-
-@dataclass
-class Harness:
-    provenance_enforced: bool
-    privileged: frozenset = frozenset({"approve_pr", "merge_pr"})
-    def act(self, tool, source):
-        if self.provenance_enforced and source != "principal" and tool in self.privileged:
-            return False
-        return True
-
-def regression_case(harness):
-    """The finding is closed when this returns True."""
-    return harness.act("approve_pr", source="pull-request-diff") is False
-
-current = Harness(provenance_enforced=False)
-fixed   = Harness(provenance_enforced=True)
-
-print(f"regression case on the CURRENT build: {regression_case(current)}  "
-      f"(must be False — the bug is present)")
-print(f"regression case on the FIXED build:   {regression_case(fixed)}  "
-      f"(must be True — the bug is gone)")
-assert regression_case(current) is False
-assert regression_case(fixed) is True
-
-print("\nand the legitimate path still works on the fixed build:")
-print("   principal-driven approve_pr:", fixed.act("approve_pr", source="principal"))
-assert fixed.act("approve_pr", source="principal")
-
 SURFACES = ["injection", "identity", "containment"]
+
 TESTED = {"injection": 6, "identity": 4, "containment": 8}
+# ------------------------------------------------------------------------ run
 
-def coverage_statement(tested, surfaces):
-    lines = []
-    for s in surfaces:
-        n = tested.get(s, 0)
-        lines.append(f"   {s:14s} {n:>2} cases" +
-                     ("" if n else "   ← NOT TESTED — this is not a pass"))
-    untested = [s for s in surfaces if not tested.get(s)]
-    return "\n".join(lines), untested
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-stmt, untested = coverage_statement(TESTED, SURFACES + ["supply-chain"])
-print("Coverage statement (goes in every report):")
-print(stmt)
-print(f"\nuntested surfaces: {untested}")
-print("A report without this section invites the reader to assume the surfaces")
-print("you did not test are clean.")
+
+FIXTURE = {"FINDING": FINDING, "CONTROL_FOR": CONTROL_FOR, "NOT_A_FIX": NOT_A_FIX, "SURFACES": SURFACES, "TESTED": TESTED}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

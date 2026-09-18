@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Write detections whose subject is the agent platform — sandbox escape, orphaned processes, cache tampering — and compare them with a generic anomaly score.
 
-This is the executable half of the `agent-platform-detections` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/detection/agent-platform-detections/scripts/agent_platform_detections.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 EVENTS = [
  {"t": 1,  "proc": "harness",   "syscall": "execve",  "arg": "python3 solve.py"},
  {"t": 2,  "proc": "solve.py",  "syscall": "openat",  "arg": "/workspace/in.json"},
@@ -18,107 +45,57 @@ EVENTS = [
  {"t": 6,  "proc": "solve.py",  "syscall": "openat",  "arg": "/workspace/out.json"},
  {"t": 7,  "proc": "sidecar",   "syscall": "execve",  "arg": "sleep 86400"},
 ]
+
 BASELINE_TREE = {"harness", "solve.py"}
-
-RULES = [
- ("ptrace attach to a non-child", lambda e: e["syscall"] == "ptrace" and "not a child" in e["arg"]),
- ("LD_PRELOAD on a spawned process", lambda e: "LD_PRELOAD" in e["arg"]),
- ("non-harness write to the RPC path", lambda e: "harness.sock" in e["arg"] and e["proc"] != "harness"),
- ("process outside the baseline tree", lambda e: e["proc"] not in BASELINE_TREE),
-]
-
-fired = []
-for e in EVENTS:
-    for name, rule in RULES:
-        if rule(e):
-            fired.append((e["t"], name, e["proc"]))
-print(f"{'t':>3}  {'rule':36s}process")
-for t, name, proc in fired:
-    print(f"{t:>3}  {name:36s}{proc}")
-
-# a generic score over the same events
-volume = len(EVENTS)
-score = volume / 100
-print(f"\ngeneric anomaly score for this run: {score:.2f}  "
-      f"(seven syscalls is unremarkable)")
-print(f"named rules fired: {len(fired)}")
-print()
-print("The escape is four ordinary-looking events. Volume scoring cannot see it")
-print("because nothing about the volume is unusual.")
-assert len(fired) >= 5 and score < 0.1
 
 TOOL_CALLS = [
  {"call": 1, "spawned": ["solve.py"],  "ended": ["solve.py"]},
  {"call": 2, "spawned": ["sidecar"],   "ended": []},
  {"call": 3, "spawned": ["fmt"],       "ended": ["fmt"]},
 ]
-def orphans(calls):
-    live = []
-    for c in calls:
-        for p in c["spawned"]:
-            if p not in c["ended"]:
-                live.append((c["call"], p))
-    return live
-
-live = orphans(TOOL_CALLS)
-print("processes surviving the tool call that spawned them:")
-for call, proc in live:
-    print(f"   call {call}: {proc}")
-print()
-print("A background process that outlives its tool call is how a substituted")
-print("command stays in place for the next one. This single rule is the cheapest")
-print("detection in the set and it is specific enough to page on.")
-assert live == [(2, "sidecar")]
-
-import hashlib
-
-def h(s): return hashlib.sha256(s.encode()).hexdigest()[:12]
-
-MANIFEST = {"libtarget-1.4.jar": h("libtarget-1.4"),
-            "runner-2.0.tar":    h("runner-2.0"),
-            "fixtures-9.zip":    h("fixtures-9")}
-REPOSITORY = {"libtarget-1.4.jar": h("libtarget-1.4-modified"),   # staged
-              "runner-2.0.tar":    h("runner-2.0"),
-              "extra-0.1.jar":     h("extra-0.1")}                # unexpected
-
-def diff(manifest, repo):
-    out = []
-    for name in sorted(set(manifest) | set(repo)):
-        if name not in repo:
-            out.append((name, "MISSING - expected artifact removed"))
-        elif name not in manifest:
-            out.append((name, "UNEXPECTED - not in the manifest"))
-        elif manifest[name] != repo[name]:
-            out.append((name, "MODIFIED - hash mismatch"))
-    return out
-
-print("cache integrity diff (C5.4)")
-for name, why in diff(MANIFEST, REPOSITORY):
-    print(f"   {name:22s}{why}")
 
 EXPOSURES = [("hf_liveToken", "public dataset card", 0)]
-def revoke(exposures, human_in_loop):
-    delay = 240 if human_in_loop else 2       # minutes
-    return [(t, where, delay) for t, where, _ in exposures]
-
-print("\ncredential exposure to revocation (C4.1)")
-for mode, hitl in (("human in the loop", True), ("automated", False)):
-    for token, where, delay in revoke(EXPOSURES, hitl):
-        print(f"   {mode:20s}{token:16s}{where:22s}{delay:>4} min")
-print("   reported interval from discovery to redistribution: minutes")
 
 APPROVED = {"cyber-classifier": 30}
+
 LIVE = {"cyber-classifier": "disabled", "egress-allowlist": "disabled"}
-print("\nexemption-state reconciliation (C6.3), day 44")
-for control, state in sorted(LIVE.items()):
-    expires = APPROVED.get(control)
-    if state == "enabled":
-        verdict = "ok"
-    elif expires is None:
-        verdict = "P1 - disabled with no approved exemption"
-    elif 44 > expires:
-        verdict = f"P1 - exemption expired on day {expires}, auto re-enable"
-    else:
-        verdict = "ok - within an approved exemption"
-    print(f"   {control:20s}{state:10s}{verdict}")
-assert len(diff(MANIFEST, REPOSITORY)) == 3
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"EVENTS": EVENTS, "BASELINE_TREE": BASELINE_TREE, "TOOL_CALLS": TOOL_CALLS, "EXPOSURES": EXPOSURES, "APPROVED": APPROVED, "LIVE": LIVE}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

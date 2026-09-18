@@ -1,73 +1,84 @@
 #!/usr/bin/env python3
 """Check which lifecycle events leave a record, and find the active credentials belonging to decommissioned services.
 
-This is the executable half of the `agent-lifecycle-governance` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/grc/agent-lifecycle-governance/scripts/agent_lifecycle_governance.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import time
-now = time.time(); DAY = 86400
+import json
+import pathlib
+import sys
 
-IDENTITIES = {
- "triage-agent":   {"created": now - 200*DAY, "last_auth": now - 0.2*DAY,
-                    "owner": "appsec", "service_running": True},
- "patch-agent":    {"created": now - 180*DAY, "last_auth": now - 1*DAY,
-                    "owner": "platform", "service_running": True},
- "legacy-scanner": {"created": now - 900*DAY, "last_auth": now - 400*DAY,
-                    "owner": "", "service_running": False},
- "poc-agent-2025": {"created": now - 500*DAY, "last_auth": now - 300*DAY,
-                    "owner": "", "service_running": False},
- "sunset-agent":   {"created": now - 300*DAY, "last_auth": now - 2*DAY,
-                    "owner": "", "service_running": False},
-}
-print(f"{'identity':18s}{'last auth (d)':>15}{'service running':>18}{'owner':>12}  finding")
-print("-" * 92)
-for name, i in IDENTITIES.items():
-    age = (now - i["last_auth"])/DAY
-    finding = ""
-    if not i["service_running"] and age < 30:
-        finding = "ACTIVE CREDENTIAL FOR A RETIRED SERVICE"
-    elif not i["service_running"]:
-        finding = "orphan — decommissioning never finished"
-    elif not i["owner"]:
-        finding = "no owner"
-    print(f"{name:18s}{age:>15.0f}{str(i['service_running']):>18}"
-          f"{i['owner'] or '—':>12}  {finding}")
-print("\nRead the sunset-agent row twice. The service was retired. The identity")
-print("authenticated two days ago. Somebody or something is still using it.")
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-def lifecycle_checks(identities, now, stale_days=90):
-    findings = []
-    for name, i in identities.items():
-        age = (now - i["last_auth"])/DAY
-        if not i["service_running"] and age < stale_days:
-            findings.append((name, "critical",
-                             "identity active for a decommissioned service"))
-        elif age > stale_days:
-            findings.append((name, "medium",
-                             f"no authentication in {age:.0f}d — decommission it"))
-        elif not i["owner"]:
-            findings.append((name, "medium", "no named owner"))
-    return findings
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-for name, sev, why in lifecycle_checks(IDENTITIES, now):
-    print(f"[{sev:8s}] {name:18s} {why}")
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-print("\nand the manifest-diff check, for the events that change behaviour:")
+# ---------------------------------------------------------------- the fixture
+DAY = 86400
+
 SCOPE_WEIGHT = {"self": 1, "project": 3, "tenant": 8, "org": 20}
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n,s,rev in tools if n not in gated)
-BEFORE = [("read_file","self",True)]
-AFTER  = [("read_file","self",True), ("deploy","org",False)]
-d = blast(AFTER) - blast(BEFORE)
-print(f"   manifest changed: blast {blast(BEFORE)} → {blast(AFTER)} (+{d})")
-print(f"   → requires re-tiering (E1.3) and a fresh SB-2 test (E1.7)")
 
-crit = [f for f in lifecycle_checks(IDENTITIES, now) if f[1] == "critical"]
-assert crit
-print(f"\n{len(crit)} critical lifecycle finding(s) — each is a standing credential")
-print("for something everyone believes is switched off.")
+BEFORE = [("read_file","self",True)]
+
+AFTER  = [("read_file","self",True), ("deploy","org",False)]
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"DAY": DAY, "SCOPE_WEIGHT": SCOPE_WEIGHT, "BEFORE": BEFORE, "AFTER": AFTER}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

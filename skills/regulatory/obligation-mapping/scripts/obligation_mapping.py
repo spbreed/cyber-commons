@@ -1,48 +1,41 @@
 #!/usr/bin/env python3
 """Resolve which regulatory layers apply to a system and register the shortest clock among them.
 
-This is the executable half of the `obligation-mapping` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/regulatory/obligation-mapping/scripts/obligation_mapping.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-from dataclasses import dataclass
+import json
+import pathlib
+import sys
 
-@dataclass
-class System:
-    name: str; sector: str; data: tuple; autonomy: str
-    affects_individuals: bool; is_ict_service: bool
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-CLAIMS = System("claims-triage-agent", sector="insurance",
-                data=("customer", "health", "regulated"), autonomy="L2.5",
-                affects_individuals=True, is_ict_service=True)
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-def applicable(sys_):
-    out = []
-    # layer 1
-    if sys_.autonomy in ("L2", "L2.5", "L3") and sys_.affects_individuals:
-        out.append(("EU AI Act", 1, "automated decision affecting individuals; "
-                    "human oversight and record-keeping obligations"))
-    # layer 2
-    if sys_.sector in ("insurance", "banking", "financial"):
-        out.append(("DORA", 2, "ICT third-party risk, incident reporting, "
-                    "resilience testing, exit strategy"))
-    if "health" in sys_.data:
-        out.append(("HIPAA-equivalent", 2, "minimum necessary; audit controls"))
-    # layer 3
-    if sys_.affects_individuals and "customer" in sys_.data:
-        out.append(("GDPR", 3, "lawful basis, erasure, automated decision-making"))
-    return sorted(out, key=lambda r: r[1])
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-print(f"{CLAIMS.name} — autonomy {CLAIMS.autonomy}, data {list(CLAIMS.data)}\n")
-print(f"{'instrument':22s}{'layer':>6}  obligation")
-print("-" * 92)
-for name, layer, why in applicable(CLAIMS):
-    print(f"{name:22s}{layer:>6}  {why}")
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 CLOCKS = {
  "DORA (major ICT incident)":       (4,  "initial notification to the regulator"),
  "contractual (major client)":      (12, "client security contact"),
@@ -50,29 +43,43 @@ CLOCKS = {
  "GDPR (personal data breach)":     (72, "supervisory authority"),
  "EU AI Act (serious incident)":    (72, "market surveillance authority"),
 }
-applicable_names = {n for n, _, _ in applicable(CLAIMS)}
-mine = {k: v for k, v in CLOCKS.items()
-        if any(a.split()[0] in k for a in applicable_names) or "contractual" in k}
+# ------------------------------------------------------------------------ run
 
-print(f"{'obligation':36s}{'deadline (h)':>14}  notify")
-print("-" * 78)
-for name, (hours, who) in sorted(mine.items(), key=lambda kv: kv[1][0]):
-    print(f"{name:36s}{hours:>14}  {who}")
-shortest = min(mine.items(), key=lambda kv: kv[1][0])
-print(f"\nBINDING DEADLINE: {shortest[0]} at {shortest[1][0]}h")
-print("Every runbook, every escalation path and every out-of-hours rota is")
-print("designed against that number, not against the 72-hour one people quote.")
-assert shortest[1][0] <= 12
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-# Verify: which layer actually drove the requirements?
-from collections import Counter
-layers = Counter(layer for _, layer, _ in applicable(CLAIMS))
-print("obligations by layer:", dict(layers))
-print()
-for layer, label in ((1, "horizontal AI regulation"), (2, "sector overlay"),
-                     (3, "cross-cutting")):
-    n = layers.get(layer, 0)
-    print(f"   layer {layer} ({label:26s}) {n} obligation(s)")
-print("\nLayers 2 and 3 produce more obligations than layer 1, and they were")
-print("already in force before anyone deployed an agent. That is the finding.")
-assert layers.get(2, 0) + layers.get(3, 0) > layers.get(1, 0)
+
+FIXTURE = {"CLOCKS": CLOCKS}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

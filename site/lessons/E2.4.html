@@ -81,49 +81,14 @@ DORA (financial)
 <li><strong>Searching for AI.</strong> The binding clauses do not use the word.</li>
 <li><strong>Waiting for the horizontal regime.</strong> These apply now.</li>
 <li><strong>An exit assessment that assumes substitutability.</strong> Test it.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>claims-triage-agent: autonomy L2.5, data [&#x27;customer&#x27;, &#x27;health&#x27;], external model True
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-DORA (financial)
-   ICT third-party risk    your model provider is an ICT third party
-   exit strategy           can you stop using this provider and keep operating?
-   resilience testing      your stop mechanism is in scope for testing
-   incident reporting      clocks measured in hours
+No model endpoint is configured, and every skill here needs one.
 
-HIPAA (health)
-   minimum necessary       the context window is a disclosure
-   audit controls          the ACTING identity must be recorded
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-PCI DSS (cards)
-   access control          non-human identities need the same rigour
-
-7 pre-existing clauses apply. None of them mentions AI.
-provider                      exit strategy
-------------------------------------------------
-hosted frontier API          NOT DEFENSIBLE
-      ⚠ cannot pin a version — behaviour changes without notice
-      ⚠ cannot retain the artefact — no continuity if withdrawn
-      ⚠ 45d to switch — outside most RTOs
-hosted open-weight API       NOT DEFENSIBLE
-      ⚠ cannot retain the artefact — no continuity if withdrawn
-self-hosted open weights         defensible
-
-DORA Art.11 asks this directly. It is the clause most AI procurement
-cannot answer, and it was written years before anyone deployed an agent.
-&#x27;ICT third-party risk&#x27; (DORA) already applies to us and is owned by third-party risk management.
-   The agent fact that engages it: the model provider is an ICT third party
-   Ask: extend the existing control, not create an AI policy.
-
-&#x27;audit controls&#x27; (HIPAA) already applies to us and is owned by the security team.
-   The agent fact that engages it: the acting identity is not currently recorded
-   Ask: extend the existing control, not create an AI policy.
-
-&#x27;access control&#x27; (PCI DSS) already applies to us and is owned by identity and access management.
-   The agent fact that engages it: non-human identities have no recertification
-   Ask: extend the existing control, not create an AI policy.
-
-Compare with the alternative ask:
-   &#x27;We need a new AI governance policy and a new committee.&#x27;
-   → new owner, new process, new budget line, six months.
-versus
-   &#x27;Extend third-party risk to cover model providers.&#x27;
-   → existing owner, existing process, next review cycle.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Seven pre-existing clauses apply to the claims-triage agent across DORA, HIPAA and PCI DSS, none of which mentions AI. The exit-strategy assessment marks the hosted frontier API as not defensible on all three counts, the hosted open-weight API on one, and self-hosted weights as defensible. Three cases show how to route the requirement to an existing owner rather than a new policy.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Find the clause in your own sector overlay that already covers autonomous action without naming AI. Citing it is faster, cheaper and more persuasive than any new AI policy you could write.</p></div></section><div class="expect"><b>Expect</b>The agent is often already a &#x27;model&#x27; under rules you already comply with. Cheaper than inventing a new programme.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E2.4.ipynb</code></p></div><div class="pager"><a href="E2.3.html"><span class="k">← Previous</span><span class="t">E2.3 · Voluntary frameworks as your spine</span></a><a class="next" href="E2.5.html"><span class="k">Next →</span><span class="t">E2.5 · Privacy and data protection</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Seven pre-existing clauses apply to the claims-triage agent across DORA, HIPAA and PCI DSS, none of which mentions AI. The exit-strategy assessment marks the hosted frontier API as not defensible on all three counts, the hosted open-weight API on one, and self-hosted weights as defensible. Three cases show how to route the requirement to an existing owner rather than a new policy.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Find the clause in your own sector overlay that already covers autonomous action without naming AI. Citing it is faster, cheaper and more persuasive than any new AI policy you could write.</p></div></section><div class="expect"><b>Expect</b>The agent is often already a &#x27;model&#x27; under rules you already comply with. Cheaper than inventing a new programme.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E2.4.ipynb</code></p></div><div class="pager"><a href="E2.3.html"><span class="k">← Previous</span><span class="t">E2.3 · Voluntary frameworks as your spine</span></a><a class="next" href="E2.5.html"><span class="k">Next →</span><span class="t">E2.5 · Privacy and data protection</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

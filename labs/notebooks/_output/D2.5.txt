@@ -1,15 +1,11 @@
-incident: 3 steps · benign corpus: 84 runs
+no model configured
 
-candidate rule                          fires on   FP  FP rate  verdict
-any refund                                  True   18     21%  REJECT — buries the queue
-refund with no approval in the run          True    0      0%  ship
-refund on BK-772                            True    0      0%  REJECT — matches this incident only
+No model endpoint is configured, and every skill here needs one.
 
-All three rules catch the incident. That is the trap: catching the thing
-that already happened is the one property every candidate has, so it
-cannot be the property you select on.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-'any refund' fires on 18 legitimate refunds - a 21% false-positive
-rate, and refunds are the business. 'refund on BK-772' is perfect on this
-corpus and worthless tomorrow, because the booking id will be different.
-Only the sequence rule generalises AND stays quiet.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

@@ -141,12 +141,25 @@ that are enforced or that get broken most.
 
 ### Code
 
-- **Standard library only** in anything a lesson runs, and **deterministic** —
-  two runs must be diffable, and `check_determinism.py` runs each notebook
-  across four hash seeds.
+- **Standard library only** in anything a lesson runs. There is nothing to
+  `pip install`; the one dependency is a model endpoint.
+- **Every skill is executed by a model.** The script is the harness, not the
+  procedure: it assembles the fixture, hands the model that skill's own
+  `SKILL.md` body and output contract, and validates the reply against the
+  same contract. Documentation and prompt are the same bytes, so they cannot
+  disagree. `scripts/convert_skills_to_model.py` is what produced that shape.
+- **Nothing is ever substituted for a model's answer.** `ask()` raises rather
+  than falling back, and `backend()` raises `NoModelConfigured` when there is
+  no endpoint. A canned answer returned in a model's place is the one failure
+  nothing downstream can catch — it has the right shape and passes the
+  contract.
+- **Deterministic where it is ours.** A model is not deterministic and the
+  repository no longer pretends otherwise. `check_determinism.py` checks the
+  harness — ordering, formatting, seeding, and that the no-model refusal does
+  not vary across hash seeds.
 - **A skill declares an output contract** and carries a script. `check_skills.py`
-  validates the shape; `test_skills.py` executes every one offline with the
-  model and cloud variables stripped, and a script that prints nothing fails.
+  validates the shape; `test_skills.py` runs every script with the model
+  variables stripped and requires it to exit 2 *having said why*.
 - **Comments say why, not what.** The codebase leans on this heavily: nearly
   every guard in `scripts/` carries the failure it exists to prevent. Keep that
   up — it is what stops the next person deleting a gate they do not understand.
@@ -174,8 +187,8 @@ person.
 | 1 | `check_secrets.py` | a credential reaching the repo. Runs a self-test on shapes it must and must not match |
 | 2 | `run_notebooks.py` | a notebook that does not execute |
 | 3 | `check_skills.py --check` | a skill missing its activation condition, procedure, example, failure modes, or a parseable output contract |
-| 4 | `test_skills.py --check` | a skill that loads but does not run. Executes each offline with model and cloud variables removed |
-| 5 | `check_determinism.py --seeds 4` | output that changes between runs, which makes a diff meaningless |
+| 4 | `test_skills.py --check` | a skill that answers **without a model**. Runs each script with the model variables stripped: exit 2 with the refusal on stdout passes, exit 0 with output fails, and exit 2 with no explanation fails because the reader sees a broken repository rather than an unconfigured machine |
+| 5 | `check_determinism.py --seeds 4` | non-determinism in **the harness** — ordering, formatting, seeding, and a no-model refusal that varies between runs. It does not and must not claim a model's findings reproduce |
 | 6 | `build_notebooks.py --check` + `relink_labs.py --check` | a notebook or lab block out of sync with its source |
 | 7 | `check_lessons.py --check` | the authoring contract: Day 0/1/2, hook/diagram/concept, framework before code, chapter bridges, D/E anchors, chapter numbering |
 | 8 | `check_register.py --check` | the incident register's 40 controls — **its ids are `C1.1`–`C10.4`, syntactically identical to lesson ids**, and a blind lesson rename corrupts them |
@@ -249,7 +262,13 @@ actually gone wrong.
 
 ## 7 · The pipeline
 
-`.github/workflows/pages.yml`, on push to `main` or `claude/**`.
+`.github/workflows/pages.yml`, on push to `master`, `main` or `claude/**`.
+
+**CI is given no model endpoint, on purpose.** Every skill therefore refuses
+there, and the gates are written to treat a legible refusal as a pass. The
+alternative is a key in CI or a stand-in that is allowed to answer, and the
+second one is undetectable downstream. Running the skills *against* a model is
+a separate job.
 
 - **`build`** runs the gates in §5, then builds the site and uploads it.
 - **`deploy`** publishes to the `github-pages` environment.

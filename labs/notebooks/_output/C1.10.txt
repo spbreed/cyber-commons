@@ -1,42 +1,11 @@
-fully instrumented     replayable=True
-typical production     replayable=False
-      ✗ model version — a silent upgrade changes the output
-      ✗ seed — sampling makes the run unrepeatable
-prompts only           replayable=False
-      ✗ tool results — the agent saw a world you cannot rebuild
-      ✗ model version — a silent upgrade changes the output
-      ✗ seed — sampling makes the run unrepeatable
-actions only           replayable=False
-      ✗ prompts — cannot reconstruct what it was asked
-      ✗ tool results — the agent saw a world you cannot rebuild
-      ✗ model version — a silent upgrade changes the output
-      ✗ seed — sampling makes the run unrepeatable
-reproduce the incident under the ORIGINAL model version:
-   → read_source
+no model configured
 
-reproduce it AFTER the provider upgraded (same prompts, same tool results):
-   glm-4.6@2026-08-01     → read_source        reproduces
-   glm-4.7@2026-08-01     → read_source        reproduces
+No model endpoint is configured, and every skill here needs one.
 
-Without a pinned version you cannot tell 'the agent did not do this'
-from 'the model that did it no longer exists'.
-field             cost  what it costs                         why it matters
-----------------------------------------------------------------------------------------------------
-model version        1  one string per run                    invalidates everything else if missing
-seed                 1  one integer per run                   makes the run repeatable
-prompts              3  storage + privacy review (D1.3)       what it was asked
-tool results         5  largest volume, highest sensitivity   what it saw
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-recording order, by value per unit cost:
-   1. model version
-   2. seed
-   3. prompts
-   4. tool results
-
-after adding model version    replayable=False  still missing=1
-
-after adding seed             replayable=True  still missing=0
-
-after adding prompts          replayable=True  still missing=0
-
-after adding tool results     replayable=True  still missing=0
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

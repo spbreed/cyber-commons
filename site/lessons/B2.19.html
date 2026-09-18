@@ -101,53 +101,14 @@ would have to build.</p>
 <li><strong>Scoring on the shipped examples.</strong> They were chosen.</li>
 <li><strong>Reporting one of precision and recall.</strong> Either alone flatters.</li>
 <li><strong>Treating uncovered stages as out of scope.</strong> They are the work you inherit.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>stage  name                              mantis    note
-------------------------------------------------------------------------------------------------
-  1  historical parsing                yes       historical_learnings.jsonl is read on subsequent runs
-  2  structural indexing               partial   operates over the agent&#x27;s code-reading tools
-  3  component summarisation           partial   context assembled per review target
-  4  architecture synthesis            no        assumes you supply the architecture context
-  5  threat modelling                  partial   review skills encode threat patterns rather than deriving them
-  6  strategic planning                no        you decide what to point it at
-  7  vulnerability auditing            yes       the core: security-review skills emitting finding objects
-  8  deduplication                     partial   findings are structured, so dedup is possible downstream
-  9  contextual verification           partial   structured output aids verification; you still run the checks
- 10  feasibility filtering             no        reachability is yours
- 11  sandbox replication               no        no sandbox — it is a review harness, not a DAST
- 12  dynamic exploitation              no        static review only
- 13  exploit chaining                  no        no chaining
- 14  remediation engineering           partial   can propose fixes; validation is yours (B2.9)
- 15  severity calibration and reportingpartial   emits severity; calibration against confirmation is yours
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-coverage: {&#x27;yes&#x27;: 2, &#x27;partial&#x27;: 7, &#x27;no&#x27;: 6}
-→ Mantis is a strong Phase 3 stage-7 implementation with a stage-1 loop.
-  Phases 4 and 5 remain yours, which is exactly what B2.6-B2.15 built.
-conforming                                                {&quot;type&quot;:&quot;learning_entry&quot;,&quot;title&quot;:&quot;owner filt…
-conforming                                                {&quot;type&quot;:&quot;finding&quot;,&quot;title&quot;:&quot;SQL injection in …
-non-conforming: learning_entry missing [&#x27;history&#x27;]        {&quot;type&quot;:&quot;learning_entry&quot;,&quot;title&quot;:&quot;path join …
-non-conforming: finding missing [&#x27;cwe&#x27;]                   {&quot;type&quot;:&quot;finding&quot;,&quot;title&quot;:&quot;traversal&quot;,&quot;sever…
-non-conforming: not JSON (Expecting value)                I found a SQL injection in the reports modul…
+No model endpoint is configured, and every skill here needs one.
 
-conformance: 2/5 = 0.40
-file                      result                                score
---------------------------------------------------------------------------
-src/data/reports.py       correct                               1.0
-src/data/docs.py          right file, wrong class (None)        0.5
-src/web/handlers.py       MISSED                                0.0
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-conformance       0.4000   ← structural. NOT quality.
-expert accuracy   0.5000   ← the adoption number
-1 learning entry/entries carried into the next run:
-   owner filter built by concatenation
-      history: introduced in c3d4e5f, fixed once in 2025 and reintroduced
-
-stage 1 input for the next run (Phase 5 → Phase 1):
-   src/data/reports.py        weight 3
-   src/data/docs.py           weight 1
-
-ADOPTION CHECKLIST
-   · map its stages onto your fifteen — know what it does NOT do
-   · score it against YOUR held-out key before trusting a single finding
-   · report conformance and accuracy separately, always
-   · keep Phase 4 — a static reviewer cannot confirm exploitability
-   · feed learning entries back into stage 1, or the loop does not close</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required <code>history</code> field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run the real thing: clone <code>google/mantis</code>, point it at a repository you have ground truth for, and score its output with a scoring harness. The gap between its conformance and its expert accuracy on <em>your</em> code is the only number that should decide whether you adopt it.</p></div></section><div class="expect"><b>Expect</b>The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run&#x27;s risk zones.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Google Mantis</span><span>OpenGrep</span><span>GLM-4.6</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.19.ipynb</code></p></div><div class="pager"><a href="B2.18.html"><span class="k">← Previous</span><span class="t">B2.18 · Agentic AI in the pipeline — attesting control intent for agents and MCP servers</span></a><a class="next" href="C1.0.html"><span class="k">Next →</span><span class="t">C1.0 · Start here — the evolution of non-deterministic threat simulation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required <code>history</code> field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run the real thing: clone <code>google/mantis</code>, point it at a repository you have ground truth for, and score its output with a scoring harness. The gap between its conformance and its expert accuracy on <em>your</em> code is the only number that should decide whether you adopt it.</p></div></section><div class="expect"><b>Expect</b>The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run&#x27;s risk zones.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Google Mantis</span><span>OpenGrep</span><span>GLM-4.6</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.19.ipynb</code></p></div><div class="pager"><a href="B2.18.html"><span class="k">← Previous</span><span class="t">B2.18 · Agentic AI in the pipeline — attesting control intent for agents and MCP servers</span></a><a class="next" href="C1.0.html"><span class="k">Next →</span><span class="t">C1.0 · Start here — the evolution of non-deterministic threat simulation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

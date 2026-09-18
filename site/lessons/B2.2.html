@@ -248,53 +248,14 @@ T-04  I get_booking     load_booking       9  no open CSPM finding on the resour
   agent with no state has no meaningful tampering row.</li>
 <li><strong>Scoring without recording why.</strong> A score nobody can argue with is a score
   nobody will act on.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>id      entry           sink           score  why
---------------------------------------------------------------------------------------------
-T-10  I upload_voucher  store             11  a live CSPM finding on the resource this path reaches
-T-01  S get_booking     load_booking      11  the running role is assumable by *
-T-05  D get_booking     load_booking      10  internet-facing with no WAF in front of it
-T-06  E get_booking     load_booking      10  the identity holds write, not just read
-T-03  R get_booking     load_booking      10  no MFA on the assumable role, so the actor is not established
-T-04  I get_booking     load_booking       9  no open CSPM finding on the resource
-T-07  S upload_voucher  store              9  the running role is assumable by *
-T-02  T get_booking     load_booking       9  entry point requires a session
-T-11  D upload_voucher  store              8  internet-facing with no WAF in front of it
-T-12  E upload_voucher  store              8  the identity holds write, not just read
-T-09  R upload_voucher  store              8  no MFA on the assumable role, so the actor is not established
-T-08  T upload_voucher  store              7  entry point requires a session
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-12 threats across 6 STRIDE categories
-2 trust-boundary crossing(s):
-   get_booking -&gt; load_booking   (0-&gt;2)
-   upload_voucher -&gt; store   (0-&gt;2)
-flowchart LR
-  subgraph src_api[&quot;src/api · trust 0&quot;]
-    get_booking
-    health
-    upload_voucher
-  end
-  subgraph src_data[&quot;src/data · trust 2&quot;]
-    load_booking
-    store
-  end
-  subgraph src_util[&quot;src/util · trust 1&quot;]
-    ·
-  end
-  get_booking ==&gt;|BOUNDARY| load_booking
-  get_booking --&gt; render
-  load_booking --&gt; execute
-  store --&gt; open
-  upload_voucher ==&gt;|BOUNDARY| store</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-2-trust-boundaries.svg" alt="b2 2 trust boundaries" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-2-trust-boundaries.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><figure class="nbdiag"><img src="../assets/diagrams/b2-2-request-sequence.svg" alt="b2 2 request sequence" loading="lazy"><figcaption>Rendered from the skill’s own PlantUML output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-2-request-sequence.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>entry -&gt; sink                       deployed  hardened
-----------------------------------------------------------
-I upload_voucher -&gt; store                   11         1
-S get_booking -&gt; load_booking               11         2
-D get_booking -&gt; load_booking               10         2
-E get_booking -&gt; load_booking               10         2
-R get_booking -&gt; load_booking               10         2
-I get_booking -&gt; load_booking                9         2
+No model endpoint is configured, and every skill here needs one.
 
-threat rows: 12 -&gt; 12   (unchanged)
-max severity: 11 -&gt; 2
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-The rows do not disappear. Hardening removes severity, not threats -
-and the row is what you re-check after the next terraform change.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Point the skill at one of your own services. The work is not the model, it is collecting the five inputs: if any of them is "in somebody's head", that is the input your threat model is currently guessing at, and the guess is always the optimistic one.</p></div></section><div class="expect"><b>Expect</b>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP Threat Dragon</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · What building a harness means in security engineering</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · SAST for agentic code — deterministic Semgrep, then the model pass</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Point the skill at one of your own services. The work is not the model, it is collecting the five inputs: if any of them is "in somebody's head", that is the input your threat model is currently guessing at, and the guess is always the optimistic one.</p></div></section><div class="expect"><b>Expect</b>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP Threat Dragon</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · What building a harness means in security engineering</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · SAST for agentic code — deterministic Semgrep, then the model pass</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

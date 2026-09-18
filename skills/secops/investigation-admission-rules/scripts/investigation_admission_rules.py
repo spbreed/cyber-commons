@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Enforce an admission set on an investigating agent's queries, and record every refusal.
 
-This is the executable half of `investigation-admission-rules`. An investigating
-agent is granted broad read access to find a problem, and broad read access to
-everything is what the incident was about. The admission set is decided per
-investigation class, before the investigation starts.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/secops/investigation-admission-rules/scripts/investigation_admission_rules.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # What this class of investigation may touch. Declared first, not inferred.
 ADMISSION = {
     "agent-misuse": {
@@ -26,41 +53,43 @@ QUERIES = [
     ("agent.traces",   ["agent", "message_body"],               900),   # denied field
     ("gateway.logs",   ["src", "route"],                      90000),   # over the cap
 ]
+# ------------------------------------------------------------------------ run
 
-rule = ADMISSION["agent-misuse"]
-print("investigation class: agent-misuse")
-print(f"   sources admitted : {', '.join(sorted(rule['sources']))}")
-print(f"   fields denied    : {', '.join(sorted(rule['fields_denied']))}")
-print(f"   row cap          : {rule['max_rows']}")
-print()
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-report = {"allowed": [], "refused": []}
-print(f"{'source':<16}{'fields':<34}{'rows':>7}  outcome")
-for source, fields, rows in QUERIES:
-    why = None
-    if source not in rule["sources"]:
-        why = "source not admitted for this class"
-    elif set(fields) & rule["fields_denied"]:
-        bad = ", ".join(sorted(set(fields) & rule["fields_denied"]))
-        why = f"denied field: {bad}"
-    elif rows > rule["max_rows"]:
-        why = f"{rows} rows exceeds the {rule['max_rows']} cap"
-    out = "allow" if why is None else f"REFUSE — {why}"
-    print(f"{source:<16}{','.join(fields):<34}{rows:>7}  {out}")
-    (report["allowed"] if why is None else report["refused"]).append(
-        {"source": source, "fields": fields, "rows": rows, "why": why})
-print()
-print(f"{len(report['allowed'])} allowed · {len(report['refused'])} refused")
-print()
-print("Every refusal is a record, not a silent drop. That matters twice: the")
-print("investigator can ask a human for a grant with the exact query attached,")
-print("and the refusals are themselves evidence that the investigation did not")
-print("become the second incident.")
-print()
-print("Note the third refusal. Nothing about it is sensitive - it is the same")
-print("source and the same fields as an allowed query. It is refused on volume,")
-print("because 90,000 rows is not an investigation, it is a copy.")
 
-assert len(report["refused"]) == 3
-assert any("denied field" in (r["why"] or "") for r in report["refused"])
-assert any("cap" in (r["why"] or "") for r in report["refused"])
+FIXTURE = {"ADMISSION": ADMISSION, "QUERIES": QUERIES}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

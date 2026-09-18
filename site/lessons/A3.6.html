@@ -164,26 +164,14 @@ an unchallengeable metric stops being used.</p>
   that separates an incident from a near miss.</li>
 <li><strong>Raising autonomy because the agent has been reliable.</strong> Reliability is not
   containment; it is the absence of an adversary so far.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>action              reversible  external  routing         per day
-delete_row          False       False     human approval  6
-issue_refund        False       True      human approval  2
-read_report         True        False     policy only     400
-rotate_credential   False       False     human approval  1
-send_email          False       True      human approval  3
-update_ticket       True        False     policy only     260
-write_draft         True        False     policy only     120
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-actions per day            : 792
-reaching a human           : 12
-a reviewer considers ~25/day properly
-gate holds?                : True
+No model endpoint is configured, and every skill here needs one.
 
-Approving everything would send 792 a day to someone who can read
-25. Routing by reversibility sends 12, and every one gets read.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-unlabelled : libfoo has no known vulnerabilities
-labelled   : [machine-generated, unverified] libfoo has no known vulnerabilities
-
-The label does not stop anyone acting on it. It restores the scepticism
-they would give a colleague saying the same sentence.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/a-blast-radius-routing.svg" alt="a blast radius routing" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/a-blast-radius-routing.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Orange is irreversible. Every orange path ends at the human gate, and
-nothing else does - which is why the gate is small enough to be read.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape. The failure mode to carry into your own estate is the last one: raising an agent's autonomy because it has been reliable. Reliability is a measurement of the happy path; blast radius is a measurement of the worst one, and only the second bounds what an approval gate is for.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Count how many approvals your agents generate daily and compare it with 25. If you are above it, decide which actions are reversible enough to be handled by policy instead — that list is usually most of them.</p></div></section><div class="expect"><b>Expect</b>Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.6.ipynb</code></p></div><div class="pager"><a href="A3.5.html"><span class="k">← Previous</span><span class="t">A3.5 · Validating what comes back</span></a><a class="next" href="A3.7.html"><span class="k">Next →</span><span class="t">A3.7 · The agent gateway — one choke point when you scale</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape. The failure mode to carry into your own estate is the last one: raising an agent's autonomy because it has been reliable. Reliability is a measurement of the happy path; blast radius is a measurement of the worst one, and only the second bounds what an approval gate is for.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Count how many approvals your agents generate daily and compare it with 25. If you are above it, decide which actions are reversible enough to be handled by policy instead — that list is usually most of them.</p></div></section><div class="expect"><b>Expect</b>Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.6.ipynb</code></p></div><div class="pager"><a href="A3.5.html"><span class="k">← Previous</span><span class="t">A3.5 · Validating what comes back</span></a><a class="next" href="A3.7.html"><span class="k">Next →</span><span class="t">A3.7 · The agent gateway — one choke point when you scale</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

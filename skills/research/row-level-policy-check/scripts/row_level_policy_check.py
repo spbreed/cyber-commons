@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Query an exposed data API as an anonymous caller with row-level security off and on, and count what a leaked key returns.
 
-This is the executable half of the `row-level-policy-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/research/row-level-policy-check/scripts/row_level_policy_check.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 AGENTS = [
  {"id": "a-0001", "owner": "dana@example",  "handle": "@researchbot",
   "provider_key": "sk-REDACTED-openai",     "claim_token": "clm_8fA2"},
@@ -18,40 +45,9 @@ AGENTS = [
   "provider_key": "AKIA-REDACTED-aws",      "claim_token": "clm_9zR1"},
 ]
 
-def data_api(table, caller, rls_enabled):
-    """Supabase's PostgREST surface, in miniature.
-
-    `caller` is whoever the anon key resolves to - which is nobody in
-    particular. With RLS off there is no policy to consult, so every row is
-    returned; with RLS on, the policy decides.
-    """
-    if not rls_enabled:
-        return list(table)                       # no policy exists to consult
-    return [r for r in table if r["owner"] == caller]
-
-anon = None                                      # the anon key is not a person
-for label, rls in (("RLS disabled (as shipped)", False), ("RLS enabled", True)):
-    rows = data_api(AGENTS, caller=anon, rls_enabled=rls)
-    print(f"{label:28s}rows returned: {len(rows)}")
-    for r in rows:
-        print(f"      {r['handle']:14s}{r['owner']:16s}{r['provider_key']}")
-
-owner_rows = data_api(AGENTS, caller="dana@example", rls_enabled=True)
-print(f"\nsigned in as dana@example, RLS enabled: {len(owner_rows)} row")
-print()
-print("Same key, same endpoint, same table. The only difference is whether a")
-print("policy exists for the API to consult.")
-assert len(data_api(AGENTS, anon, False)) == 3
-assert len(data_api(AGENTS, anon, True)) == 0 and len(owner_rows) == 1
-
 REPORTED_SCALE = {"Treblle": 770_000, "Wiz-sourced reporting": 1_500_000}
-PROVIDERS = ["OpenAI", "Anthropic", "AWS", "GitHub", "Google Cloud"]
 
-for source, n in sorted(REPORTED_SCALE.items()):
-    print(f"{source:26s}{n:>10,} agents exposed")
-low, high = min(REPORTED_SCALE.values()), max(REPORTED_SCALE.values())
-print(f"\nreported range            {low:>10,} - {high:,}")
-print(f"provider accounts implicated: {', '.join(PROVIDERS)}")
+PROVIDERS = ["OpenAI", "Anthropic", "AWS", "GitHub", "Google Cloud"]
 
 # Who can actually revoke each thing that leaked.
 REVOCABLE_BY = {
@@ -59,14 +55,43 @@ REVOCABLE_BY = {
  "the claim token":            "Moltbook",
  "the agent's provider key":   "the individual who created the agent",
 }
-print()
-print(f"{'what leaked':30s}who can revoke it")
-for what in sorted(REVOCABLE_BY):
-    print(f"{what:30s}{REVOCABLE_BY[what]}")
+# ------------------------------------------------------------------------ run
 
-platform_can_fix = [w for w in REVOCABLE_BY if REVOCABLE_BY[w] == "Moltbook"]
-print(f"\nthe platform can revoke {len(platform_can_fix)} of {len(REVOCABLE_BY)}.")
-print("The third is a key in somebody else's provider account, and the only")
-print("person who can turn it off may not know it was ever exposed. That is the")
-print("difference between a platform breach and a supply-chain one.")
-assert len(platform_can_fix) == 2
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"AGENTS": AGENTS, "REPORTED_SCALE": REPORTED_SCALE, "PROVIDERS": PROVIDERS, "REVOCABLE_BY": REVOCABLE_BY}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

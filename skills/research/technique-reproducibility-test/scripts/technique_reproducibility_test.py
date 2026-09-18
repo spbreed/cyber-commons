@@ -1,80 +1,80 @@
 #!/usr/bin/env python3
 """Run a technique enough times to know whether it reproduces, and compute the sample size the comparison actually needed.
 
-This is the executable half of the `technique-reproducibility-test` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/research/technique-reproducibility-test/scripts/technique_reproducibility_test.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import random
+import json
+import pathlib
+import sys
 
-def trial(effect, n=200, seed=7):
-    """Run a stochastic effect n times; report the rate with a 95% interval."""
-    rng = random.Random(seed)
-    hits = sum(effect(rng) for _ in range(n))
-    rate = hits / n
-    half = 1.96 * ((rate * (1 - rate) / n) ** 0.5) if n else 0.0
-    lo, hi = round(max(rate - half, 0), 3), round(min(rate + half, 1), 3)
-    verdict = ("reproducible" if lo > 0.5 else
-               "flaky" if hi > 0.05 else "not reproduced")
-    return {"n": n, "hits": hits, "rate": round(rate, 3), "ci95": (lo, hi),
-            "verdict": verdict}
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # ground-truth landing probabilities for three injection techniques
 TECHNIQUES = {"direct override": 0.05, "context reframe": 0.35, "task nesting": 0.62}
+# ------------------------------------------------------------------------ run
 
-print(f"{'technique':20s}{'rate':>7}{'ci95':>18}  verdict")
-print("-" * 60)
-for name, p in TECHNIQUES.items():
-    r = trial(lambda rng, p=p: rng.random() < p, n=200)
-    print(f"{name:20s}{r['rate']:>7.3f}{str(r['ci95']):>18}  {r['verdict']}")
-print("\n'It worked' is true for all three. Only one is reproducible.")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-def compare(before_p, after_p, n, seed=11):
-    b = trial(lambda rng: rng.random() < before_p, n=n, seed=seed)
-    a = trial(lambda rng: rng.random() < after_p,  n=n, seed=seed + 1)
-    overlap = a["ci95"][1] >= b["ci95"][0]
-    return b, a, overlap
 
-print(f"{'n':>6}{'before':>18}{'after':>18}  conclusion")
-print("-" * 68)
-for n in (20, 100, 1000):
-    b, a, overlap = compare(0.62, 0.48, n)
-    concl = "NOT demonstrated" if overlap else "improvement holds"
-    print(f"{n:>6}{str(b['ci95']):>18}{str(a['ci95']):>18}  {concl}")
-print("\nThe true effect is identical in all three rows. Only sample size changed.")
-print("At n=20 you would report a 23% reduction you cannot support.")
+FIXTURE = {"TECHNIQUES": TECHNIQUES}
 
-def required_n(p_before, p_after, power_z=1.96):
-    """Rough two-proportion sample size for a 95% interval that separates."""
-    p = (p_before + p_after) / 2
-    diff = abs(p_before - p_after)
-    if diff == 0: return float("inf")
-    return int((2 * power_z ** 2 * p * (1 - p)) / (diff ** 2)) + 1
 
-print(f"{'effect you want to detect':34s}{'n required':>11}")
-print("-" * 47)
-for before, after in ((0.62, 0.10), (0.62, 0.31), (0.62, 0.48), (0.62, 0.58)):
-    print(f"{f'{before:.0%} → {after:.0%}':34s}{required_n(before, after):>11}")
-print("\nDetecting a halving is cheap. Detecting a 14-point move is not, and")
-print("detecting a 4-point move is a research project in itself.")
+def main() -> int:
+    announce_backend()
 
-n_needed = required_n(0.62, 0.48)
-b, a, overlap = compare(0.62, 0.48, n_needed)
-print(f"\nre-run at the computed n={n_needed}: "
-      f"before {b['ci95']}, after {a['ci95']}, overlap={overlap}")
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-# Verify: the honest reporting template.
-def report(technique, before, after, n):
-    b, a, overlap = compare(before, after, n)
-    return (f"{technique}\n"
-            f"   before  {b['rate']:.2f} (95% CI {b['ci95']}, n={n})\n"
-            f"   after   {a['rate']:.2f} (95% CI {a['ci95']}, n={n})\n"
-            f"   verdict {'no demonstrated change — intervals overlap' if overlap else 'reduction demonstrated'}")
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-print(report("task nesting, after provenance mitigation", 0.62, 0.48, 20))
-print()
-print(report("task nesting, after provenance mitigation", 0.62, 0.48, 1000))
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

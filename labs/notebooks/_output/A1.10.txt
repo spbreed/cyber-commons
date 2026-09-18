@@ -1,11 +1,11 @@
-one poisoned document, summarised by pricing-agent, sent to its peers:
+no model configured
 
-   pricing-agent   applied 90% discount
-   billing-agent   applied 90% discount
+No model endpoint is configured, and every skill here needs one.
 
-agents that acted on it: 2
-agents actually attacked : 1
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-billing-agent received it from a peer, not from the internet. The
-provenance ('the supplier page says') was dropped on the first hop,
-because summarising is what the hand-off is for.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

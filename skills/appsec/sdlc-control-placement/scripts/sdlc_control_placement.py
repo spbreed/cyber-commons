@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Place CyberTravels' security techniques on the pre/post-deploy line and count the risks covered only on the side that cannot act.
 
-This is the executable half of the `sdlc-control-placement` skill: the coverage
-review the SKILL.md next to it describes, run against CyberTravels' actual
-tooling inventory so the gaps it finds are the ones the rest of this chapter
-goes on to close.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/appsec/sdlc-control-placement/scripts/sdlc_control_placement.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # (technique, side, what the OTHER side sees that this cannot, can it block a merge)
 TECHNIQUES = [
     ("SAST / code analysis",        "pre",  "whether the vulnerable path is reached with real traffic", True),
@@ -36,52 +63,43 @@ RISKS = [
     ("guardrail switched off after the demo",    ["post"]),
     ("secret committed to the repository",       ["pre"]),
 ]
+# ------------------------------------------------------------------------ run
 
-print("techniques, placed")
-print(f"   {'technique':<30}{'side':<7}{'gate':<6}blind to")
-report = {"techniques": [], "risks": []}
-for name, side, blind, gate in TECHNIQUES:
-    print(f"   {name:<30}{side:<7}{'yes' if gate else '-':<6}{blind}")
-    report["techniques"].append({"name": name, "side": side, "blind_to": blind})
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-gate_capable = sum(1 for *_, g in TECHNIQUES if g)
-report["gate_capable"] = gate_capable
-print()
-print(f"{gate_capable} of {len(TECHNIQUES)} can block a merge. Everything else is")
-print("advisory - it produces a ticket, and a ticket is a request, not a control.")
-print()
 
-# Steps 4 and 5 — the two shapes that both read as "covered" on an inventory.
-print("risks, by which side covers them")
-counts = {"pre_only": 0, "post_only": 0, "uncovered": 0}
-for risk, sides in RISKS:
-    if not sides:
-        shape = "uncovered"
-    elif sides == ["pre"]:
-        shape = "pre-only"
-    elif sides == ["post"]:
-        shape = "post-only"
-    else:
-        shape = "covered"
-    counts[shape.replace("-", "_")] = counts.get(shape.replace("-", "_"), 0) + 1
-    mark = {"covered": "  ", "pre-only": "->", "post-only": "->", "uncovered": "!!"}[shape]
-    print(f"   {mark} {risk:<42}{shape}")
-    report["risks"].append({"risk": risk, "sides": sides, "shape": shape})
-report["counts"] = counts
-print()
+FIXTURE = {"TECHNIQUES": TECHNIQUES, "RISKS": RISKS}
 
-print(f"pre-only  {counts['pre_only']}   preventable, and invisible once it ships:")
-print("           nothing on the right would tell you it happened.")
-print(f"post-only {counts['post_only']}   visible, and unpreventable: detection is the whole")
-print("           of the control, and the merge that caused it went through.")
-print(f"uncovered {counts['uncovered']}   nothing on either side. B2.7 is this row - an")
-print("           artefact with no manifest entry has no identifier, so the")
-print("           SCA pass on the left never had anything to look up.")
-print()
-print("All three of those render as one word on a tooling inventory. The middle")
-print("row is the one that gets signed off, because a control exists, it runs,")
-print("and it reports - and it reports afterwards.")
 
-assert counts["post_only"], "no post-only risks - the placement is probably all 'both'"
-assert counts["uncovered"], "an inventory with no gaps has not been read carefully"
-assert gate_capable < len(TECHNIQUES) / 2, "most techniques cannot gate; check the placement"
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

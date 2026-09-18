@@ -1,49 +1,11 @@
-BARE ALERT (what most SOCs receive):
-   patch-agent read /vault/.env
-   rotator-agent read /vault/.env
-   → identical. An analyst cannot tell these apart.
+no model configured
 
-ENRICHED ALERT:
-   actor        patch-agent
-   on behalf of dana@corp
-   chain        dana@corp → orchestrator → patch-agent
-   scopes held  ['repo:read', 'repo:write']
-   verdict      ANOMALY — no secrets scope
+No model endpoint is configured, and every skill here needs one.
 
-   actor        rotator-agent
-   on behalf of ops@corp
-   chain        ops@corp → scheduler → rotator-agent
-   scopes held  ['secrets:read', 'secrets:write']
-   verdict      EXPECTED — this agent rotates secrets
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-agent           no context    with context      truth
---------------------------------------------------------
-patch-agent     escalate      escalate             tp
-rotator-agent   escalate      close                fp
-
-Without scopes, both escalate → the rotator generates a false positive
-every single night, and within a month the rule is tuned off.
-acting identity     which agent — not the human whose token it borrowed
-principal           who the action was for
-delegation chain    who caused the task; where to look for the trigger
-scopes held         THE decisive field — is this action within its remit?
-tool + target       what it did
-session/trace id    so the analyst can pull the whole run (D1.3)
-
-patch-agent     ESCALATE (outside remit)
-                dana@corp → orchestrator → patch-agent  scopes=['repo:read', 'repo:write']
-rotator-agent   close (within remit)
-                ops@corp → scheduler → rotator-agent  scopes=['secrets:read', 'secrets:write']
-conformance: 0 problem(s)
-   A-1  true_positive        auto_closed=False sampled=False
-   A-2  benign_true_positive auto_closed=True  sampled=False
-   A-3  true_positive        auto_closed=False sampled=False
-   A-4  benign_true_positive auto_closed=True  sampled=True
-   A-5  true_positive        auto_closed=False sampled=False
-   A-6  benign_true_positive auto_closed=True  sampled=True
-
-auto-closed 3, of which 2 sampled back for human review
-
-`benign_true_positive` is its own verdict. Folding it into false-positive
-would teach the tuner to suppress a detection that is working exactly as
-designed - the read really happened, it was simply within remit.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

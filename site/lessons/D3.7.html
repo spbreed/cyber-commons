@@ -94,49 +94,14 @@ resources, including a payments repository and a dev vault.
 <li><strong>Revoking one agent's token</strong> when the identity is shared, and calling it
   contained.</li>
 <li><strong>Containing before snapshotting</strong> a log store the agent can write to.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>chain                     dana@corp → orchestrator → patch-agent → deploy-agent
-scoped_last_actor_only    [&#x27;cluster-prod&#x27;]
-scoped_whole_chain        [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
-missed_by_naive_scoping   [&#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
-undercount_factor         6.0
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-Scoping the last actor finds one cluster. The chain reached six
-resources, including a payments repository and a dev vault.
- depth   last-actor scope   chain scope  undercount
-----------------------------------------------------
-     1                  3             3         1.0
-     2                  2             4         2.0
-     3                  2             5         2.5
-     4                  1             6         6.0
+No model endpoint is configured, and every skill here needs one.
 
-Each hop adds resources the last actor never touched. This is why B2.0
-bounds delegation depth: depth is an incident-scope multiplier.
-resources_direct      [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
-actors_in_scope       [&#x27;build-agent&#x27;, &#x27;dana@corp&#x27;, &#x27;deploy-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;orchestrator&#x27;, &#x27;patch-agent&#x27;, &#x27;test-agent&#x27;]
-second_order_actors   [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Five more identities shared a resource with the compromised chain.
-They are not confirmed compromised — they are IN SCOPE, which is different
-and is the distinction an incident record has to make explicitly.
-SCOPE
-  chain              dana@corp → orchestrator → patch-agent → deploy-agent
-  confirmed touched  [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
-  would have been missed by scoping the acting agent alone:
-                     [&#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
-  undercount factor  6.0×
-  in scope, not confirmed (shared a resource):
-                     [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
-conformance: 0 problem(s)
-
-authorised but wrong : 3
-exceeded authority   : 0
-reach                : 6 resources
-confirmed exfil      : 0
-revoking one credential does NOT stop: [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
-
-Zero actions exceeded authority, and the incident still happened. That
-combination says the grant was too broad - a different fix from a
-control that failed, which is why the contract counts them separately.
-
-Reach is 4 resources; confirmed exfiltration is 0. Reporting the second
-as the scope is how a notification decision gets made on the wrong number.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Scoping the last actor finds <code>cluster-prod</code> alone; the whole chain reaches six resources, missing five, with an undercount factor of 6.0. The undercount grows with each hop. Transitive scoping adds five second-order identities that shared a resource, explicitly marked as in scope rather than confirmed compromised.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>For your last incident involving a service account, recompute the scope by walking what else that account could reach. The number is almost always larger than what was written in the report.</p></div></section><div class="expect"><b>Expect</b>The action-plane actor is a sub-agent two hops from the prompt that started it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.7.ipynb</code></p></div><div class="pager"><a href="D3.6.html"><span class="k">← Previous</span><span class="t">D3.6 · Plan, then replan — an investigation that changes its mind</span></a><a class="next" href="D3.8.html"><span class="k">Next →</span><span class="t">D3.8 · Fleet-level correlation — seeing a swarm</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Scoping the last actor finds <code>cluster-prod</code> alone; the whole chain reaches six resources, missing five, with an undercount factor of 6.0. The undercount grows with each hop. Transitive scoping adds five second-order identities that shared a resource, explicitly marked as in scope rather than confirmed compromised.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>For your last incident involving a service account, recompute the scope by walking what else that account could reach. The number is almost always larger than what was written in the report.</p></div></section><div class="expect"><b>Expect</b>The action-plane actor is a sub-agent two hops from the prompt that started it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.7.ipynb</code></p></div><div class="pager"><a href="D3.6.html"><span class="k">← Previous</span><span class="t">D3.6 · Plan, then replan — an investigation that changes its mind</span></a><a class="next" href="D3.8.html"><span class="k">Next →</span><span class="t">D3.8 · Fleet-level correlation — seeing a swarm</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

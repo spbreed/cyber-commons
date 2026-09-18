@@ -1,67 +1,42 @@
 #!/usr/bin/env python3
 """Check whether an incident run can be replayed at all, and what a later model version does to the replay.
 
-This is the executable half of the `run-replayability-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/response/run-replayability-audit/scripts/run_replayability_audit.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-from dataclasses import dataclass, field
+import json
+import pathlib
+import sys
 
-@dataclass
-class Run:
-    prompts: list = field(default_factory=list)
-    tool_results: list = field(default_factory=list)
-    model_version: str = ""
-    seed: object = None
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-    def replayable(self):
-        missing = []
-        if not self.prompts:
-            missing.append("prompts — cannot reconstruct what it was asked")
-        if not self.tool_results:
-            missing.append("tool results — the agent saw a world you cannot rebuild")
-        if not self.model_version:
-            missing.append("model version — a silent upgrade changes the output")
-        if self.seed is None:
-            missing.append("seed — sampling makes the run unrepeatable")
-        return (not missing), missing
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-CONFIGS = {
- "fully instrumented": Run(["fix SEC-4471"], ["file contents…"], "glm-4.6@2026-07-14", 42),
- "typical production": Run(["fix SEC-4471"], ["file contents…"], "", None),
- "prompts only":       Run(["fix SEC-4471"], [], "", None),
- "actions only":       Run(),
-}
-for name, r in CONFIGS.items():
-    ok, missing = r.replayable()
-    print(f"{name:22s} replayable={ok}")
-    for m in missing: print(f"      ✗ {m}")
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-import hashlib
-
-def model_output(prompt, tool_result, version, seed):
-    """Deterministic stand-in: output depends on ALL FOUR inputs."""
-    h = hashlib.sha256(f"{prompt}|{tool_result}|{version}|{seed}".encode()).hexdigest()
-    return "read_credentials" if int(h[:2], 16) % 3 == 0 else "read_source"
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 INCIDENT_INPUTS = ("fix SEC-4471", "billing.py: charge(card)…")
-
-print("reproduce the incident under the ORIGINAL model version:")
-orig = model_output(*INCIDENT_INPUTS, "glm-4.6@2026-07-14", 42)
-print(f"   → {orig}")
-
-print("\nreproduce it AFTER the provider upgraded (same prompts, same tool results):")
-for v in ("glm-4.6@2026-08-01", "glm-4.7@2026-08-01"):
-    out = model_output(*INCIDENT_INPUTS, v, 42)
-    match = "reproduces" if out == orig else "DOES NOT REPRODUCE"
-    print(f"   {v:22s} → {out:18s} {match}")
-
-print("\nWithout a pinned version you cannot tell 'the agent did not do this'")
-print("from 'the model that did it no longer exists'.")
 
 COST = {
  "model version": (1,  "one string per run", "invalidates everything else if missing"),
@@ -69,25 +44,43 @@ COST = {
  "prompts":       (3,  "storage + privacy review (D1.3)", "what it was asked"),
  "tool results":  (5,  "largest volume, highest sensitivity", "what it saw"),
 }
-print(f"{'field':16s}{'cost':>6}  {'what it costs':38s}why it matters")
-print("-" * 100)
-for f, (c, cost, why) in sorted(COST.items(), key=lambda kv: kv[1][0]):
-    print(f"{f:16s}{c:>6}  {cost:38s}{why}")
+# ------------------------------------------------------------------------ run
 
-print("\nrecording order, by value per unit cost:")
-for i, f in enumerate(sorted(COST, key=lambda k: COST[k][0]), 1):
-    print(f"   {i}. {f}")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-def upgrade(run, add):
-    return Run(prompts=run.prompts or (["…"] if "prompts" in add else []),
-               tool_results=run.tool_results or (["…"] if "tool results" in add else []),
-               model_version=run.model_version or ("pinned" if "model version" in add else ""),
-               seed=run.seed if run.seed is not None else (42 if "seed" in add else None))
 
-cur = CONFIGS["typical production"]
-added = set()
-for f in sorted(COST, key=lambda k: COST[k][0]):
-    added.add(f)
-    ok, missing = upgrade(cur, added).replayable()
-    print(f"\nafter adding {f:16s} replayable={ok}  still missing={len(missing)}")
-assert upgrade(cur, set(COST)).replayable()[0]
+FIXTURE = {"INCIDENT_INPUTS": INCIDENT_INPUTS, "COST": COST}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

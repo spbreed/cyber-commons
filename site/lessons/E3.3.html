@@ -79,54 +79,14 @@ advance is what stops it being abandoned in the second.</p>
 <li><strong>Starting with evaluation.</strong> It depends on nearly everything else.</li>
 <li><strong>Arguing about order without the dependency list.</strong> It becomes preference.</li>
 <li><strong>Not warning about the quiet quarters.</strong> The plan gets abandoned mid-way.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code> step  name          needs     unlocks
-------------------------------------------------------------------------------------
-    1  inventory     []        you can now tier and assign owners
-    2  identity      [1]       per-agent revocation; attribution in logs
-    3  containment   [1]       bounded blast radius; a red team has something to test
-    4  evidence      [2]       act chains; replayable runs; a drift baseline
-    5  evaluation    [4]       accuracy you can defend; regression cases
-    6  continuous    [4, 5]    freshness windows; drift alerts; live posture
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-what is doable from a standing start:
-    [1]
-=== popular order ===
-   5. evaluation    BLOCKED on [&#x27;evidence&#x27;]
-   6. continuous    BLOCKED on [&#x27;evidence&#x27;, &#x27;evaluation&#x27;]
-   1. inventory     done
-   3. containment   done
-   2. identity      done
-   4. evidence      done
-   completed 4/6, blocked 2
+No model endpoint is configured, and every skill here needs one.
 
-=== correct order ===
-   1. inventory     done
-   2. identity      done
-   3. containment   done
-   4. evidence      done
-   5. evaluation    done
-   6. continuous    done
-   completed 6/6, blocked 0
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-popular order completes 4/6 on the first pass;
-2 step(s) have to be redone after their prerequisites land.
-=== eval-first, one quarter in — 0 capabilit(y/ies) ===
-   no   can list every AI asset with an owner
-   no   can revoke one agent without stopping the others
-   no   can bound what a compromised agent reaches
-   no   can say who caused a specific action, and replay it
-   no   can defend an accuracy number to a supervisor
-   no   can say what is TRUE TODAY, not what passed once
-
-=== correct order, one quarter in — 3 capabilit(y/ies) ===
-   YES  can list every AI asset with an owner
-   YES  can revoke one agent without stopping the others
-   YES  can bound what a compromised agent reaches
-   no   can say who caused a specific action, and replay it
-   no   can defend an accuracy number to a supervisor
-   no   can say what is TRUE TODAY, not what passed once
-
-after equal effort: eval-first has 0 capabilities, correct order has 3
-
-The eval-first programme can produce a dashboard. It cannot switch
-anything off, and it cannot say who did what.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Only inventory is doable from a standing start. The popular evaluation-first order completes 4 of 6 on the first pass with 2 steps blocked on missing prerequisites; the correct order completes all six. After equal effort the eval-first programme holds 1 capability against the correct order's 3, and can produce a dashboard while being unable to revoke an agent or attribute an action.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Locate your programme on the six steps honestly. Most are between 2 and 3 while reporting on 5, which is exactly the gap this sequence prevents — and the fix is to stop reporting 5 until 2 and 3 are done.</p></div></section><div class="expect"><b>Expect</b>Ordered by winnability × risk retired, with one explicit refusal. A programme without a &#x27;no&#x27; has no policy.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.3.ipynb</code></p></div><div class="pager"><a href="E3.2.html"><span class="k">← Previous</span><span class="t">E3.2 · Governing autonomy rather than approving tools</span></a><a class="next" href="E3.4.html"><span class="k">Next →</span><span class="t">E3.4 · Org design and ownership</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Only inventory is doable from a standing start. The popular evaluation-first order completes 4 of 6 on the first pass with 2 steps blocked on missing prerequisites; the correct order completes all six. After equal effort the eval-first programme holds 1 capability against the correct order's 3, and can produce a dashboard while being unable to revoke an agent or attribute an action.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Locate your programme on the six steps honestly. Most are between 2 and 3 while reporting on 5, which is exactly the gap this sequence prevents — and the fix is to stop reporting 5 until 2 and 3 are done.</p></div></section><div class="expect"><b>Expect</b>Ordered by winnability × risk retired, with one explicit refusal. A programme without a &#x27;no&#x27; has no policy.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.3.ipynb</code></p></div><div class="pager"><a href="E3.2.html"><span class="k">← Previous</span><span class="t">E3.2 · Governing autonomy rather than approving tools</span></a><a class="next" href="E3.4.html"><span class="k">Next →</span><span class="t">E3.4 · Org design and ownership</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

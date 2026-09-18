@@ -1,25 +1,11 @@
-seam                        owner                           lesson
-------------------------------------------------------------------------------
-AppSec ↔ Platform           platform-security               A3.1
-Identity ↔ SecOps           on-call SRE, pre-authorised     A3.6
-GRC ↔ Engineering           ⚠ NOBODY                        E3.2
-SOC ↔ Data                  ⚠ NOBODY                        D1.3
-CISO office ↔ Legal         legal, on IR notification       E2.6
-AppSec ↔ SOC                detection engineering           D2.2
+no model configured
 
-2/6 seams have no named owner:
-   who decides an autonomy rung?
-   who retains agent traces, and for how long?
-step                                  seam                  owned   hours
-----------------------------------------------------------------------------
-detection fires                       SOC                    True     0.2
-agent identified as the actor         SOC                    True     1.0
-decision to revoke the identity       Identity ↔ SecOps      True     0.3
-decide trace retention for evidence   SOC ↔ Data            False    14.0   ← stalls
-re-tier the agent post-incident       GRC ↔ Engineering     False    21.0   ← stalls
+No model endpoint is configured, and every skill here needs one.
 
-total elapsed: 36.5 hours
-if every seam were owned: 1.5 hours (24× faster)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-The two unowned steps account for 96% of the elapsed time, and both are
-decisions rather than work.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

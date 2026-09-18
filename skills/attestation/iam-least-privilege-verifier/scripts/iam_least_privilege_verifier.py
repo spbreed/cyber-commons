@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Print an entitlement at full resolution and evaluate the same tool calls under allow-by-default and under default-deny.
 
-This is the executable half of the `iam-least-privilege-verifier` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/attestation/iam-least-privilege-verifier/scripts/iam_least_privilege_verifier.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # One agent's entire entitlement. Not "the Workflow Agent may query" - this
 # SPIFFE ID, these tools, these resources, these verbs. Anything not written
 # here is refused, so the file is also the complete answer to "what can this
@@ -25,50 +52,43 @@ ENTITLEMENTS = {
 }
 
 WF = "spiffe://cybertravels.com/ns/prod/sa/workflow-agent"
+# ------------------------------------------------------------------------ run
 
-def decide(identity, tool, resource, verb, default_deny=True):
-    """Four inputs. No matching rule means refuse."""
-    resources = ENTITLEMENTS.get(identity, {}).get(tool)
-    if resources is None:
-        return (False, "no entitlement for this identity+tool") if default_deny \
-               else (True, "allowed by default")
-    for res_prefix in sorted(resources):
-        if resource.startswith(res_prefix):
-            verbs = resources[res_prefix]
-            if "*" in verbs or verb in verbs:
-                return True, f"{tool} on {res_prefix} permits {verb}"
-            return False, f"{verb} not permitted on {res_prefix} (only {sorted(verbs)})"
-    return (False, "resource outside the entitlement") if default_deny \
-           else (True, "allowed by default")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-for tool, res in sorted((t, r) for t, rs in ENTITLEMENTS[WF].items() for r in rs):
-    print(f"   {tool:12s}{res:26s}{sorted(ENTITLEMENTS[WF][tool][res])}")
 
-CALLS = [
- (WF, "run_query",   "table:bookings",           "SELECT"),  # intended
- (WF, "run_query",   "table:customer_pii",       "SELECT"),  # A1.5, resource
- (WF, "charge_card", "payments:booking",         "REFUND"),  # R1, verb
- (WF, "send_email",  "domain:archive.evil.example", "*"),    # A1.3, exfiltration
- (WF, "drop_table",  "table:bookings",           "*"),       # tool never granted
-]
+FIXTURE = {"ENTITLEMENTS": ENTITLEMENTS, "WF": WF}
 
-for mode in (False, True):
-    label = "DEFAULT-DENY" if mode else "allow-by-default"
-    allowed = 0
-    print(f"{label}:")
-    for identity, tool, resource, verb in CALLS:
-        ok, why = decide(identity, tool, resource, verb, default_deny=mode)
-        allowed += ok
-        print(f"   {tool:12s}{resource:30s}{verb:7s}"
-              f"{'ALLOW' if ok else 'deny ':6s}{why}")
-    print(f"   -> {allowed}/{len(CALLS)} permitted\n")
 
-print("Only the first call should succeed. Under allow-by-default four do, and")
-print("each one is a real risk from Chapter 1 walking through.")
-print()
-print("Row three is the one to sit with: same identity, same tool, same")
-print("resource, refused on the VERB. An entitlement attached to the tool")
-print("instead of the call cannot express that distinction at all - and the")
-print("distance between CHARGE and REFUND is the whole of R1.")
-assert sum(decide(*c, default_deny=True)[0] for c in CALLS) == 1
-assert not decide(WF, "charge_card", "payments:booking", "REFUND")[0]
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,23 +1,11 @@
-action                         reversible   radius   tier
-throttle one agent                   True    agent   automated
-reduce one agent's scope             True    agent   automated
-revoke one agent's token             True    agent   automated
-reroute a tenant's traffic           True   tenant   human-in-the-loop
-force HITL on every agent            True   estate   human-in-the-loop
-fleet kill switch                    True   estate   human-in-the-loop
-delete the agent's workdir          False    agent   manual
-roll back the tenant's data         False   tenant   manual
-rotate the estate's root CA         False   estate   manual
+no model configured
 
-   automated           3
-   human-in-the-loop   3
-   manual              3
+No model endpoint is configured, and every skill here needs one.
 
-Reversibility dominates radius, and that ordering is the policy's whole
-content. 'delete the agent's workdir' touches one agent and is still
-manual, because there is no undo - while 'force HITL on every agent'
-touches the entire estate and is only human-in-the-loop, because it is
-one flag and it can be turned back off.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Write this down once and every runbook inherits its tier. Decide it per
-runbook and the blast radius of your response is unknown until it fires.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

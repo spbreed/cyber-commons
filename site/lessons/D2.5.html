@@ -92,18 +92,14 @@ refund on BK-772                            True    0      0%  REJECT — matche
 <li><strong>Selecting on "does it catch the incident".</strong> Every candidate does.</li>
 <li><strong>Shipping without a false-positive number.</strong> That is a guess with syntax.</li>
 <li><strong>Never writing the bad candidates.</strong> Then nothing shows the good one is good.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>incident: 3 steps · benign corpus: 84 runs
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-candidate rule                          fires on   FP  FP rate  verdict
-any refund                                  True   18     21%  REJECT — buries the queue
-refund with no approval in the run          True    0      0%  ship
-refund on BK-772                            True    0      0%  REJECT — matches this incident only
+No model endpoint is configured, and every skill here needs one.
 
-All three rules catch the incident. That is the trap: catching the thing
-that already happened is the one property every candidate has, so it
-cannot be the property you select on.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-&#x27;any refund&#x27; fires on 18 legitimate refunds - a 21% false-positive
-rate, and refunds are the business. &#x27;refund on BK-772&#x27; is perfect on this
-corpus and worthless tomorrow, because the booking id will be different.
-Only the sequence rule generalises AND stays quiet.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>All three candidates catch the incident; only the sequence rule ships. The naive rule fires on 18 legitimate refunds — a 21% false-positive rate on a business that runs on refunds.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Add a benign run that the shipped rule fires on. If you cannot construct one, your corpus is too easy.</p></div></section><div class="expect"><b>Expect</b>Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.5.ipynb</code></p></div><div class="pager"><a href="D2.4.html"><span class="k">← Previous</span><span class="t">D2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human</span></a><a class="next" href="D2.6.html"><span class="k">Next →</span><span class="t">D2.6 · Honeypots, canaries and deception — the detector with no threshold</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>All three candidates catch the incident; only the sequence rule ships. The naive rule fires on 18 legitimate refunds — a 21% false-positive rate on a business that runs on refunds.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Add a benign run that the shipped rule fires on. If you cannot construct one, your corpus is too easy.</p></div></section><div class="expect"><b>Expect</b>Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.5.ipynb</code></p></div><div class="pager"><a href="D2.4.html"><span class="k">← Previous</span><span class="t">D2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human</span></a><a class="next" href="D2.6.html"><span class="k">Next →</span><span class="t">D2.6 · Honeypots, canaries and deception — the detector with no threshold</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

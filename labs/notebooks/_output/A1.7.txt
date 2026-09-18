@@ -1,16 +1,11 @@
-what the downstream service recorded:
-   caller=svc-agent-7f3a1c  read    reports
-   caller=svc-agent-7f3a1c  read    reports
-   caller=svc-agent-7f3a1c  read    reports
-   caller=svc-agent-7f3a1c  delete  prod.customers
+no model configured
 
-incident: delete on prod.customers
-which agent did it? candidates: ['deploy-agent', 'patch-agent', 'triage-agent']
-distinguishable from the record? False
+No model endpoint is configured, and every skill here needs one.
 
-containment options:
-   rotate svc-agent-7f3a1c -> stops the incident, and stops 3 agents including 2 innocent ones
-   rotate only the culprit -> not available; there is no 'only'
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-No attacker forged anything. Impersonation is the resting state of a
-system where identity was never per-workload.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

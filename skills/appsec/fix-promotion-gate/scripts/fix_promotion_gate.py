@@ -1,16 +1,41 @@
 #!/usr/bin/env python3
 """Promote four candidate patches from the sandbox replica through QA to a merge request, and count how many CI alone would have merged.
 
-This is the executable half of the `fix-promotion-gate` skill. The four
-candidates are the ones from B2.16's confirmed SQL injection in CyberTravels'
-booking service: one real fix, one that changes behaviour, one that only moves
-the pattern, and one that closes the bug by deleting the feature.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/appsec/fix-promotion-gate/scripts/fix_promotion_gate.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-from cyber_commons_skill_runtime import emit_diagram, puml_sequence
+import json
+import pathlib
+import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # (id, patch, ci_green, exploit_blocked_in_replica, behaviour_preserved_in_qa,
 #  new_findings, what it actually did)
 CANDIDATES = [
@@ -27,102 +52,43 @@ CANDIDATES = [
 # Step 2 — the control. Without it a probe that stopped asserting reports every
 # patch as a success, and this is the run that proves the probe still works.
 EXPLOIT_ON_UNPATCHED = True
+# ------------------------------------------------------------------------ run
 
-print("the exploit, against the unpatched build in the replica")
-print(f"   reproduces: {EXPLOIT_ON_UNPATCHED}   <- if this were False the probe is")
-print("               broken and every result below would be meaningless")
-print()
-
-report = {"candidates": [], "evidence_attached": []}
-print(f"   {'':<3}{'CI':<5}{'exploit':<9}{'behaviour':<11}{'new':<5}promoted to")
-for cid, patch, ci, blocked, behaviour, new, what in CANDIDATES:
-    if not blocked:
-        promoted, died = "rejected", "sandbox: exploit still works"
-    elif not behaviour:
-        promoted, died = "rejected", "qa: behaviour changed"
-    elif new:
-        promoted, died = "rejected", "finding diff: introduced a new one"
-    else:
-        promoted, died = "merge-request", ""
-    print(f"   {cid:<3}{'ok' if ci else '--':<5}{'blocked' if blocked else 'WORKS':<9}"
-          f"{'same' if behaviour else 'CHANGED':<11}{new:<5}{promoted}"
-          f"{'  <- ' + died if died else ''}")
-    report["candidates"].append({"id": cid, "ci_green": ci,
-                                 "exploit_blocked": blocked,
-                                 "behaviour_preserved": behaviour,
-                                 "new_findings": new, "promoted_to": promoted,
-                                 "died_at": died})
-print()
-
-for cid, patch, *_rest, what in CANDIDATES:
-    print(f"   {cid}  {what}")
-print()
-
-ci_alone = sum(1 for c in CANDIDATES if c[2])
-opened = sum(1 for c in report["candidates"] if c["promoted_to"] == "merge-request")
-report["would_merge_on_ci_alone"] = ci_alone
-report["merge_requests_opened"] = opened
-
-print(f"merge requests CI alone would have opened : {ci_alone}")
-print(f"merge requests the gates opened           : {opened}")
-print()
-print("C is the one worth staring at. It is green, the rule no longer fires,")
-print("and the exploit works unchanged - the patch moved the pattern rather than")
-print("closing the injection. Only re-running the exploit catches that, and only")
-print("in an environment built to be attacked.")
-print()
-print("D is the other kind. It passes every gate above and it is still wrong:")
-print("it closes the finding by deleting partial-reference search, which is a")
-print("feature travellers use. No automated gate rejects D, because 'is this the")
-print("mechanism we want' is not a property of a test run - it is the question")
-print("the merge request exists to ask a human.")
-print()
-
-# Step 5 — the evidence travels with the request, or the reviewer re-derives it.
-report["evidence_attached"] = [
-    "exploit run against the unpatched build: reproduces",
-    "exploit run against the patched build: blocked",
-    "QA regression: 4/4 booking behaviours unchanged",
-    "finding diff: target finding gone, 0 introduced",
-]
-print("attached to the merge request for A:")
-for e in report["evidence_attached"]:
-    print(f"   - {e}")
-print()
-print("A reviewer opening that request does not have to establish whether the")
-print("bug is closed. That is answered on the page, so the review can be about")
-print("D's question instead - which is the only one they are needed for.")
-
-assert EXPLOIT_ON_UNPATCHED, "the proof-of-fix control must reproduce"
-assert ci_alone > opened, "if CI alone merges no more than the gates, a gate is not running"
-# Two reach review, and one of those two is D. The gates are not a substitute
-# for the review; they are what makes the review about something a human is
-# needed for.
-assert opened == 2, "the gates should stop the evasion and the behaviour change, and not D"
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
 
-# The promotion path as a sequence, because that is the shape it has: one patch
-# moving between three environments over time, with a different question asked
-# at each. A graph would say which environments exist; a sequence says the order
-# they are asked in, and the order is the whole control.
-_parts = [("dev", "the patch", "unit"),
-          ("replica", "sandbox replica", "sink"),
-          ("qa", "QA", "unit"),
-          ("master", "merge request\\nto master", "control")]
-_msgs = [("dev", "replica", "re-run the exploit", ""),
-         ("replica", "replica", "and against the UNPATCHED build", ""),
-         ("replica", "dev", "C dies here: exploit still works", "danger"),
-         ("replica", "qa", "survivors only", "control"),
-         ("qa", "dev", "B dies here: booking ref truncated", "danger"),
-         ("qa", "master", "A and D, with the evidence attached", "control")]
-_notes = [("master", "D passed every gate and still should not merge.\n"
-                     "Whether this is the mechanism we want is not a test result.")]
+FIXTURE = {"CANDIDATES": CANDIDATES, "EXPLOIT_ON_UNPATCHED": EXPLOIT_ON_UNPATCHED}
 
-print()
-emit_diagram("b2-11-promotion-path",
-             puml=puml_sequence("A security patch, from the sandbox to master",
-                                _parts, _msgs, notes=_notes))
-print()
-print("Read the order rather than the boxes. The exploit re-run is first because")
-print("it is the only gate that cannot be satisfied by editing the code around a")
-print("detector, and it is the one that gets skipped.")
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

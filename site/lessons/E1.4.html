@@ -72,77 +72,14 @@ SB-1    preventive  2 clause(s): NIST AI RMF: MANAGE-2.1
 <li><strong>A control with no artefact.</strong> It cannot be shown.</li>
 <li><strong>Claiming clause coverage directly.</strong> The assessor asks which control, and
   there is no answer.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>control kind        satisfies
-------------------------------------------------------------------------------------
-AC-1    preventive  3 clause(s): NIST AI RMF: GOVERN-1.2
-                    ISO 42001: 6.1
-                    EU AI Act: Art.14
-AC-2    preventive  2 clause(s): NIST AI RMF: MANAGE-2.2
-                    ISO 42001: 8.1
-SB-1    preventive  2 clause(s): NIST AI RMF: MANAGE-2.1
-                    ISO 27001: A.8.20
-SB-2    preventive  1 clause(s): EU AI Act: Art.14 human oversight
-EV-1    detective   2 clause(s): ISO 42001: 9.1
-                    EU AI Act: Art.12 record-keeping
-EV-2    detective   1 clause(s): NIST AI RMF: MEASURE-2.3
-DR-1    detective   2 clause(s): NIST AI RMF: MEASURE-2.4
-                    ISO 42001: 9.1
-ST-1    corrective  2 clause(s): EU AI Act: Art.14
-                    DORA: Art.11
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-tier critical: 8 controls → 13 framework clauses
-   controls   [&#x27;AC-1&#x27;, &#x27;AC-2&#x27;, &#x27;SB-1&#x27;, &#x27;SB-2&#x27;, &#x27;EV-1&#x27;, &#x27;EV-2&#x27;, &#x27;DR-1&#x27;, &#x27;ST-1&#x27;]
-   satisfies  DORA: Art.11
-   satisfies  EU AI Act: Art.12 record-keeping
-   satisfies  EU AI Act: Art.14
-   satisfies  EU AI Act: Art.14 human oversight
-   satisfies  ISO 27001: A.8.20
-   satisfies  ISO 42001: 6.1
-   satisfies  ISO 42001: 8.1
-   satisfies  ISO 42001: 9.1
-   satisfies  NIST AI RMF: GOVERN-1.2
-   satisfies  NIST AI RMF: MANAGE-2.1
-   satisfies  NIST AI RMF: MANAGE-2.2
-   satisfies  NIST AI RMF: MEASURE-2.3
-   satisfies  NIST AI RMF: MEASURE-2.4
+No model endpoint is configured, and every skill here needs one.
 
-tier medium: 5 controls → 10 framework clauses
-   controls   [&#x27;AC-1&#x27;, &#x27;AC-2&#x27;, &#x27;SB-1&#x27;, &#x27;SB-2&#x27;, &#x27;EV-1&#x27;]
-   satisfies  EU AI Act: Art.12 record-keeping
-   satisfies  EU AI Act: Art.14
-   satisfies  EU AI Act: Art.14 human oversight
-   satisfies  ISO 27001: A.8.20
-   satisfies  ISO 42001: 6.1
-   satisfies  ISO 42001: 8.1
-   satisfies  ISO 42001: 9.1
-   satisfies  NIST AI RMF: GOVERN-1.2
-   satisfies  NIST AI RMF: MANAGE-2.1
-   satisfies  NIST AI RMF: MANAGE-2.2
-clause                                                operating control?
---------------------------------------------------------------------------
-NIST AI RMF: GOVERN-1.1 policies are documented      NO — checklist only
-NIST AI RMF: GOVERN-1.2 roles and responsibilities are defined NO — checklist only
-NIST AI RMF: MAP-1.1 context is established          NO — checklist only
-NIST AI RMF: MEASURE-2.3 performance is evaluated    NO — checklist only
-ISO 42001: 6.1 actions to address risks              NO — checklist only
-ISO 42001: 7.2 competence                            NO — checklist only
-ISO 42001: 9.1 monitoring and measurement            NO — checklist only
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-7/7 clauses have no operating control behind them.
-Working framework-first, those get a policy document and a tick. Working
-control-first, they are visibly uncovered — which is the useful state.
-AC-1  gateway logs containing an act chain for every action; monthly sample
-      → NIST AI RMF: GOVERN-1.2
-      → ISO 42001: 6.1
-      → EU AI Act: Art.14
-AC-2  regression suite cases IDN-01/IDN-04, run on every release
-      → NIST AI RMF: MANAGE-2.2
-      → ISO 42001: 8.1
-SB-1  90-day egress denial log
-      → NIST AI RMF: MANAGE-2.1
-      → ISO 27001: A.8.20
-SB-2  tool policy in git + denial log
-      → EU AI Act: Art.14 human oversight
-
-8 controls produce evidence for 13 framework clauses.
-One artefact, many clauses. That ratio is why control-first is cheaper.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The catalogue's 8 controls map to framework clauses across NIST AI RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier requires all 8 and satisfies 12 clauses; medium requires 5. Working framework-first leaves 3 of 7 clauses with no operating control. The evidence pack shows one artefact satisfying several clauses.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take one framework clause your programme claims to satisfy and ask which operating control produces its evidence. If the answer is a policy document, the clause is ticked and undefended.</p></div></section><div class="expect"><b>Expect</b>Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OSCAL</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.4.ipynb</code></p></div><div class="pager"><a href="E1.3.html"><span class="k">← Previous</span><span class="t">E1.3 · Risk tiering agentic use cases</span></a><a class="next" href="E1.5.html"><span class="k">Next →</span><span class="t">E1.5 · Evaluation output as audit evidence</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The catalogue's 8 controls map to framework clauses across NIST AI RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier requires all 8 and satisfies 12 clauses; medium requires 5. Working framework-first leaves 3 of 7 clauses with no operating control. The evidence pack shows one artefact satisfying several clauses.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take one framework clause your programme claims to satisfy and ask which operating control produces its evidence. If the answer is a policy document, the clause is ticked and undefended.</p></div></section><div class="expect"><b>Expect</b>Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OSCAL</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.4.ipynb</code></p></div><div class="pager"><a href="E1.3.html"><span class="k">← Previous</span><span class="t">E1.3 · Risk tiering agentic use cases</span></a><a class="next" href="E1.5.html"><span class="k">Next →</span><span class="t">E1.5 · Evaluation output as audit evidence</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

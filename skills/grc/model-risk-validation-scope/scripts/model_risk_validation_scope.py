@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Check whether a model validated at one autonomy level and tool set is still covered by that validation as deployed.
 
-This is the executable half of the `model-risk-validation-scope` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/grc/model-risk-validation-scope/scripts/model_risk_validation_scope.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 PILLARS = {
  "conceptual_soundness": ("is the method appropriate for the purpose",
                           "assumes the purpose is stable and stated"),
@@ -17,12 +44,6 @@ PILLARS = {
  "independent_validation":("did someone other than the builder check",
                           "assumes the thing checked is the thing deployed"),
 }
-print(f"{'pillar':24s}{'what it asks':46s}what it quietly assumes")
-for p in sorted(PILLARS):
-    asks, assumes = PILLARS[p]
-    print(f"{p:24s}{asks:46s}{assumes}")
-print()
-print("All three survive contact with AI. The assumptions are what break.")
 
 VALIDATED = {
  "model": "glm-5.2", "version": "2026-03",
@@ -31,49 +52,8 @@ VALIDATED = {
  "autonomy": "L1",                  # suggests; a human acts
 }
 
-def validation_covers(deployed, validated):
-    diffs = []
-    if deployed["model"] != validated["model"]:       diffs.append("model changed")
-    if deployed["version"] != validated["version"]:   diffs.append("version changed")
-    if deployed["purpose"] != validated["purpose"]:   diffs.append("purpose changed")
-    if sorted(deployed["tools"]) != sorted(validated["tools"]):
-        diffs.append(f"tool surface changed: {sorted(set(deployed['tools']) - set(validated['tools']))}")
-    if deployed["autonomy"] != validated["autonomy"]: diffs.append(
-        f"autonomy raised {validated['autonomy']} -> {deployed['autonomy']}")
-    return (not diffs), diffs
-
-DEPLOYED = dict(VALIDATED, tools=["read_ticket", "write_ticket", "db_update"],
-                autonomy="L3")
-ok, diffs = validation_covers(DEPLOYED, VALIDATED)
-print(f"validation still covers what is deployed: {ok}")
-for d in diffs:
-    print(f"   {d}")
-print()
-print("Same weights. Same version. The validation report is accurate about a")
-print("system that no longer exists, and nothing in the classical process is")
-print("required to notice, because the classical trigger is a model change.")
-assert not ok
-
-import random
-def monitor(metric, runs=200, seed=4):
-    rng = random.Random(seed)
-    return [round(rng.gauss(0.92, 0.01), 3) for _ in range(runs)]
-
-acc = monitor("summarisation_accuracy")
-print(f"summarisation accuracy over 200 runs: mean {sum(acc)/len(acc):.3f}, "
-      f"min {min(acc)}, max {max(acc)}")
-print("threshold 0.85 -> breaches:", sum(a < 0.85 for a in acc))
-print()
 UNMONITORED = ["rows written to production", "tools invoked per run",
                "actions taken without human review", "scope of the credential used"]
-print("what is NOT on the dashboard:")
-for u in UNMONITORED:
-    print(f"   {u}")
-print()
-print("The monitoring is excellent and it is monitoring the prediction. The")
-print("risk moved to the action, and the action has no threshold, no baseline")
-print("and no alert.")
-assert sum(a < 0.85 for a in acc) == 0
 
 TRIGGERS = {
  "model or version change": True,
@@ -83,35 +63,45 @@ TRIGGERS = {
  "purpose changed": True,
  "calendar year elapsed": True,
 }
+
 CLASSICAL = {"model or version change", "calendar year elapsed"}
+# ------------------------------------------------------------------------ run
 
-print(f"{'trigger':32s}{'classical MRM':16s}extended")
-for t in TRIGGERS:
-    print(f"{t:32s}{'yes' if t in CLASSICAL else 'no':16s}yes")
-missed = [t for t in TRIGGERS if t not in CLASSICAL]
-print(f"\ntriggers classical MRM would miss: {len(missed)}")
-for m in missed: print(f"   {m}")
-print()
-ok2, diffs2 = validation_covers(DEPLOYED, VALIDATED)
-print(f"under the extended triggers, this deployment requires revalidation: {not ok2}")
-print(f"reasons: {diffs2}")
-assert len(missed) == 4
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-record = {
- "model": DEPLOYED["model"], "version": DEPLOYED["version"],
- "purpose": DEPLOYED["purpose"],
- "tool_surface": sorted(DEPLOYED["tools"]),
- "autonomy": DEPLOYED["autonomy"],
- "validated_unit": "model + tool surface + autonomy",
- "monitors": ["summarisation_accuracy", "rows_written", "tools_per_run",
-              "actions_without_review"],
- "revalidation_triggers": sorted(TRIGGERS),
- "independent_of_builder": True,
-}
-for k in sorted(record):
-    print(f"   {k:24s}{record[k]}")
-print()
-print("Three fields carry the whole extension: validated_unit, tool_surface and")
-print("autonomy. Without them a validation report describes a text generator,")
-print("and the thing in production is an actor.")
-assert record["validated_unit"].startswith("model + tool")
+
+FIXTURE = {"PILLARS": PILLARS, "VALIDATED": VALIDATED, "UNMONITORED": UNMONITORED, "TRIGGERS": TRIGGERS, "CLASSICAL": CLASSICAL}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

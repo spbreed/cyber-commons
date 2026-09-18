@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Refuse to start an offensive-agent engagement until every safety control is present, and tell the SOC what to expect.
 
-This is the executable half of the `offensive-agent-safety-preflight` skill: the
-check the SKILL.md next to it describes, run against two CyberTravels engagement
-configurations so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle kernel with the
-internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/redteam/offensive-agent-safety-preflight/scripts/offensive_agent_safety_preflight.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # Seven controls. BLOCKING means the engagement does not start without it — not
 # because the control is more important, but because its absence cannot be
 # noticed later. A missing egress allowlist is invisible until data has left.
@@ -48,55 +75,43 @@ ENGAGEMENTS = {
     "deterministic_guardrails": False, "soc_notified": False,
  },
 }
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
 
-def preflight(name, cfg):
-    print(f"\n=== {name}")
-    blocking, advisory = [], []
-    for key, is_blocking, what, cost in CONTROLS:
-        ok = cfg.get(key, False)
-        mark = "PASS" if ok else ("BLOCK" if is_blocking else "WARN ")
-        print(f"  [{mark}] {key:<26} {what}")
-        if not ok:
-            print(f"          if absent: {cost}")
-            (blocking if is_blocking else advisory).append(key)
-    if blocking:
-        print(f"\n  ENGAGEMENT REFUSED — {len(blocking)} blocking control(s) "
-              f"missing: {', '.join(blocking)}")
-    else:
-        print("\n  ENGAGEMENT MAY START")
-        if advisory:
-            print(f"  advisory: {', '.join(advisory)}")
-    return not blocking, blocking, advisory
+FIXTURE = {"CONTROLS": CONTROLS, "ENGAGEMENTS": ENGAGEMENTS}
 
 
 def main() -> int:
-    print("the seven controls an offensive agent runs inside")
-    print("(six blocking; SOC notification is advisory because its absence is")
-    print(" recoverable — you can always pick up the phone mid-engagement)")
+    announce_backend()
 
-    results = {n: preflight(n, c) for n, c in ENGAGEMENTS.items()}
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-    print("\n" + "=" * 66)
-    print("what the SOC is told, for the engagement that may start\n")
-    ok_name = next(n for n, (ok, *_) in results.items() if ok)
-    print(f"  engagement   {ok_name}")
-    print("  window       2026-09-14 09:00 to 2026-09-18 18:00 UTC")
-    print("  sources      198.51.100.0/29 only")
-    print("  expect       credential stuffing signatures, BOLA probes on")
-    print("               /bookings and /refunds, and a burst of 4xx")
-    print("  do NOT       suppress the rules. record what fired and what did not")
-    print("               — that measurement is the point of telling them.")
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-    print("\nthe last line is the one people skip. an engagement the SOC muted")
-    print("produces a clean report and no information about whether anything")
-    print("would have been detected, which was half the reason to run it.")
-
-    refused = [n for n, (ok, *_) in results.items() if not ok]
-    assert refused, "a preflight that passes every configuration is decoration"
-    assert any(ok for ok, *_ in results.values()), "and one that passes none is broken"
-    return 0
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

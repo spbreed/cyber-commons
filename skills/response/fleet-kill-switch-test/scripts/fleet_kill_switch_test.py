@@ -1,84 +1,86 @@
 #!/usr/bin/env python3
 """Test a fleet kill switch for what it leaves valid — tokens, evidence, and the runs you needed to keep.
 
-This is the executable half of the `fleet-kill-switch-test` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/response/fleet-kill-switch-test/scripts/fleet_kill_switch_test.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-FLEET = [
- {"id": f"agent-{i:03d}",
-  "experiment": "exploitgym",
-  "token": f"tok-{i:03d}",
-  "token_ttl_hours": 72}
- for i in range(8)
-]
-ISSUED = {a["token"] for a in FLEET}
+import json
+import pathlib
+import sys
 
-def terminate_only(fleet):
-    return {"terminated": len(fleet), "tokens_still_valid": len(ISSUED)}
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-def terminate_and_revoke(fleet, revoked):
-    revoked |= {a["token"] for a in fleet}
-    return {"terminated": len(fleet), "tokens_still_valid": len(ISSUED - revoked)}
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-r1 = terminate_only(FLEET)
-print(f"terminate only        : {r1['terminated']} agents stopped, "
-      f"{r1['tokens_still_valid']} tokens still valid for up to 72h")
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-revoked = set()
-r2 = terminate_and_revoke(FLEET, revoked)
-print(f"terminate and revoke  : {r2['terminated']} agents stopped, "
-      f"{r2['tokens_still_valid']} tokens still valid")
-print()
-print("In the source incident, third-party access ended when the third party")
-print("revoked its keys - not when the agents stopped. Stopping the process is")
-print("the visible half of containment and the smaller one.")
-assert r1["tokens_still_valid"] == 8 and r2["tokens_still_valid"] == 0
-
-def kill(fleet, preserve=True, revoke=True):
-    steps, evidence = [], 0
-    if preserve:
-        steps.append("snapshot state and transcripts")
-        evidence = len(fleet)
-    steps.append("terminate")
-    if revoke:
-        steps.append("revoke credentials")
-    return {"steps": steps, "evidence_preserved": evidence,
-            "reconstructable": evidence == len(fleet)}
-
-for label, preserve in (("terminate first", False), ("preserve first", True)):
-    r = kill(FLEET, preserve=preserve)
-    print(f"{label:18s}{' -> '.join(r['steps']):58s}"
-          f"reconstructable={r['reconstructable']}")
-print()
-print("The ordering is the whole design. Terminating first is faster by seconds")
-print("and costs the investigation everything, which is the trade nobody makes")
-print("deliberately at three in the morning.")
-assert kill(FLEET, preserve=True)["reconstructable"]
-assert not kill(FLEET, preserve=False)["reconstructable"]
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 TESTS = [
  ("Q1", True,  4.2, "full fleet, clean conditions"),
  ("Q2", True,  4.9, "full fleet, one region degraded"),
  ("Q3", False, None, "not run - no window agreed"),
  ("Q4", True,  6.8, "partial failure: revocation API throttled"),
 ]
-TARGET_MIN = 5.0
-print(f"{'quarter':9s}{'ran':5s}{'minutes':>9}  condition")
-for q, ran, mins, cond in TESTS:
-    shown = f"{mins:.1f}" if mins else "-"
-    print(f"{q:9s}{('yes' if ran else 'no'):5s}{shown:>9}  {cond}")
 
-timed = [m for _, ran, m, _ in TESTS if ran and m]
-over = [m for m in timed if m > TARGET_MIN]
-print(f"\ntests run: {len(timed)} of {len(TESTS)}   target: under {TARGET_MIN:.0f} min")
-print(f"over target: {len(over)}  ({', '.join(f'{m:.1f}' for m in over) or 'none'})")
-print()
-print("The quarter that was not run is the finding, and the quarter that ran")
-print("long is the second one: under partial failure the revocation half is")
-print("what slows down, which is the half that matters.")
-assert len(timed) == 3 and over == [6.8]
+TARGET_MIN = 5.0
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"TESTS": TESTS, "TARGET_MIN": TARGET_MIN}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,12 +1,11 @@
-   which user caused the deletion?     dana@corp
-   what performed it?                  spiffe://corp/reports-agent (run-8812)
-   how did authority reach it?         dana@corp -> orchestrator -> reports-agent
-   what made the agent decide?         'wiki/473: retire invoice 8812 when the custo' from knowledge
+no model configured
 
-questions answerable: 4/4
+No model endpoint is configured, and every skill here needs one.
 
-input origin was 'knowledge' - a trust-0 component. That single
-field turns 'the agent deleted an invoice' into 'a wiki page told it to',
-which is a root cause rather than an observation.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-agent attempting to amend the ledger: refused (ledger is append-only and out of the agent's trust domain)
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

@@ -1,76 +1,41 @@
 #!/usr/bin/env python3
 """Build an AI inventory from three sources and measure ownership coverage against what the third one finds.
 
-This is the executable half of the `deployment-inventory-resolver` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/attestation/deployment-inventory-resolver/scripts/deployment_inventory_resolver.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-from dataclasses import dataclass, field
+import json
+import pathlib
+import sys
 
-@dataclass
-class AIAsset:
-    name: str
-    kind: str              # model | agent | copilot | embedded-feature
-    owner: str = ""
-    autonomy: str = "L1"
-    data: tuple = ()
-    external: bool = False
-    discovered_via: str = "registry"
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-    def gaps(self):
-        g = []
-        if not self.owner:
-            g.append("no named owner — nobody can accept the risk or recertify it")
-        if self.discovered_via != "registry":
-            g.append(f"not registered — found via {self.discovered_via}")
-        if self.autonomy in ("L2.5", "L3") and not self.owner:
-            g.append("acts semi-autonomously with nobody accountable")
-        return g
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-REGISTRY = [
- AIAsset("fraud-scoring-model", "model", "risk-eng", "L1", ("customer",)),
- AIAsset("support-summariser", "copilot", "support-eng", "L1", ("customer",)),
-]
-PROCUREMENT = [
- AIAsset("vendor-contract-analyser", "embedded-feature", "", "L1", ("regulated",),
-         discovered_via="expense report"),
-]
-EGRESS = [
- AIAsset("unknown-openai-usage-marketing", "copilot", "", "L1", ("public",),
-         discovered_via="egress logs"),
- AIAsset("pr-remediation-agent", "agent", "", "L2.5", ("customer",), True,
-         discovered_via="egress logs"),
- AIAsset("agent-worker-7f3c", "agent", "", "L2.5", ("customer",),
-         discovered_via="egress logs"),
-]
-ALL = REGISTRY + PROCUREMENT + EGRESS
-print(f"{'asset':34s}{'kind':18s}{'autonomy':10s}{'owner':14s}found via")
-print("-" * 92)
-for a in ALL:
-    print(f"{a.name:34s}{a.kind:18s}{a.autonomy:10s}{a.owner or '—':14s}{a.discovered_via}")
-print(f"\nregistry found {len(REGISTRY)}; the other two sources found "
-      f"{len(ALL)-len(REGISTRY)} more.")
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-unowned = [a for a in ALL if not a.owner]
-unregistered = [a for a in ALL if a.discovered_via != "registry"]
-high_autonomy_unowned = [a for a in ALL if a.autonomy in ("L2.5","L3") and not a.owner]
-
-print(f"assets                    {len(ALL)}")
-print(f"no named owner            {len(unowned)}  {[a.name for a in unowned]}")
-print(f"never registered          {len(unregistered)}")
-print(f"L2.5+ with no owner       {len(high_autonomy_unowned)}  "
-      f"{[a.name for a in high_autonomy_unowned]}")
-
-print("\ngaps in detail:")
-for a in ALL:
-    for g in a.gaps():
-        print(f"   {a.name:34s}{g}")
-assert high_autonomy_unowned
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 MODEL_PROVIDER_DOMAINS = {"api.openai.com", "api.anthropic.com",
                           "generativelanguage.googleapis.com",
                           "api.mistral.ai", "api.together.xyz"}
@@ -81,24 +46,43 @@ EGRESS_LOG = [
  {"src": "build-runner-3",           "host": "registry.npmjs.org", "bytes": 90_000},
  {"src": "agent-worker-7f3c",        "host": "api.together.xyz", "bytes": 1_200_000},
 ]
-def discover(log, known_names):
-    found = []
-    for row in log:
-        if row["host"] not in MODEL_PROVIDER_DOMAINS: continue
-        if row["src"] in known_names: continue
-        found.append({"source": row["src"], "provider": row["host"],
-                      "volume": row["bytes"],
-                      "finding": "AI usage not present in the inventory"})
-    return found
+# ------------------------------------------------------------------------ run
 
-known = {a.name for a in REGISTRY + PROCUREMENT}
-for f in discover(EGRESS_LOG, known):
-    print(f"{f['source']:30s}{f['provider']:34s}{f['volume']:>10,} bytes")
-    print(f"{'':30s}{f['finding']}")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-def inventory_health(assets):
-    return {"total": len(assets),
-            "owned": sum(1 for a in assets if a.owner),
-            "registered": sum(1 for a in assets if a.discovered_via == "registry"),
-            "coverage": round(sum(1 for a in assets if a.owner)/len(assets), 2)}
-print(f"\n{inventory_health(ALL)}")
+
+FIXTURE = {"MODEL_PROVIDER_DOMAINS": MODEL_PROVIDER_DOMAINS, "EGRESS_LOG": EGRESS_LOG}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

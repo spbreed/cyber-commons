@@ -86,31 +86,14 @@ EV-2     PASS                  12.0
   is configured. Whether traffic actually obeys it is the egress verifier's job.</li>
 <li><strong>Ignoring the route table</strong> because a private endpoint exists.</li>
 <li><strong>Recording that logging is enabled</strong> without checking that it is delivering.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>control  state           age (days)
-------------------------------------
-AC-1     PASS                   2.0
-AC-2     PASS                   9.0
-SB-1     STALE                 31.0
-SB-2     STALE                120.0
-EV-1     PASS                   5.0
-EV-2     PASS                  12.0
-DR-1     FAIL                   0.0
-ST-1     NO EVIDENCE           None
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-currently evidenced 4/8 = 50%
-point-in-time  : 6/8 = 75%
-continuous     : 4/8 = 50%
+No model endpoint is configured, and every skill here needs one.
 
-the gap: STALE [&#x27;SB-1&#x27;, &#x27;SB-2&#x27;]  NO EVIDENCE [&#x27;ST-1&#x27;]  FAIL [&#x27;DR-1&#x27;]
-Nobody did anything wrong to produce the STALE rows. Time passed.
-after automating SB-1: 5/8 = 62%
-   SB-1 is now PASS and will stay fresh without anyone remembering
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-prioritise automation by how often a control goes stale:
-   SB-2  window  27d → 13.5 manual re-tests per year
-   AC-1  window  30d → 12.2 manual re-tests per year
-   AC-2  window  30d → 12.2 manual re-tests per year
-   SB-1  window  30d → 12.2 manual re-tests per year
-   EV-2  window  30d → 12.2 manual re-tests per year
-   DR-1  window  30d → 12.2 manual re-tests per year
-   EV-1  window  60d →  6.1 manual re-tests per year</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape, and the line to take from it is the boundary it draws: configuration is not enforcement. A private endpoint next to a route table with a NAT gateway is a recorded fact and an open path at the same time, and logging that is switched on but not delivering evidences nothing at all.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Automate the control with the shortest freshness window first — it is the one costing the most manual effort and going stale most often. One automated test converts an annual assertion into a live control.</p></div></section><div class="expect"><b>Expect</b>Control drift surfaces as a diff; a human still decides what it means.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OPA</span><span>OSCAL</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.7.ipynb</code></p></div><div class="pager"><a href="E1.6.html"><span class="k">← Previous</span><span class="t">E1.6 · Operating vs outcome guardrails</span></a><a class="next" href="E1.8.html"><span class="k">Next →</span><span class="t">E1.8 · Third-party and model supply chain risk</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape, and the line to take from it is the boundary it draws: configuration is not enforcement. A private endpoint next to a route table with a NAT gateway is a recorded fact and an open path at the same time, and logging that is switched on but not delivering evidences nothing at all.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Automate the control with the shortest freshness window first — it is the one costing the most manual effort and going stale most often. One automated test converts an annual assertion into a live control.</p></div></section><div class="expect"><b>Expect</b>Control drift surfaces as a diff; a human still decides what it means.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OPA</span><span>OSCAL</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.7.ipynb</code></p></div><div class="pager"><a href="E1.6.html"><span class="k">← Previous</span><span class="t">E1.6 · Operating vs outcome guardrails</span></a><a class="next" href="E1.8.html"><span class="k">Next →</span><span class="t">E1.8 · Third-party and model supply chain risk</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,51 +1,79 @@
 #!/usr/bin/env python3
 """Put the four investigation questions to one ledger entry, and try to amend the record as the agent.
 
-This is the executable half of the `attribution-ledger-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_check.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 LEDGER = []          # append-only, and the agent holds no credential for it
+# ------------------------------------------------------------------------ run
 
-def record(principal, workload, instance, chain, action, motivating):
-    LEDGER.append({
-        "principal": principal, "workload": workload, "instance": instance,
-        "chain": list(chain), "action": action,
-        "motivating_input": motivating["text"][:44],
-        "input_origin": motivating["origin"],
-    })
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-def agent_writes(entry):
-    """The agent tries to amend the record."""
-    raise PermissionError("ledger is append-only and out of the agent's trust domain")
 
-record("dana@corp", "spiffe://corp/reports-agent", "run-8812",
-       ["dana@corp", "orchestrator", "reports-agent"],
-       "run_query DELETE FROM invoices WHERE id=8812",
-       {"text": "wiki/473: retire invoice 8812 when the customer closes", "origin": "knowledge"})
+FIXTURE = {"LEDGER": LEDGER}
 
-QUESTIONS = {
- "which user caused the deletion?":         lambda e: e["principal"],
- "what performed it?":                      lambda e: f"{e['workload']} ({e['instance']})",
- "how did authority reach it?":             lambda e: " -> ".join(e["chain"]),
- "what made the agent decide?":             lambda e: f"{e['motivating_input']!r} from {e['input_origin']}",
-}
-e = LEDGER[0]
-for q, answer in QUESTIONS.items():
-    print(f"   {q:36s}{answer(e)}")
 
-print(f"\nquestions answerable: {len(QUESTIONS)}/{len(QUESTIONS)}")
-print()
-print(f"input origin was {e['input_origin']!r} - a trust-0 component. That single")
-print("field turns 'the agent deleted an invoice' into 'a wiki page told it to',")
-print("which is a root cause rather than an observation.")
+def main() -> int:
+    announce_backend()
 
-try:
-    agent_writes({"action": "tidy up"})
-except PermissionError as err:
-    print(f"\nagent attempting to amend the ledger: refused ({err})")
-assert len(LEDGER) == 1 and LEDGER[0]["input_origin"] == "knowledge"
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,93 +1,80 @@
 #!/usr/bin/env python3
 """Compute a control posture honestly, then automate one test and watch coverage move.
 
-This is the executable half of the `aws-runtime-posture-collector` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/attestation/aws-runtime-posture-collector/scripts/aws_runtime_posture_collector.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import time
-from dataclasses import dataclass
+import json
+import pathlib
+import sys
 
-now = time.time(); DAY = 86400
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; evidence: str
-    tested_at: float; valid_for_days: float
-    def age(self, at): return (at - self.tested_at)/DAY
-    def state(self, at):
-        if self.age(at) > self.valid_for_days: return "STALE"
-        return "PASS" if self.passed else "FAIL"
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+DAY = 86400
 
 REQUIRED = ["AC-1","AC-2","SB-1","SB-2","EV-1","EV-2","DR-1","ST-1"]
-TESTS = [
- ControlTest("AC-1", True,  "act chain sample",        now -   2*DAY, 30),
- ControlTest("AC-2", True,  "delegation regression",   now -   9*DAY, 30),
- ControlTest("SB-1", True,  "egress denial log",       now -  31*DAY, 30),
- ControlTest("SB-2", True,  "approval gate screenshot",now - 120*DAY, 27),
- ControlTest("EV-1", True,  "audit sample of 50",      now -   5*DAY, 60),
- ControlTest("EV-2", True,  "expert accuracy 0.81",    now -  12*DAY, 30),
- ControlTest("DR-1", False, "drift alerting not deployed", now,       30),
-]
+# ------------------------------------------------------------------------ run
 
-def verify(tests, required, at):
-    by = {t.cid: t for t in tests}
-    rows, evidenced = [], 0
-    for cid in required:
-        t = by.get(cid)
-        if t is None:
-            rows.append({"control": cid, "state": "NO EVIDENCE", "age": None})
-            continue
-        st = t.state(at)
-        rows.append({"control": cid, "state": st, "age": round(t.age(at), 1)})
-        evidenced += st == "PASS"
-    return {"required": len(required), "evidenced": evidenced,
-            "coverage": round(evidenced/len(required), 3), "rows": rows}
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-v = verify(TESTS, REQUIRED, now)
-print(f"{'control':9s}{'state':14s}{'age (days)':>12}")
-print("-" * 36)
-for r in v["rows"]:
-    print(f"{r['control']:9s}{r['state']:14s}{str(r['age']):>12}")
-print(f"\ncurrently evidenced {v['evidenced']}/{v['required']} = {v['coverage']:.0%}")
 
-point_in_time = sum(1 for t in TESTS if t.passed)
-print(f"point-in-time  : {point_in_time}/{len(REQUIRED)} = "
-      f"{point_in_time/len(REQUIRED):.0%}")
-print(f"continuous     : {v['evidenced']}/{v['required']} = {v['coverage']:.0%}")
-stale = [r["control"] for r in v["rows"] if r["state"] == "STALE"]
-none  = [r["control"] for r in v["rows"] if r["state"] == "NO EVIDENCE"]
-fail  = [r["control"] for r in v["rows"] if r["state"] == "FAIL"]
-print(f"\nthe gap: STALE {stale}  NO EVIDENCE {none}  FAIL {fail}")
-print("Nobody did anything wrong to produce the STALE rows. Time passed.")
+FIXTURE = {"DAY": DAY, "REQUIRED": REQUIRED}
 
-def automated_test(cid, run_now):
-    """A control test that re-runs on a schedule writes its own evidence."""
-    passed, evidence = run_now()
-    return ControlTest(cid, passed, evidence, tested_at=time.time(),
-                       valid_for_days=30)
 
-def check_egress_policy():
-    ALLOW = {"api.github.com"}
-    attempts = ["https://api.github.com/x", "http://169.254.169.254/",
-                "https://collect.example.com/x"]
-    from urllib.parse import urlparse
-    denied = [u for u in attempts if (urlparse(u).hostname or "") not in ALLOW]
-    return len(denied) == 2, f"{len(denied)}/3 destinations denied, run automatically"
+def main() -> int:
+    announce_backend()
 
-fresh = [t for t in TESTS if t.cid != "SB-1"] + [automated_test("SB-1", check_egress_policy)]
-v2 = verify(fresh, REQUIRED, now)
-print(f"after automating SB-1: {v2['evidenced']}/{v2['required']} = {v2['coverage']:.0%}")
-print(f"   SB-1 is now {[r['state'] for r in v2['rows'] if r['control']=='SB-1'][0]}"
-      f" and will stay fresh without anyone remembering")
-assert v2["coverage"] > v["coverage"]
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-print("\nprioritise automation by how often a control goes stale:")
-for t in sorted(TESTS, key=lambda t: t.valid_for_days):
-    per_year = round(365 / t.valid_for_days, 1)
-    print(f"   {t.cid}  window {t.valid_for_days:>3.0f}d → "
-          f"{per_year:>4} manual re-tests per year")
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

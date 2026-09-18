@@ -1,15 +1,11 @@
-requestertheir scopes                                asked for       allowed?
-dana    ['reports:read']                            db:admin        True
-priya   ['db:admin', 'reports:read', 'reports:write']db:admin        True
+no model configured
 
-AUDIT TRAIL
-   actor=agent-svc  tool=drop_table   allowed=True
-   actor=agent-svc  tool=drop_table   allowed=True
+No model endpoint is configured, and every skill here needs one.
 
-dana holds reports:read only, and her request reached db:admin.
-The authorization decision was made about the agent, not about her.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Now answer 'which user caused the table to be dropped' from that trail.
-You cannot: every row says agent-svc. Privilege and attribution failed
-in the same step, which is what makes this different from a human with
-too much access.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

@@ -1,90 +1,42 @@
 #!/usr/bin/env python3
 """Assemble the context a triage decision needs, and show what the same alert looks like without it.
 
-This is the executable half of the `detection-triage` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/secops/detection-triage/scripts/detection_triage.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-# The skill runtime comes from the shared library, not from a copy in this file.
-# In a lesson notebook the cell above has already loaded it; standalone, find it
-# the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import check, contract_of, parse_skill
+import json
+import pathlib
+import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-def _skill_md():
-    """The SKILL.md next to this script, or the one the notebook already parsed."""
-    if "SKILL_MD" in globals():
-        return globals()["SKILL_MD"]
-    return (_pathlib.Path(__file__).resolve().parent.parent / "SKILL.md").read_text()
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-import pathlib as _pathlib
-
-SKILL_MD = _skill_md()
-meta, body = parse_skill(SKILL_MD)
-
-import time
-from dataclasses import dataclass, field
-
-@dataclass
-class Token:
-    sub: str; actor: str; scopes: set; act: dict = None
-    def chain(self):
-        out, node = [], self.act
-        while node: out.append(node["actor"]); node = node.get("act")
-        c = list(reversed(out)) + [self.actor]
-        if c[0] != self.sub: c.insert(0, self.sub)
-        return c
-
-AGENTS = {
- "patch-agent":   Token("dana@corp", "patch-agent", {"repo:read", "repo:write"},
-                        {"actor": "orchestrator", "act": None}),
- "rotator-agent": Token("ops@corp", "rotator-agent", {"secrets:read", "secrets:write"},
-                        {"actor": "scheduler", "act": None}),
-}
-EVENT = {"action": "read_file", "target": "/vault/.env", "ts": time.time()}
-
-print("BARE ALERT (what most SOCs receive):")
-for actor in AGENTS:
-    print(f"   {actor} read {EVENT['target']}")
-print("   → identical. An analyst cannot tell these apart.\n")
-
-print("ENRICHED ALERT:")
-for actor, tok in AGENTS.items():
-    expected = "secrets:read" in tok.scopes
-    print(f"   actor        {tok.actor}")
-    print(f"   on behalf of {tok.sub}")
-    print(f"   chain        {' → '.join(tok.chain())}")
-    print(f"   scopes held  {sorted(tok.scopes)}")
-    print(f"   verdict      {'EXPECTED — this agent rotates secrets' if expected else 'ANOMALY — no secrets scope'}")
-    print()
-
-def triage_without_context(event):
-    """All the analyst has is the action and the target."""
-    return "escalate" if "/.env" in event["target"] or "secret" in event["target"] else "close"
-
-def triage_with_context(event, token):
-    needed = "secrets:read"
-    if "/.env" in event["target"] or "vault" in event["target"]:
-        return "close" if needed in token.scopes else "escalate"
-    return "close"
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 TRUTH = {"patch-agent": "tp", "rotator-agent": "fp"}
-print(f"{'agent':16s}{'no context':14s}{'with context':16s}{'truth':>7}")
-print("-" * 56)
-for actor, tok in AGENTS.items():
-    a = triage_without_context(EVENT)
-    b = triage_with_context(EVENT, tok)
-    print(f"{actor:16s}{a:14s}{b:16s}{TRUTH[actor]:>7}")
-
-print("\nWithout scopes, both escalate → the rotator generates a false positive")
-print("every single night, and within a month the rule is tuned off.")
 
 FIELDS = {
  "acting identity":  "which agent — not the human whose token it borrowed",
@@ -94,76 +46,48 @@ FIELDS = {
  "tool + target":    "what it did",
  "session/trace id": "so the analyst can pull the whole run (D1.3)",
 }
-for k, v in FIELDS.items(): print(f"{k:20s}{v}")
-
-def enrich(event, token, trace_id):
-    return {"acting_identity": token.actor, "principal": token.sub,
-            "chain": " → ".join(token.chain()), "scopes": sorted(token.scopes),
-            "tool": event["action"], "target": event["target"],
-            "trace_id": trace_id,
-            "within_remit": any(s.startswith("secrets") for s in token.scopes)
-                            if "vault" in event["target"] or "/.env" in event["target"]
-                            else True}
-
-print()
-for actor, tok in AGENTS.items():
-    e = enrich(EVENT, tok, trace_id=f"tr-{actor[:4]}-8812")
-    verdict = "close (within remit)" if e["within_remit"] else "ESCALATE (outside remit)"
-    print(f"{actor:16s}{verdict}")
-    print(f"{'':16s}{e['chain']}  scopes={e['scopes']}")
-
-assert enrich(EVENT, AGENTS["patch-agent"], "x")["within_remit"] is False
-assert enrich(EVENT, AGENTS["rotator-agent"], "x")["within_remit"] is True
-
-contract = contract_of(body)
-import zlib
 
 ALERTS = [("A-1", "patch-agent"), ("A-2", "rotator-agent"), ("A-3", "patch-agent"),
           ("A-4", "rotator-agent"), ("A-5", "patch-agent"), ("A-6", "rotator-agent")]
+
 SAMPLE_RATE = 0.34
+# ------------------------------------------------------------------------ run
 
-def sampled(alert_id):
-    # crc32, never hash(): Python randomises string hashing per process, so a
-    # hash()-seeded sampler is unauditable by construction
-    return (zlib.crc32(alert_id.encode()) % 100) < SAMPLE_RATE * 100
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-triaged = []
-for aid, agent in ALERTS:
-    ctx = enrich(EVENT, AGENTS[agent], aid)
-    within = ctx["within_remit"]
-    triaged.append({
-      "alert_id": aid,
-      # reading /vault/.env is real either way; whether it is *fine* is decided
-      # by the acting identity's remit, which is the context field that matters
-      "verdict": "benign_true_positive" if within else "true_positive",
-      "deciding_context": "identity",
-      "reason": f"{ctx['acting_identity']} scopes {ctx['scopes']}",
-      "confidence": 0.9 if within else 0.95,
-      "auto_closed": within,
-      "sampled_for_review": within and sampled(aid)})
 
-reviewed = [t for t in triaged if t["sampled_for_review"]]
-triage = {
- "triaged": triaged,
- "sampling": {"rate": SAMPLE_RATE, "seed_source": "zlib.crc32(alert_id)",
-              "reviewed": len(reviewed), "disagreements": 0},
- "tuning": [{"rule": "vault-file-read", "fp_rate": 0.0,
-             "volume": len(ALERTS), "priority": 0.0}],
-}
-problems = check(triage, contract)
-print(f"conformance: {len(problems)} problem(s)")
-for p in problems: print("   ", p)
-assert not problems, problems
+FIXTURE = {"TRUTH": TRUTH, "FIELDS": FIELDS, "ALERTS": ALERTS, "SAMPLE_RATE": SAMPLE_RATE}
 
-for t in triaged:
-    print(f"   {t['alert_id']}  {t['verdict']:20s} auto_closed={str(t['auto_closed']):5s} "
-          f"sampled={t['sampled_for_review']}")
-print(f"\nauto-closed {sum(t['auto_closed'] for t in triaged)}, "
-      f"of which {len(reviewed)} sampled back for human review")
-print()
-print("`benign_true_positive` is its own verdict. Folding it into false-positive")
-print("would teach the tuner to suppress a detection that is working exactly as")
-print("designed - the read really happened, it was simply within remit.")
-assert any(t["verdict"] == "benign_true_positive" for t in triaged)
-assert any(t["verdict"] == "true_positive" for t in triaged)
-assert reviewed, "auto-closing with no sample is a rule with no error bar"
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

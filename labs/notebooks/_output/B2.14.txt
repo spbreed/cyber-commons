@@ -1,45 +1,11 @@
-the seven controls an offensive agent runs inside
-(six blocking; SOC notification is advisory because its absence is
- recoverable — you can always pick up the phone mid-engagement)
+no model configured
 
-=== cybertravels-q3-external
-  [PASS] zero_data_retention        provider retains no prompts or completions
-  [PASS] sandbox                    the agent runs in an isolated, disposable workspace
-  [PASS] egress_allowlist           outbound restricted to the engagement scope
-  [PASS] secret_management          credentials injected at call time, never in prompt or repo
-  [PASS] human_in_the_loop          a named person approves every destructive action
-  [PASS] deterministic_guardrails   scope and rate enforced outside the model, not asked of it
-  [PASS] soc_notified               the SOC has the window, source addresses and expected signatures
+No model endpoint is configured, and every skill here needs one.
 
-  ENGAGEMENT MAY START
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-=== quick-look-before-the-board
-  [BLOCK] zero_data_retention        provider retains no prompts or completions
-          if absent: target data enters a third party's training set or breach
-  [PASS] sandbox                    the agent runs in an isolated, disposable workspace
-  [BLOCK] egress_allowlist           outbound restricted to the engagement scope
-          if absent: the agent tests something you were not authorised to touch
-  [PASS] secret_management          credentials injected at call time, never in prompt or repo
-  [BLOCK] human_in_the_loop          a named person approves every destructive action
-          if absent: an exploit runs against production because it looked in scope
-  [BLOCK] deterministic_guardrails   scope and rate enforced outside the model, not asked of it
-          if absent: the model is argued out of the scope it was told to respect
-  [WARN ] soc_notified               the SOC has the window, source addresses and expected signatures
-          if absent: your own detection team runs a real incident against you
-
-  ENGAGEMENT REFUSED — 4 blocking control(s) missing: zero_data_retention, egress_allowlist, human_in_the_loop, deterministic_guardrails
-
-==================================================================
-what the SOC is told, for the engagement that may start
-
-  engagement   cybertravels-q3-external
-  window       2026-09-14 09:00 to 2026-09-18 18:00 UTC
-  sources      198.51.100.0/29 only
-  expect       credential stuffing signatures, BOLA probes on
-               /bookings and /refunds, and a burst of 4xx
-  do NOT       suppress the rules. record what fired and what did not
-               — that measurement is the point of telling them.
-
-the last line is the one people skip. an engagement the SOC muted
-produces a clean report and no information about whether anything
-would have been detected, which was half the reason to run it.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

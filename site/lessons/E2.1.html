@@ -82,29 +82,14 @@ GDPR                       3  lawful basis, erasure, automated decision-making
 <li><strong>Stopping at the first regime that applies.</strong> They are cumulative.</li>
 <li><strong>Planning against the longest clock.</strong> The shortest is the one you miss.</li>
 <li><strong>Annual re-derivation.</strong> The triggers are changes, not dates.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>claims-triage-agent — autonomy L2.5, data [&#x27;customer&#x27;, &#x27;health&#x27;, &#x27;regulated&#x27;]
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-instrument             layer  obligation
---------------------------------------------------------------------------------------------
-EU AI Act                  1  automated decision affecting individuals; human oversight and record-keeping obligations
-DORA                       2  ICT third-party risk, incident reporting, resilience testing, exit strategy
-HIPAA-equivalent           2  minimum necessary; audit controls
-GDPR                       3  lawful basis, erasure, automated decision-making
-obligation                            deadline (h)  notify
-------------------------------------------------------------------------------
-DORA (major ICT incident)                        4  initial notification to the regulator
-contractual (major client)                      12  client security contact
-GDPR (personal data breach)                     72  supervisory authority
-EU AI Act (serious incident)                    72  market surveillance authority
+No model endpoint is configured, and every skill here needs one.
 
-BINDING DEADLINE: DORA (major ICT incident) at 4h
-Every runbook, every escalation path and every out-of-hours rota is
-designed against that number, not against the 72-hour one people quote.
-obligations by layer: {1: 1, 2: 2, 3: 1}
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-   layer 1 (horizontal AI regulation  ) 1 obligation(s)
-   layer 2 (sector overlay            ) 2 obligation(s)
-   layer 3 (cross-cutting             ) 1 obligation(s)
-
-Layers 2 and 3 produce more obligations than layer 1, and they were
-already in force before anyone deployed an agent. That is the finding.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The three layers print with what triggers each. The claims-triage agent attracts obligations from all three — EU AI Act, DORA, a HIPAA-equivalent and GDPR. The shortest-clock register identifies DORA's 4-hour initial notification as the binding deadline, and layers 2 and 3 together produce more obligations than the horizontal AI regulation.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Build the shortest-clock register for your highest-tier AI system. Most teams discover the binding deadline is a sector overlay or a customer contract, not the AI regulation they have been reading.</p></div></section><div class="expect"><b>Expect</b>One spine, several overlays. Orphans are your programme backlog.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OSCAL</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E2.1.ipynb</code></p></div><div class="pager"><a href="E1.13.html"><span class="k">← Previous</span><span class="t">E1.13 · Measuring the controls on CyberTravels — gaps and mitigations</span></a><a class="next" href="E2.2.html"><span class="k">Next →</span><span class="t">E2.2 · Horizontal AI regulation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The three layers print with what triggers each. The claims-triage agent attracts obligations from all three — EU AI Act, DORA, a HIPAA-equivalent and GDPR. The shortest-clock register identifies DORA's 4-hour initial notification as the binding deadline, and layers 2 and 3 together produce more obligations than the horizontal AI regulation.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Build the shortest-clock register for your highest-tier AI system. Most teams discover the binding deadline is a sector overlay or a customer contract, not the AI regulation they have been reading.</p></div></section><div class="expect"><b>Expect</b>One spine, several overlays. Orphans are your programme backlog.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OSCAL</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E2.1.ipynb</code></p></div><div class="pager"><a href="E1.13.html"><span class="k">← Previous</span><span class="t">E1.13 · Measuring the controls on CyberTravels — gaps and mitigations</span></a><a class="next" href="E2.2.html"><span class="k">Next →</span><span class="t">E2.2 · Horizontal AI regulation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

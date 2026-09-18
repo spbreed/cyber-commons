@@ -1,12 +1,16 @@
 # Getting the models — open weight, or none at all
 
-Every lab runs **two ways from one code path**, and the choice is one
-environment variable:
+Every skill in this commons is **executed by a model**, so a model is the one
+thing you have to provide. There is no offline path and no stand-in: with no
+endpoint configured a skill exits 2 and says so, because a canned answer
+returned in a model's place has the right shape, passes the contract, and is
+not a model result.
 
 | Backend | How | What it costs |
 |---|---|---|
-| **offline** (the default) | nothing to set | nothing — a deterministic stand-in, labelled as one everywhere it appears |
-| **open weight** | `OPENAI_BASE_URL` | nothing, on your own hardware — llama.cpp, Ollama, vLLM, or a free hosted tier |
+| **open weight, local** | `OPENAI_BASE_URL` at Ollama, llama.cpp or vLLM | nothing, on your own hardware |
+| **open weight, hosted** | `OPENAI_BASE_URL` at any OpenAI-compatible free tier | nothing, within the tier's quota |
+| **nothing configured** | — | the skill refuses. That is the designed behaviour, not a failure |
 
 **There is no paid backend, deliberately.** A curriculum that is free to read
 should be free to run, so the adapter speaks one protocol — OpenAI-compatible
@@ -20,13 +24,11 @@ ollama pull glm-4.6
 export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
 ```
 
-The adapter is standard library only (`urllib`), so a notebook stays
-self-contained and needs no model service: offline it is the replay, and the
-only network call a lesson makes is the clone that fetches the skills tree.
-It lives inside the **skill scripts** that call a model, not in the lessons — a
-lesson executes a skill and nothing else. If a backend is configured and the
-call fails, the lesson **says so and falls back to the replay, labelled as a
-replay** — it never reports a model's answer when no model answered.
+The adapter is standard library only (`urllib`), so there is nothing to
+install beyond the model server itself. It lives in the shared skill runtime,
+not in any lesson — a lesson executes a skill and nothing else. If a call
+fails, it **raises with what the server actually returned**. It never reports
+an answer when no model answered.
 
 **Keys never go in this repository.** A local server usually needs none at all;
 anything you do set goes in your environment or a file outside the working tree.
@@ -78,7 +80,7 @@ needs ~40GB RAM. If your laptop has 16GB, use the small variants
 (`llama3.2:3b`, `glm-4-9b`, `qwen2.5:7b`) — every lab's *mechanics* work on a
 small model.
 
-The seven model-facing lessons were run against two sizes on 4 CPUs with no GPU,
+The 128 model-facing lessons were run against two sizes on 4 CPUs with no GPU,
 on weights pulled from Kaggle Models. Each calls the model from inside its
 **skill's own script** — there is no adapter in a lesson — so what is tested
 here is the same file `scripts/test_skills.py` runs offline.

@@ -212,33 +212,14 @@ conversation about controls for components nobody has.</p>
 <li><strong>Omitting components a system does not have.</strong> Their absence is information.</li>
 <li><strong>A map with no trust levels.</strong> Then no edge is a boundary and the diagram is
   decoration.</li>
-</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A1.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a1-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a1-1" title="Kaggle notebook A1.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>9 components, 8 present at CyberTravels
-   component        trust  authority  present
-   agent runtime        2        yes  yes
-   egress               3        yes  NO
-   ingress              0          -  yes
-   knowledge            0          -  yes
-   mcp servers          1        yes  yes
-   messaging            2          -  yes
-   model                1          -  yes
-   orchestrator         2          -  yes
-   tools                3        yes  yes
+</ul></div><div class="kembed"><div class="kbar"><span class="kdot"></span><span>Live Kaggle notebook — A1.1</span><a href="https://www.kaggle.com/code/cybercommons/cyber-commons-a1-1" target="_blank" rel="noopener">open on Kaggle ↗</a></div><iframe src="https://www.kaggle.com/embed/cybercommons/cyber-commons-a1-1" title="Kaggle notebook A1.1" loading="lazy" frameborder="0" scrolling="auto"></iframe></div><details class="recorded"><summary>The recorded run, checked byte for byte against the Kaggle kernel above</summary><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-5 trust-boundary crossing(s) — always more than expected
-   ingress          -&gt; orchestrator    0-&gt;2   carries traveller text
-   knowledge        -&gt; agent runtime   0-&gt;2   carries retrieved documents
-   model            -&gt; agent runtime   1-&gt;2   carries proposed tool call
-   agent runtime    -&gt; tools           2-&gt;3   carries arguments, credentials
-   mcp servers      -&gt; agent runtime   1-&gt;2   carries tool results, tool descriptions
+No model endpoint is configured, and every skill here needs one.
 
-Two of those carry content nobody on staff wrote — traveller text and
-retrieved documents — into a component that holds authority. Every
-injection risk in Function A is one of those two edges.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-absent: egress
-CyberTravels has no egress gateway, so &#x27;route it through the gateway&#x27; is
-not a control it can apply yet. Saying that here stops the argument
-later.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/a-architecture-map.svg" alt="a architecture map" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/a-architecture-map.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is trust 0 — content from outside. Orange holds authority. Dashed is
-a component CyberTravels does not have. Every BOUNDARY edge is a risk in
-Function A, and there are more of them than the picture suggests until
-the levels are written down.</code></pre></div></details></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Draw your own system on one page, then mark the <code>agent_runtime -&gt; tools</code> edge on it. Everything in chapters 2 and 3 is an argument about what is allowed to stand on that arrow, and you will get more out of them having drawn it first.</p></div></section><div class="expect"><b>Expect</b>You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.1.ipynb</code></p></div><div class="pager"><a href="A1.0.html"><span class="k">← Previous</span><span class="t">A1.0 · Start here — what securing an AI architecture means</span></a><a class="next" href="A1.2.html"><span class="k">Next →</span><span class="t">A1.2 · Prompt injection</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></details></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Draw your own system on one page, then mark the <code>agent_runtime -&gt; tools</code> edge on it. Everything in chapters 2 and 3 is an argument about what is allowed to stand on that arrow, and you will get more out of them having drawn it first.</p></div></section><div class="expect"><b>Expect</b>You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.1.ipynb</code></p></div><div class="pager"><a href="A1.0.html"><span class="k">← Previous</span><span class="t">A1.0 · Start here — what securing an AI architecture means</span></a><a class="next" href="A1.2.html"><span class="k">Next →</span><span class="t">A1.2 · Prompt injection</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

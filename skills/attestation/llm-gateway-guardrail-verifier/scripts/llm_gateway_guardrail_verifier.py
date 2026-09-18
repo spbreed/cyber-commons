@@ -1,66 +1,91 @@
 #!/usr/bin/env python3
 """Send five calls through one gateway and record which check refuses each one.
 
-This is the executable half of the `llm-gateway-guardrail-verifier` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/attestation/llm-gateway-guardrail-verifier/scripts/llm_gateway_guardrail_verifier.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 LEGACY_DB_CREDENTIAL = "static-service-password"     # never leaves the gateway
 
 REGISTRY = {"spiffe://corp/reports-agent": {"owner": "sam@corp", "expires": 9000}}
+
 POLICY = {("reports-agent", "run_query", "table:reports"): {"SELECT"}}
+
 EGRESS_ALLOW = {"reports-db.corp.example"}
 
 AUDIT = []
 
-def gateway(call):
-    """One choke point: identity, registry, policy, egress, budget, audit."""
-    checks = []
-    def check(name, ok, why=""):
-        checks.append((name, ok, why)); return ok
-
-    if not check("identity", call["identity"] in REGISTRY, "attested and registered"):
-        return {"allowed": False, "checks": checks}
-    verbs = POLICY.get((call["agent"], call["tool"], call["resource"]), set())
-    if not check("policy", call["verb"] in verbs, f"permitted verbs {sorted(verbs) or 'none'}"):
-        return {"allowed": False, "checks": checks}
-    if not check("egress", call["destination"] in EGRESS_ALLOW, "destination allow-list"):
-        return {"allowed": False, "checks": checks}
-    if not check("budget", call["calls_so_far"] < 5, "per-target ceiling"):
-        return {"allowed": False, "checks": checks}
-
-    # the agent never held this; the gateway attaches it on the way out
-    AUDIT.append({"principal": call["principal"], "agent": call["agent"],
-                  "tool": call["tool"], "resource": call["resource"]})
-    return {"allowed": True, "checks": checks, "credential_attached": LEGACY_DB_CREDENTIAL[:6] + "..."}
-
 BASE = {"identity": "spiffe://corp/reports-agent", "agent": "reports-agent",
         "principal": "dana@corp", "tool": "run_query", "resource": "table:reports",
         "verb": "SELECT", "destination": "reports-db.corp.example", "calls_so_far": 0}
+# ------------------------------------------------------------------------ run
 
-CASES = {
- "the intended call":          BASE,
- "unregistered agent":         dict(BASE, identity="spiffe://corp/rogue-agent"),
- "verb not permitted":         dict(BASE, verb="DELETE"),
- "exfiltration destination":   dict(BASE, destination="archive.evil.example"),
- "over the per-target ceiling":dict(BASE, calls_so_far=9),
-}
-for label, call in CASES.items():
-    r = gateway(call)
-    failed = [n for n, ok, _ in r["checks"] if not ok]
-    print(f"   {label:28s}{'ALLOWED' if r['allowed'] else 'denied at ' + failed[0]}")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-print(f"\naudit entries written: {len(AUDIT)}")
-print(f"credential held by the agent: never - attached at the gateway")
-print()
-print("The agent implements none of this. Add a new agent tomorrow and it")
-print("inherits every control by being on the other side of one hop.")
-print()
-print("And the legacy database, which cannot consume a delegated token, is")
-print("reached with a static credential the agent has never seen - authorised")
-print("against dana before the call was made.")
-assert len(AUDIT) == 1 and gateway(CASES["unregistered agent"])["allowed"] is False
+
+FIXTURE = {"LEGACY_DB_CREDENTIAL": LEGACY_DB_CREDENTIAL, "REGISTRY": REGISTRY, "POLICY": POLICY, "EGRESS_ALLOW": EGRESS_ALLOW, "AUDIT": AUDIT, "BASE": BASE}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

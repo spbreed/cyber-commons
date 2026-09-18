@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Fill a roles-by-objects-by-verbs matrix from real credentials, and rank the cells nobody tested.
 
-This is the executable half of the `greybox-authorization-matrix` skill: the
-check the SKILL.md next to it describes, run against the CyberTravels estate so
-two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle kernel with the
-internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/redteam/greybox-authorization-matrix/scripts/greybox_authorization_matrix.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # Grey box is defined by what you are given, and this is the list. One
 # credential per role is the entire reason the mode can find BOLA at all.
 DATA_SOURCES = [
@@ -20,7 +47,9 @@ DATA_SOURCES = [
 ]
 
 ROLES = ["traveller", "agent-svc", "finance"]
+
 OBJECTS = ["booking(own)", "booking(other)", "refund", "profile(other)", "audit_log"]
+
 VERBS = ["read", "write"]
 
 # (role, object, verb) -> "allow" | "deny"  : what the design says.
@@ -78,55 +107,43 @@ TESTED = {
 # something other than the order the endpoints appear in the schema.
 BLAST = {"booking(other)": 3, "refund": 4, "profile(other)": 4, "audit_log": 5,
          "booking(own)": 1}
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"DATA_SOURCES": DATA_SOURCES, "ROLES": ROLES, "OBJECTS": OBJECTS, "VERBS": VERBS, "DESIGN": DESIGN, "TESTED": TESTED, "BLAST": BLAST}
 
 
 def main() -> int:
-    print("what a grey-box engagement is handed\n")
-    for src, gives in DATA_SOURCES:
-        print(f"  {src:<30} {gives}")
+    announce_backend()
 
-    cells = [(r, o, v) for r in ROLES for o in OBJECTS for v in VERBS]
-    print(f"\nthe matrix: {len(ROLES)} roles x {len(OBJECTS)} objects x "
-          f"{len(VERBS)} verbs = {len(cells)} cells\n")
-    print(f"  {'role':<10} {'object':<16} {'verb':<6} {'design':<7} "
-          f"{'observed':<9} verdict")
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-    findings, untested = [], []
-    for r, o, v in cells:
-        want = DESIGN[(r, o, v)]
-        got = TESTED.get((r, o, v))
-        if got is None:
-            untested.append((r, o, v, want))
-            verdict = "UNTESTED"
-        elif got != want:
-            findings.append((r, o, v, want, got))
-            verdict = "*** MISMATCH ***"
-        else:
-            verdict = "ok"
-        print(f"  {r:<10} {o:<16} {v:<6} {want:<7} {got or '-':<9} {verdict}")
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-    print(f"\ntested {len(cells) - len(untested)} of {len(cells)} cells "
-          f"({1 - len(untested) / len(cells):.0%})")
-
-    print(f"\n{len(findings)} mismatch(es) — the design says one thing and the "
-          f"estate does another:")
-    for r, o, v, want, got in findings:
-        print(f"  ! {r} can {v} {o}: designed {want}, observed {got}")
-
-    print(f"\n{len(untested)} untested cells, ranked by what a wrong answer costs:")
-    ranked = sorted(untested, key=lambda c: -BLAST[c[1]])
-    for r, o, v, want in ranked[:6]:
-        print(f"  {BLAST[o]}  {r:<10} {v:<6} {o:<16} designed {want}, never exercised")
-
-    print("\nan endpoint-coverage report would call this engagement complete:")
-    print("every endpoint in the schema was touched at least once. authorisation")
-    print("does not live in endpoints, it lives in cells, and the two highest-cost")
-    print("cells here were never sent a single request.")
-
-    assert findings, "a matrix with no mismatch has not been run against a real estate"
-    assert untested, "full coverage of every cell is not what an engagement produces"
-    return 0
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

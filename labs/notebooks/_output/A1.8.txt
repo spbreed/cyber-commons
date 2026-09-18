@@ -1,23 +1,11 @@
-ordinary bug / benign task:
-   code   : rows = open('/home/agent/work/data.csv').read()
-   reached: 3 things
-      file:/etc/passwd
-      file:/home/agent/.ssh/id_ed25519
-      file:/home/agent/work/data.csv
+no model configured
 
-steered by an injection:
-   code   : import os; d=os.environ; connect('169.254.169.254')
-   reached: 6 things
-      env:AWS_ACCESS_KEY_ID
-      env:DATABASE_URL
-      env:HOME
-      net:prod-db:5432
-      net:169.254.169.254:80
-      net:0.0.0.0/0
+No model endpoint is configured, and every skill here needs one.
 
-The benign task reached every file the process can see, including a
-private key it had no reason to touch. It was not attacked - the code
-used open(), and open() sees what the process sees.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Blast radius here is a property of the environment. A3.2 changes the
-environment; no amount of instruction changes it.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

@@ -74,42 +74,14 @@ The first row contained in ONE HOUR and still missed the deadline.
 <li><strong>Starting the clock at confirmation.</strong> A regulator may start it earlier.</li>
 <li><strong>Optimising containment.</strong> Scoping is the term that misses the deadline.</li>
 <li><strong>An unowned runbook step.</strong> It is the one that takes a day.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>scenario                            contain   report   met   margin
---------------------------------------------------------------------
-fast containment, slow scoping          1.0     80.0 False     -8.0
-slow containment, fast reporting       40.0     60.0  True     12.0
-both fast                               2.0     20.0  True     52.0
-attribution broken (D3.5)               6.0     92.0 False    -20.0
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-The first row contained in ONE HOUR and still missed the deadline.
-event                                      t+h  could a regulator call this awareness?
-------------------------------------------------------------------------------------
-alert fires                                  0  False
-analyst triages, suspects an incident        3  True
-IR lead confirms an incident                 9  True
-scope established                           40  True
-legal confirms it is reportable             55  True
+No model endpoint is configured, and every skill here needs one.
 
-clock from analyst suspicion       elapsed  73h  MISSED (72h deadline)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-clock from IR confirmation         elapsed  67h  MET (72h deadline)
-
-clock from legal determination     elapsed  21h  MET (72h deadline)
-
-The same incident, the same report time, three different answers.
-Pick the earliest defensible start. A regulator will.
-obligation                            deadline (h)  notify
-----------------------------------------------------------------------------
-DORA (major ICT incident)                        4  initial notification
-contractual (major client)                      12  client security contact
-NIS2 (early warning)                            24  CSIRT
-PCI DSS (card data)                             24  acquirer/brands
-GDPR (personal data breach)                     72  supervisory authority
-
-your real deadline is the shortest: DORA (major ICT incident) at 4h
-
-as usually written: sound=False
-   ⚠ one owner for both workstreams — they compete for the same person under time pressure
-   ⚠ clock starts at &#x27;confirmation&#x27;, not at awareness — a regulator will use the earlier point
-
-corrected: sound=True</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>One-hour containment still misses the 72-hour deadline in the slow-scoping scenario, and broken attribution misses it by 20 hours. The same incident is met or missed depending on which point is treated as awareness. The obligation register shows DORA's 4-hour clock as the binding one, and the runbook check flags a shared owner and a late clock start.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Build your shortest-clock register: every obligation, its deadline, and who notifies. Then check whether your runbook starts the clock at awareness or at confirmation. The gap between those two is often more than a day.</p></div></section><div class="expect"><b>Expect</b>A materiality call and a notification clock started in hour one, feeding Track E2.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D5.6.ipynb</code></p></div><div class="pager"><a href="D5.5.html"><span class="k">← Previous</span><span class="t">D5.5 · Proposing the policy change — the diff, and what it does not fix</span></a><a class="next" href="E1.0.html"><span class="k">Next →</span><span class="t">E1.0 · Start here — what AI governance means</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>One-hour containment still misses the 72-hour deadline in the slow-scoping scenario, and broken attribution misses it by 20 hours. The same incident is met or missed depending on which point is treated as awareness. The obligation register shows DORA's 4-hour clock as the binding one, and the runbook check flags a shared owner and a late clock start.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Build your shortest-clock register: every obligation, its deadline, and who notifies. Then check whether your runbook starts the clock at awareness or at confirmation. The gap between those two is often more than a day.</p></div></section><div class="expect"><b>Expect</b>A materiality call and a notification clock started in hour one, feeding Track E2.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D5.6.ipynb</code></p></div><div class="pager"><a href="D5.5.html"><span class="k">← Previous</span><span class="t">D5.5 · Proposing the policy change — the diff, and what it does not fix</span></a><a class="next" href="E1.0.html"><span class="k">Next →</span><span class="t">E1.0 · Start here — what AI governance means</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

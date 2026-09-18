@@ -197,71 +197,14 @@ Nobody put a card number in the trace deliberately. The agent read a
 <li><strong>Retaining or discarding whole records.</strong> Both answers are wrong.</li>
 <li><strong>Scanning prompts only.</strong> Tool results carry the same content.</li>
 <li><strong>Not stating what the short windows lose.</strong> That is the trade being made.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
---------------------------------------------------------------
-svc-indexer             0.800    0.0    20.04     0.01  agent
-dana@corp               0.028   1.55      0.0     1.11  human
-unknown-token-7f3c      0.563    0.0      1.0     0.11  agent
-sam@corp-ide            0.533    0.0      0.5      0.1  human
-polite-agent            0.021   1.26      0.0     0.83  agent
- threshold  humans flagged   agents MISSED
---------------------------------------------
-       0.3               1               1   ← invisible agents
-       0.4               1               1   ← invisible agents
-       0.5               1               1   ← invisible agents
-       0.6               0               2   ← invisible agents
-       0.7               0               2   ← invisible agents
-       0.8               0               2   ← invisible agents
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-The two errors cost differently:
-   human flagged as agent  → one investigation, ~30 min, self-correcting
-   agent flagged as human  → it stays out of your NHI inventory entirely
- threshold   FP   FN   expected cost (hrs)
---------------------------------------------
-      0.20    1    1                  40.5
-      0.30    1    1                  40.5
-      0.40    1    1                  40.5
-      0.50    1    1                  40.5
-      0.60    0    2                  80.0
-      0.70    0    2                  80.0
-      0.80    0    2                  80.0
-      0.90    0    3                 120.0
+No model endpoint is configured, and every skill here needs one.
 
-cost-minimising threshold: 0.55 (expected 40.0 hrs)
-Accuracy-maximising would sit higher and let the polite agent through.
-at that threshold: 0 humans investigated, 1 agents missed
-shadow agents (behaves like software, not in the inventory):
-   unknown-token-7f3c     score=0.563
-full record (everything the harness saw):
-    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result&#x27;: &#x27;def charge(card_number, amount):  # card_number = 4111111111111111&#x27;}
-    {&#x27;n&#x27;: 2, &#x27;tool&#x27;: &#x27;search_code&#x27;, &#x27;target&#x27;: &#x27;charge(&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;find callers of charge()&#x27;, &#x27;result&#x27;: &#x27;api/checkout.py:88 charge(user.card, total)&#x27;}
-    {&#x27;n&#x27;: 3, &#x27;tool&#x27;: &#x27;write_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;tests pass&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;apply the fix&#x27;, &#x27;result&#x27;: &#x27;patch applied&#x27;}
-sensitive content found in the trace:
-   step 1  result   payment card
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Nobody put a card number in the trace deliberately. The agent read a
-source file, and the file contained a test fixture with a real-shaped PAN.
-The trace is now in scope for PCI, and it is in your SIEM for 400 days.
-field       days  sensitivity  rationale
---------------------------------------------------------------------------
-n            400          low  cheap, high forensic value
-tool         400          low  cheap, high forensic value
-target       400          low  path only, no contents
-verifier     400          low  what the harness believed — the key forensic field
-ok           400          low  
-prompt        30         high  may contain anything the task included
-result         7         high  tool output — the highest-risk field
-
-after 1 days — step 1 record:
-    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result&#x27;: &#x27;def charge(card_number, amount):  # card_number = 4111111111111111&#x27;}
-
-after 14 days — step 1 record:
-    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result_sha256&#x27;: &#x27;b0e3ecafa7e7a9a0&#x27;}
-
-after 90 days — step 1 record:
-    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt_sha256&#x27;: &#x27;60d7bceb0de1a7bd&#x27;, &#x27;result_sha256&#x27;: &#x27;b0e3ecafa7e7a9a0&#x27;}
-sensitive content after 90 days: none
-can still answer &#x27;what did it do and what did the harness believe?&#x27;: True
-
-The hash is retained, so if the original is recovered from a backup you
-can still prove it is the same content the agent saw.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>First: the service indexer and unknown token score highest, the human lowest, with the IDE user and the politely-jittered agent in between. The threshold sweep shows humans flagged rising and agents missed falling as it drops, cost-weighting selects a low one, and joining against the registry names the unregistered actors as shadow agents. Then the trace of one of them: a payment-card pattern in a source file it read legitimately, and per-field retention that keeps timestamps, tool, target and verifier for 400 days while dropping prompts at 30 and tool results at 7. After 90 days no sensitive content remains and the record still answers what the agent did.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run the scoring against a week of your own authentication logs and count the actors it flags that are not in your registry. Then check the retention period on whatever traces you keep for them: if it matches your firewall logs, one of those two numbers was chosen without anyone looking at what the traces contain.</p></div></section><div class="expect"><b>Expect</b>A working classifier — your earliest Shadow Autonomy signal.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.3.ipynb</code></p></div><div class="pager"><a href="D1.2.html"><span class="k">← Previous</span><span class="t">D1.2 · Drift monitoring — behaviour that changes without a code change</span></a><a class="next" href="D2.1.html"><span class="k">Next →</span><span class="t">D2.1 · The detection data lake — where agent telemetry lands</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>First: the service indexer and unknown token score highest, the human lowest, with the IDE user and the politely-jittered agent in between. The threshold sweep shows humans flagged rising and agents missed falling as it drops, cost-weighting selects a low one, and joining against the registry names the unregistered actors as shadow agents. Then the trace of one of them: a payment-card pattern in a source file it read legitimately, and per-field retention that keeps timestamps, tool, target and verifier for 400 days while dropping prompts at 30 and tool results at 7. After 90 days no sensitive content remains and the record still answers what the agent did.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run the scoring against a week of your own authentication logs and count the actors it flags that are not in your registry. Then check the retention period on whatever traces you keep for them: if it matches your firewall logs, one of those two numbers was chosen without anyone looking at what the traces contain.</p></div></section><div class="expect"><b>Expect</b>A working classifier — your earliest Shadow Autonomy signal.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.3.ipynb</code></p></div><div class="pager"><a href="D1.2.html"><span class="k">← Previous</span><span class="t">D1.2 · Drift monitoring — behaviour that changes without a code change</span></a><a class="next" href="D2.1.html"><span class="k">Next →</span><span class="t">D2.1 · The detection data lake — where agent telemetry lands</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

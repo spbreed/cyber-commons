@@ -1,12 +1,11 @@
-   Alex                12 actions/hour -> silent
-   workflow agent    1400 actions/hour -> ALERT
+no model configured
 
-the agent crosses the threshold after 154 seconds
-and keeps going for the remaining 3446.
+No model endpoint is configured, and every skill here needs one.
 
-So the rule fires, about two and a half minutes into a sixty-minute run -
-by which point most of what the actor was going to do is done. If those
-were refunds, the alert arrives after the money has moved.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Chapter 8 is about detections that fire on shape rather than volume.
-Chapter 9 is about who can pull the stop lever without asking.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

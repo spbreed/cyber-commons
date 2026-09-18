@@ -1,15 +1,11 @@
- hop   confidence  claim
-   0         0.20  I could not find a CVE for libfoo, it is probably fine
-   1         0.80  a CVE for libfoo, it is fine
-   2         0.80  a CVE for libfoo, it is fine
-   3         0.80  a CVE for libfoo, it is fine
+no model configured
 
-provenance recorded at hop 3: none
-confidence at hop 0: 0.20   at hop 3: 0.8
+No model endpoint is configured, and every skill here needs one.
 
-Nothing lied. Every hop did its job. The claim gained certainty at the
-exact rate it lost evidence, and by hop three it reads like a finding
-someone verified.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-An attacker who lands one plausible claim early gets it laundered into
-an established fact by your own pipeline - for free.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

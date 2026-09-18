@@ -73,45 +73,14 @@ red-team attack success rate (containment surface): 25%
 <li><strong>Reporting incidents.</strong> They are anecdotes at this altitude.</li>
 <li><strong>One coverage number.</strong> The stale bucket is the story.</li>
 <li><strong>No ask.</strong> An update with no decision requested gets noted.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>agent                     blast radius
-----------------------------------------
-pr-remediation-agent                44
-claims-triage-agent                  1
-doc-summariser                       1
-FLEET TOTAL                         46
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-red-team attack success rate (containment surface): 25%
-controls currently evidenced: 4/8 = 50%
+No model endpoint is configured, and every skill here needs one.
 
-This quarter the team identified prompt injection in the code review agent,
-insufficient scope narrowing in the delegation chain, and gaps in our egress
-allowlist. We ran garak and promptfoo against three agents and found a 25%
-attack success rate on the containment surface. We recommend prioritising
-provenance controls and completing the SPIFFE rollout.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Problems with this, from the audience&#x27;s side:
-   · no exposure figure — how much can actually happen?
-   · &#x27;25% attack success rate&#x27; against what, and is that good or bad?
-   · four tool names nobody in the room can evaluate
-   · &#x27;recommend prioritising&#x27; is not a decision anyone can take
-   · no option to decline, so it reads as lobbying rather than a choice
-
-EXPOSURE     A critical-tier system can take 46 units of unreviewed action.
-             (One unit ≈ one irreversible change inside one project.)
-
-LIKELIHOOD   We attacked it. 25% of our attack suite succeeded — demonstrated.
-             This is a measurement, not an assessment.
-
-ASSURANCE    50% of the controls we say we operate are currently
-             evidenced. The remainder are untested or their evidence has expired.
-
-DECISION     Fund continuous control verification for the agent fleet.
-             Cost: 0.5 FTE for two quarters, no new licences.
-             The alternative is to accept the unevidenced portion in writing,
-             owned by the Chief Operating Officer, with a review date. Both are acceptable outcomes;
-             we need one of them recorded.
-mechanism terms present: none
-offers a genuine alternative : True
-carries measured numbers     : True
-
-Four facts, no mechanism, and a decision that can go either way.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The fleet's exposure totals 46 units, containment ASR is 25%, and control coverage is 50%. The findings-shaped update is shown with five specific problems. The board translation states exposure, likelihood, assurance and a decision, contains no mechanism jargon, carries the measured numbers, and explicitly offers written acceptance as an alternative.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Write these four lines for your highest-tier system. If you cannot fill the likelihood line with a measurement, that is the first thing to fund — an assessment is not a number.</p></div></section><div class="expect"><b>Expect</b>What can happen, how fast, who can stop it — with the engineering vocabulary stripped out.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.1.ipynb</code></p></div><div class="pager"><a href="E2.9.html"><span class="k">← Previous</span><span class="t">E2.9 · Regulator and auditor conversations</span></a><a class="next" href="E3.2.html"><span class="k">Next →</span><span class="t">E3.2 · Governing autonomy rather than approving tools</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The fleet's exposure totals 46 units, containment ASR is 25%, and control coverage is 50%. The findings-shaped update is shown with five specific problems. The board translation states exposure, likelihood, assurance and a decision, contains no mechanism jargon, carries the measured numbers, and explicitly offers written acceptance as an alternative.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Write these four lines for your highest-tier system. If you cannot fill the likelihood line with a measurement, that is the first thing to fund — an assessment is not a number.</p></div></section><div class="expect"><b>Expect</b>What can happen, how fast, who can stop it — with the engineering vocabulary stripped out.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.1.ipynb</code></p></div><div class="pager"><a href="E2.9.html"><span class="k">← Previous</span><span class="t">E2.9 · Regulator and auditor conversations</span></a><a class="next" href="E3.2.html"><span class="k">Next →</span><span class="t">E3.2 · Governing autonomy rather than approving tools</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

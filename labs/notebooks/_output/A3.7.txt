@@ -1,15 +1,11 @@
-   the intended call           ALLOWED
-   unregistered agent          denied at identity
-   verb not permitted          denied at policy
-   exfiltration destination    denied at egress
-   over the per-target ceiling denied at budget
+no model configured
 
-audit entries written: 1
-credential held by the agent: never - attached at the gateway
+No model endpoint is configured, and every skill here needs one.
 
-The agent implements none of this. Add a new agent tomorrow and it
-inherits every control by being on the other side of one hop.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-And the legacy database, which cannot consume a delegated token, is
-reached with a static credential the agent has never seen - authorised
-against dana before the call was made.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

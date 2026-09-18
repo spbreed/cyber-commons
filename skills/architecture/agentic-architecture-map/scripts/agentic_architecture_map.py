@@ -1,19 +1,41 @@
 #!/usr/bin/env python3
 """Draw CyberTravels as nine components, mark every edge where trust changes, and name the boxes that do not exist.
 
-This is the executable half of the `agentic-architecture-map` skill. The
-crossings are derived from the trust levels rather than listed: change a level
-in COMPONENTS below and the count changes with it, which is the property that
-makes the map arguable rather than decorative.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-It also emits the map as Graphviz DOT, so the picture on the lesson page is
-rendered from this data by the real `dot` binary rather than drawn by hand.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
 
-Standard library only, and deterministic.
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/architecture/agentic-architecture-map/scripts/agentic_architecture_map.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-from cyber_commons_skill_runtime import dot_graph, emit_diagram
+import json
+import pathlib
+import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # Step 1 — all nine, present or not. An absent box is a decision, not a gap.
 # (trust level, holds authority, present at CyberTravels)
 COMPONENTS = {
@@ -43,81 +65,44 @@ EDGES = [
     ("messaging",     "agent runtime", ["peer messages"]),
 ]
 
-present = {c for c, (_, _, p) in COMPONENTS.items() if p}
-absent = sorted(c for c, (_, _, p) in COMPONENTS.items() if not p)
-
-print(f"{len(COMPONENTS)} components, {len(present)} present at CyberTravels")
-print(f"   {'component':<16}{'trust':>6}{'authority':>11}  present")
-for name in sorted(COMPONENTS):
-    trust, auth, is_present = COMPONENTS[name]
-    print(f"   {name:<16}{trust:>6}{'yes' if auth else '-':>11}  "
-          f"{'yes' if is_present else 'NO'}")
-print()
-
-# Step 3 — a crossing is an edge from a lower trust level to a higher one.
-report = {"components": [], "edges": [], "absent": absent}
-for name in sorted(COMPONENTS):
-    trust, auth, is_present = COMPONENTS[name]
-    report["components"].append({"name": name, "present": is_present,
-                                 "trust": trust, "holds_authority": auth})
-
-crossings = []
-for src, dst, carries in EDGES:
-    if src not in present or dst not in present:
-        continue
-    crossing = COMPONENTS[src][0] < COMPONENTS[dst][0]
-    report["edges"].append({"from": src, "to": dst, "carries": carries,
-                            "boundary_crossing": crossing})
-    if crossing:
-        crossings.append((src, dst, carries))
-report["crossings"] = len(crossings)
-
-print(f"{len(crossings)} trust-boundary crossing(s) — always more than expected")
-for src, dst, carries in crossings:
-    print(f"   {src:<16} -> {dst:<16}{COMPONENTS[src][0]}->{COMPONENTS[dst][0]}"
-          f"   carries {', '.join(carries)}")
-print()
-print("Two of those carry content nobody on staff wrote — traveller text and")
-print("retrieved documents — into a component that holds authority. Every")
-print("injection risk in Function A is one of those two edges.")
-print()
-
-# Step 5 — name what is missing. A control for a component nobody has is a
-# conversation nobody needs.
-print(f"absent: {', '.join(absent)}")
-print("CyberTravels has no egress gateway, so 'route it through the gateway' is")
-print("not a control it can apply yet. Saying that here stops the argument")
-print("later.")
-print()
-
 KIND = {}
-for name, (trust, auth, is_present) in COMPONENTS.items():
-    if not is_present:
-        KIND[name] = "dead"
-    elif trust == 0:
-        KIND[name] = "entry"
-    elif auth:
-        KIND[name] = "sink"
-    else:
-        KIND[name] = "unit"
+# ------------------------------------------------------------------------ run
 
-nodes = {n: {"label": f"{n}\\ntrust {COMPONENTS[n][0]}", "kind": KIND[n]}
-         for n in COMPONENTS}
-edges = [(s, d, "BOUNDARY" if COMPONENTS[s][0] < COMPONENTS[d][0] else "")
-         for s, d, _ in EDGES]
-emit_diagram("a-architecture-map",
-             dot=dot_graph("architecture", nodes, edges,
-                           legend_labels={"entry": "trust 0 — content from outside",
-                                          "unit": "no authority",
-                                          "sink": "holds authority",
-                                          "dead": "not built yet"}))
-print()
-print("Red is trust 0 — content from outside. Orange holds authority. Dashed is")
-print("a component CyberTravels does not have. Every BOUNDARY edge is a risk in")
-print("Function A, and there are more of them than the picture suggests until")
-print("the levels are written down.")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-assert report["crossings"] >= 2, "a map with no crossings has the levels wrong"
-assert absent, "name what is missing, or the map implies it exists"
-assert any(e["boundary_crossing"] and "retrieved documents" in e["carries"]
-           for e in report["edges"]), "the indirect-injection edge must cross"
+
+FIXTURE = {"COMPONENTS": COMPONENTS, "EDGES": EDGES, "KIND": KIND}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

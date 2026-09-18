@@ -1,13 +1,41 @@
 #!/usr/bin/env python3
 """Re-measure the key control indicators an incident moved, and say which the fix actually restored.
 
-This is the executable half of `kci-fix-validation`. Closing a ticket is not
-evidence. The KCIs defined in E1.1 are measurements; a fix is validated when
-the indicators it claimed to restore have been measured again and come back.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/response/kci-fix-validation/scripts/kci_fix_validation.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # KCI, what it measures, target, and three readings: healthy, during, after fix.
 KCIS = [
     ("KCI-01", "tool calls carrying provenance",        ">= 0.99", 1.00, 0.41, 1.00),
@@ -16,47 +44,43 @@ KCIS = [
     ("KCI-04", "mean minutes to detect a scope breach", "<= 15",   9.0, 194.0, 118.0),
     ("KCI-05", "agents inside declared scope",          "== 1.00", 1.00, 0.97, 1.00),
 ]
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
 
-def meets(target, value):
-    op, bound = target.split()
-    bound = float(bound)
-    return {">=": value >= bound, "==": value == bound, "<=": value <= bound}[op]
+FIXTURE = {"KCIS": KCIS}
 
 
-print(f"{'kci':<8}{'measures':<38}{'target':>9}{'before':>8}{'incident':>10}{'after':>8}  verdict")
-report = {"restored": [], "not_restored": [], "regressed": []}
-for kid, what, target, before, during, after in KCIS:
-    was_ok, broke, now_ok = meets(target, before), not meets(target, during), meets(target, after)
-    if not broke:
-        verdict = "untouched"
-    elif now_ok:
-        verdict = "restored"
-        report["restored"].append(kid)
-    else:
-        verdict = "NOT RESTORED"
-        report["not_restored"].append(kid)
-    print(f"{kid:<8}{what:<38}{target:>9}{before:>8.2f}{during:>10.2f}{after:>8.2f}  {verdict}")
-print()
-print(f"{len(report['restored'])} restored · {len(report['not_restored'])} not restored")
-print()
-for kid in report["not_restored"]:
-    row = next(k for k in KCIS if k[0] == kid)
-    print(f"   {kid}  {row[1]}")
-    print(f"          target {row[2]}, measured {row[5]} — the fix did not reach this one")
-print()
-broke = len(report["restored"]) + len(report["not_restored"])
-print(f"This is the whole point of measuring rather than closing. "
-      f"{len(report['restored'])} indicators came")
-print(f"back to target and {len(report['not_restored'])} did not, and the incident "
-      f"record would have said")
-print(f"'remediated' for all {broke}.")
-print()
-print("KCI-04 is the uncomfortable one. Detection time improved from 194 minutes")
-print("to 118 and is still eight times the target, so the control the root cause")
-print("record named has been partially built. Partially built is not built, and")
-print("without the re-measurement it reads as done.")
+def main() -> int:
+    announce_backend()
 
-assert report["not_restored"] == ["KCI-03", "KCI-04"]
-assert "KCI-01" in report["restored"] and "KCI-02" in report["restored"]
-assert not meets("<= 15", 118.0)
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

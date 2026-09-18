@@ -80,52 +80,14 @@ fills the gap fluently.</p>
 <li><strong>Correcting the timeline before showing it.</strong> The uncorrected view is what
   everyone else is looking at.</li>
 <li><strong>Softening unsupported claims.</strong> Remove them.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>WHAT THE RESPONDER SEES
-   t+s  actor           action          target
-     0  dana@corp       login           sso
-    22  dana@corp       open_ticket     SEC-4471
-    40  dana@corp       read_file       /work/repo/billing.py
-    41  dana@corp       read_file       /home/app/.aws/credentials
-    43  dana@corp       http_post       collect.example.com
-   180  dana@corp       logout          sso
-A MODEL&#x27;S RECONSTRUCTION (fluent, supported by every log line):
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-At 14:02 dana@corp authenticated via SSO and opened ticket SEC-4471. Eighteen
-seconds later the same account read billing.py, then read the application&#x27;s AWS
-credentials, and posted to an external host. The account then remained active
-for a further two minutes before logging out.
+No model endpoint is configured, and every skill here needs one.
 
-Assessment: credential theft by an authenticated insider. Recommend immediate
-suspension of dana@corp pending investigation.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-WHAT ACTUALLY HAPPENED
-   t+s  actor           action          target
-     0  dana@corp       login           sso
-    22  dana@corp       open_ticket     SEC-4471
-    40  patch-agent     read_file       /work/repo/billing.py
-    41  patch-agent     read_file       /home/app/.aws/credentials
-    43  patch-agent     http_post       collect.example.com
-   180  dana@corp       logout          sso
-actors_in_logs        [&#x27;dana@corp&#x27;]
-actors_in_reality     [&#x27;dana@corp&#x27;, &#x27;patch-agent&#x27;]
-misattributed_lines   3
-hidden_actors         [&#x27;patch-agent&#x27;]
-attribution           BROKEN
-consequence           containment aimed at [&#x27;dana@corp&#x27;] leaves [&#x27;patch-agent&#x27;] running
-
-Every sentence in that narrative is supported by the logs.
-The conclusion is wrong, and the recommended action does nothing.
-EVIDENTIARY LIMITS (must appear before any conclusion):
-   ⚠ no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
-   ⚠ no delegation chain: cannot establish who caused the task
-
-Timeline: dana@corp authenticated, opened SEC-4471; the account then read
-billing.py, read AWS credentials, and posted externally.
-
-LIMITS OF THIS RECONSTRUCTION
-  - no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
-  - no delegation chain: cannot establish who caused the task
-
-Assessment: an actor holding dana@corp&#x27;s credential performed the reads and the
-POST. The logs CANNOT establish whether that actor was the human or an agent
-operating with her token. Containment must therefore address both.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The timeline attributes every action to <code>dana@corp</code>. The fluent narrative recommends suspending her. The truth view shows <code>patch-agent</code> performed the credential read and the external POST; reconstruction reports BROKEN attribution with 3 misattributed lines. The evidence check flags the missing acting-identity field, the missing chain, and a non-human action rate.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take a real incident timeline from your own history and ask what it would look like if an agent had been operating on the user's credential. If you cannot tell from the logs, your reconstructions already carry this risk.</p></div></section><div class="expect"><b>Expect</b>The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Velociraptor</span><span>OpenSearch</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.5.ipynb</code></p></div><div class="pager"><a href="D3.4.html"><span class="k">← Previous</span><span class="t">D3.4 · When the actor is an agent — three instincts that misfire</span></a><a class="next" href="D3.6.html"><span class="k">Next →</span><span class="t">D3.6 · Plan, then replan — an investigation that changes its mind</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The timeline attributes every action to <code>dana@corp</code>. The fluent narrative recommends suspending her. The truth view shows <code>patch-agent</code> performed the credential read and the external POST; reconstruction reports BROKEN attribution with 3 misattributed lines. The evidence check flags the missing acting-identity field, the missing chain, and a non-human action rate.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take a real incident timeline from your own history and ask what it would look like if an agent had been operating on the user's credential. If you cannot tell from the logs, your reconstructions already carry this risk.</p></div></section><div class="expect"><b>Expect</b>The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Velociraptor</span><span>OpenSearch</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.5.ipynb</code></p></div><div class="pager"><a href="D3.4.html"><span class="k">← Previous</span><span class="t">D3.4 · When the actor is an agent — three instincts that misfire</span></a><a class="next" href="D3.6.html"><span class="k">Next →</span><span class="t">D3.6 · Plan, then replan — an investigation that changes its mind</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

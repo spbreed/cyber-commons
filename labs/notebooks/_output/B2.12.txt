@@ -1,58 +1,11 @@
-what a black-box engagement may look at
+no model configured
 
-  DNS and certificate transparency     names that exist
-  TLS handshake                        the terminator, and its config
-  HTTP status, headers, body           what the app chose to return
-  error strings                        occasionally a stack, usually a template
-  response timing                      a signal, and a noisy one
-  public artefacts (JS, sitemaps)      routes the front end knows about
-  the scope document                   what you are permitted to touch
+No model endpoint is configured, and every skill here needs one.
 
-OBSERVED — the evidence entails the claim  (5)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-  + host api.cybertravels.example resolves and serves TLS 1.3
-      because: handshake completed, cert chain read
-  + /bookings/{id} exists
-      because: 200 on a known id, 404 on a random one
-  + an admin surface exists at /admin
-      because: 302 to a login form, distinct from the 404 template
-  + rate limiting is applied per IP
-      because: 429 after 61 requests in 60s from one address
-  + passport numbers are returned by /profile
-      because: observed in a response to our own account
-
-INFERRED — the evidence is consistent with the claim, and with others  (7)
-
-  ? /bookings/{id} returns another tenant's booking
-      from:    404 on a random id
-  ? the app runs on Django
-      from:    X-Frame-Options and a csrftoken cookie name
-  ? the database is PostgreSQL
-      from:    an error string containing 'duplicate key value'
-  ? rate limiting is NOT applied per account
-      from:    not tested; no second address available
-  ? refunds are processed synchronously
-      from:    response time 1.9s vs 120ms on reads
-  ? the refund endpoint accepts a booking id it does not own
-      from:    not tested; would require a second account
-  ? a vendor MCP server is in the request path
-      from:    a Server header naming a proxy
-
-why each inference fails, in one line:
-  another tenant's booking  — a 404 on a random id is what CORRECT
-                              authorisation also looks like
-  Django / PostgreSQL       — headers and error strings are copied,
-                              proxied and templated by other stacks
-  no per-account rate limit — untested is not disproved
-  synchronous refunds       — latency has a dozen other causes
-  vendor MCP in the path    — a Server header names a hop, not a role
-  refund accepts foreign id — the finding that MATTERS, and this mode
-                              cannot reach it with one account
-
-report: 5 findings, 7 open questions
-no severity is attached to anything in the second list. an inference
-with a CVSS score beside it reads as a finding to everyone downstream,
-and the person who has to retract it is not the person who wrote it.
-
-the last open question is the one to escalate: it needs a second
-credential, which makes it a grey-box test, not a better black-box one.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

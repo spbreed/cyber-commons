@@ -77,50 +77,14 @@ colourama==0.4.6        block
   that differs.</li>
 <li><strong>Treating an MCP connector as configuration.</strong> It is code that runs with the
   agent.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>requests==2.31.0        allow
-requsts==2.31.0         block
-      · unsigned — no attestation to source
-      · published 3d ago — no soak time
-      · only 12 downloads
-      · distance 1 from popular package &#x27;requests&#x27;
-colourama==0.4.6        block
-      · unsigned — no attestation to source
-      · published 9d ago — no soak time
-      · only 40 downloads
-      · distance 1 from popular package &#x27;colorama&#x27;
-langchain==0.2.1        review
-      · unsigned — no attestation to source
-=== model weights ===
-   signing              Sigstore/in-toto possible, rarely used
-   popularity signal    NONE — &#x27;popular checkpoint&#x27; is not provenance
-   lineage              a fine-tune of a fine-tune; base model often unrecorded
-   runs with            no authority of its own — but shapes every decision
-   honest verdict       assess the PUBLISHER, because you cannot assess the artefact
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-=== prompt / tool packages (MCP, skills) ===
-   signing              NO convention exists
-   popularity signal    star counts, which are trivially gamed
-   lineage              none recorded
-   runs with            YOUR AGENT&#x27;S AUTHORITY — this is the dangerous one
-   honest verdict       treat as executable code, because it is
+No model endpoint is configured, and every skill here needs one.
 
-mcp-jira-connector: block
-   · unsigned — no attestation to source
-   · published 6d ago — no soak time
-   · only 180 downloads
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-Good news: the existing process EXTENDS to it rather than needing
-invention. Bad news: nothing in that process accounts for the fact that
-this package will run with your agent&#x27;s tools.
-
-authority-weighted verdict: block
-   · unsigned — no attestation to source
-   · published 6d ago — no soak time
-   · only 180 downloads
-   · runs with agent authority (blast 43)
-python package    assessed on 4/4 signals;  not available for this artefact class
-model weights     assessed on 1/4 signals; signature, downloads, lineage not available for this artefact class
-MCP tool pack     assessed on 1/4 signals; signature, downloads, lineage not available for this artefact class
-
-That last sentence is the deliverable. A risk rating that hides which
-signals were unavailable is a number someone will later rely on.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The pinned libraries score low-risk, the hosted model and the re-pulled dataset score high because neither can be pinned, and the one component with no provenance at all is the finding.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>List every model and dataset your pipeline pulls at train or deploy time. The ones with no pinned digest are the ones an attacker can change without touching your code.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigstore</span><span>OSV</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.1.ipynb</code></p></div><div class="pager"><a href="C1.0.html"><span class="k">← Previous</span><span class="t">C1.0 · Start here — the evolution of non-deterministic threat simulation</span></a><a class="next" href="C1.2.html"><span class="k">Next →</span><span class="t">C1.2 · Weaponizing the ingestion path</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The pinned libraries score low-risk, the hosted model and the re-pulled dataset score high because neither can be pinned, and the one component with no provenance at all is the finding.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>List every model and dataset your pipeline pulls at train or deploy time. The ones with no pinned digest are the ones an attacker can change without touching your code.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigstore</span><span>OSV</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.1.ipynb</code></p></div><div class="pager"><a href="C1.0.html"><span class="k">← Previous</span><span class="t">C1.0 · Start here — the evolution of non-deterministic threat simulation</span></a><a class="next" href="C1.2.html"><span class="k">Next →</span><span class="t">C1.2 · Weaponizing the ingestion path</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

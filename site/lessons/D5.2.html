@@ -79,32 +79,14 @@ D5.4 and to the policy change proposal.</p>
 <li><strong>Narrative postmortems.</strong> Readable, and they change nothing.</li>
 <li><strong>Blame, however gently worded.</strong> It ends the analysis one step early.</li>
 <li><strong>A root cause with no KCI.</strong> Nothing will ever check that the fix worked.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>INC-2026-114 · detected by customer complaint after 194 minutes
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-control what it would have caught                 status
-A2.6    provenance marking at ingress             absent
-A3.1    default-deny on the tool call             present-but-scoped-wrong
-D2.4    detection on refund without approval      absent
-D1.2    drift monitor on vendor tool descriptions absent
-D4.4    stop authority within the refund window   present
+No model endpoint is configured, and every skill here needs one.
 
-first absent control in the chain: A2.6 — provenance marking at ingress
-contributing: D2.4, D1.2
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-candidate root cause statements
-   REJECT  the on-call engineer missed the alert
-           -&gt; names no control
-   REJECT  we should have been more careful with vendor MCP servers
-           -&gt; names no control
-   ACCEPT  no control compared the vendor tool description against the version approved at onboarding
-
-1 of 3 statements are usable as a root cause
-
-The first two are true and useless. An engineer missing an alert is a
-thing that will happen again next quarter to a different engineer, and
-&#x27;be more careful&#x27; is not a change anybody can make. Only the third names
-something that can be built, tested, and checked in D5.4.
-
-Note that stop authority was PRESENT and the incident still ran 194
-minutes. A control that exists but is never reached is not a mitigating
-factor - it is evidence that the detection in front of it was the gap.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>One of three statements accepted. The first absent control in the chain is the root cause; the later absences are contributing.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take your last postmortem's root cause and run the test on it. If it names a person or an intention, rewrite it as a control.</p></div></section><div class="expect"><b>Expect</b>Build a root cause record from a reconstructed incident and check it names a control rather than a person.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D5.2.ipynb</code></p></div><div class="pager"><a href="D5.1.html"><span class="k">← Previous</span><span class="t">D5.1 · Replay and forensics — reproducing a run you can defend</span></a><a class="next" href="D5.3.html"><span class="k">Next →</span><span class="t">D5.3 · Post-incident change surface — picking the layer the fix belongs in</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>One of three statements accepted. The first absent control in the chain is the root cause; the later absences are contributing.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take your last postmortem's root cause and run the test on it. If it names a person or an intention, rewrite it as a control.</p></div></section><div class="expect"><b>Expect</b>Build a root cause record from a reconstructed incident and check it names a control rather than a person.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D5.2.ipynb</code></p></div><div class="pager"><a href="D5.1.html"><span class="k">← Previous</span><span class="t">D5.1 · Replay and forensics — reproducing a run you can defend</span></a><a class="next" href="D5.3.html"><span class="k">Next →</span><span class="t">D5.3 · Post-incident change surface — picking the layer the fix belongs in</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

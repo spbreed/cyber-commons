@@ -1,22 +1,44 @@
 #!/usr/bin/env python3
 """Evaluate the same destinations under a deny-list and under an exact allow-list.
 
-This is the executable half of the `sandbox-egress-verifier` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifier.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 ALLOW = {"api.corp.example", "reports-db.corp.example"}
+
 DENY_SUFFIXES = {".evil.example"}          # the deny-list, for comparison
-
-def by_denylist(host):
-    return not any(host.endswith(s) for s in DENY_SUFFIXES)
-
-def by_allowlist(host):
-    return host in ALLOW                    # exact, not suffix
 
 DESTINATIONS = [
  ("api.corp.example",              "the one it actually needs"),
@@ -25,20 +47,43 @@ DESTINATIONS = [
  ("169.254.169.254",               "cloud metadata - every credential"),
  ("pastebin.example",              "not on anyone's deny-list"),
 ]
+# ------------------------------------------------------------------------ run
 
-print(f"{'destination':38s}{'deny-list':12s}{'allow-list':12s}note")
-for host, note in DESTINATIONS:
-    d, a = by_denylist(host), by_allowlist(host)
-    print(f"{host:38s}{'allow' if d else 'block':12s}{'allow' if a else 'block':12s}{note}")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-leaked = [h for h, _ in DESTINATIONS if by_denylist(h) and h not in ALLOW]
-print(f"\ndeny-list lets through : {len(leaked)}  {leaked}")
-print(f"allow-list lets through : {sorted(h for h, _ in DESTINATIONS if by_allowlist(h))}")
-print()
-print("The deny-list blocked exactly the destination somebody had already")
-print("thought of. It cannot be completed, because the internet cannot be")
-print("enumerated.")
-print()
-print("Placement matters as much: this check belongs in the network path, not")
-print("in the agent. A check inside the process being attacked is advice.")
-assert len(leaked) == 3 and len([h for h, _ in DESTINATIONS if by_allowlist(h)]) == 1
+
+FIXTURE = {"ALLOW": ALLOW, "DENY_SUFFIXES": DENY_SUFFIXES, "DESTINATIONS": DESTINATIONS}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

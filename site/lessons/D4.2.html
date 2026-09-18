@@ -84,31 +84,14 @@ manual                   2072s                                0.2
   production on a false positive.</li>
 <li><strong>Manual as the safe default.</strong> On a 29-minute breakout time, slow is a risk
   decision too — just an unstated one.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>step                           automated   human-in-the-loop              manual
-detect                               2s                  2s                  2s 
-decide                               1s                240s               1800s 
-throttle agent                       3s                  3s                 60s 
-revoke token                         3s                  3s                 90s 
-confirm contained                    5s                  5s                120s 
-time to contain                     14s                253s               2072s 
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-tier                   contain  reaches the estate wrongly / 100
-automated                  14s                               8.0
-human-in-the-loop         253s                               1.2
-manual                   2072s                               0.2
+No model endpoint is configured, and every skill here needs one.
 
-There is deliberately no third column ranking these. Seconds of exposure
-and wrongly-contained agents are not in the same unit, and any single
-score that ranks them has smuggled in an exchange rate somebody chose.
-Choose it openly, per incident class, or do not choose it at all.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-The automated tier contains in a quarter of a minute and is wrong eight
-times in a hundred, with nobody between the mistake and the estate. The
-manual tier is wrong far less often and takes over half an hour, which on
-a 29-minute breakout time means containment lands after the attacker has
-finished. Neither is &#x27;safe&#x27;. They fail differently.
-
-This is why the tier comes from the remediation policy and not from the
-runbook author&#x27;s confidence: the trade is a property of the ACTION, and
-the false-positive rate is a property of the DETECTION. Neither of them
-is a property of how bold the person writing the runbook was feeling.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>14s / 253s / 2072s to contain, against 8.0 / 1.2 / 0.2 wrong actions per hundred — and no third column ranking them.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Put your own detection's false-positive rate in and see whether the tier you already ship still looks right.</p></div></section><div class="expect"><b>Expect</b>Take one incident and run its response at all three tiers, comparing what each costs and what each risks.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>kagent</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D4.2.ipynb</code></p></div><div class="pager"><a href="D4.1.html"><span class="k">← Previous</span><span class="t">D4.1 · Remediation policy — what may be done without asking</span></a><a class="next" href="D4.3.html"><span class="k">Next →</span><span class="t">D4.3 · Containment at machine speed</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>14s / 253s / 2072s to contain, against 8.0 / 1.2 / 0.2 wrong actions per hundred — and no third column ranking them.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Put your own detection's false-positive rate in and see whether the tier you already ship still looks right.</p></div></section><div class="expect"><b>Expect</b>Take one incident and run its response at all three tiers, comparing what each costs and what each risks.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>kagent</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D4.2.ipynb</code></p></div><div class="pager"><a href="D4.1.html"><span class="k">← Previous</span><span class="t">D4.1 · Remediation policy — what may be done without asking</span></a><a class="next" href="D4.3.html"><span class="k">Next →</span><span class="t">D4.3 · Containment at machine speed</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

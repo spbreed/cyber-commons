@@ -1,29 +1,41 @@
 #!/usr/bin/env python3
 """Score three real Semgrep runs against a hand-written key, and report recall per ruleset width.
 
-This is the executable half of the `sast-semgrep-deterministic` skill. The
-findings are not synthetic: they are the output of **Semgrep 1.176.0** run
-against the `cybertravels/` sample repository — the reference architecture
-from A1.1, as source — at three widths. The raw JSON is committed next to
-this script in `evidence/semgrep_runs.json`, and
-`labs/tools/semgrep-sast/run.sh` reproduces it:
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-    semgrep --config=p/python --config=p/secrets            -> narrow
-    semgrep --config=p/default ... seven packs ...          -> wide
-    semgrep --config=rules/cybertravels-taint.yaml          -> taint
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
 
-Replaying committed output rather than shelling out keeps the lesson
-deterministic and runnable on a kernel with no Semgrep installed. It is the
-same JSON the run produced.
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
 
-Standard library only, and deterministic.
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/appsec/sast-semgrep-deterministic/scripts/sast_semgrep_deterministic.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
 import json
-from pathlib import Path
+import pathlib
+import sys
 
-EVIDENCE = Path(__file__).resolve().parent.parent / "evidence" / "semgrep_runs.json"
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # Step 1 — the key, from cybertravels/LABELS.md, written by reading the tree
 # before any scan. `expressible` is the question that decides what a scanner
 # could ever do, and it has three values rather than two.
@@ -48,91 +60,45 @@ KEY = [
     ("agents/file_agent.py",   11, "render_template",  "CWE-95",  "yes",
      "customer template evaluated"),
 ]
-KEY_SITES = {(f, ln) for f, ln, *_ in KEY}
 
-runs = json.loads(EVIDENCE.read_text())
 ORDER = ["narrow", "wide", "taint"]
+# ------------------------------------------------------------------------ run
 
-expressible = sum(1 for k in KEY if k[4] != "no")
-print(f"semgrep {runs['narrow']['semgrep_version']} · cybertravels/ · "
-      f"{len(KEY)} defects in the key, {expressible} of them expressible "
-      f"as a pattern")
-print()
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-report = {"key": {"defects": len(KEY), "pattern_expressible": expressible},
-          "runs": []}
-found_by_any = set()
 
-print(f"{'config':<24}{'found':>6}{'tp':>4}{'fp':>4}{'prec':>7}{'recall':>8}")
-for name in ORDER:
-    run = runs[name]
-    sites = {(f["file"], f["line"]) for f in run["findings"]}
-    found_by_any |= sites
-    tp = len(sites & KEY_SITES)
-    fp = len(sites - KEY_SITES)
-    precision = tp / len(sites) if sites else 0.0
-    recall = tp / len(KEY)
-    print(f"{run['config']:<24}{len(run['findings']):>6}{tp:>4}{fp:>4}"
-          f"{precision:>7.2f}{recall:>8.2f}")
-    report["runs"].append({"config": run["config"], "findings": len(run["findings"]),
-                           "true_positives": tp, "precision": round(precision, 2),
-                           "recall": round(recall, 2)})
-print()
+FIXTURE = {"KEY": KEY, "ORDER": ORDER}
 
-# Step 5 — the width is the finding. Same tree, same engine, three times the
-# result on the widest setting, and every scan exits 0.
-print("Nothing about the tree changed between those rows. The narrow run looked")
-print("for two of the eight and found one; the wide run looked for more. Both")
-print("exit 0. A finding count with no config beside it is not a result.")
-print()
 
-# Step 4 — partition the misses. This is the part that decides what to buy.
-print("missed by every width:")
-report["missed_by_all"] = []
-for f, ln, unit, cwe, expr, what in KEY:
-    if (f, ln) in found_by_any:
-        continue
-    cls = {"yes": "coverage-gap", "library": "wrong-library",
-           "no": "not-expressible"}[expr]
-    print(f"   {f.split('/')[-1]:<18}{unit:<18}{cwe:<9}{cls:<17}{what}")
-    report["missed_by_all"].append({"file": f, "line": ln, "unit": unit,
-                                    "cwe": cwe, "class": cls})
-print()
+def main() -> int:
+    announce_backend()
 
-by_class = {}
-for m in report["missed_by_all"]:
-    by_class.setdefault(m["class"], []).append(m["unit"])
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-print(f"{len(by_class.get('coverage-gap', []))} coverage gap: a pattern matches this "
-      f"and nobody enabled a rule for it.")
-print("   Write the rule. It is an afternoon.")
-print()
-print(f"{len(by_class.get('wrong-library', []))} wrong library: sync_vendor disables TLS "
-      f"verification, which is")
-print("   textbook - on CyberTravels' own HTTP wrapper. Every registry rule for")
-print("   it is written against `requests`, so no pack fires. This is the single")
-print("   most common reason a mature codebase scans cleaner than it is, and the")
-print("   fix is a rule that names YOUR wrapper, not a different scanner.")
-print()
-print(f"{len(by_class.get('not-expressible', []))} not expressible as a pattern - all "
-      f"three are IDOR:")
-for unit in by_class.get("not-expressible", []):
-    print(f"      {unit}")
-print("   Each takes an identifier and returns or mutates the record it names,")
-print("   and never compares an owner. `get_my_booking` two functions away does")
-print("   the same read correctly. The defect is not in either function - it is")
-print("   the missing comparison BETWEEN loading and returning, and there is no")
-print("   syntax for a thing that is absent. No ruleset reaches these at any")
-print("   width, ever. That is the boundary, and B2.3's next skill crosses it.")
-print()
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-widest = max(r["recall"] for r in report["runs"])
-report["widest_recall"] = widest
-print(f"widest recall: {widest:.2f}")
-print("Precision is 1.00 at every width. Semgrep's problem here was never that")
-print("it was wrong - it is that five of eight were never in scope, and three of")
-print("those five could not have been.")
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
 
-assert all(r["precision"] == 1.0 for r in report["runs"]), "a run reported a false positive"
-assert widest < 1.0, "if the widest width found everything, the key is too easy"
-assert len(by_class.get("not-expressible", [])) == 3, "the three IDORs must survive every width"
+
+if __name__ == "__main__":
+    sys.exit(main())

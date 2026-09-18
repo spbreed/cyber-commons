@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Turn horizontal AI regulation themes into named controls with evidence artefacts, and apply the show-me test to prose answers.
 
-This is the executable half of the `horizontal-requirement-to-control` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/regulatory/horizontal-requirement-to-control/scripts/horizontal_requirement_to_control.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 CATALOGUE = {
  "AC-1": ("agent identities distinct from human and separately revocable",
           "gateway logs with an act chain; monthly sample"),
@@ -22,19 +49,13 @@ CATALOGUE = {
  "DR-1": ("behavioural drift raises an alert", "drift alerts and dispositions"),
  "ST-1": ("a tested stop mechanism you own", "game-day record with measured time-to-stop"),
 }
+
 THEMES = {
  "risk management system":       ["AC-1", "SB-2", "DR-1"],
  "record-keeping (Art.12)":      ["EV-1", "AC-2"],
  "human oversight (Art.14)":     ["SB-2", "ST-1"],
  "accuracy and robustness":      ["EV-2", "DR-1"],
 }
-for theme, cids in THEMES.items():
-    print(f"{theme}")
-    for cid in cids:
-        text, evidence = CATALOGUE[cid]
-        print(f"   {cid}  {text}")
-        print(f"         evidence: {evidence}")
-    print()
 
 WEAK = {
  "risk management system":   "We operate a risk management framework for AI systems.",
@@ -42,50 +63,45 @@ WEAK = {
  "human oversight (Art.14)": "Human oversight is maintained at all times.",
  "accuracy and robustness":  "Models are tested prior to deployment.",
 }
-def survives_followup(answer, controls):
-    """The follow-up question is always 'show me'."""
-    return bool(controls), ("names a control with an artefact" if controls
-                            else "no artefact — the answer IS the evidence, which is the problem")
 
-print(f"{'theme':28s}{'prose answer survives?':>24}")
-print("-" * 56)
-for theme in THEMES:
-    ok_weak, _ = survives_followup(WEAK[theme], [])
-    print(f"{theme:28s}{str(ok_weak):>24}")
-print("\nAll four fail the same way: there is nothing to produce when asked.")
+DAY = 86400
+# ------------------------------------------------------------------------ run
 
-import time
-from dataclasses import dataclass
-now = time.time(); DAY = 86400
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; tested_at: float; valid_for_days: float
-    def state(self, at):
-        if (at - self.tested_at)/DAY > self.valid_for_days: return "STALE"
-        return "PASS" if self.passed else "FAIL"
 
-TESTS = [ControlTest("AC-1", True,  now -  3*DAY, 30),
-         ControlTest("AC-2", True,  now -  9*DAY, 30),
-         ControlTest("SB-2", True,  now - 40*DAY, 30),
-         ControlTest("EV-1", True,  now -  5*DAY, 60),
-         ControlTest("EV-2", True,  now - 12*DAY, 30),
-         ControlTest("DR-1", False, now,          30),
-         ControlTest("ST-1", True,  now - 41*DAY, 180)]
-by = {t.cid: t for t in TESTS}
+FIXTURE = {"CATALOGUE": CATALOGUE, "THEMES": THEMES, "WEAK": WEAK, "DAY": DAY}
 
-print(f"{'theme':28s}{'controls':22s}{'evidenced now':>15}")
-print("-" * 68)
-for theme, cids in THEMES.items():
-    states = [by[c].state(now) if c in by else "NO EVIDENCE" for c in cids]
-    ok = all(s == "PASS" for s in states)
-    blockers = ",".join(c for c, s in zip(cids, states) if s != "PASS")
-    verdict = "yes" if ok else f"NO — {blockers}"
-    print(f"{theme:28s}{str(cids):22s}{verdict:>15}")
 
-fully = [t for t, cids in THEMES.items()
-         if all((by[c].state(now) if c in by else "X") == "PASS" for c in cids)]
-print(f"\nthemes fully evidenced right now: {len(fully)}/{len(THEMES)}  {fully}")
-print("\nThat sentence is what you say to a supervisor. It is smaller than the")
-print("prose version and it is defensible, which is the trade worth making.")
-assert len(fully) < len(THEMES)
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

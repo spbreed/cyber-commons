@@ -1,13 +1,41 @@
 #!/usr/bin/env python3
 """Build a root cause record from a reconstructed incident, and reject one that names a person.
 
-This is the executable half of `root-cause-record`. A postmortem narrative is
-not a root cause: the test is whether the record names a CONTROL that should
-have caught the incident and did not, in a form the next change can act on.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/response/root-cause-record/scripts/root_cause_record.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 INCIDENT = {
     "id": "INC-2026-114",
     "summary": "vendor MCP tool description was altered; the workflow agent "
@@ -32,50 +60,45 @@ CANDIDATES = [
     "the version approved at onboarding",                        # names a control
 ]
 
-print(f"{INCIDENT['id']} · detected by {INCIDENT['detected_by']} after "
-      f"{INCIDENT['detected_after_minutes']} minutes")
-print()
-print(f"{'control':<8}{'what it would have caught':<42}status")
-for cid, what, status in CHAIN:
-    print(f"{cid:<8}{what:<42}{status}")
-print()
-
-# Step 2 — the first control in the chain that was absent is the root cause
-# candidate. Later absent controls are contributing, not root.
-absent = [c for c in CHAIN if c[2] == "absent"]
-root = absent[0]
-print(f"first absent control in the chain: {root[0]} — {root[1]}")
-print(f"contributing: {', '.join(c[0] for c in absent[1:])}")
-print()
-
 # Step 4 — the record has to name a control, not a person or an intention.
 PERSON = ("engineer", "analyst", "developer", "team", "on-call", "we", "someone")
-report = {"incident": INCIDENT["id"], "root_control": root[0],
-          "contributing": [c[0] for c in absent[1:]], "statements": []}
-print("candidate root cause statements")
-for text in CANDIDATES:
-    words = set(text.lower().replace(",", " ").split())
-    names_person = bool(words & set(PERSON))
-    names_control = any(k in text for k in ("control", "no ", "compared", "check"))
-    ok = names_control and not names_person
-    print(f"   {'ACCEPT' if ok else 'REJECT'}  {text}")
-    if not ok:
-        why = "names no control" if not names_control else "names a person"
-        print(f"           -> {why}")
-    report["statements"].append({"text": text, "accepted": ok})
-print()
-accepted = [s for s in report["statements"] if s["accepted"]]
-print(f"{len(accepted)} of {len(CANDIDATES)} statements are usable as a root cause")
-print()
-print("The first two are true and useless. An engineer missing an alert is a")
-print("thing that will happen again next quarter to a different engineer, and")
-print("'be more careful' is not a change anybody can make. Only the third names")
-print("something that can be built, tested, and checked in D5.4.")
-print()
-print("Note that stop authority was PRESENT and the incident still ran 194")
-print("minutes. A control that exists but is never reached is not a mitigating")
-print("factor - it is evidence that the detection in front of it was the gap.")
+# ------------------------------------------------------------------------ run
 
-assert len(accepted) == 1
-assert report["root_control"] == "A2.6"
-assert "D2.4" in report["contributing"]
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"INCIDENT": INCIDENT, "CHAIN": CHAIN, "CANDIDATES": CANDIDATES, "PERSON": PERSON}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

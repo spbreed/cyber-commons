@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Score the sensor classes an estate already owns against what an agent actually does.
 
-This is the executable half of the `sensor-coverage-matrix` skill: the check the
-SKILL.md next to it describes, run against the CyberTravels estate so two runs
-can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle kernel with the
-internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/detection/sensor-coverage-matrix/scripts/sensor_coverage_matrix.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # Four sensor classes almost every estate has bought, with an open-source
 # reference product so the claim is checkable rather than vendor-shaped.
 SENSORS = [
@@ -36,50 +63,45 @@ ACTIONS = [
 ]
 
 WEIGHT = {"full": 1.0, "partial": 0.5, "none": 0.0}
+
 MARK = {"full": "##", "partial": "..", "none": "  "}
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"SENSORS": SENSORS, "ACTIONS": ACTIONS, "WEIGHT": WEIGHT, "MARK": MARK}
 
 
 def main() -> int:
-    names = [s[0] for s in SENSORS]
+    announce_backend()
 
-    print("the sensor estate, as bought")
-    for name, product, sees in SENSORS:
-        print(f"  {name:<6} {product:<22} {sees}")
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-    width = max(len(a) for a, _ in ACTIONS)
-    print(f"\ncoverage of what the agents actually do  "
-          f"(## full  .. partial  blank none)\n")
-    print(f"  {'action':<{width}}  " + "  ".join(f"{n:<5}" for n in names))
-    uncovered = []
-    for action, row in ACTIONS:
-        cells = "  ".join(f"{MARK[row[n]]:<5}" for n in names)
-        print(f"  {action:<{width}}  {cells}")
-        if all(row[n] == "none" for n in names):
-            uncovered.append(action)
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-    print("\nper-sensor coverage of the agent's day")
-    for n in names:
-        got = sum(WEIGHT[row[n]] for _, row in ACTIONS)
-        print(f"  {n:<6} {got:>4.1f} / {len(ACTIONS)}   "
-              f"{got / len(ACTIONS):.0%}")
-
-    best = max(names, key=lambda n: sum(WEIGHT[row[n]] for _, row in ACTIONS))
-    union = sum(max(WEIGHT[row[n]] for n in names) for _, row in ACTIONS)
-    print(f"\n  best single sensor   {best}")
-    print(f"  all four combined    {union:.1f} / {len(ACTIONS)}   "
-          f"{union / len(ACTIONS):.0%}")
-
-    print(f"\n{len(uncovered)} of {len(ACTIONS)} actions are seen by NO sensor class:")
-    for a in uncovered:
-        print(f"  - {a}")
-    print("\nnote what they have in common: every one of them happens inside the")
-    print("agent's reasoning loop or behind an API the host never observes.")
-    print("buying a fifth product of the same four kinds does not move this column.")
-    print("D1.3 is the source that does, and D2.1 is where it has to land.")
-
-    assert union < len(ACTIONS), "a full-coverage estate would make this lesson wrong"
-    return 0
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

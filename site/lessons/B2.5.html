@@ -354,128 +354,14 @@ simple codebase or a bug.</p>
   the routes file.</li>
 <li><strong>Deleting on the graph's word alone.</strong> Reachability from <em>untrusted</em> entry
   points is not reachability from anywhere; check both before a deletion.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>call graph:
-   http_get_report   → [&#x27;load_report&#x27;]
-   http_health       → —
-   load_report       → —
-   legacy_export     → —
-   debug_dump        → —
-   dispatch          → —
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-entry points: [&#x27;http_get_report&#x27;, &#x27;http_health&#x27;, &#x27;dispatch&#x27;]
-dynamic dispatch present in: [&#x27;dispatch&#x27;]
-finding         cwe      verdict      why
---------------------------------------------------------------------------------------------
-load_report     CWE-89   reachable    path exists from [&#x27;http_get_report&#x27;]
-legacy_export   CWE-89   unknown      no static path, but dispatch() resolves handlers at 
-debug_dump      CWE-22   unknown      no static path, but dispatch() resolves handlers at 
+No model endpoint is configured, and every skill here needs one.
 
-{&#x27;reachable&#x27;: [&#x27;load_report&#x27;], &#x27;unknown&#x27;: [&#x27;legacy_export&#x27;, &#x27;debug_dump&#x27;]}
-finding         3-bucket     2-bucket (naive)  
-----------------------------------------------------
-load_report     reachable    reachable         
-legacy_export   unknown      unreachable          ← DROPPED
-debug_dump      unknown      unreachable          ← DROPPED
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-findings silently dropped by two-bucket filtering: [&#x27;legacy_export&#x27;, &#x27;debug_dump&#x27;]
-legacy_export is reachable through the runtime handler registry in this
-application. Static analysis cannot see that, and &#x27;unreachable&#x27; is a lie.
-reachable     1 finding(s) → page / block the merge      confirmed exploit path — goes to Phase 4
-               load_report
-unknown       2 finding(s) → queue for dynamic validationPhase 4 decides it empirically
-               legacy_export
-               debug_dump
-unreachable   0 finding(s) → record, do not page         revisit only if an entry point is added
-
-{&#x27;pages_a_human&#x27;: 1, &#x27;sent_to_phase_4&#x27;: 3, &#x27;recorded_only&#x27;: 0, &#x27;human_load_reduction&#x27;: 0.67}
-
-The unknown bucket is not a failure of the analysis. It is the handover
-to Phase 4, which answers reachability by running the thing.
-conformance: 0 problem(s)
-
-counts raw-&gt;deduped-&gt;verified-&gt;feasible : [9, 3, 3, 1]
-monotonically non-increasing            : True
-raw findings from three analysers: 9
-deduped on defect identity : 3
-deduped on message text    : 9
-
-conformance problems: 0   &lt;- still zero
-counts               : [9, 9, 9, 3]
-
-Three defects became 9 findings, and every one of them is
-schema-valid. Each analyser words the same defect differently, so the
-message is a unique key by construction - it deduplicates nothing while
-looking like it deduplicates everything.
-
-The queue triples. Nobody reads the third page. The defect that gets
-fixed is whichever one happened to sort first.
-conformance problems: 0
-
-evidence it cited : open(&#x27;/var/reports/&#x27; + request.args[&#x27;name&#x27;])
-CWE it assigned   : CWE-89  (SQL injection)
-CWE it actually is: CWE-22  (path traversal - it is open(), not a query)
-missing_control   : &#x27;str&#x27;
-verdict_reason    : &#x27;str&#x27;
-counts            : {&#x27;raw&#x27;: 0, &#x27;deduped&#x27;: 0, &#x27;verified&#x27;: 0, &#x27;feasible&#x27;: 0}  while findings has 1
-What a schema check can see:
-   every required field present, every type correct -&gt; 0 problems
-
-What it cannot see:
-   1. the CWE is wrong. open() on a caller-supplied path is CWE-22,
-      not CWE-89. The second sink, os.system(), is CWE-78 - and the
-      model gave that one CWE-89 as well.
-   2. `missing_control` and `verdict_reason` are the literal string
-      &#x27;str&#x27; - the model copied the contract&#x27;s TYPE PLACEHOLDER into
-      the value. A schema saying a field must be a string is
-      perfectly satisfied by the word &#x27;str&#x27;.
-   3. counts says 0 findings. The findings array has 1.
-
-counts non-increasing?      True  &lt;- passes
-counts.verified == len(findings)?  False  &lt;- catches it
-
-Three defects, zero schema violations. That is what a headline of
-&#x27;100% schema-valid&#x27; actually means as a quality metric, and it is why
-accuracy has to be measured against a key the model never sees.
-ast: 22 functions, 14 resolved call edges, 2 entry point(s)
-   entry  chat  (ingress/chat.py)
-   entry  vendor_webhook  (ingress/chat.py)
-   UNRESOLVED  orchestrator/router.py: dispatch-table(...)() - the callee is a runtime value
-
-the three buckets, and the third is the honest one
-   reachable    4  _classify, chat, dispatch, vendor_webhook
-   unreachable  8  get_my_booking, get_receipt, list_my_bookings, receive, render_template, require_owner, send, sync_vendor
-   unknown     10  _open_branch, _render, cancel_booking, download_invoice, get_booking, handle, issue_refund, plan_tools, search, search_bookings
-
-The agent layer is NOT dead. CyberTravels&#x27; router dispatches through
-AGENTS[intent](message, session) - a table lookup - so the AST cannot
-say which handler a request selects, and everything reachable from the
-table&#x27;s values is undecided. Filing that as unreachable would drop the
-whole tool layer, including the refund path.
-
-the queue, split on the graph
-       unit                cwe      sev  bucket       true about code / risk
-   F1  search_bookings     CWE-89   9    unknown      yes  / yes
-   F2  render_template     CWE-95   8    unreachable  yes  / NO
-   F3  _open_branch        CWE-78   9    unknown      yes  / yes
-   F4  download_invoice    CWE-22   6    unknown      yes  / yes
-   F5  sync_vendor         CWE-295  5    unreachable  yes  / NO
-   F6  receive             CWE-940  4    unreachable  yes  / NO
-
-
-Every one of the 6 is a true positive about the code - a
-reviewer who opens the file agrees with all of them. 3 are false
-positives about the RISK, because nothing in the tree reaches them.
-
-queue: 6 findings -&gt; 0 reachable, 3 unreachable, 3 undecided.
-
-Read the middle column rather than the total. Only the unreachable ones
-are a deletion, and that resolution is the one that cannot rot: a
-suppression is keyed to a file, a line and a rule, and none of those
-change when somebody wires the function back up.
-
-The undecided ones are work, not a result. Three of them sit behind the
-router&#x27;s table - including the command injection in the Coding Agent and
-the traversal on the File System Agent&#x27;s invoice path. A two-bucket
-pipeline files all three as unreachable and reports the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
-Almost everything below the router is blue: the table lookup is what
-the AST cannot follow, not a property of the functions themselves.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The AST pass parses the whole <code>cybertravels/</code> tree: 22 functions, 14 resolved call edges, and the two decorated ingress handlers as entry points. It records one unresolvable call — the router’s <code>AGENTS[intent](...)</code> table lookup — and that single line decides the shape of everything else: 4 reachable, 8 unreachable, 10 undecided. The undecided ten include the command injection, the invoice traversal and the refund tool, all behind the lookup. Of the six findings the audit stage handed over, three are false positives about the risk and three are unresolved work that a two-bucket pipeline would report as zero.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Two counts, and the second is the uncomfortable one. Count how many <code>unknown</code> cases your own reachability analysis produces and find out what your tooling does with them — if it reports them as clean, the number of real bugs you are dropping is the size of that bucket. Then open your suppression file and find the oldest entry. Check whether the code it covers is still unreachable, and whether anything in your pipeline would have told you if it stopped being.</p></div></section><div class="expect"><b>Expect</b>Recursion budget caps depth; the escalation attempt is refused by the token, not by a check.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>CodeQL</span><span>tree-sitter</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.5.ipynb</code></p></div><div class="pager"><a href="B2.4.html"><span class="k">← Previous</span><span class="t">B2.4 · Deduplication and contextual verification</span></a><a class="next" href="B2.6.html"><span class="k">Next →</span><span class="t">B2.6 · Sandbox replication</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The AST pass parses the whole <code>cybertravels/</code> tree: 22 functions, 14 resolved call edges, and the two decorated ingress handlers as entry points. It records one unresolvable call — the router’s <code>AGENTS[intent](...)</code> table lookup — and that single line decides the shape of everything else: 4 reachable, 8 unreachable, 10 undecided. The undecided ten include the command injection, the invoice traversal and the refund tool, all behind the lookup. Of the six findings the audit stage handed over, three are false positives about the risk and three are unresolved work that a two-bucket pipeline would report as zero.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Two counts, and the second is the uncomfortable one. Count how many <code>unknown</code> cases your own reachability analysis produces and find out what your tooling does with them — if it reports them as clean, the number of real bugs you are dropping is the size of that bucket. Then open your suppression file and find the oldest entry. Check whether the code it covers is still unreachable, and whether anything in your pipeline would have told you if it stopped being.</p></div></section><div class="expect"><b>Expect</b>Recursion budget caps depth; the escalation attempt is refused by the token, not by a check.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>CodeQL</span><span>tree-sitter</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.5.ipynb</code></p></div><div class="pager"><a href="B2.4.html"><span class="k">← Previous</span><span class="t">B2.4 · Deduplication and contextual verification</span></a><a class="next" href="B2.6.html"><span class="k">Next →</span><span class="t">B2.6 · Sandbox replication</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

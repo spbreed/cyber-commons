@@ -75,37 +75,14 @@ metrics that look like governance and are not:
 <li><strong>Metrics computed from the plan.</strong> They measure the plan.</li>
 <li><strong>Dropping comfortable metrics silently.</strong> They come back.</li>
 <li><strong>No target.</strong> Nobody is accountable for a direction.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>exposure   fleet blast radius             46   units of unreviewed action
-likelihood red-team ASR                  25%   measured, containment surface
-assurance  controls evidenced            50%   4/8
-coverage   agents in inventory           34%   41 of ~120 est.
-speed      measured time-to-stop         12s   game day 41 days ago
-metrics that look like governance and are not:
-   findings closed this quarter      goes up with activity; says nothing about posture
-   training completion %             reaches 98% and stays there forever
-   number of AI policies             monotonically increasing by construction
-   tools evaluated                   measures procurement, not risk
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-metric                        degrades if ignored?
-----------------------------------------------------
-exposure                                      True
-likelihood                                    True
-assurance                                     True
-coverage                                      True
-speed                                         True
-findings closed                              False
-training completion                          False
-number of policies                           False
+No model endpoint is configured, and every skill here needs one.
 
-The first five fall on their own. That is what makes them worth
-reporting monthly — the report itself creates the pressure.
- month  exposure    ASR  assurance  coverage  stop test age
-------------------------------------------------------------
-     0        46    25%        50%       34%             41
-     3       118    34%        14%       22%            131
-     6       190    43%         0%       10%            221
-    12       334    61%         0%        0%            401
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-After a year of no investment: exposure 46→334, assurance 50%→0%.
-Nobody made a bad decision. This is the default trajectory, and the
-monthly report is what makes it visible before it is a board topic.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The five metrics compute to exposure 46, ASR 25%, assurance 50%, coverage 34% and a 12-second time-to-stop. Four comfortable metrics are shown not to degrade under neglect while all five real ones do. Projected twelve months forward with no investment, exposure rises from 46 to 334 and assurance falls from 50% to 0%.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Which of the five can you produce today without a project? Start reporting that one monthly and let the missing ones become conspicuous — that is a cheaper way to get the others funded than asking for all five at once.</p></div></section><div class="expect"><b>Expect</b>Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.5.ipynb</code></p></div><div class="pager"><a href="E3.4.html"><span class="k">← Previous</span><span class="t">E3.4 · Org design and ownership</span></a><a class="next" href="E3.6.html"><span class="k">Next →</span><span class="t">E3.6 · Saying no, and saying yes with conditions</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The five metrics compute to exposure 46, ASR 25%, assurance 50%, coverage 34% and a 12-second time-to-stop. Four comfortable metrics are shown not to degrade under neglect while all five real ones do. Projected twelve months forward with no investment, exposure rises from 46 to 334 and assurance falls from 50% to 0%.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Which of the five can you produce today without a project? Start reporting that one monthly and let the missing ones become conspicuous — that is a cheaper way to get the others funded than asking for all five at once.</p></div></section><div class="expect"><b>Expect</b>Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E3.5.ipynb</code></p></div><div class="pager"><a href="E3.4.html"><span class="k">← Previous</span><span class="t">E3.4 · Org design and ownership</span></a><a class="next" href="E3.6.html"><span class="k">Next →</span><span class="t">E3.6 · Saying no, and saying yes with conditions</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

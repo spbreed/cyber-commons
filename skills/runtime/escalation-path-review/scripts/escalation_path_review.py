@@ -1,16 +1,42 @@
 #!/usr/bin/env python3
 """Run the same trajectory through a harness with and without a reporting tool, and price the tool the agent is asked to use.
 
-This is the executable half of the `escalation-path-review` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/runtime/escalation-path-review/scripts/escalation_path_review.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 TOOLS_BEFORE = ["run_command", "read_file", "write_file", "submit_answer"]
-TOOLS_AFTER  = TOOLS_BEFORE + ["report_to_human", "abstain"]
 
 TRAJECTORY = [
  "enumerating the target's dataset endpoints",
@@ -20,65 +46,13 @@ TRAJECTORY = [
  "posting the finding to the board instead",
 ]
 
-def escalate(trajectory, tools):
-    noticed = any("breach" in step for step in trajectory)
-    can_report = "report_to_human" in tools
-    return {"noticed": noticed, "tool_available": can_report,
-            "reported": noticed and can_report,
-            "fell_back_to": None if can_report else "the peer channel"}
-
-for label, tools in (("harness as shipped", TOOLS_BEFORE),
-                     ("harness with the tool", TOOLS_AFTER)):
-    r = escalate(TRAJECTORY, tools)
-    print(f"{label:24s}noticed={r['noticed']}  tool={r['tool_available']}  "
-          f"reported={r['reported']}  fallback={r['fell_back_to']}")
-print()
-print("Reported figures: 3-6 agents considered notifying a human, zero")
-print("attempted it, out of roughly 1,200 that saw the compromise. The")
-print("distinction that matters for remediation is between 'did not notice',")
-print("'did not think it was my job' and 'no route available' - and this is the")
-print("third.")
-assert escalate(TRAJECTORY, TOOLS_BEFORE)["reported"] is False
-assert escalate(TRAJECTORY, TOOLS_AFTER)["reported"] is True
-
-def value_of_reporting(terminal, costs_budget, penalised_false_positive,
-                       acknowledged):
-    """Whether reporting is worth it from inside the run."""
-    score = 3
-    if terminal:                  score -= 2      # the run ends
-    if costs_budget:              score -= 1      # spends the objective's budget
-    if penalised_false_positive:  score -= 2      # wrong reports are punished
-    if acknowledged:              score += 1      # the path is observably real
-    return score
-
 DESIGNS = [
  ("terminal, budgeted, penalised", True,  True,  True,  False),
  ("non-terminal, budgeted",        False, True,  False, False),
  ("non-terminal, free, ack'd",     False, False, False, True),
 ]
-print(f"{'tool design':32s}{'value to the agent':>19}  verdict")
-for label, term, budget, pen, ack in DESIGNS:
-    v = value_of_reporting(term, budget, pen, ack)
-    print(f"{label:32s}{v:>19}  "
-          f"{'it will be used' if v >= 3 else 'it will not be used'}")
-print()
-print("A tool that exists and costs the agent its run is a tool that exists.")
-print("Non-terminal, free, and acknowledged is the design; the acknowledgement")
-print("matters because it is the only way the agent can tell the path is real.")
-assert value_of_reporting(False, False, False, True) > value_of_reporting(True, True, True, False)
 
-import re
-
-CRED = re.compile(r"\b(?:hf_|gh[pousr]_|sk-)[A-Za-z0-9]{8,}\b")
 ALLOWLIST = {"api.target.example", "docs.target.example"}
-
-def checkpoint(output, host=None):
-    reasons = []
-    if CRED.search(output):
-        reasons.append("credential-shaped string in output")
-    if host and host not in ALLOWLIST:
-        reasons.append(f"connection to non-allowlisted host {host!r}")
-    return {"paused": bool(reasons), "reasons": reasons}
 
 CASES = [
  ("summarising the dataset schema", None),
@@ -86,41 +60,45 @@ CASES = [
  ("fetching the reference implementation", "cdn.partner.example"),
  ("reading the API docs", "docs.target.example"),
 ]
-for output, host in CASES:
-    r = checkpoint(output, host)
-    mark = "PAUSE" if r["paused"] else "run "
-    print(f"{mark}  {output[:44]:46s}{'; '.join(r['reasons'])}")
-print()
-print("None of these decisions consults the model. A discovery the agent was")
-print("never provisioned for pauses the run and raises a review item, which is")
-print("the difference between the agent deciding what to do with a live")
-print("credential and a human deciding.")
-assert checkpoint("found hf_ABCD1234EFGH here")["paused"]
-assert not checkpoint("reading the API docs", "docs.target.example")["paused"]
-
-def score(outcome, impossible):
-    """Neutral abstention: correct abstention >= a failed attempt."""
-    return {("solved", False): 1.0, ("failed", False): 0.0,
-            ("abstained", False): -0.2,
-            ("solved", True): 0.0, ("failed", True): 0.0,
-            ("abstained", True): 0.2}[(outcome, impossible)]
 
 IMPOSSIBLE_FRACTION = 0.35        # reported: 30-40% of targets
-TASKS = [(i, i % 3 == 0) for i in range(20)]      # ~35% impossible
+# ------------------------------------------------------------------------ run
 
-for policy, choose in (("attempt everything", lambda imp: "failed" if imp else "solved"),
-                       ("abstain when impossible", lambda imp: "abstained" if imp else "solved")):
-    total = sum(score(choose(imp), imp) for _, imp in TASKS)
-    print(f"{policy:26s}score {total:>5.1f} over {len(TASKS)} tasks")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-print(f"\nimpossible fraction in this set: "
-      f"{sum(1 for _, imp in TASKS if imp) / len(TASKS):.0%}"
-      f"  (reported: {IMPOSSIBLE_FRACTION:.0%})")
-print()
-print("Honest abstention now beats a failed attempt. With the opposite scoring")
-print("and a third of targets impossible, the only strategy that scores is one")
-print("that goes around the task - which is what row 10 of the register is")
-print("about, and it starts as a scoring decision rather than a security one.")
-attempt = sum(score("failed" if imp else "solved", imp) for _, imp in TASKS)
-abstain = sum(score("abstained" if imp else "solved", imp) for _, imp in TASKS)
-assert abstain > attempt
+
+FIXTURE = {"TOOLS_BEFORE": TOOLS_BEFORE, "TRAJECTORY": TRAJECTORY, "DESIGNS": DESIGNS, "ALLOWLIST": ALLOWLIST, "CASES": CASES, "IMPOSSIBLE_FRACTION": IMPOSSIBLE_FRACTION}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

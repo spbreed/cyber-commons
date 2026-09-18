@@ -1,16 +1,4 @@
-
-[1] the runtime
----------------
-runtime       : cyber_commons_skill_runtime
-resolved from : /home/user/Cyber-harness-eval/skills/_runtime
-
-[2] the configuration
----------------------
-endpoint      : (not set)
-model         : (not set)
-api key set   : no
-
-Nothing is configured, so there is nothing to prove. The refusal below is what every skill will print:
+no model configured
 
 No model endpoint is configured, and every skill here needs one.
 

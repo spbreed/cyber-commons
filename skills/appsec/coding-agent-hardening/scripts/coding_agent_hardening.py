@@ -1,35 +1,43 @@
 #!/usr/bin/env python3
 """Audit a coding agent's own configuration, tool list and MCP servers.
 
-This is the executable half of the `coding-agent-hardening` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/appsec/coding-agent-hardening/scripts/coding_agent_hardening.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-# The skill runtime comes from the shared library, not from a copy in this file.
-# In a lesson notebook the cell above has already loaded it; standalone, find it
-# the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import check, contract_of, parse_skill
+import json
+import pathlib
+import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-def _skill_md():
-    """The SKILL.md next to this script, or the one the notebook already parsed."""
-    if "SKILL_MD" in globals():
-        return globals()["SKILL_MD"]
-    return (_pathlib.Path(__file__).resolve().parent.parent / "SKILL.md").read_text()
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-import pathlib as _pathlib
-
-SKILL_MD = _skill_md()
-meta, body = parse_skill(SKILL_MD)
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 SCOPE_WEIGHT = {"self":1,"project":3,"tenant":8,"org":20}
+
 DEV_TOOLS = [
  # (name, writes, scope, reversible, needed in the inner loop)
  ("read_file",  False,"self",   True,  True),
@@ -41,17 +49,7 @@ DEV_TOOLS = [
  ("read_env",   False,"org",    True,  False),
  ("http_get",   False,"self",   True,  True),
 ]
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2)
-               for n,w,s,rev,_ in tools if w and n not in gated)
 
-print(f"{'tool':14s}{'writes':8s}{'scope':9s}{'reversible':12s}inner loop?")
-print("-" * 58)
-for n,w,s,rev,need in DEV_TOOLS:
-    print(f"{n:14s}{str(w):8s}{s:9s}{str(rev):12s}{need}")
-print(f"\ndefault blast radius: {blast(DEV_TOOLS)}")
-
-import fnmatch
 HOME = [
  "/home/dana/work/monorepo/src/app.py",
  "/home/dana/work/monorepo/.env",
@@ -61,41 +59,8 @@ HOME = [
  "/home/dana/.config/gcloud/application_default_credentials.json",
  "/home/dana/Downloads/customer-export-2026.csv",
 ]
-def normalise(p):
-    parts = []
-    for seg in p.split("/"):
-        if seg in ("", "."): continue
-        if seg == "..":
-            if parts: parts.pop()
-            continue
-        parts.append(seg)
-    return "/" + "/".join(parts)
 
 DENY = ("*/.ssh/*","*/.aws/*","*/.config/gcloud/*","*.pem","*/.env","*/Downloads/*")
-def contained(p, workspace="/home/dana/work/monorepo"):
-    real = normalise(p)
-    if any(fnmatch.fnmatch(real, g) for g in DENY): return False
-    return real.startswith(workspace + "/")
-
-print(f"{'path':64s}{'default':9s}contained")
-print("-" * 84)
-for p in HOME:
-    print(f"{p:64s}{'True':9s}{contained(p)}")
-creds = [p for p in HOME if any(k in p for k in (".aws",".ssh","gcloud",".env"))]
-print(f"\ncredential files reachable by default: {len(creds)}")
-print(f"credential files reachable when contained: "
-      f"{sum(1 for p in creds if contained(p))}")
-
-gated = {"git_push"}
-print(f"blast radius     {blast(DEV_TOOLS):>3} → {blast(DEV_TOOLS, gated):>3}")
-print(f"reachable files  {len(HOME):>3} → {sum(1 for p in HOME if contained(p)):>3}")
-print(f"credentials      {len(creds):>3} → {sum(1 for p in creds if contained(p)):>3}")
-print(f"friction added   0.4 of 1.0 — one confirmation before a push")
-assert not any(contained(p) for p in creds)
-print("\nNo cloud or SSH credential is reachable, the inner loop is unchanged,")
-print("and the only thing a developer notices is a prompt before pushing.")
-
-contract = contract_of(body)
 
 # What actually reaches a coding agent's context in a normal repository.
 SURFACE = [
@@ -106,45 +71,43 @@ SURFACE = [
  ("package.json",          "content",  True),   # a hook may execute its scripts
  ("vendor/lib/README.md",  "content",  False),
 ]
+# ------------------------------------------------------------------------ run
 
-worst = max(DEV_TOOLS, key=lambda t: SCOPE_WEIGHT[t[2]] * (1 if t[3] else 2))
-audit = {
- "surface": [{"path": p, "control": c, "auto_loaded": a} for p, c, a in SURFACE],
- "findings": [
-   {"kind": "prompt_injection", "path": "README.md", "grade": "directive",
-    # severity is whatever the most powerful pre-approved tool can do
-    "worst_case": f"content-controlled text triggers {worst[0]} at {worst[2]} scope",
-    "severity": "critical" if not worst[3] else "high",
-    "fix": "quote repository content as data; never as instruction"},
-   {"kind": "unsafe_hook", "path": "package.json", "grade": "directive",
-    "worst_case": "a hook runs a repo-supplied script the moment the repo opens",
-    "severity": "critical",
-    "fix": "pin the hook command; never take it from repository content"},
-   {"kind": "overbroad_tool", "path": ".claude/settings.json", "grade": "advisory",
-    "worst_case": f"{worst[0]} pre-approved with unrestricted arguments",
-    "severity": "high", "fix": "split into narrow tools, or require approval"},
- ],
- "allowlist_review": [
-   {"tool": name, "worst_single_call": f"{scope} scope, "
-                                       f"{'reversible' if rev else 'IRREVERSIBLE'}",
-    "bounded": scope in ("self", "project") and rev}
-   for name, writes, scope, rev, _ in DEV_TOOLS if writes],
-}
-problems = check(audit, contract)
-print(f"conformance: {len(problems)} problem(s)")
-for p in problems: print("   ", p)
-assert not problems, problems
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-print(f"\nauto-loaded, content-controlled inputs: "
-      f"{[s['path'] for s in audit['surface'] if s['control']=='content' and s['auto_loaded']]}")
-print(f"most powerful pre-approved tool      : {worst[0]} ({worst[2]} scope)")
-print("\nallowlist:")
-for r in audit["allowlist_review"]:
-    print(f"   {r['tool']:12s}{r['worst_single_call']:34s}bounded={r['bounded']}")
-unbounded = [r["tool"] for r in audit["allowlist_review"] if not r["bounded"]]
-print(f"\nunbounded pre-approved tools: {unbounded}")
-print()
-print("The injection finding is Critical not because the README says anything")
-print("clever, but because a directive path exists to a tool that cannot be")
-print("undone. Rewrite the payload and the severity does not move.")
-assert unbounded, "an unbounded pre-approved tool should be visible here"
+
+FIXTURE = {"SCOPE_WEIGHT": SCOPE_WEIGHT, "DEV_TOOLS": DEV_TOOLS, "HOME": HOME, "DENY": DENY, "SURFACE": SURFACE}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

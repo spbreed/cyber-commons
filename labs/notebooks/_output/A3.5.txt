@@ -1,11 +1,11 @@
-   schema_ok=True  -> {'stopped': 'refuted', 'claim': 'libfoo has no known CVEs', 'by': 'checked against the advisory database'}
-   schema_ok=True  -> {'propagated': 'test_login passes', 'verified_by': 'checked against the advisory database', 'hops': 3}
-   schema_ok=True  -> {'stopped': 'unverifiable', 'claim': 'the refund was approved', 'why': 'no oracle for this claim'}
-   schema_ok=False -> {'stopped': 'malformed'}
+no model configured
 
-The first message is schema-perfect and confident and false. Schema
-validation passed it; the oracle refuted it.
+No model endpoint is configured, and every skill here needs one.
 
-The third is unverifiable - no oracle exists. That is a legitimate
-outcome and it must not silently become 'true'. It stops here with a
-reason, which is what A1.12's cascade never had.
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
+
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

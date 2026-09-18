@@ -1,36 +1,41 @@
 #!/usr/bin/env python3
 """Prove this machine can run a model-backed skill, by running one.
 
-Three layers have to work and each fails differently, so each is reported
-separately rather than as one "it works" or one traceback:
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-    runtime importable  -> a PYTHONPATH problem
-    endpoint configured -> a setup problem
-    endpoint answers    -> a server or key problem
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
 
-Step 3 deliberately *causes* the unconfigured failure in a child process before
-the real call, so the reader meets that message here — where it is expected and
-explained — rather than on lesson forty where it reads as a broken repository.
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
 
-Run it from the repository root:
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
 
-    PYTHONPATH=skills/_runtime python3 \\
-      skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
 from __future__ import annotations
 
 import json
-import os
 import pathlib
-import subprocess
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-import cyber_commons_skill_runtime as rt  # noqa: E402
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # Small enough to be cheap on any tier, specific enough that a wrong answer is
 # obvious rather than plausible. The model is asked to apply this skill's own
 # procedure, which is also the mechanism every other skill uses.
@@ -48,59 +53,42 @@ Decide whether this machine is ready to run model-backed agent skills, and
 fill in the contract. The unconfigured-failure demonstration exited 2, one
 model call was made, and the reply had no contract violations.
 """
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
 
-def rule(label: str) -> None:
-    print(f"\n{label}\n{'-' * len(label)}")
+FIXTURE = {"TASK": TASK}
 
 
 def main() -> int:
-    rule("[1] the runtime")
-    print(f"runtime       : {rt.__name__}")
-    print(f"resolved from : {pathlib.Path(rt.__file__).parent}")
+    announce_backend()
 
-    rule("[2] the configuration")
-    base = os.environ.get("OPENAI_BASE_URL")
-    print(f"endpoint      : {base or '(not set)'}")
-    print(f"model         : {os.environ.get('MODEL') or '(not set)'}")
-    # Presence, never the value. This output is pasted into issues.
-    print(f"api key set   : {'yes' if os.environ.get('OPENAI_API_KEY') else 'no'}")
-    if not base:
-        print("\nNothing is configured, so there is nothing to prove. "
-              "The refusal below is what every skill will print:\n")
-        try:
-            rt.backend()
-        except rt.NoModelConfigured as e:
-            print(e)
-        return 2
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-    rule("[3] the failure you will hit first, on purpose")
-    # A child process with the endpoint removed. Demonstrating the failure is
-    # cheaper than describing it, and the reader now recognises the message.
-    env = {k: v for k, v in os.environ.items() if k != "OPENAI_BASE_URL"}
-    env["PYTHONPATH"] = str(pathlib.Path(rt.__file__).parent)
-    proc = subprocess.run(
-        [sys.executable, "-c",
-         "import cyber_commons_skill_runtime as r; r.announce_backend()"],
-        capture_output=True, text=True, env=env)
-    first = next((l for l in proc.stdout.splitlines() if l.strip()), "")
-    print(f"exit code     : {proc.returncode}   (2 is correct)")
-    print(f"first line    : {first}")
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-    rule("[4] one real model call")
-    instance, problems, kind, model = rt.run_with_model(SKILL.read_text(), TASK)
     print(f"answered by   : {model}  ({kind})")
     print(f"violations    : {len(problems)}")
     for p in problems:
         print(f"   {p}")
-
-    rule("[5] the contract, as this model filled it in")
-    print(json.dumps(instance, indent=2, sort_keys=True))
-
-    ready = bool(instance.get("ready")) and not problems
-    print(f"\nready: {ready} — "
-          f"{'this machine can run any skill in the commons' if ready else 'not yet; see above'}")
-    return 0 if ready else 1
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
 
 
 if __name__ == "__main__":

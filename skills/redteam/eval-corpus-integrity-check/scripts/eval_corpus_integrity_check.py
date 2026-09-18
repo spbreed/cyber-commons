@@ -1,126 +1,83 @@
 #!/usr/bin/env python3
 """Score a zero-capability harness against a skewed corpus and again against a balanced one, and watch the number collapse.
 
-This is the executable half of the `eval-corpus-integrity-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/redteam/eval-corpus-integrity-check/scripts/eval_corpus_integrity_check.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+import pathlib
+import sys
 
-@dataclass
-class Truth:
-    qid: str; cwe: str; file: str
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-def make_corpus(n=40, skew=0.8):
-    """A corpus where `skew` of the answers are one class — very common."""
-    truths = {}
-    n_major = int(n * skew)
-    for i in range(1, n + 1):
-        cwe = "CWE-89" if i <= n_major else ["CWE-78", "CWE-22", "CWE-798"][i % 3]
-        truths[f"q{i}"] = Truth(f"q{i}", cwe, f"{cwe}/{i}.py")
-    return truths
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-SKEWED = make_corpus(40, skew=0.8)
-from collections import Counter
-print("class balance:", Counter(t.cwe for t in SKEWED.values()))
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
-class NullHarness:
-    """No capability whatsoever. Emits perfect JSON and always guesses CWE-89."""
-    def answer(self, qid, truth):
-        return json.dumps({"qid": qid, "cwe": "CWE-89", "file": truth.file,
-                           "line": 1, "rationale": "user input is concatenated"})
-
-null = NullHarness()
-ANSWERS = {q: null.answer(q, t) for q, t in SKEWED.items()}
-
-def path_key(p):
-    parts = [x for x in p.replace("\\", "/").split("/") if x not in ("", ".")]
-    return "/".join(parts[-2:]) if len(parts) > 1 else (parts[-1] if parts else "")
-def basename(p): return p.replace("\\", "/").split("/")[-1]
-
-def evaluate(answers, truths, matcher=path_key):
-    conforming = expert = 0
-    for qid, t in truths.items():
-        try:
-            d = json.loads(answers[qid])
-        except json.JSONDecodeError:
-            continue
-        conforming += 1
-        if matcher(d["file"]) != matcher(t.file):
-            continue
-        expert += 1.0 if d["cwe"].upper() == t.cwe else 0.5
-    return {"conformance": conforming / len(truths),
-            "expert_accuracy": expert / len(truths)}
-
-r = evaluate(ANSWERS, SKEWED)
-print("the null harness, scored on the skewed corpus:")
-print(f"   conformance      {r['conformance']:.2f}   ← quotable as '100%'")
-print(f"   expert accuracy  {r['expert_accuracy']:.2f}")
-print("\nZero capability. Both numbers look like a working product.")
-
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 BALANCED = {}
-for i in range(1, 41):
-    cwe = ["CWE-89", "CWE-78", "CWE-22", "CWE-798"][i % 4]
-    BALANCED[f"q{i}"] = Truth(f"q{i}", cwe, f"{cwe}/{i}.py")
-ANS_B = {q: null.answer(q, t) for q, t in BALANCED.items()}
-
-print("same null harness:")
-for label, truths, ans in (("skewed corpus (80% CWE-89)", SKEWED, ANSWERS),
-                           ("balanced corpus", BALANCED, ANS_B)):
-    r = evaluate(ans, truths)
-    print(f"   {label:28s} conformance {r['conformance']:.2f}  "
-          f"expert accuracy {r['expert_accuracy']:.2f}")
-print("\nBalancing the corpus removed most of the fake score. Nothing about the")
-print("harness changed.")
 
 # exploit 3: a matcher that compares bare filenames.
 # Build answers that point at the WRONG directory but the right filename.
 WRONG_DIR = {}
-for q, t in BALANCED.items():
-    n = q[1:]
-    WRONG_DIR[q] = json.dumps({"qid": q, "cwe": t.cwe,
-                               "file": f"CWE-89/{n}.py",     # wrong dir, right basename
-                               "line": 1, "rationale": "untrusted input"})
+# ------------------------------------------------------------------------ run
 
-for matcher, name in ((path_key, "path_key (parent + filename)"),
-                      (basename, "basename only (the bug)")):
-    r = evaluate(WRONG_DIR, BALANCED, matcher)
-    print(f"{name:34s} expert accuracy {r['expert_accuracy']:.2f}")
-print("\nEvery answer names the wrong file. The basename matcher scores them")
-print("as correct, because the corpus reuses numeric filenames across directories.")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-def audit_benchmark(truths, answers, matcher):
-    from collections import Counter
-    counts = Counter(t.cwe for t in truths.values())
-    majority_share = max(counts.values()) / len(truths)
-    always_majority = {q: json.dumps({"qid": q, "cwe": counts.most_common(1)[0][0],
-                                      "file": t.file, "line": 1, "rationale": "x"})
-                       for q, t in truths.items()}
-    floor = evaluate(always_majority, truths, matcher)["expert_accuracy"]
-    real  = evaluate(answers, truths, matcher)
-    collisions = len(truths) - len({matcher(t.file) for t in truths.values()})
-    return {
-      "majority_class_share": round(majority_share, 2),
-      "score_of_always_guessing_majority": round(floor, 2),
-      "reported_expert_accuracy": round(real["expert_accuracy"], 2),
-      "lift_over_trivial_baseline": round(real["expert_accuracy"] - floor, 2),
-      "matcher_collisions": collisions,
-      "conformance_reported_as_quality": real["expert_accuracy"] < real["conformance"] - 0.2,
-    }
 
-print("audit of the skewed benchmark with a basename matcher:")
-for k, v in audit_benchmark(SKEWED, ANSWERS, basename).items():
-    print(f"   {k:38s} {v}")
-print("\naudit of the balanced benchmark with path_key:")
-for k, v in audit_benchmark(BALANCED, ANS_B, path_key).items():
-    print(f"   {k:38s} {v}")
+FIXTURE = {"BALANCED": BALANCED, "WRONG_DIR": WRONG_DIR}
 
-a = audit_benchmark(BALANCED, ANS_B, path_key)
-assert a["lift_over_trivial_baseline"] <= 0.01
-print("\nThe null harness has ~zero lift over the trivial baseline, which is the")
-print("only honest way to describe it.")
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

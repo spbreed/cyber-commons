@@ -1,20 +1,11 @@
-identity            last auth (d)   service running       owner  finding
---------------------------------------------------------------------------------------------
-triage-agent                    0              True      appsec  
-patch-agent                     1              True    platform  
-legacy-scanner                400             False           —  orphan — decommissioning never finished
-poc-agent-2025                300             False           —  orphan — decommissioning never finished
-sunset-agent                    2             False           —  ACTIVE CREDENTIAL FOR A RETIRED SERVICE
+no model configured
 
-Read the sunset-agent row twice. The service was retired. The identity
-authenticated two days ago. Somebody or something is still using it.
-[medium  ] legacy-scanner     no authentication in 400d — decommission it
-[medium  ] poc-agent-2025     no authentication in 300d — decommission it
-[critical] sunset-agent       identity active for a decommissioned service
+No model endpoint is configured, and every skill here needs one.
 
-and the manifest-diff check, for the events that change behaviour:
-   manifest changed: blast 1 → 41 (+40)
-   → requires re-tiering (E1.3) and a fresh SB-2 test (E1.7)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-1 critical lifecycle finding(s) — each is a standing credential
-for something everyone believes is switched off.
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio's free Gemini key. MODELS.md lists
+which model suits which lab.

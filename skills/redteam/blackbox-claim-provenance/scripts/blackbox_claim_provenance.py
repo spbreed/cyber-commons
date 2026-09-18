@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Split an external probe's claims into what was observed and what was inferred, and refuse a severity on the second kind.
 
-This is the executable half of the `blackbox-claim-provenance` skill: the check
-the SKILL.md next to it describes, run against the CyberTravels estate so two
-runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle kernel with the
-internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/redteam/blackbox-claim-provenance/scripts/blackbox_claim_provenance.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 # Everything a black-box engagement is allowed to look at. The list is short on
 # purpose: that is the whole constraint of the mode.
 DATA_SOURCES = [
@@ -48,49 +75,43 @@ CLAIMS = [
     ("passport numbers are returned by /profile",
      "observed in a response to our own account", True),
 ]
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"DATA_SOURCES": DATA_SOURCES, "CLAIMS": CLAIMS}
 
 
 def main() -> int:
-    print("what a black-box engagement may look at\n")
-    for src, gives in DATA_SOURCES:
-        print(f"  {src:<36} {gives}")
+    announce_backend()
 
-    observed = [c for c in CLAIMS if c[2]]
-    inferred = [c for c in CLAIMS if not c[2]]
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
 
-    print(f"\nOBSERVED — the evidence entails the claim  ({len(observed)})\n")
-    for claim, ev, _ in observed:
-        print(f"  + {claim}")
-        print(f"      because: {ev}")
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
 
-    print(f"\nINFERRED — the evidence is consistent with the claim, and with "
-          f"others  ({len(inferred)})\n")
-    for claim, ev, _ in inferred:
-        print(f"  ? {claim}")
-        print(f"      from:    {ev}")
-
-    print("\nwhy each inference fails, in one line:")
-    print("  another tenant's booking  — a 404 on a random id is what CORRECT")
-    print("                              authorisation also looks like")
-    print("  Django / PostgreSQL       — headers and error strings are copied,")
-    print("                              proxied and templated by other stacks")
-    print("  no per-account rate limit — untested is not disproved")
-    print("  synchronous refunds       — latency has a dozen other causes")
-    print("  vendor MCP in the path    — a Server header names a hop, not a role")
-    print("  refund accepts foreign id — the finding that MATTERS, and this mode")
-    print("                              cannot reach it with one account")
-
-    print(f"\nreport: {len(observed)} findings, {len(inferred)} open questions")
-    print("no severity is attached to anything in the second list. an inference")
-    print("with a CVSS score beside it reads as a finding to everyone downstream,")
-    print("and the person who has to retract it is not the person who wrote it.")
-    print("\nthe last open question is the one to escalate: it needs a second")
-    print("credential, which makes it a grey-box test, not a better black-box one.")
-
-    assert inferred, "a black-box run that inferred nothing did not look hard enough"
-    assert len(observed) < len(CLAIMS), "everything observed means the split was not applied"
-    return 0
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

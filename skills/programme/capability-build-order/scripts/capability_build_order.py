@@ -1,35 +1,46 @@
 #!/usr/bin/env python3
 """Compare a build order that produces coverage against one that produces demos, quarter by quarter.
 
-This is the executable half of the `capability-build-order` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/programme/capability-build-order/scripts/capability_build_order.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-import time
-now = time.time(); DAY = 86400
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+DAY = 86400
+
 REQUIRED = ["AC-1","AC-2","SB-1","SB-2","EV-1","EV-2","DR-1","ST-1"]
 
-QUARTERS = {
- "Q1 · inventory + identity": ["AC-1","AC-2"],
- "Q2 · containment":          ["AC-1","AC-2","SB-1","SB-2"],
- "Q3 · evidence + evaluation":["AC-1","AC-2","SB-1","SB-2","EV-1","EV-2"],
- "Q4 · continuous + stop":    REQUIRED,
-}
 DEMOABLE = {"AC-1": False, "AC-2": False, "SB-1": False, "SB-2": False,
             "EV-1": False, "EV-2": True, "DR-1": True, "ST-1": True}
-
-print(f"{'quarter':30s}{'coverage':>10}{'demoable':>11}")
-print("-" * 54)
-for q, done in QUARTERS.items():
-    cov = len(done)/len(REQUIRED)
-    demo = sum(1 for c in done if DEMOABLE[c])
-    print(f"{q:30s}{cov:>10.0%}{demo:>11}")
-print("\nQ1 and Q2 produce nothing demoable. That is the political problem, and")
-print("it is why the inverted order keeps getting chosen.")
 
 INVERTED = {
  "Q1 · evaluation + dashboard": ["EV-2","DR-1"],
@@ -37,6 +48,7 @@ INVERTED = {
  "Q3 · identity (finally)":     ["EV-2","DR-1","AC-1","AC-2"],
  "Q4 · containment":            ["EV-2","DR-1","AC-1","AC-2","SB-1","SB-2"],
 }
+
 CAPABILITY_AT = {
  "can revoke one agent":            {"AC-1"},
  "can attribute an action":         {"AC-1","EV-1"},
@@ -44,21 +56,6 @@ CAPABILITY_AT = {
  "can halt the fleet":              {"ST-1"},
  "can defend an accuracy number":   {"EV-2"},
 }
-def capabilities(done):
-    return [c for c, need in CAPABILITY_AT.items() if need <= set(done)]
-
-print(f"{'quarter':30s}{'coverage':>10}  capabilities")
-print("-" * 90)
-for q, done in INVERTED.items():
-    print(f"{q:30s}{len(done)/len(REQUIRED):>10.0%}  {capabilities(done) or '—'}")
-
-end_inverted = capabilities(INVERTED["Q4 · containment"])
-end_correct  = capabilities(QUARTERS["Q4 · continuous + stop"])
-print(f"\nafter four quarters:")
-print(f"   inverted order: {len(end_inverted)} capabilities  {end_inverted}")
-print(f"   correct order : {len(end_correct)} capabilities")
-print("\nThe inverted programme spent a year and still cannot halt the fleet.")
-assert len(end_correct) > len(end_inverted)
 
 ROLES = {
  "harness engineer":   ("B2", {"EV-2"},                 "loop, verifier, eval"),
@@ -66,26 +63,43 @@ ROLES = {
  "detection engineer": ("D1", {"DR-1"},                 "agent telemetry and drift"),
  "GRC practitioner":   ("E1", {"SB-2","ST-1"},          "tiering, evidence, verification"),
 }
-def unblocks(role):
-    delivered = ROLES[role][1]
-    return [c for c, need in CAPABILITY_AT.items() if need & delivered]
+# ------------------------------------------------------------------------ run
 
-print(f"{'role':22s}{'track':7s}{'controls':28s}unblocks")
-print("-" * 92)
-for role, (track, controls, what) in sorted(
-        ROLES.items(), key=lambda kv: -len(unblocks(kv[0]))):
-    print(f"{role:22s}{track:7s}{str(sorted(controls)):28s}{unblocks(role)}")
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-first = max(ROLES, key=lambda r: len(unblocks(r)))
-print(f"\nhire first (unblocks the most): {first}")
-print(f"hired first most often        : harness engineer")
-assert first == "identity engineer"
 
-print("\nplan that survives contact:")
-for q, hire, deliver in [
- ("Q1", "identity engineer", "inventory + agent identities (AC-1, AC-2)"),
- ("Q2", "GRC practitioner",  "containment + tiering (SB-1, SB-2)"),
- ("Q3", "harness engineer",  "evidence + held-out evaluation (EV-1, EV-2)"),
- ("Q4", "detection engineer","drift + tested stop (DR-1, ST-1)"),
-]:
-    print(f"   {q}  hire {hire:20s}deliver {deliver}")
+FIXTURE = {"DAY": DAY, "REQUIRED": REQUIRED, "DEMOABLE": DEMOABLE, "INVERTED": INVERTED, "CAPABILITY_AT": CAPABILITY_AT, "ROLES": ROLES}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

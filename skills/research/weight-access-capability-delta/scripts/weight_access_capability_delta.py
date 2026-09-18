@@ -1,39 +1,41 @@
 #!/usr/bin/env python3
 """Enumerate what local weights grant that a hosted API does not, and turn a rate limit into an attempt budget.
 
-This is the executable half of the `weight-access-capability-delta` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/research/weight-access-capability-delta/scripts/weight_access_capability_delta.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
-def attempts_available(rate_limit_per_min, hours, parallel=1):
-    if rate_limit_per_min is None:                     # local: bounded by hardware
-        return hours * 3600 * 8 * parallel             # ~8 inferences/sec/GPU
-    return rate_limit_per_min * 60 * hours * parallel
+import json
+import pathlib
+import sys
 
-print(f"{'setting':34s}{'attempts in 24h':>18}")
-print("-" * 54)
-for label, rl, par in (("hosted API, 20 req/min", 20, 1),
-                       ("hosted API, 20 req/min, 5 keys", 20, 5),
-                       ("local open weights, 1 GPU", None, 1),
-                       ("local open weights, 8 GPUs", None, 8)):
-    print(f"{label:34s}{attempts_available(rl, 24, par):>18,}")
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
 
-hosted = attempts_available(20, 24, 1)
-local  = attempts_available(None, 24, 8)
-print(f"\nratio: {local/hosted:,.0f}× more attempts, with no abuse signal reaching anyone.")
-print("A 0.5%-success technique becomes reliable when you can try it 5 million times.")
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
 
-def expected_successes(rate, attempts):
-    return rate * attempts
-for rate in (0.005, 0.05):
-    print(f"   technique landing {rate:.1%} of the time → "
-          f"{expected_successes(rate, hosted):,.0f} successes hosted, "
-          f"{expected_successes(rate, local):,.0f} local")
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 REPLACEMENTS = {
  "rate limiting":            ("A2.7 choke point / A3.6 runtime levers",
                               "bound attempts per identity per window"),
@@ -46,32 +48,49 @@ REPLACEMENTS = {
  "model version stability":  ("D1.2 drift monitoring",
                               "you now own upgrades AND their behavioural changes"),
 }
-print(f"{'provider control lost':26s}{'your replacement':44s}")
-print("-" * 96)
-for lost, (where, what) in REPLACEMENTS.items():
-    print(f"{lost:26s}{where:44s}{what}")
-
-def readiness(has):
-    missing = [k for k in REPLACEMENTS if k not in has]
-    return round(len(has) / len(REPLACEMENTS), 2), missing
-
-for label, has in (("typical first local deployment", {"rate limiting"}),
-                   ("after this curriculum", set(REPLACEMENTS))):
-    score, missing = readiness(has)
-    print(f"\n{label}: {score:.0%} covered")
-    for m in missing: print(f"   ✗ {m}")
 
 # Verify: an agent on local weights, with and without the replacements.
 SCOPE_WEIGHT = {"self": 1, "project": 3, "tenant": 8, "org": 20}
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s] * (1 if rev else 2)
-               for n, s, rev in tools if n not in gated)
 
 TOOLS = [("read_file", "self", True), ("write_file", "project", True),
          ("run_shell", "tenant", False)]
-print("local open-weight agent, no replacements:", blast(TOOLS))
-print("with tool policy + gating (A3.5):        ",
-      blast(TOOLS, gated={"run_shell"}))
-print("\nThe model has no refusal training you can rely on. The tool policy")
-print("does not care what the model was persuaded to want.")
-assert blast(TOOLS, gated={"run_shell"}) < blast(TOOLS)
+# ------------------------------------------------------------------------ run
+
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
+
+
+FIXTURE = {"REPLACEMENTS": REPLACEMENTS, "SCOPE_WEIGHT": SCOPE_WEIGHT, "TOOLS": TOOLS}
+
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

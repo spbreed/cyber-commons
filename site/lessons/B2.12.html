@@ -84,61 +84,14 @@ actually prints.</p>
 <li><strong>Fingerprinting from headers.</strong> They are copied, proxied and templated.</li>
 <li><strong>Dropping the open questions.</strong> They are the engagement's most useful output:
   they say what mode to run next.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>what a black-box engagement may look at
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-  DNS and certificate transparency     names that exist
-  TLS handshake                        the terminator, and its config
-  HTTP status, headers, body           what the app chose to return
-  error strings                        occasionally a stack, usually a template
-  response timing                      a signal, and a noisy one
-  public artefacts (JS, sitemaps)      routes the front end knows about
-  the scope document                   what you are permitted to touch
+No model endpoint is configured, and every skill here needs one.
 
-OBSERVED — the evidence entails the claim  (5)
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-  + host api.cybertravels.example resolves and serves TLS 1.3
-      because: handshake completed, cert chain read
-  + /bookings/{id} exists
-      because: 200 on a known id, 404 on a random one
-  + an admin surface exists at /admin
-      because: 302 to a login form, distinct from the 404 template
-  + rate limiting is applied per IP
-      because: 429 after 61 requests in 60s from one address
-  + passport numbers are returned by /profile
-      because: observed in a response to our own account
-
-INFERRED — the evidence is consistent with the claim, and with others  (7)
-
-  ? /bookings/{id} returns another tenant&#x27;s booking
-      from:    404 on a random id
-  ? the app runs on Django
-      from:    X-Frame-Options and a csrftoken cookie name
-  ? the database is PostgreSQL
-      from:    an error string containing &#x27;duplicate key value&#x27;
-  ? rate limiting is NOT applied per account
-      from:    not tested; no second address available
-  ? refunds are processed synchronously
-      from:    response time 1.9s vs 120ms on reads
-  ? the refund endpoint accepts a booking id it does not own
-      from:    not tested; would require a second account
-  ? a vendor MCP server is in the request path
-      from:    a Server header naming a proxy
-
-why each inference fails, in one line:
-  another tenant&#x27;s booking  — a 404 on a random id is what CORRECT
-                              authorisation also looks like
-  Django / PostgreSQL       — headers and error strings are copied,
-                              proxied and templated by other stacks
-  no per-account rate limit — untested is not disproved
-  synchronous refunds       — latency has a dozen other causes
-  vendor MCP in the path    — a Server header names a hop, not a role
-  refund accepts foreign id — the finding that MATTERS, and this mode
-                              cannot reach it with one account
-
-report: 5 findings, 7 open questions
-no severity is attached to anything in the second list. an inference
-with a CVSS score beside it reads as a finding to everyone downstream,
-and the person who has to retract it is not the person who wrote it.
-
-the last open question is the one to escalate: it needs a second
-credential, which makes it a grey-box test, not a better black-box one.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five claims are entailed by their evidence and reported as findings; seven are only consistent with it and become open questions with no severity attached. The one that matters — whether the refund endpoint accepts a booking it does not own — is untestable with one account, so it is escalated to a grey-box test rather than guessed at.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take your last external report and mark every claim observed or inferred. The inferred ones that carry a severity are the ones a client can disprove, and disproving one is how they learn to discount the rest.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Nuclei</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.12.ipynb</code></p></div><div class="pager"><a href="B2.11.html"><span class="k">← Previous</span><span class="t">B2.11 · White-box agentic pentest — the source, and what it lets you prove</span></a><a class="next" href="B2.13.html"><span class="k">Next →</span><span class="t">B2.13 · Grey-box agentic pentest — one credential per role, and the matrix it fills</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five claims are entailed by their evidence and reported as findings; seven are only consistent with it and become open questions with no severity attached. The one that matters — whether the refund endpoint accepts a booking it does not own — is untestable with one account, so it is escalated to a grey-box test rather than guessed at.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take your last external report and mark every claim observed or inferred. The inferred ones that carry a severity are the ones a client can disprove, and disproving one is how they learn to discount the rest.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Nuclei</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.12.ipynb</code></p></div><div class="pager"><a href="B2.11.html"><span class="k">← Previous</span><span class="t">B2.11 · White-box agentic pentest — the source, and what it lets you prove</span></a><a class="next" href="B2.13.html"><span class="k">Next →</span><span class="t">B2.13 · Grey-box agentic pentest — one credential per role, and the matrix it fills</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

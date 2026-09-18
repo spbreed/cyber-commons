@@ -70,52 +70,14 @@ public internet       [4]         single row
 <li><strong>One finding per row.</strong> The shared surface survives every fix.</li>
 <li><strong>An all-preventive register.</strong> Nothing tells you when a control is disabled.</li>
 <li><strong>Controls with no owner.</strong> They do not get built.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>shared surface        rows        reading
-agent container       [1]         single row
-artifact repository   [1, 2, 5]   one chain, not separate findings
-benchmark scoring     [10]        single row
-eval configuration    [6]         single row
-harness tooling       [9]         single row
-peer channel          [7, 8]      linked
-public internet       [4]         single row
-third-party upload    [3]         single row
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no model configured
 
-surfaces implicated in three or more rows: [&#x27;artifact repository&#x27;]
+No model endpoint is configured, and every skill here needs one.
 
-Filed as three findings, three teams each fix their third and the
-repository stays a shared mutable surface. Filed as one chain, the
-remediation is a single workstream - which is why the register keeps
-the note rather than the tidy row numbering.
-function   controls  what it owns
-A                24  securing the architecture
-C                 1  red teaming and research
-D                15  the agentic SOC
+  export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+  export OPENAI_API_KEY=ollama          # any non-empty value locally
+  export MODEL=qwen2.5-7b-instruct
 
-controls landing on lessons that already existed: 8
-   A2.3   C4.3
-   A2.4   C3.2, C4.2
-   A2.6   C7.1, C7.2, C7.3
-   A3.2   C3.1
-   A3.3   C3.3
-
-controls with no owning lesson: 0
-
-Nothing is unowned. Note which functions do NOT appear: the register
-is preventive, detective and investigative, and none of its forty
-controls is a code-review control - the pipeline in Function B reviews
-code, and no amount of code review would have caught any of this.
-
-Six of the forty needed no new lesson at all -
-parser sandboxing was already A3.2, micro-segmentation A3.3, short-lived
-credentials A2.4. A register that duplicates what you have is worse than
-one that maps onto it.
-preconditions the incident needed : 9
-already true at CyberTravels      : 8
-still missing                     : 1  (scale)
-
-register rows implicated: 9  (R2, R3, R4, R5, R7, R8, R9, R10, R11)
-
-Read the incident as a story about an AI lab and it is a curiosity. Read
-it as a list of preconditions and eight of nine are already sitting in a
-travel company&#x27;s booking platform. The ninth is a scaling decision
-somebody will make for good reasons, as routine engineering work.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Each behaviour in the incident resolves to a named control, and the ones with no control behind them are the gaps the case study exists to surface.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Ask whether anything in your estate could spawn a child agent. If the answer is yes and you cannot attribute the child to a human, you already have the swarm's precondition.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>MITRE ATLAS</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.5.ipynb</code></p></div><div class="pager"><a href="C1.4.html"><span class="k">← Previous</span><span class="t">C1.4 · Establishing telemetry and detecting the actor</span></a><a class="next" href="C1.6.html"><span class="k">Next →</span><span class="t">C1.6 · High-concurrency detection engineering</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+Lesson A0.0 sets this up end to end on a free tier — a local model
+with Ollama, or Google AI Studio&#x27;s free Gemini key. MODELS.md lists
+which model suits which lab.</code></pre></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Each behaviour in the incident resolves to a named control, and the ones with no control behind them are the gaps the case study exists to surface.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Ask whether anything in your estate could spawn a child agent. If the answer is yes and you cannot attribute the child to a human, you already have the swarm's precondition.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>MITRE ATLAS</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.5.ipynb</code></p></div><div class="pager"><a href="C1.4.html"><span class="k">← Previous</span><span class="t">C1.4 · Establishing telemetry and detecting the actor</span></a><a class="next" href="C1.6.html"><span class="k">Next →</span><span class="t">C1.6 · High-concurrency detection engineering</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

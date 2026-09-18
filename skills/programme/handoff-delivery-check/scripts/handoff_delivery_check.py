@@ -1,14 +1,41 @@
 #!/usr/bin/env python3
 """Trace each joint runbook from owner to consumer and find the handoffs that were never actually delivered.
 
-This is the executable half of the `handoff-delivery-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The procedure this runs is **not in this file**. It is in the `SKILL.md` beside
+it, and the model is what carries it out: this script assembles the fixture,
+hands the model the skill's own documentation and output contract, and checks
+the reply against that same contract.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
+That is the point. A procedure written in one place and implemented in another
+is two things that can disagree, and only one of them runs. Here they are the
+same bytes.
+
+The fixture below is committed input, carried over unchanged. Edit it and
+re-run — every number in the output is derived from it.
+
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
+    export OPENAI_API_KEY=ollama
+    export MODEL=qwen2.5:1.5b-instruct
+    python3 skills/programme/handoff-delivery-check/scripts/handoff_delivery_check.py
+
+With no endpoint configured this exits 2 and says so. Nothing is substituted
+for a model's answer.
 """
+from __future__ import annotations
 
+import json
+import pathlib
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
+
+from cyber_commons_skill_runtime import (  # noqa: E402
+    announce_backend, run_with_model)
+
+SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
+
+# ---------------------------------------------------------------- the fixture
+# ---------------------------------------------------------------- the fixture
 RUNBOOKS = {
  "privacy assessment -> control design": {
    "artefact": "DPIA with a control annex",
@@ -29,28 +56,6 @@ RUNBOOKS = {
    "consumer_entitled_to_assume": "the validated unit matches what is deployed",
    "delivered_to": ["compliance"]},                  # cyber and audit never receive it
 }
-for name in sorted(RUNBOOKS):
-    r = RUNBOOKS[name]
-    print(f"{name}")
-    print(f"   artefact  : {r['artefact']}")
-    print(f"   owner     : {r['owner']}")
-    print(f"   consumers : {', '.join(r['consumers'])}")
-    print()
-
-gaps = []
-for name in sorted(RUNBOOKS):
-    r = RUNBOOKS[name]
-    missing = sorted(set(r["consumers"]) - set(r["delivered_to"]))
-    status = "complete" if not missing else f"NOT DELIVERED to {', '.join(missing)}"
-    print(f"{name[:44]:46s}{status}")
-    for m in missing:
-        gaps.append((name, m, r["consumer_entitled_to_assume"]))
-print()
-print(f"undelivered handoffs: {len(gaps)}")
-for name, who, assumption in gaps:
-    print(f"   {who:14s} is assuming: {assumption}")
-    print(f"   {'':14s} and has not received: {RUNBOOKS[name]['artefact']}")
-assert gaps
 
 CONSEQUENCE = {
  ("privacy assessment -> control design", "model_risk"):
@@ -60,49 +65,43 @@ CONSEQUENCE = {
  ("MRM validation -> security evidence", "internal_audit"):
    "third line cannot test the second line's assurance; it audits the artefact it has",
 }
-for name, who, _ in gaps:
-    print(f"   {who:16s}{CONSEQUENCE.get((name, who), 'unknown')}")
-print()
-print("None of these is a control failing. Each is a control that was built,")
-print("works, and is invisible to the function whose decision depends on it.")
+# ------------------------------------------------------------------------ run
 
-def close(runbooks):
-    out = {}
-    for name, r in runbooks.items():
-        out[name] = dict(r, delivered_to=sorted(r["consumers"]))
-    return out
+def task() -> str:
+    """The fixture, as the model sees it."""
+    return "\n\n".join(
+        f"### {name}\n\n```json\n{json.dumps(value, indent=2, default=str)}\n```"
+        for name, value in FIXTURE.items())
 
-CLOSED = close(RUNBOOKS)
-remaining = [(n, c) for n, r in sorted(CLOSED.items())
-             for c in r["consumers"] if c not in r["delivered_to"]]
-print(f"{'seam':46s}{'owner':13s}delivered to")
-for n in sorted(CLOSED):
-    r = CLOSED[n]
-    print(f"{n[:44]:46s}{r['owner']:13s}{', '.join(r['delivered_to'])}")
-print(f"\nundelivered handoffs remaining: {len(remaining)}")
-print()
-print("One owner per artefact, every consumer named, and delivery recorded")
-print("rather than assumed. The delivery record is the part people skip, and it")
-print("is the only part that makes the seam auditable a year later.")
-assert not remaining
 
-def check(runbooks):
-    problems = []
-    for name, r in sorted(runbooks.items()):
-        if not r["artefact"]:                     problems.append(f"{name}: no artefact")
-        if not r["owner"]:                        problems.append(f"{name}: no owner")
-        if isinstance(r["owner"], list):          problems.append(f"{name}: {len(r['owner'])} owners")
-        if not r["consumers"]:                    problems.append(f"{name}: no consumers")
-        undel = set(r["consumers"]) - set(r["delivered_to"])
-        if undel:                                 problems.append(f"{name}: undelivered to {sorted(undel)}")
-    return problems
+FIXTURE = {"RUNBOOKS": RUNBOOKS, "CONSEQUENCE": CONSEQUENCE}
 
-print("before:", len(check(RUNBOOKS)), "problem(s)")
-for p in check(RUNBOOKS): print("   ", p)
-print("after :", len(check(CLOSED)), "problem(s)")
-print()
-print("Four properties, checked mechanically: an artefact exists, one owner is")
-print("accountable, consumers are named, delivery is recorded. A governance")
-print("programme that can run this check on its own seams is doing something")
-print("more useful than another policy document.")
-assert check(RUNBOOKS) and not check(CLOSED)
+
+def main() -> int:
+    announce_backend()
+
+    print("the fixture this run is derived from")
+    for name, value in FIXTURE.items():
+        n = len(value) if isinstance(value, (list, dict, tuple, set)) else 1
+        print(f"   {name:<28} {n} item(s)")
+    print()
+
+    instance, problems, kind, model = run_with_model(SKILL.read_text(), task())
+
+    print(f"answered by   : {model}  ({kind})")
+    print(f"violations    : {len(problems)}")
+    for p in problems:
+        print(f"   {p}")
+    print()
+    print(json.dumps(instance, indent=2, sort_keys=True, default=str))
+    print()
+    # The violations are printed, not raised, and they are also the exit code's
+    # reason: what the model actually said is the evidence a reader needs, and
+    # hiding it behind a traceback removes the only thing worth looking at.
+    print(f"contract: {'held' if not problems else 'BROKEN in ' + str(len(problems)) + ' place(s)'}"
+          f" — this is one model's answer, not the answer")
+    return 0 if not problems else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
