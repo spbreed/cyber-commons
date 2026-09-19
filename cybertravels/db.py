@@ -7,6 +7,7 @@ they were — see LABELS.md — they simply have real rows underneath them now.
 
 Standard library only. `sqlite3` ships with Python.
 """
+import hashlib
 import json
 import sqlite3
 import time
@@ -32,7 +33,14 @@ CREATE TABLE IF NOT EXISTS policies (
 -- A log the workload can edit is a log that proves nothing, which is A2.8.
 CREATE TABLE IF NOT EXISTS audit (
   id INTEGER PRIMARY KEY AUTOINCREMENT, at REAL, chain TEXT, tool TEXT,
-  audience TEXT, scope TEXT, outcome TEXT, detail TEXT, trace_id TEXT);
+  audience TEXT, scope TEXT, outcome TEXT, detail TEXT, trace_id TEXT
+-- step:A2.8 add
+  -- A2.8: each row carries the hash of the one before it, so an edit anywhere
+  -- breaks every hash after it. Append-only was a convention until here; this
+  -- makes it detectable.
+  , prev_hash TEXT, row_hash TEXT
+-- step:A2.8 end
+  );
 CREATE TABLE IF NOT EXISTS memory (
   id INTEGER PRIMARY KEY AUTOINCREMENT, at REAL, owner_id TEXT, kind TEXT,
   content TEXT, origin TEXT, trusted INTEGER);
@@ -112,12 +120,62 @@ def audit(chain, tool, audience, scope, outcome, detail="", trace_id=""):
     which is what was attempted.
     """
     c = conn()
+    row = (time.time(), chain, tool, audience, scope, outcome,
+           detail if isinstance(detail, str) else json.dumps(detail), trace_id)
+    # step:A2.8 was
+    #~ # Append-only by convention: this module simply never issues an UPDATE
+    #~ # or a DELETE. Nothing stops anything else from doing so, and an
+    #~ # attacker holding the agent's credentials holds the log's.
+    #~ c.execute(
+    #~     "INSERT INTO audit (at, chain, tool, audience, scope, outcome,"
+    #~     " detail, trace_id) VALUES (?,?,?,?,?,?,?,?)", row)
+    # step:A2.8 now
+    prev = c.execute("SELECT row_hash FROM audit ORDER BY id DESC "
+                     "LIMIT 1").fetchone()
+    prev_hash = (prev["row_hash"] if prev else GENESIS) or GENESIS
     c.execute(
-        "INSERT INTO audit (at, chain, tool, audience, scope, outcome, detail,"
-        " trace_id) VALUES (?,?,?,?,?,?,?,?)",
-        (time.time(), chain, tool, audience, scope, outcome,
-         detail if isinstance(detail, str) else json.dumps(detail), trace_id))
+        "INSERT INTO audit (at, chain, tool, audience, scope, outcome,"
+        " detail, trace_id, prev_hash, row_hash) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        row + (prev_hash, _row_hash(prev_hash, row)))
+    # step:A2.8 end
     c.commit()
+
+
+# step:A2.8 add
+GENESIS = "0" * 64
+
+
+def _row_hash(prev_hash, row):
+    """The hash of this row, chained to the one before it.
+
+    Canonical and ordered: a hash over a dict would depend on insertion order
+    and two honest machines would disagree about whether the log was intact.
+    """
+    payload = json.dumps([prev_hash, *[str(v) for v in row]],
+                         separators=(",", ":"))
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
+def verify_audit_chain():
+    """Recompute every hash. Returns (ok, first_broken_id).
+
+    This is the property `append-only` was standing in for. It does not stop a
+    write — nothing in the same trust domain can — but an edit, a deletion or
+    an insertion anywhere in the log breaks every hash after it, and that is
+    visible in one pass. A3.8 is where the log moves somewhere the workload
+    cannot reach at all; this is what you can do without that.
+    """
+    prev = GENESIS
+    for r in conn().execute(
+            "SELECT id, at, chain, tool, audience, scope, outcome, detail,"
+            " trace_id, prev_hash, row_hash FROM audit ORDER BY id"):
+        row = (r["at"], r["chain"], r["tool"], r["audience"], r["scope"],
+               r["outcome"], r["detail"], r["trace_id"])
+        if r["prev_hash"] != prev or r["row_hash"] != _row_hash(prev, row):
+            return False, r["id"]
+        prev = r["row_hash"]
+    return True, None
+# step:A2.8 end
 
 
 def recent_audit(limit=60):

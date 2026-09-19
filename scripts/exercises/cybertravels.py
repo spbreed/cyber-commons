@@ -729,3 +729,35 @@ GROUNDING.update({
          "wants it to fail. Every row in that table is a lesson in Function A, "
          "by id.",
 })
+
+
+# ------------------------------------------------- Function A, rewired to G
+# These lessons no longer describe a system — they change the one the reader
+# built. The grounding line names the file their checkpoint contains and the
+# lesson that put it there, so "add the control" is a diff rather than advice.
+GROUNDING.update({
+ "A1.2": "The chat box is `cybertravels/ingress/chat.py`, which you wrote in "
+         "G1.0 and which passes the traveller's text straight to the "
+         "orchestrator. Take the A1.2 checkpoint and the injection works, "
+         "because at that point nothing in the tree marks where a string came "
+         "from. A2.6 is the lesson that changes it.",
+ "A1.3": "Same file, the other handler: `/webhook/vendor`. The Northwind Rail "
+         "notice in `cybertravels/mcp/vendor_server.py` already carries an "
+         "instruction addressed to automated agents — it is in the corpus "
+         "rather than injected by a test, and at the A1.3 checkpoint the only "
+         "thing standing between it and a refund is the system prompt.",
+ "A1.14": "`cybertravels/db.py`'s audit table, as G2.2 left it. Every row "
+          "names the human and the agent. None of them names the vendor notice "
+          "the agent read eleven seconds earlier, which is the fourth question "
+          "and the one A2.7 closes.",
+ "A2.6": "You add `cybertravels/provenance.py` and change both handlers in "
+         "`ingress/chat.py` to mark what they receive. `--diff` at A2.6 is the "
+         "whole control. Then re-run the A1.2 attack against your new "
+         "checkpoint and read the trace: the instruction is still there, and "
+         "it is now labelled as a traveller's.",
+ "A2.8": "You change `db.audit` in `cybertravels/db.py` from append-only by "
+         "convention to a hash chain, and add `verify_audit_chain`. The smoke "
+         "test gains an assertion that edits a recorded refusal into a success "
+         "and proves the chain detects it — which is the difference between a "
+         "log you trust and a log you can check.",
+})

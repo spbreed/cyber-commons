@@ -1113,3 +1113,18 @@ ABOUT.update({
          "a bypass, and the agent's blast radius measured as the number the "
          "next function argues with.",
 })
+
+
+ABOUT.update({
+ "A2.6": "Marking untrusted text where it enters, in the file the reader "
+         "already wrote: a Span carrying its origin, assigned at the boundary "
+         "because that is the only place that honestly knows, and rendered to "
+         "the model with delimiters a span cannot forge. Including the part "
+         "people skip — marking is not filtering, and this closes nothing on "
+         "its own.",
+ "A2.8": "Turning an append-only convention into a detectable property: each "
+         "audit row carries the hash of the one before it, so an edit, a "
+         "deletion or an insertion anywhere breaks every hash after it and is "
+         "visible in one pass. What it does not do is stop the write, which is "
+         "why A3.8 moves the log somewhere the workload cannot reach.",
+})

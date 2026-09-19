@@ -94,7 +94,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 # any other, and a marker syntax that only worked in Python would have silently
 # left it present from the first checkpoint.
 FILE_RE = re.compile(
-    r"^\s*(?:#|<!--)\s*step:file\s+([A-Z]\d+\.\d+)\s*(?:-->)?\s*$", re.M)
+    r"^[ \t]*(?:#|<!--)[ \t]*step:file[ \t]+([A-Z]\d+\.\d+)[ \t]*(?:-->)?[ \t]*$",
+    re.M)
 # `# step:G1.4 was|now|add|end`, on its own line, any indentation.
 BLOCK_RE = re.compile(r"^[ \t]*#\s*step:([A-Z]\d+\.\d+)\s+(was|now|add|end)\s*$")
 
@@ -155,9 +156,18 @@ def materialise(text: str, have: set[str]) -> str:
 
 
 def strip_file_marker(text: str) -> str:
-    """Remove the marker line entirely, newline included."""
-    return re.sub(r"^\s*(?:#|<!--)\s*step:file\s+[A-Z]\d+\.\d+\s*(?:-->)?\s*\n",
-                  "", text, count=1, flags=re.M)
+    """Remove the marker line entirely, newline included.
+
+    `[ \t]*` rather than `\s*`: `\s` matches newlines, so a leading `\s*`
+    greedily ate the blank line *above* the marker as well. That only shows up
+    when the marker sits inside a docstring with a blank line before it, and it
+    shows up as the final checkpoint differing from the committed tree by two
+    blank lines — which is exactly the drift gate 1 exists to catch, arriving
+    from the gate's own regex.
+    """
+    return re.sub(
+        r"^[ \t]*(?:#|<!--)[ \t]*step:file[ \t]+[A-Z]\d+\.\d+[ \t]*(?:-->)?[ \t]*\n",
+        "", text, count=1, flags=re.M)
 
 
 def build(at: str, order: list[str]) -> dict[str, str]:
