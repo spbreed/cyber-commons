@@ -4719,7 +4719,7 @@ Next up: D1.0, Start here — the agentic SOC, and the stack that runs it.
 
 ### D1.0 · Start here — the agentic SOC, and the stack that runs it
 
-Chapter D1 · lesson 1 of 4 · runs a skill · 336 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/D1.0.html)
+Chapter D1 · lesson 1 of 4 · runs a skill · 359 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/D1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -4749,7 +4749,7 @@ Here is what that costs you.
 
 A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour, reports nothing and means nothing.
 
-And this is CyberTravels again — the same company, because a lot of people start watching here. CyberTravels' SOC was built for people. One hour of the Workflow Agent is 1,400 tool calls; one hour of Alex is twelve.
+And this is CyberTravels again — the same company, because a lot of people start watching here. cybertravels/soc/__init__.py carries the incident clock, and its shape is the argument. elapsed budget('contain') shows where the time actually goes: attribute is the largest block, and for a human actor it would be near zero. Every lesson in this function names a stage on that clock.
 
 **③ What we do about it**
 
@@ -4781,7 +4781,7 @@ Next up: D1.1, The sensor estate — EDR, DLP, CSPM and CNAPP against an agent.
 
 ### D1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent
 
-Chapter D1 · lesson 2 of 4 · runs a skill · 300 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/D1.1.html)
+Chapter D1 · lesson 2 of 4 · runs a skill · 302 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/D1.1.html)
 
 **① Open**
 
@@ -4801,7 +4801,7 @@ Here is what that costs you.
 
 Four products are bought, the estate is assumed covered, and the agent's whole working day falls between them.
 
-Same company, same four agents, new way of failing. CyberTravels bought all four before it shipped an agent, and all four still work. What none of them is in the path of is the Workflow Agent reading a booking through the internal API, putting it in a prompt, calling the vendor MCP server and issuing the refund — which is the entire incident, start to finish, invisible to the estate's whole security stack.
+Same company, same four agents, new way of failing. soc/sensors.py derives the action list from config.TOOL_POLICY rather than from memory, then asks each product what it observes. With the agent's own telemetry onboarded, coverage is 1.0. Run it without={'agent telemetry'} — the estate as most teams have it — and it is 0.214: every tool call, the token mint, the approval, memory and every peer message are invisible. That is the agent's whole working day.
 
 **③ What we do about it**
 
@@ -4833,7 +4833,7 @@ Next up: D1.2, Drift monitoring — behaviour that changes without a code change
 
 ### D1.2 · Drift monitoring — behaviour that changes without a code change
 
-Chapter D1 · lesson 3 of 4 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D1.2.html)
+Chapter D1 · lesson 3 of 4 · runs a skill · 282 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.2.html)
 
 **① Open**
 
@@ -4853,7 +4853,7 @@ Here is what that costs you.
 
 A detection that worked last month is silently degraded, because the model, the prompt or the tool list changed and none of it was a code change.
 
-Same company, same four agents, new way of failing. Nothing was attacked. The model provider upgraded, Alex edited a prompt, the tool manifest changed — and CyberTravels' baseline moved underneath every detection built on it.
+Same company, same four agents, new way of failing. Six surfaces change what your agent does and only one of them is in this repository. drift() reports which moved and, in its own column, which have no approver — the model version on the vendor's schedule, the retrieval corpus anyone can add a template to, and the MCP tool descriptions A1.9 says can be rewritten after you approved them.
 
 **③ What we do about it**
 
@@ -4885,7 +4885,7 @@ Next up: D1.3, Bonus — finding the agents, and keeping what they emit.
 
 ### D1.3 · Bonus — finding the agents, and keeping what they emit
 
-Chapter D1 · lesson 4 of 4 · runs a skill · 429 words, about 3.1 min spoken · [page](https://cybercommons.ai/lessons/D1.3.html)
+Chapter D1 · lesson 4 of 4 · runs a skill · 433 words, about 3.1 min spoken · [page](https://cybercommons.ai/lessons/D1.3.html)
 
 **① Open**
 
@@ -4905,7 +4905,7 @@ Here is what that costs you.
 
 An agent nobody registered acts under a person's credential, and conventional analytics read it as that person behaving oddly.
 
-Same company, same four agents, new way of failing. CyberTravels acts under Alex's authority and in Alex's name, so conventional UEBA reads it as Alex behaving strangely at 3am. Score it on behaviour instead and it is unmistakable — and then you are holding its trace, which carries prompts, tool calls, decisions and identities that appear in no application log CyberTravels has. R10, R11.
+Same company, same four agents, new way of failing. retention plan() decides per field rather than per record, because a record-level rule is decided by its most sensitive field: the whole run gets the prompt's retention and the investigation loses the chain. Here prompt text is seven days and chain, trace id and motive origin are a year, which is the set D3.4 needs and the smallest one.
 
 **③ What we do about it**
 
@@ -4945,7 +4945,7 @@ Next up: D2.1, The detection data lake — where agent telemetry lands.
 
 ### D2.1 · The detection data lake — where agent telemetry lands
 
-Chapter D2 · lesson 1 of 6 · runs a skill · 310 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/D2.1.html)
+Chapter D2 · lesson 1 of 6 · runs a skill · 335 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/D2.1.html)
 
 **① Open**
 
@@ -4965,7 +4965,7 @@ Here is what that costs you.
 
 Everything is indexed hot because nobody priced it, so retention is cut across the board and the agent traces go first.
 
-Same company, same four agents, new way of failing. The six sources are CyberTravels' own, and the one that decides the lesson is its agent prompts: 23 percent of the volume, read by exactly one query, and the first thing an infrastructure review proposes deleting. Delete it and D5.1 cannot replay the refund incident at all.
+Same company, same four agents, new way of failing. soc/lake.py tiers each source by the queries the SOC actually runs. model io is 900 GB queried twice a quarter and lands in cold; audit rows is 8 GB and lands in hot. The bill is $267 against $2,972 all-hot — and the alternative to tiering is not a bigger bill, it is a retention cut applied to every source at once, with the traces going first because they are the newest.
 
 **③ What we do about it**
 
@@ -4997,7 +4997,7 @@ Next up: D2.2, Detections whose subject is the agent — mapped to ATT and CK an
 
 ### D2.2 · Detections whose subject is the agent — mapped to ATT&CK and ATLAS
 
-Chapter D2 · lesson 2 of 6 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D2.2.html)
+Chapter D2 · lesson 2 of 6 · runs a skill · 316 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/D2.2.html)
 
 **① Open**
 
@@ -5017,7 +5017,7 @@ Here is what that costs you.
 
 Classic baselines call two countries in an hour an incident and 300 file reads a minute an incident; for an agent both are ordinary.
 
-Same company, same four agents, new way of failing. Writing a detection where the subject is CyberTravels means writing one where 1,400 actions an hour is normal and every heuristic that relies on human rhythm is gone.
+Same company, same four agents, new way of failing. Four detections whose subject is the agent, each mapped to ATT and CK and ATLAS. They are about relationships rather than volumes: a scope that widened between hops (A2.3 says chains narrow), a tool pair never seen — lookup vendor doc then issue refund is the Northwind notice working — an action with no human in its chain, and an approval granted faster than the content could be read.
 
 **③ What we do about it**
 
@@ -5049,7 +5049,7 @@ Next up: D2.3, Detections whose subject is the agent platform.
 
 ### D2.3 · Detections whose subject is the agent platform
 
-Chapter D2 · lesson 3 of 6 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D2.3.html)
+Chapter D2 · lesson 3 of 6 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D2.3.html)
 
 **① Open**
 
@@ -5069,7 +5069,7 @@ Here is what that costs you.
 
 Platform-layer compromise is invisible to workload-layer detection — not detected late, not detected at all.
 
-Same company, same four agents, new way of failing. Detections whose subject is the platform CyberTravels runs on, not the agents themselves — the escape, the poisoned package cache, the credential loose on the internet, the guardrail still switched off after the demo.
+Same company, same four agents, new way of failing. When the harness is what is being attacked, a workload-layer detection is looking in the wrong place. Four named primitives rather than an anomaly score, and the sharpest is exemption reconciliation(): A3.9's Exemption carries an expiry, nothing reconciles the register against the running configuration, so the expiry is a date that passes and the control stays off.
 
 **③ What we do about it**
 
@@ -5101,7 +5101,7 @@ Next up: D2.4, Agent-assisted detection engineering — written by a loop, shipp
 
 ### D2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human
 
-Chapter D2 · lesson 4 of 6 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D2.4.html)
+Chapter D2 · lesson 4 of 6 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D2.4.html)
 
 **① Open**
 
@@ -5121,7 +5121,7 @@ Here is what that costs you.
 
 An agent writes candidate rules faster than anyone can review them, and a rule at 5 percent precision is not 5 percent useful — it is negative.
 
-Same company, same four agents, new way of failing. An agent can write and tune a detection for CyberTravels' behaviour far faster than the detection engineer can — including a confident, wrong one, shipped to production.
+Same company, same four agents, new way of failing. review() calls C1.6's deployable() rather than restating it. Your sequence rule ships at 1,000 events a day and needs eleven analysts at 100,000 — same rule, same precision. And a candidate with no technique mapped is refused, because a rule nobody mapped is a rule nobody can reason about for coverage.
 
 **③ What we do about it**
 
@@ -5153,7 +5153,7 @@ Next up: D2.5, Rules generated from an incident — and the benign corpus that d
 
 ### D2.5 · Rules generated from an incident — and the benign corpus that decides them
 
-Chapter D2 · lesson 5 of 6 · runs a skill · 265 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D2.5.html)
+Chapter D2 · lesson 5 of 6 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D2.5.html)
 
 **① Open**
 
@@ -5173,7 +5173,7 @@ Here is what that costs you.
 
 Every candidate rule catches the incident it was generated from, so catching it cannot be the test.
 
-Same company, same four agents, new way of failing. The incident is CyberTravels': the Workflow Agent issued a refund against a booking nobody asked it to touch. The benign corpus is the hard one on purpose — CyberTravels processes eighteen legitimate refunds in the same window, and a rule that cannot tell them apart is a rule that alerts on the business.
+Same company, same four agents, new way of failing. A rule generated from an incident matches that incident; that is not evidence. measure() runs it against the trace it came from and against a benign corpus, and reports both failure modes — overfitted to one trace id, or general enough to match the baseline. A rule with no measured false-positive rate is a guess.
 
 **③ What we do about it**
 
@@ -5265,7 +5265,7 @@ Next up: D3.1, From alert queue to loop operator.
 
 ### D3.1 · From alert queue to loop operator
 
-Chapter D3 · lesson 1 of 10 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.1.html)
+Chapter D3 · lesson 1 of 10 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D3.1.html)
 
 **① Open**
 
@@ -5285,7 +5285,7 @@ Here is what that costs you.
 
 Supervising a loop by re-reading everything it did is not supervision, and a loop that closes a true positive does so silently.
 
-Same company, same four agents, new way of failing. The analyst on CyberTravels' alerts stops triaging and starts supervising something that triages — which is a different skill, with a worse failure mode: confident, fast, and wrong at volume.
+Same company, same four agents, new way of failing. supervise() wraps C1.7's triage with the list of alerts that bypass ranking entirely. A canary read is not a scoring question — C1.8 built it precisely so that it needs no triage — and the sample below the line is what makes the closing rule testable rather than trusted.
 
 **③ What we do about it**
 
@@ -5317,7 +5317,7 @@ Next up: D3.2, Admission rules — what the investigating agent may touch.
 
 ### D3.2 · Admission rules — what the investigating agent may touch
 
-Chapter D3 · lesson 2 of 10 · runs a skill · 257 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.2.html)
+Chapter D3 · lesson 2 of 10 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.2.html)
 
 **① Open**
 
@@ -5337,7 +5337,7 @@ Here is what that costs you.
 
 Incident response grants the broadest read in the organisation at the moment of least supervision — and that grant is often larger than the incident.
 
-Same company, same four agents, new way of failing. The admission set is written for CyberTravels' agent-misuse class: agent traces, gateway logs and the tool audit are in; the bookings database, with its payment cards, is not. The refused query that matters is the one asking for ninety thousand rows of a source that IS admitted — CyberTravels' whole gateway log, which is a copy.
+Same company, same four agents, new way of failing. The investigation is itself a data movement, and usually a larger one than the incident. Investigation declares its admission set per class, refuses anything outside it, and requires a named human and a reason to grant more. The grant list is the part an assessor reads.
 
 **③ What we do about it**
 
@@ -5369,7 +5369,7 @@ Next up: D3.3, The context that makes agent triage work.
 
 ### D3.3 · The context that makes agent triage work
 
-Chapter D3 · lesson 3 of 10 · runs a skill · 227 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/D3.3.html)
+Chapter D3 · lesson 3 of 10 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.3.html)
 
 **① Open**
 
@@ -5389,7 +5389,7 @@ Here is what that costs you.
 
 An alert about an agent without scope, identity and delegation is not triageable, so analysts escalate everything or quietly close everything.
 
-Same company, same four agents, new way of failing. An alert saying cybertravels-svc listed all customer records is untriageable without knowing whether that is its job. Most bad triage at CyberTravels is missing context, not a weak model.
+Same company, same four agents, new way of failing. The context that makes agent triage work is the context your own tree already holds: sensors.matrix() for what is observable, LABELS.md for the known defects, D1.2's baseline for what normal looks like this week, and the prior decisions in the audit log. A triage agent given none of it underperforms your worst analyst.
 
 **③ What we do about it**
 
@@ -5421,7 +5421,7 @@ Next up: D3.4, When the actor is an agent — three instincts that misfire.
 
 ### D3.4 · When the actor is an agent — three instincts that misfire
 
-Chapter D3 · lesson 4 of 10 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.4.html)
+Chapter D3 · lesson 4 of 10 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D3.4.html)
 
 **① Open**
 
@@ -5441,7 +5441,7 @@ Here is what that costs you.
 
 Three responder instincts that are right for people misfire on agents, and each one burns the clock.
 
-Same company, same four agents, new way of failing. The internal actor was the Workflow Agent. Was it instructed, injected, or simply permitted? CyberTravels' existing playbook has no branch for that question, and every step of it assumes a person.
+Same company, same four agents, new way of failing. Three instincts, each correct for a person and confidently wrong for an agent. Run attribute() on a row whose chain reads priya => spiffe://… and it answers all four questions; run it on service-account — the estate before A2.x — and it answers one, naming the other three as gaps rather than guessing them.
 
 **③ What we do about it**
 
@@ -5473,7 +5473,7 @@ Next up: D3.5, Agent-assisted reconstruction — a timeline you can challenge.
 
 ### D3.5 · Agent-assisted reconstruction — a timeline you can challenge
 
-Chapter D3 · lesson 5 of 10 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.5.html)
+Chapter D3 · lesson 5 of 10 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D3.5.html)
 
 **① Open**
 
@@ -5493,7 +5493,7 @@ Here is what that costs you.
 
 A model correlates thousands of log lines in seconds and will produce a fluent narrative from logs that never supported one.
 
-Same company, same four agents, new way of failing. Reconstructing what CyberTravels did across six log sources is reading, and agents read fast. A timeline that is 95 percent right and fully confident is worse than none.
+Same company, same four agents, new way of failing. Reconstruction is pre-loaded or it is late. Everything the timeline needs already exists — G2.1's spans, G2.2's rows, A2.7's motive — and D1.3 decided how long each field survives. The timeline you can challenge is the one built from inputs rather than from the model's account of them.
 
 **③ What we do about it**
 
@@ -5525,7 +5525,7 @@ Next up: D3.6, Plan, then replan — an investigation that changes its mind.
 
 ### D3.6 · Plan, then replan — an investigation that changes its mind
 
-Chapter D3 · lesson 6 of 10 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D3.6.html)
+Chapter D3 · lesson 6 of 10 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.6.html)
 
 **① Open**
 
@@ -5545,7 +5545,7 @@ Here is what that costs you.
 
 An agent scoring evidence only on support confirms its first theory and never terminates.
 
-Same company, same four agents, new way of failing. The investigation is CyberTravels' refund incident, and the branch that gets abandoned is the one everybody starts with: the Workflow Agent issued the refund, so the Workflow Agent is the problem. The evidence that kills it is that the agent's own plan for that run contains no refund step — the instruction came from a vendor MCP server's tool description, which is A1.13's risk arriving as an incident.
+Same company, same four agents, new way of failing. Plan records the hypothesis, counts contradicting evidence, and makes replanning a trigger rather than a judgement call. The abandoned branch stays in the trace, because a branch that is not in the trace looks like one nobody considered.
 
 **③ What we do about it**
 
@@ -5577,7 +5577,7 @@ Next up: D3.7, Scoping an agentic incident — following the delegation graph.
 
 ### D3.7 · Scoping an agentic incident — following the delegation graph
 
-Chapter D3 · lesson 7 of 10 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.7.html)
+Chapter D3 · lesson 7 of 10 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.7.html)
 
 **① Open**
 
@@ -5597,7 +5597,7 @@ Here is what that costs you.
 
 The agent that touched the resource is usually the last actor in a chain, and the earlier ones had more authority, not less.
 
-Same company, same four agents, new way of failing. Eleven minutes of CyberTravels on delegated credentials. What it touched is not answerable from memory — it comes out of the identity and egress logs, if they exist. R9.
+Same company, same four agents, new way of failing. delegation graph() builds the edges out of the act chains A2.3 made nest, and blast scope() walks forward from one principal. Scoping to the acting agent alone returns the last hop; the run that asked for it is one edge back.
 
 **③ What we do about it**
 
@@ -5629,7 +5629,7 @@ Next up: D3.8, Fleet-level correlation — seeing a swarm.
 
 ### D3.8 · Fleet-level correlation — seeing a swarm
 
-Chapter D3 · lesson 8 of 10 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.8.html)
+Chapter D3 · lesson 8 of 10 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.8.html)
 
 **① Open**
 
@@ -5649,7 +5649,7 @@ Here is what that costs you.
 
 Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction, not by tuning.
 
-Same company, same four agents, new way of failing. Four agents, thousands of runs. Coordination between runs that should be independent is invisible to per-run monitoring by construction — and the shared package cache in R4 is exactly the surface it would use.
+Same company, same four agents, new way of failing. Imports C1.5's correlate(). The run artefacts table A3.8 added is what it reads, and the finding is the one no per-run check can produce: every run passed, and one of them wrote the cache entry three others read.
 
 **③ What we do about it**
 
@@ -5681,7 +5681,7 @@ Next up: D3.9, Third-party threat intelligence, and the tactics it names.
 
 ### D3.9 · Third-party threat intelligence, and the tactics it names
 
-Chapter D3 · lesson 9 of 10 · runs a skill · 212 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/D3.9.html)
+Chapter D3 · lesson 9 of 10 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.9.html)
 
 **① Open**
 
@@ -5701,7 +5701,7 @@ Here is what that costs you.
 
 Intelligence that stays a narrative about adversary trends moves nothing, however well written.
 
-Same company, same four agents, new way of failing. Two intel questions for CyberTravels: how adversaries use agents, and who is coming for CyberTravels. The second is the one that reaches the booking API.
+Same company, same four agents, new way of failing. intake() splits incoming intelligence by whether anything backs it. Same rule as B2.12, at the other end of the pipe: an unsourced claim cannot carry a severity and cannot become a detection, because a rule whose provenance is a model's fluency is a rule nobody can defend.
 
 **③ What we do about it**
 
@@ -5733,7 +5733,7 @@ Next up: D3.10, Hunting in agent telemetry.
 
 ### D3.10 · Hunting in agent telemetry
 
-Chapter D3 · lesson 10 of 10 · runs a skill · 392 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/D3.10.html)
+Chapter D3 · lesson 10 of 10 · runs a skill · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/D3.10.html)
 
 **① Open**
 
@@ -5753,7 +5753,7 @@ Here is what that costs you.
 
 Everything not covered by a rule is invisible, and the rules were written against behaviour somebody already understood.
 
-Same company, same four agents, new way of failing. The corpus is CyberTravels' agent runs — the Workflow Agent and the RAG Advisor, forty runs across a fortnight. The overnight batch that wrecks the working-hours hypothesis is CyberTravels' own nightly reconciliation, which is exactly the kind of legitimate oddity that makes an obvious hunt useless in a real estate.
+Same company, same four agents, new way of failing. hunt() is hypothesis-first because a hunt without one produces interesting-looking clusters, and graduates() is what stops hunting being a hobby. Three ways to answer no, and the third is skipped most: a finding an existing rule already covers does not need a second rule, it needs somebody to check the first is not muted.
 
 **③ What we do about it**
 
@@ -5793,7 +5793,7 @@ Next up: D4.1, Remediation policy — what may be done without asking.
 
 ### D4.1 · Remediation policy — what may be done without asking
 
-Chapter D4 · lesson 1 of 5 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D4.1.html)
+Chapter D4 · lesson 1 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.1.html)
 
 **① Open**
 
@@ -5813,7 +5813,7 @@ Here is what that costs you.
 
 Automation scope decided per runbook means the blast radius of your response is unknown until the response fires.
 
-Same company, same four agents, new way of failing. The nine actions are CyberTravels' actual response levers, from throttling one agent to rotating the estate's root CA. The pair worth reading together is deleting a single agent's working directory — manual, because there is no undo — against forcing human-in-the-loop on every agent in the estate, which is one flag.
+Same company, same four agents, new way of failing. soc/respond.py makes the tier a consequence rather than a choice. Blast radius times reversibility, and wide-and-reversible is automated on purpose — a response system that will not throttle without a human does nothing at 3am. An action nobody classified raises rather than defaulting to automated.
 
 **③ What we do about it**
 
@@ -5845,7 +5845,7 @@ Next up: D4.2, Runbook tiers — fully automated, human in the loop, manual.
 
 ### D4.2 · Runbook tiers — fully automated, human in the loop, manual
 
-Chapter D4 · lesson 2 of 5 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.2.html)
+Chapter D4 · lesson 2 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.2.html)
 
 **① Open**
 
@@ -5865,7 +5865,7 @@ Here is what that costs you.
 
 "Automate everything" and "keep a human in it" are both asserted constantly and neither is a position.
 
-Same company, same four agents, new way of failing. The incident is CyberTravels' runaway Workflow Agent, and the numbers are its containment ladder from A3.9 timed three ways. Manual takes thirty-four minutes against a breakout time of twenty-nine, which for CyberTravels means the refunds have already moved before anybody has decided anything.
+Same company, same four agents, new way of failing. decision point() asks three questions of a human-in-the-loop runbook: does it say what it will do specifically, what it cannot undo, and does it offer something narrower. Without the third the choice is act or abandon the incident, and act always wins. A runbook that fails is tiered manual instead.
 
 **③ What we do about it**
 
@@ -5897,7 +5897,7 @@ Next up: D4.3, Containment at machine speed.
 
 ### D4.3 · Containment at machine speed
 
-Chapter D4 · lesson 3 of 5 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D4.3.html)
+Chapter D4 · lesson 3 of 5 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.3.html)
 
 **① Open**
 
@@ -5917,7 +5917,7 @@ Here is what that costs you.
 
 An agent at 300 actions a minute takes about 2,400 further actions inside an eight-minute approval cycle.
 
-Same company, same four agents, new way of failing. You have to stop CyberTravels faster than it issues refunds. The containment path is something CyberTravels builds in advance, because improvising it takes longer than the incident.
+Same company, same four agents, new way of failing. Six rungs, each strictly more disruptive and each reversible until the last two — throttle, scope-reduce, reroute, force-HITL, revoke, hard-stop. escalate() never skips. Starting at the bottom is a decision; arriving there because the rungs were never built is not.
 
 **③ What we do about it**
 
@@ -5949,7 +5949,7 @@ Next up: D4.4, Stop authority — who halts a fleet, and how long it takes.
 
 ### D4.4 · Stop authority — who halts a fleet, and how long it takes
 
-Chapter D4 · lesson 4 of 5 · runs a skill · 223 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/D4.4.html)
+Chapter D4 · lesson 4 of 5 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.4.html)
 
 **① Open**
 
@@ -5969,7 +5969,7 @@ Here is what that costs you.
 
 Stop authority is the control everyone assumes exists and almost nobody has timed.
 
-Same company, same four agents, new way of failing. At three in the morning, who is allowed to stop all four agents without waiting for a bridge call? Pre-agreed authority beats consensus every time, and R1 is what happens while you wait.
+Same company, same four agents, new way of failing. Five checks and only the last has a number in it. measured time to stop has to come from a real attempt, because the first time a stop authority is exercised is the worst possible moment to discover how long it takes — and C1.9's time to stop says twenty thousand revocations is not instant.
 
 **③ What we do about it**
 
@@ -6001,7 +6001,7 @@ Next up: D4.5, The fleet kill switch.
 
 ### D4.5 · The fleet kill switch
 
-Chapter D4 · lesson 5 of 5 · runs a skill · 350 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/D4.5.html)
+Chapter D4 · lesson 5 of 5 · runs a skill · 397 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/D4.5.html)
 
 **① Open**
 
@@ -6021,7 +6021,7 @@ Here is what that costs you.
 
 Terminating agents while their credentials stay valid leaves the persistence exactly where it was.
 
-Same company, same four agents, new way of failing. Terminating CyberTravels' four agents while their bearer tokens stay valid moves the incident rather than ending it. R5.
+Same company, same four agents, new way of failing. Imports C1.9's coverage() rather than recomputing it, so the red team and the SOC cannot disagree about the number mid-incident. What this adds is the ordering: snapshot before terminate, and revoke in the same action. A plan that terminates without revoking leaves the tokens valid, and the first version of this check called such a plan correct — the comment in the file says why.
 
 **③ What we do about it**
 
@@ -6061,7 +6061,7 @@ Next up: D5.1, Replay and forensics — reproducing a run you can defend.
 
 ### D5.1 · Replay and forensics — reproducing a run you can defend
 
-Chapter D5 · lesson 1 of 6 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D5.1.html)
+Chapter D5 · lesson 1 of 6 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D5.1.html)
 
 **① Open**
 
@@ -6081,7 +6081,7 @@ Here is what that costs you.
 
 Miss one of the four runtime constants and you can describe what happened but never demonstrate it.
 
-Same company, same four agents, new way of failing. Not just what the agent did, but what it saw and what it decided. If the booking note that triggered the refund was not recorded, the decision cannot be reconstructed at all. R11.
+Same company, same four agents, new way of failing. Imports C1.10's reconstruct() and adds the evidentiary question the red team did not have to ask. Two things are explicitly not evidence: a rerun of the agent, because non-determinism makes it a different run, and the agent's own account, because that is a claim by the subject of the investigation.
 
 **③ What we do about it**
 
@@ -6113,7 +6113,7 @@ Next up: D5.2, The root cause record — naming a control, not a person.
 
 ### D5.2 · The root cause record — naming a control, not a person
 
-Chapter D5 · lesson 2 of 6 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D5.2.html)
+Chapter D5 · lesson 2 of 6 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D5.2.html)
 
 **① Open**
 
@@ -6133,7 +6133,7 @@ Here is what that costs you.
 
 An incident that closes with a narrative recurs, because nothing in a narrative can be built or measured.
 
-Same company, same four agents, new way of failing. The control chain is CyberTravels': provenance at ingress (A2.6), default-deny on the tool call (A3.1), the detection that should have caught a refund without an approval, and the stop authority that existed and was never reached. The first absent one is the root cause; the stop lever nobody pulled is evidence about the detection in front of it.
+Same company, same four agents, new way of failing. RootCause refuses "human error", "a process gap" and "insufficient training" outright, and requires all three fields: the control that failed, the detection that should have fired, and the specific change. Name the thing that would have stopped it whoever was on shift.
 
 **③ What we do about it**
 
@@ -6165,7 +6165,7 @@ Next up: D5.3, Post-incident change surface — picking the layer the fix belong
 
 ### D5.3 · Post-incident change surface — picking the layer the fix belongs in
 
-Chapter D5 · lesson 3 of 6 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D5.3.html)
+Chapter D5 · lesson 3 of 6 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D5.3.html)
 
 **① Open**
 
@@ -6185,7 +6185,7 @@ Here is what that costs you.
 
 The fix goes to the prompt when the bug is in the control plane, and the layers that bypass process are the ones edited under pressure.
 
-Same company, same four agents, new way of failing. After the incident CyberTravels changes prompts, tool scopes, model versions and policy — four things with no release process and no version history.
+Same company, same four agents, new way of failing. Seven surfaces, ordered by how long a fix at that layer survives. Ask choose surface() about an agent that followed a vendor instruction and it recommends identity, not prompt — because if the model can be argued out of the prompt, the prompt was never the fix. A prompt change for a control-plane bug closes the ticket and leaves the gap.
 
 **③ What we do about it**
 
@@ -6217,7 +6217,7 @@ Next up: D5.4, Validating the fix — re-measuring the indicators the incident m
 
 ### D5.4 · Validating the fix — re-measuring the indicators the incident moved
 
-Chapter D5 · lesson 4 of 6 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D5.4.html)
+Chapter D5 · lesson 4 of 6 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D5.4.html)
 
 **① Open**
 
@@ -6237,7 +6237,7 @@ Here is what that costs you.
 
 A closed ticket is not evidence that a control came back.
 
-Same company, same four agents, new way of failing. The six indicators are CyberTravels' own, and two of them do not come back: refunds carrying an approval, and the time to detect a scope breach. CyberTravels' detection went from 194 minutes to 118 against a fifteen-minute target — a real improvement that would still let the same incident run for two hours.
+Same company, same four agents, new way of failing. validate fix() re-measures the indicators the incident moved and attaches the before and after. An indicator it cannot measure comes back in unmeasured rather than as a pass — which is the ticket closing on its own authority, and the most common way a remediation is recorded as done.
 
 **③ What we do about it**
 
@@ -6269,7 +6269,7 @@ Next up: D5.5, Proposing the policy change — the diff, and what it does not fi
 
 ### D5.5 · Proposing the policy change — the diff, and what it does not fix
 
-Chapter D5 · lesson 5 of 6 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D5.5.html)
+Chapter D5 · lesson 5 of 6 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D5.5.html)
 
 **① Open**
 
@@ -6289,7 +6289,7 @@ Here is what that costs you.
 
 Most incidents change what is deployed and leave what is allowed untouched, so the next system reproduces the conditions.
 
-Same company, same four agents, new way of failing. The diff is against CyberTravels' policy, and the expensive line is the one that says a tool call without provenance is refused rather than recorded. That will break CyberTravels' vendor integrations, which is precisely the review that should happen before it ships.
+Same company, same four agents, new way of failing. propose() will not construct without does not fix. A proposal presented as closing the whole class is one nobody reads carefully, and this one says plainly that it leaves the direct API path C1.9 measured. The diff is the deliverable; the postmortem is the reasoning behind it and changes nothing on its own.
 
 **③ What we do about it**
 
@@ -6321,7 +6321,7 @@ Next up: D5.6, The regulatory clock — awareness, not confirmation.
 
 ### D5.6 · The regulatory clock — awareness, not confirmation
 
-Chapter D5 · lesson 6 of 6 · runs a skill · 349 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/D5.6.html)
+Chapter D5 · lesson 6 of 6 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/D5.6.html)
 
 **① Open**
 
@@ -6341,7 +6341,7 @@ Here is what that costs you.
 
 The clock starts at awareness, not at confirmation, and it does not pause while you work out who acted.
 
-Same company, same four agents, new way of failing. The disclosure clock started when CyberTravels exported the customer profiles, not when CyberTravels understood what had happened. Passport and payment data make the deadline short. R10.
+Same company, same four agents, new way of failing. clock check() runs from awareness, not from confirmation. Personal data and a significant incident put you on a 24-hour NIS2 early warning and a 72-hour GDPR clock simultaneously, and "we were still confirming" is not a defence — it is a description of the period the clock was running. This is the hour-one handoff into Track E2.
 
 **③ What we do about it**
 

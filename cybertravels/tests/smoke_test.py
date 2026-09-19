@@ -1636,6 +1636,516 @@ def main():
                          durability_counts_what_outlived_the_engagement))
     # step:C1.11 end
 
+    # ===================================================================== #
+    # Function D — the SOC that watches all of it
+    # ===================================================================== #
+    # step:D1.0 add
+    from cybertravels import soc
+
+    def the_clock_names_where_the_time_goes():
+        stages = [c[0] for c in soc.CLOCK]
+        assert stages[0] == "emit" and stages[-1] == "recover", stages
+        # Attribution is the block that would be near zero for a human actor.
+        assert soc.target_minutes("attribute") > soc.target_minutes("triage")
+        b = soc.elapsed_budget("contain")
+        assert 0 < b["attribution_share"] < 1, b
+        try:
+            soc.target_minutes("guessing")
+        except KeyError:
+            return
+        raise AssertionError("a stage nobody put on the clock had a target")
+    results.append(check("the incident clock names the stage that consumes it",
+                         the_clock_names_where_the_time_goes))
+    # step:D1.0 end
+
+    # step:D1.1 add
+    from cybertravels.soc import sensors
+
+    def the_estate_is_measured_against_what_the_agent_does():
+        acts = sensors.actions()
+        assert any(a["action"] == "tool:issue_refund" for a in acts), \
+            "the action list is not derived from config.TOOL_POLICY"
+        full = sensors.matrix()
+        assert full["coverage"] == 1.0, full["uncovered_actions"]
+        # The estate as most teams actually have it: four products, and the
+        # agent's own telemetry never onboarded.
+        without = sensors.matrix(without={"agent telemetry"})
+        assert without["coverage"] < 0.3, without["coverage"]
+        assert "mint a delegated token" in without["uncovered_actions"]
+        assert "tool:issue_refund" in without["uncovered_actions"], \
+            "every tool call was visible without agent telemetry, which " \
+            "would mean this lesson has nothing to teach"
+        assert all(s["blind_to"] for s in sensors.blind_spots()), \
+            "a sensor in the estate does not state what it cannot see"
+    results.append(check("sensor coverage is measured per agent action, not per product",
+                         the_estate_is_measured_against_what_the_agent_does))
+    # step:D1.1 end
+
+    # step:D1.2 add
+    def drift_names_what_changed_outside_change_management():
+        was = sensors.baseline({"model_version": "v1", "system_prompt": "a",
+                                "tool_policy": "p1", "retrieval_index": "i1",
+                                "mcp_tool_descriptions": "d1", "memory": "m1"})
+        now = dict(was, model_version="v2", retrieval_index="i2",
+                   tool_policy="p2")
+        d = sensors.drift(was, now)
+        assert d["count"] == 3, d
+        assert set(d["outside_change_management"]) == {"model_version",
+                                                       "retrieval_index"}, d
+        assert "tool_policy" not in d["outside_change_management"], \
+            "config.TOOL_POLICY is in the repository; a change to it leaves " \
+            "a commit, and calling it unmanaged would be wrong"
+        assert not sensors.drift(was, was)["moved"]
+    results.append(check("behaviour drifts through surfaces with no approver",
+                         drift_names_what_changed_outside_change_management))
+    # step:D1.2 end
+
+    # step:D1.3 add
+    def retention_is_decided_per_field():
+        p = sensors.retention_plan()
+        days = {r["field"]: r["days"] for r in p["fields"]}
+        assert days["prompt_text"] < days["chain"], days
+        assert set(p["investigable_after_a_year"]) >= {"chain", "trace_id",
+                                                       "motive_origin"}, p
+        assert days["prompt_text"] <= 7, \
+            "the traveller's prose is kept as long as the chain, which is " \
+            "the record-level rule this lesson exists to replace"
+        o = sensors.onboarded({"span", "audit"})
+        assert o["missing"] == ["approval"] and not o["complete"], o
+    results.append(check("retention is per field, so the chain outlives the prose",
+                         retention_is_decided_per_field))
+    # step:D1.3 end
+
+    # step:D2.1 add
+    from cybertravels.soc import lake
+
+    def tiering_is_driven_by_the_queries_not_by_importance():
+        p = lake.plan()
+        by_source = {r["source"]: r for r in p["rows"]}
+        # 900 GB queried twice a quarter. Importance would put it in hot.
+        assert by_source["model_io"]["tier"] == "cold", by_source["model_io"]
+        assert by_source["audit_rows"]["tier"] == "hot", by_source["audit_rows"]
+        assert p["cost_month"] < p["cost_if_all_hot"] / 5, p
+        # The tiers nest: a hot index can serve a postmortem query. Written as
+        # disjoint sets, no tier supports audit_rows at all.
+        assert lake.TIERS["cold"]["supports"] <= lake.TIERS["hot"]["supports"]
+        assert lake.what_a_cut_costs("agent_spans")["stages_degraded"], \
+            "cutting a source degraded no stage, so the trade is invisible"
+    results.append(check("each source is tiered by the queries the SOC runs",
+                         tiering_is_driven_by_the_queries_not_by_importance))
+    # step:D2.1 end
+
+    # step:D2.2 add
+    from cybertravels.soc import rules as det
+
+    def every_rule_names_its_subject_and_its_technique():
+        cat = det.catalogue("agent")
+        assert cat and all(r["subject"] == "agent" for r in cat)
+        assert all(r["attack"] and r["atlas"] for r in cat), \
+            "a rule with no technique cannot be reasoned about for coverage"
+        try:
+            det.Rule("x", "everyone", "T1", "AML.T1", "s", "w")
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("a rule with no stated subject was accepted")
+
+    def the_sequence_rule_keys_on_pairs_not_trajectories():
+        calls = ["list_my_bookings", "lookup_vendor_doc", "issue_refund"]
+        baseline = {("list_my_bookings", "lookup_vendor_doc")}
+        novel = det.sequence_never_seen(calls, baseline)
+        assert ("lookup_vendor_doc", "issue_refund") in novel, novel
+        # The Northwind notice working, as a detection.
+        rows = [{"chain": "priya => spiffe://x", "tool": "issue_refund"},
+                {"chain": "spiffe://x", "tool": "issue_refund"}]
+        orphan = det.no_human_in_chain(rows)
+        assert len(orphan) == 1, orphan
+    results.append(check("a detection states whose behaviour it is about",
+                         every_rule_names_its_subject_and_its_technique))
+    results.append(check("the sequence rule keys on pairs, so it can fire at all",
+                         the_sequence_rule_keys_on_pairs_not_trajectories))
+    # step:D2.2 end
+
+    # step:D2.3 add
+    def the_platform_has_its_own_detections():
+        cat = det.platform_catalogue()
+        assert cat and all(r["subject"] == "agent-platform" for r in cat)
+        names = {r["rule"] for r in cat}
+        assert any("profile that forbids it" in n for n in names), names
+        # The rule that finds a control which is off and everybody thinks is on.
+        from cybertravels import policy as pol
+        expired = pol.Exemption("SEC-9", ["issue_refund"], ["human-approval"],
+                                "migration", "alex", expires_at=time.time() - 1)
+        found = det.exemption_reconciliation([expired], {"SEC-9": False},
+                                             now=time.time())
+        assert found and found[0]["exemption"] == "SEC-9", found
+        assert not det.exemption_reconciliation([expired], {"SEC-9": True},
+                                                now=time.time()), \
+            "a control that came back was still reported as off"
+    results.append(check("the platform is a subject too, with named primitives",
+                         the_platform_has_its_own_detections))
+    # step:D2.3 end
+
+    # step:D2.4 add
+    def a_candidate_rule_is_reviewed_before_it_ships():
+        candidate = det.AGENT_RULES[1]
+        assert det.review(candidate, 1_000)["ship"]
+        big = det.review(candidate, 100_000)
+        assert not big["ship"] and "muted" in big["verdict"], big
+        unmapped = det.Rule("hunch", "agent", "", "", "spans", "felt odd",
+                            true_rate=0.001, false_rate=0.0001)
+        r = det.review(unmapped, 1_000)
+        assert not r["ship"] and "unmapped" in r["verdict"], r
+    results.append(check("a generated rule is measured and mapped before shipping",
+                         a_candidate_rule_is_reviewed_before_it_ships))
+    # step:D2.4 end
+
+    # step:D2.5 add
+    def a_rule_from_one_incident_is_measured_against_benign_traffic():
+        incident = [{"trace_id": "t1", "tool": "issue_refund",
+                     "preceded_by": "lookup_vendor_doc"},
+                    {"trace_id": "t2", "tool": "issue_refund",
+                     "preceded_by": "lookup_vendor_doc"}]
+        benign = [{"trace_id": f"b{i}", "tool": "get_booking",
+                   "preceded_by": "list_my_bookings"} for i in range(100)]
+        overfit = det.measure(lambda t: t.get("trace_id") == "t1",
+                              incident, benign)
+        assert overfit["overfitted"], overfit
+        general = det.measure(
+            lambda t: t.get("tool") == "issue_refund"
+            and t.get("preceded_by") == "lookup_vendor_doc", incident, benign)
+        assert not general["overfitted"] and not general["too_general"], general
+        assert general["false_rate"] == 0.0, general
+        broad = det.measure(lambda t: True, incident, benign)
+        assert broad["too_general"], broad
+        assert "trace_id" not in det.generalise(incident[0])
+    results.append(check("a generated rule is tested against a benign corpus",
+                         a_rule_from_one_incident_is_measured_against_benign_traffic))
+    # step:D2.5 end
+
+    # step:D3.1 add
+    from cybertravels.soc import investigate as inv
+
+    def some_alerts_bypass_ranking_entirely():
+        alerts = [{"id": i, "score": i % 5, "canary": False}
+                  for i in range(40)]
+        alerts.append({"id": 99, "score": 0, "canary": True})
+        out = inv.supervise(alerts, capacity=5,
+                            rank=lambda a: a["score"],
+                            must_escalate=lambda a: a["canary"])
+        assert out["escalated_by_rule"] == 1, out
+        assert out["sampled_from_below"] > 0, \
+            "nothing below the line was sampled, so the loop is unsupervised"
+    results.append(check("a canary read is not a scoring question",
+                         some_alerts_bypass_ranking_entirely))
+    # step:D3.1 end
+
+    # step:D3.2 add
+    def the_investigation_is_not_itself_the_breach():
+        i = inv.Investigation("INC-1", "agent-misbehaviour")
+        i.read("audit_rows", reason="the chain")
+        try:
+            i.read("crm_exports", reason="curiosity")
+            raise AssertionError("the investigation read outside its scope")
+        except inv.NotAdmitted:
+            pass
+        try:
+            i.grant("crm_exports", by="", reason="")
+            raise AssertionError("a grant with no named human was accepted")
+        except inv.NotAdmitted:
+            pass
+        i.grant("crm_exports", by="priya", reason="confirm the export claim")
+        i.read("crm_exports", reason="confirm the export claim")
+        r = i.report()
+        assert r["granted"] == ["crm_exports"] and r["refused"], r
+        try:
+            inv.Investigation("INC-2", "anything-goes")
+        except inv.NotAdmitted:
+            return
+        raise AssertionError("an investigation class nobody scoped was allowed")
+    results.append(check("an investigation declares what it may touch",
+                         the_investigation_is_not_itself_the_breach))
+    # step:D3.2 end
+
+    # step:D3.4 add
+    def which_user_is_the_wrong_first_question():
+        assert len(inv.INSTINCTS) == 3
+        assert all(i["ask_instead"] for i in inv.INSTINCTS)
+        good = inv.attribute({"chain": "priya => spiffe://ct/agent/workflow",
+                              "tool": "issue_refund",
+                              "motive_origin": "vendor-document"})
+        assert good["answered"] == 4 and not good["unanswered"], good
+        assert good["human"] == "priya" and "spiffe://" in good["workload"]
+        # The estate as it is before A2.x: one shared service account, and the
+        # record answers exactly one of the four questions.
+        thin = inv.attribute({"chain": "service-account", "tool": "x"})
+        assert thin["answered"] == 1, thin
+        assert set(thin["unanswered"]) == {"human", "workload", "motive"}, thin
+    results.append(check("attribution answers four questions or names the gap",
+                         which_user_is_the_wrong_first_question))
+    # step:D3.4 end
+
+    # step:D3.7 add
+    def scoping_follows_the_delegation_graph():
+        rows = [{"chain": "dana => agent-a", "tool": "get_booking"},
+                {"chain": "dana => agent-a => agent-b", "tool": "issue_refund"},
+                {"chain": "priya => agent-c", "tool": "get_receipt"}]
+        g = inv.delegation_graph(rows)
+        assert ("agent-a", "agent-b") in g["edges"], g["edges"]
+        s = inv.blast_scope(rows, start="agent-a")
+        assert "agent-b" in s["principals"], s
+        assert "issue_refund" in s["tools"], s
+        assert "get_receipt" not in s["tools"], \
+            "scoping reached an unrelated principal's actions"
+    results.append(check("scoping walks the chain, not the last hop",
+                         scoping_follows_the_delegation_graph))
+    # step:D3.7 end
+
+    # step:D3.6 add
+    def an_investigation_may_change_its_mind_visibly():
+        p = inv.Plan("the traveller did it")
+        p.observe("the refund was on a booking she does not own", supports=False)
+        assert not p.should_replan()
+        p.observe("the vendor notice names issue_refund", supports=False)
+        assert p.should_replan(), "two contradictions did not trigger a replan"
+        p.replan("the vendor notice did it", "two facts contradicted the first")
+        t = p.trace()
+        assert t["abandoned"] == ["the traveller did it"], t
+        assert t["replans"] == 1
+    results.append(check("an abandoned hypothesis stays in the trace",
+                         an_investigation_may_change_its_mind_visibly))
+    # step:D3.6 end
+
+    # step:D3.9 add
+    def intel_without_a_source_does_not_become_a_rule():
+        out = inv.intake([{"claim": "group X targets travel", "source": "CTI-1"},
+                          {"claim": "they will pivot to rail", "source": ""}])
+        assert out["accepted"] == 1 and out["refused"] == 1, out
+        assert "they will pivot to rail" in out["refused_claims"]
+        assert out["may_become_rules"] == ["group X targets travel"]
+    results.append(check("an unsourced intel claim cannot become a detection",
+                         intel_without_a_source_does_not_become_a_rule))
+    # step:D3.9 end
+
+    # step:D3.10 add
+    def a_hunt_finding_has_to_earn_its_detection():
+        traces = [{"tool": "issue_refund", "hour": 3} for _ in range(3)]
+        traces += [{"tool": "get_booking", "hour": 11} for _ in range(97)]
+        h = inv.hunt("refunds at 3am", traces,
+                     lambda t: t["tool"] == "issue_refund" and t["hour"] < 5)
+        assert h["hits"] == 3, h
+        assert inv.graduates(h, benign_rate=0.001,
+                             explained_by_existing_rule=False)["graduates"]
+        noisy = inv.graduates(h, benign_rate=0.2,
+                              explained_by_existing_rule=False)
+        assert not noisy["graduates"] and "bury the queue" in noisy["why"]
+        covered = inv.graduates(h, benign_rate=0.001,
+                                explained_by_existing_rule=True)
+        assert not covered["graduates"], covered
+        assert "before writing another" in covered["why"], covered["why"]
+    results.append(check("a hunt finding graduates only if it is novel and measured",
+                         a_hunt_finding_has_to_earn_its_detection))
+    # step:D3.10 end
+
+    # step:D4.1 add
+    from cybertravels.soc import respond as resp
+
+    def the_tier_is_derived_from_blast_radius_and_reversibility():
+        assert resp.tier_for("throttle the agent") == "automated"
+        assert resp.tier_for("revoke one workload identity") == "human-in-the-loop"
+        assert resp.tier_for("revoke the fleet") == "manual"
+        # Wide AND reversible is automated on purpose: a response system that
+        # will not throttle without a human does nothing at 3am.
+        assert resp.tier_for("force human approval on every call") == "automated"
+        try:
+            resp.tier_for("do something clever")
+        except KeyError as e:
+            assert "nobody classified" in str(e)
+            return
+        raise AssertionError("an unclassified action was given a tier")
+    results.append(check("a runbook's tier is derived, not chosen by its author",
+                         the_tier_is_derived_from_blast_radius_and_reversibility))
+    # step:D4.1 end
+
+    # step:D4.2 add
+    def a_confirmation_dialog_is_not_a_decision_point():
+        thin = {"name": "revoke the workflow agent",
+                "action": "revoke one workload identity", "tier": "automated"}
+        a = resp.assign(thin)
+        assert "conflict" in a, a
+        assert not a["decision_point"]["real_decision"], a["decision_point"]
+        full = dict(thin, states_what_it_will_do=True,
+                    states_what_it_cannot_undo=True,
+                    offers_a_narrower_option=True, tier="human-in-the-loop")
+        b = resp.assign(full)
+        assert "conflict" not in b and b["decision_point"]["real_decision"], b
+    results.append(check("the human-in-the-loop tier carries a real choice",
+                         a_confirmation_dialog_is_not_a_decision_point))
+    # step:D4.2 end
+
+    # step:D4.3 add
+    def containment_climbs_the_ladder_rather_than_jumping():
+        first = resp.escalate()
+        assert first["rung"] == "throttle" and first["reversible"]
+        assert resp.escalate("force-HITL")["rung"] == "revoke"
+        assert resp.escalate("revoke")["reversible"] is False
+        assert resp.escalate("hard-stop") is None
+        r = resp.ladder_report("force-HITL")
+        assert r["still_reversible"], r
+        assert not resp.ladder_report("revoke")["still_reversible"]
+    results.append(check("containment escalates in order, reversible first",
+                         containment_climbs_the_ladder_rather_than_jumping))
+    # step:D4.3 end
+
+    # step:D4.4 add
+    def stop_authority_is_rehearsed_or_it_is_a_paragraph():
+        r = resp.readiness({"named_holder": "alex", "deputy": "priya"})
+        assert not r["ready"] and "rehearsed" in r["missing"], r
+        assert "measured_time_to_stop" in r["missing"]
+        ok = resp.readiness({"named_holder": "alex", "deputy": "priya",
+                             "reachable_out_of_hours": True, "rehearsed": True,
+                             "measured_time_to_stop": 14})
+        assert ok["ready"] and ok["time_to_stop_minutes"] == 14
+    results.append(check("stop authority needs a deputy and a measured time",
+                         stop_authority_is_rehearsed_or_it_is_a_paragraph))
+    # step:D4.4 end
+
+    # step:D4.5 add
+    def the_kill_path_revokes_before_it_terminates():
+        wrong = {"name": "stop", "snapshot": True, "terminate": True,
+                 "independent_path": True, "audit_rows": True,
+                 "trace_spans": True, "in_flight_args": True,
+                 "memory_rows": True}
+        k = resp.kill_path(wrong)
+        assert k["evidence_preserved"], k
+        assert not k["ready"] and not k["order_correct"], \
+            "a kill path that terminates without revoking was called ready — " \
+            "the processes stop and the tokens stay valid"
+        assert any("revoke" in p for p in k["order_problems"]), k
+        right = dict(wrong, revoke=True, verify=True)
+        k2 = resp.kill_path(right)
+        assert k2["order_correct"] and k2["ready"] and k2["verified_after"], k2
+        # And the number C1.9 computed, from the defender's side. One team,
+        # one answer.
+        assert k2["act_path_coverage"] == 0.4, k2["act_path_coverage"]
+        assert "direct API call" in k2["still_live_after"]
+        lossy = resp.kill_path({"snapshot": False, "revoke": True,
+                                "terminate": True, "independent_path": True})
+        assert not lossy["evidence_preserved"] and lossy["evidence_lost"]
+    results.append(check("the kill path revokes in the same action as the stop",
+                         the_kill_path_revokes_before_it_terminates))
+    # step:D4.5 end
+
+    # step:D5.1 add
+    from cybertravels.soc import recover as rec
+
+    def a_rerun_is_not_evidence():
+        rows = [{"chain": "priya => spiffe://ct/agent/workflow",
+                 "tool": "issue_refund", "motive_origin": "vendor-document"}]
+        spans = [{"kind": k} for k in ("start", "plan", "token_issued",
+                                       "tool_result", "done")]
+        r = rec.replay_readiness(rows, spans, lambda: (True, None))
+        assert r["defensible"], r["blockers"]
+        assert any("rerun" in n for n in r["not_evidence"]), r["not_evidence"]
+        assert any("subject of the investigation" in n
+                   for n in r["not_evidence"])
+    results.append(check("replay is reconstruction, and a rerun is not evidence",
+                         a_rerun_is_not_evidence))
+    # step:D5.1 end
+
+    # step:D5.2 add
+    def a_root_cause_names_a_control_not_a_person():
+        for bad in ("human error", "a process gap", "insufficient training"):
+            try:
+                rec.RootCause("INC-1", bad, "the sequence rule", "add a check")
+            except rec.RootCauseIncomplete as e:
+                assert "person or a mood" in str(e)
+            else:
+                raise AssertionError(f"{bad!r} was accepted as a root cause")
+        try:
+            rec.RootCause("INC-1", "no default-deny on issue_refund", "", "x")
+        except rec.RootCauseIncomplete as e:
+            assert "detection_that_should_have_fired" in str(e)
+        else:
+            raise AssertionError("a record with no detection field was accepted")
+        good = rec.RootCause(
+            "INC-1", "no default-deny on issue_refund",
+            "tool sequence never seen in the baseline",
+            "A3.1 decide() on every call, with the obligation from policy")
+        assert good.as_dict()["failed_control"].startswith("no default-deny")
+    results.append(check("a root cause record names the control that failed",
+                         a_root_cause_names_a_control_not_a_person))
+    # step:D5.2 end
+
+    # step:D5.3 add
+    def the_fix_goes_in_the_layer_that_survives_a_prompt_edit():
+        c = rec.choose_surface("the agent followed a vendor instruction",
+                               model_can_be_persuaded=True,
+                               survives_prompt_edit=False)
+        assert c["recommended"] == "identity", c["recommended"]
+        by_name = {s["surface"]: s for s in c["surfaces"]}
+        assert not by_name["prompt"]["appropriate"], \
+            "a prompt fix was recommended for something the model can be " \
+            "argued out of"
+        assert by_name["identity"]["durability"] > by_name["prompt"]["durability"]
+    results.append(check("the fix goes in a layer a prompt edit cannot undo",
+                         the_fix_goes_in_the_layer_that_survives_a_prompt_edit))
+    # step:D5.3 end
+
+    # step:D5.4 add
+    def the_fix_is_done_when_the_indicator_moved():
+        v = rec.validate_fix({"refusals": 2, "mean_time_to_attribute": 45},
+                             {"refusals": 9, "mean_time_to_attribute": 12},
+                             indicators={"refusals": "up",
+                                         "mean_time_to_attribute": "down"})
+        assert v["all_improved"], v["indicators"]
+        u = rec.validate_fix({"refusals": 2}, {},
+                             indicators={"refusals": "up"})
+        assert not u["all_improved"] and u["unmeasured"] == ["refusals"], u
+    results.append(check("a fix is validated by re-measuring, not by closing",
+                         the_fix_is_done_when_the_indicator_moved))
+    # step:D5.4 end
+
+    # step:D5.5 add
+    def a_policy_proposal_says_what_it_does_not_fix():
+        rc = rec.RootCause("INC-1", "no default-deny on issue_refund",
+                           "tool sequence never seen", "decide() per call")
+        try:
+            rec.propose(rc, policy_line="TOOL_POLICY", was="a", now="b",
+                        does_not_fix=[])
+        except rec.RootCauseIncomplete as e:
+            assert "does not fix" in str(e)
+        else:
+            raise AssertionError("a proposal claiming to close everything "
+                                 "was accepted")
+        p = rec.propose(rc, policy_line="config.TOOL_POLICY['issue_refund']",
+                        was="high_risk: True", now="high_risk: True, "
+                        "obligations: ['human-approval', 'second-approver']",
+                        does_not_fix=["the direct API path C1.9 measured"])
+        assert p["diff"]["now"] != p["diff"]["was"]
+        assert p["evidence"]["failed_control"], p
+    results.append(check("a policy proposal is a diff that states its limits",
+                         a_policy_proposal_says_what_it_does_not_fix))
+    # step:D5.5 end
+
+    # step:D5.6 add
+    def the_clock_starts_at_awareness():
+        now = time.time()
+        c = rec.clock_check(now, personal_data=True, significant=True,
+                            financial_entity=False, listed=False)
+        regimes = {r["regime"] for r in c["running"]}
+        assert regimes == {"GDPR Art. 33", "NIS2 early warning"}, regimes
+        assert c["tightest_hours"] == 24, c
+        assert c["running"][0]["deadline"] > now
+        assert all("awareness" in r["trigger"] for r in c["running"]), \
+            "a clock was described as starting at confirmation"
+        quiet = rec.clock_check(now, personal_data=False, significant=False,
+                                financial_entity=False, listed=False)
+        assert not quiet["running"] and quiet["tightest_hours"] is None
+    results.append(check("the regulatory clock runs from awareness",
+                         the_clock_starts_at_awareness))
+    # step:D5.6 end
+
     print(f"\n{sum(results)}/{len(results)} checks held")
     return 0 if all(results) else 1
 

@@ -1080,3 +1080,169 @@ GROUNDING.update({
           "and `durability()` reports the report-only fraction, which is the "
           "work the next engagement will redo at full price.",
 })
+
+
+# ----------------------------------------- Function D, rewired onto the tree
+# C1.11 said a finding ends in a control the SOC runs. `cybertravels/soc/` is
+# where that lands, and it imports from `cybertravels/redteam/` rather than
+# restating it — two teams computing the same number separately is how they
+# end up disagreeing about it during the incident.
+GROUNDING.update({
+ "D1.0": "`cybertravels/soc/__init__.py` carries the incident clock, and its "
+         "shape is the argument. `elapsed_budget('contain')` shows where the "
+         "time actually goes: **attribute** is the largest block, and for a "
+         "human actor it would be near zero. Every lesson in this function "
+         "names a stage on that clock.",
+ "D1.1": "`soc/sensors.py` derives the action list from `config.TOOL_POLICY` "
+         "rather than from memory, then asks each product what it observes. "
+         "With the agent's own telemetry onboarded, coverage is 1.0. Run it "
+         "`without={'agent telemetry'}` — the estate as most teams have it — "
+         "and it is **0.214**: every tool call, the token mint, the approval, "
+         "memory and every peer message are invisible. That is the agent's "
+         "whole working day.",
+ "D1.2": "Six surfaces change what your agent does and only one of them is in "
+         "this repository. `drift()` reports which moved and, in its own "
+         "column, which have no approver — the model version on the vendor's "
+         "schedule, the retrieval corpus anyone can add a template to, and "
+         "the MCP tool descriptions A1.9 says can be rewritten after you "
+         "approved them.",
+ "D1.3": "`retention_plan()` decides per field rather than per record, because "
+         "a record-level rule is decided by its most sensitive field: the "
+         "whole run gets the prompt's retention and the investigation loses "
+         "the chain. Here `prompt_text` is seven days and `chain`, "
+         "`trace_id` and `motive_origin` are a year, which is the set D3.4 "
+         "needs and the smallest one.",
+ "D2.1": "`soc/lake.py` tiers each source by the queries the SOC actually "
+         "runs. `model_io` is 900 GB queried twice a quarter and lands in "
+         "cold; `audit_rows` is 8 GB and lands in hot. The bill is $267 "
+         "against $2,972 all-hot — and the alternative to tiering is not a "
+         "bigger bill, it is a retention cut applied to every source at once, "
+         "with the traces going first because they are the newest.",
+ "D2.2": "Four detections whose subject is the agent, each mapped to ATT&CK "
+         "and ATLAS. They are about relationships rather than volumes: a "
+         "scope that widened between hops (A2.3 says chains narrow), a tool "
+         "pair never seen — `lookup_vendor_doc` then `issue_refund` is the "
+         "Northwind notice working — an action with no human in its chain, "
+         "and an approval granted faster than the content could be read.",
+ "D2.3": "When the harness is what is being attacked, a workload-layer "
+         "detection is looking in the wrong place. Four named primitives "
+         "rather than an anomaly score, and the sharpest is "
+         "`exemption_reconciliation()`: A3.9's `Exemption` carries an expiry, "
+         "nothing reconciles the register against the running configuration, "
+         "so the expiry is a date that passes and the control stays off.",
+ "D2.4": "`review()` calls C1.6's `deployable()` rather than restating it. "
+         "Your sequence rule ships at 1,000 events a day and needs eleven "
+         "analysts at 100,000 — same rule, same precision. And a candidate "
+         "with no technique mapped is refused, because a rule nobody mapped "
+         "is a rule nobody can reason about for coverage.",
+ "D2.5": "A rule generated from an incident matches that incident; that is "
+         "not evidence. `measure()` runs it against the trace it came from "
+         "**and** against a benign corpus, and reports both failure modes — "
+         "overfitted to one `trace_id`, or general enough to match the "
+         "baseline. A rule with no measured false-positive rate is a guess.",
+ "D3.1": "`supervise()` wraps C1.7's triage with the list of alerts that "
+         "bypass ranking entirely. A canary read is not a scoring question — "
+         "C1.8 built it precisely so that it needs no triage — and the sample "
+         "below the line is what makes the closing rule testable rather than "
+         "trusted.",
+ "D3.2": "The investigation is itself a data movement, and usually a larger "
+         "one than the incident. `Investigation` declares its admission set "
+         "per class, refuses anything outside it, and requires a **named** "
+         "human and a reason to grant more. The grant list is the part an "
+         "assessor reads.",
+ "D3.3": "The context that makes agent triage work is the context your own "
+         "tree already holds: `sensors.matrix()` for what is observable, "
+         "`LABELS.md` for the known defects, D1.2's baseline for what normal "
+         "looks like this week, and the prior decisions in the audit log. A "
+         "triage agent given none of it underperforms your worst analyst.",
+ "D3.4": "Three instincts, each correct for a person and confidently wrong "
+         "for an agent. Run `attribute()` on a row whose chain reads "
+         "`priya => spiffe://…` and it answers all four questions; run it on "
+         "`service-account` — the estate before A2.x — and it answers **one**, "
+         "naming the other three as gaps rather than guessing them.",
+ "D3.5": "Reconstruction is pre-loaded or it is late. Everything the timeline "
+         "needs already exists — G2.1's spans, G2.2's rows, A2.7's motive — "
+         "and D1.3 decided how long each field survives. The timeline you can "
+         "challenge is the one built from inputs rather than from the model's "
+         "account of them.",
+ "D3.6": "`Plan` records the hypothesis, counts contradicting evidence, and "
+         "makes replanning a **trigger** rather than a judgement call. The "
+         "abandoned branch stays in the trace, because a branch that is not "
+         "in the trace looks like one nobody considered.",
+ "D3.7": "`delegation_graph()` builds the edges out of the `act` chains A2.3 "
+         "made nest, and `blast_scope()` walks forward from one principal. "
+         "Scoping to the acting agent alone returns the last hop; the run "
+         "that asked for it is one edge back.",
+ "D3.8": "Imports C1.5's `correlate()`. The `run_artefacts` table A3.8 added "
+         "is what it reads, and the finding is the one no per-run check can "
+         "produce: every run passed, and one of them wrote the cache entry "
+         "three others read.",
+ "D3.9": "`intake()` splits incoming intelligence by whether anything backs "
+         "it. Same rule as B2.12, at the other end of the pipe: an unsourced "
+         "claim cannot carry a severity and cannot become a detection, "
+         "because a rule whose provenance is a model's fluency is a rule "
+         "nobody can defend.",
+ "D3.10": "`hunt()` is hypothesis-first because a hunt without one produces "
+          "interesting-looking clusters, and `graduates()` is what stops "
+          "hunting being a hobby. Three ways to answer no, and the third is "
+          "skipped most: a finding an existing rule already covers does not "
+          "need a second rule, it needs somebody to check the first is not "
+          "muted.",
+ "D4.1": "`soc/respond.py` makes the tier a consequence rather than a choice. "
+         "Blast radius times reversibility, and wide-and-reversible is "
+         "automated on purpose — a response system that will not throttle "
+         "without a human does nothing at 3am. An action nobody classified "
+         "raises rather than defaulting to automated.",
+ "D4.2": "`decision_point()` asks three questions of a human-in-the-loop "
+         "runbook: does it say what it will do specifically, what it cannot "
+         "undo, and does it offer something narrower. Without the third the "
+         "choice is act or abandon the incident, and act always wins. A "
+         "runbook that fails is tiered manual instead.",
+ "D4.3": "Six rungs, each strictly more disruptive and each reversible until "
+         "the last two — throttle, scope-reduce, reroute, force-HITL, revoke, "
+         "hard-stop. `escalate()` never skips. Starting at the bottom is a "
+         "decision; arriving there because the rungs were never built is not.",
+ "D4.4": "Five checks and only the last has a number in it. "
+         "`measured_time_to_stop` has to come from a real attempt, because "
+         "the first time a stop authority is exercised is the worst possible "
+         "moment to discover how long it takes — and C1.9's `time_to_stop` "
+         "says twenty thousand revocations is not instant.",
+ "D4.5": "Imports C1.9's `coverage()` rather than recomputing it, so the red "
+         "team and the SOC cannot disagree about the number mid-incident. "
+         "What this adds is the ordering: snapshot before terminate, and "
+         "revoke in the **same** action. A plan that terminates without "
+         "revoking leaves the tokens valid, and the first version of this "
+         "check called such a plan correct — the comment in the file says why.",
+ "D5.1": "Imports C1.10's `reconstruct()` and adds the evidentiary question "
+         "the red team did not have to ask. Two things are explicitly not "
+         "evidence: a rerun of the agent, because non-determinism makes it a "
+         "different run, and the agent's own account, because that is a claim "
+         "by the subject of the investigation.",
+ "D5.2": "`RootCause` refuses \"human error\", \"a process gap\" and "
+         "\"insufficient training\" outright, and requires all three fields: "
+         "the control that failed, the detection that should have fired, and "
+         "the specific change. Name the thing that would have stopped it "
+         "whoever was on shift.",
+ "D5.3": "Seven surfaces, ordered by how long a fix at that layer survives. "
+         "Ask `choose_surface()` about an agent that followed a vendor "
+         "instruction and it recommends **identity**, not prompt — because if "
+         "the model can be argued out of the prompt, the prompt was never the "
+         "fix. A prompt change for a control-plane bug closes the ticket and "
+         "leaves the gap.",
+ "D5.4": "`validate_fix()` re-measures the indicators the incident moved and "
+         "attaches the before and after. An indicator it cannot measure comes "
+         "back in `unmeasured` rather than as a pass — which is the ticket "
+         "closing on its own authority, and the most common way a "
+         "remediation is recorded as done.",
+ "D5.5": "`propose()` will not construct without `does_not_fix`. A proposal "
+         "presented as closing the whole class is one nobody reads carefully, "
+         "and this one says plainly that it leaves the direct API path C1.9 "
+         "measured. The diff is the deliverable; the postmortem is the "
+         "reasoning behind it and changes nothing on its own.",
+ "D5.6": "`clock_check()` runs from **awareness**, not from confirmation. "
+         "Personal data and a significant incident put you on a 24-hour NIS2 "
+         "early warning and a 72-hour GDPR clock simultaneously, and \"we "
+         "were still confirming\" is not a defence — it is a description of "
+         "the period the clock was running. This is the hour-one handoff into "
+         "Track E2.",
+})

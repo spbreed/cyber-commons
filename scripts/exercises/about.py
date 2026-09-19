@@ -1364,3 +1364,117 @@ ABOUT.update({
           "that makes the eval case real: it must fail against the old build. "
           "A test that passes both ways is testing the weather.",
 })
+
+
+# Function D, rewired onto cybertravels/soc/. Each entry names the mechanism
+# and the stage of the incident clock it sits on.
+ABOUT.update({
+ "D1.0": "The SOC as one system with a clock, and the observation the whole "
+         "function turns on: the estate's detection content was written for "
+         "an actor that acts a few times a minute and is now watching one "
+         "that acts a thousand times an hour. Including where the clock "
+         "actually goes, which is establishing who acted.",
+ "D1.1": "Changing the denominator of a coverage report from products "
+         "deployed to agent actions observable, so the uncovered rows come "
+         "back named rather than as a percentage — and each product states "
+         "what it cannot see, in its own row.",
+ "D1.2": "The surfaces that change an agent's behaviour without a commit — "
+         "model version, system prompt, retrieval index, tool descriptions, "
+         "memory — baselined and diffed, with the column that makes it a "
+         "finding: which of them anybody approves.",
+ "D1.3": "Onboarding what the agent already emits, and settling the retention "
+         "argument at the granularity where it can be won: per field, so the "
+         "parts that make a run attributable outlive the parts that are "
+         "somebody's prose.",
+ "D2.1": "Tiering each telemetry source by the queries the SOC runs against "
+         "it rather than by how important it feels, with the cost of each "
+         "tier stated — because the alternative to a tiering decision is a "
+         "retention cut applied everywhere at once.",
+ "D2.2": "Detections whose subject is a non-human principal, mapped to ATT&CK "
+         "and ATLAS, and written about relationships rather than volumes: a "
+         "widened scope, an unseen tool pair, an action with no human behind "
+         "it, an approval faster than reading.",
+ "D2.3": "Why a workload-layer detection cannot see a platform-layer "
+         "compromise, and the named primitives that can — a spawn under a "
+         "profile that forbids it, a cache entry that differs from its "
+         "manifest, an exemption that expired while the control stayed off.",
+ "D2.4": "The gate between a model-written detection and a deployed one: a "
+         "measured false-positive rate at the volume it will actually see, a "
+         "technique mapping so coverage can be reasoned about, and a human "
+         "who accepts it.",
+ "D2.5": "Why a rule generated from an incident always matches that incident, "
+         "and the benign corpus that tells an overfitted rule from a "
+         "generalising one — the measurement that turns a guess into a rule.",
+ "D3.1": "Supervising a triage loop rather than re-reading it: the list of "
+         "alerts that bypass ranking entirely, and a sample of what the loop "
+         "closed, so the closing rule is measured rather than trusted.",
+ "D3.2": "Scoping the investigation itself, because an agent granted broad "
+         "read to find the problem moves more data than most incidents do — "
+         "a declared admission set per class, enforced at the tool boundary, "
+         "with named human grants for anything beyond it.",
+ "D3.3": "What a triage agent has to be given before it beats a junior "
+         "analyst: the baseline, the known false positives, the crown-jewel "
+         "map and the prior decisions — all of which the system already holds.",
+ "D3.4": "The three responder instincts that are correct for a person and "
+         "wrong for an agent, and the four questions that replace 'which "
+         "user' — with the record answering them or naming which it cannot.",
+ "D3.5": "Reconstruction as something pre-loaded rather than reached for once "
+         "you are already behind, and the difference between a timeline built "
+         "from inputs and one built from the agent's account of them.",
+ "D3.6": "An investigation that is structurally allowed to change its mind: a "
+         "plan record, a replan trigger that counts contradicting evidence, "
+         "and abandoned branches that stay visible in the trace.",
+ "D3.7": "Scoping an agentic incident by walking the delegation graph, "
+         "because the agent that made the call is not the one that started "
+         "the work, and the difference is one edge back.",
+ "D3.8": "Correlation at fleet level, where coordination between runs that "
+         "are supposed to be independent becomes visible — every run normal, "
+         "the population not.",
+ "D3.9": "Provenance discipline on intelligence intake: a claim with no "
+         "source cannot carry a severity and cannot become a detection, "
+         "because a synthesis loop's output is formatted identically whether "
+         "anything backs it or not.",
+ "D3.10": "A standing hunt over agent traces for what no rule was written "
+          "against, hypothesis-first, with an explicit rule for when a "
+          "finding graduates into a detection and when it means an existing "
+          "rule is muted.",
+ "D4.1": "One remediation policy keyed on blast radius and reversibility, "
+         "from which every runbook's tier is derived rather than chosen by "
+         "whoever wrote it — including why wide-and-reversible should be "
+         "automated.",
+ "D4.2": "What separates a human-in-the-loop tier from a confirmation dialog: "
+         "specificity, an explicit statement of what cannot be undone, and a "
+         "narrower option, so the choice is not act-or-abandon.",
+ "D4.3": "Containment as a ladder climbed in order — throttle, scope-reduce, "
+         "reroute, force approval, revoke, hard stop — so a response can "
+         "start immediately with something reversible and escalate only as "
+         "far as it has to.",
+ "D4.4": "Stop authority as something rehearsed and timed rather than "
+         "assigned: a named holder, a deputy, out-of-hours reachability that "
+         "was tested by calling them, and a time-to-stop from a real attempt.",
+ "D4.5": "A kill path independent of the agent's own execution path, in the "
+         "order that matters — snapshot before terminate, revoke in the same "
+         "action rather than after it, because terminating agents whose "
+         "tokens stay valid leaves the persistence in place.",
+ "D5.1": "Replay as reconstruction from the record rather than a rerun, with "
+         "the two things that are explicitly not evidence about the run that "
+         "happened: a second run, and the agent's own account of the first.",
+ "D5.2": "A root cause record that names a control rather than a person or a "
+         "narrative, with all three fields required — what failed, what "
+         "should have detected it, and the specific change proposed.",
+ "D5.3": "Choosing the layer a fix belongs in, ordered by how long a fix "
+         "there survives, and the specific trap: fixing the prompt when the "
+         "model can be argued out of the prompt.",
+ "D5.4": "Closing a remediation on a re-measurement rather than on a ticket, "
+         "with the before and after attached to the incident — and an "
+         "indicator that cannot be measured reported as unmeasured rather "
+         "than as a pass.",
+ "D5.5": "The policy change as a diff generated from the root cause record, "
+         "carrying the incident as its evidence and stating what it does not "
+         "fix — because a change presented as closing everything is one "
+         "nobody scrutinises.",
+ "D5.6": "Which notification clocks a given incident starts, counted from "
+         "awareness rather than from confirmation, and why 'we were still "
+         "investigating' describes the period the clock was running rather "
+         "than excusing it.",
+})
