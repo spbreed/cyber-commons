@@ -702,6 +702,17 @@ contractors.
     + D.label(350, 124, "inside CyberTravels  →  to a regulator  →  to the board",
               anchor="middle", size=11.5),
     height=140)),
+  *skill_steps(
+      "regulatory/framework-reference-lookup",
+      "## 4 · Which vocabulary is this control already in?\n\n"
+      "Governance work is mostly translation, and the first translation is "
+      "the cheapest: a control you already operate is usually named in "
+      "several framework vocabularies at once. `cybertravels/governance/"
+      "__init__.py` is the tree increment this lesson adds — six "
+      "trustworthy-AI properties, each with the function that owns it and "
+      "the **artefact** that evidences it, because a property with no "
+      "artefact is a value and values do not survive an audit. This skill is "
+      "the lookup in the other direction:"),
  ],
  "expect": "Seven trustworthy-AI properties with a named owner each and security "
            "owning exactly one outright. Five material changes to CyberTravels since "

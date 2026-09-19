@@ -327,6 +327,15 @@ Resilience means the other five steps work when it does.
 ("md", "## 4 · The control — the game day that assumes containment failed"),
   *skill_steps('programme/resilience-readiness-check',
                '## 2 · The procedure, as a skill\n\nThree properties for the day a control fails: drift detected, stop tested, run replayable. The skill checks each with its evidence — a measured twelve-second stop, tested 41 days ago — and reports three verdicts rather than one score.'),
+  *skill_steps('research/research-durability-check',
+               "## 3 · And whether what you learned survived\n\n"
+               "`governance/programme.py`'s `readiness()` asks four questions "
+               "this curriculum has already produced numbers for — time to "
+               "detect, time to stop, containment coverage, reconstructable. "
+               "`durable()` asks the fifth, which is about the programme "
+               "rather than the system: what fraction of what was learned "
+               "became an artefact, and what fraction the next engagement "
+               "will rediscover at full price."),
 ],
  "expect": "Drift is detected with `run_shell` as a new tool, the stop mechanism "
            "is ready at 12 seconds tested 41 days ago, and the run is replayable "

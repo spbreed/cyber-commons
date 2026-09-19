@@ -2146,6 +2146,456 @@ def main():
                          the_clock_starts_at_awareness))
     # step:D5.6 end
 
+    # ===================================================================== #
+    # Function E — governance that reads the code
+    # ===================================================================== #
+    # step:E1.0 add
+    from cybertravels import governance as gov
+
+    def every_claimed_property_has_an_owner_and_an_artefact():
+        rows = gov.owners()
+        assert all(r["function"] and r["evidence"] for r in rows), rows
+        # A statement is usually longer than the list of things anybody built,
+        # and this is the number that says so.
+        assert gov.unowned(["secure", "fair", "explainable"]) == \
+            ["explainable", "fair"], gov.unowned(["secure", "fair",
+                                                  "explainable"])
+        assert not gov.unowned(["secure", "observable", "accountable"])
+    results.append(check("each trustworthy-AI property names an owner and an artefact",
+                         every_claimed_property_has_an_owner_and_an_artefact))
+    # step:E1.0 end
+
+    # step:E1.1 add
+    from cybertravels.governance import register as reg
+
+    def a_kci_has_to_be_computable():
+        k = reg.KCI("A3.1", "unclassified tools denied", lambda: 1.0, 1.0,
+                    ">=", 7, "cybertravels/policy.py")
+        assert k.evaluate()["passes"]
+        low = reg.KCI("X", "n", lambda: 0.5, 0.9, ">=", 7, "s")
+        assert not low.evaluate()["passes"]
+        try:
+            reg.KCI("Y", "ask an engineer", "go and look", 1, ">=", 365, "s")
+        except ValueError as e:
+            assert "computable" in str(e)
+            return
+        raise AssertionError("a KCI whose measurement is prose was accepted")
+    results.append(check("a control indicator is computable or it is a paragraph",
+                         a_kci_has_to_be_computable))
+    # step:E1.1 end
+
+    # step:E1.2 add
+    def the_inventory_is_derived_rather_than_surveyed():
+        rows = reg.inventory()
+        assert len(rows) == len(config.AGENT_IDS), rows
+        assert not any(r["unapproved"] for r in rows), \
+            "an identity with no named approver is in the inventory"
+        s = reg.shadow([config.AGENT_IDS["workflow"],
+                        "spiffe://cybertravels.local/agent/ghost"])
+        assert s["shadow_count"] == 1, s
+        assert config.AGENT_IDS["coding"] in s["registered_but_absent"], s
+    results.append(check("the inventory comes from the registry, not a survey",
+                         the_inventory_is_derived_rather_than_surveyed))
+    # step:E1.2 end
+
+    # step:E1.3 add
+    def tiering_by_capability_disagrees_with_tiering_by_model():
+        t = reg.tier_the_workflow_agent()
+        assert t["tier"] == "critical", t
+        assert t["disagrees"], \
+            "capability tiering and model-name tiering agreed, so this " \
+            "lesson has nothing to demonstrate"
+        low = reg.tier("suggests", "public", "none")
+        assert low["tier"] == "low", low
+    results.append(check("a deployment is tiered by what it can do",
+                         tiering_by_capability_disagrees_with_tiering_by_model))
+    # step:E1.3 end
+
+    # step:E1.4 add
+
+    def mapping_outward_names_the_uncovered_clauses():
+        m = reg.map_outward({"A3.1": ["Art. 15"], "A2.8": ["Art. 12"]},
+                            ["Art. 12", "Art. 14", "Art. 15"])
+        assert m["clauses_uncovered"] == ["Art. 14"], m
+        assert m["coverage"] == round(2 / 3, 3), m
+
+    def an_existing_control_usually_applies():
+        r = reg.needs_a_new_control("agent access review")
+        assert not r["new"] and r["existing_control"] == "access review", r
+        assert reg.needs_a_new_control("prompt provenance marking")["new"]
+    results.append(check("mapping outward answers which clauses nothing covers",
+                         mapping_outward_names_the_uncovered_clauses))
+    results.append(check("a new principal type is not a new control",
+                         an_existing_control_usually_applies))
+    # step:E1.4 end
+
+    # step:E1.5 add
+    from cybertravels.governance import evidence as ev
+
+    def a_best_of_k_demo_is_not_control_evidence():
+        vendor = {"best_of_k": 8, "accuracy": 0.91, "interval": (0.87, 0.94),
+                  "held_out": True}
+        r = ev.evidences(vendor)
+        assert not r["usable_as_control_evidence"], r
+        assert any("best-of-8" in x for x in r["does_not_evidence"]), r
+
+    def conformance_reported_as_quality_is_refused():
+        r = ev.evidences({"conformance": 0.998, "interval": (0.9, 1.0),
+                          "held_out": True})
+        assert not r["usable_as_control_evidence"]
+        assert any("schema validity" in x for x in r["does_not_evidence"]), r
+        good = ev.evidences({"accuracy": 0.82, "interval": (0.78, 0.86),
+                             "held_out": True})
+        assert good["usable_as_control_evidence"], good
+    results.append(check("a best-of-k demonstration is not a rate",
+                         a_best_of_k_demo_is_not_control_evidence))
+    results.append(check("conformance is refused where accuracy was asked for",
+                         conformance_reported_as_quality_is_refused))
+    # step:E1.5 end
+
+    # step:E1.6 add
+    def an_unenforceable_guardrail_is_labelled_as_one():
+        op = ev.classify_guardrail("the agent may not act outside its "
+                                   "authority", enforced_by="policy.decide")
+        assert op["kind"] == "operating" and op["status"] == "in place"
+        watched = ev.classify_guardrail("the agent must not mislead",
+                                        measured_by="a weekly sample")
+        assert watched["status"] == "watched", watched
+        empty = ev.classify_guardrail("the agent must be fair")
+        assert empty["status"] == "aspirational", empty
+        assert "decorative" in empty["why"]
+    results.append(check("a rule nobody can enforce is not filed as a control",
+                         an_unenforceable_guardrail_is_labelled_as_one))
+    # step:E1.6 end
+
+    # step:E1.7 add
+    def collection_is_automated_and_judgement_is_not():
+        out = ev.collect("A3.1", lambda: {"denied": 12}, judged_by="priya")
+        assert out["judgement"] is None and out["judged_by"] == "priya", out
+        try:
+            ev.collect("A3.1", lambda: {}, judged_by=None)
+        except ValueError as e:
+            assert "named human" in str(e)
+            return
+        raise AssertionError("an adequacy verdict with no named human passed")
+    results.append(check("continuous verification collects, and does not judge",
+                         collection_is_automated_and_judgement_is_not))
+    # step:E1.7 end
+
+    # step:E1.8 add
+    def the_sub_processor_chain_is_the_gap():
+        bad = ev.assess_third_party({"name": "VendorCo",
+                                     "ai_features_default_on": True,
+                                     "trains_on_customer_data": True})
+        assert not bad["acceptable"] and bad["depth_mapped"] == 0, bad
+        assert any("sub-processor" in g for g in bad["gaps"]), bad["gaps"]
+        ok = ev.assess_third_party({"name": "Good", "sub_processors": ["a"],
+                                    "change_notification": True})
+        assert ok["acceptable"], ok
+    results.append(check("a vendor assessment reaches the sub-processor chain",
+                         the_sub_processor_chain_is_the_gap))
+    # step:E1.8 end
+
+    # step:E1.9 add
+    def re_indexing_is_a_change():
+        r = ev.is_a_change("retrieval_index")
+        assert r["changes_behaviour"] and r["usually_filed_as_maintenance"]
+        assert r["needs_change_record"], r
+        assert set(ev.lifecycle_gaps()) == {"retrieval_index", "memory",
+                                            "mcp_tool_descriptions"}, \
+            ev.lifecycle_gaps()
+    results.append(check("a change is anything that alters what the system does",
+                         re_indexing_is_a_change))
+    # step:E1.9 end
+
+    # step:E1.13 add
+    def the_register_measures_the_tree_rather_than_asserting():
+        m = ev.measure()
+        assert m["controls"] >= 8, m
+        assert m["coverage"] == 1.0, m["failing"]
+        # And the part that makes the number believable.
+        assert len(m["known_gaps"]) >= 4, m["known_gaps"]
+        assert all(g["named_in"] and g["mitigation"] for g in m["known_gaps"])
+
+    def deleting_a_control_moves_the_number():
+        # The assertion that stops this being a register of assertions. Take
+        # away the coding agent's empty env allow-list and E1.13 must notice.
+        from cybertravels import sandbox
+        was = set(sandbox.CODING_AGENT.env_keys)
+        sandbox.CODING_AGENT.env_keys.add("AWS_SECRET_ACCESS_KEY")
+        try:
+            broken = ev.measure()
+        finally:
+            sandbox.CODING_AGENT.env_keys.clear()
+            sandbox.CODING_AGENT.env_keys.update(was)
+        assert "A3.2" in broken["failing"], broken["failing"]
+        assert broken["coverage"] < 1.0, broken["coverage"]
+        assert ev.measure()["coverage"] == 1.0, "the probe left state behind"
+    results.append(check("the control register is measured off the running tree",
+                         the_register_measures_the_tree_rather_than_asserting))
+    results.append(check("removing a control moves the coverage number",
+                         deleting_a_control_moves_the_number))
+    # step:E1.13 end
+
+    # step:E1.10 add
+    from cybertravels.governance import seams
+
+    def a_shared_part_is_not_safer_than_an_unowned_one():
+        m = seams.seam_map()
+        assert "evidence that a control works" in m["unowned"], m["unowned"]
+        assert m["shared"], "nothing is shared, so the seam has no example"
+        row = next(r for r in m["parts"] if r["state"] == "shared")
+        assert "each may believe the other has it" in row["risk"]
+    results.append(check("the seam map separates unowned from shared",
+                         a_shared_part_is_not_safer_than_an_unowned_one))
+    # step:E1.10 end
+
+    # step:E1.11 add
+    def model_validation_stops_short_once_the_model_can_act():
+        classical = seams.validation_scope(
+            {"validated": ["conceptual soundness", "output accuracy",
+                           "input data quality", "use within limitations",
+                           "ongoing monitoring"]})
+        assert not classical["valid_for_an_acting_model"], classical
+        assert "authority" in classical["agentic_missing"], classical
+        assert "containment" in classical["agentic_missing"]
+        assert not classical["classical_missing"], \
+            "the classical scope was incomplete, which is a different finding"
+        d = seams.capability_delta(["read bookings"],
+                                   ["read bookings", "issue refunds"])
+        assert d["retier"] and d["gained"] == ["issue refunds"], d
+    results.append(check("a classical validation is complete and insufficient",
+                         model_validation_stops_short_once_the_model_can_act))
+    # step:E1.11 end
+
+    # step:E1.12 add
+    def a_handoff_is_traced_to_an_artefact():
+        none = seams.delivered(set())
+        assert none["delivered"] == 0 and none["rate"] == 0.0, none
+        some = seams.delivered({"a retention parameter per telemetry field — D1.3",
+                                "an eval case, a control and a detection — C1.11"})
+        assert some["delivered"] == 2, some
+        assert len(some["undelivered"]) == len(seams.HANDOFFS) - 2
+    results.append(check("a handoff is measured by the artefact it produced",
+                         a_handoff_is_traced_to_an_artefact))
+    # step:E1.12 end
+
+    # step:E2.1 add
+    from cybertravels.governance import regulatory as regu
+
+    def one_control_set_answers_several_regimes():
+        m = regu.map_obligations(["A2.8", "A2.7", "D1.3", "A3.6", "D4.2",
+                                  "D5.6"])
+        assert m["satisfied"] >= 4, m
+        assert m["unmet"], "every obligation was met, which is not this system"
+        reuse = m["controls_reused"]
+        assert reuse["answering_more_than_one"] >= 2, reuse
+    results.append(check("one control answers obligations in several regimes",
+                         one_control_set_answers_several_regimes))
+    # step:E2.1 end
+
+    # step:E2.2 add
+    def fine_tuning_makes_a_deployer_a_provider():
+        assert regu.role({"fine_tuned": True})["role"] == "provider"
+        assert regu.role({"renamed_or_rebranded": True})["role"] == "provider"
+        assert regu.role({})["role"] == "deployer"
+        assert not regu.requirement_to_control("be transparent",
+                                               evidence_artefact=None
+                                               )["passes_show_me"]
+        assert regu.requirement_to_control(
+            "keep records", evidence_artefact="db.audit hash chain"
+        )["passes_show_me"]
+    results.append(check("the deployer-to-provider triggers are engineering acts",
+                         fine_tuning_makes_a_deployer_a_provider))
+    # step:E2.2 end
+
+    # step:E2.3 add
+    def the_spine_is_the_framework_that_covers_the_most_of_yours():
+        s = regu.choose_spine(
+            {"ISO 42001": ["A2.8", "A3.1", "D1.3"],
+             "NIST AI RMF": ["A3.1"],
+             "SOC 2": ["A2.8", "D2.2"]},
+            ["A2.8", "A3.1", "D1.3", "C1.0"])
+        assert s["spine"] == "ISO 42001", s
+        assert "C1.0" in s["not_covered_by_the_spine"], s
+    results.append(check("the spine is chosen by coverage of your own controls",
+                         the_spine_is_the_framework_that_covers_the_most_of_yours))
+    # step:E2.3 end
+
+    # step:E2.4 add
+    def the_sector_overlay_is_usually_already_complied_with():
+        fs = regu.overlays("financial services")
+        assert fs["already_complied_with"] and len(fs["overlays"]) >= 2, fs
+        assert any("is a model" in o["why"] for o in fs["overlays"]), fs
+        assert not regu.overlays("widgets")["already_complied_with"]
+    results.append(check("an agent that decides is already a model somewhere",
+                         the_sector_overlay_is_usually_already_complied_with))
+    # step:E2.4 end
+
+    # step:E2.5 add
+    def erasure_does_not_reach_every_surface():
+        r = regu.erasure_reach()
+        assert r["coverage"] < 1.0, r
+        assert "model weights (if fine-tuned)" in r["not_erasable"], r
+
+    def the_audit_trail_is_scanned_for_personal_data():
+        assert regu.scan_text("contact dana@example.com re CT-4417") == \
+            ["a booking reference", "email address"], \
+            regu.scan_text("contact dana@example.com re CT-4417")
+        dirty = regu.audit_trace([{"detail": "refund for dana@example.com",
+                                   "chain": "dana => spiffe://x"}])
+        assert not dirty["clean"] and dirty["hits"], dirty
+        clean = regu.audit_trace([{"detail": "refund issued",
+                                   "chain": "dana => spiffe://x"}])
+        assert clean["clean"], clean
+    results.append(check("erasure reaches the database and not the weights",
+                         erasure_does_not_reach_every_surface))
+    results.append(check("personal data in a long-lived store is found",
+                         the_audit_trail_is_scanned_for_personal_data))
+    # step:E2.5 end
+
+    # step:E2.7 add
+    def supervisory_documentation_is_not_an_explanation_of_the_model():
+        s = regu.score_documentation(["intended purpose", "authority"])
+        assert s["score"] < 0.5, s
+        assert "run record" in s["missing"], s["missing"]
+        full = regu.score_documentation(list(regu.SUPERVISORY_SECTIONS))
+        assert full["score"] == 1.0 and not full["missing"], full
+    results.append(check("supervisory documentation answers what a supervisor asks",
+                         supervisory_documentation_is_not_an_explanation_of_the_model))
+    # step:E2.7 end
+
+    # step:E2.8 add
+    def the_regulator_asks_C1_10s_question():
+        rows = [{"chain": "priya => spiffe://ct/agent/workflow",
+                 "tool": "issue_refund", "motive_origin": "vendor-document"}]
+        spans = [{"kind": k} for k in ("start", "plan", "token_issued",
+                                       "tool_result", "done")]
+        a = regu.auditability(rows, spans, lambda: (True, None))
+        assert a["answerable"] and not a["blockers"], a
+        broken = regu.auditability(rows, spans, lambda: (False, 3))
+        assert not broken["answerable"], broken
+        assert any("chain breaks" in b for b in broken["blockers"]), broken
+    results.append(check("auditability is the investigation's question, asked earlier",
+                         the_regulator_asks_C1_10s_question))
+    # step:E2.8 end
+
+    # step:E2.9 add
+    def the_conversation_opens_with_the_gaps():
+        p = regu.prepare(ev.measure(),
+                         {"accuracy": 0.82, "conformance": 0.998,
+                          "interval": (0.78, 0.86), "held_out": True})
+        assert p["reported_separately"] and p["accuracy"] != p["conformance"]
+        assert p["gaps_named_up_front"], p
+        assert len(p["openings"]) == 3
+        assert p["evidence_check"]["usable_as_control_evidence"], p
+    results.append(check("accuracy and conformance are reported separately",
+                         the_conversation_opens_with_the_gaps))
+    # step:E2.9 end
+
+    # step:E3.1 add
+    from cybertravels.governance import programme as prog
+
+    def blast_radius_is_translated_into_consequence():
+        t = prog.translate(scope="payments:refund", max_calls=12,
+                           amount_per_call=5000, reversible=False,
+                           detected_in=5)
+        assert t["exposure"] == 60_000
+        assert "payments:refund" in t["engineering_sentence"]
+        assert "60,000" in t["board_sentence"], t["board_sentence"]
+        assert "not recoverable" in t["board_sentence"]
+    results.append(check("blast radius is stated as consequence, not as a scope",
+                         blast_radius_is_translated_into_consequence))
+    # step:E3.1 end
+
+    # step:E3.2 add
+    def autonomy_is_approved_by_rung_not_by_tool():
+        r = prog.request({"requested_rung": 4, "reversible": False,
+                          "unattended": False, "volume": "low"})
+        assert r["supported_by_blast_radius"] == 3 and r["over_asking"], r
+        assert r["approve_at"] == 3, r
+        assert prog.rung_for(reversible=False, unattended=True,
+                             volume="low") == 4
+        assert prog.RUNGS[4][2].startswith("not granted")
+    results.append(check("the decision is about a rung, so the next tool ships",
+                         autonomy_is_approved_by_rung_not_by_tool))
+    # step:E3.2 end
+
+    # step:E3.3 add
+    def the_first_workflow_is_the_winnable_one():
+        s = prog.sequence([
+            {"name": "board demo", "visibility": 5, "difficulty": 5,
+             "control_reuse": 0},
+            {"name": "refund triage", "visibility": 1, "difficulty": 1,
+             "control_reuse": 4}])
+        assert s["order"][0] == "refund triage", s["order"]
+    results.append(check("sequencing weights control reuse over visibility",
+                         the_first_workflow_is_the_winnable_one))
+    # step:E3.3 end
+
+    # step:E3.4 add
+    def two_functions_have_no_home():
+        o = prog.ownership()
+        assert o["homeless"] == ["harness engineering", "red team / research"], o
+        assert "quietly do not happen" in o["why"]
+    results.append(check("harness engineering and research have no owner",
+                         two_functions_have_no_home))
+    # step:E3.4 end
+
+    # step:E3.5 add
+    def an_activity_metric_is_replaced_by_an_exposure_one():
+        r = prog.replace("agents reviewed")
+        assert r["is_activity"] and "blast radius" in r["exposure_metric"], r
+        assert not prog.replace("time to stop")["is_activity"]
+        assert all(prog.replace(m)["exposure_metric"]
+                   for m in prog.INSTEAD_OF)
+    results.append(check("an activity metric moves when the work gets bigger",
+                         an_activity_metric_is_replaced_by_an_exposure_one))
+    # step:E3.5 end
+
+    # step:E3.6 add
+    def a_condition_with_no_consequence_is_a_preference():
+        weak = prog.condition("improve logging", testable_by=None, due=None,
+                              owner="alex", consequence=None)
+        assert not weak["real"] and "consequence" in weak["missing"], weak
+        strong = prog.condition("sensor coverage above 0.9",
+                                testable_by="soc.sensors.matrix()",
+                                due="2026-12-01", owner="alex",
+                                consequence="the rung drops to 1")
+        assert strong["real"]
+        assert not prog.approve_with([weak, strong])["enforceable"]
+        assert prog.approve_with([strong])["enforceable"]
+    results.append(check("a conditional yes is enforceable or it is a wish list",
+                         a_condition_with_no_consequence_is_a_preference))
+    # step:E3.6 end
+
+    # step:E3.7 add
+    def the_red_team_comes_last():
+        b = prog.build_order()
+        assert b["order"][0] == "inventory and tiering", b["order"]
+        assert b["order"][-1] == "red team", b["order"]
+        demo = prog.build_order(demos_first=True)
+        assert demo["order"][0] == "red team"
+        assert "nowhere to land" in demo["produces"], demo
+    results.append(check("the build order starts with the inventory, not the demo",
+                         the_red_team_comes_last))
+    # step:E3.7 end
+
+    # step:E3.8 add
+    def resilience_is_four_numbers_this_curriculum_produces():
+        r = prog.readiness({"time_to_detect": 5, "time_to_stop": 14,
+                            "containment_coverage": 0.4,
+                            "reconstructable": True})
+        assert r["resilient"] and not r["unanswered"], r
+        partial = prog.readiness({"time_to_detect": 5})
+        assert not partial["resilient"]
+        assert "containment_coverage" in partial["unanswered"], partial
+        d = prog.durable(3, 10)
+        assert d["durability"] == 0.3 and d["repeated_next_time"] == 7, d
+    results.append(check("resilience is measured recovery, not enumerated failure",
+                         resilience_is_four_numbers_this_curriculum_produces))
+    # step:E3.8 end
+
     print(f"\n{sum(results)}/{len(results)} checks held")
     return 0 if all(results) else 1
 

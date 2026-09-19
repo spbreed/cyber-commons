@@ -1478,3 +1478,114 @@ ABOUT.update({
          "investigating' describes the period the clock was running rather "
          "than excusing it.",
 })
+
+
+# Function E, rewired onto cybertravels/governance/ — the package that
+# measures the controls the other functions built, by calling them.
+ABOUT.update({
+ "E1.0": "Governance stated as a table rather than a value: each property a "
+         "trustworthy-AI claim makes, the function that owns it, and the "
+         "artefact that evidences it — because a property with no artefact "
+         "is a value, and values do not survive an audit.",
+ "E1.1": "Turning a framework control into a key control indicator that can "
+         "be computed this week without asking anybody, since the only "
+         "alternative is a measurement taken once, at audit time, by "
+         "somebody who knows what answer is wanted.",
+ "E1.2": "Why an AI inventory built by survey returns the complement of the "
+         "set you want, and how to derive one instead — plus the two "
+         "directions of orphan, because teams check one.",
+ "E1.3": "Tiering by what a deployment can do — autonomy, data reach, "
+         "external effect — and the comparison that makes the case: what "
+         "tiering by model name would have said about the same system.",
+ "E1.4": "Mapping controls outward to frameworks rather than inward from "
+         "them, so the output is which clauses nothing covers — and the "
+         "prior question, which is whether an existing control already "
+         "applies to a new principal type.",
+ "E1.5": "What an evaluation result is and is not evidence of: a best-of-k "
+         "demonstration, a rate with no interval, a score against tuned-on "
+         "cases, and conformance reported where accuracy was asked for.",
+ "E1.6": "Separating guardrails that something enforces from outcomes that "
+         "something measures, and refusing to file the third kind — enforced "
+         "by nothing, measured by nothing — as a control.",
+ "E1.7": "What continuous control verification can automate, which is "
+         "gathering the artefact, and what it cannot, which is the adequacy "
+         "judgement and the name that goes on it.",
+ "E1.8": "The vendor assessment's two blind spots: AI features that arrive "
+         "enabled by default so no purchase event triggers a review, and the "
+         "sub-processor chain behind the vendor, which is where the data "
+         "actually goes.",
+ "E1.9": "Which changes to an agentic system are changes for governance "
+         "purposes, decided on whether they alter behaviour rather than on "
+         "whether they touched code — which is how re-indexing gets filed as "
+         "maintenance.",
+ "E1.10": "Where the estate is held, and the distinction that matters: a "
+          "part two functions share is not safer than one nobody holds, "
+          "because it is a gap that looks covered from both sides.",
+ "E1.11": "How the classical model-risk playbook breaks once the model can "
+          "act — a validation complete on conceptual soundness, accuracy and "
+          "monitoring, and silent on authority, reversibility, blast radius, "
+          "reachability and containment.",
+ "E1.12": "Tracing each handoff to the artefact the receiving function should "
+          "now be holding, because a handoff is nobody's deliverable and "
+          "therefore nobody's deadline.",
+ "E1.13": "Measuring the control set against the running system rather than "
+          "against the register, so removing a control moves the number — "
+          "with the known absences shipped alongside, since a register "
+          "reporting no gaps on a system with gaps is one nobody should "
+          "believe.",
+ "E2.1": "One control set mapped to many regimes instead of one programme "
+         "per regime, with the reuse counted — the number that argues "
+         "against quadrupling the work for an eighty per cent overlap.",
+ "E2.2": "The four specific things that move a deployer into a provider's "
+         "obligations, each of which an engineering team does without "
+         "thinking of it as a regulatory event — and the show-me test for "
+         "turning prose requirements into controls.",
+ "E2.3": "Choosing the framework that covers the most of the controls you "
+         "actually have as a spine and supplying the remainder from the "
+         "others, rather than building a programme shaped like a document.",
+ "E2.4": "Finding the sector rules you are already complying with under "
+         "another name, which is usually the cheapest control in the "
+         "programme — an agent that decides is a model, and model rules "
+         "already have inventory, validation and change requirements.",
+ "E2.5": "Where personal data actually is once an agent has touched it, and "
+         "how far an erasure request reaches — including the two surfaces it "
+         "does not reach, one of which has no good answer.",
+ "E2.6": "Breaking a disclosure deadline into its phases to find the one "
+         "that consumes it, which for an agentic incident is establishing "
+         "who acted rather than containment.",
+ "E2.7": "What supervisory documentation can contain for a system with no "
+         "deterministic reasoning — purpose, authority, bounds, a run "
+         "record, decisions and known limitations — none of which is an "
+         "explanation of the model and all of which a supervisor can use.",
+ "E2.8": "Whether the record can say under whose authority an autonomous "
+         "action was taken, asked as a governance question in advance rather "
+         "than as an investigation question afterwards.",
+ "E2.9": "Preparing the assurance conversation as arithmetic rather than "
+         "rhetoric: accuracy and conformance reported separately, coverage "
+         "with the gaps named first, and the three openings that actually "
+         "get used.",
+ "E3.1": "Translating blast radius into consequence, so the sentence a board "
+         "hears is about what one compromised run can move rather than about "
+         "which scope the agent holds.",
+ "E3.2": "Approving a rung of autonomy rather than a tool, because a "
+         "per-tool review queue becomes a bottleneck and then a bypass — "
+         "with the top rung left ungranted and the reason stated.",
+ "E3.3": "Sequencing by winnability rather than visibility, weighting the "
+         "workflow whose controls the next one inherits over the one the "
+         "sponsor mentioned.",
+ "E3.4": "The two functions that fall between org charts — harness "
+         "engineering and research — and the failure mode of both, which is "
+         "not dramatic: they quietly do not happen.",
+ "E3.5": "Replacing activity metrics with exposure ones, starting from the "
+         "observation that an activity metric moves in the right direction "
+         "when the work gets bigger.",
+ "E3.6": "What a flat no costs in visibility, and what makes a conditional "
+         "yes enforceable rather than aspirational — testable, time-bound, "
+         "owned, and with a stated consequence.",
+ "E3.7": "A build order in which each stage's output is the next stage's "
+         "input, and the comparison with the order that produces demos — "
+         "including why the red team comes last.",
+ "E3.8": "Organising around recovery rather than around enumerating the "
+         "failure modes of a probabilistic system, using four numbers this "
+         "curriculum has already produced.",
+})

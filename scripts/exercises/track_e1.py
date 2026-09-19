@@ -603,6 +603,16 @@ the three triggers revalidation — not just a change to the weights.
   ("md", "## 6 · Verify — what a validation record must now carry"),
   *skill_steps('grc/model-risk-validation-scope',
                '## 2 · The procedure, as a skill\n\nA model validated with no tools at L1 is deployed with three tools at L3 — same model, same version, different system. The skill diffs validated against deployed and lists what the monitoring never observes.'),
+  *skill_steps('research/weight-access-capability-delta',
+               "## 3 · And the change that ships as an improvement\n\n"
+               "`cybertravels/governance/seams.py` separates a classical "
+               "validation scope from the five activities that only exist "
+               "once the model can act — authority, reversibility, blast "
+               "radius, adversarial reachability, containment. A validation "
+               "can be complete against the classical list and say nothing "
+               "about any of them. `capability_delta()` is the trigger: more "
+               "capability is a re-tiering event even when the release note "
+               "calls it an improvement, and this skill measures the delta."),
 ],
  "expect": "The three SR 11-7 pillars, each with the assumption it quietly makes. A "
            "system validated with no tools at L1 is shown deployed with three "

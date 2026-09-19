@@ -1246,3 +1246,172 @@ GROUNDING.update({
          "the period the clock was running. This is the hour-one handoff into "
          "Track E2.",
 })
+
+
+# ----------------------------------------- Function E, rewired onto the tree
+# `cybertravels/governance/` measures the controls Functions A to D actually
+# built, by calling them. A register that asserts is a register; one that
+# imports the thing it is asserting about is evidence.
+GROUNDING.update({
+ "E1.0": "`cybertravels/governance/__init__.py` is six trustworthy-AI "
+         "properties with two columns beside each: the function that owns it "
+         "and the **artefact** that evidences it. Call `unowned()` with the "
+         "properties your own statement claims and it returns the ones "
+         "nothing in this system evidences — usually a longer list than "
+         "anybody expects, because a statement is written before the "
+         "artefacts are.",
+ "E1.1": "`KCI` refuses a measurement that is not callable. That single "
+         "constructor check is the lesson: a control indicator an engineer "
+         "has to go and look up is taken once, at audit time, by somebody "
+         "who knows what answer is wanted. Every KCI here reads the tree.",
+ "E1.2": "`inventory()` comes from `registry.all_workloads()`, not a survey — "
+         "and the reason is exact: a survey returns the agents somebody "
+         "declared, which is the **complement** of the set you are looking "
+         "for. `shadow()` wraps A2.5's `orphans()` and answers both "
+         "directions, because teams check one.",
+ "E1.3": "Run `tier_the_workflow_agent()`. It reads `config.TOOL_POLICY`, "
+         "finds `payments:refund`, and returns **critical** — while tiering "
+         "by model name returns medium. The `disagrees` field is True on your "
+         "own system, which is the whole argument for tiering on autonomy, "
+         "data reach and external effect rather than on the thing written on "
+         "the form.",
+ "E1.4": "`map_outward()` answers the question the framework was for: which "
+         "clauses nothing covers. And `needs_a_new_control()` checks the "
+         "cheaper thing first — five of the controls you already operate "
+         "apply to an agent principal unchanged, and a new control is a new "
+         "thing to maintain and evidence forever.",
+ "E1.5": "`evidences()` reads an eval result and separates what it supports "
+         "from what it does not. A best-of-8 demonstration shows the system "
+         "*can* produce the answer; a control needs the rate. And "
+         "conformance reported where accuracy was asked for is refused "
+         "outright — it runs at about 100%, it is structural, and B2.18 caps "
+         "two controls at PARTIAL for the same reason.",
+ "E1.6": "Three states, not two. `classify_guardrail()` calls a rule "
+         "**operating** when something enforces it, **watched** when "
+         "something measures it, and **aspirational** when neither — and "
+         "says plainly that a rule nobody can enforce teaches its readers "
+         "the policy is decorative. The honest move is to name the "
+         "measurement, not to delete the rule.",
+ "E1.7": "`collect()` raises without a named human. Collection is automatable "
+         "and judgement is not, and the failure this prevents is specific: a "
+         "model asked whether a control is adequate answers yes, and the "
+         "answer is filed as evidence. The verdict field comes back empty on "
+         "purpose.",
+ "E1.8": "Two gaps most vendor assessments miss. AI features arrive **on by "
+         "default** in a product you already bought, so no purchase event "
+         "triggered a review — and behind the vendor is a sub-processor "
+         "chain, which is where the data actually goes. `depth_mapped` is "
+         "usually zero.",
+ "E1.9": "`lifecycle_gaps()` returns the three surfaces from D1.2 that change "
+         "behaviour and are routinely filed as maintenance — the retrieval "
+         "index, memory, and the MCP tool descriptions A1.9 says can be "
+         "rewritten after approval. The test is whether it alters what the "
+         "system does, not whether it touched code.",
+ "E1.10": "`seam_map()` sorts the estate into owned, shared and unowned — and "
+          "makes the point that a **shared** part is not safer than an "
+          "unowned one. It is an unowned one that looks covered from both "
+          "sides. Two parts of this system are owned by nobody, and one of "
+          "them is \"evidence that a control works\".",
+ "E1.11": "`validation_scope()` returns a validation that is **complete "
+          "against the classical list and invalid for an acting model**. "
+          "Conceptual soundness, input quality, output accuracy, limitations "
+          "and monitoring all pass; authority, reversibility, blast radius, "
+          "adversarial reachability and containment were never asked, "
+          "because no classical template contains them.",
+ "E1.12": "Six handoffs, each with the artefact the consumer should now be "
+          "holding. `delivered()` goes and looks. Both sides agreed every one "
+          "of these in a meeting and neither had a deliverable, which is why "
+          "the artefact column exists rather than a status column.",
+ "E1.13": "The number. `measure()` walks the controls Functions A to D built "
+          "and calls each one — A2.1's approvers, A3.1's default-deny, A3.2's "
+          "empty environment, A3.9's expiry, B2.3's five findings, C1.9's "
+          "coverage, D1.1's matrix. Add a credential to "
+          "`sandbox.CODING_AGENT.env_keys` and coverage drops below 1.0, "
+          "which is what makes it a measurement. `known_gaps()` ships four "
+          "absences with the file that admits each one.",
+ "E2.1": "`map_obligations()` shows one control answering several regimes — "
+         "`D1.3`'s per-field retention answers GDPR storage limitation and "
+         "EU AI Act record-keeping, `D5.6` answers GDPR Art. 33 and NIS2 "
+         "Art. 23. That reuse is the argument against one programme per "
+         "regime, and it is a number rather than an assertion.",
+ "E2.2": "Four triggers turn a deployer into a provider, and every one is "
+         "something an engineering team does routinely without telling "
+         "compliance: renaming it, fine-tuning it, changing its purpose, "
+         "modifying it. Then the show-me test — a requirement whose evidence "
+         "is a paragraph is not yet a control.",
+ "E2.3": "`choose_spine()` ranks frameworks by how much of **your** control "
+         "set each covers, picks the best as the structure, and returns the "
+         "remainder to be supplied from the others. The alternative is a "
+         "mapping per regime with nothing to hang it off, which produces "
+         "documents rather than a programme.",
+ "E2.4": "The cheapest control in the programme is one you are already "
+         "operating under another name. An agent that decides is a **model** "
+         "under model-risk rules your organisation has followed for years, "
+         "with inventory, validation and change requirements nobody thought "
+         "to apply here.",
+ "E2.5": "`erasure_reach()` returns **0.714** against your own tree: five "
+         "surfaces a deletion request reaches and two it does not — the "
+         "model provider's logs, and weights if anything was fine-tuned. "
+         "Then `audit_trace()` scans the rows you are keeping for a year: "
+         "A2.7's digest keeps the motive clean, and nothing protects "
+         "`detail`, which is where a tool's arguments land.",
+ "E2.6": "D5.6 started the clocks in hour one. This is the phase breakdown "
+         "underneath them, and the finding is where the time goes: "
+         "establishing **who acted** is the largest block, which D1.0's "
+         "clock already measured and which would be near zero for a human "
+         "actor.",
+ "E2.7": "Six sections, none of which is an explanation of the model's "
+         "reasoning and all of which a supervisor can act on: purpose, "
+         "authority, bounds, a run record, who decided, and the known "
+         "limitations — including E1.13's `known_gaps()`, which is the "
+         "section that makes the other five believable.",
+ "E2.8": "Calls C1.10's `reconstruct()`. The regulator's question — under "
+         "whose authority did the agent act, show me for a specific action — "
+         "is the investigation's question asked earlier by a different "
+         "person, and a second implementation would give a second answer.",
+ "E2.9": "`prepare()` reports accuracy and conformance as separate fields, "
+         "puts `known_gaps()` at the top, and carries the three openings that "
+         "actually get used. Naming the gaps first is not candour for its own "
+         "sake — it is the only version of the conversation where the answers "
+         "to those three are already written down.",
+ "E3.1": "`translate()` turns \"the agent holds payments:refund with a ceiling "
+         "of twelve calls\" into \"one compromised run can move up to 60,000 "
+         "before any human is involved, it is not recoverable, and we would "
+         "know within five minutes\". Same fact. The first sentence answers a "
+         "question nobody asked.",
+ "E3.2": "Five rungs, and the decision is about the rung rather than the "
+         "tool — which is what lets the next tool ship without a review "
+         "queue that becomes a bottleneck and then a bypass. Rung 4 is not "
+         "granted in this system, and the reason is A3.6: the gate stops "
+         "working before you get there.",
+ "E3.3": "`sequence()` weights control reuse **double**. The first workflow's "
+         "job is to produce controls the second one inherits, which is why "
+         "the board demo loses to refund triage even though refund triage is "
+         "invisible.",
+ "E3.4": "Two functions have no home on any org chart — harness engineering "
+         "and red team / research — and neither fails loudly. They quietly do "
+         "not happen, and the first evidence is an incident nobody had the "
+         "tooling to investigate.",
+ "E3.5": "Six activity metrics, each paired with the exposure question it was "
+         "standing in for. \"Agents reviewed\" goes **up** when the queue gets "
+         "longer, which is the opposite of what it is read as meaning; the "
+         "replacement is agents running at a rung above what their blast "
+         "radius supports.",
+ "E3.6": "`condition()` requires all four of testable, due, owner and "
+         "consequence. A condition with no consequence is a preference, and "
+         "it will be recorded in the register as a control — which is worse "
+         "than the flat no it was meant to avoid, because a flat no at least "
+         "leaves the capability visible.",
+ "E3.7": "`build_order()` starts with the inventory and puts the red team "
+         "last, because its findings need somewhere to land — that is "
+         "C1.11's handoff read as a hiring plan. Call it with "
+         "`demos_first=True` and it returns what that produces: striking "
+         "findings with nowhere to land, and a coverage number nobody "
+         "computed.",
+ "E3.8": "`readiness()` asks four questions this curriculum has already "
+         "answered with numbers — time to detect (D1.0), time to stop (D4.4), "
+         "containment coverage (C1.9's 0.4), reconstructable (C1.10). A "
+         "programme that cannot fill them in has been enumerating failure "
+         "modes, which does not terminate, instead of measuring recovery, "
+         "which does.",
+})

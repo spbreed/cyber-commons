@@ -212,6 +212,15 @@ cannot delete it.
 ("md", "## 4 · The control — index the trace, and set retention per field"),
   *skill_steps('regulatory/trace-personal-data-audit',
                "## 2 · The procedure, as a skill\n\nFive items of personal data are in the agent trace and nobody put them there deliberately. The skill maps every system holding a copy and runs a real erasure request through all of them — three of which cannot delete one subject's records."),
+  *skill_steps('research/row-level-policy-check',
+               "## 3 · And whether the rows have a policy on them at all\n\n"
+               "`governance/regulatory.py`'s `erasure_reach()` returns "
+               "**0.714** against your own tree: five surfaces a deletion "
+               "request reaches and two it does not — the model provider's "
+               "logs, and weights if anything was fine-tuned. That argument "
+               "is worth having only after the ordinary one is settled, "
+               "which is whether any policy sits on the rows in the first "
+               "place:"),
 ],
  "expect": "Five items of personal data appear in the agent trace — name, email, "
            "account number and payment card — none placed there deliberately. The "

@@ -6392,7 +6392,7 @@ Next up: E1.0, Start here — what AI governance means.
 
 ### E1.0 · Start here — what AI governance means
 
-Chapter E1 · lesson 1 of 14 · reading lesson · 328 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/E1.0.html)
+Chapter E1 · lesson 1 of 14 · runs a skill · 386 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/E1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -6422,13 +6422,17 @@ Here is what that costs you.
 
 A trustworthy-AI statement with no owner per property means every property is somebody else's job.
 
-And this is CyberTravels again — the same company, because a lot of people start watching here. Someone at CyberTravels signed off on the platform when it was a chatbot. It now issues refunds, ships code and indexes contracts.
+And this is CyberTravels again — the same company, because a lot of people start watching here. cybertravels/governance/__init__.py is six trustworthy-AI properties with two columns beside each: the function that owns it and the artefact that evidences it. Call unowned() with the properties your own statement claims and it returns the ones nothing in this system evidences — usually a longer list than anybody expects, because a statement is written before the artefacts are.
 
 **③ What we do about it**
 
 So here is what we do in this lesson.
 
 Assign each of the seven properties an owner, and read the three chapters as one unit built, evidenced and run.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -6450,7 +6454,7 @@ Next up: E1.1, From framework control to key control indicator.
 
 ### E1.1 · From framework control to key control indicator
 
-Chapter E1 · lesson 2 of 14 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.1.html)
+Chapter E1 · lesson 2 of 14 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.1.html)
 
 **① Open**
 
@@ -6470,7 +6474,7 @@ Here is what that costs you.
 
 A control tested six months ago is not passing — it is unevidenced, and most tooling cannot represent that third state.
 
-Same company, same four agents, new way of failing. The control test that passed in March described a CyberTravels with no payments scope, no repository access and no vector store. Nothing about it was wrong; everything about it is stale.
+Same company, same four agents, new way of failing. KCI refuses a measurement that is not callable. That single constructor check is the lesson: a control indicator an engineer has to go and look up is taken once, at audit time, by somebody who knows what answer is wanted. Every KCI here reads the tree.
 
 **③ What we do about it**
 
@@ -6502,7 +6506,7 @@ Next up: E1.2, Building the AI and agent inventory.
 
 ### E1.2 · Building the AI and agent inventory
 
-Chapter E1 · lesson 3 of 14 · runs a skill · 225 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E1.2.html)
+Chapter E1 · lesson 3 of 14 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.2.html)
 
 **① Open**
 
@@ -6522,7 +6526,7 @@ Here is what that costs you.
 
 You cannot govern, tier, test or revoke what you cannot list, and most of it is already in production.
 
-Same company, same four agents, new way of failing. Nobody at CyberTravels can currently list every agent, MCP server and vector index in the estate. Everything else in this chapter depends on that list being true next quarter.
+Same company, same four agents, new way of failing. inventory() comes from registry.all workloads(), not a survey — and the reason is exact: a survey returns the agents somebody declared, which is the complement of the set you are looking for. shadow() wraps A2.5's orphans() and answers both directions, because teams check one.
 
 **③ What we do about it**
 
@@ -6554,7 +6558,7 @@ Next up: E1.3, Risk tiering agentic use cases.
 
 ### E1.3 · Risk tiering agentic use cases
 
-Chapter E1 · lesson 4 of 14 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E1.3.html)
+Chapter E1 · lesson 4 of 14 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.3.html)
 
 **① Open**
 
@@ -6574,7 +6578,7 @@ Here is what that costs you.
 
 Tiering by model name tracks vendor marketing rather than exposure, and gets the dangerous case exactly backwards.
 
-Same company, same four agents, new way of failing. The RAG Advisor and the Workflow Agent do not deserve the same control set. One recommends hotels; the other moves money. R1, R12.
+Same company, same four agents, new way of failing. Run tier the workflow agent(). It reads config.TOOL_POLICY, finds payments:refund, and returns critical — while tiering by model name returns medium. The disagrees field is True on your own system, which is the whole argument for tiering on autonomy, data reach and external effect rather than on the thing written on the form.
 
 **③ What we do about it**
 
@@ -6606,7 +6610,7 @@ Next up: E1.4, Control mapping for agents.
 
 ### E1.4 · Control mapping for agents
 
-Chapter E1 · lesson 5 of 14 · runs a skill · 227 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E1.4.html)
+Chapter E1 · lesson 5 of 14 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.4.html)
 
 **① Open**
 
@@ -6626,7 +6630,7 @@ Here is what that costs you.
 
 A framework-first mapping produces a complete checklist that defends nothing, because a clause with no operating control behind it evidences nothing.
 
-Same company, same four agents, new way of failing. Most of CyberTravels' risks map onto controls it already has. Building a parallel AI control estate is the expensive mistake; finding the genuine gaps is the work.
+Same company, same four agents, new way of failing. map outward() answers the question the framework was for: which clauses nothing covers. And needs a new control() checks the cheaper thing first — five of the controls you already operate apply to an agent principal unchanged, and a new control is a new thing to maintain and evidence forever.
 
 **③ What we do about it**
 
@@ -6658,7 +6662,7 @@ Next up: E1.5, Evaluation output as audit evidence.
 
 ### E1.5 · Evaluation output as audit evidence
 
-Chapter E1 · lesson 6 of 14 · runs a skill · 223 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E1.5.html)
+Chapter E1 · lesson 6 of 14 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.5.html)
 
 **① Open**
 
@@ -6678,7 +6682,7 @@ Here is what that costs you.
 
 A vendor's best-of-k demo is not assurance, and schema conformance is not accuracy.
 
-Same company, same four agents, new way of failing. The eval that says CyberTravels recommends real hotels 94 percent of the time is the closest thing to evidence here — and unusable as evidence without provenance, retention and a way to reproduce the run. R2.
+Same company, same four agents, new way of failing. evidences() reads an eval result and separates what it supports from what it does not. A best-of-8 demonstration shows the system can produce the answer; a control needs the rate. And conformance reported where accuracy was asked for is refused outright — it runs at about 100 percent, it is structural, and B2.18 caps two controls at PARTIAL for the same reason.
 
 **③ What we do about it**
 
@@ -6710,7 +6714,7 @@ Next up: E1.6, Operating vs outcome guardrails.
 
 ### E1.6 · Operating vs outcome guardrails
 
-Chapter E1 · lesson 7 of 14 · runs a skill · 222 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E1.6.html)
+Chapter E1 · lesson 7 of 14 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.6.html)
 
 **① Open**
 
@@ -6730,7 +6734,7 @@ Here is what that costs you.
 
 Shipping only operating guardrails and reporting them as coverage is how a programme passes audit while missing harm.
 
-Same company, same four agents, new way of failing. Two different controls get confused: what bounds how CyberTravels runs (budgets, scopes, approvals) and what bounds what it produces (the hotel recommendation). They fail differently and are tested differently.
+Same company, same four agents, new way of failing. Three states, not two. classify guardrail() calls a rule operating when something enforces it, watched when something measures it, and aspirational when neither — and says plainly that a rule nobody can enforce teaches its readers the policy is decorative. The honest move is to name the measurement, not to delete the rule.
 
 **③ What we do about it**
 
@@ -6762,7 +6766,7 @@ Next up: E1.7, Continuous control verification.
 
 ### E1.7 · Continuous control verification
 
-Chapter E1 · lesson 8 of 14 · runs a skill · 230 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E1.7.html)
+Chapter E1 · lesson 8 of 14 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.7.html)
 
 **① Open**
 
@@ -6782,7 +6786,7 @@ Here is what that costs you.
 
 Point-in-time assurance describes a system that no longer exists by the time anyone reads it.
 
-Same company, same four agents, new way of failing. A control verified once a year on a system whose prompt was edited last week. Continuous verification is the only version of assurance that keeps up with CyberTravels.
+Same company, same four agents, new way of failing. collect() raises without a named human. Collection is automatable and judgement is not, and the failure this prevents is specific: a model asked whether a control is adequate answers yes, and the answer is filed as evidence. The verdict field comes back empty on purpose.
 
 **③ What we do about it**
 
@@ -6814,7 +6818,7 @@ Next up: E1.8, Third-party and model supply chain risk.
 
 ### E1.8 · Third-party and model supply chain risk
 
-Chapter E1 · lesson 9 of 14 · runs a skill · 210 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/E1.8.html)
+Chapter E1 · lesson 9 of 14 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.8.html)
 
 **① Open**
 
@@ -6834,7 +6838,7 @@ Here is what that costs you.
 
 For a hosted model the estate holds no source to measure, so there is nothing to compute an indicator from.
 
-Same company, same four agents, new way of failing. CyberTravels inherited its model vendor's decisions, its OCR library's, and a third-party MCP server's. R4.
+Same company, same four agents, new way of failing. Two gaps most vendor assessments miss. AI features arrive on by default in a product you already bought, so no purchase event triggered a review — and behind the vendor is a sub-processor chain, which is where the data actually goes. depth mapped is usually zero.
 
 **③ What we do about it**
 
@@ -6866,7 +6870,7 @@ Next up: E1.9, Model and agent lifecycle governance.
 
 ### E1.9 · Model and agent lifecycle governance
 
-Chapter E1 · lesson 10 of 14 · runs a skill · 230 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E1.9.html)
+Chapter E1 · lesson 10 of 14 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.9.html)
 
 **① Open**
 
@@ -6886,7 +6890,7 @@ Here is what that costs you.
 
 A retrain, a fine-tune or a re-index is treated as maintenance, and it invalidates every reading taken before it.
 
-Same company, same four agents, new way of failing. CyberTravels was approved once and has changed continuously since — a tool added, a prompt edited, a model upgraded silently by the provider. None of it raised a ticket.
+Same company, same four agents, new way of failing. lifecycle gaps() returns the three surfaces from D1.2 that change behaviour and are routinely filed as maintenance — the retrieval index, memory, and the MCP tool descriptions A1.9 says can be rewritten after approval. The test is whether it alters what the system does, not whether it touched code.
 
 **③ What we do about it**
 
@@ -6918,7 +6922,7 @@ Next up: E1.10, The stakeholder map — who owns what.
 
 ### E1.10 · The stakeholder map — who owns what
 
-Chapter E1 · lesson 11 of 14 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.10.html)
+Chapter E1 · lesson 11 of 14 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.10.html)
 
 **① Open**
 
@@ -6938,7 +6942,7 @@ Here is what that costs you.
 
 Five functions each hold part of the AI control estate and none holds all of it, so each assumes another has the middle.
 
-Same company, same four agents, new way of failing. Legal, privacy, model risk and security each hold a piece of CyberTravels' control estate. R10 — passport numbers in the logs — failed exactly at the boundary between two of them.
+Same company, same four agents, new way of failing. seam map() sorts the estate into owned, shared and unowned — and makes the point that a shared part is not safer than an unowned one. It is an unowned one that looks covered from both sides. Two parts of this system are owned by nobody, and one of them is "evidence that a control works".
 
 **③ What we do about it**
 
@@ -6970,7 +6974,7 @@ Next up: E1.11, Model risk management for AI systems.
 
 ### E1.11 · Model risk management for AI systems
 
-Chapter E1 · lesson 12 of 14 · runs a skill · 214 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/E1.11.html)
+Chapter E1 · lesson 12 of 14 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.11.html)
 
 **① Open**
 
@@ -6990,7 +6994,7 @@ Here is what that costs you.
 
 The classical model-risk playbook silently breaks once the model can act, because validation was scoped to predictions.
 
-Same company, same four agents, new way of failing. Forty years of model-risk doctrine transfers to CyberTravels. The part that does not is the part where the model calls issue refund.
+Same company, same four agents, new way of failing. validation scope() returns a validation that is complete against the classical list and invalid for an acting model. Conceptual soundness, input quality, output accuracy, limitations and monitoring all pass; authority, reversibility, blast radius, adversarial reachability and containment were never asked, because no classical template contains them.
 
 **③ What we do about it**
 
@@ -7022,7 +7026,7 @@ Next up: E1.12, Working the seams.
 
 ### E1.12 · Working the seams
 
-Chapter E1 · lesson 13 of 14 · runs a skill · 220 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E1.12.html)
+Chapter E1 · lesson 13 of 14 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.12.html)
 
 **① Open**
 
@@ -7042,7 +7046,7 @@ Here is what that costs you.
 
 The functions work and the handoffs leak, and both sides are usually right about their own scope.
 
-Same company, same four agents, new way of failing. The privacy assessment said what CyberTravels may retain; the log design never received it. That handoff has two owners, which means none. R10.
+Same company, same four agents, new way of failing. Six handoffs, each with the artefact the consumer should now be holding. delivered() goes and looks. Both sides agreed every one of these in a meeting and neither had a deliverable, which is why the artefact column exists rather than a status column.
 
 **③ What we do about it**
 
@@ -7074,7 +7078,7 @@ Next up: E1.13, Measuring the controls on CyberTravels — gaps and mitigations.
 
 ### E1.13 · Measuring the controls on CyberTravels — gaps and mitigations
 
-Chapter E1 · lesson 14 of 14 · runs a skill · 375 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/E1.13.html)
+Chapter E1 · lesson 14 of 14 · runs a skill · 374 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/E1.13.html)
 
 **① Open**
 
@@ -7094,7 +7098,7 @@ Here is what that costs you.
 
 A control asserted in a register and never measured has no evidence behind it until an incident supplies some.
 
-Same company, same four agents, new way of failing. The indicators are computed from the CyberTravels repository itself — the same tree B2.3 scans and A1.1 draws. Five of six report gaps, and KCI-05 is the honest one: it measures an egress control that CyberTravels has never built, so it reads zero and will keep reading zero until A3.7's gateway exists. That is the backlog in the same units as everything else.
+Same company, same four agents, new way of failing. The number. measure() walks the controls Functions A to D built and calls each one — A2.1's approvers, A3.1's default-deny, A3.2's empty environment, A3.9's expiry, B2.3's five findings, C1.9's coverage, D1.1's matrix. Add a credential to sandbox.CODING_AGENT.env keys and coverage drops below 1.0, which is what makes it a measurement. known gaps() ships four absences with the file that admits each one.
 
 **③ What we do about it**
 
@@ -7134,7 +7138,7 @@ Next up: E2.1, The regulatory map.
 
 ### E2.1 · The regulatory map
 
-Chapter E2 · lesson 1 of 9 · runs a skill · 212 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/E2.1.html)
+Chapter E2 · lesson 1 of 9 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.1.html)
 
 **① Open**
 
@@ -7154,7 +7158,7 @@ Here is what that costs you.
 
 One programme per regime is four times the work and none of it joined up.
 
-Same company, same four agents, new way of failing. CyberTravels holds passports, payment data and health information for corporate travellers. Layers 2 and 3 were in force before CyberTravels existed.
+Same company, same four agents, new way of failing. map obligations() shows one control answering several regimes — D1.3's per-field retention answers GDPR storage limitation and EU AI Act record-keeping, D5.6 answers GDPR Art. 33 and NIS2 Art. 23. That reuse is the argument against one programme per regime, and it is a number rather than an assertion.
 
 **③ What we do about it**
 
@@ -7186,7 +7190,7 @@ Next up: E2.2, Horizontal AI regulation.
 
 ### E2.2 · Horizontal AI regulation
 
-Chapter E2 · lesson 2 of 9 · runs a skill · 214 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/E2.2.html)
+Chapter E2 · lesson 2 of 9 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.2.html)
 
 **① Open**
 
@@ -7206,7 +7210,7 @@ Here is what that costs you.
 
 "We only deployed it, we didn't build it" is sometimes true and often not, and the answer changes what you owe.
 
-Same company, same four agents, new way of failing. Horizontal AI obligations land on CyberTravels as programme requirements: a risk register, technical documentation, named human oversight, measured accuracy, post-market monitoring.
+Same company, same four agents, new way of failing. Four triggers turn a deployer into a provider, and every one is something an engineering team does routinely without telling compliance: renaming it, fine-tuning it, changing its purpose, modifying it. Then the show-me test — a requirement whose evidence is a paragraph is not yet a control.
 
 **③ What we do about it**
 
@@ -7238,7 +7242,7 @@ Next up: E2.3, Voluntary frameworks as your spine.
 
 ### E2.3 · Voluntary frameworks as your spine
 
-Chapter E2 · lesson 3 of 9 · runs a skill · 215 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/E2.3.html)
+Chapter E2 · lesson 3 of 9 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.3.html)
 
 **① Open**
 
@@ -7258,7 +7262,7 @@ Here is what that costs you.
 
 Regime-specific mappings have nothing to hang off, so each new law restarts the programme.
 
-Same company, same four agents, new way of failing. One control set for CyberTravels, mapped outward to every regime that asks — rather than a control set per regulator, which is where CyberTravels would otherwise end up.
+Same company, same four agents, new way of failing. choose spine() ranks frameworks by how much of your control set each covers, picks the best as the structure, and returns the remainder to be supplied from the others. The alternative is a mapping per regime with nothing to hang it off, which produces documents rather than a programme.
 
 **③ What we do about it**
 
@@ -7290,7 +7294,7 @@ Next up: E2.4, Sector overlays.
 
 ### E2.4 · Sector overlays
 
-Chapter E2 · lesson 4 of 9 · runs a skill · 207 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/E2.4.html)
+Chapter E2 · lesson 4 of 9 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E2.4.html)
 
 **① Open**
 
@@ -7310,7 +7314,7 @@ Here is what that costs you.
 
 The sector regime you are already in applies to agents without ever using the word AI.
 
-Same company, same four agents, new way of failing. A travel company touches payment rules, privacy law and, through corporate health bookings, health obligations. Overlays add; they do not replace.
+Same company, same four agents, new way of failing. The cheapest control in the programme is one you are already operating under another name. An agent that decides is a model under model-risk rules your organisation has followed for years, with inventory, validation and change requirements nobody thought to apply here.
 
 **③ What we do about it**
 
@@ -7342,7 +7346,7 @@ Next up: E2.5, Privacy and data protection.
 
 ### E2.5 · Privacy and data protection
 
-Chapter E2 · lesson 5 of 9 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.5.html)
+Chapter E2 · lesson 5 of 9 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E2.5.html)
 
 **① Open**
 
@@ -7362,7 +7366,7 @@ Here is what that costs you.
 
 The context window is a disclosure and the trace is a record, so personal data lands in a system nobody reviewed.
 
-Same company, same four agents, new way of failing. Passport numbers reach CyberTravels' prompts, its context window, its vector store and its logs. None of those looks like a database to the privacy programme. R10, R12.
+Same company, same four agents, new way of failing. erasure reach() returns 0.714 against your own tree: five surfaces a deletion request reaches and two it does not — the model provider's logs, and weights if anything was fine-tuned. Then audit trace() scans the rows you are keeping for a year: A2.7's digest keeps the motive clean, and nothing protects detail, which is where a tool's arguments land.
 
 **③ What we do about it**
 
@@ -7394,7 +7398,7 @@ Next up: E2.6, Incident and disclosure obligations.
 
 ### E2.6 · Incident and disclosure obligations
 
-Chapter E2 · lesson 6 of 9 · runs a skill · 210 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/E2.6.html)
+Chapter E2 · lesson 6 of 9 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.6.html)
 
 **① Open**
 
@@ -7414,7 +7418,7 @@ Here is what that costs you.
 
 The clock starts at awareness and broken attribution consumes it, so containing fast buys no reporting time.
 
-Same company, same four agents, new way of failing. Is the $5,000 refund incident reportable, to whom, and by when? That question gets asked at 2am by someone already busy.
+Same company, same four agents, new way of failing. D5.6 started the clocks in hour one. This is the phase breakdown underneath them, and the finding is where the time goes: establishing who acted is the largest block, which D1.0's clock already measured and which would be near zero for a human actor.
 
 **③ What we do about it**
 
@@ -7446,7 +7450,7 @@ Next up: E2.7, Documentation that survives supervision.
 
 ### E2.7 · Documentation that survives supervision
 
-Chapter E2 · lesson 7 of 9 · runs a skill · 195 words, about 1.4 min spoken · [page](https://cybercommons.ai/lessons/E2.7.html)
+Chapter E2 · lesson 7 of 9 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E2.7.html)
 
 **① Open**
 
@@ -7466,7 +7470,7 @@ Here is what that costs you.
 
 Documentation that restates intent is what supervision fails.
 
-Same company, same four agents, new way of failing. The document describing CyberTravels' oversight has to survive a supervisor asking when that oversight last operated. R2.
+Same company, same four agents, new way of failing. Six sections, none of which is an explanation of the model's reasoning and all of which a supervisor can act on: purpose, authority, bounds, a run record, who decided, and the known limitations — including E1.13's known gaps(), which is the section that makes the other five believable.
 
 **③ What we do about it**
 
@@ -7498,7 +7502,7 @@ Next up: E2.8, Auditability of autonomous action.
 
 ### E2.8 · Auditability of autonomous action
 
-Chapter E2 · lesson 8 of 9 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E2.8.html)
+Chapter E2 · lesson 8 of 9 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.8.html)
 
 **① Open**
 
@@ -7518,7 +7522,7 @@ Here is what that costs you.
 
 Without attribution and replay captured at the moment of the action, neither can be reconstructed afterwards.
 
-Same company, same four agents, new way of failing. “Why did CyberTravels issue that refund?” has a legal deadline attached. Logging designed backwards from that question records the booking note; logging designed forwards records the HTTP call. R11.
+Same company, same four agents, new way of failing. Calls C1.10's reconstruct(). The regulator's question — under whose authority did the agent act, show me for a specific action — is the investigation's question asked earlier by a different person, and a second implementation would give a second answer.
 
 **③ What we do about it**
 
@@ -7550,7 +7554,7 @@ Next up: E2.9, Regulator and auditor conversations.
 
 ### E2.9 · Regulator and auditor conversations
 
-Chapter E2 · lesson 9 of 9 · runs a skill · 321 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/E2.9.html)
+Chapter E2 · lesson 9 of 9 · runs a skill · 351 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/E2.9.html)
 
 **① Open**
 
@@ -7570,7 +7574,7 @@ Here is what that costs you.
 
 A supervisor who finds a weakness you did not disclose doubts everything else you said.
 
-Same company, same four agents, new way of failing. A supervisor can tell the difference between confidence and evidence. Opening with CyberTravels' real numbers is the only version that survives the follow-up.
+Same company, same four agents, new way of failing. prepare() reports accuracy and conformance as separate fields, puts known gaps() at the top, and carries the three openings that actually get used. Naming the gaps first is not candour for its own sake — it is the only version of the conversation where the answers to those three are already written down.
 
 **③ What we do about it**
 
@@ -7610,7 +7614,7 @@ Next up: E3.1, Translating agentic risk upward.
 
 ### E3.1 · Translating agentic risk upward
 
-Chapter E3 · lesson 1 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.1.html)
+Chapter E3 · lesson 1 of 8 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E3.1.html)
 
 **① Open**
 
@@ -7630,7 +7634,7 @@ Here is what that costs you.
 
 A board cannot act on "we found prompt injection"; it can act on exposure, likelihood and a decision being requested.
 
-Same company, same four agents, new way of failing. The board does not want CyberTravels' threat model. It wants the exposure, the direction it is moving, and the decision being asked of them.
+Same company, same four agents, new way of failing. translate() turns "the agent holds payments:refund with a ceiling of twelve calls" into "one compromised run can move up to 60,000 before any human is involved, it is not recoverable, and we would know within five minutes". Same fact. The first sentence answers a question nobody asked.
 
 **③ What we do about it**
 
@@ -7662,7 +7666,7 @@ Next up: E3.2, Governing autonomy rather than approving tools.
 
 ### E3.2 · Governing autonomy rather than approving tools
 
-Chapter E3 · lesson 2 of 8 · runs a skill · 220 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.2.html)
+Chapter E3 · lesson 2 of 8 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.2.html)
 
 **① Open**
 
@@ -7682,7 +7686,7 @@ Here is what that costs you.
 
 A per-tool review queue becomes a bottleneck and then a bypass, within about a quarter.
 
-Same company, same four agents, new way of failing. CyberTravels will not stop at four agents. An approved-tools list stops governing at about forty; autonomy levels with conditions attach to behaviour and keep working.
+Same company, same four agents, new way of failing. Five rungs, and the decision is about the rung rather than the tool — which is what lets the next tool ship without a review queue that becomes a bottleneck and then a bypass. Rung 4 is not granted in this system, and the reason is A3.6: the gate stops working before you get there.
 
 **③ What we do about it**
 
@@ -7714,7 +7718,7 @@ Next up: E3.3, Sequencing the programme.
 
 ### E3.3 · Sequencing the programme
 
-Chapter E3 · lesson 3 of 8 · runs a skill · 224 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.3.html)
+Chapter E3 · lesson 3 of 8 · runs a skill · 229 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.3.html)
 
 **① Open**
 
@@ -7734,7 +7738,7 @@ Here is what that costs you.
 
 Starting with the most visible workflow rather than the most winnable is how programmes thrash.
 
-Same company, same four agents, new way of failing. Everything in CyberTravels' programme depends on something else in it. Start with the register and the identity work, or the first two quarters produce nothing anyone can see.
+Same company, same four agents, new way of failing. sequence() weights control reuse double. The first workflow's job is to produce controls the second one inherits, which is why the board demo loses to refund triage even though refund triage is invisible.
 
 **③ What we do about it**
 
@@ -7766,7 +7770,7 @@ Next up: E3.4, Org design and ownership.
 
 ### E3.4 · Org design and ownership
 
-Chapter E3 · lesson 4 of 8 · runs a skill · 222 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.4.html)
+Chapter E3 · lesson 4 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.4.html)
 
 **① Open**
 
@@ -7786,7 +7790,7 @@ Here is what that costs you.
 
 Harness engineering with no home and research as a hobby means the seams have no names against them.
 
-Same company, same four agents, new way of failing. Ask five people at CyberTravels who owns agent identity and you will get five sincere, different answers. R11 is that question going unanswered.
+Same company, same four agents, new way of failing. Two functions have no home on any org chart — harness engineering and red team / research — and neither fails loudly. They quietly do not happen, and the first evidence is an incident nobody had the tooling to investigate.
 
 **③ What we do about it**
 
@@ -7818,7 +7822,7 @@ Next up: E3.5, The metrics that matter at your level.
 
 ### E3.5 · The metrics that matter at your level
 
-Chapter E3 · lesson 5 of 8 · runs a skill · 220 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.5.html)
+Chapter E3 · lesson 5 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.5.html)
 
 **① Open**
 
@@ -7838,7 +7842,7 @@ Here is what that costs you.
 
 Reporting activity instead of exposure gives a board numbers that stay flat under neglect.
 
-Same company, same four agents, new way of failing. How many of CyberTravels' agents are in the register, how many have egress control, and what is the median time to stop one. Not how many policies were written.
+Same company, same four agents, new way of failing. Six activity metrics, each paired with the exposure question it was standing in for. "Agents reviewed" goes up when the queue gets longer, which is the opposite of what it is read as meaning; the replacement is agents running at a rung above what their blast radius supports.
 
 **③ What we do about it**
 
@@ -7870,7 +7874,7 @@ Next up: E3.6, Saying no, and saying yes with conditions.
 
 ### E3.6 · Saying no, and saying yes with conditions
 
-Chapter E3 · lesson 6 of 8 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.6.html)
+Chapter E3 · lesson 6 of 8 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.6.html)
 
 **① Open**
 
@@ -7890,7 +7894,7 @@ Here is what that costs you.
 
 Saying no is cheap and usually wrong — the capability ships anyway and you have traded influence for comfort.
 
-Same company, same four agents, new way of failing. Saying no to the Coding Agent's self-approval costs the next conversation. Conditional yes — written, time-bound, checked — is what keeps security in the room. R7.
+Same company, same four agents, new way of failing. condition() requires all four of testable, due, owner and consequence. A condition with no consequence is a preference, and it will be recorded in the register as a control — which is worse than the flat no it was meant to avoid, because a flat no at least leaves the capability visible.
 
 **③ What we do about it**
 
@@ -7922,7 +7926,7 @@ Next up: E3.7, Building the capability.
 
 ### E3.7 · Building the capability
 
-Chapter E3 · lesson 7 of 8 · runs a skill · 225 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.7.html)
+Chapter E3 · lesson 7 of 8 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.7.html)
 
 **① Open**
 
@@ -7942,7 +7946,7 @@ Here is what that costs you.
 
 Hiring for conceptual familiarity produces a team that can discuss the problem and not measure it.
 
-Same company, same four agents, new way of failing. CyberTravels cannot hire an identity engineer, a detection engineer and a harness engineer at the rate CyberTravels is changing. Most of that capability has to be built.
+Same company, same four agents, new way of failing. build order() starts with the inventory and puts the red team last, because its findings need somewhere to land — that is C1.11's handoff read as a hiring plan. Call it with demos first=True and it returns what that produces: striking findings with nowhere to land, and a coverage number nobody computed.
 
 **③ What we do about it**
 
@@ -7974,7 +7978,7 @@ Next up: E3.8, Resilience over perfection.
 
 ### E3.8 · Resilience over perfection
 
-Chapter E3 · lesson 8 of 8 · runs a skill · 322 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/E3.8.html)
+Chapter E3 · lesson 8 of 8 · runs a skill · 339 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/E3.8.html)
 
 **① Open**
 
@@ -7994,7 +7998,7 @@ Here is what that costs you.
 
 A programme judged on prevention is judged on something a probabilistic system cannot deliver.
 
-Same company, same four agents, new way of failing. CyberTravels will fail sometimes, because it is probabilistic. A programme that promised otherwise will be judged on that promise; one designed to detect fast, contain small and recover cheaply will not.
+Same company, same four agents, new way of failing. readiness() asks four questions this curriculum has already answered with numbers — time to detect (D1.0), time to stop (D4.4), containment coverage (C1.9's 0.4), reconstructable (C1.10). A programme that cannot fill them in has been enumerating failure modes, which does not terminate, instead of measuring recovery, which does.
 
 **③ What we do about it**
 

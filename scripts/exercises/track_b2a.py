@@ -191,7 +191,17 @@ you read the procedure, execute it, and read what it produced.
          "that has to give the same answer twice so two runs can be diffed. "
          "Embedded from `skills/appsec/threat-model-stride/scripts/`."),
   ("skill_script", "appsec/threat-model-stride/scripts/threat_model.py"),
-  ("md", "## 4 · Execute it against CyberTravels\n\nFive synthetic inputs, "
+  *skill_steps("research/generated-schema-audit",
+               "## 4 · The assets, read out of the catalogue\n\n"
+               "`cybertravels/appsec/threatmodel.py` derives the asset list "
+               "from `db.py`'s `CREATE TABLE` statements rather than from a "
+               "workshop, and one of them comes back **UNCLASSIFIED** — "
+               "`policies`, which nobody has said is worth anything. That is "
+               "the same reading this skill performs on a generated scaffold: "
+               "work from the catalogue, not from the application's own "
+               "queries, because the table the application never queries is "
+               "the one nobody put a policy on."),
+  ("md", "## 5 · Execute it against CyberTravels\n\nFive synthetic inputs, "
          "standing in for what a real estate already holds."),
 ("md", "## 5 · The diagram it emits\n\nMermaid, so it renders here and on "
          "the lesson page without a library. Double arrows are trust-boundary "

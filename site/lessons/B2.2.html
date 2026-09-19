@@ -98,7 +98,8 @@ both.</p>
 <p>This lesson runs the <code>threat-model-stride</code> skill. You do not write the code;
 you read the procedure, execute it, and read what it produced.</p><div class="how"><h2>2 · The skill</h2>
 <p>This is <code>skills/appsec/threat-model-stride/SKILL.md</code>, verbatim. The frontmatter is what routes a request to it; the body is the procedure a model follows.</p><h2>3 · Its script</h2>
-<p>The deterministic half of the skill — the part that has to give the same answer twice so two runs can be diffed. Embedded from <code>skills/appsec/threat-model-stride/scripts/</code>.</p><h2>4 · Execute it against CyberTravels</h2>
+<p>The deterministic half of the skill — the part that has to give the same answer twice so two runs can be diffed. Embedded from <code>skills/appsec/threat-model-stride/scripts/</code>.</p><h2>4 · The assets, read out of the catalogue</h2>
+<p><code>cybertravels/appsec/threatmodel.py</code> derives the asset list from <code>db.py</code>'s <code>CREATE TABLE</code> statements rather than from a workshop, and one of them comes back <strong>UNCLASSIFIED</strong> — <code>policies</code>, which nobody has said is worth anything. That is the same reading this skill performs on a generated scaffold: work from the catalogue, not from the application's own queries, because the table the application never queries is the one nobody put a policy on.</p><h2>5 · Execute it against CyberTravels</h2>
 <p>Five synthetic inputs, standing in for what a real estate already holds.</p><h2>5 · The diagram it emits</h2>
 <p>Mermaid, so it renders here and on the lesson page without a library. Double arrows are trust-boundary crossings — the edges every finding turned out to live on.</p><h2>6 · The same code, a hardened estate</h2>
 <p>Not one line of CyberTravels' source changes. Only the four evidence inputs around it do.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/threat-model-stride/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/threat-model-stride/SKILL.md</code></a></p><pre class="front"><code>name: threat-model-stride
@@ -246,6 +247,63 @@ T-04  I get_booking     load_booking       9  no open CSPM finding on the resour
   agent with no state has no meaningful tampering row.</li>
 <li><strong>Scoring without recording why.</strong> A score nobody can argue with is a score
   nobody will act on.</li>
+</ul><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/research/generated-schema-audit/SKILL.md" target="_blank" rel="noopener"><code>skills/research/generated-schema-audit/SKILL.md</code></a></p><pre class="front"><code>name: generated-schema-audit
+description: &gt;-
+  Audit a generated database scaffold for tables that hold secrets and carry no
+  access policy, working from the catalogue rather than from the application&#x27;s
+  own queries. Use after any scaffold, migration or agent-authored schema
+  change.
+allowed-tools: Read, Grep, Glob</code></pre><h1>Everything works, and two tables are open</h1>
+<p>A generated scaffold produces a schema that runs. Whether it is safe is a
+different question and the application cannot answer it, because the application
+only touches the tables it uses. The catalogue knows about all of them, and the
+gap between those two sets is where this finding lives.</p>
+<h2>When to use this</h2>
+<p>After a scaffold generator, an agent-authored migration, or any schema change
+nobody reviewed statement by statement.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Read the statements as written.</strong> Table by table, column by column. Flag
+every column that holds a credential, a token, a session or personal data — an
+<code>api_key</code> column in a profiles table is the shape to look for.</p>
+<p><strong>2 — Check policy per table, not per application feature.</strong> For each table:
+does an access policy exist at all, and does it name a subject. "No policy" and
+"a policy that permits everyone" are different findings.</p>
+<p><strong>3 — Enumerate from the catalogue.</strong> Query the system catalogue for every table
+in the schema. Compare against the tables the application references. The
+difference is the set nobody has looked at.</p>
+<p><strong>4 — Classify by sensitivity and policy together.</strong> Sensitive with no policy is
+critical. Non-sensitive with no policy is a finding with a lower number and the
+same cause.</p>
+<p><strong>5 — Report per table with the statement that created it.</strong> A finding that
+points at a line in a migration gets fixed; one that says "enable RLS" gets
+discussed.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/generated_schema_audit.py"><code>scripts/generated_schema_audit.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>tables created : profiles, posts
+findings       : 2
+
+table       severity   why
+profiles    critical   RLS disabled - open via the public API
+posts       high       policy matches every row
+
+The application works. Every feature passes. `profiles` holds an api_key
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;statements&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;columns&quot;: [&quot;str&quot;], &quot;sensitive_columns&quot;: [&quot;str&quot;]}],
+  &quot;policies&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;policy&quot;: &quot;none|open|scoped&quot;, &quot;subject&quot;: &quot;str|null&quot;}],
+  &quot;catalogue&quot;: {&quot;tables&quot;: [&quot;str&quot;], &quot;referenced_by_app&quot;: [&quot;str&quot;], &quot;unreviewed&quot;: [&quot;str&quot;]},
+  &quot;findings&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium&quot;, &quot;created_by&quot;: &quot;str&quot;}]
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Auditing the application's queries.</strong> They cover the tables it uses.</li>
+<li><strong>Treating "no policy" as "open policy".</strong> They are different fixes.</li>
+<li><strong>Reporting the table without the statement.</strong> Nobody knows where to change
+  it.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at B2.2 --out work/cybertravels
 python3 scripts/checkpoint.py --at B2.2 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
 # then, in your agent: ask for "threat model stride"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/appsec/threat-model-stride/scripts/threat_model.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Point the skill at one of your own services. The work is not the model, it is collecting the five inputs: if any of them is "in somebody's head", that is the input your threat model is currently guessing at, and the guess is always the optimistic one.</p></div></section><div class="expect"><b>Expect</b>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP Threat Dragon</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/appsec/threat-model-stride</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · What building a harness means in security engineering</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · SAST for agentic code — deterministic Semgrep, then the model pass</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
