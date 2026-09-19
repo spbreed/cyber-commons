@@ -418,6 +418,17 @@ can run — a red team that produces only a slide has produced nothing.
          "**R7**, where a jailbroken advisor kept its booking tools, and **R8**, "
          "where an agent spawned a child nobody could attribute. Both are red-"
          "team findings first and governance items last."),
+  *skill_steps(
+      "redteam/attack-success-rate-campaign",
+      "## 4 · The arithmetic, before the first attack\n\n"
+      "This function's whole argument is that an offensive result without a "
+      "denominator is an anecdote, so the first thing it builds is the "
+      "denominator. `cybertravels/redteam/campaign.py` is the tree increment "
+      "this lesson adds: cases with a criterion stated **before** the run, a "
+      "rate with an interval that behaves at 0/20, benign cases so a technique "
+      "that fires on everything cannot report a success rate of 1.0, and the "
+      "ablation that says whether you measured the model or your own "
+      "scaffolding. This is the procedure:"),
  ],
  "expect": "The four stages of the agentic red-team lifecycle, from the "
            "ingestion and elicitation surfaces an attacker reaches first through "

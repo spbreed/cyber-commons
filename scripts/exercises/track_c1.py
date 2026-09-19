@@ -95,6 +95,17 @@ seeds and minor rewordings is a finding with a measurable success rate.
   ("md", "## 4 · The control — report a rate across attempts, not a screenshot"),
   *skill_steps('research/technique-reproducibility-test',
                "## 2 · The procedure, as a skill\n\nThe skill runs a candidate elicitation technique against CyberTravels' advisor repeatedly and reports the share of attempts that reproduced — the difference between a finding and a lucky transcript."),
+  *skill_steps('redteam/eval-corpus-integrity-check',
+               "## 3 · And the question the rate cannot answer\n\n"
+               "A reproduction rate is a statement about the technique **and** "
+               "about the corpus it was measured on. Score a deliberately "
+               "zero-capability harness against your own case suite and see "
+               "what the suite alone awards it: whatever that number is, it is "
+               "in every result you have reported. "
+               "`cybertravels/redteam/elicitation.py` adds the other half — "
+               "seed spread beside the rate, and a technique whose best "
+               "phrasing works while its others never do, reported as one "
+               "phrasing rather than as a technique."),
 ],
  "expect": "The technique reproduces on a measurable fraction of attempts rather "
            "than all or none, and the report is that rate with its denominator, "
@@ -317,6 +328,15 @@ report.
   ("md", "## 4 · The control — handover with a regression test attached"),
   *skill_steps('research/finding-to-control-handover',
                "## 2 · The procedure, as a skill\n\nThe skill turns a CyberTravels finding into a handover: the control it becomes, its owner, and an eval case that fails on the old build — so the fix is verifiable and cannot regress unseen."),
+  *skill_steps('redteam/agentic-finding-report',
+               "## 3 · And the write-up the handover ends in\n\n"
+               "`cybertravels/redteam/handoff.py` enforces the shape: a "
+               "finding will not construct without a rate and an interval, "
+               "`verify()` refuses an eval case that passes against the old "
+               "build, and an artefact nobody accepted counts as missing "
+               "rather than done. This skill is the prose half — a report that "
+               "names the absent control, states plainly what is **not** a "
+               "fix, and carries the regression case with it."),
 ],
  "expect": "The finding leaves with a named control, an owner and an eval case "
            "that fails on the unfixed build, and a finding missing any of the "

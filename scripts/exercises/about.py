@@ -1306,3 +1306,61 @@ ABOUT.update({
           "what it does not have, and scoring it against a key it has never "
           "seen before trusting its output.",
 })
+
+
+# Function C, rewired onto cybertravels/redteam/. Each entry names what the
+# lesson builds and the claim it is allowed to make, because by C the reader
+# has a running system and the question is what an attack result means.
+ABOUT.update({
+ "C1.0": "The arithmetic an offensive result needs before it is a finding: a "
+         "criterion stated before the run and applied by something that is not "
+         "the model under test, a rate with an interval that behaves at the "
+         "ends, benign cases so a technique that fires on everything cannot "
+         "report a perfect score, and an ablation that separates what the "
+         "model did from what the scaffolding did.",
+ "C1.1": "Inventorying the paths by which text somebody else wrote reaches the "
+         "agent, with the column an integration list does not have — who can "
+         "write here, and does it arrive labelled. Including the path people "
+         "miss, which is memory: an ingestion path with a delay.",
+ "C1.2": "Writing into one of those paths and measuring how far it gets, with "
+         "the criterion set on effect rather than on the model's reply — plus "
+         "the gate that keeps the measurement honest when somebody tidies the "
+         "planted instruction away and every trial silently measures nothing.",
+ "C1.3": "What it takes to report a technique rather than a transcript: the "
+         "same technique across phrasings and seeds, the seed spread published "
+         "beside the rate, and the distinction between a technique and one "
+         "phrasing that happens to work.",
+ "C1.4": "Separating an agent from a person using only the shape of the trace "
+         "— rate, gap variance, tool breadth, burst — and choosing the "
+         "threshold by the cost of each mistake rather than by accuracy, since "
+         "the two mistakes are never equally expensive.",
+ "C1.5": "The signals that exist only across runs: an artefact one run wrote "
+         "and another read, trajectories converging, a token appearing "
+         "everywhere and in no baseline. Every run passes its own checks; the "
+         "finding is between them.",
+ "C1.6": "Why a rule's precision is the wrong thing to report to the people "
+         "who have to work it. The same rule at two volumes, with the alert "
+         "count and the analyst-days it implies — and the rule that gets "
+         "muted while coverage still counts it.",
+ "C1.7": "Triage when the queue is longer than the day: ranking, an explicit "
+         "capacity cut, and the sample taken from below the line so the rule "
+         "that closes most of the queue is itself measured rather than "
+         "trusted.",
+ "C1.8": "Deception as the one alert with no triage step, and the placement "
+         "rule that keeps it that way — if you cannot name why nothing reads "
+         "it, it is not a canary. Plus the two things canary write-ups skip: "
+         "decay, and a volume threshold that swallows the conclusive alert.",
+ "C1.9": "The second question about a kill switch, which is the one that gets "
+         "asked on the night: what is still able to act after it is thrown. "
+         "Measured as coverage over the act-paths, with the conflict between "
+         "containment and evidence decided in advance rather than at 3am.",
+ "C1.10": "Whether a finished run can be reconstructed from the record or only "
+          "summarised — the four investigation questions put to the audit "
+          "rows, the difference between replay and rerun, and the property "
+          "that decides whether any of it is worth anything: that the actor "
+          "cannot amend it.",
+ "C1.11": "What has to exist before a finding is finished — an eval case, a "
+          "control and a detection, each with a named owner — and the check "
+          "that makes the eval case real: it must fail against the old build. "
+          "A test that passes both ways is testing the weather.",
+})

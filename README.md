@@ -7,7 +7,7 @@ secure the AI *itself*.
 
 **148 lessons across 16 chapters.** Every lesson is the idea, the diagram, the
 control, and what it looks like in one running system — and then it **runs a
-skill**. 145 of the 148 do, and the skill is the deliverable: the page shows the
+skill**. 146 of the 148 do, and the skill is the deliverable: the page shows the
 `SKILL.md` as prose and you run that skill's own script out of
 [`skills/`](skills/), on your own machine, in whichever agent CLI you already
 use. Every skill is executed in CI before it ships. **Every skill is executed

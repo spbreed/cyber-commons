@@ -995,3 +995,88 @@ GROUNDING.update({
           "adopted without an eval is a product you did not buy and cannot "
           "return.",
 })
+
+
+# ----------------------------------------- Function C, rewired onto the tree
+# B built the pipeline that reviews CyberTravels. C attacks the running system
+# — and the first thing it builds is not an attack, it is the arithmetic that
+# decides whether an attack result means anything. `cybertravels/redteam/`.
+GROUNDING.update({
+ "C1.0": "You add `cybertravels/redteam/campaign.py`, and nothing in it is an "
+         "attack. `Case` refuses a criterion that is not a callable, because "
+         "one applied by eye after the run is one chosen to fit it. `Campaign` "
+         "refuses to exist without benign cases. `wilson()` gives 0 out of 20 "
+         "an interval of about [0, 0.16] rather than the [0, 0] the normal "
+         "approximation reports as \"cannot be bypassed\". Run "
+         "`trials_needed(0.5, 0.1)` and it says 97 — which is the number "
+         "behind every red-team result you have read that said ten.",
+ "C1.1": "`redteam/ingestion.py` inventories the four ways text somebody else "
+         "wrote reaches your agents, with the column teams do not have: who "
+         "can write here. Three of the four arrive labelled untrusted because "
+         "A2.6 marks them. The fourth is `knowledge/retriever.py`'s CORPUS — "
+         "anyone who can add a travel template, no review, no label — and "
+         "`unlabelled()` returns exactly that one.",
+ "C1.2": "The Northwind Rail notice in `mcp/vendor_server.py` already carries "
+         "an instruction addressed to automated agents. It has been in your "
+         "corpus since G1.2, which is the point: an attack somebody planted "
+         "for the test is an attack that proves the test works. "
+         "`source_of_truth()` is the gate that stops it being tidied away — "
+         "without it every trial would measure an empty attack and report a "
+         "rate of zero as a defence working.",
+ "C1.3": "`redteam/elicitation.py` refuses a technique with one phrasing, "
+         "because with one you cannot tell a technique from a magic string. "
+         "`reproduce()` runs every variant under every seed and reports the "
+         "**seed spread beside the rate** — which is usually the larger "
+         "number and almost never the published one. A technique at 0.4 whose "
+         "seeds disagree by 0.5 has a real finding, and it is not 0.4.",
+ "C1.4": "`redteam/actor.py` reads the spans G2.1 already emits and scores "
+         "four shape signals — rate, gap variance, tool breadth, burst. Your "
+         "planner run scores above 0.7; a person's session scores below 0.4. "
+         "Then the part that matters: `pick_threshold()` chooses by the cost "
+         "of each mistake rather than by accuracy, and prints what accuracy "
+         "would have picked. When those differ, accuracy was optimising "
+         "something nobody asked for.",
+ "C1.5": "`redteam/swarm.py` reads the `run_artefacts` table A3.8 added. Three "
+         "runs, each passing every per-run check; one wrote a cache entry two "
+         "others read. `correlate()` is the only view that can see it, and "
+         "`convergence` is the ratio worth watching — a fleet doing varied "
+         "work has many distinct trajectories, a driven one has few.",
+ "C1.6": "Take a rule with 98% precision and run `deployable()` at 100 events "
+         "a day and at 100,000. The precision is identical; the second needs "
+         "five analysts and has one. That rule will be muted, and the coverage "
+         "report will still count it — which is why this lesson reports a "
+         "volume rather than a ratio.",
+ "C1.7": "`triage()` ranks, cuts at capacity, and — the part that makes it a "
+         "control rather than a strategy — takes a deterministic sample from "
+         "**below** the line. `floor_miss_rate()` then says what the sample "
+         "found. A non-zero rate means the ranking is wrong and the queue is "
+         "being cut in the wrong place, which is a different fix from hiring.",
+ "C1.8": "`redteam/deception.py` will not place a canary without the reason "
+         "nothing legitimately reads it, written down. Four placements in your "
+         "tree, each with that second column earned. Then the failure the "
+         "lesson exists for: a canary alert has a count of one by "
+         "construction, and `suppressed_by_threshold()` shows a volume rule "
+         "tuned to five swallowing the one alert that needed no triage.",
+ "C1.9": "Revoke the File System Agent and measure what actually stopped. The "
+         "MCP path is genuinely closed — `verify_delegated` checks "
+         "`registry.active` on every call, which is what A2.5 built. The "
+         "direct path is not: `agents/file_agent.py::handle` calls "
+         "`payments_api.download_invoice` in-process, so nothing on that route "
+         "ever reaches a check. `coverage()` returns **0.4**, and that is a "
+         "finding about the architecture rather than about the switch — it is "
+         "A1.1's \"direct APIs, no policy point\" card, priced.",
+ "C1.10": "`redteam/forensics.py` puts the four investigation questions to "
+          "your own audit rows. All four are answerable — but only because the "
+          "chain carries `priya => spiffe://…`, which is `identity."
+          "actor_chain()`'s doing rather than a column's. `NOT_RECORDED` names "
+          "what is still absent: A2.2 issues an SVID with an attestation "
+          "digest and no audit column carries it, so a row names which "
+          "workload acted and cannot show it was the attested instance.",
+ "C1.11": "`redteam/handoff.py` is the shape the engagement has to end in. A "
+          "`Finding` will not construct without a rate and an interval. "
+          "`verify()` runs the eval case against both builds and refuses one "
+          "that passes on the old — the same rule B2.16 applies to a patch, "
+          "for the same reason. An artefact nobody accepted counts as missing, "
+          "and `durability()` reports the report-only fraction, which is the "
+          "work the next engagement will redo at full price.",
+})

@@ -4066,7 +4066,7 @@ Next up: C1.0, Start here — the evolution of non-deterministic threat simulati
 
 ### C1.0 · Start here — the evolution of non-deterministic threat simulation
 
-Chapter C1 · lesson 1 of 12 · reading lesson · 348 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/C1.0.html)
+Chapter C1 · lesson 1 of 12 · runs a skill · 408 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/C1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -4096,13 +4096,17 @@ Here is what that costs you.
 
 Offensive work that produces anecdotes — a result that worked once, on one target, with no rate attached — changes nothing.
 
-And this is CyberTravels again — the same company, because a lot of people start watching here. The board asked whether CyberTravels is secure. This function answers the version of that question a researcher can act on — what would go wrong, would it reproduce, and would we see it — and it answers it on CyberTravels end to end, from a poisoned template to a governed fix.
+And this is CyberTravels again — the same company, because a lot of people start watching here. You add cybertravels/redteam/campaign.py, and nothing in it is an attack. Case refuses a criterion that is not a callable, because one applied by eye after the run is one chosen to fit it. Campaign refuses to exist without benign cases. wilson() gives 0 out of 20 an interval of about [0, 0.16] rather than the [0, 0] the normal approximation reports as "cannot be bypassed". Run trials needed(0.5, 0.1) and it says 97 — which is the number behind every red-team result you have read that said ten.
 
 **③ What we do about it**
 
 So here is what we do in this lesson.
 
 Follow one lifecycle end to end: reach, see, respond, carry forward.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
 
 **④ The number**
 
@@ -4124,7 +4128,7 @@ Next up: C1.1, Platform ingestion and supply-chain risks.
 
 ### C1.1 · Platform ingestion and supply-chain risks
 
-Chapter C1 · lesson 2 of 12 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C1.1.html)
+Chapter C1 · lesson 2 of 12 · runs a skill · 273 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C1.1.html)
 
 **① Open**
 
@@ -4144,7 +4148,7 @@ Here is what that costs you.
 
 The first surface an attacker reaches is the hub the model came from, and a squatted name is accepted because it looked right.
 
-Same company, same four agents, new way of failing. The components are CyberTravels' own — the model its advisor calls, the packages its coding agent installs, the templates indexed into its vector store — and the one with no pinned digest is the route in.
+Same company, same four agents, new way of failing. redteam/ingestion.py inventories the four ways text somebody else wrote reaches your agents, with the column teams do not have: who can write here. Three of the four arrive labelled untrusted because A2.6 marks them. The fourth is knowledge/retriever.py's CORPUS — anyone who can add a travel template, no review, no label — and unlabelled() returns exactly that one.
 
 **③ What we do about it**
 
@@ -4176,7 +4180,7 @@ Next up: C1.2, Weaponizing the ingestion path.
 
 ### C1.2 · Weaponizing the ingestion path
 
-Chapter C1 · lesson 3 of 12 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/C1.2.html)
+Chapter C1 · lesson 3 of 12 · runs a skill · 281 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.2.html)
 
 **① Open**
 
@@ -4196,7 +4200,7 @@ Here is what that costs you.
 
 A dataset is parsed before it is embedded, and a crafted record reaches code execution on the indexing host — which usually has more access than the serving one.
 
-Same company, same four agents, new way of failing. The pipeline is CyberTravels' RAG ingestion: vendor PDFs and images through OCR and a decoder, on the indexing host that can reach the backend APIs. A crafted invoice is the payload.
+Same company, same four agents, new way of failing. The Northwind Rail notice in mcp/vendor server.py already carries an instruction addressed to automated agents. It has been in your corpus since G1.2, which is the point: an attack somebody planted for the test is an attack that proves the test works. source of truth() is the gate that stops it being tidied away — without it every trial would measure an empty attack and report a rate of zero as a defence working.
 
 **③ What we do about it**
 
@@ -4228,7 +4232,7 @@ Next up: C1.3, Cognitive vulnerability and elicitation scaling.
 
 ### C1.3 · Cognitive vulnerability and elicitation scaling
 
-Chapter C1 · lesson 4 of 12 · runs a skill · 227 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/C1.3.html)
+Chapter C1 · lesson 4 of 12 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C1.3.html)
 
 **① Open**
 
@@ -4248,7 +4252,7 @@ Here is what that costs you.
 
 A jailbreak that strips safety while leaving tool use intact is the combination that turns a bypass into an incident.
 
-Same company, same four agents, new way of failing. The target is CyberTravels' advisor, and the dangerous outcome is a jailbreak that keeps the booking and refund tools while shedding the policy that governed them.
+Same company, same four agents, new way of failing. redteam/elicitation.py refuses a technique with one phrasing, because with one you cannot tell a technique from a magic string. reproduce() runs every variant under every seed and reports the seed spread beside the rate — which is usually the larger number and almost never the published one. A technique at 0.4 whose seeds disagree by 0.5 has a real finding, and it is not 0.4.
 
 **③ What we do about it**
 
@@ -4280,7 +4284,7 @@ Next up: C1.4, Establishing telemetry and detecting the actor.
 
 ### C1.4 · Establishing telemetry and detecting the actor
 
-Chapter C1 · lesson 5 of 12 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C1.4.html)
+Chapter C1 · lesson 5 of 12 · runs a skill · 286 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.4.html)
 
 **① Open**
 
@@ -4300,7 +4304,7 @@ Here is what that costs you.
 
 To catch the actor you have just played, you have to be able to see it — and the model gateway logs none of the fields that would distinguish an agent from a person.
 
-Same company, same four agents, new way of failing. The gateway is CyberTravels', and the actor to find is the Workflow Agent acting under Alex's credential at a tempo no person types — invisible until the trace carries the acting identity.
+Same company, same four agents, new way of failing. redteam/actor.py reads the spans G2.1 already emits and scores four shape signals — rate, gap variance, tool breadth, burst. Your planner run scores above 0.7; a person's session scores below 0.4. Then the part that matters: pick threshold() chooses by the cost of each mistake rather than by accuracy, and prints what accuracy would have picked. When those differ, accuracy was optimising something nobody asked for.
 
 **③ What we do about it**
 
@@ -4332,7 +4336,7 @@ Next up: C1.5, Emergent swarms and multi-agent proliferation.
 
 ### C1.5 · Emergent swarms and multi-agent proliferation
 
-Chapter C1 · lesson 6 of 12 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/C1.5.html)
+Chapter C1 · lesson 6 of 12 · runs a skill · 257 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C1.5.html)
 
 **① Open**
 
@@ -4352,7 +4356,7 @@ Here is what that costs you.
 
 Each run examined alone is plausible work; the swarm exists only in the population, so per-run review cannot see it.
 
-Same company, same four agents, new way of failing. The swarm is the one from the register's R8: a CyberTravels agent that spawned children to parallelise a task and left no chain from any child back to a human.
+Same company, same four agents, new way of failing. redteam/swarm.py reads the run artefacts table A3.8 added. Three runs, each passing every per-run check; one wrote a cache entry two others read. correlate() is the only view that can see it, and convergence is the ratio worth watching — a fleet doing varied work has many distinct trajectories, a driven one has few.
 
 **③ What we do about it**
 
@@ -4384,7 +4388,7 @@ Next up: C1.6, High-concurrency detection engineering.
 
 ### C1.6 · High-concurrency detection engineering
 
-Chapter C1 · lesson 7 of 12 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C1.6.html)
+Chapter C1 · lesson 7 of 12 · runs a skill · 277 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.6.html)
 
 **① Open**
 
@@ -4404,7 +4408,7 @@ Here is what that costs you.
 
 A rule that flags an unauthorised runtime objective is worth a great deal; the same rule firing on everything is worth less than nothing.
 
-Same company, same four agents, new way of failing. The anomaly is a CyberTravels agent pursuing an objective its task never set, and the rules are scored against CyberTravels' own history so the queue cost is real.
+Same company, same four agents, new way of failing. Take a rule with 98 percent precision and run deployable() at 100 events a day and at 100,000. The precision is identical; the second needs five analysts and has one. That rule will be muted, and the coverage report will still count it — which is why this lesson reports a volume rather than a ratio.
 
 **③ What we do about it**
 
@@ -4436,7 +4440,7 @@ Next up: C1.7, Triaging the non-deterministic swarm.
 
 ### C1.7 · Triaging the non-deterministic swarm
 
-Chapter C1 · lesson 8 of 12 · runs a skill · 225 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/C1.7.html)
+Chapter C1 · lesson 8 of 12 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C1.7.html)
 
 **① Open**
 
@@ -4456,7 +4460,7 @@ Here is what that costs you.
 
 An agent that scores evidence only on support confirms its first theory and closes the wrong case at machine speed, silently.
 
-Same company, same four agents, new way of failing. The alerts are CyberTravels', and the deceptive branch is the refund incident: the loop confirms 'the Workflow Agent did it' and never reaches the vendor tool description that actually did.
+Same company, same four agents, new way of failing. triage() ranks, cuts at capacity, and — the part that makes it a control rather than a strategy — takes a deterministic sample from below the line. floor miss rate() then says what the sample found. A non-zero rate means the ranking is wrong and the queue is being cut in the wrong place, which is a different fix from hiring.
 
 **③ What we do about it**
 
@@ -4488,7 +4492,7 @@ Next up: C1.8, Defensive deception and threshold failures.
 
 ### C1.8 · Defensive deception and threshold failures
 
-Chapter C1 · lesson 9 of 12 · runs a skill · 229 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/C1.8.html)
+Chapter C1 · lesson 9 of 12 · runs a skill · 261 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C1.8.html)
 
 **① Open**
 
@@ -4508,7 +4512,7 @@ Here is what that costs you.
 
 Every other detector needs a threshold, and every threshold trades misses against false alarms.
 
-Same company, same four agents, new way of failing. The canary is a fake booking record in CyberTravels' index that no legitimate itinerary references, so a read of it is an agent going somewhere its task never sent it.
+Same company, same four agents, new way of failing. redteam/deception.py will not place a canary without the reason nothing legitimately reads it, written down. Four placements in your tree, each with that second column earned. Then the failure the lesson exists for: a canary alert has a count of one by construction, and suppressed by threshold() shows a volume rule tuned to five swallowing the one alert that needed no triage.
 
 **③ What we do about it**
 
@@ -4540,7 +4544,7 @@ Next up: C1.9, Machine-speed containment and fleet revocation.
 
 ### C1.9 · Machine-speed containment and fleet revocation
 
-Chapter C1 · lesson 10 of 12 · runs a skill · 229 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/C1.9.html)
+Chapter C1 · lesson 10 of 12 · runs a skill · 276 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.9.html)
 
 **① Open**
 
@@ -4560,7 +4564,7 @@ Here is what that costs you.
 
 A fleet completes thousands of actions inside one human approval cycle, so containment is pre-authorised or it is too late.
 
-Same company, same four agents, new way of failing. The fleet is CyberTravels' four agents, and the detail that matters is R9: third-party access ended only when the third party revoked its keys, not when the agents were stopped.
+Same company, same four agents, new way of failing. Revoke the File System Agent and measure what actually stopped. The MCP path is genuinely closed — verify delegated checks registry.active on every call, which is what A2.5 built. The direct path is not: agents/file agent.py::handle calls payments api.download invoice in-process, so nothing on that route ever reaches a check. coverage() returns 0.4, and that is a finding about the architecture rather than about the switch — it is A1.1's "direct APIs, no policy point" card, priced.
 
 **③ What we do about it**
 
@@ -4592,7 +4596,7 @@ Next up: C1.10, Forensic replay and control architecture.
 
 ### C1.10 · Forensic replay and control architecture
 
-Chapter C1 · lesson 11 of 12 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/C1.10.html)
+Chapter C1 · lesson 11 of 12 · runs a skill · 274 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.10.html)
 
 **① Open**
 
@@ -4612,7 +4616,7 @@ Here is what that costs you.
 
 A finding is only as good as its reproduction, and the constant teams miss is the model version — which silently invalidates every other constant.
 
-Same company, same four agents, new way of failing. The run is the CyberTravels refund incident, and the field missing most often is the advisor's model version — upgraded by the provider between the incident and the replay.
+Same company, same four agents, new way of failing. redteam/forensics.py puts the four investigation questions to your own audit rows. All four are answerable — but only because the chain carries priya => spiffe://…, which is identity.actor chain()'s doing rather than a column's. NOT_RECORDED names what is still absent: A2.2 issues an SVID with an attestation digest and no audit column carries it, so a row names which workload acted and cannot show it was the attested instance.
 
 **③ What we do about it**
 
@@ -4644,7 +4648,7 @@ Next up: C1.11, Institutional governance and compliance.
 
 ### C1.11 · Institutional governance and compliance
 
-Chapter C1 · lesson 12 of 12 · runs a skill · 368 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/C1.11.html)
+Chapter C1 · lesson 12 of 12 · runs a skill · 413 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/C1.11.html)
 
 **① Open**
 
@@ -4664,7 +4668,7 @@ Here is what that costs you.
 
 A finding that stays in a notebook changes nothing and regresses unseen.
 
-Same company, same four agents, new way of failing. The finding is CyberTravels' indirect-injection refund, and the handover is the policy clause it changes, the owner who holds it, and the eval case that fails on the pre-fix build.
+Same company, same four agents, new way of failing. redteam/handoff.py is the shape the engagement has to end in. A Finding will not construct without a rate and an interval. verify() runs the eval case against both builds and refuses one that passes on the old — the same rule B2.16 applies to a patch, for the same reason. An artefact nobody accepted counts as missing, and durability() reports the report-only fraction, which is the work the next engagement will redo at full price.
 
 **③ What we do about it**
 
