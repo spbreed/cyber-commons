@@ -10,6 +10,7 @@ side that is easy to get wrong and impossible to notice: a system that lets
 everything through passes every happy-path test ever written.
 """
 # step:file G2.3
+import json
 import sys
 
 from cybertravels import config, db, identity
@@ -82,18 +83,38 @@ def main():
                          wrong_scope_refused))
 
     def unregistered_actor_refused():
-        saved = set(config.REGISTERED_AGENTS)
         ex = identity.token_exchange(priya, agent, config.AUD_INTERNAL_MCP,
                                      "bookings:read")
-        config.REGISTERED_AGENTS.clear()
+        # step:A2.1 was
+        #~ saved = set(config.REGISTERED_AGENTS)
+        #~ config.REGISTERED_AGENTS.clear()
+        #~ try:
+        #~     identity.verify_delegated(ex["access_token"],
+        #~                               config.AUD_INTERNAL_MCP,
+        #~                               "bookings:read")
+        #~     raise AssertionError("an unregistered actor was accepted")
+        #~ except identity.IdentityError:
+        #~     pass
+        #~ finally:
+        #~     config.REGISTERED_AGENTS.update(saved)
+        # step:A2.1 now
+        # A2.1 moved the check from a set to the registry, so this assertion
+        # moved with it. A test that keeps asserting against the mechanism a
+        # lesson replaced passes or fails for reasons that have nothing to do
+        # with the property it names — here it went on clearing a set nothing
+        # reads any more, and reported the control broken.
+        from cybertravels import registry as _reg
+        wid = config.AGENT_IDS["workflow"]
+        _reg.get(wid).state = "retired"
         try:
             identity.verify_delegated(ex["access_token"],
                                       config.AUD_INTERNAL_MCP, "bookings:read")
-            raise AssertionError("an unregistered actor was accepted")
+            raise AssertionError("a retired workload was accepted")
         except identity.IdentityError:
             pass
         finally:
-            config.REGISTERED_AGENTS.update(saved)
+            _reg.get(wid).state = "active"
+        # step:A2.1 end
     results.append(check("an unregistered workload is refused",
                          unregistered_actor_refused))
 
@@ -130,6 +151,106 @@ def main():
             "a refusal was not recorded"
     results.append(check("refusals are audited, not only successes",
                          audit_records_refusals))
+
+    # step:A2.1 add
+    # --- the registry replaces the hand-edited set ----------------------
+    from cybertravels import registry
+
+    def registry_knows_when_and_who():
+        w = registry.get(config.AGENT_IDS["workflow"]).as_dict()
+        assert w["approved_by"], "an identity with no named approver"
+        assert w["state"] == "active"
+        assert w["registered_at"], "no record of when it started existing"
+    results.append(check("every workload identity has an approver and a state",
+                         registry_knows_when_and_who))
+    # step:A2.1 end
+
+    # step:A2.2 add
+    def attestation_refuses_a_liar():
+        wid = config.AGENT_IDS["coding"]
+        good = registry.get(wid).selectors
+        svid = registry.attest(wid, dict(good))
+        assert svid["expires_at"] > svid["issued_at"], "an SVID with no TTL"
+        try:
+            registry.attest(wid, dict(good, image="cybertravels/coding:evil"))
+        except registry.RegistryError:
+            return
+        raise AssertionError("a process presenting the wrong image was attested")
+    results.append(check("an SVID is issued against evidence, not against a claim",
+                         attestation_refuses_a_liar))
+    # step:A2.2 end
+
+    # step:A2.3 add
+    def delegation_must_narrow():
+        first = identity.token_exchange(priya, agent,
+                                        config.AUD_INTERNAL_MCP, "bookings:read")
+        # Hop two tries to widen: the human may delegate a refund, but the
+        # token this hop holds is a read.
+        try:
+            identity.token_exchange(first["access_token"], agent,
+                                    config.AUD_INTERNAL_MCP, "payments:refund")
+        except identity.IdentityError:
+            return
+        raise AssertionError("a second hop widened its own authority")
+    results.append(check("a delegation chain narrows and cannot widen",
+                         delegation_must_narrow))
+
+    def the_chain_records_every_hop():
+        claims = {"sub": "dana", "act": {"sub": "agent-b",
+                                         "act": {"sub": "agent-a"}}}
+        assert identity.actor_chain(claims) == "dana => agent-a => agent-b", \
+            f"got {identity.actor_chain(claims)!r}"
+    results.append(check("the actor chain reads as every hop, not the last one",
+                         the_chain_records_every_hop))
+    # step:A2.3 end
+
+    # step:A2.4 add
+    def a_token_cannot_be_replayed_on_another_call():
+        binding = identity.bind_call("get_booking", {"booking_id": 2})
+        ex = identity.token_exchange(priya, agent, config.AUD_INTERNAL_MCP,
+                                     "bookings:read", call_binding=binding)
+        identity.verify_delegated(ex["access_token"], config.AUD_INTERNAL_MCP,
+                                  "bookings:read", call_binding=binding)
+        other = identity.bind_call("get_booking", {"booking_id": 3})
+        try:
+            identity.verify_delegated(ex["access_token"],
+                                      config.AUD_INTERNAL_MCP,
+                                      "bookings:read", call_binding=other)
+        except identity.IdentityError:
+            return
+        raise AssertionError("a token bound to one call was accepted for another")
+    results.append(check("a call-bound token cannot be replayed elsewhere",
+                         a_token_cannot_be_replayed_on_another_call))
+    # step:A2.4 end
+
+    # step:A2.5 add
+    def revoking_stops_it_now():
+        wid = config.AGENT_IDS["file"]
+        tok = identity.mint_agent_token("file")
+        registry.revoke(wid, reason="decommissioned")
+        try:
+            identity.token_exchange(priya, tok, config.AUD_INTERNAL_MCP,
+                                    "bookings:read")
+            raise AssertionError("a revoked workload still obtained a token")
+        except identity.IdentityError:
+            pass
+        finally:
+            # It still exists as a record — revocation retires an identity, it
+            # does not erase the history of one. Restored so later checks run.
+            registry.get(wid).state = "active"
+    results.append(check("a revoked workload stops acting immediately",
+                         revoking_stops_it_now))
+
+    def orphans_are_found_in_both_directions():
+        live = [config.AGENT_IDS["workflow"], "spiffe://cybertravels.local/agent/ghost"]
+        o = registry.orphans(live)
+        assert "spiffe://cybertravels.local/agent/ghost" in o["running_but_unregistered"], \
+            "a running workload nobody registered was not reported"
+        assert config.AGENT_IDS["coding"] in o["registered_but_absent"], \
+            "a registered identity nothing is running was not reported"
+    results.append(check("orphans are found running-but-unregistered AND the reverse",
+                         orphans_are_found_in_both_directions))
+    # step:A2.5 end
 
     # step:A2.6 add
     # --- provenance at the door -----------------------------------------
@@ -173,6 +294,23 @@ def main():
     results.append(check("an edited audit row is detectable",
                          audit_chain_detects_an_edit))
     # step:A2.8 end
+
+    # step:A2.7 add
+    def the_fourth_question_is_answerable():
+        from cybertravels import provenance
+        motive = provenance.mark("refund my Northwind booking", "traveller",
+                                 source="/chat")
+        db.audit("dana => agent", "issue_refund", config.AUD_INTERNAL_MCP,
+                 "payments:refund", "ok", "", "trace-1", motive=motive)
+        row = db.recent_audit(1)[0]
+        assert row["motive_origin"] == "traveller", \
+            "the row cannot say what made the agent act"
+        assert row["motive_digest"], "no handle on the motivating text"
+        assert "refund my" not in json.dumps(dict(row)), \
+            "the traveller's prose itself went into a long-lived store"
+    results.append(check("an audit row answers what motivated the action",
+                         the_fourth_question_is_answerable))
+    # step:A2.7 end
 
     print(f"\n{sum(results)}/{len(results)} checks held")
     return 0 if all(results) else 1

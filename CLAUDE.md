@@ -195,7 +195,7 @@ that are enforced or that get broken most.
 
 ## 5 · Pre-deployment testing
 
-Twenty-two gates, in the order CI runs them. Each exists because of a specific
+Twenty-three gates, in the order CI runs them. Each exists because of a specific
 failure — a gate whose reason is written down does not get deleted by the next
 person.
 
@@ -212,17 +212,18 @@ person.
 | 9 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |
 | 10 | `render_diagrams.py --check` | a diagram source that Graphviz or PlantUML will not lay out — which ships as an empty or smeared SVG behind a green build. With a model reachable it runs the skills and also checks the committed source is fresh; in CI, where there is no model and every skill refuses, it validates the committed sources and says freshness is not covered. It used to fail every CI run with "no skill emitted a diagram", which is a gate nobody keeps |
 | 11 | `checkpoint.py --check` | a lesson checkpoint that no longer materialises. `cybertravels/` carries `step:` markers saying which lesson introduced each file and each block, so a reader can get the tree as it stood at any of the 148 lessons. Checks the last checkpoint against the committed tree with a second implementation of the rule (a gate that asserts a function equals itself protects nothing), that all 148 parse, and that every `was` line is `#~`-commented — an uncommented one makes the committed application run the naive branch as well as the real one |
-| 12 | `check_labels.py --check` | `cybertravels/LABELS.md` naming a file or unit that is no longer in the tree, or a skill scoring recall against one. The skills hard-code those names on purpose — a key derived from a scanner is a description of the scanner — so a rename would otherwise make every recall number wrong with nothing failing |
-| 13 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
-| 14 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
-| 15 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
-| 16 | `build_curriculum.py --check` | a chapter doc in `curriculum/` stale against `curriculum.json` — fifteen committed files that nothing compared against their source until a clarity fix reached the site and not them |
-| 17 | `check_repo_links.py --check` | a link into this repository pinning a branch that is not the published one. The branch lives in `scripts/exercises/repo.py`; it was spelled out longhand in nine files and one had drifted to `main`, which has never existed on the remote |
-| 18 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that |
-| 19 | `check_frameworks.py` | a framework label that is not real |
-| 20 | `check_framework_links.py` | a framework label that links nowhere. `continue-on-error`: an upstream site being down must not hold the deploy |
-| 21 | `build_site.py` | a page stale against its source. It rebuilds and warns rather than failing, so a forgotten rebuild never blocks a deploy |
-| 22 | curriculum + videos data | `videos.json` naming a session id the curriculum does not carry |
+| 12 | `checkpoint.py --run` | a checkpoint that parses and does not work. Materialises each of the 148 and runs its own `cybertravels/tests/smoke_test.py` — the suite grows from 8 assertions at G2.3 to 19 at A2.8, and every checkpoint has to pass its own. Found two `was` branches in `db.audit` binding the wrong number of values whenever one of A2.7/A2.8 was applied and not the other; all 148 parsed and G2.4 raised on the first INSERT. Needs PyJWT and skips cleanly without it |
+| 13 | `check_labels.py --check` | `cybertravels/LABELS.md` naming a file or unit that is no longer in the tree, or a skill scoring recall against one. The skills hard-code those names on purpose — a key derived from a scanner is a description of the scanner — so a rename would otherwise make every recall number wrong with nothing failing |
+| 14 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
+| 15 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
+| 16 | `check_docs.py --check` | **every other markdown file** — a broken relative link, a link to a retired lesson id, a `scripts/*.py` that does not exist, or the site cited at the old `github.io` host rather than `cybercommons.ai` |
+| 17 | `build_curriculum.py --check` | a chapter doc in `curriculum/` stale against `curriculum.json` — fifteen committed files that nothing compared against their source until a clarity fix reached the site and not them |
+| 18 | `check_repo_links.py --check` | a link into this repository pinning a branch that is not the published one. The branch lives in `scripts/exercises/repo.py`; it was spelled out longhand in nine files and one had drifted to `main`, which has never existed on the remote |
+| 19 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that |
+| 20 | `check_frameworks.py` | a framework label that is not real |
+| 21 | `check_framework_links.py` | a framework label that links nowhere. `continue-on-error`: an upstream site being down must not hold the deploy |
+| 22 | `build_site.py` | a page stale against its source. It rebuilds and warns rather than failing, so a forgotten rebuild never blocks a deploy |
+| 23 | curriculum + videos data | `videos.json` naming a session id the curriculum does not carry |
 
 Run the lot before pushing:
 
@@ -233,7 +234,8 @@ gates=(
   "install_skills.py --tool claude --dry-run"
   "check_lessons.py --check"            "check_register.py --check"
   "check_clarity.py --check"            "render_diagrams.py --check"
-  "checkpoint.py --check"               "check_labels.py --check"
+  "checkpoint.py --check"               "checkpoint.py --run"
+  "check_labels.py --check"
   "check_claims.py --check"
   "check_claude_md.py --check"
   "check_docs.py --check"               "build_curriculum.py --check"

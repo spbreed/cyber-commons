@@ -34,6 +34,14 @@ CREATE TABLE IF NOT EXISTS policies (
 CREATE TABLE IF NOT EXISTS audit (
   id INTEGER PRIMARY KEY AUTOINCREMENT, at REAL, chain TEXT, tool TEXT,
   audience TEXT, scope TEXT, outcome TEXT, detail TEXT, trace_id TEXT
+-- step:A2.7 add
+  -- A2.7: the fourth question. G2.2's rows said which human, which workload
+  -- and which call, and could not say what made the agent act. These two
+  -- columns are that answer: the origin of the text that motivated the call,
+  -- and a digest of it rather than the text — a refund request quoted in full
+  -- puts traveller prose in a long-lived store, which is E2.5's problem.
+  , motive_origin TEXT, motive_digest TEXT
+-- step:A2.7 end
 -- step:A2.8 add
   -- A2.8: each row carries the hash of the one before it, so an edit anywhere
   -- breaks every hash after it. Append-only was a convention until here; this
@@ -112,32 +120,55 @@ def rows(result):
     return [dict(r) for r in result]
 
 
-def audit(chain, tool, audience, scope, outcome, detail="", trace_id=""):
+def audit(chain, tool, audience, scope, outcome, detail="", trace_id="",
+          # step:A2.7 add
+          motive=None,
+          # step:A2.7 end
+          ):
     """Write one row. Never updated, never deleted — only appended.
 
     Every call is recorded, and so is every refusal. A log that records only
     what succeeded cannot answer the question an investigation actually asks,
     which is what was attempted.
+
+    The statement is assembled from `cols` rather than written out twice,
+    because the row grows across the curriculum: A2.7 adds the motive columns
+    and A2.8 adds the hash chain. Two hard-coded variants meant a checkpoint
+    with one lesson applied and not the other bound the wrong number of values
+    — which is what happened, and it only showed up when the G2.4 checkpoint
+    was run rather than merely parsed.
     """
     c = conn()
-    row = (time.time(), chain, tool, audience, scope, outcome,
-           detail if isinstance(detail, str) else json.dumps(detail), trace_id)
-    # step:A2.8 was
-    #~ # Append-only by convention: this module simply never issues an UPDATE
-    #~ # or a DELETE. Nothing stops anything else from doing so, and an
-    #~ # attacker holding the agent's credentials holds the log's.
-    #~ c.execute(
-    #~     "INSERT INTO audit (at, chain, tool, audience, scope, outcome,"
-    #~     " detail, trace_id) VALUES (?,?,?,?,?,?,?,?)", row)
-    # step:A2.8 now
+    cols = ["at", "chain", "tool", "audience", "scope", "outcome", "detail",
+            "trace_id"]
+    vals = [time.time(), chain, tool, audience, scope, outcome,
+            detail if isinstance(detail, str) else json.dumps(detail), trace_id]
+
+    # step:A2.7 add
+    # `motive` is a provenance.Span — the thing A2.6 made it possible to have.
+    # Without A2.6 there was nothing to record here, which is why these two
+    # lessons are in this order. The digest rather than the text: a refund
+    # request quoted in full puts traveller prose in a long-lived store, which
+    # is E2.5's problem.
+    cols += ["motive_origin", "motive_digest"]
+    vals += [getattr(motive, "origin", "") if motive is not None else "",
+             hashlib.sha256(motive.text.encode()).hexdigest()[:16]
+             if motive is not None else ""]
+    # step:A2.7 end
+
+    # step:A2.8 add
     prev = c.execute("SELECT row_hash FROM audit ORDER BY id DESC "
                      "LIMIT 1").fetchone()
     prev_hash = (prev["row_hash"] if prev else GENESIS) or GENESIS
-    c.execute(
-        "INSERT INTO audit (at, chain, tool, audience, scope, outcome,"
-        " detail, trace_id, prev_hash, row_hash) VALUES (?,?,?,?,?,?,?,?,?,?)",
-        row + (prev_hash, _row_hash(prev_hash, row)))
+    cols += ["prev_hash", "row_hash"]
+    vals += [prev_hash, _row_hash(prev_hash, vals)]
     # step:A2.8 end
+
+    # Column names come from the list above and never from a caller, so the
+    # join is a literal by construction. Spelled out because this is a security
+    # curriculum and an f-string near SQL deserves the sentence.
+    c.execute(f"INSERT INTO audit ({', '.join(cols)}) "
+              f"VALUES ({', '.join('?' * len(cols))})", vals)
     c.commit()
 
 
@@ -168,9 +199,11 @@ def verify_audit_chain():
     prev = GENESIS
     for r in conn().execute(
             "SELECT id, at, chain, tool, audience, scope, outcome, detail,"
-            " trace_id, prev_hash, row_hash FROM audit ORDER BY id"):
-        row = (r["at"], r["chain"], r["tool"], r["audience"], r["scope"],
-               r["outcome"], r["detail"], r["trace_id"])
+            " trace_id, motive_origin, motive_digest, prev_hash, row_hash"
+            " FROM audit ORDER BY id"):
+        row = [r["at"], r["chain"], r["tool"], r["audience"], r["scope"],
+               r["outcome"], r["detail"], r["trace_id"],
+               r["motive_origin"], r["motive_digest"]]
         if r["prev_hash"] != prev or r["row_hash"] != _row_hash(prev, row):
             return False, r["id"]
         prev = r["row_hash"]

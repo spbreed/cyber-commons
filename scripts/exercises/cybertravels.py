@@ -761,3 +761,35 @@ GROUNDING.update({
          "and proves the chain detects it — which is the difference between a "
          "log you trust and a log you can check.",
 })
+
+
+# A2.1-A2.5 and A2.7 each change the reader's own tree. The grounding names the
+# file and the diff, so the lesson is a change rather than a recommendation.
+GROUNDING.update({
+ "A2.1": "G1.3 put four SPIFFE names in a `set` in `cybertravels/config.py`. "
+         "You replace it with `cybertravels/registry.py`: identities as "
+         "records with an approver, a registration time and a state. "
+         "`identity.py` stops asking \"is this one of ours\" and starts asking "
+         "\"is this still active\".",
+ "A2.2": "You add `registry.attest()`. CyberTravels' agents stop being handed "
+         "`IDP_SECRET` at deploy time and start presenting what the platform "
+         "already observed about them — module and image — for a five-minute "
+         "SVID. The smoke test presents the wrong image and is refused.",
+ "A2.3": "`identity.token_exchange` in your tree lets any hop ask for anything "
+         "the human may delegate. You make it narrow, and you make `act` nest "
+         "so `actor_chain` reads `dana => advisor => workflow` instead of "
+         "naming only the last agent to touch it.",
+ "A2.4": "You add `bind_call()` and a `cnf` claim. A token minted for "
+         "`get_booking(2)` stops working against `get_booking(3)`. It does "
+         "**not** stop `get_booking(2)` returning Priya's booking to Dana — "
+         "that is rows 1 and 4 of `cybertravels/LABELS.md`, and B2.3 is where "
+         "it is found.",
+ "A2.5": "You add rotate, revoke and `orphans()` to the registry. Revoking the "
+         "File System Agent stops its next token exchange, not its next "
+         "restart. `orphans()` answers both directions — registered identities "
+         "nothing runs, and running workloads nobody registered.",
+ "A2.7": "The fourth question, which G2.2 left open. `db.audit` takes the "
+         "`provenance.Span` that A2.6 made it possible to have, and records "
+         "its origin plus a digest — not the text, because a refund request "
+         "quoted in full puts traveller prose in a long-lived store.",
+})

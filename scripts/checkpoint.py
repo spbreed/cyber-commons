@@ -334,6 +334,58 @@ def check(order: list[str]) -> list[str]:
     return problems
 
 
+def run_each(order: list[str]) -> int:
+    """Materialise each checkpoint that has a smoke test, and run it.
+
+    Parsing proves a checkpoint is syntactically whole. This proves it *works*,
+    which is a different claim and the one a reader cares about — they are
+    going to run the thing, not compile it.
+
+    It caught the failure that motivated it: two `was` branches in `db.audit`,
+    one for the motive columns and one for the hash chain, bound the wrong
+    number of values at any checkpoint with one lesson applied and not the
+    other. Every checkpoint parsed. G2.4 raised at the first INSERT.
+    """
+    import subprocess
+    import tempfile
+
+    try:
+        subprocess.run([sys.executable, "-c", "import jwt"], check=True,
+                       capture_output=True)
+    except (subprocess.CalledProcessError, OSError):
+        print("PyJWT is not installed, so the checkpoints cannot be run here. "
+              "That is not evidence they are broken:\n"
+              "  pip install PyJWT && python3 scripts/checkpoint.py --run")
+        return 0
+
+    smoke = "tests/smoke_test.py"
+    failures = []
+    for sid in order:
+        tree = build(sid, order)
+        if smoke not in tree:
+            continue
+        with tempfile.TemporaryDirectory() as tmp:
+            write(tree, Path(tmp) / "cybertravels")
+            r = subprocess.run(
+                [sys.executable, "-m", "cybertravels.tests.smoke_test"],
+                cwd=tmp, capture_output=True, text=True, timeout=120)
+            last = (r.stdout.strip().splitlines() or ["no output"])[-1]
+            if r.returncode != 0:
+                failures.append(sid)
+                print(f"  FAIL {sid:<7} {last}")
+                for line in (r.stdout + r.stderr).strip().splitlines()[-6:]:
+                    print(f"        {line}")
+            else:
+                print(f"  ok   {sid:<7} {last}")
+
+    print(f"\n{len(failures)} checkpoint(s) failed their own smoke test")
+    if failures:
+        print(f"::error::checkpoints that do not run: {failures}",
+              file=sys.stderr)
+        return 1
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__,
@@ -345,6 +397,9 @@ def main() -> int:
     ap.add_argument("--diff", action="store_true",
                     help="with --at: what that one lesson changed")
     ap.add_argument("--check", action="store_true", help="CI: run the gates")
+    ap.add_argument("--run", action="store_true",
+                    help="materialise every checkpoint carrying the smoke test "
+                         "and run it. Needs PyJWT; skips cleanly without it")
     a = ap.parse_args()
 
     order = lesson_order()
@@ -363,6 +418,9 @@ def main() -> int:
                   file=sys.stderr)
             return 1
         return 0
+
+    if a.run:
+        return run_each(order)
 
     if a.list:
         prev: dict[str, str] = {}

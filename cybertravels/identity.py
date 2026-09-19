@@ -17,10 +17,15 @@ verify. If it is missing the module still imports, so the tree can be scanned
 on a machine with nothing installed.
 """
 # step:file G1.3
+import hashlib
+import json
 import time
 import uuid
 
 from . import config
+# step:A2.1 add
+from . import registry
+# step:A2.1 end
 
 # Broad on purpose. PyJWT is optional here — the tree must scan on a machine
 # with nothing installed — and "not installed" is not the only way this import
@@ -95,8 +100,30 @@ def mint_agent_token(agent: str) -> str:
 # --------------------------------------------------------------------------- #
 # RFC 8693 exchange
 # --------------------------------------------------------------------------- #
+# step:A2.4 add
+def bind_call(tool: str, args: dict) -> str:
+    """A handle over the exact call this token is for.
+
+    Canonical and sorted, so two honest machines agree. It closes **replay**,
+    not authorisation: a token minted for `get_booking(2)` cannot be reused for
+    `get_booking(3)`, and it says nothing about whether booking 2 is yours.
+    That gap is real, it is rows 1 and 4 of `LABELS.md`, and B2.3 is where it
+    gets found. A control that looks like it closes something it does not is
+    worse than an absent one.
+    """
+    payload = json.dumps([tool, {k: args[k] for k in sorted(args)
+                                 if k != "auth_token"}],
+                         sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(payload.encode()).hexdigest()[:32]
+# step:A2.4 end
+
+
 def token_exchange(subject_token: str, actor_token: str,
-                   audience: str, scope: str) -> dict:
+                   audience: str, scope: str,
+                   # step:A2.4 add
+                   call_binding: str | None = None,
+                   # step:A2.4 end
+                   ) -> dict:
     """User token + agent token -> one delegated token, for one call.
 
     Enforced here, in order:
@@ -122,8 +149,17 @@ def token_exchange(subject_token: str, actor_token: str,
                          algorithms=[config.JWT_ALG], audience="token-exchange")
     except InvalidTokenError as e:
         raise IdentityError(f"invalid actor token: {e}")
-    if act.get("sub") not in config.REGISTERED_AGENTS:
-        raise IdentityError(f"actor is not a registered agent: {act.get('sub')}")
+    # step:A2.1 was
+    #~ # Membership in a hand-edited set. It answers "is this one of ours" and
+    #~ # nothing else — not when it was approved, and not whether it still is.
+    #~ if act.get("sub") not in config.REGISTERED_AGENTS:
+    #~     raise IdentityError(
+    #~         f"actor is not a registered agent: {act.get('sub')}")
+    # step:A2.1 now
+    if not registry.active(act.get("sub")):
+        raise IdentityError(
+            f"actor is not an active registered workload: {act.get('sub')}")
+    # step:A2.1 end
 
     role = subj.get("role")
     allowed = config.ROLE_ALLOWED_SCOPES.get(role, set())
@@ -132,17 +168,42 @@ def token_exchange(subject_token: str, actor_token: str,
             f"role '{role}' may not delegate '{scope}' "
             f"(allowed: {sorted(allowed)})")
 
+    # step:A2.3 add
+    # A chain has to NARROW. If the subject token is itself a delegated token —
+    # one agent handing work to another — the new scope must be inside what the
+    # parent already held. Without this, hop two can ask for anything the human
+    # may delegate, and a chain that widens is a chain that launders authority
+    # through an agent rather than passing it on.
+    parent_scope = subj.get("scope", "")
+    if parent_scope not in ("agent:invoke", "") and scope != parent_scope:
+        raise IdentityError(
+            f"delegation must narrow: the parent held '{parent_scope}' and "
+            f"this asks for '{scope}'")
+    # step:A2.3 end
+
     now = int(time.time())
     claims = {
         "iss": config.IDP_ISSUER,
         "sub": subj["sub"],              # still the human
-        "act": {"sub": act["sub"]},      # the agent acting for them
+        # step:A2.3 was
+        #~ "act": {"sub": act["sub"]},  # the agent acting for them
+        # step:A2.3 now
+        # The FULL chain, not just the last hop. `act.act` is RFC 8693's own
+        # nesting, and it is what lets an investigator say "the advisor asked
+        # the workflow agent, on Dana's behalf" rather than seeing one name.
+        "act": ({"sub": act["sub"], "act": subj["act"]} if subj.get("act")
+                else {"sub": act["sub"]}),
+        # step:A2.3 end
         "aud": audience,                 # one resource server
         "scope": scope,                  # one scope
         "iat": now,
         "exp": now + config.DELEGATED_TOKEN_TTL,
         "jti": uuid.uuid4().hex,
     }
+    # step:A2.4 add
+    if call_binding is not None:
+        claims["cnf"] = call_binding
+    # step:A2.4 end
     return {"access_token": jwt.encode(claims, config.IDP_SECRET,
                                        algorithm=config.JWT_ALG),
             "claims": claims}
@@ -152,7 +213,11 @@ def token_exchange(subject_token: str, actor_token: str,
 # Enforcement, inside the resource server
 # --------------------------------------------------------------------------- #
 def verify_delegated(token: str, expected_audience: str,
-                     required_scope: str) -> dict:
+                     required_scope: str,
+                     # step:A2.4 add
+                     call_binding: str | None = None,
+                     # step:A2.4 end
+                     ) -> dict:
     """Refuse to act unless the token is signed, addressed to *this* server,
     carries the required scope, names a registered actor and has not expired.
 
@@ -173,15 +238,41 @@ def verify_delegated(token: str, expected_audience: str,
             f"insufficient scope: need '{required_scope}', have {sorted(granted)}")
 
     actor = (claims.get("act") or {}).get("sub")
-    if actor not in config.REGISTERED_AGENTS:
-        raise IdentityError(f"unrecognised actor in the chain: {actor}")
+    # step:A2.1 was
+    #~ if actor not in config.REGISTERED_AGENTS:
+    #~     raise IdentityError(f"unrecognised actor in the chain: {actor}")
+    # step:A2.1 now
+    # A revoked workload's tokens stop working here rather than at expiry,
+    # which is the difference A2.5 builds the lifecycle for.
+    if not registry.active(actor):
+        raise IdentityError(
+            f"actor is not an active registered workload: {actor}")
+    # step:A2.1 end
+    # step:A2.4 add
+    # Bound to one call. A token captured from one tool invocation cannot be
+    # replayed against a different one — the resource server recomputes the
+    # binding from the arguments it was actually given.
+    if call_binding is not None and claims.get("cnf") != call_binding:
+        raise IdentityError(
+            "token is bound to a different call — replayed, or the arguments "
+            "changed between the exchange and the call")
+    # step:A2.4 end
     return claims
 
 
 def actor_chain(claims: dict) -> str:
     """`human => agent`, for an audit row that answers "who did this"."""
-    actor = (claims.get("act") or {}).get("sub", "?")
-    return f"{claims.get('sub', '?')} => {actor}"
+    # step:A2.3 was
+    #~ actor = (claims.get("act") or {}).get("sub", "?")
+    #~ return f"{claims.get('sub', '?')} => {actor}"
+    # step:A2.3 now
+    # Walks the whole nest, so a two-hop delegation reads as two hops.
+    hops, node = [], claims.get("act")
+    while node:
+        hops.append(node.get("sub", "?"))
+        node = node.get("act")
+    return " => ".join([claims.get("sub", "?"), *reversed(hops)])
+    # step:A2.3 end
 
 
 class Session:

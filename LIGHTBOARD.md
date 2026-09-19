@@ -1971,7 +1971,7 @@ Next up: A2.1, Agent identity — user, workload, agent.
 
 ### A2.1 · Agent identity — user, workload, agent
 
-Chapter A2 · lesson 1 of 8 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.1.html)
+Chapter A2 · lesson 1 of 8 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A2.1.html)
 
 **① Open**
 
@@ -1991,7 +1991,7 @@ Here is what that costs you.
 
 A shared service account answers "what ran" and destroys "for whom", so no later control can be conditioned on the caller.
 
-Same company, same four agents, new way of failing. Three identities are present whenever CyberTravels books a flight: the traveller who asked, the workload the agent runs as, and which of the four agents is acting. CyberTravels collapses all three into cybertravels-svc, which is R11.
+Same company, same four agents, new way of failing. G1.3 put four SPIFFE names in a set in cybertravels/config.py. You replace it with cybertravels/registry.py: identities as records with an approver, a registration time and a state. identity.py stops asking "is this one of ours" and starts asking "is this still active".
 
 **③ What we do about it**
 
@@ -2023,7 +2023,7 @@ Next up: A2.2, Bootstrapping the first credential.
 
 ### A2.2 · Bootstrapping the first credential
 
-Chapter A2 · lesson 2 of 8 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.2.html)
+Chapter A2 · lesson 2 of 8 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.2.html)
 
 **① Open**
 
@@ -2043,7 +2043,7 @@ Here is what that costs you.
 
 A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.
 
-Same company, same four agents, new way of failing. Each of CyberTravels' four agents needs a credential to prove it is that agent, and cannot be handed one safely without already proving it. The long-lived bearer token in R5 exists because somebody resolved that circle by giving up.
+Same company, same four agents, new way of failing. You add registry.attest(). CyberTravels' agents stop being handed IDP_SECRET at deploy time and start presenting what the platform already observed about them — module and image — for a five-minute SVID. The smoke test presents the wrong image and is refused.
 
 **③ What we do about it**
 
@@ -2075,7 +2075,7 @@ Next up: A2.3, Delegation that narrows, and survives audit.
 
 ### A2.3 · Delegation that narrows, and survives audit
 
-Chapter A2 · lesson 3 of 8 · runs a skill · 272 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.3.html)
+Chapter A2 · lesson 3 of 8 · runs a skill · 279 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A2.3.html)
 
 **① Open**
 
@@ -2095,7 +2095,7 @@ Here is what that costs you.
 
 Subset-only delegation lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked.
 
-Same company, same four agents, new way of failing. Alex can issue refunds; the triage agent must never be able to. Delegation from Alex to CyberTravels has to narrow to a subset of what he presented AND stay inside the receiving agent's own ceiling. R1.
+Same company, same four agents, new way of failing. identity.token exchange in your tree lets any hop ask for anything the human may delegate. You make it narrow, and you make act nest so actor chain reads dana => advisor => workflow instead of naming only the last agent to touch it.
 
 **③ What we do about it**
 
@@ -2127,7 +2127,7 @@ Next up: A2.4, Just-in-time authority.
 
 ### A2.4 · Just-in-time authority
 
-Chapter A2 · lesson 4 of 8 · runs a skill · 218 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
+Chapter A2 · lesson 4 of 8 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
 
 **① Open**
 
@@ -2147,7 +2147,7 @@ Here is what that costs you.
 
 Permanent scope makes every injection a successful one, because the authority is already there when the attacker arrives.
 
-Same company, same four agents, new way of failing. Standing payments scope means a successful injection always finds a live refund credential. Just-in-time means the attacker has to arrive during the ninety seconds a specific booking is being settled. R1, R5.
+Same company, same four agents, new way of failing. You add bind call() and a cnf claim. A token minted for get booking(2) stops working against get booking(3). It does not stop get booking(2) returning Priya's booking to Dana — that is rows 1 and 4 of cybertravels/LABELS.md, and B2.3 is where it is found.
 
 **③ What we do about it**
 
@@ -2179,7 +2179,7 @@ Next up: A2.5, The non-human identity lifecycle.
 
 ### A2.5 · The non-human identity lifecycle
 
-Chapter A2 · lesson 5 of 8 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.5.html)
+Chapter A2 · lesson 5 of 8 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.5.html)
 
 **① Open**
 
@@ -2199,7 +2199,7 @@ Here is what that costs you.
 
 Agents accumulate with no owner and no expiry, and an unregistered one joins the topology as a peer.
 
-Same company, same four agents, new way of failing. cybertravels-svc was created for a proof of concept in March. The proof of concept was cancelled. The identity still holds payments scope, because nothing in CyberTravels' joiner-mover-leaver process describes an agent.
+Same company, same four agents, new way of failing. You add rotate, revoke and orphans() to the registry. Revoking the File System Agent stops its next token exchange, not its next restart. orphans() answers both directions — registered identities nothing runs, and running workloads nobody registered.
 
 **③ What we do about it**
 
@@ -2283,7 +2283,7 @@ Next up: A2.7, Attribution: an audit trail that answers "who".
 
 ### A2.7 · Attribution: an audit trail that answers "who"
 
-Chapter A2 · lesson 7 of 8 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.7.html)
+Chapter A2 · lesson 7 of 8 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.7.html)
 
 **① Open**
 
@@ -2303,7 +2303,7 @@ Here is what that costs you.
 
 Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.
 
-Same company, same four agents, new way of failing. The four fields an auditor will ask about that $5,000 refund: which traveller, which agent, under what authority, and what text made it act. CyberTravels currently records the third and a version of the second. R11.
+Same company, same four agents, new way of failing. The fourth question, which G2.2 left open. db.audit takes the provenance.Span that A2.6 made it possible to have, and records its origin plus a digest — not the text, because a refund request quoted in full puts traveller prose in a long-lived store.
 
 **③ What we do about it**
 

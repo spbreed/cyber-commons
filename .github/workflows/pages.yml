@@ -126,6 +126,20 @@ jobs:
       - name: Check every lesson checkpoint materialises
         run: python3 scripts/checkpoint.py --check
 
+      # Parsing proves a checkpoint is syntactically whole; this proves it
+      # works, which is the claim a reader depends on. It caught two `was`
+      # branches in db.audit binding the wrong number of values at any
+      # checkpoint with one of the two lessons applied and not the other —
+      # every checkpoint parsed, and G2.4 raised at the first INSERT.
+      #
+      # PyJWT only. The app's other dependencies are not needed: the smoke
+      # test runs no server and calls no model, which is why it is the thing
+      # worth running 148 times.
+      - name: Run every checkpoint's own smoke test
+        run: |
+          pip install --quiet PyJWT
+          python3 scripts/checkpoint.py --run
+
       # LABELS.md is the hand-written key four AppSec skills score recall and
       # precision against, and those skills hard-code the unit names — a key
       # derived by running a scanner would not be a key. So a rename in

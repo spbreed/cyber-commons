@@ -1128,3 +1128,28 @@ ABOUT.update({
          "visible in one pass. What it does not do is stop the write, which is "
          "why A3.8 moves the log somewhere the workload cannot reach.",
 })
+
+
+ABOUT.update({
+ "A2.1": "Replacing a hand-edited set of agent names with a registry: "
+         "identities as records that carry an approver, a registration time "
+         "and a state, so the system can answer when an identity started "
+         "existing and whether it still should.",
+ "A2.2": "The bootstrap problem — a workload needs a credential to prove who "
+         "it is and has to prove who it is to get one — answered by not "
+         "issuing a first secret at all. Attestation against properties the "
+         "platform already observes, for a short-lived identity document.",
+ "A2.3": "Making a delegation chain narrow rather than merely exist: each hop "
+         "bounded by what the hop before it held, and the actor claim nested "
+         "so an investigator reads every hop instead of the last one.",
+ "A2.4": "Binding a delegated token to the exact call it was minted for, so a "
+         "captured token cannot be replayed against different arguments — "
+         "including a clear statement of what that does not close, which is "
+         "whether the object belongs to the caller.",
+ "A2.5": "The non-human identity lifecycle: rotation, revocation that takes "
+         "effect at the next call rather than the next restart, and finding "
+         "orphans in both directions.",
+ "A2.7": "Recording what motivated an action, not only who took it — the "
+         "fourth investigation question, answerable only once ingress marks "
+         "where text came from, and recorded as a digest rather than the text.",
+})
