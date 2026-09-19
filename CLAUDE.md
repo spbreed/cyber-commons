@@ -21,7 +21,7 @@ real work; knowing which you are in is the first thing to establish.
 
 | | what it is | lives in |
 |---|---|---|
-| **Cyber Commons** | a 135-lesson curriculum on securing agentic AI, plus the static site at [cybercommons.ai](https://cybercommons.ai) | `scripts/`, `skills/`, `site/`, `curriculum/` |
+| **Cyber Commons** | a 148-lesson curriculum on securing agentic AI, plus the static site at [cybercommons.ai](https://cybercommons.ai) | `scripts/`, `skills/`, `site/`, `curriculum/`, `cybertravels/` |
 | **vulnbench** | a benchmark that scores an AI security harness's findings against ground truth | `labs/b2.10-eval-harness/` |
 
 Most of this file is about the first. §8 is the second, and its rules are not
@@ -31,24 +31,32 @@ optional — several of them are about not fabricating a benchmark result.
 
 ## 2 · The mental model of the curriculum
 
-**One system, taught five ways.** Everything is grounded in **CyberTravels**, a
-corporate travel company whose product is an agentic platform of four agents —
-a workflow agent that books and refunds, a retrieval advisor, a coding agent,
-and a file-system agent reading vendor documents. Alex is the engineer who
-shipped it. Five functions ask different questions of that same system:
+**One system, built once and then taught five ways.** Everything is grounded in
+**CyberTravels**, a corporate travel company whose product is an agentic
+platform of four agents — a workflow agent that books and refunds, a retrieval
+advisor, a coding agent, and a file-system agent reading vendor documents. Alex
+is the engineer who shipped it. Function G builds that platform; the five that
+follow ask different questions of the thing the reader now owns:
 
 | | function | asks |
 |---|---|---|
+| G | Getting Started — Building Agentic AI | how is it built, and what did building it leave open |
 | A | Securing AI Architectures | what can go wrong here, and what closes it |
 | B | Application Security with an AI SDLC | how do we review its code, at its speed |
 | C | Agentic Evaluation and Red Teaming | can we break it before somebody else does |
 | D | The Agentic SOC | would we see it happening, and could we stop it |
 | E | Governance and Assurance | who signed off, and can they still evidence it |
 
-Current shape, measured rather than typed — `check_claims.py` fails CI when any
-count in the docs drifts from the tree:
+`cybertravels/` is the running application those lessons build, one increment
+at a time. It is **not** a fixture to read: `scripts/checkpoint.py --at <id>`
+writes the tree as it stood at the end of any lesson, so a reader joining at
+A3.5 gets everything up to it and nothing after. §5 rows 11 and 12 are the
+gates that keep that true.
 
-    135 lessons · 14 chapters · 5 functions · 139 skills
+Current shape, measured rather than typed — `check_claims.py` fails CI when any
+count in the docs drifts from the tree, this line included:
+
+    148 lessons · 16 chapters · 6 functions · 139 skills
 
 **A lesson is two artefacts, not one.** The page (prose, rendered from source)
 and the skill (`skills/<area>/<name>/SKILL.md` plus its script — the procedure).
@@ -211,8 +219,8 @@ person.
 | 8 | `check_clarity.py --check` | weekday idioms and culture-specific phrasing, read from the rendered page |
 | 9 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |
 | 10 | `render_diagrams.py --check` | a diagram source that Graphviz or PlantUML will not lay out — which ships as an empty or smeared SVG behind a green build. With a model reachable it runs the skills and also checks the committed source is fresh; in CI, where there is no model and every skill refuses, it validates the committed sources and says freshness is not covered. It used to fail every CI run with "no skill emitted a diagram", which is a gate nobody keeps |
-| 11 | `checkpoint.py --check` | a lesson checkpoint that no longer materialises. `cybertravels/` carries `step:` markers saying which lesson introduced each file and each block, so a reader can get the tree as it stood at any of the 148 lessons. Checks the last checkpoint against the committed tree with a second implementation of the rule (a gate that asserts a function equals itself protects nothing), that all 148 parse, and that every `was` line is `#~`-commented — an uncommented one makes the committed application run the naive branch as well as the real one |
-| 12 | `checkpoint.py --run` | a checkpoint that parses and does not work. Materialises each of the 148 and runs its own `cybertravels/tests/smoke_test.py` — the suite grows from 8 assertions at G2.3 to 19 at A2.8, and every checkpoint has to pass its own. Found two `was` branches in `db.audit` binding the wrong number of values whenever one of A2.7/A2.8 was applied and not the other; all 148 parsed and G2.4 raised on the first INSERT. Needs PyJWT and skips cleanly without it |
+| 11 | `checkpoint.py --check` | a lesson checkpoint that no longer materialises. `cybertravels/` carries `step:` markers saying which lesson introduced each file and each block, so a reader can get the tree as it stood at any lesson. Checks the last checkpoint against the committed tree with a second implementation of the rule (a gate that asserts a function equals itself protects nothing), that every checkpoint parses, and that every `was` line is `#~`-commented — an uncommented one makes the committed application run the naive branch as well as the real one. It also refuses a region opened while another is still open: a missing `step:A3.10 end` once swallowed `class Budget:` whole, and every gate passed because what it ate still parsed |
+| 12 | `checkpoint.py --run` | a checkpoint that parses and does not work. Materialises every checkpoint and runs its own `cybertravels/tests/smoke_test.py` — the suite grows as the lessons add controls (8 assertions at G2.3, 19 at A2.8, 38 at A3.11) and every checkpoint has to pass the one it carries. Found two `was` branches in `db.audit` binding the wrong number of values whenever one of A2.7/A2.8 was applied and not the other; all of them parsed and G2.4 raised on the first INSERT. Needs PyJWT and skips cleanly without it |
 | 13 | `check_labels.py --check` | `cybertravels/LABELS.md` naming a file or unit that is no longer in the tree, or a skill scoring recall against one. The skills hard-code those names on purpose — a key derived from a scanner is a description of the scanner — so a rename would otherwise make every recall number wrong with nothing failing |
 | 14 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
 | 15 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |

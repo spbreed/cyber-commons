@@ -116,6 +116,21 @@ CLAIMS = [
      "the skills index"),
     ("skills/README.md", r"that (\d+) plausible tasks", "routing_cases",
      "the routing check's size"),
+    # CLAUDE.md's own shape line called itself "measured rather than typed" and
+    # was neither: it read "135 lessons · 14 chapters · 5 functions" while the
+    # tree carried 148, 16 and 6, and it sat two sections above a row that said
+    # "any of the 148 lessons". Nothing compared it, because this table had no
+    # entry for the file that claims to be the authority on the repository.
+    ("CLAUDE.md", r"^    (\d+) lessons · \d+ chapters · \d+ functions", "sessions",
+     "CLAUDE.md's shape line, lesson count"),
+    ("CLAUDE.md", r"^    \d+ lessons · (\d+) chapters · \d+ functions", "chapters",
+     "CLAUDE.md's shape line, chapter count"),
+    ("CLAUDE.md", r"^    \d+ lessons · \d+ chapters · (\d+) functions", "functions",
+     "CLAUDE.md's shape line, function count"),
+    ("CLAUDE.md", r"· \d+ functions · (\d+) skills", "skills",
+     "CLAUDE.md's shape line, skill count"),
+    ("CLAUDE.md", r"a (\d+)-lesson curriculum on securing agentic AI", "sessions",
+     "CLAUDE.md's one-line description of the commons"),
 ]
 
 WORDS = {"six": 6, "seven": 7, "eight": 8}
