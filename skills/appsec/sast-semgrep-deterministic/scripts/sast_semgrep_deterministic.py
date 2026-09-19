@@ -41,20 +41,27 @@ SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 #   yes      a pattern matches it
 #   library  a pattern matches it in a library the rule knows about
 #   no       the defect is the absence of a call; there is nothing to match
+#
+# The line convention, which was not written down and had therefore drifted in
+# two rows: a **`yes`/`library` row points at the sink**, because that is the
+# line a pattern matches; a **`no` row points at the definition**, because the
+# defect is an absence and an absence has no line of its own. Both are checked
+# against the tree by scripts/check_labels.py — a key whose lines are wrong
+# marks a model that reported the right place as wrong.
 KEY = [
-    ("tools/bookings_api.py",  20, "get_booking",      "CWE-639", "no",
+    ("tools/bookings_api.py",  17, "get_booking",      "CWE-639", "no",
      "returns the row a caller names, no owner comparison"),
-    ("tools/bookings_api.py",  34, "cancel_booking",   "CWE-639", "no",
+    ("tools/bookings_api.py",  32, "cancel_booking",   "CWE-639", "no",
      "cancels the booking a caller names, and it writes"),
     ("tools/bookings_api.py",  41, "search_bookings",  "CWE-89",  "yes",
      "reference concatenated into the query"),
     ("tools/payments_api.py",   8, "issue_refund",     "CWE-639", "no",
      "refunds against any booking id, on the money path"),
-    ("tools/payments_api.py",  23, "download_invoice", "CWE-22",  "yes",
+    ("tools/payments_api.py",  29, "download_invoice", "CWE-22",  "yes",
      "vendor filename joined to a root"),
     ("agents/coding_agent.py", 13, "_open_branch",     "CWE-78",  "yes",
      "branch name reaches a shell"),
-    ("agents/coding_agent.py", 18, "sync_vendor",      "CWE-295", "library",
+    ("agents/coding_agent.py", 19, "sync_vendor",      "CWE-295", "library",
      "verify=False, on the house HTTP wrapper rather than requests"),
     ("agents/file_agent.py",   11, "render_template",  "CWE-95",  "yes",
      "customer template evaluated"),

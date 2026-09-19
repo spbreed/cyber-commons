@@ -2997,7 +2997,7 @@ Next up: B2.0, The AI SDLC — what runs before a deploy, and what runs after.
 
 ### B2.0 · The AI SDLC — what runs before a deploy, and what runs after
 
-Chapter B2 · lesson 1 of 20 · runs a skill · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/B2.0.html)
+Chapter B2 · lesson 1 of 20 · runs a skill · 416 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/B2.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -3027,7 +3027,7 @@ Here is what that costs you.
 
 A security pipeline built as if it were exempt from the risks it exists to find is the one nobody audits.
 
-And this is CyberTravels again — the same company, because a lot of people start watching here. Alex's Coding Agent turned six pull requests a week into forty, some touching a hundred and twenty files. Every tool he reaches for sits on one side of the deploy: the ones that can block a merge cannot see what CyberTravels' agents actually got at runtime, and the ones that can see it cannot block anything.
+And this is CyberTravels again — the same company, because a lot of people start watching here. You add cybertravels/appsec/, and it ships inside the tree it scans. That is the lesson's argument rather than a filing decision: a pipeline in its own repository drifts from the code it reviews, and one that exempts itself from its own stages is the expensive kind. The stage table names what each stage may claim — claim for(10) says reachable, claim for(12) says exploited, and a report that blurs them is one nobody can act on.
 
 **③ What we do about it**
 
@@ -3059,7 +3059,7 @@ Next up: B2.1, What building a harness means in security engineering.
 
 ### B2.1 · What building a harness means in security engineering
 
-Chapter B2 · lesson 2 of 20 · runs a skill · 282 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B2.1.html)
+Chapter B2 · lesson 2 of 20 · runs a skill · 300 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.1.html)
 
 **① Open**
 
@@ -3079,7 +3079,7 @@ Here is what that costs you.
 
 A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds quietly and wrongly.
 
-Same company, same four agents, new way of failing. Alex is building the reviewer that reads CyberTravels' pull requests. Its verifier is the part that decides whether it found anything, and a verifier that asks the model whether it is happy reports a clean review of a vulnerable diff.
+Same company, same four agents, new way of failing. appsec/findings.py. A Finding carries its basis — pattern, model, reachability, executed exploit — so stage 7's hypothesis cannot be reported with stage 12's confidence. run() refuses when the producer and the verifier are the same callable, and refuses a verifier that cannot answer undetermined. Your smoke test proves both refusals, because a self-grading loop files a clean trace.
 
 **③ What we do about it**
 
@@ -3111,7 +3111,7 @@ Next up: B2.2, Threat modelling from what the estate already knows.
 
 ### B2.2 · Threat modelling from what the estate already knows
 
-Chapter B2 · lesson 3 of 20 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B2.2.html)
+Chapter B2 · lesson 3 of 20 · runs a skill · 304 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/B2.2.html)
 
 **① Open**
 
@@ -3131,7 +3131,7 @@ Here is what that costs you.
 
 Threat models are written once, by hand, against a system that has changed since.
 
-Same company, same four agents, new way of failing. The threat model that said “CyberTravels answers questions” is still on file. Deriving it from the architecture on every release is what would have caught the refund endpoint appearing.
+Same company, same four agents, new way of failing. appsec/threatmodel.py reads the assets out of db.py's schema and the entry points out of the tree. Run it and one asset comes back UNCLASSIFIED — policies, which nobody has said is worth anything. drift() then compares a stored model against the tree, so "the threat model is out of date" becomes the two entry points that appeared since.
 
 **③ What we do about it**
 
@@ -3163,7 +3163,7 @@ Next up: B2.3, SAST for agentic code — deterministic Semgrep, then the model p
 
 ### B2.3 · SAST for agentic code — deterministic Semgrep, then the model pass
 
-Chapter B2 · lesson 4 of 20 · runs a skill · 280 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B2.3.html)
+Chapter B2 · lesson 4 of 20 · runs a skill · 308 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/B2.3.html)
 
 **① Open**
 
@@ -3183,7 +3183,7 @@ Here is what that costs you.
 
 Pattern matching floods the queue, and the classes that matter in agentic code cannot be written as patterns at all.
 
-Same company, same four agents, new way of failing. The IDOR that exposed card details by booking ID (R8) is exactly the class each generation of SAST handles differently — and the class the third generation will also confidently invent.
+Same company, same four agents, new way of failing. appsec/sast.py, run against your own tools/ and agents/. It returns exactly five findings — the four yes rows of cybertravels/LABELS.md plus the library row — and none of the three IDOR-only rows. Clear sast.WRAPPERS and sync vendor disappears: that one line is the whole of the library column, and the reason a mature codebase scans cleaner than it is.
 
 **③ What we do about it**
 
@@ -3215,7 +3215,7 @@ Next up: B2.4, Deduplication and contextual verification.
 
 ### B2.4 · Deduplication and contextual verification
 
-Chapter B2 · lesson 5 of 20 · runs a skill · 214 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/B2.4.html)
+Chapter B2 · lesson 5 of 20 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.4.html)
 
 **① Open**
 
@@ -3235,7 +3235,7 @@ Here is what that costs you.
 
 Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.
 
-Same company, same four agents, new way of failing. Three analysers found the same booking-handler defect four times. The queue Alex will actually read is the deduplicated one.
+Same company, same four agents, new way of failing. dedup() and cross reference() in findings.py. Three tracks report search bookings and the queue gets one row that remembers all three bases — a defect two unrelated tracks reached is a better bet than one. Then the cheapest check in the pipeline: a finding naming a function nobody wrote is refuted, and it is otherwise perfectly formed.
 
 **③ What we do about it**
 
@@ -3267,7 +3267,7 @@ Next up: B2.5, Feasibility filtering, reachability and dead code.
 
 ### B2.5 · Feasibility filtering, reachability and dead code
 
-Chapter B2 · lesson 6 of 20 · runs a skill · 273 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.5.html)
+Chapter B2 · lesson 6 of 20 · runs a skill · 307 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/B2.5.html)
 
 **① Open**
 
@@ -3287,7 +3287,7 @@ Here is what that costs you.
 
 A finding in dead code costs exactly as much to triage as one on the login path.
 
-Same company, same four agents, new way of failing. The finding is real and nothing in CyberTravels' booking service calls the function it landed in. The syntax tree can prove that for three of them, and for the nightly ledger job it cannot — which is the finding, not a gap in the report.
+Same company, same four agents, new way of failing. appsec/reach.py walks from the entry points B2.2 defined. Two of your five findings are in units nothing calls — render template and sync vendor — and the stage marks them rather than dropping them, because the walk over-approximates and a deleted finding comes back the day somebody adds a route. The first version of this file collapsed four handle functions by assignment rather than union and reported two live sinks as dead; the comment in the file says so.
 
 **③ What we do about it**
 
@@ -3319,7 +3319,7 @@ Next up: B2.6, Sandbox replication.
 
 ### B2.6 · Sandbox replication
 
-Chapter B2 · lesson 7 of 20 · runs a skill · 219 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B2.6.html)
+Chapter B2 · lesson 7 of 20 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.6.html)
 
 **① Open**
 
@@ -3339,7 +3339,7 @@ Here is what that costs you.
 
 Dynamic testing run against staging turns a destructive probe into an incident.
 
-Same company, same four agents, new way of failing. You cannot confirm the IDOR by exploiting it in production. The replica is where the booking API can be attacked safely, and its fidelity decides which findings are confirmable at all.
+Same company, same four agents, new way of failing. appsec/replica.py. The interesting part is the refusal: for target('cybertravels-staging') raises rather than quietly building something safe-looking. isolated db() then points your application's storage at the replica — and finds that it does not move INVOICE_ROOT, which is computed at import from the source tree. That bug is in the file, named, because a replica has to be checked rather than assumed.
 
 **③ What we do about it**
 
@@ -3371,7 +3371,7 @@ Next up: B2.7, Supply chain — SBOM, dependency vulnerabilities, and decompilin
 
 ### B2.7 · Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries
 
-Chapter B2 · lesson 8 of 20 · runs a skill · 270 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.7.html)
+Chapter B2 · lesson 8 of 20 · runs a skill · 301 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.7.html)
 
 **① Open**
 
@@ -3391,7 +3391,7 @@ Here is what that costs you.
 
 A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety.
 
-Same company, same four agents, new way of failing. The booking provider's integration bundle drops a jar into CyberTravels' image. It is in no manifest, so the weekly dependency report has been silently excluding it, and it carries a hardcoded telemetry endpoint and its own licence key. R5.
+Same company, same four agents, new way of failing. appsec/supplychain.py reconciles requirements.txt against what your code actually imports, and reports two things a scanner will not: mcp is a declared dependency and a first-party package in your tree, and PyJWT is imported as jwt. Without the distribution-to-import map that second one is two findings, both false, from one correct manifest. Then it reads a .pyc for strings and egress, because there is no advisory for a file nobody catalogued.
 
 **③ What we do about it**
 
@@ -3423,7 +3423,7 @@ Next up: B2.8, Dynamic exploitation (DAST).
 
 ### B2.8 · Dynamic exploitation (DAST)
 
-Chapter B2 · lesson 9 of 20 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B2.8.html)
+Chapter B2 · lesson 9 of 20 · runs a skill · 259 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.8.html)
 
 **① Open**
 
@@ -3443,7 +3443,7 @@ Here is what that costs you.
 
 A static finding is a hypothesis, and hypotheses get argued about in triage meetings instead of fixed.
 
-Same company, same four agents, new way of failing. A finding becomes a fact when something other than a model says so — here, a request to the replica's booking endpoint that returns another traveller's card details.
+Same company, same four agents, new way of failing. The hypotheses become demonstrations, in your own replica. exploit sql injection turns one row into four across three owners; exploit idor asks for booking 2 as Dana and gets Priya's, with no payload and nothing malformed — which is why stage 7 could not see it. An exploit that does not fire returns undetermined, never refuted.
 
 **③ What we do about it**
 
@@ -3475,7 +3475,7 @@ Next up: B2.9, Exploit chaining.
 
 ### B2.9 · Exploit chaining
 
-Chapter B2 · lesson 10 of 20 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B2.9.html)
+Chapter B2 · lesson 10 of 20 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.9.html)
 
 **① Open**
 
@@ -3495,7 +3495,7 @@ Here is what that costs you.
 
 Three medium findings are triaged as three mediums, and nobody notices they compose into a critical.
 
-Same company, same four agents, new way of failing. Verbose errors, an open redirect and a path traversal are each low on their own. Chained against CyberTravels they read a config file and end the conversation about severity. R9.
+Same company, same four agents, new way of failing. Chain and chains() in findings.py. The chain in your tree reads as one sentence: a vendor filename reaches a reader that does not check ownership, in a process that can also reach a shell. Three mediums, scored as critical — and a recipe whose links are not all confirmed builds nothing, because a chain assembled from hypotheses is a story that will be read as a finding.
 
 **③ What we do about it**
 
@@ -3527,7 +3527,7 @@ Next up: B2.10, Agentic penetration testing — the loop, and who runs each turn
 
 ### B2.10 · Agentic penetration testing — the loop, and who runs each turn
 
-Chapter B2 · lesson 11 of 20 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.10.html)
+Chapter B2 · lesson 11 of 20 · runs a skill · 270 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.10.html)
 
 **① Open**
 
@@ -3547,7 +3547,7 @@ Here is what that costs you.
 
 An offensive loop with no hard scope boundary tests something you were not authorised to touch, at machine speed.
 
-Same company, same four agents, new way of failing. An offensive loop pointed at CyberTravels' staging estate is the most dangerous thing in the building — and the engagement scope has to be enforced below the model, because everything the harness reads comes from the system it is attacking.
+Same company, same four agents, new way of failing. appsec/pentest.py. Scope.check() is called on every request and lives outside the loop, which is the lesson: "only test the hosts below" is a request addressed to the component an attacker is trying to influence, and it is the first thing to go when the loop finds something one hop away.
 
 **③ What we do about it**
 
@@ -3579,7 +3579,7 @@ Next up: B2.11, White-box agentic pentest — the source, and what it lets you p
 
 ### B2.11 · White-box agentic pentest — the source, and what it lets you prove
 
-Chapter B2 · lesson 12 of 20 · runs a skill · 280 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B2.11.html)
+Chapter B2 · lesson 12 of 20 · runs a skill · 291 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.11.html)
 
 **① Open**
 
@@ -3599,7 +3599,7 @@ Here is what that costs you.
 
 Full source produces a finding list nobody can act on, because presence is reported where reachability was needed.
 
-Same company, same four agents, new way of failing. The tree is CyberTravels', and the path that matters is the refund one: handler to svc.refund to the payments sink, authenticated by a session at every hop and checked for ownership at none. That is the refund incident stated as a finding before it happened.
+Same company, same four agents, new way of failing. pentest.candidate() joins a finding to B2.5's graph: the path that reaches it, the authorisation predicate on that path, and report as. Point it at render template and it comes back "unreachable — reported, not dropped", which is the difference between a white-box report somebody can act on and a list of every sink in the tree.
 
 **③ What we do about it**
 
@@ -3631,7 +3631,7 @@ Next up: B2.12, Black-box agentic pentest — inference, and refusing to report 
 
 ### B2.12 · Black-box agentic pentest — inference, and refusing to report it as fact
 
-Chapter B2 · lesson 13 of 20 · runs a skill · 284 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B2.12.html)
+Chapter B2 · lesson 13 of 20 · runs a skill · 299 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.12.html)
 
 **① Open**
 
@@ -3651,7 +3651,7 @@ Here is what that costs you.
 
 An agent narrates a confident architecture from status codes, and the report is fiction that reads like findings.
 
-Same company, same four agents, new way of failing. The target is CyberTravels from outside, and the claim the mode cannot reach is the one that matters — whether the refund endpoint accepts a booking it does not own. One account can only ask the question; answering it is a grey-box test.
+Same company, same four agents, new way of failing. pentest.Claim makes the distinction structural rather than editorial: an inference cannot be given a severity, and an observation with no evidence will not construct. report claims() prints the inference ratio in the header, because a black-box report that is 80 percent inference is a hypothesis document and saying so is what makes the other 20 percent worth reading.
 
 **③ What we do about it**
 
@@ -3703,7 +3703,7 @@ Here is what that costs you.
 
 Object-level authorisation is assumed correct because the endpoint list was covered, and broken object access lives in the cells nobody enumerated.
 
-Same company, same four agents, new way of failing. The matrix is CyberTravels' three roles against its objects, and the two highest-cost untested cells are both on the audit log — the records a regulator asks for first, and the ones no request in the engagement ever touched.
+Same company, same four agents, new way of failing. pentest.Matrix — roles by objects by verbs, every cell tested, assumed or unreachable. assumed means nobody looked, and it is exactly where rows 1, 2 and 4 of LABELS.md have been sitting while the endpoint list showed full coverage.
 
 **③ What we do about it**
 
@@ -3735,7 +3735,7 @@ Next up: B2.14, Bonus — testing safely: the controls an offensive agent runs i
 
 ### B2.14 · Bonus — testing safely: the controls an offensive agent runs inside
 
-Chapter B2 · lesson 15 of 20 · runs a skill · 270 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.14.html)
+Chapter B2 · lesson 15 of 20 · runs a skill · 296 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.14.html)
 
 **① Open**
 
@@ -3755,7 +3755,7 @@ Here is what that costs you.
 
 The offensive agent is the most capable and least supervised thing in the estate, and its traffic is indistinguishable from an attack by design.
 
-Same company, same four agents, new way of failing. The two configurations are CyberTravels' own: a scoped Q3 external engagement that clears the preflight, and a quick-look-before-the-board run that is refused for four missing controls. The refusal is the deliverable.
+Same company, same four agents, new way of failing. pentest.preflight() returns what is missing and may start() refuses. Seven controls, each one somebody has skipped "just for this engagement" — including soc notified, which is the one that turns a finding into a call at 2am, because an offensive agent's traffic is an attack and an unannounced one is indistinguishable from the real thing by design.
 
 **③ What we do about it**
 
@@ -3787,7 +3787,7 @@ Next up: B2.15, Severity calibration, triaging and reporting.
 
 ### B2.15 · Severity calibration, triaging and reporting
 
-Chapter B2 · lesson 16 of 20 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B2.15.html)
+Chapter B2 · lesson 16 of 20 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.15.html)
 
 **① Open**
 
@@ -3807,7 +3807,7 @@ Here is what that costs you.
 
 Severity copied from the rule orders the queue by something that predicts nothing.
 
-Same company, same four agents, new way of failing. CVSS scores the vulnerability. CyberTravels' engineers are asking about this booking API, with card data, behind this gateway — and the number that answers them is not on the badge.
+Same company, same four agents, new way of failing. calibrate() scores from what this run actually established: demonstrated, on the money path, mutates state, reachable. Same CWE and same rule severity, and issue refund comes back critical while dead render template comes back info — a queue ordered by the rule's severity puts them in the same place. economics() is what you report instead of a finding count.
 
 **③ What we do about it**
 
@@ -3839,7 +3839,7 @@ Next up: B2.16, Remediation engineering — proven in a sandbox before the merge
 
 ### B2.16 · Remediation engineering — proven in a sandbox before the merge request
 
-Chapter B2 · lesson 17 of 20 · runs a skill · 218 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B2.16.html)
+Chapter B2 · lesson 17 of 20 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.16.html)
 
 **① Open**
 
@@ -3859,7 +3859,7 @@ Here is what that costs you.
 
 A patch that silences the scanner is indistinguishable from a patch that fixes the bug.
 
-Same company, same four agents, new way of failing. The Coding Agent's fix must not break booking behaviour. A patch that passes the tests and changes what travellers experience is a second incident with a pull request attached. R8.
+Same company, same four agents, new way of failing. appsec/remediate.py, and the fix for row 1 of LABELS.md — which does not sanitise the id, because the id was never the problem. accept() requires three things and the scanner is not one of them; the third is a regression test that fails against the unpatched code. Hand it a test that passes both ways and it is refused, which is the most common thing a generated fix ships with.
 
 **③ What we do about it**
 
@@ -3891,7 +3891,7 @@ Next up: B2.17, Context engineering — cutting the false positives.
 
 ### B2.17 · Context engineering — cutting the false positives
 
-Chapter B2 · lesson 18 of 20 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.17.html)
+Chapter B2 · lesson 18 of 20 · runs a skill · 291 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.17.html)
 
 **① Open**
 
@@ -3911,7 +3911,7 @@ Here is what that costs you.
 
 The model is handed the repository and asked to be thorough, so the relevant line falls out of the context window.
 
-Same company, same four agents, new way of failing. Give the review agent CyberTravels' whole repository and it gets worse, not better. The cliff arrives earlier than anyone expects and you pay more per token for it.
+Same company, same four agents, new way of failing. sast.slice for(). The slice for get booking carries get my booking as well, because the defect is the difference between them and a slice holding one of the pair cannot show it. slice ratio() is the Day 2 number: a stage that claims to cut context and hands over 90 percent of the file is a stage nobody measured.
 
 **③ What we do about it**
 
@@ -3943,7 +3943,7 @@ Next up: B2.18, Agentic AI in the pipeline — attesting control intent for agen
 
 ### B2.18 · Agentic AI in the pipeline — attesting control intent for agents and MCP servers
 
-Chapter B2 · lesson 19 of 20 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.18.html)
+Chapter B2 · lesson 19 of 20 · runs a skill · 308 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/B2.18.html)
 
 **① Open**
 
@@ -3963,7 +3963,7 @@ Here is what that costs you.
 
 Control claims live in a spreadsheet and are never bound to a deployment, so nobody can say which build they describe.
 
-Same company, same four agents, new way of failing. “CyberTravels enforces least privilege” is true of some deployment at some time. An attestation is what binds it to the one running now — and refuses to claim more than it can show.
+Same company, same four agents, new way of failing. appsec/attest.py binds every control claim in Functions A and B to one deployment id, with an evidence URI a PASS cannot be issued without. Two controls are capped at PARTIAL and will raise if you try to pass them — sandbox egress is enforced outside the process and injection screening is a classifier whose failure mode is silence. drift() catches the case that matters: verdicts unchanged while the image digest moved underneath them.
 
 **③ What we do about it**
 
@@ -3995,7 +3995,7 @@ Next up: B2.19, Bonus — Google Mantis, the pipeline in production.
 
 ### B2.19 · Bonus — Google Mantis, the pipeline in production
 
-Chapter B2 · lesson 20 of 20 · runs a skill · 363 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/B2.19.html)
+Chapter B2 · lesson 20 of 20 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/B2.19.html)
 
 **① Open**
 
@@ -4015,7 +4015,7 @@ Here is what that costs you.
 
 A reference implementation gets adopted as a product and its outputs trusted without an evaluation.
 
-Same company, same four agents, new way of failing. Somebody else has already built this pipeline and published what happened. Adopting it without scoring it against a held-out key is how a reference implementation becomes a dependency CyberTravels cannot evaluate.
+Same company, same four agents, new way of failing. Map Mantis's stages onto the eleven in appsec/__init__.py and see which of yours it does not have — then score it with the key in LABELS.md, which it has never seen. A reference implementation adopted without an eval is a product you did not buy and cannot return.
 
 **③ What we do about it**
 

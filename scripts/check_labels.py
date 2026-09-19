@@ -86,6 +86,33 @@ def rows_from_labels() -> list[tuple[str, str, str]]:
     return out
 
 
+def unit_spans(path: Path) -> dict[str, tuple[int, int]]:
+    """unit -> (first line, last line). What a cited line has to fall inside."""
+    try:
+        tree = ast.parse(path.read_text())
+    except (OSError, SyntaxError) as e:
+        raise RuntimeError(f"{path}: {e}")
+    return {n.name: (n.lineno, getattr(n, "end_lineno", n.lineno))
+            for n in ast.walk(tree)
+            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))}
+
+
+# The one skill whose key carries line numbers as well as names. Read out of
+# the source so the gate cannot drift from the fixture it is holding.
+LINED_FIXTURE = "appsec/sast-semgrep-deterministic"
+
+
+def fixture_lines(skill: str) -> list[tuple[str, int, str]]:
+    """(file, line, unit) for every row of a fixture's KEY."""
+    script = next((ROOT / "skills" / skill / "scripts").glob("*.py"))
+    tree = ast.parse(script.read_text())
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(
+                isinstance(t, ast.Name) and t.id == "KEY" for t in node.targets):
+            return [(r[0], r[1], r[2]) for r in ast.literal_eval(node.value)]
+    return []
+
+
 def fixture_names(skill: str, names: tuple[str, ...]) -> set[str]:
     """The unit names a skill's fixture declares, read from its source."""
     script = next((ROOT / "skills" / skill / "scripts").glob("*.py"))
@@ -153,9 +180,47 @@ def main() -> int:
                 f"{skill} scores against '{unit}', which is not in any file "
                 f"LABELS.md names")
 
+    # Rule 4 — a cited line has to be inside the unit it names.
+    #
+    # Added after two rows of the SAST key had drifted: `download_invoice` was
+    # cited at line 23, which is a blank line four lines above the function,
+    # and `sync_vendor` at its docstring. Nothing compared them, because rules
+    # 1 to 3 check names and a name is still correct when the line beside it
+    # is not. A model that reports the true line is then scored wrong by a key
+    # that is wrong, which is the worst direction for a benchmark to fail in.
+    #
+    # The check is deliberately a span rather than an exact line. Which line
+    # inside a unit a defect "is on" is a judgement — the sink for a pattern,
+    # the definition for an absence — and a gate that enforced a judgement
+    # would be enforcing one person's convention. Outside the unit entirely is
+    # not a judgement.
+    print()
+    lined = fixture_lines(LINED_FIXTURE)
+    if not lined:
+        problems.append(
+            f"{LINED_FIXTURE}: no KEY rows parsed — this check would pass "
+            f"without reading anything")
+    for rel, line, unit in lined:
+        path = TREE / rel
+        if not path.is_file():
+            problems.append(f"{LINED_FIXTURE} cites {rel}, not in the tree")
+            continue
+        span = unit_spans(path).get(unit)
+        if span is None:
+            continue                     # rule 2 already reported this
+        inside = span[0] <= line <= span[1]
+        print(f"  {'ok  ' if inside else 'DRIFT'}  {rel}:{line} {unit} "
+              f"(lines {span[0]}-{span[1]})")
+        if not inside:
+            problems.append(
+                f"{LINED_FIXTURE} cites {rel}:{line} for {unit}, which spans "
+                f"{span[0]}-{span[1]} — the key points outside the function it "
+                f"names, so a correct answer scores as wrong")
+
     for p in problems:
         print(f"\n  FAIL  {p}")
-    print(f"\n{len(rows)} labelled unit(s) checked · {len(problems)} problem(s)")
+    print(f"\n{len(rows)} labelled unit(s) · {len(lined)} cited line(s) "
+          f"checked · {len(problems)} problem(s)")
     if problems and a.check:
         print(f"::error::{len(problems)} label(s) no longer describe the tree",
               file=sys.stderr)

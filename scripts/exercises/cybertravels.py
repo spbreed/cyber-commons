@@ -863,3 +863,135 @@ GROUNDING.update({
           "environment — ordered by the friction a developer feels, because "
           "the containment they notice is the one they switch off.",
 })
+
+
+# ---------------------------------------- Function B, rewired onto the tree
+# Function A added controls to the product. Function B adds the pipeline that
+# reviews it — `cybertravels/appsec/`, one stage per lesson — and every lesson
+# runs against the real corpus in `tools/` and `agents/` rather than a fixture.
+# Which is why the grounding lines below can name a row of LABELS.md: these
+# stages find those defects, or fail the smoke test.
+GROUNDING.update({
+ "B2.0": "You add `cybertravels/appsec/`, and it ships **inside** the tree it "
+         "scans. That is the lesson's argument rather than a filing decision: "
+         "a pipeline in its own repository drifts from the code it reviews, "
+         "and one that exempts itself from its own stages is the expensive "
+         "kind. The stage table names what each stage may claim — `claim_for"
+         "(10)` says reachable, `claim_for(12)` says exploited, and a report "
+         "that blurs them is one nobody can act on.",
+ "B2.1": "`appsec/findings.py`. A `Finding` carries its **basis** — pattern, "
+         "model, reachability, executed exploit — so stage 7's hypothesis "
+         "cannot be reported with stage 12's confidence. `run()` refuses when "
+         "the producer and the verifier are the same callable, and refuses a "
+         "verifier that cannot answer `undetermined`. Your smoke test proves "
+         "both refusals, because a self-grading loop files a clean trace.",
+ "B2.2": "`appsec/threatmodel.py` reads the assets out of `db.py`'s schema and "
+         "the entry points out of the tree. Run it and one asset comes back "
+         "**UNCLASSIFIED** — `policies`, which nobody has said is worth "
+         "anything. `drift()` then compares a stored model against the tree, "
+         "so \"the threat model is out of date\" becomes the two entry points "
+         "that appeared since.",
+ "B2.3": "`appsec/sast.py`, run against your own `tools/` and `agents/`. It "
+         "returns exactly five findings — the four `yes` rows of "
+         "`cybertravels/LABELS.md` plus the `library` row — and **none** of "
+         "the three IDOR-only rows. Clear `sast.WRAPPERS` and `sync_vendor` "
+         "disappears: that one line is the whole of the `library` column, and "
+         "the reason a mature codebase scans cleaner than it is.",
+ "B2.4": "`dedup()` and `cross_reference()` in `findings.py`. Three tracks "
+         "report `search_bookings` and the queue gets one row that remembers "
+         "all three bases — a defect two unrelated tracks reached is a better "
+         "bet than one. Then the cheapest check in the pipeline: a finding "
+         "naming a function nobody wrote is refuted, and it is otherwise "
+         "perfectly formed.",
+ "B2.5": "`appsec/reach.py` walks from the entry points B2.2 defined. Two of "
+         "your five findings are in units nothing calls — `render_template` "
+         "and `sync_vendor` — and the stage **marks** them rather than "
+         "dropping them, because the walk over-approximates and a deleted "
+         "finding comes back the day somebody adds a route. The first version "
+         "of this file collapsed four `handle` functions by assignment rather "
+         "than union and reported two live sinks as dead; the comment in the "
+         "file says so.",
+ "B2.6": "`appsec/replica.py`. The interesting part is the refusal: "
+         "`for_target('cybertravels-staging')` raises rather than quietly "
+         "building something safe-looking. `isolated_db()` then points your "
+         "application's storage at the replica — and finds that it does not "
+         "move `INVOICE_ROOT`, which is computed at import from the source "
+         "tree. That bug is in the file, named, because a replica has to be "
+         "checked rather than assumed.",
+ "B2.7": "`appsec/supplychain.py` reconciles `requirements.txt` against what "
+         "your code actually imports, and reports two things a scanner will "
+         "not: `mcp` is a declared dependency **and** a first-party package in "
+         "your tree, and `PyJWT` is imported as `jwt`. Without the "
+         "distribution-to-import map that second one is two findings, both "
+         "false, from one correct manifest. Then it reads a `.pyc` for "
+         "strings and egress, because there is no advisory for a file nobody "
+         "catalogued.",
+ "B2.8": "The hypotheses become demonstrations, in your own replica. "
+         "`exploit_sql_injection` turns one row into four across three owners; "
+         "`exploit_idor` asks for booking 2 as Dana and gets Priya's, with no "
+         "payload and nothing malformed — which is why stage 7 could not see "
+         "it. An exploit that does not fire returns `undetermined`, never "
+         "`refuted`.",
+ "B2.9": "`Chain` and `chains()` in `findings.py`. The chain in your tree "
+         "reads as one sentence: a vendor filename reaches a reader that does "
+         "not check ownership, in a process that can also reach a shell. "
+         "Three mediums, scored as critical — and a recipe whose links are not "
+         "all confirmed builds nothing, because a chain assembled from "
+         "hypotheses is a story that will be read as a finding.",
+ "B2.10": "`appsec/pentest.py`. `Scope.check()` is called on every request and "
+          "lives outside the loop, which is the lesson: \"only test the hosts "
+          "below\" is a request addressed to the component an attacker is "
+          "trying to influence, and it is the first thing to go when the loop "
+          "finds something one hop away.",
+ "B2.11": "`pentest.candidate()` joins a finding to B2.5's graph: the path "
+          "that reaches it, the authorisation predicate on that path, and "
+          "`report_as`. Point it at `render_template` and it comes back "
+          "\"unreachable — reported, not dropped\", which is the difference "
+          "between a white-box report somebody can act on and a list of every "
+          "sink in the tree.",
+ "B2.12": "`pentest.Claim` makes the distinction structural rather than "
+          "editorial: an inference **cannot** be given a severity, and an "
+          "observation with no evidence will not construct. `report_claims()` "
+          "prints the inference ratio in the header, because a black-box "
+          "report that is 80% inference is a hypothesis document and saying "
+          "so is what makes the other 20% worth reading.",
+ "B2.13": "`pentest.Matrix` — roles by objects by verbs, every cell `tested`, "
+          "`assumed` or `unreachable`. `assumed` means nobody looked, and it "
+          "is exactly where rows 1, 2 and 4 of `LABELS.md` have been sitting "
+          "while the endpoint list showed full coverage.",
+ "B2.14": "`pentest.preflight()` returns what is missing and `may_start()` "
+          "refuses. Seven controls, each one somebody has skipped \"just for "
+          "this engagement\" — including `soc_notified`, which is the one that "
+          "turns a finding into a call at 2am, because an offensive agent's "
+          "traffic is an attack and an unannounced one is indistinguishable "
+          "from the real thing by design.",
+ "B2.15": "`calibrate()` scores from what this run actually established: "
+          "demonstrated, on the money path, mutates state, reachable. Same "
+          "CWE and same rule severity, and `issue_refund` comes back critical "
+          "while dead `render_template` comes back info — a queue ordered by "
+          "the rule's severity puts them in the same place. `economics()` is "
+          "what you report instead of a finding count.",
+ "B2.16": "`appsec/remediate.py`, and the fix for row 1 of `LABELS.md` — which "
+          "does not sanitise the id, because the id was never the problem. "
+          "`accept()` requires three things and the scanner is not one of "
+          "them; the third is a regression test that **fails against the "
+          "unpatched code**. Hand it a test that passes both ways and it is "
+          "refused, which is the most common thing a generated fix ships with.",
+ "B2.17": "`sast.slice_for()`. The slice for `get_booking` carries "
+          "`get_my_booking` as well, because the defect *is* the difference "
+          "between them and a slice holding one of the pair cannot show it. "
+          "`slice_ratio()` is the Day 2 number: a stage that claims to cut "
+          "context and hands over 90% of the file is a stage nobody measured.",
+ "B2.18": "`appsec/attest.py` binds every control claim in Functions A and B "
+          "to one `deployment_id`, with an evidence URI a PASS cannot be "
+          "issued without. Two controls are **capped at PARTIAL** and will "
+          "raise if you try to pass them — sandbox egress is enforced outside "
+          "the process and injection screening is a classifier whose failure "
+          "mode is silence. `drift()` catches the case that matters: verdicts "
+          "unchanged while the image digest moved underneath them.",
+ "B2.19": "Map Mantis's stages onto the eleven in `appsec/__init__.py` and see "
+          "which of yours it does not have — then score it with the key in "
+          "`LABELS.md`, which it has never seen. A reference implementation "
+          "adopted without an eval is a product you did not buy and cannot "
+          "return.",
+})

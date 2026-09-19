@@ -1212,3 +1212,97 @@ ABOUT.update({
           "gets switched off, and a configuration with everything disabled "
           "still reports as compliant.",
 })
+
+
+# Function B, rewired onto the pipeline the reader builds in cybertravels/appsec/.
+# Each entry names the stage's mechanism and what that stage is allowed to
+# claim, because by B the reader has a pipeline and the question is what its
+# output means.
+ABOUT.update({
+ "B2.0": "The pipeline as one system, split by what each half can honestly "
+         "assert: before a deploy there is source and no running thing, so "
+         "every finding is a hypothesis; after it there is a disposable "
+         "replica, so a finding can be demonstrated. Including where the "
+         "pipeline lives, and why exempting it from its own stages is the "
+         "expensive choice.",
+ "B2.1": "What separates a harness from a loop with a model in it: structured "
+         "output, a verifier that is not the producer, and a budget that stops "
+         "with the work unfinished. Built around the failure that does not "
+         "announce itself — a model grading its own findings files a clean "
+         "trace either way.",
+ "B2.2": "A threat model derived from the tree rather than remembered from a "
+         "workshop: assets from the schema, entry points from the code, trust "
+         "boundaries from the layout — plus the column a machine cannot fill "
+         "in, and a drift check that turns 'this is out of date' into a list.",
+ "B2.3": "Two passes, and why the split follows from the defects rather than "
+         "from taste: deterministic rules for what a pattern can express, a "
+         "model for the class where the defect is the absence of a call and "
+         "there is nothing to match at any ruleset width. Including the case "
+         "in between — a house wrapper that makes every rule naming the "
+         "library blind.",
+ "B2.4": "Two cheap stages that decide whether the queue is usable: collapsing "
+         "the reports of one defect into one row while keeping how many "
+         "independent tracks reached it, and refuting the finding that names a "
+         "function nobody wrote — which is otherwise perfectly formed.",
+ "B2.5": "Asking whether an external caller can reach the sink before anybody "
+         "is paged, with the property that decides how the answer may be used: "
+         "the walk over-approximates, so it is safe to rank with and unsafe to "
+         "delete with, and an unreachable sink is reported as unreachable.",
+ "B2.6": "A disposable replica, and the refusal that makes it one — a stage "
+         "that quietly downgrades to something safe-looking produces output "
+         "nobody can interpret. Plus the isolation bug the stage finds in "
+         "itself, because a replica has to be checked rather than assumed.",
+ "B2.7": "What a dependency scan actually says — nothing declared has a known "
+         "vulnerability — and the two checks that say something about the "
+         "system: reconciling the manifest against what the code imports, and "
+         "reading the compiled artefact that no manifest entry covers.",
+ "B2.8": "Turning hypotheses into demonstrations against the replica, and the "
+         "half that matters as much: a hypothesis that cannot be demonstrated "
+         "is dropped rather than shipped as a medium somebody has to carry. An "
+         "exploit that does not fire is undetermined, not refuted.",
+ "B2.9": "Composing confirmed findings into sequences and scoring the chain "
+         "rather than the links, because a chain is invisible from inside a "
+         "queue row — with the rule that keeps it a finding: every link "
+         "confirmed, or what you have is a story.",
+ "B2.10": "The offensive loop, and the control that has to sit outside it. "
+          "Scope enforced at the request boundary rather than requested in a "
+          "prompt, because a prompt-level rule is addressed to the component "
+          "an attacker is trying to influence.",
+ "B2.11": "What full source actually buys, which is not a longer list: every "
+          "candidate carrying the path that reaches it and the authorisation "
+          "predicate on that path, so presence stops being reported where "
+          "reachability was the question.",
+ "B2.12": "Keeping observation and inference apart structurally rather than "
+          "editorially — an inference cannot carry a severity, an observation "
+          "cannot exist without evidence — and publishing the ratio, which is "
+          "what makes the observed part worth acting on.",
+ "B2.13": "Why endpoint coverage is the wrong denominator for object-level "
+          "authorisation, and the grid that is the right one: roles by objects "
+          "by verbs, with the untested cells ranked by blast radius rather "
+          "than listed.",
+ "B2.14": "The preflight an offensive agent starts behind: a gate rather than "
+          "a checklist, refusing until every control is present — including "
+          "telling the SOC, because unannounced offensive traffic is "
+          "indistinguishable from the real thing by design.",
+ "B2.15": "Calibrating severity from what this run established rather than "
+          "copying it from the rule that fired, and reporting per-stage "
+          "economics instead of a finding count — what each stage cost and "
+          "what it removed.",
+ "B2.16": "The stage whose wrong outcome looks exactly like the right one. "
+          "Three pieces of evidence for a patch, none of them the scanner "
+          "going quiet, and the one that is usually skipped: a regression test "
+          "that fails against the unpatched code.",
+ "B2.17": "Slicing context on the source-to-sink path rather than on distance, "
+          "and the case that decides the rule — a defect that is the "
+          "difference between two functions needs both of them in the window, "
+          "and the cut is measured rather than claimed.",
+ "B2.18": "Binding control claims to a deployment so they can be re-checked "
+          "rather than re-asserted: per-control verdicts with evidence URIs, "
+          "framework mappings gathered once, drift against the last "
+          "attestation — and two controls capped at PARTIAL because this "
+          "pipeline cannot prove them.",
+ "B2.19": "A reference implementation read as a reference rather than bought "
+          "as a product: mapping its stages onto the ones you built, finding "
+          "what it does not have, and scoring it against a key it has never "
+          "seen before trusting its output.",
+})

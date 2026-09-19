@@ -74,6 +74,7 @@ python3 -m cybertravels.tests.smoke_test    # 8 assertions, all about refusals
 | the return path | `returns.py` | schema, then an independent verifier — conformance is not correctness |
 | the choke point | `gateway.py` | the controls above, behind one entry point, with a coverage number |
 | the developer's agent | `devagent.py` | containment for the IDE agent that wrote all of the above |
+| the AppSec pipeline | `appsec/` | **not part of the product** — the eleven stages Function B builds to review it, shipping in the same repository and scanned by its own rules |
 | the defects | `tools/`, `agents/` | the corpus the AppSec lessons scan |
 
 Those files arrive one lesson at a time. `python3 scripts/checkpoint.py --at <id>`
