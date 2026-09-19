@@ -287,14 +287,18 @@ def lesson_body(entry: dict) -> str:
     out.append("</div></section>")
 
     # 4 — the procedure, and how to run it on your own machine
+    #
+    # The run block now appears on EVERY lesson, including the three that run
+    # no skill, because it also carries the checkpoint — and a reader landing
+    # on a reading lesson needs the tree as it stood there just as much. It
+    # used to be gated on has_code(), which meant the introductions to three
+    # functions offered no way to get the system those functions are about.
     runs = has_code(sid)
-    if skill or runs:
-        out.append(sec_open("skill"))
-        if skill:
-            out.append(f'<div class="skillmd">{skill}</div>')
-        if runs:
-            out.append(run_block(sid))
-        out.append("</div></section>")
+    out.append(sec_open("skill"))
+    if skill:
+        out.append(f'<div class="skillmd">{skill}</div>')
+    out.append(run_block(sid))
+    out.append("</div></section>")
 
     # 5, 6, 7 — the result, the exercise, and the gap into the next chapter
     if runs and (expect := ex.get("expect")):
@@ -358,11 +362,27 @@ def run_block(sid: str) -> str:
     reader will actually use and the second is the one a reviewer needs.
     """
     script = script_of(sid)
+    # The checkpoint comes first and is offered on every lesson, including the
+    # three that run no skill. A reader who lands here needs CyberTravels as it
+    # stood at this lesson before anything else makes sense — the finished tree
+    # contains every control the lessons after this one exist to build, and
+    # handing it over spoils all of them.
+    checkpoint = (
+        '<p><b>Get your copy of CyberTravels as it stood here.</b> Everything '
+        'taught up to this lesson, and nothing taught after it — so the '
+        'exercises ahead of you still work.</p>'
+        f'<pre><code>python3 scripts/checkpoint.py --at {html.escape(sid)} '
+        f'--out work/cybertravels\n'
+        f'python3 scripts/checkpoint.py --at {html.escape(sid)} --diff'
+        f'   # what this lesson changed</code></pre>')
     if not script:
-        return ""
+        return ('<div class="runbox">' + checkpoint +
+                '<p class="runnote">This is a reading lesson — there is no '
+                'skill to run. The checkpoint is still worth taking, because '
+                'the next lesson that does run one starts from it.</p></div>')
     name = script.split("/")[1]
     return (
-        '<div class="runbox">'
+        '<div class="runbox">' + checkpoint +
         '<p><b>Run it in your agent.</b> Link the skills store into whichever '
         'CLI you use — Claude Code, Codex, Gemini and the rest read the same '
         'format — then ask for the task in your own words.</p>'

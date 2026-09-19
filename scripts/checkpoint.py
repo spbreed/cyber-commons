@@ -63,11 +63,15 @@ building this instead of shipping one finished tree.
 4. **A `was` region is never empty, and every line in one is `#~`-commented.**
    Empty means "this did not exist before", which is what `add` says. An
    uncommented line means the committed tree is running code it should not be.
-5. **Every lab block asks for its own lesson's checkpoint.** The blocks are
-   near-identical across 134 lessons, so the failure mode is a copy-paste that
-   leaves `--at A1.2` on a Function D page. The reader then gets a tree from
-   forty lessons earlier, the exercise does not work, and nothing anywhere
-   says why.
+5. **Every lab block, and every built page, asks for its own lesson's
+   checkpoint.** Two renderings of the same idea live in different files —
+   `curriculum/labs.json` feeds the chapter docs and `build_site.py::run_block`
+   feeds the pages — and the first time the checkpoint was added, only one of
+   them got it. All 134 lab blocks were correct, the whole site was silently
+   without it, and every other gate passed. The blocks are also near-identical
+   across lessons, so the other failure is a copy-paste leaving `--at A1.2` on
+   a Function D page: the reader gets a tree from forty lessons earlier and
+   nothing says why.
 """
 from __future__ import annotations
 
@@ -286,6 +290,24 @@ def check(order: list[str]) -> list[str]:
                     f"curriculum/labs.json: {sid}'s lab block asks for "
                     f"checkpoint {m.group(1)} — a reader would get the tree "
                     f"from the wrong lesson")
+
+    # 5b — the built page carries it too, and carries its own
+    pages = ROOT / "site" / "lessons"
+    if pages.is_dir():
+        for sid in order:
+            page = pages / f"{sid}.html"
+            if not page.is_file():
+                continue
+            found = set(asked.findall(page.read_text()))
+            if not found:
+                problems.append(
+                    f"site/lessons/{sid}.html: no checkpoint command on the "
+                    f"page — a reader landing here has no way to get the tree "
+                    f"as it stood")
+            elif found != {sid}:
+                problems.append(
+                    f"site/lessons/{sid}.html: offers checkpoint "
+                    f"{sorted(found)} rather than its own")
 
     # 2 — every checkpoint parses
     for sid in order:
