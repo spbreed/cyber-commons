@@ -1,6 +1,6 @@
 # LIGHTBOARD.md — the word-for-word script, lesson by lesson
 
-A recording script for all 134 lessons, written to be **read aloud exactly as
+A recording script for all 148 lessons, written to be **read aloud exactly as
 written**. Open the lesson, talk. No translating notes into sentences while the
 camera is running.
 
@@ -13,23 +13,24 @@ at the output, slow down. Everything else is speech, already in sentences,
 already said the way a person says it: no asterisks, no backticks, "29 percent"
 rather than "29%", "issue refund" rather than `issue_refund`.
 
-## Record these six first
+## Record these 7 first
 
 Do not start at lesson one and grind forwards. Record the **entry points**
 first, in this order, because they are where people actually arrive and they
 are the only ones carrying a ground-rules beat for somebody who has never
-shipped an agent:
+built an agent:
 
 | order | lesson | opens |
 |---|---|---|
-| 1 | **A0.1** | the whole commons — what an agent is, and what this is |
-| 2 | **A1.0** | Function A, and CyberTravels itself. The one that has to land |
-| 3 | **B2.0** | Function B — the AI SDLC |
-| 4 | **C1.0** | Function C — red teaming agents, not models |
-| 5 | **D1.0** | Function D — the SOC |
-| 6 | **E1.0** | Function E — governance |
+| 1 | **G1.0** | the front door — what an agent is, and that you are about to build one |
+| 2 | **A0.1** | the commons itself: the five functions on top of what you built |
+| 3 | **A1.0** | Function A, and CyberTravels read adversarially. The one that has to land |
+| 4 | **B2.0** | Function B — the AI SDLC |
+| 5 | **C1.0** | Function C — red teaming agents, not models |
+| 6 | **D1.0** | Function D — the SOC |
+| 7 | **E1.0** | Function E — governance |
 
-Say the ground rules once, in those six, and never again. Every lesson after
+Say the ground rules once, in those 7, and never again. Every lesson after
 them assumes you said it.
 
 Then take a whole chapter at a time rather than jumping around. The chapter
@@ -46,8 +47,8 @@ next chapter — and that only works if you recorded the chapter.
 | **④ The number** | Day 2 — what comes out, and what it means | 20–30s |
 | **⑤ Hand it over** | their turn, then the name of the next lesson | 10–15s |
 
-The six entry points add a **⓪ ground rules** beat before the open. Nothing
-else does.
+The 7 entry points add a **⓪ ground rules** beat before the open.
+Nothing else does.
 
 Each lesson's heading gives its spoken word count and the time that comes to at
 an unhurried 140 words a minute. That is words only — it does not count the
@@ -59,7 +60,7 @@ something. A model takes longer than a local computation did.
 - **The script is the floor, not the ceiling.** It is written to work read
   straight. If a better sentence arrives on the day, take it — but the numbers
   are exact, so say those as written.
-- **Start cold, after the first six.** No "hello and welcome". Somebody landed
+- **Start cold, after the entry points.** No "hello and welcome". Somebody landed
   here from a search result and gives you eight seconds. On an entry point the
   ⓪ beat comes first: a viewer who does not know what an agent is cannot be
   hooked by a scene about one.
@@ -92,7 +93,17 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 ### G1.0 · What an agent is, and what you are about to build
 
-Chapter G1 · lesson 1 of 8 · runs a skill · 272 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/G1.0.html)
+Chapter G1 · lesson 1 of 8 · runs a skill · 427 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/G1.0.html)
+
+**⓪ Ground rules — only on this lesson**
+
+*[Draw nothing yet. Talk to camera.]*
+
+Before anything else, thirty seconds on what an agent actually is, because if you have never built one, none of the rest of this will land properly.
+
+A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong.
+
+So here is how this works. You are going to build one. Not read about one — build it, on your own machine, over this chapter and the next. Then the four functions after that take the thing you built and attack it, review it, watch it and govern it. Everything is free and nothing needs an account.
 
 **① Open**
 
@@ -847,7 +858,7 @@ Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 2 of 2 · runs a skill · 608 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · runs a skill · 605 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -857,7 +868,7 @@ Before anything else, thirty seconds on what an agent actually is, because if yo
 
 A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong. Everything here follows from that one sentence.
 
-So, what this is. A hundred and thirty-five lessons. It is free, there is no vendor, there is no paid account, and every single one of them runs — one command on your own machine, in whichever coding assistant you already use. I am going to use one made-up company for all of it, and I will introduce you to them in the next video.
+So, what this is. Five functions on top of the one you just built. It is free, there is no vendor, there is no paid account, and every lesson runs with one command on your own machine, in whichever coding assistant you already use. I am going to use one made-up company for all of it, and you have already met them.
 
 **① Open**
 
