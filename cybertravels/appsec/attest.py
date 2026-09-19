@@ -1,4 +1,4 @@
-# step:file B2.18
+# step:file C2.18
 """Stage 16 — bind the control claim to a deployment, or it is a spreadsheet.
 
 Every control in Function A is real and running. What nobody can currently do

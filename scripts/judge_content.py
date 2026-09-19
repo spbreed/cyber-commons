@@ -13,7 +13,7 @@ its output is a judgement rather than a fact. Nothing in CI depends on it.
 
     export ANTHROPIC_API_KEY=...
     python3 scripts/judge_content.py                 # every lesson
-    python3 scripts/judge_content.py --session D1.1  # one
+    python3 scripts/judge_content.py --session E1.1  # one
     python3 scripts/judge_content.py --limit 20      # a sample
     python3 scripts/judge_content.py --out findings.json
 

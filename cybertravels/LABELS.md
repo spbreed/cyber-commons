@@ -73,4 +73,4 @@ it is whether an ownership comparison happens between loading the record and
 returning it. That is why `get_booking` and `get_my_booking` look almost
 identical and only one of them is a finding, and it is why this class is the
 worked example for reasoning-era SAST in
-[B2.3](https://cybercommons.ai/lessons/B2.3.html).
+[C2.3](https://cybercommons.ai/lessons/C2.3.html).

@@ -46,7 +46,7 @@ BYPASS = [
  ("payload lands in a field the harness marks as principal-supplied",
   "e.g. the task description, which a ticket system populates"),
  ("a second agent relays it, and the relay is trusted as principal",
-  "A2.5's delegation chain is what stops this — if it is enforced"),
+  "B2.5's delegation chain is what stops this — if it is enforced"),
 ]
 
 SURFACES = {

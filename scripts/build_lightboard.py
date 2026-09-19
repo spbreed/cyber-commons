@@ -82,7 +82,7 @@ WPM = 140          # unhurried delivery to camera, measured against a read-throu
 # other five are FUNCTION_INTRO — where somebody arriving from a search result
 # actually lands. Written as words to say, in the first person, out loud.
 ORIENT = {
- "G1.0": [
+ "A1.0": [
   "Before anything else, thirty seconds on what an agent actually is, because "
   "if you have never built one, none of the rest of this will land properly.",
   "A model that only answers questions is a chatbot. Give it tools — let it "
@@ -110,7 +110,7 @@ ORIENT = {
   "already use. I am going to use one made-up company for all of it, and you "
   "have already met them.",
  ],
- "A1.0": [
+ "B1.0": [
   "Let me introduce you to CyberTravels, because you are going to be seeing a "
   "lot of them.",
   "CyberTravels is a corporate travel company that does not exist. I made them "
@@ -123,7 +123,7 @@ ORIENT = {
   "fourth example. You are watching a system you already understand fail in a "
   "new way.",
  ],
- "B2.0": [
+ "C2.0": [
   "If you have done application security before, let me tell you what is "
   "different here, because otherwise you will assume you can skip this chapter.",
   "The pipeline is not new. What is new is that code now arrives faster than "
@@ -131,7 +131,7 @@ ORIENT = {
   "that cannot tell you why it wrote it. Everything in this chapter comes out "
   "of that one pressure.",
  ],
- "C1.0": [
+ "D1.0": [
   "One distinction before we start, because most people hear red team and think "
   "jailbreaks.",
   "Getting a model to say something it should not say is a prompt result. "
@@ -139,7 +139,7 @@ ORIENT = {
   "file, message another agent — is an incident. This chapter is about the "
   "second one, and it is the one almost nobody has a playbook for.",
  ],
- "D1.0": [
+ "E1.0": [
   "Let me say this up front: your SOC already works. You have sensors, you have "
   "a lake, you have rules, you have an on-call rota. None of that is wrong, and "
   "none of it is getting replaced here.",
@@ -147,7 +147,7 @@ ORIENT = {
   "uncomfortable. When an agent is the thing that went wrong — would any of it "
   "have fired?",
  ],
- "E1.0": [
+ "F1.0": [
   "Governance has a reputation, so let me get ahead of it. Most people hear "
   "that word and picture a spreadsheet nobody reads.",
   "Here is what I actually mean by it: being able to show, later, and to "
@@ -195,10 +195,10 @@ def say(text: str) -> str:
 
 
 def drop_pointer(text: str) -> str:
-    """Strip a chapter bridge's own trailing "Next → A2.1, agent identity".
+    """Strip a chapter bridge's own trailing "Next → B2.1, agent identity".
 
     Left in, it prints twice in one closing beat. It has to be removed from the
-    RAW text, before say(): the arrow substitution turns it into ", then A2.1"
+    RAW text, before say(): the arrow substitution turns it into ", then B2.1"
     first, and then there is no pointer left to match. The pointer is re-added
     afterwards from the curriculum, where the id and the title cannot drift.
     """
@@ -474,13 +474,13 @@ built an agent:
 
 | order | lesson | opens |
 |---|---|---|
-| 1 | **G1.0** | the front door — what an agent is, and that you are about to build one |
+| 1 | **A1.0** | the front door — what an agent is, and that you are about to build one |
 | 2 | **A0.1** | the commons itself: the five functions on top of what you built |
-| 3 | **A1.0** | Function A, and CyberTravels read adversarially. The one that has to land |
-| 4 | **B2.0** | Function B — the AI SDLC |
-| 5 | **C1.0** | Function C — red teaming agents, not models |
-| 6 | **D1.0** | Function D — the SOC |
-| 7 | **E1.0** | Function E — governance |
+| 3 | **B1.0** | Function A, and CyberTravels read adversarially. The one that has to land |
+| 4 | **C2.0** | Function B — the AI SDLC |
+| 5 | **D1.0** | Function C — red teaming agents, not models |
+| 6 | **E1.0** | Function D — the SOC |
+| 7 | **F1.0** | Function E — governance |
 
 Say the ground rules once, in those {n_orient}, and never again. Every lesson after
 them assumes you said it.

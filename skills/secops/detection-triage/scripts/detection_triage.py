@@ -43,7 +43,7 @@ FIELDS = {
  "delegation chain": "who caused the task; where to look for the trigger",
  "scopes held":      "THE decisive field — is this action within its remit?",
  "tool + target":    "what it did",
- "session/trace id": "so the analyst can pull the whole run (D1.3)",
+ "session/trace id": "so the analyst can pull the whole run (E1.3)",
 }
 
 ALERTS = [("A-1", "patch-agent"), ("A-2", "rotator-agent"), ("A-3", "patch-agent"),

@@ -1,4 +1,4 @@
-# step:file B2.3
+# step:file C2.3
 """Stage 7 — deterministic rules first, then the pass a rule cannot express.
 
 Two passes, and the split is not a preference. It follows from a property of
@@ -244,9 +244,9 @@ def model_pass_prompt(finding_sites):
         + "\n".join(f"- {f}::{u}" for f, u in finding_sites))
 
 
-# step:B2.17 add
+# step:C2.17 add
 # --------------------------------------------------------------------------- #
-# B2.17 — stage 6: the smallest context that still supports a decision
+# C2.17 — stage 6: the smallest context that still supports a decision
 # --------------------------------------------------------------------------- #
 # The instinct is to give the model the repository and ask it to be thorough.
 # What that produces is a window in which the relevant six lines are 2% of the
@@ -288,7 +288,7 @@ def slice_for(root, finding, *, twin=True):
 
 
 def slice_ratio(root, finding):
-    """B2.17's Day 2: how much of the file the slice actually is.
+    """C2.17's Day 2: how much of the file the slice actually is.
 
     Report it per finding. A stage that claims to cut context and is handing
     over 90% of the file is a stage nobody has measured.
@@ -297,4 +297,4 @@ def slice_ratio(root, finding):
     whole = len(path.read_text().splitlines()) or 1
     cut = len(slice_for(root, finding).splitlines())
     return round(cut / whole, 3)
-# step:B2.17 end
+# step:C2.17 end

@@ -12,7 +12,7 @@ it must never be exposed to a network, put behind a tunnel, or deployed.
 
     uvicorn cybertravels.main:app --host 127.0.0.1 --port 8000
 """
-# step:file G1.1
+# step:file A1.1
 import asyncio
 import json
 
@@ -49,7 +49,7 @@ async def index():
 @app.post("/login")
 async def login(request: Request):
     """No password. It is a demo login and it looks like one on purpose —
-    wiring it to real OIDC is A2.1's exercise, not a detail we pretend is done."""
+    wiring it to real OIDC is B2.1's exercise, not a detail we pretend is done."""
     body = await request.json()
     try:
         token = identity.mint_user_token(body.get("username", ""))

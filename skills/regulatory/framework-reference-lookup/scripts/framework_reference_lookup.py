@@ -74,7 +74,7 @@ def for_control(kind, code):
     return [sid for sid, tid in LESSONS if code in labels(sid, tid)[kind]]
 
 print("lookup, both directions")
-for sid in ("A1.2", "B2.3", "D5.4"):
+for sid in ("B1.2", "C2.3", "E5.4"):
     report["lookup"]["by_lesson"][sid] = for_lesson(sid)
     print(f"   {sid:<8}{' · '.join(for_lesson(sid))}")
 print()
@@ -86,7 +86,7 @@ print(f"      {len(hits)} lessons: {', '.join(hits[:8])}"
       + (" ..." if len(hits) > 8 else ""))
 print()
 print("Reading it the second way is the one that matters in an audit. Nobody")
-print("asks 'what does lesson A1.2 map to'. They ask 'show me where human")
+print("asks 'what does lesson B1.2 map to'. They ask 'show me where human")
 print("oversight is addressed', and the answer has to be a list of things that")
 print("exist, not a paragraph saying it is covered.")
 print()
@@ -95,7 +95,7 @@ print("CI - so a framework that renumbers its pages breaks the build rather than
 print("quietly leaving a lesson pointing at a 404.")
 
 assert len(FW["urls"]["owasp_llm"]) == 10
-assert set(FW["tracks"]) >= {"A1", "B2", "D1", "E1"}
-assert for_lesson("A1.2"), "A1.2 must carry labels"
+assert set(FW["tracks"]) >= {"B1", "C2", "E1", "F1"}
+assert for_lesson("B1.2"), "B1.2 must carry labels"
 assert hits, "no lesson maps to human oversight, which cannot be right"
 assert report["frameworks"] and report["euai_articles"] and report["coverage"]

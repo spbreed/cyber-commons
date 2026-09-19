@@ -11,10 +11,10 @@ Auth uses an OAuth **refresh token** (no browser in CI). Create one once:
   4. Store as repo secrets: YT_CLIENT_ID, YT_CLIENT_SECRET, YT_REFRESH_TOKEN
 
 Then:
-    python3 scripts/youtube_upload.py --session A2.5 --file recordings/a2.5.mp4 \
+    python3 scripts/youtube_upload.py --session B2.5 --file recordings/a2.5.mp4 \
         --privacy unlisted
 
-    python3 scripts/youtube_upload.py --session A2.5 --file x.mp4 --dry-run
+    python3 scripts/youtube_upload.py --session B2.5 --file x.mp4 --dry-run
         # prints the exact metadata and does not call YouTube
 
 Title/description/tags are generated from curriculum.json so every video is

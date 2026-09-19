@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Materialise `cybertravels/` as it stood at the end of any lesson.
 
-    python3 scripts/checkpoint.py --at G1.4 --out ./my-cybertravels
+    python3 scripts/checkpoint.py --at A1.4 --out ./my-cybertravels
     python3 scripts/checkpoint.py --list            # every checkpoint, in order
-    python3 scripts/checkpoint.py --at G1.4 --diff  # what that one lesson added
+    python3 scripts/checkpoint.py --at A1.4 --diff  # what that one lesson added
     python3 scripts/checkpoint.py --check           # CI: the four gates below
 
-A reader who opens the commons at D2.3 needs the system as it stood after
-D2.2 — everything taught so far, nothing taught later. Handing them the
+A reader who opens the commons at E2.3 needs the system as it stood after
+E2.2 — everything taught so far, nothing taught later. Handing them the
 finished tree spoils every exercise between here and the end; handing them a
 bare repository makes the lesson unrunnable.
 
@@ -21,7 +21,7 @@ time an early lesson changed.
 
 One magic comment near the top:
 
-    # step:file G1.4
+    # step:file A1.4
 
 The file does not exist in any checkpoint before that lesson.
 
@@ -30,12 +30,12 @@ The file does not exist in any checkpoint before that lesson.
 Four markers. `add` introduces something; `was`/`now` replaces one thing with
 another; `end` closes either.
 
-    # step:G1.4 was
+    # step:A1.4 was
     #~ token = DEV_TOKEN          # one long-lived token, every scope
-    # step:G1.4 now
+    # step:A1.4 now
     ex = identity.token_exchange(user, agent, audience, scope)
     token = ex["access_token"]
-    # step:G1.4 end
+    # step:A1.4 end
 
 **Every line of a `was` region is commented out with `#~`,** and the
 materialiser strips that prefix when it emits one. This is not cosmetic and it
@@ -46,8 +46,8 @@ real one, referencing names that do not exist yet — the application breaks, an
 it breaks in the file the whole commons is about.
 
 **`was` is not scaffolding.** The naive branch is what Function A attacks: a
-reader at A1.2 gets the ingress with no provenance, so the injection actually
-works, and A2.6 flips the region so it stops working. The vulnerability is real
+reader at B1.2 gets the ingress with no provenance, so the injection actually
+works, and B2.6 flips the region so it stops working. The vulnerability is real
 at that checkpoint rather than described, which is the whole reason for
 building this instead of shipping one finished tree.
 
@@ -69,7 +69,7 @@ building this instead of shipping one finished tree.
    feeds the pages — and the first time the checkpoint was added, only one of
    them got it. All 134 lab blocks were correct, the whole site was silently
    without it, and every other gate passed. The blocks are also near-identical
-   across lessons, so the other failure is a copy-paste leaving `--at A1.2` on
+   across lessons, so the other failure is a copy-paste leaving `--at B1.2` on
    a Function D page: the reader gets a tree from forty lessons earlier and
    nothing says why.
 """
@@ -89,14 +89,14 @@ TREE = ROOT / "cybertravels"
 
 sys.path.insert(0, str(ROOT / "scripts"))
 
-# `# step:file G1.4` — anywhere in the first 40 lines. The HTML form is
+# `# step:file A1.4` — anywhere in the first 40 lines. The HTML form is
 # accepted too: the operator console is a file that appears at a lesson like
 # any other, and a marker syntax that only worked in Python would have silently
 # left it present from the first checkpoint.
 FILE_RE = re.compile(
     r"^[ \t]*(?:#|<!--)[ \t]*step:file[ \t]+([A-Z]\d+\.\d+)[ \t]*(?:-->)?[ \t]*$",
     re.M)
-# `# step:G1.4 was|now|add|end`, on its own line, any indentation.
+# `# step:A1.4 was|now|add|end`, on its own line, any indentation.
 BLOCK_RE = re.compile(r"^[ \t]*#\s*step:([A-Z]\d+\.\d+)\s+(was|now|add|end)\s*$")
 
 # `#~ ` prefixes every line of a `was` region so the committed tree never runs
@@ -251,7 +251,7 @@ def check(order: list[str]) -> list[str]:
                 # `end` is `was` -> `now` on the same lesson. Anything else is
                 # a region somebody forgot to close, and it does not read as
                 # one: the next marker silently adopts everything between them.
-                # A missing `step:A3.10 end` once swallowed `class Budget:`
+                # A missing `step:B3.10 end` once swallowed `class Budget:`
                 # itself, and every gate still passed — the file parsed,
                 # because what it swallowed was a whole class.
                 if open_at and not (kind == "now" and open_at[1] == "was"
@@ -359,7 +359,7 @@ def run_each(order: list[str]) -> int:
     It caught the failure that motivated it: two `was` branches in `db.audit`,
     one for the motive columns and one for the hash chain, bound the wrong
     number of values at any checkpoint with one lesson applied and not the
-    other. Every checkpoint parsed. G2.4 raised at the first INSERT.
+    other. Every checkpoint parsed. A2.4 raised at the first INSERT.
     """
     import subprocess
     import tempfile
@@ -405,7 +405,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--at", help="lesson id, e.g. G1.4")
+    ap.add_argument("--at", help="lesson id, e.g. A1.4")
     ap.add_argument("--out", type=Path, help="where to write the checkpoint")
     ap.add_argument("--list", action="store_true",
                     help="every checkpoint and what it adds")

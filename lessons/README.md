@@ -4,8 +4,8 @@ Optional long-form notes for any lesson. Drop a file named after the session id
 and it appears on that lesson's page under the lab:
 
 ```
-lessons/A2.5.md   →  https://cybercommons.ai/lessons/A2.5.html
-lessons/D1.0.md   →  https://cybercommons.ai/lessons/D1.0.html
+lessons/B2.5.md   →  https://cybercommons.ai/lessons/B2.5.html
+lessons/E1.0.md   →  https://cybercommons.ai/lessons/E1.0.html
 ```
 
 Nothing here is required, and nothing here is currently written — the folder is
@@ -45,7 +45,7 @@ Draw the three planes first, left to right...
 
 ```bash
 python3 scripts/build_site.py     # regenerate the lesson pages
-git add lessons/ site/lessons/ && git commit -m "notes: A2.5" && git push
+git add lessons/ site/lessons/ && git commit -m "notes: B2.5" && git push
 ```
 
 CI rebuilds and deploys automatically. If you forget to run the build,

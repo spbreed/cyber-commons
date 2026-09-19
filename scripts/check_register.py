@@ -54,7 +54,7 @@ def main() -> int:
     # therefore rewrite them, and the damage is silent: ROW below only matches
     # C-prefixed ids, so a corrupted row simply vanishes from the embedded set
     # and the mismatch surfaces as a confusing "only in the file" line. Say it
-    # plainly instead — this is exactly how control C1.1 became "B2.10".
+    # plainly instead — this is exactly how control C1.1 became "C2.10".
     for c in controls:
         if not CONTROL_ID.fullmatch(c["id"]):
             problems.append(f"{c['id']}: not a control id — control ids are "

@@ -3,7 +3,7 @@
 Every link a lesson renders — the skills tree, a `SKILL.md`, the sample repo,
 the raw notebook Kaggle fetches — is pinned to a branch. That branch name was
 written out longhand in nine files, and one of them had drifted to a branch
-that does not exist on the remote at all: `track_a2.py` linked to
+that does not exist on the remote at all: `track_b2.py` linked to
 `.../tree/main/labs/tools/keycloak-obo`, and there has never been a `main`.
 
 Nothing caught it. `check_docs.py` validates relative links in markdown; an

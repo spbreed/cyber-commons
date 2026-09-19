@@ -8,59 +8,59 @@ from __future__ import annotations
 
 HOOKS: dict[str, str] = {
 
-"D3.10":
+"E3.10":
  "The alert queue has been quiet for a fortnight and nobody believes it. "
  "Hunting is the pass that finds what no rule was written for — and the "
  "hypothesis that feels most obviously right is usually a description of "
  "the overnight batch doing its job.",
 
-"D2.5":
+"E2.5":
  "You have just reconstructed an incident and the rule almost writes itself. "
  "That is the problem: every rule you could write catches the incident, "
  "because you wrote it from the incident. What decides whether it ships is "
  "the traffic it fires on when nothing is wrong.",
 
-"D3.2":
+"E3.2":
  "The investigating agent is granted broad read across production so it can "
  "find the problem. Broad read across production is frequently what the "
  "problem was. Admission rules are how the response avoids becoming the "
  "second incident.",
 
-"D3.6":
+"E3.6":
  "An agent forms a hypothesis at step one and spends the rest of the "
  "incident finding evidence for it. The evidence that should have stopped it "
  "supports nothing at all — which is exactly why an agent scoring only "
  "support reads it as noise and carries on.",
 
-"D4.1":
+"E4.1":
  "Every runbook in the drawer picked its own automation tier, chosen by "
  "whoever wrote it on the day. So the blast radius of your incident response "
  "is unknown until the response fires, which is the worst moment to find out.",
 
-"D4.2":
+"E4.2":
  "Fully automated contains in fourteen seconds and is wrong eight times in a "
  "hundred. Manual is almost never wrong and takes thirty-four minutes, "
  "against a breakout time of twenty-nine. Neither of those is the safe "
  "option; they fail differently.",
 
-"D5.2":
+"E5.2":
  "The postmortem says the on-call engineer missed the alert. It is true, it "
  "is useless, and it will be true again next quarter about somebody else. A "
  "root cause names a control, or it names nothing that can be built.",
 
-"D5.4":
+"E5.4":
  "The ticket is closed and the incident is marked remediated. Re-measure the "
  "indicators it moved and two of them never came back — including the "
  "detection time, which improved from 194 minutes to 118 and is still eight "
  "times its target.",
 
-"D5.5":
+"E5.5":
  "The incident produced a fix to what is deployed and no change at all to "
  "what is allowed. So the next system built under the same policy "
  "reproduces the same conditions, and the postmortem sits in a folder being "
  "correct.",
 
-"E1.13":
+"F1.13":
  "The register says the control is in place. Nobody has computed it from the "
  "estate, so the first evidence either way will be an incident. An indicator "
  "you cannot calculate today is a sentence in a policy wearing a number's "
@@ -70,7 +70,7 @@ HOOKS: dict[str, str] = {
 
 DIAGRAMS: dict[str, str] = {
 
-"D3.10": """
+"E3.10": """
    DETECTION                          HUNTING
 
    behaviour  ->  rule  ->  alert     hypothesis
@@ -88,7 +88,7 @@ DIAGRAMS: dict[str, str] = {
    fourteen runs to find two, because twelve are the nightly batch
 """,
 
-"D2.5": """
+"E2.5": """
    incident trace
         |
         v
@@ -110,7 +110,7 @@ DIAGRAMS: dict[str, str] = {
    REJECT           SHIP            REJECT
 """,
 
-"D3.2": """
+"E3.2": """
    investigation class: agent-misuse
    +--------------------------------------------------+
    |  sources   agent.traces  gateway.logs  tool.audit |   allowlist
@@ -128,7 +128,7 @@ DIAGRAMS: dict[str, str] = {
    400 rows is an investigation and 90,000 is a copy
 """,
 
-"D3.6": """
+"E3.6": """
    evidence        supports?        the plan
 
    1 refund at 03:14   misuse|theft   agent-misuse
@@ -145,7 +145,7 @@ DIAGRAMS: dict[str, str] = {
    agent-misuse was considered and dropped, not that it was never raised
 """,
 
-"D4.1": """
+"E4.1": """
                     reversible without a human?
                     yes                     no
                 +---------------------+-------------------+
@@ -161,14 +161,14 @@ DIAGRAMS: dict[str, str] = {
      force HITL on every agent    whole estate, a flag  -> HITL
 """,
 
-"D5.2": """
+"E5.2": """
    control chain for INC-2026-114        status
 
-   A2.6  provenance at ingress           absent   <- first absent = ROOT
-   A3.1  default-deny on the tool call   wrong scope
-   D2.2  detection: refund w/o approval  absent   <- contributing
-   D1.2  drift on vendor tool descs      absent   <- contributing
-   D4.4  stop authority in the window    PRESENT  <- and never reached
+   B2.6  provenance at ingress           absent   <- first absent = ROOT
+   B3.1  default-deny on the tool call   wrong scope
+   E2.2  detection: refund w/o approval  absent   <- contributing
+   E1.2  drift on vendor tool descs      absent   <- contributing
+   E4.4  stop authority in the window    PRESENT  <- and never reached
 
    a control that exists but is never reached is not a mitigating factor.
    it is evidence about the detection in front of it.
@@ -177,7 +177,7 @@ DIAGRAMS: dict[str, str] = {
                     names a person  -> rejected, however true
 """,
 
-"D5.4": """
+"E5.4": """
    kci        healthy   during     after fix    verdict
 
    KCI-01      1.00      0.41       1.00        restored
@@ -192,7 +192,7 @@ DIAGRAMS: dict[str, str] = {
               for all five. improvement is not restoration.
 """,
 
-"E1.13": """
+"F1.13": """
    cybertravels/  (read at run time, not from a register)
         |
         v
@@ -207,14 +207,14 @@ DIAGRAMS: dict[str, str] = {
         |                                              |
         v                                              v
    gap  -> the lesson that closes it        one PASSING indicator,
-           (A2.4, B2.7, A3.4, A3.7)         so the set can be seen
+           (B2.4, C2.7, B3.4, B3.7)         so the set can be seen
                                             to discriminate
 """,
 
 }
 
-# D4.2 and D5.5 reuse the shape of their neighbours rather than inventing one.
-DIAGRAMS["D4.2"] = """
+# E4.2 and E5.5 reuse the shape of their neighbours rather than inventing one.
+DIAGRAMS["E4.2"] = """
    one incident, three tiers
 
    tier                 decide      contain      wrong / 100
@@ -230,7 +230,7 @@ DIAGRAMS["D4.2"] = """
    has an exchange rate hidden in it that somebody chose
 """
 
-DIAGRAMS["D5.5"] = """
+DIAGRAMS["E5.5"] = """
    root cause record
         |
         v
@@ -253,7 +253,7 @@ BRIDGES: dict[str, dict[str, str]] = {
 
 # Each one closes on the interval the chapter shortened and names the next one.
 
-"D1": {
+"E1": {
  "gained": "You can measure the discover interval instead of assuming it: four "
            "sensor classes scored against what an agent actually does, drift "
            "caught without a code change, and — as a bonus — the agents nobody "
@@ -261,12 +261,12 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gap": "Four of the nine ordinary agent actions are seen by nothing you own, "
         "and the source that would see them lands nowhere. Everything here is a "
         "finding in a notebook; the detect interval is exactly where it was.",
- "next": "Chapter D2 builds the place it lands and the rules that read it: the "
+ "next": "Chapter E2 builds the place it lands and the rules that read it: the "
          "lake, tiered by the queries the SOC runs, and detections mapped to "
          "ATT&CK and ATLAS.",
 },
 
-"D2": {
+"E2": {
  "gained": "You can shorten detect: a lake tiered by the queries that read it "
            "rather than by whoever holds the invoice, detections for both "
            "subjects — the agent and the platform running it — each carrying a "
@@ -275,12 +275,12 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gap": "A detection fires. It does not investigate. Understanding still costs "
         "an analyst's reading speed, and the obvious fix — hand an agent broad "
         "read across the estate — is frequently what the incident was.",
- "next": "Chapter D3 shortens understand, and spends part of it deliberately: "
+ "next": "Chapter E3 shortens understand, and spends part of it deliberately: "
          "admission rules before anything runs, scope along the delegation "
          "graph, then intel and the hunt for what no rule covers.",
 },
 
-"D3": {
+"E3": {
  "gained": "You can end the understand interval honestly: the investigator "
            "bounded before it starts, an alert carrying the fields agent triage "
            "needs, a trace where the first theory was abandoned in the open, "
@@ -290,12 +290,12 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gap": "You know what happened and you have not stopped it. Every lever you "
         "might pull is still chosen in the moment by whoever is awake, so the "
         "contain interval is whatever that person's night is like.",
- "next": "Chapter D4 makes contain a number you set in advance: the remediation "
+ "next": "Chapter E4 makes contain a number you set in advance: the remediation "
          "policy that decides what may happen without asking, and the three "
          "runbook tiers that policy produces.",
 },
 
-"D4": {
+"E4": {
  "gained": "You can fix the contain interval before the incident — actions "
            "classified on reversibility and radius, tiers derived from that "
            "rather than from their author, containment timed against a measured "
@@ -304,12 +304,12 @@ BRIDGES: dict[str, dict[str, str]] = {
         "been named, no measurement re-read, and the policy that permitted it "
         "is exactly as it was — so the next occurrence starts every interval "
         "again from the top.",
- "next": "Chapter D5 is the last interval, recover: the root cause record, the "
+ "next": "Chapter E5 is the last interval, recover: the root cause record, the "
          "layer the fix belongs in, the re-measurement that decides whether it "
          "worked, and the policy change with the incident attached.",
 },
 
-"D5": {
+"E5": {
  "gained": "You can close an incident properly: a run you can reproduce, a root "
            "cause naming a control rather than a person, the fix at the right "
            "layer, the indicators re-read to see which actually came back, and "
@@ -318,10 +318,10 @@ BRIDGES: dict[str, dict[str, str]] = {
         "regulatory clock started at awareness, and nothing here tells you "
         "which controls a supervisor will ask for, on what date, or what "
         "evidence they will accept.",
- "next": "Function E is governance, and it is told in the unit D5.4 already "
-         "used: the key control indicator. E1.1 defines it, and the rest of the "
+ "next": "Function E is governance, and it is told in the unit E5.4 already "
+         "used: the key control indicator. F1.1 defines it, and the rest of the "
          "function builds it, evidences it and runs it as a programme. "
-         "Next → E1.0, what AI governance means.",
+         "Next → F1.0, what AI governance means.",
 },
 
 }

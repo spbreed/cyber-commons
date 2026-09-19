@@ -57,7 +57,7 @@ mappings, not a certification.
 
 ```
    Art. 14  Human oversight                                      17 lessons
-   A1.2    OWASP LLM01 · OWASP T6 · ATLAS AML.T0051 · ATLAS Initial Access · NIST MAP · EUAI Art. 15
+   B1.2    OWASP LLM01 · OWASP T6 · ATLAS AML.T0051 · ATLAS Initial Access · NIST MAP · EUAI Art. 15
 ```
 
 ## Output contract
@@ -67,7 +67,7 @@ mappings, not a certification.
   "frameworks": [{"name": "str", "url": "str", "size": "str"}],
   "euai_articles": [{"article": "str", "title": "str", "lessons": 0}],
   "coverage": {"nist": {"GOVERN": 0}, "owasp": {"LLM01": 0}},
-  "lookup": {"by_lesson": {"A1.2": ["str"]}, "by_control": {"Art. 14": ["str"]}}
+  "lookup": {"by_lesson": {"B1.2": ["str"]}, "by_control": {"Art. 14": ["str"]}}
 }
 ```
 

@@ -1,4 +1,4 @@
-# step:file A3.3
+# step:file B3.3
 """Egress control — an allow-list at the boundary the agent actually crosses.
 
 Up to here CyberTravels has had no egress control at all. Nothing in the tree
@@ -20,7 +20,7 @@ allow-list says yes, and the data leaves. So the check is on the destination
 
 Enforced here at the point the agent reaches out, because that is where the
 decision is, and noted plainly: a control inside the process an attacker is
-influencing is the weaker placement. A3.7 moves it to a gateway.
+influencing is the weaker placement. B3.7 moves it to a gateway.
 """
 import re
 from urllib.parse import urlparse

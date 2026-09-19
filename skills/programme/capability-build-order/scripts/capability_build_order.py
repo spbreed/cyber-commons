@@ -58,10 +58,10 @@ CAPABILITY_AT = {
 }
 
 ROLES = {
- "harness engineer":   ("B2", {"EV-2"},                 "loop, verifier, eval"),
- "identity engineer":  ("A2", {"AC-1","AC-2","EV-1"},   "identity, delegation, act chains"),
- "detection engineer": ("D1", {"DR-1"},                 "agent telemetry and drift"),
- "GRC practitioner":   ("E1", {"SB-2","ST-1"},          "tiering, evidence, verification"),
+ "harness engineer":   ("C2", {"EV-2"},                 "loop, verifier, eval"),
+ "identity engineer":  ("B2", {"AC-1","AC-2","EV-1"},   "identity, delegation, act chains"),
+ "detection engineer": ("E1", {"DR-1"},                 "agent telemetry and drift"),
+ "GRC practitioner":   ("F1", {"SB-2","ST-1"},          "tiering, evidence, verification"),
 }
 # ------------------------------------------------------------------------ run
 

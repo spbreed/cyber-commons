@@ -615,24 +615,24 @@ def home_numbers() -> dict[str, int]:
 # tree. The mapping lives here instead, and a function missing from it fails
 # the build rather than quietly falling back to the stored title.
 TRACKS = {
-    "G": ("Build an agentic system",
-          "Build CyberTravels end to end — the loop, MCP tools, identity and "
-          "delegation, memory, agent-to-agent, spans and an audit trail — "
-          "before any of it is called a risk."),
-    "A": ("Agent architecture &amp; risks",
+    "A": ("Build an agentic system",
+          "Set your machine up, then build CyberTravels end to end — the loop, "
+          "MCP tools, identity and delegation, memory, agent-to-agent, spans "
+          "and an audit trail — before any of it is called a risk."),
+    "B": ("Agent architecture &amp; risks",
           "One reference architecture for agentic systems, and every risk that "
           "attaches to a component of it."),
-    "B": ("AI SDLC &amp; harness",
+    "C": ("AI SDLC &amp; harness",
           "An AppSec pipeline that runs before and after deploy, and the harness "
           "that measures whether it works."),
-    "C": ("AI red teaming",
+    "D": ("AI red teaming",
           "One authorised, scoped offensive lifecycle against your own estate — "
           "from ingestion and elicitation to containment, forensics and "
           "governance."),
-    "D": ("Agentic SOC",
+    "E": ("Agentic SOC",
           "Detection and response when the analyst is directing agents rather "
           "than reading alerts one at a time."),
-    "E": ("AI GRC",
+    "F": ("AI GRC",
           "Risk, control, regulatory mapping and the CISO office, for systems "
           "that take actions on their own."),
 }

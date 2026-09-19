@@ -1,188 +1,261 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.0 — Start here — what AI governance means | Cyber Commons</title><meta name="description" content="One register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.0</div><h1>Start here — what AI governance means</h1><div class="badges"><span class="badge t">E1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T7</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A trustworthy-AI statement with no owner per property, so every property is somebody else&#x27;s job.</p></div><div class="ctrl"><div class="lab">Control</div><p>One register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Take the seven properties and assign each an owner in your own organisation. The gaps are the programme.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/regulatory/framework-reference-lookup" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/regulatory/framework-reference-lookup/scripts/framework_reference_lookup.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">A list of approved products works at forty products. It does not survive a thousand agents, most of them assembled by people who do not think of themselves as building software. Governing autonomy is a different exercise from approving tools.</p><div class="ct"><b>At CyberTravels.</b> `cybertravels/governance/__init__.py` is six trustworthy-AI properties with two columns beside each: the function that owns it and the **artefact** that evidences it. Call `unowned()` with the properties your own statement claims and it returns the ones nothing in this system evidences — usually a longer list than anybody expects, because a statement is written before the artefacts are.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Governance stated as a table rather than a value: each property a trustworthy-AI claim makes, the function that owns it, and the artefact that evidences it — because a property with no artefact is a value, and values do not survive an audit.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A trustworthy-AI statement with no owner per property means every property is somebody else&#x27;s job.</p></div><div class="d1"><span>Day 1 — how</span><p>Assign each of the seven properties an owner, and read the three chapters as one unit built, evidenced and run.</p></div><div class="d2"><span>Day 2 — measure</span><p>Properties with a named owner. Security owns one of seven outright, which is why this is not a security document.</p></div></div><div class="fnday"><b>Who this function is for.</b> GRC analysts, risk and compliance managers, control owners, privacy engineers, BISOs and the CISO office — anyone who has to answer for the estate rather than build it.</div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   approving tools                governing autonomy
-   +-------------------+          +---------------------------+
-   | a list of 40      |          | levels + conditions        |
-   | grows forever     |    vs    | attach to behaviour        |
-   | governs nothing   |          | still works at 1000 agents |
-   +-------------------+          +---------------------------+
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.0 — Start here — the agentic SOC, and the stack that runs it | Cyber Commons</title><meta name="description" content="Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — The Agentic SOC › Discover — the Sensors, and the Agent-Shaped Hole in Them</div><div class="sid">E1.0</div><h1>Start here — the agentic SOC, and the stack that runs it</h1><div class="badges"><span class="badge t">E1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.</p></div><div class="ctrl"><div class="lab">Control</div><p>Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put one agent trace and one human session side by side and list what separates them.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/detection/agent-tempo-baseline" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">An hour of an agent is 1,400 actions across 260 resources in 96 sessions. An hour of a person is twelve actions. Every detection, baseline and playbook you own was tuned against the second number.</p><div class="ct"><b>At CyberTravels.</b> `cybertravels/soc/__init__.py` carries the incident clock, and its shape is the argument. `elapsed_budget(&#x27;contain&#x27;)` shows where the time actually goes: **attribute** is the largest block, and for a human actor it would be near zero. Every lesson in this function names a stage on that clock.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>The SOC as one system with a clock, and the observation the whole function turns on: the estate's detection content was written for an actor that acts a few times a minute and is now watching one that acts a thousand times an hour. Including where the clock actually goes, which is establishing who acted.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour, reports nothing and means nothing.</p></div><div class="d1"><span>Day 1 — how</span><p>Learn the five intervals and the open-source stack that measures them, before building anything.</p></div><div class="d2"><span>Day 2 — measure</span><p>The five intervals themselves — discover, detect, understand, contain, recover. Every later lesson moves one of them.</p></div></div><div class="fnday"><b>Who this function is for.</b> SOC analysts, detection engineers, incident responders, threat hunters and DFIR leads — running a SOC that now has agents in it, and agents watching it.</div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   one hour                person        agent
+   actions                    12          1400
+   distinct resources          5           260
+   gap between calls        180s             2s
+   sessions                    1            96
 
-   seven trustworthy-AI properties, one owner each
-   valid+reliable . safe . secure+resilient . accountable+transparent
-   explainable . privacy-enhanced . fair
-
-   security owns one of the seven outright</pre><p>Someone at CyberTravels signed off on the platform. Function E is about whether
-that signature still means anything.</p>
-<p>It has to, because the sign-off happened when CyberTravels was a chatbot. It now
-issues refunds, writes code, reads invoices and indexes contracts. Nothing about
-the approval was wrong on the day; everything about it is stale, and the
-approval process has no step that notices.</p>
-<p><strong>Governing autonomy rather than approving tools</strong> is the shift. A list of
-approved products works at forty products. CyberTravels will not stop at four
-agents, and neither will the list.</p>
-<p>The vocabulary is <strong>trustworthy AI</strong>, and it is worth being precise about,
-because it is used loosely everywhere else. Seven properties, and not one of
-them belongs to a single team:</p>
+   chapter 8   detect it     chapter 9   respond to it
+   +----------------------+  +-------------------------+
+   | triage as a loop     |  | scope at machine speed  |
+   | detections FOR agents|  | contain, replay, stop   |
+   +----------------------+  +-------------------------+</pre><p>CyberTravels has a SOC. It was built for people.</p>
+<p>It watches for a login from an unusual country, a burst of failed
+authentications, an employee downloading the customer list on their last day. It
+is good at those, and none of them describes CyberTravels.</p>
+<p><strong>An agentic SOC watches a different actor.</strong> One hour of CyberTravels' Workflow
+Agent is roughly 1,400 tool calls across 260 resources in 96 sessions. One hour
+of Alex is twelve actions. Every threshold, baseline and playbook CyberTravels
+owns was tuned against the second number.</p>
+<p>And the actor is not only the adversary. It is also the instrument: chapter E2
+puts an agent on detection engineering and chapter E3 puts one on the alert
+queue. Both work, and both bring the same failure mode — a loop that concludes
+confidently can conclude wrongly at machine speed.</p>
+<h3>The unit this function is written in</h3>
+<p>A ratio of 117× is not a fact you can act on. <strong>The unit is an interval</strong>, and
+there are five of them between an agent doing something it should not and the
+control that stopped it being back at target:</p>
 <table>
 <thead>
 <tr>
-<th>property</th>
-<th>what it means for CyberTravels</th>
+<th>interval</th>
+<th>from</th>
+<th>to</th>
+<th>chapter</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>valid and reliable</td>
-<td>it recommends hotels that exist, repeatably, and somebody measured that</td>
+<td><strong>discover</strong></td>
+<td>the behaviour happens</td>
+<td>somebody could see it at all</td>
+<td>E1</td>
 </tr>
 <tr>
-<td>safe</td>
-<td>a wrong recommendation does not become a $5,000 refund</td>
+<td><strong>detect</strong></td>
+<td>it is visible</td>
+<td>an alert exists</td>
+<td>E2</td>
 </tr>
 <tr>
-<td>secure and resilient</td>
-<td>it withstands the twelve risks in the register, and recovers</td>
+<td><strong>understand</strong></td>
+<td>the alert exists</td>
+<td>a conclusion you can act on</td>
+<td>E3</td>
 </tr>
 <tr>
-<td>accountable and transparent</td>
-<td>a named person owns it, and its actions are visible</td>
+<td><strong>contain</strong></td>
+<td>the conclusion</td>
+<td>the actor stopped</td>
+<td>E4</td>
 </tr>
 <tr>
-<td>explainable</td>
-<td>the reason it issued a refund can be recovered afterwards</td>
-</tr>
-<tr>
-<td>privacy-enhanced</td>
-<td>passport numbers do not end up in a log or a vector store</td>
-</tr>
-<tr>
-<td>fair, harmful bias managed</td>
-<td>it does not quietly serve some travellers worse</td>
+<td><strong>recover</strong></td>
+<td>stopped</td>
+<td>the control measurably back at target</td>
+<td>E5</td>
 </tr>
 </tbody>
 </table>
-<p>Security owns one of the seven outright. That ratio is the whole reason this
-function exists as more than a security document.</p>
-<p>Contributing evidence to six properties you do not own only works if the
-evidence is in a form the other six owners can use, which is why the whole of
-Function E is written in one unit: a <strong>key control indicator</strong>. E1.1 defines it
-— a number computed from the estate, with a denominator, and a target set before
-the measurement is taken — and the three chapters are that one unit built,
-evidenced and run:</p>
-<ul>
-<li><strong>Chapter E1 — risk and control.</strong> Where the indicators come from. The
-  register supplies the denominator, risk tiering supplies the target, control
-  mapping supplies the subject, and E1.13 computes six of them against the
-  CyberTravels repository and reports the gaps.</li>
-<li><strong>Chapter E2 — regulatory and compliance.</strong> The same indicators read as
-  evidence. A travel company holds passports, payment data and health
-  information, and each regime asks for a reading rather than a description —
-  quotable to several of them because it was computed once.</li>
-<li><strong>Chapter E3 — the CISO office.</strong> The indicators run as a programme:
-  sequenced by distance from target, owned by name, and reported to a board in
-  numbers somebody in the room can re-compute.</li>
-</ul>
-<p>Every lesson in this function carries a line under its concept saying what it
-contributes to that indicator or takes from it. Where a lesson looks like it
-belongs to a different argument, that line is the place to check.</p>
-<p>Two rows of the register belong to this function outright: <strong>R2</strong>, where a
-guardrail was disabled for a demo and nobody had to approve it, and <strong>R12</strong>,
-where contracts were indexed for better answers and became searchable by
-contractors.</p><div class="how"><h2>2 · Seven properties, and who at CyberTravels owns each</h2><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">trustworthy-AI property</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">who owns it at CyberTravels</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">security&#x27;s share</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">valid and reliable</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">engineering + the eval harness (B2.19)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">safe</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the CyberTravels product owner + risk</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">secure and resilient</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">security</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>owns it</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">accountable and transparent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the named system owner</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">explainable and interpretable</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">engineering + model risk</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">privacy-enhanced</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">privacy office + engineering</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">fair, harmful bias managed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">product owner + legal</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Security owns one of the seven and contributes evidence to the other six. A trustworthy-AI statement with no owner per property is a statement that every property is somebody else's job.</div><h2>3 · What the sign-off actually covered</h2>
-<p>The approval was accurate when it was given. This is what changed underneath it, and which of those changes raised a ticket.</p><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">at approval</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">today</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">did it go through change management?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">one agent, answers questions</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">four agents</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">read-only</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">issues refunds</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no repository access</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">opens and self-approves pull requests</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no document store</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">indexes contracts and pricing models</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">hosted model, fixed version</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">provider upgrades it silently</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no — you may not be told</b></td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Five material changes, none of them ticketed. This is R2 and the lifecycle problem of E1.9 in one table, and it is why chapter 10 starts with an inventory rather than a policy.</div><h2>4 · Three distances from the same question</h2><svg viewBox="0 0 700 140" width="100%" style="max-width:700px;height:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d93a3"/></marker></defs><rect x="6" y="14" width="218" height="84" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="115.0" y="53.0" text-anchor="middle" fill="currentColor">chapter 10</text><text x="115.0" y="69.0" text-anchor="middle" fill="#4a6172" font-size="10.5">risk and control</text><text x="115" y="62" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">inventory · tiering</text><text x="115" y="78" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">mapping · evidence</text><rect x="242" y="14" width="218" height="84" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="351.0" y="53.0" text-anchor="middle" fill="currentColor">chapter 11</text><text x="351.0" y="69.0" text-anchor="middle" fill="#4a6172" font-size="10.5">regulatory</text><text x="351" y="62" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">obligations · documentation</text><text x="351" y="78" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">supervision</text><rect x="478" y="14" width="216" height="84" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="586.0" y="53.0" text-anchor="middle" fill="currentColor">chapter 12</text><text x="586.0" y="69.0" text-anchor="middle" fill="#4a6172" font-size="10.5">the CISO office</text><text x="586" y="62" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">sequencing · org design</text><text x="586" y="78" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">metrics · stop authority</text><line x1="224" y1="56" x2="240" y2="56" stroke="#7d93a3" stroke-width="1.4" marker-end="url(#a)"/><line x1="460" y1="56" x2="476" y2="56" stroke="#7d93a3" stroke-width="1.4" marker-end="url(#a)"/><text x="350" y="124" text-anchor="middle" fill="#4a6172" font-size="11.5" font-weight="normal">inside CyberTravels  →  to a regulator  →  to the board</text></svg><h2>4 · Which vocabulary is this control already in?</h2>
-<p>Governance work is mostly translation, and the first translation is the cheapest: a control you already operate is usually named in several framework vocabularies at once. <code>cybertravels/governance/__init__.py</code> is the tree increment this lesson adds — six trustworthy-AI properties, each with the function that owns it and the <strong>artefact</strong> that evidences it, because a property with no artefact is a value and values do not survive an audit. This skill is the lookup in the other direction:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/regulatory/framework-reference-lookup/SKILL.md" target="_blank" rel="noopener"><code>skills/regulatory/framework-reference-lookup/SKILL.md</code></a></p><pre class="front"><code>name: framework-reference-lookup
+<p>Every lesson in this function shortens one of those five, or spends one
+deliberately to buy something else — and each says which, in a line under its
+own concept. The intervals are where the numbers live: CyberTravels' detection
+interval is 194 minutes against a 15-minute target, and its manual containment
+runbook finishes in 34 minutes against a measured breakout time of 29. Neither
+of those is an opinion about tooling.</p>
+<h3>The stack that runs it</h3>
+<p>Nothing in this function needs a product you do not have. Every phase below has
+a working open-source reference, and the lessons are written against these
+rather than against a vendor's diagram — so you can build the whole thing and
+find out what it does not cover, which is the part that matters.</p>
+<table>
+<thead>
+<tr>
+<th>phase</th>
+<th>what has to exist</th>
+<th>open source that does it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>discover</strong></td>
+<td>endpoint and workload sensing</td>
+<td><strong>Wazuh</strong> (agent, manager, indexer)</td>
+</tr>
+<tr>
+<td></td>
+<td>cloud posture, on a schedule</td>
+<td><strong>Prowler</strong>, <strong>ScoutSuite</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>container runtime and image contents</td>
+<td><strong>Falco</strong>, <strong>Trivy</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>sensitive content in motion</td>
+<td>regex plus Wazuh file integrity monitoring</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>agent</strong> traces — prompts, tools, decisions</td>
+<td><strong>OpenTelemetry</strong>, instrumented at the gateway</td>
+</tr>
+<tr>
+<td><strong>detect</strong></td>
+<td>somewhere for all of it to land</td>
+<td><strong>OpenSearch</strong> (or the Wazuh indexer)</td>
+</tr>
+<tr>
+<td></td>
+<td>rules, portable and reviewable</td>
+<td><strong>Sigma</strong>, mapped to <strong>ATT&amp;CK</strong> and <strong>ATLAS</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>deception with no threshold</td>
+<td>canary tokens and honeypot tasks you write</td>
+</tr>
+<tr>
+<td><strong>understand</strong></td>
+<td>third-party intelligence</td>
+<td><strong>MISP</strong>, <strong>OpenCTI</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>correlation and hunting</td>
+<td>notebooks over the lake</td>
+</tr>
+<tr>
+<td></td>
+<td>case management</td>
+<td><strong>TheHive</strong>, enrichment via <strong>Cortex</strong></td>
+</tr>
+<tr>
+<td><strong>respond</strong></td>
+<td>orchestration and runbooks</td>
+<td><strong>Shuffle</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>revocation</td>
+<td>your own IdP and gateway, driven from the runbook</td>
+</tr>
+<tr>
+<td><strong>recover</strong></td>
+<td>host and memory forensics</td>
+<td><strong>Velociraptor</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>run replay</td>
+<td>the harness from C2.1, pinned per E5.1</td>
+</tr>
+</tbody>
+</table>
+<p>Two honest notes about that table.</p>
+<p><strong>The DLP row is the weakest.</strong> There is no open-source DLP with the maturity of
+the other three, which is why the row names a pattern rather than a product —
+and why E1.1 scores DLP at almost no coverage of an agent's day. That is a real
+finding about the market, not a gap in the reading.</p>
+<p><strong>The agent-telemetry row does not exist in any of the products.</strong> Wazuh will
+tell you a process wrote a file. Nothing in the list tells you which prompt
+caused it. That row is instrumentation you write, it lands in the lake E2.1
+designs, and its absence is what E1.1 measures.</p>
+<h3>The five chapters</h3>
+<p><strong>E1 — discover.</strong> The four sensor classes you already own, scored against what
+an agent actually does; drift, the failure with no adversary at all; and a bonus
+on finding the agents nobody registered and keeping what they emit.</p>
+<p><strong>E2 — detect.</strong> The lake every rule is written against, then detections for two
+subjects that are not the same subject — the agent, and the platform running it
+— mapped to ATT&amp;CK and ATLAS, plus the loop that writes rules, the benign corpus
+that decides whether they ship, and the one detector that needs no threshold.</p>
+<p><strong>E3 — understand.</strong> An investigation an agent can run: bounded before it
+starts, given the fields an agent alert needs, willing to abandon its first
+theory in the open, scoped along the delegation graph, widened to the
+population — and then the two proactive halves, third-party intelligence that
+has to become a rule and a hunt for behaviour no rule covers.</p>
+<p><strong>E4 — respond.</strong> A response whose blast radius is known before it fires.
+Actions classified on reversibility and radius, tiers derived from that rather
+than from their author, containment timed against the attacker, and a fleet stop
+that revokes as well as terminates.</p>
+<p><strong>E5 — recover and root cause.</strong> A run you can reproduce, a root cause that
+names a control rather than a person, the fix put at the layer it belongs in,
+the indicators re-measured to see which actually came back — and a regulatory
+clock that started before anyone knew.</p>
+<p>Two rows of the CyberTravels register are this function's whole reason to exist:
+<strong>R9</strong>, where holding one agent reaches CRM, payroll and the cloud resource
+manager, and <strong>R10</strong>, where passport numbers are in the logs that would have
+told you.</p><div class="how"><h2>2 · One hour of CyberTravels, one hour of Alex</h2><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">signal, over one hour</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">Alex</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">CyberTravels&#x27; Workflow Agent</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">ratio</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">actions taken</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">12</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1,400</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">117×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">distinct resources touched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">5</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">260</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">52×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">median gap between calls</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">180s</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2s</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1/90×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">sessions</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">96</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">96×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">typo / retry events</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">—</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Every detection, baseline and playbook CyberTravels owns was tuned against the second column.</div><h2>3 · Why a volume rule is not the answer</h2>
+<p>The obvious rule does fire. The problem is <em>when</em> — which is the one thing a table cannot show you, so this part is worth running.</p><h2>4 · What CyberTravels has to emit before any of this works</h2><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what the SOC needs</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">is it in an application log?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">which lesson gets it</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the prompt that motivated the action</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">E1.3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the tool call, with arguments</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">E1.3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the decision, and what it was based on</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">E5.1</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which agent acted</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">E1.3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which human it acted for</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B2.7 · E1.3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the HTTP request the tool made</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">already there</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Five of six do not exist yet. R10 in the register is the sixth one's twin problem — the log you do have is full of passport numbers.</div><h2>2 · The procedure, as a skill</h2>
+<p>Alex and CyberTravels' Workflow Agent, over the same hour. The skill measures the five signals that separate them, then runs the existing volume rule against the agent's run — where it fires 154 seconds in and stays silent for the remaining fifty-seven minutes.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/agent-tempo-baseline/SKILL.md" target="_blank" rel="noopener"><code>skills/detection/agent-tempo-baseline/SKILL.md</code></a></p><pre class="front"><code>name: agent-tempo-baseline
 description: &gt;-
-  Look up which control vocabularies a lesson maps to, and which lessons address
-  a given control, from the commons&#x27; own mapping file. Use when answering &quot;where
-  is this framework covered&quot;, when preparing an audit response, or when checking
-  a framework&#x27;s coverage for gaps.
-allowed-tools: Read, Grep, Glob</code></pre><h1>Two directions, and the second one is the one people actually ask for</h1>
-<p>Nobody asks what a lesson maps to. They ask <strong>"show me where human oversight is
-addressed"</strong>, and the answer has to be a list of things that exist rather than a
-paragraph asserting coverage.</p>
-<p>This reads <code>curriculum/frameworks.json</code> — the same file every lesson page is
-labelled from — so a reference table and a lesson's chips cannot disagree.</p>
-<h2>The four vocabularies</h2>
-<table>
-<thead>
-<tr>
-<th>framework</th>
-<th>what it is</th>
-<th>when it is the right lens</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM Applications</a></td>
-<td>LLM01–LLM10, application-level risks</td>
-<td>reviewing a feature that calls a model</td>
-</tr>
-<tr>
-<td><a href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/">OWASP Agentic AI Top 10</a></td>
-<td>T1–T15, threats specific to agents</td>
-<td>the system plans and calls tools</td>
-</tr>
-<tr>
-<td><a href="https://atlas.mitre.org/">MITRE ATLAS</a></td>
-<td>adversary tactics against AI systems</td>
-<td>describing what an attacker did</td>
-</tr>
-<tr>
-<td><a href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF">NIST AI RMF 1.0</a></td>
-<td>GOVERN, MAP, MEASURE, MANAGE</td>
-<td>organising a programme, not a bug</td>
-</tr>
-<tr>
-<td><a href="https://artificialintelligenceact.eu/">EU AI Act</a></td>
-<td>Regulation 2024/1689, by article</td>
-<td>an obligation, with a deadline</td>
-</tr>
-</tbody>
-</table>
-<p>The first three describe <em>what can go wrong</em>. NIST describes <em>how you organise
-to find out</em>. The EU AI Act describes <em>what you must be able to show</em>. A control
-usually needs one of each, which is why lessons carry several.</p>
+  Measure the behavioural signals that separate an agent&#x27;s tempo from a
+  person&#x27;s — action rate, inter-action variance, session length, tool breadth,
+  night-hours share — and check what a volume rule tuned for human tempo does
+  when an agent runs. Use before writing any detection that will see agents.
+allowed-tools: Read, Grep, Glob</code></pre><h1>The rule fires 154 seconds into a sixty-minute run</h1>
+<p>Detection content is calibrated on human tempo. An agent performs in an hour
+what a person performs in a month, so a volume rule does fire — immediately, and
+then not again for the rest of the run, which is the part that matters. The
+baseline has to be measured before any rule is written against it.</p>
 <h2>When to use this</h2>
-<p>Preparing an audit or assurance response, checking coverage before claiming it,
-and picking the right vocabulary for a finding — an ATLAS tactic in a risk
-register and a NIST function in an incident write-up are both category errors.</p>
-<h2>Step-by-step</h2>
-<p><strong>1 — Decide which direction you need.</strong> Lesson → controls for a reader;
-control → lessons for an auditor.</p>
-<p><strong>2 — Use the vocabulary the audience uses.</strong> Do not translate a regulator's
-article into a threat id for them.</p>
-<p><strong>3 — Read the coverage counts as a gap finder.</strong> A control with one lesson is
-thin; one with none is a hole.</p>
-<p><strong>4 — Follow the link before quoting the label.</strong> The labels are indicative
-mappings, not a certification.</p>
+<p>Before authoring or tuning detections in an estate where agents act, and when
+an existing rule is either silent or permanently firing.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Pick one human and one agent doing comparable work.</strong> Same task class,
+same hour. Comparability is what makes the ratio meaningful.</p>
+<p><strong>2 — Measure five signals for each.</strong> Actions per hour, variance between
+actions, session length, distinct tools touched, and share of activity outside
+working hours. Report the ratio per signal — most will be in the hundreds.</p>
+<p><strong>3 — Run the existing volume rule against the agent's hour.</strong> Record when it
+first fires, in seconds. This is usually early enough that the rest of the run
+is unmonitored, which is the finding.</p>
+<p><strong>4 — Say what the rule now means.</strong> After the first firing it is silent for the
+remainder — so it is an <em>onset</em> detector, not a volume detector, and anyone
+relying on it for volume is relying on something else.</p>
+<p><strong>5 — Derive per-population thresholds.</strong> Humans and agents need different
+baselines, and an agent's baseline needs a per-agent one: a patch agent and a
+triage agent do not share a tempo.</p>
 <h2>Example</h2>
-<p><strong>Output</strong> — from a real run:</p>
-<pre><code>   Art. 14  Human oversight                                      17 lessons
-   A1.2    OWASP LLM01 · OWASP T6 · ATLAS AML.T0051 · ATLAS Initial Access · NIST MAP · EUAI Art. 15
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_tempo_baseline.py"><code>scripts/agent_tempo_baseline.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>   Alex                12 actions/hour -&gt; silent
+   workflow agent    1400 actions/hour -&gt; ALERT
+
+the agent crosses the threshold after 154 seconds
+and keeps going for the remaining 3446.
+
+So the rule fires, about two and a half minutes into a sixty-minute run -
+by which point most of what the actor was going to do is done. If those
 </code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;frameworks&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;url&quot;: &quot;str&quot;, &quot;size&quot;: &quot;str&quot;}],
-  &quot;euai_articles&quot;: [{&quot;article&quot;: &quot;str&quot;, &quot;title&quot;: &quot;str&quot;, &quot;lessons&quot;: 0}],
-  &quot;coverage&quot;: {&quot;nist&quot;: {&quot;GOVERN&quot;: 0}, &quot;owasp&quot;: {&quot;LLM01&quot;: 0}},
-  &quot;lookup&quot;: {&quot;by_lesson&quot;: {&quot;A1.2&quot;: [&quot;str&quot;]}, &quot;by_control&quot;: {&quot;Art. 14&quot;: [&quot;str&quot;]}}
+  &quot;subjects&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;human|agent&quot;,
+                &quot;actions_per_hour&quot;: 0, &quot;variance&quot;: 0.0, &quot;session_minutes&quot;: 0,
+                &quot;distinct_tools&quot;: 0, &quot;night_share&quot;: 0.0}],
+  &quot;ratios&quot;: {&quot;str&quot;: 0.0},
+  &quot;existing_rule&quot;: {&quot;threshold&quot;: 0, &quot;first_fires_after_seconds&quot;: 0, &quot;silent_after&quot;: true},
+  &quot;recommendation&quot;: {&quot;per_population_thresholds&quot;: true, &quot;populations&quot;: [&quot;str&quot;]}
 }
 </code></pre>
-<h2>Common edge cases</h2>
-<ul>
-<li><strong>A lesson carries no labels.</strong> A0 is setup and maps to no control on
-  purpose; that is declared, not missing.</li>
-<li><strong>One article dominates.</strong> Art. 15 covers accuracy, robustness <em>and</em>
-  cybersecurity, so it is broad by construction.</li>
-<li><strong>A label with one lesson.</strong> Thin coverage, not necessarily wrong — check
-  whether the control deserves more.</li>
-</ul>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Quoting a mapping as compliance.</strong> These are indicative. Studying a lesson
-  discharges no obligation.</li>
-<li><strong>Maintaining a second copy of the tables.</strong> They will diverge; read the one
-  file.</li>
-<li><strong>Assuming a framework's ids are stable.</strong> OWASP renumbered the LLM Top 10
-  slugs between editions, which is why the links are fetched in CI.</li>
+<li><strong>Comparing an agent to an average human.</strong> Compare like work.</li>
+<li><strong>Reading an early firing as coverage.</strong> It is one alert and then silence.</li>
+<li><strong>One agent baseline for every agent.</strong> Their tempos differ as much as their
+  jobs do.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at E1.0 --out work/cybertravels
 python3 scripts/checkpoint.py --at E1.0 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "framework reference lookup"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/regulatory/framework-reference-lookup/scripts/framework_reference_lookup.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Seven trustworthy-AI properties with a named owner each and security owning exactly one outright. Five material changes to CyberTravels since its approval, none of which raised a ticket. The three chapters laid out by how far from the system each one sits.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Find the approval record for one agent you run and compare it to what that agent does today. The gap is the programme, and the reason nobody noticed it is what chapter 10 is for.</p></div></section><div class="expect"><b>Expect</b>Seven trustworthy-AI properties print with a typical owner each. Security owns exactly one outright and contributes evidence to the other six — which is the reason this function exists as more than a security document.</div><p class="sub" style="margin-top:10px">Skill source: <code>skills/regulatory/framework-reference-lookup</code></p></div><div class="pager"><a href="D5.6.html"><span class="k">← Previous</span><span class="t">D5.6 · The regulatory clock — awareness, not confirmation</span></a><a class="next" href="E1.1.html"><span class="k">Next →</span><span class="t">E1.1 · From framework control to key control indicator</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "agent tempo baseline"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five behavioural signals for Alex and for CyberTravels' Workflow Agent over the same hour, with ratios in the hundreds. The volume rule tuned for human tempo does fire — 154 seconds into a sixty-minute run, leaving 3,446 seconds unmonitored. Five of the six things an agentic SOC needs are not in any application log.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8 and it is a telemetry problem rather than a detection one.</p></div></section><div class="expect"><b>Expect</b>Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.</div><p class="sub" style="margin-top:10px">Skill source: <code>skills/detection/agent-tempo-baseline</code></p></div><div class="pager"><a href="D1.11.html"><span class="k">← Previous</span><span class="t">D1.11 · Institutional governance and compliance</span></a><a class="next" href="E1.1.html"><span class="k">Next →</span><span class="t">E1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

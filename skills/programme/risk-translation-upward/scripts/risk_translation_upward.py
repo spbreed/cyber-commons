@@ -53,7 +53,7 @@ GATED = {"pr-remediation-agent": set(), "claims-triage-agent": {"issue_refund"},
 ATTACKS = [("metadata service", False), ("path traversal", False),
            ("unlisted egress", True), ("denied tool", False)]
 
-# assurance — from E1.7
+# assurance — from F1.7
 REQUIRED = ["AC-1","AC-2","SB-1","SB-2","EV-1","EV-2","DR-1","ST-1"]
 
 EVIDENCED = ["AC-1","AC-2","EV-1","EV-2"]

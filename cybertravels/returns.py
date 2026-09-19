@@ -1,4 +1,4 @@
-# step:file A3.5
+# step:file B3.5
 """Validating what comes back — before any of it reaches the model.
 
 Every control so far guards the outbound half: may this agent call this tool,
@@ -17,7 +17,7 @@ sane.
 know? A booking that belongs to a different traveller than the one we asked
 about, a refund larger than the booking, a count that disagrees with the rows
 beside it. This is the half that catches a *correct-shaped* lie, and it has to
-be independent of the thing it is checking, which is B2.1's whole argument.
+be independent of the thing it is checking, which is C2.1's whole argument.
 
 Conformance is a statement about the serialiser. An empty result conforms
 perfectly.

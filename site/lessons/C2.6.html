@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.6 — Sandbox replication | Cyber Commons</title><meta name="description" content="Stage 11: replicate the application in an isolated, disposable runtime with no path to production."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Application Security with an AI SDLC › The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">C2.6</div><h1>Sandbox replication</h1><div class="badges"><span class="badge t">C2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM05</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Resource Development</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Dynamic testing is run against staging, so a destructive probe becomes an incident.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 11: replicate the application in an isolated, disposable runtime with no path to production.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/appsec/exploit-replica-isolation-check" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/appsec/exploit-replica-isolation-check/scripts/exploit_replica_isolation_check.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Change the model and the harness at the same time and you have learned nothing about either. Separating those two effects is the whole job — and it is also how you read somebody else&#x27;s published number without being misled by it.</p><div class="ct"><b>At CyberTravels.</b> `appsec/replica.py`. The interesting part is the refusal: `for_target(&#x27;cybertravels-staging&#x27;)` raises rather than quietly building something safe-looking. `isolated_db()` then points your application&#x27;s storage at the replica — and finds that it does not move `INVOICE_ROOT`, which is computed at import from the source tree. That bug is in the file, named, because a replica has to be checked rather than assumed.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>A disposable replica, and the refusal that makes it one — a stage that quietly downgrades to something safe-looking produces output nobody can interpret. Plus the isolation bug the stage finds in itself, because a replica has to be checked rather than assumed.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>Dynamic testing run against staging turns a destructive probe into an incident.</p></div><div class="d1"><span>Day 1 — how</span><p>Replicate the application in an isolated, disposable runtime with no path to production.</p></div><div class="d2"><span>Day 2 — measure</span><p>Probes executed in the sandbox, and connections from it to anything production — where the second number must be zero.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   two effects, one number
+   +-------------+     +--------------+
+   |   model     |  x  |   harness    |  = the result you published
+   +-------------+     +--------------+
+
+   change one at a time, on fixed seeds and a fixed corpus.
+
+   then the three checks on anybody&#x27;s benchmark
+   class balance -&gt; the floor . held-out key -&gt; a result . matcher -&gt; real</pre><p>Phase 4 turns hypotheses into facts by running the application. That is only
+safe if the thing you run it against cannot hurt anyone.</p>
+<p><strong>Stage 11 — Sandbox replication.</strong> Deploy the application in an isolated,
+disposable runtime: its own container, its own synthetic data, no route to
+production, no real credentials.</p>
+<p>The reason this is a <em>stage</em> rather than a footnote is that the obvious shortcut
+— point the dynamic tests at staging — converts every destructive probe into an
+incident. Staging usually shares an identity provider, a message bus, sometimes
+a database replica, and always someone's on-call rota.</p>
+<p>Four isolation properties, and you need all four:</p>
+<ul>
+<li><strong>network</strong> — no egress except to the replica itself,</li>
+<li><strong>credentials</strong> — synthetic secrets, so a leak is worthless,</li>
+<li><strong>data</strong> — synthetic records, so an exfiltration test exfiltrates nothing,</li>
+<li><strong>lifetime</strong> — destroyed after the run, so state cannot leak between tests.</li>
+</ul><div class="how"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote><h2>2 · Stage 11 — model the replica and its isolation</h2><h2>3 · Where it breaks — the same probes against staging</h2><h2>4 · The control — the four isolation properties, checked</h2><h2>2 · The stage, as a skill</h2>
+<p>Before anything is executed against CyberTravels' environment, four checks decide whether it is a replica or staging with a different DNS name. The skill runs them — egress, credentials, data, and the destructive probes you would only run somewhere built to be destroyed.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/exploit-replica-isolation-check/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/exploit-replica-isolation-check/SKILL.md</code></a></p><pre class="front"><code>name: exploit-replica-isolation-check
+description: &gt;-
+  Check that the environment a finding is proved in is a replica rather than
+  staging — on egress, credentials, data realism and destructive probes — before
+  anything is executed against it. Use before dynamic testing, exploit
+  validation, or letting an agent run a proof of concept.
+allowed-tools: Read, Grep, Glob, Bash</code></pre><h1>Staging is production with a different DNS name</h1>
+<p>The reason exploitation is safe is the environment, and "staging" is not that
+environment: it holds real credentials, real-shaped customer records, and a
+route to things that matter. A replica is built to be destroyed, and the four
+checks that distinguish them take minutes.</p>
+<h2>When to use this</h2>
+<p>Before running any probe that could change state, before pointing an agent at a
+target, and every time somebody offers staging because the replica is not ready.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Check egress.</strong> The environment should reach its own internal hosts and
+nothing else. Test the three that matter specifically: a code host, the cloud
+metadata address, and any private range. A replica that can reach GitHub can
+exfiltrate.</p>
+<p><strong>2 — Check credentials.</strong> Every secret in the environment should be synthetic.
+Grep the environment, the mounted files and the database. One real key makes the
+whole environment production for the purposes of this decision.</p>
+<p><strong>3 — Check the data.</strong> Real-shaped is not the same as real. Sample records and
+confirm they are generated, not copied — a customer row with a real email
+address is a breach waiting for a log line.</p>
+<p><strong>4 — Run the destructive probes.</strong> Drop a table, delete a file, exhaust a
+quota. In a replica these are unremarkable. If you would not do them here, this
+is not the environment to prove an exploit in, and that is the finding.</p>
+<p><strong>5 — Record the verdict per check, not overall.</strong> "Isolated: no" sends people
+looking; "credentials: fail, egress: pass" tells them what to fix.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/exploit_replica_isolation_check.py"><code>scripts/exploit_replica_isolation_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>ALLOW http://replica.local/reports                   replica-internal
+ALLOW http://db.replica.local:5432/                  replica-internal
+DENY  https://api.github.com/                        not on the replica allowlist
+DENY  http://169.254.169.254/latest/meta-data/       private address outside the replica — blocked
+DENY  http://10.0.3.14:9200/_search                  private address outside the replica — blocked
+probe                       on staging    on replica
+--------------------------------------------------------
+drop a table                   REACHES     contained
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;environment&quot;: &quot;str&quot;,
+  &quot;checks&quot;: {&quot;egress&quot;: {&quot;pass&quot;: false, &quot;reachable&quot;: [&quot;str&quot;]},
+             &quot;credentials&quot;: {&quot;pass&quot;: false, &quot;real_found&quot;: [&quot;str&quot;]},
+             &quot;data&quot;: {&quot;pass&quot;: false, &quot;sample_real&quot;: [&quot;str&quot;]},
+             &quot;destructive&quot;: {&quot;pass&quot;: false, &quot;refused&quot;: [&quot;str&quot;]}},
+  &quot;verdict&quot;: &quot;replica|not a replica&quot;,
+  &quot;safe_to_exploit&quot;: false
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Accepting the name.</strong> "staging" and "replica" are labels; the four checks
+  are the definition.</li>
+<li><strong>Testing general egress only.</strong> The metadata address is the one that turns a
+  probe into a credential theft.</li>
+<li><strong>Skipping the destructive probes</strong> because they are destructive. That
+  reluctance is the answer.</li>
+</ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at C2.6 --out work/cybertravels
+python3 scripts/checkpoint.py --at C2.6 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
+# then, in your agent: ask for "exploit replica isolation check"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/appsec/exploit-replica-isolation-check/scripts/exploit_replica_isolation_check.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Check whether your dynamic testing currently runs against staging. If it does, list what staging shares with production — identity provider, message bus, data replica. Each shared component is a path from a test probe to a real incident.</p></div></section><div class="expect"><b>Expect</b>Loop divergence, objective drift, reward hacking, silent truncation, tool thrash — one per trace.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Docker</span><span>gVisor</span><span>Cilium</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/appsec/exploit-replica-isolation-check</code></p></div><div class="pager"><a href="C2.5.html"><span class="k">← Previous</span><span class="t">C2.5 · Feasibility filtering, reachability and dead code</span></a><a class="next" href="C2.7.html"><span class="k">Next →</span><span class="t">C2.7 · Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

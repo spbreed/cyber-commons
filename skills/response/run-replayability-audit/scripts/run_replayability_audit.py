@@ -40,7 +40,7 @@ INCIDENT_INPUTS = ("fix SEC-4471", "billing.py: charge(card)…")
 COST = {
  "model version": (1,  "one string per run", "invalidates everything else if missing"),
  "seed":          (1,  "one integer per run", "makes the run repeatable"),
- "prompts":       (3,  "storage + privacy review (D1.3)", "what it was asked"),
+ "prompts":       (3,  "storage + privacy review (E1.3)", "what it was asked"),
  "tool results":  (5,  "largest volume, highest sensitivity", "what it saw"),
 }
 # ------------------------------------------------------------------------ run

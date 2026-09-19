@@ -51,7 +51,7 @@ measurement of how often the analyser produces them.
 [`scripts/finding_dedup_and_verification.py`](scripts/finding_dedup_and_verification.py),
 verified against `cybertravels/tools/bookings_api.py` read off disk. The line
 numbers are real line numbers in that file: the CWE-89 is where Semgrep put it,
-and the CWE-639 is the hypothesis B2.3's model pass emitted on `get_booking`.
+and the CWE-639 is the hypothesis C2.3's model pass emitted on `get_booking`.
 Edit the queue and re-run — the buckets, counts and verdicts are derived from
 it, not hard-coded.
 

@@ -18,7 +18,7 @@ DB_PATH = str(DATA_DIR / "cybertravels.db")
 # --- Identity and token signing ----------------------------------------------
 # HS256 with a shared secret, because this has to clone and run in one command.
 # In production: RS256 + JWKS, so a resource server can VERIFY a token without
-# holding the power to MINT one. That asymmetry is the point, and A2.2 is the
+# holding the power to MINT one. That asymmetry is the point, and B2.2 is the
 # lesson that builds it.
 IDP_SECRET = os.environ.get("CT_IDP_SECRET", "cybertravels-demo-secret-change-me")
 IDP_ISSUER = "https://idp.cybertravels.local"
@@ -31,7 +31,7 @@ DELEGATED_TOKEN_TTL = 120     # per-action, on-behalf-of. Deliberately short.
 # --- The agents' non-human identities ----------------------------------------
 # SPIFFE-style workload identities. Each agent is a principal in its own right,
 # not a shared service-account key — which is what makes an audit row able to
-# name which agent acted. A1.14 is the lesson on why that matters.
+# name which agent acted. B1.14 is the lesson on why that matters.
 TRUST_DOMAIN = "spiffe://cybertravels.local"
 AGENT_IDS = {
     "workflow": f"{TRUST_DOMAIN}/agent/workflow",
@@ -85,16 +85,16 @@ TOOL_POLICY = {
 
 # --- Budgets -----------------------------------------------------------------
 # A loop with no ceiling is an availability incident waiting for a bad input.
-# A1.13 is the lesson; this is the ceiling it argues for.
+# B1.13 is the lesson; this is the ceiling it argues for.
 MAX_STEPS = 8
 MAX_TOOL_CALLS = 12
-# step:A3.4 add
+# step:B3.4 add
 # Per target, because twelve calls all landing on one vendor is, from that
 # vendor's side, indistinguishable from an attack — and tokens, because a loop
 # that stays inside its step count can still spend without bound.
 MAX_CALLS_PER_TARGET = 4
 MAX_TOKENS = 200_000
-# step:A3.4 end
+# step:B3.4 end
 
 # --- The model ---------------------------------------------------------------
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")

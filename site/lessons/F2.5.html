@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>F2.5 — Privacy and data protection | Cyber Commons</title><meta name="description" content="Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function F — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">F2.5</div><h1>Privacy and data protection</h1><div class="badges"><span class="badge t">F2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/13/" title="Transparency and provision of information to deployers" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 13</a><a class="fw" href="https://artificialintelligenceact.eu/article/50/" title="Transparency obligations for certain AI systems" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 50</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/F2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Deletion when the data is in weights, not a database.</p></div><div class="ctrl"><div class="lab">Control</div><p>Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run PII redaction inside the trust boundary with Presidio before anything crosses out.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/regulatory/trace-personal-data-audit" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/regulatory/trace-personal-data-audit/scripts/trace_personal_data_audit.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Prompts, context, logs and training runs are all places personal data ends up, and none of them looks like a database to the people who designed the privacy programme. Lawful basis, minimisation and retention apply to all four.</p><div class="ct"><b>At CyberTravels.</b> `erasure_reach()` returns **0.714** against your own tree: five surfaces a deletion request reaches and two it does not — the model provider&#x27;s logs, and weights if anything was fine-tuned. Then `audit_trace()` scans the rows you are keeping for a year: B2.7&#x27;s digest keeps the motive clean, and nothing protects `detail`, which is where a tool&#x27;s arguments land.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Where personal data actually is once an agent has touched it, and how far an erasure request reaches — including the two surfaces it does not reach, one of which has no good answer.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>The context window is a disclosure and the trace is a record, so personal data lands in a system nobody reviewed.</p></div><div class="d1"><span>Day 1 — how</span><p>Fix lawful basis, retention on the trace itself, and an erasure path that reaches it.</p></div><div class="d2"><span>Day 2 — measure</span><p>Paths rather than outcomes: where inference ran, what retrieval touched, how long a trace was kept. All three are computable.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   where personal data actually ends up
+
+   prompt --&gt; context window --&gt; model --&gt; output
+      |            |               |         |
+      +------------+---------------+---------+
+                        |
+                    the LOGS
+
+   none of these look like a database to the privacy programme
+   lawful basis . minimisation . retention . cross-border, for all four</pre><p>Privacy for agents turns on one fact that surprises most teams: <strong>the context
+window is a disclosure, and the trace is a record.</strong></p>
+<p>When an agent reads a customer record to do its job, that record enters the
+model's context. If the trace is retained — and it usually is, for forensics
+(E1.3) — then personal data now exists in a system that was never in the privacy
+review, with a retention period nobody set, in a place the erasure process does
+not reach.</p>
+<p>Three obligations attach, and the third is the one that bites:</p>
+<ul>
+<li><strong>Lawful basis</strong> for the processing that put it there.</li>
+<li><strong>Retention limit</strong> on the trace itself, separately from the source system.</li>
+<li><strong>Erasure</strong> — and this reaches into traces, eval corpora, fine-tuning sets and
+  backups.</li>
+</ul>
+<p>The capability that makes erasure possible is the same one D1.2 built for
+ingestion provenance: per-record hashes. Without them you cannot locate the record, so you
+cannot delete it.</p><blockquote class="anchor">**Anchor → F1.1.** Privacy indicators measure paths rather than outcomes — where inference ran, what retrieval touched, how long a trace was kept. They are computable, and they are the ones most often asserted instead.</blockquote><div class="how"><h2>2 · Demo — personal data arriving in a trace nobody reviewed</h2><h2>3 · Where it breaks — the erasure request</h2><h2>4 · The control — index the trace, and set retention per field</h2><h2>2 · The procedure, as a skill</h2>
+<p>Five items of personal data are in the agent trace and nobody put them there deliberately. The skill maps every system holding a copy and runs a real erasure request through all of them — three of which cannot delete one subject's records.</p><h2>3 · And whether the rows have a policy on them at all</h2>
+<p><code>governance/regulatory.py</code>'s <code>erasure_reach()</code> returns <strong>0.714</strong> against your own tree: five surfaces a deletion request reaches and two it does not — the model provider's logs, and weights if anything was fine-tuned. That argument is worth having only after the ordinary one is settled, which is whether any policy sits on the rows in the first place:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/regulatory/trace-personal-data-audit/SKILL.md" target="_blank" rel="noopener"><code>skills/regulatory/trace-personal-data-audit/SKILL.md</code></a></p><pre class="front"><code>name: trace-personal-data-audit
+description: &gt;-
+  Find personal data that nobody deliberately placed in an agent trace, and run
+  an erasure request through every system that holds a copy. Use when agent
+  telemetry meets data protection, or before a subject access request arrives.
+allowed-tools: Read, Grep, Glob</code></pre><h1>Nobody put it there, and it is there</h1>
+<p>An agent trace accumulates personal data as a side effect: a name in a ticket, an
+email in a tool result, an account number in a document it read, a card number
+in a file it was asked to fix. None of it was placed deliberately, all of it is
+personal data, and it is copied into every system the trace is shipped to.</p>
+<h2>When to use this</h2>
+<p>Before agent telemetry is retained or exported, and before the first erasure
+request rather than during it.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Run detectors over the whole trace.</strong> Every field, every step. Names,
+emails, account and card numbers, health terms. Record which step introduced
+each, because that tells you whether it is preventable.</p>
+<p><strong>2 — Map every system that holds a copy.</strong> The trace store, the SIEM, the
+warehouse, backups, and any vendor it is exported to. This list is the erasure
+surface and it is longer than the trace store.</p>
+<p><strong>3 — Run a real erasure request end to end.</strong> Locate every copy for one
+subject, delete, and verify. Systems that cannot delete a single subject's
+records — append-only stores, immutable backups, aggregate indexes — are the
+finding.</p>
+<p><strong>4 — Say what is legitimately retained and why.</strong> Some copies survive erasure
+lawfully. Naming the basis, per system, is the difference between a defensible
+position and a gap.</p>
+<p><strong>5 — Reduce at source.</strong> Redaction at write time is cheaper than erasure across
+six systems. Say which detector should run before the trace is stored.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/trace_personal_data_audit.py"><code>scripts/trace_personal_data_audit.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>personal data present in the agent trace:
+   step 1  email           dana.okonkwo@example.com
+   step 1  payment card    4111111111111111
+   step 1  account number  acct 8812
+   step 1  name            J. Okonkwo
+
+4 items. Nobody put them there deliberately — the agent read
+a support ticket, which is exactly what it was asked to do.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;trace&quot;: {&quot;steps&quot;: 0},
+  &quot;detections&quot;: [{&quot;kind&quot;: &quot;str&quot;, &quot;field&quot;: &quot;str&quot;, &quot;step&quot;: 0, &quot;deliberate&quot;: false}],
+  &quot;systems&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;holds_copy&quot;: true, &quot;can_delete_subject&quot;: false}],
+  &quot;erasure&quot;: {&quot;subject&quot;: &quot;str&quot;, &quot;located&quot;: 0, &quot;deleted&quot;: 0, &quot;failed_in&quot;: [&quot;str&quot;]},
+  &quot;retained_lawfully&quot;: [{&quot;system&quot;: &quot;str&quot;, &quot;basis&quot;: &quot;str&quot;}],
+  &quot;redaction_at_source&quot;: [&quot;str&quot;]
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Auditing the trace store only.</strong> The copies are the problem.</li>
+<li><strong>Assuming erasure works.</strong> Run one and find out.</li>
+<li><strong>Reporting failures without the lawful retentions.</strong> Half the list is fine
+  and the report loses credibility without saying so.</li>
+</ul><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/research/row-level-policy-check/SKILL.md" target="_blank" rel="noopener"><code>skills/research/row-level-policy-check/SKILL.md</code></a></p><pre class="front"><code>name: row-level-policy-check
+description: &gt;-
+  Query an exposed data API as an anonymous caller with row-level security off
+  and on, and count what a publishable key returns. Use when a client-side key
+  reaches a database directly, or when a platform&#x27;s default is open until
+  somebody closes it.
+allowed-tools: Read, Grep, Glob</code></pre><h1>The anonymous key is meant to be public; the rows are not</h1>
+<p>Platforms that expose a database over HTTP hand out a key designed to ship in a
+client. That is safe exactly when row-level policy is on, and the default on
+several of them is off. The check is one query, run twice, and it is the
+difference between a key that is public by design and a table that is.</p>
+<h2>When to use this</h2>
+<p>Any deployment where a browser or an agent talks to a database service directly,
+and any platform whose quickstart hands you an anonymous key.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Get the publishable key from where it actually is.</strong> The client bundle,
+the mobile app, the agent's configuration. It is not a secret and treating it as
+one is what hides this defect.</p>
+<p><strong>2 — Enumerate the tables.</strong> Use the platform's catalogue rather than the
+application's own queries — the application only touches the tables it needs,
+which is not the set that exists.</p>
+<p><strong>3 — Query each table anonymously with policy off.</strong> Record the row count and,
+specifically, whether any row contains a credential: provider keys stored
+alongside agent configuration are the common and expensive case.</p>
+<p><strong>4 — Enable policy and re-run.</strong> Anonymous should return nothing; a signed-in
+owner should return their own rows and no more. Both halves — a policy that
+returns nothing to everyone is an outage.</p>
+<p><strong>5 — Cost the exposure.</strong> For every credential returned, name the provider and
+who can revoke it. The revocation owner is usually not you, and that is the
+sentence that gets the work scheduled.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/row_level_policy_check.py"><code>scripts/row_level_policy_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>RLS disabled (as shipped)   rows returned: 3
+      @researchbot  dana@example    sk-REDACTED-openai
+      @newsdigest   sam@example     sk-ant-REDACTED
+      @dealfinder   kim@example     AKIA-REDACTED-aws
+RLS enabled                 rows returned: 0
+
+signed in as dana@example, RLS enabled: 1 row
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;key&quot;: {&quot;kind&quot;: &quot;publishable&quot;, &quot;found_in&quot;: &quot;str&quot;},
+  &quot;tables&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;sensitive&quot;: true,
+              &quot;anon_rows_policy_off&quot;: 0, &quot;anon_rows_policy_on&quot;: 0, &quot;owner_rows&quot;: 0}],
+  &quot;credentials_exposed&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;revocable_by&quot;: &quot;str&quot;}],
+  &quot;verdict&quot;: &quot;open|closed&quot;
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Testing with the service key.</strong> It bypasses policy; that proves nothing.</li>
+<li><strong>Enumerating from the application.</strong> It knows about its own tables only.</li>
+<li><strong>Reporting rows without the credentials.</strong> The provider keys are the
+  incident.</li>
+</ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at F2.5 --out work/cybertravels
+python3 scripts/checkpoint.py --at F2.5 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
+# then, in your agent: ask for "trace personal data audit"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/regulatory/trace-personal-data-audit/scripts/trace_personal_data_audit.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five items of personal data appear in the agent trace — name, email, account number and payment card — none placed there deliberately. The erasure request fails in three systems that cannot locate the record, two of which retain indefinitely. Building a subject index locates the affected steps, erasure leaves no personal data while retaining the hash, and per-field retention drops the sensitive field at 7 days.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Time-box this to an hour: can you delete one customer's data from your agent traces today? The answer usually arrives in ten minutes and is usually no — and the eval corpus is the system people forget entirely.</p></div></section><div class="expect"><b>Expect</b>PII is removed before egress; the redaction decision is logged as evidence for F2.7.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Presidio</span><span>GLiNER-PII</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/regulatory/trace-personal-data-audit</code></p></div><div class="pager"><a href="F2.4.html"><span class="k">← Previous</span><span class="t">F2.4 · Sector overlays</span></a><a class="next" href="F2.6.html"><span class="k">Next →</span><span class="t">F2.6 · Incident and disclosure obligations</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

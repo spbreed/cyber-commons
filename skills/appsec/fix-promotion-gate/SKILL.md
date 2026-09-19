@@ -21,7 +21,7 @@ detector**. All three turn CI green, and an autonomous loop optimising for
 green finds the second and third on its own, because they are cheaper.
 
 The pipeline has something a static workflow does not: Phase 4 already built a
-**working exploit**, and B2.6 already built a **replica** to run it against. So
+**working exploit**, and C2.6 already built a **replica** to run it against. So
 the fix has somewhere to be proven before anybody is asked to look at it, and
 the promotion path is three environments with a different question at each:
 

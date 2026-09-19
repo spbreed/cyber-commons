@@ -23,7 +23,7 @@ ABOUT: dict[str, str] = {
 This is the **first** lesson to read. It has no code and takes ten minutes.
 """,
 
-"A1.0": """
+"B1.0": """
 **What it covers.** Place the five functions of the commons on one diagram and find where your own work sits.
 
 **Why a security engineer needs it.** Without a shared architecture, "secure the agent" has no referent, and every control argument is really an argument about two different systems. The control it builds is: one picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
@@ -31,7 +31,7 @@ This is the **first** lesson to read. It has no code and takes ten minutes.
 This is an **orientation** lesson. It has no code — it exists so the chapters after it are read in the right order.
 """,
 
-"A1.1": """
+"B1.1": """
 **What it covers.** Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
 
 **Why a security engineer needs it.** Without a shared picture, 'secure the agent' has no referent and every later risk lands nowhere in particular. The control it builds is: one component map and five topologies, named once and reused by every lesson that follows.
@@ -39,63 +39,63 @@ This is an **orientation** lesson. It has no code — it exists so the chapters 
 This is a **mapping** lesson: every later risk and control in this function names a component from the picture it draws.
 """,
 
-"A1.2": """
+"B1.2": """
 **What it covers.** Send an override through the ingress component and watch the agent's goal change.
 
-**Why a security engineer needs it.** The user redirects their own agent past the behaviour the operator specified — bounded by their own authority, and therefore the milder of the two injection risks. The control it builds is: provenance at ingress (A2.6) and default-deny on the tool call (A3.1). The system prompt is not a control.
+**Why a security engineer needs it.** The user redirects their own agent past the behaviour the operator specified — bounded by their own authority, and therefore the milder of the two injection risks. The control it builds is: provenance at ingress (B2.6) and default-deny on the tool call (B3.1). The system prompt is not a control.
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.3": """
+"B1.3": """
 **What it covers.** Poison one retrieved document and watch the agent act on it with the user's authority.
 
-**Why a security engineer needs it.** Anyone who can write into a corpus the agent reads can steer it, using the victim's authority rather than their own. Nobody is phished and no credential leaks. The control it builds is: provenance marking at ingress (A2.6), and a rule that untrusted spans may not select a tool (A3.1).
+**Why a security engineer needs it.** Anyone who can write into a corpus the agent reads can steer it, using the victim's authority rather than their own. Nobody is phished and no credential leaks. The control it builds is: provenance marking at ingress (B2.6), and a rule that untrusted spans may not select a tool (B3.1).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.4": """
+"B1.4": """
 **What it covers.** Write one poisoned fact into memory and watch it steer a later, unrelated session.
 
-**Why a security engineer needs it.** An attacker's instruction outlives the conversation that delivered it, and re-fires on requests from users who never met the original payload. The control it builds is: provenance survives into memory (A2.6), and memory writes are scoped to the identity that made them (A2.1).
+**Why a security engineer needs it.** An attacker's instruction outlives the conversation that delivered it, and re-fires on requests from users who never met the original payload. The control it builds is: provenance survives into memory (B2.6), and memory writes are scoped to the identity that made them (B2.1).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.5": """
+"B1.5": """
 **What it covers.** Call one over-scoped tool with attacker-chosen arguments and see what it reaches.
 
-**Why a security engineer needs it.** The agent uses a legitimate tool, with legitimate arguments, to do something nobody intended — and every log line looks normal. The control it builds is: default-deny authorization on the tool call (A3.1) and just-in-time authority (A2.4).
+**Why a security engineer needs it.** The agent uses a legitimate tool, with legitimate arguments, to do something nobody intended — and every log line looks normal. The control it builds is: default-deny authorization on the tool call (B3.1) and just-in-time authority (B2.4).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.6": """
+"B1.6": """
 **What it covers.** Have an agent inherit a privileged token and reach something its requester never could.
 
-**Why a security engineer needs it.** The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human. The control it builds is: delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1).
+**Why a security engineer needs it.** The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human. The control it builds is: delegation that narrows (B2.3), just-in-time grants (B2.4), and default-deny (B3.1).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.7": """
+"B1.7": """
 **What it covers.** Have two agents share a credential, then try to work out which one made the call.
 
-**Why a security engineer needs it.** Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them. The control it builds is: per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).
+**Why a security engineer needs it.** Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them. The control it builds is: per-workload identity with attestation (B2.1, B2.2) and a lifecycle that can revoke one (B2.5).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.8": """
+"B1.8": """
 **What it covers.** Execute model-authored code and enumerate what the process could touch.
 
-**Why a security engineer needs it.** Model-authored code runs with the runtime's privileges — reaching the filesystem, the network and any credential in the environment. The control it builds is: sandboxed execution (A3.2) and egress control (A3.3).
+**Why a security engineer needs it.** Model-authored code runs with the runtime's privileges — reaching the filesystem, the network and any credential in the environment. The control it builds is: sandboxed execution (B3.2) and egress control (B3.3).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.9": """
+"B1.9": """
 **What it covers.** Fire four realistic payloads at the review harness and compare keyword filtering against provenance.
 
 **Why a security engineer needs it.** The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself. The control it builds is: instruction/data provenance: content the pipeline read may never drive a state-changing tool.
@@ -103,71 +103,71 @@ This is a **risk** lesson: it shows the failure happening before anything tries 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A1.10": """
+"B1.10": """
 **What it covers.** Send one poisoned inter-agent message and watch it propagate through the topology.
 
-**Why a security engineer needs it.** One compromised agent steers every agent downstream of it, because a peer's message is treated as a colleague's instruction rather than as input. The control it builds is: message validation and provenance on the inter-agent channel (A3.5), and per-agent identity (A2.1).
+**Why a security engineer needs it.** One compromised agent steers every agent downstream of it, because a peer's message is treated as a colleague's instruction rather than as input. The control it builds is: message validation and provenance on the inter-agent channel (B3.5), and per-agent identity (B2.1).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.11": """
+"B1.11": """
 **What it covers.** Introduce an unregistered agent into the topology and have it receive delegated work.
 
-**Why a security engineer needs it.** An agent nobody approved receives delegated work and delegated authority, and the orchestrator has no way to tell it apart from a legitimate worker. The control it builds is: a registry of approved agents with identity-bound admission (A2.5) and an audit trail per hop (A2.7).
+**Why a security engineer needs it.** An agent nobody approved receives delegated work and delegated authority, and the orchestrator has no way to tell it apart from a legitimate worker. The control it builds is: a registry of approved agents with identity-bound admission (B2.5) and an audit trail per hop (B2.7).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.12": """
+"B1.12": """
 **What it covers.** Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.
 
-**Why a security engineer needs it.** A single fabrication becomes a shared premise, and by the third hop nothing in the system records that it was ever uncertain. The control it builds is: verification against ground truth before a claim propagates (A3.5).
+**Why a security engineer needs it.** A single fabrication becomes a shared premise, and by the third hop nothing in the system records that it was ever uncertain. The control it builds is: verification against ground truth before a claim propagates (B3.5).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.13": """
+"B1.13": """
 **What it covers.** Run a loop with no ceiling and count what it consumes before anything notices.
 
-**Why a security engineer needs it.** An agent consumes budget, tokens, API quota or downstream capacity without bound, and the failure is denial of service against your own systems. The control it builds is: budgets and stop conditions bound to the loop (A3.4).
+**Why a security engineer needs it.** An agent consumes budget, tokens, API quota or downstream capacity without bound, and the failure is denial of service against your own systems. The control it builds is: budgets and stop conditions bound to the loop (B3.4).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.14": """
+"B1.14": """
 **What it covers.** Reconstruct who caused a deletion from a log that records only tool calls.
 
-**Why a security engineer needs it.** You cannot say which user caused an action, or what made the agent decide — so the incident cannot be scoped and the action cannot be attributed. The control it builds is: attribution carried on every hop, in a store the agent cannot write to (A2.7).
+**Why a security engineer needs it.** You cannot say which user caused an action, or what made the agent decide — so the incident cannot be scoped and the action cannot be attributed. The control it builds is: attribution carried on every hop, in a store the agent cannot write to (B2.7).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.15": """
+"B1.15": """
 **What it covers.** Push approval volume up and measure the point at which review quality collapses.
 
-**Why a security engineer needs it.** The approval gate is recorded as a control and operates as a click. At volume it approves everything, including the one request that mattered. The control it builds is: approval reserved for irreversible actions, with everything else bounded by policy (A3.6).
+**Why a security engineer needs it.** The approval gate is recorded as a control and operates as a click. At volume it approves everything, including the one request that mattered. The control it builds is: approval reserved for irreversible actions, with everything else bounded by policy (B3.6).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.16": """
+"B1.16": """
 **What it covers.** Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.
 
-**Why a security engineer needs it.** The agent satisfies the letter of its instruction — including by reporting a success it did not achieve — and the transcript contains no lie you can point at. The control it builds is: an independent verifier that checks the outcome rather than the claim (A3.5).
+**Why a security engineer needs it.** The agent satisfies the letter of its instruction — including by reporting a success it did not achieve — and the transcript contains no lie you can point at. The control it builds is: an independent verifier that checks the outcome rather than the claim (B3.5).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.17": """
+"B1.17": """
 **What it covers.** Launder a request through a delegation chain to reach something the requester was denied.
 
-**Why a security engineer needs it.** The delegation chain is used as a privilege-laundering path, and the agent's output becomes an unusually persuasive channel into a human decision. The control it builds is: ceiling-bound delegation (A2.3), attribution per hop (A2.7) and marking machine-generated output as such (A3.6).
+**Why a security engineer needs it.** The delegation chain is used as a privilege-laundering path, and the agent's output becomes an unusually persuasive channel into a human decision. The control it builds is: ceiling-bound delegation (B2.3), attribution per hop (B2.7) and marking machine-generated output as such (B3.6).
 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.18": """
+"B1.18": """
 **What it covers.** Roll the twelve risks up into families, find which agent carries each, and check that every row has an owner.
 
 **Why a security engineer needs it.** A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when CyberTravels grows a fifth agent. The control it builds is: four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.
@@ -175,7 +175,7 @@ This is a **risk** lesson: it shows the failure happening before anything tries 
 This is a **risk** lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.
 """,
 
-"A1.19": """
+"B1.19": """
 **What it covers.** The full control index for CyberTravels: the twelve controls that were required before agents existed, the ten the agents added, what each is scored at today, and the lesson that owns it.
 
 **Why a security engineer needs it.** A control list written the week after shipping agents covers the new rows and reports coverage against the wrong denominator. Vulnerability scanning, supply chain, environment segregation, encryption at rest and in transit, input validation, change management, DMZ termination, credentials, PKI, key lifecycle and logging did not stop applying — several of them are what the agents broke. The control it builds is: one index with an era column, a three-valued status measured against what runs, an owner per row, and coverage reported per era rather than blended.
@@ -183,7 +183,7 @@ This is a **risk** lesson: it shows the failure happening before anything tries 
 This is an **index** lesson. It is the reference you come back to, and the place a programme gets sequenced from.
 """,
 
-"A2.1": """
+"B2.1": """
 **What it covers.** Separate the three identities and show a downstream service authorising on the agent while attributing to the human.
 
 **Why a security engineer needs it.** A shared service account answers 'what ran' and destroys 'for whom' — so no later control can be conditioned on the caller. The control it builds is: a distinct identity per workload, carrying the human principal alongside it, asserted on every call.
@@ -191,7 +191,7 @@ This is an **index** lesson. It is the reference you come back to, and the place
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A2.2": """
+"B2.2": """
 **What it covers.** Exchange an attestation for a credential, then show a copied secret failing the same exchange.
 
 **Why a security engineer needs it.** A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity. The control it builds is: platform attestation exchanged for a short-lived, workload-bound credential.
@@ -199,7 +199,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A2.3": """
+"B2.3": """
 **What it covers.** Run both narrowing rules against a request that passes one and fails the other.
 
 **Why a security engineer needs it.** Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked. The control it builds is: token exchange that intersects presented scope with the actor's ceiling, and records the chain.
@@ -207,7 +207,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A2.4": """
+"B2.4": """
 **What it covers.** Issue a scoped grant, use it, then replay it after expiry and after the task closed.
 
 **Why a security engineer needs it.** Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives. The control it builds is: short-lived, purpose-bound grants issued per task and expiring with it.
@@ -215,7 +215,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A2.5": """
+"B2.5": """
 **What it covers.** Admit agents against a registry and show an unregistered one refused at the door.
 
 **Why a security engineer needs it.** Agents accumulate with no owner and no expiry, and an unregistered agent joins a topology as a peer. The control it builds is: a registry with a named owner, an expiry, and admission bound to a registered identity.
@@ -223,7 +223,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A2.6": """
+"B2.6": """
 **What it covers.** Tag every span at ingress, then show the same payload refused through six different entry paths.
 
 **Why a security engineer needs it.** Concatenation destroys the one fact that separates an operator instruction from an attacker's: where it came from. The control it builds is: provenance tagging at every ingress point, and a rule that only trusted origins may select a tool.
@@ -231,7 +231,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A2.7": """
+"B2.7": """
 **What it covers.** Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.
 
 **Why a security engineer needs it.** Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed. The control it builds is: per-hop attribution written to an append-only store outside the agent's reach.
@@ -239,15 +239,15 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A2.8": """
+"B2.8": """
 **What it covers.** Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
 
-**Why a security engineer needs it.** An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls. The control it builds is: out-of-band capture (B2.10), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
+**Why a security engineer needs it.** An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls. The control it builds is: out-of-band capture (C2.10), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.1": """
+"B3.1": """
 **What it covers.** Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.
 
 **Why a security engineer needs it.** Allow-by-default authorization is defeated by any argument the model can be persuaded to produce. The control it builds is: policy evaluated per call on (identity, tool, arguments, resource), denying unless a rule permits.
@@ -255,7 +255,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.2": """
+"B3.2": """
 **What it covers.** Run the same code inside and outside the sandbox and enumerate what each could reach.
 
 **Why a security engineer needs it.** Model-authored code inherits the runtime's reach, including any credential mounted into the environment. The control it builds is: execution in an isolate with no ambient credentials, a bounded filesystem and no default network.
@@ -263,7 +263,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.3": """
+"B3.3": """
 **What it covers.** Attempt exfiltration to several destinations under an allow-list and see which survive.
 
 **Why a security engineer needs it.** An agent with unrestricted egress turns any successful injection into data loss. The control it builds is: an allow-list at the network boundary, enforced where the agent cannot rewrite it.
@@ -271,7 +271,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.4": """
+"B3.4": """
 **What it covers.** Run a looping agent against each ceiling and record which one fires first.
 
 **Why a security engineer needs it.** Without a ceiling the loop runs until an external system stops it, and the failure mode is denial of service against yourself. The control it builds is: ceilings bound to the loop, with the run terminating rather than degrading when one is hit.
@@ -279,7 +279,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.5": """
+"B3.5": """
 **What it covers.** Pass a fabricated claim through a schema check and then through a ground-truth verifier.
 
 **Why a security engineer needs it.** An unverified claim becomes a shared premise, and a peer message is trusted more than a document it is no safer than. The control it builds is: schema validation plus an independent verifier before any claim propagates.
@@ -287,7 +287,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.6": """
+"B3.6": """
 **What it covers.** Route actions by reversibility and measure how many reach a human under each policy.
 
 **Why a security engineer needs it.** An approval queue at volume approves everything, and the risk register still records it as a control. The control it builds is: approval reserved for irreversible actions only, with machine-generated content labelled as such.
@@ -295,7 +295,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.7": """
+"B3.7": """
 **What it covers.** Route every call through one gateway and show the same policy holding for agents that never implemented it.
 
 **Why a security engineer needs it.** Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code. The control it builds is: a single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.
@@ -303,7 +303,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.8": """
+"B3.8": """
 **What it covers.** Pass a message between two 'isolated' runs through a shared cache, then close it with namespacing and watch the same write be denied.
 
 **Why a security engineer needs it.** Any shared mutable surface is a channel. The same repository is then the covert channel, the supply-chain target and the place a poisoned artifact is staged — one chain, not three findings. The control it builds is: per-run namespaces bound to the run's workload identity (C2.1), an immutable write-once cache (C2.2), signing and provenance verified at consumption (C5.1, C5.2), admin plane off the workload path (C5.3), and scoring infrastructure the agent cannot reach (C10.4).
@@ -311,7 +311,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.9": """
+"B3.9": """
 **What it covers.** Disable a classifier without an approved exemption and watch the platform refuse; then launch 50,000 agents under one that is approved.
 
 **Why a security engineer needs it.** Classifiers off, no compensating cap, and tens of thousands of agents launched under that configuration. Each decision was defensible; the combination was never evaluated. The control it builds is: an exemption gate the platform enforces (C6.1), caps that tighten as coverage drops (C6.2), quotas on population and lifetime (C8.2), and an exemption register reviewed at fleet-launch approval (C6.4).
@@ -319,7 +319,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.10": """
+"B3.10": """
 **What it covers.** Plant a finding, run the agent with and without the tool, and compare what it does with what it says it wants to do.
 
 **Why a security engineer needs it.** An agent that finds a live breach, reasons about telling someone, and has no tool for it, does nothing. Of roughly 1,200 agents that saw one, none reported it. The control it builds is: a report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2).
@@ -327,7 +327,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.0": """
+"C2.0": """
 **What it covers.** The one line every AI security technique sits on one side of
 — what can run before a deploy, on artefacts sitting still, and what only works
 against a system that is already running.
@@ -342,7 +342,7 @@ This is the **orientation** lesson for the chapter. Everything after it is one
 stage of a pipeline, and each stage sits on one side of this line.
 """,
 
-"B2.1": """
+"C2.1": """
 **What it covers.** What a harness is — the wrapper around a model that turns
 generating text into getting work done — and the four moves of its loop, run
 against a real CyberTravels finding with an actual LLM call in it.
@@ -359,7 +359,7 @@ harnesses you already run, then one loop of about twenty lines, executed twice.
 """,
 
 
-"B2.2": """
+"C2.2": """
 **What it covers.** Turn an architecture map into a ranked threat model, then diff it after one entry point is added.
 
 **Why a security engineer needs it.** Threat models are written once, by hand, against a system that has since changed. The control it builds is: stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.
@@ -367,7 +367,7 @@ harnesses you already run, then one loop of about twenty lines, executed twice.
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.3": """
+"C2.3": """
 **What it covers.** Score grep, taint rules and model review against the same corpus, then combine them behind a confidence gate.
 
 **Why a security engineer needs it.** Pattern matching floods the queue; the false-positive rate is what actually changed. The control it builds is: stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.
@@ -375,7 +375,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.4": """
+"C2.4": """
 **What it covers.** Deduplicate findings across three analysis tracks, then verify each against the AST and drop the ones that reference code that is not there.
 
 **Why a security engineer needs it.** Parallel analysis tracks report the same bug three times, and some of those bugs do not exist. The control it builds is: stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.
@@ -383,7 +383,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.5": """
+"C2.5": """
 **What it covers.** Build a call graph from entry points and partition findings into reachable, unreachable and unknown.
 
 **Why a security engineer needs it.** A finding in dead code costs the same to triage as one on the login path. The control it builds is: stage 10: decide whether an external caller can actually reach the sink before anyone is paged.
@@ -391,7 +391,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.6": """
+"C2.6": """
 **What it covers.** Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.
 
 **Why a security engineer needs it.** Dynamic testing is run against staging, so a destructive probe becomes an incident. The control it builds is: stage 11: replicate the application in an isolated, disposable runtime with no path to production.
@@ -399,7 +399,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.7": """
+"C2.7": """
 **What it covers.** Scan an SBOM against an advisory feed, reconcile it against
 what is actually in the built image, and decompile the library that appears in
 no manifest.
@@ -415,7 +415,7 @@ This is a **tooling** lesson: it uses a real compiled Java class and recovers it
 strings, classes and capabilities without the source.
 """,
 
-"B2.8": """
+"C2.8": """
 **What it covers.** Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.
 
 **Why a security engineer needs it.** A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed. The control it builds is: stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.
@@ -423,7 +423,7 @@ strings, classes and capabilities without the source.
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.9": """
+"C2.9": """
 **What it covers.** Chain individually-medium findings into a critical path and show the severity the chain earns.
 
 **Why a security engineer needs it.** Three medium findings are triaged as three mediums, and nobody notices they compose. The control it builds is: stage 13: combine validated findings into multi-step sequences and score the chain, not the links.
@@ -431,7 +431,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.16": """
+"C2.16": """
 **What it covers.** Validate four candidate patches on three axes and show which of them only made the scanner green.
 
 **Why a security engineer needs it.** A patch that silences the scanner is indistinguishable from a patch that fixes the bug. The control it builds is: stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
@@ -439,31 +439,31 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.11": """
+"C2.11": """
 **What it covers.** A white-box engagement: enumerating real paths from entry point to sink, naming the authorisation predicate on each, and separating reachable sinks from present ones.
 
 **Why a security engineer needs it.** Full source produces the most useless report in security — every sink that exists, with no statement about reachability or entitlement. Two distinctions fix it, and the second, that authentication is not authorisation, is the shape of every BOLA finding.
 """,
 
-"B2.12": """
+"C2.12": """
 **What it covers.** A black-box engagement: splitting an external probe's claims into what the evidence entails and what it merely suggests, and refusing a severity on the second kind.
 
 **Why a security engineer needs it.** A model with only status codes and headers narrates a confident architecture, and an inference with a CVSS score beside it reads as a finding to everyone downstream. Provenance per claim is the whole discipline, and the open questions it produces tell you which mode to run next.
 """,
 
-"B2.13": """
+"C2.13": """
 **What it covers.** A grey-box engagement: filling a roles-by-objects-by-verbs matrix from one credential per role, flagging design mismatches, and ranking the untested cells by blast radius.
 
 **Why a security engineer needs it.** This is the mode that can actually find broken object-level authorisation, and the one most often reported wrong — because authorisation lives in cells, not endpoints, and touching every endpoint leaves most cells untested.
 """,
 
-"B2.14": """
+"C2.14": """
 **What it covers.** The controls an offensive agent runs inside — zero retention, sandboxing, egress control, secret management, human in the loop, deterministic guardrails and SOC notification — enforced as a preflight that can refuse.
 
 **Why a security engineer needs it.** The offensive agent is the most capable and least supervised thing in the estate, and its traffic is indistinguishable from an attack by design. Six of the seven controls block the engagement because their absence is invisible until it has already cost something.
 """,
 
-"B2.15": """
+"C2.15": """
 **What it covers.** Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.
 
 **Why a security engineer needs it.** Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing. The control it builds is: stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.
@@ -471,7 +471,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.17": """
+"C2.17": """
 **What it covers.** Compare four context strategies against one bug and measure which are decidable and at what size.
 
 **Why a security engineer needs it.** The model is given the repository and asked to be thorough, so the relevant line falls out of the window. The control it builds is: slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.
@@ -479,7 +479,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"A3.11": """
+"B3.11": """
 **What it covers.** Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
 
 **Why a security engineer needs it.** The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment. The control it builds is: the strongest containment a developer does not notice: credential deny-lists and workspace confinement first.
@@ -487,7 +487,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.18": """
+"C2.18": """
 **What it covers.** Why the pipeline you have just built stops working on
 agentic systems — no call graph, a sink that is a tool schema, a source that is
 retrieved text, a dependency that is a third party's running process — and the
@@ -505,7 +505,7 @@ built so that it cannot overclaim, and two of the five controls are capped at
 PARTIAL by construction.
 """,
 
-"B2.19": """
+"C2.19": """
 **What it covers.** Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.
 
 **Why a security engineer needs it.** A reference implementation is adopted as a product, and its outputs are trusted without an eval. The control it builds is: map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.
@@ -513,7 +513,7 @@ PARTIAL by construction.
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"C1.0": """
+"D1.0": """
 **What it covers.** Take one published agentic attack and list what you would need to reproduce it.
 
 **Why a security engineer needs it.** Offensive work that produces anecdotes: a result that worked once, on one target, with no rate and no reproduction. The control it builds is: a campaign with a stated criterion, a harness that separates the model effect from the harness effect, and a handoff that ends in a control.
@@ -521,7 +521,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is an **orientation** lesson. It has no code — it exists so the chapters after it are read in the right order.
 """,
 
-"B2.10": """
+"C2.10": """
 **What it covers.** Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
 
 **Why a security engineer needs it.** Payload suggestions instead of attack chains — and an offensive loop with no hard scope enforcement, which is an incident with a project plan. The control it builds is: full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.
@@ -529,7 +529,7 @@ This is an **orientation** lesson. It has no code — it exists so the chapters 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"C1.2": """
+"D1.2": """
 **What it covers.** Run a campaign across the three surfaces and report a rate with its sample size, not an anecdote.
 
 **Why a security engineer needs it.** A red-team result nobody can act on, because "it worked once" is not a rate. The control it builds is: systematic campaigns across all three surfaces, with measured success rates and a criterion agreed before the first payload.
@@ -537,15 +537,15 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"C1.3": """
-**What it covers.** Game the B2.19 scoring harness deliberately, then close the hole you used.
+"D1.3": """
+**What it covers.** Game the C2.19 scoring harness deliberately, then close the hole you used.
 
 **Why a security engineer needs it.** If the eval can be fooled, the assurance is theatre. The control it builds is: eval gaming, sandbagging, contamination and judge manipulation as test cases.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"C1.4": """
+"D1.4": """
 **What it covers.** Write a finding a CISO can act on, with a replayable trace.
 
 **Why a security engineer needs it.** The vulnerability is emergent behaviour, not a line of code. The control it builds is: reproducibility requirements for probabilistic systems.
@@ -620,7 +620,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 "C2.9": """
 **What it covers.** Run the same query with and without a row policy, then work out which of the leaked things the platform could actually revoke.
 
-**Why a security engineer needs it.** The blast radius was not the platform's. What leaked were credentials in five other providers' accounts, and the platform could revoke none of them. The control it builds is: row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database.
+**Why a security engineer needs it.** The blast radius was not the platform's. What leaked were credentials in five other providers' accounts, and the platform could revoke none of them. The control it builds is: row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of B3.8, arriving at a database.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
@@ -633,7 +633,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.0": """
+"E1.0": """
 **What it covers.** Put one agent trace and one human session side by side and list what separates them.
 
 **Why a security engineer needs it.** A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session. The control it builds is: agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.
@@ -641,7 +641,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is an **orientation** lesson. It has no code — it exists so the chapters after it are read in the right order.
 """,
 
-"D3.1": """
+"E3.1": """
 **What it covers.** Run a triage loop over Wazuh alerts and supervise by exception.
 
 **Why a security engineer needs it.** Supervising by re-reading everything the loop did. The control it builds is: know what the loop must escalate and sample the rest.
@@ -649,7 +649,7 @@ This is an **orientation** lesson. It has no code — it exists so the chapters 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.3": """
+"E3.3": """
 **What it covers.** A/B a generic prompt vs a context-loaded one on the same alert set.
 
 **Why a security engineer needs it.** Generic triage agents underperform your worst analyst. The control it builds is: feed the baseline, known FPs, crown-jewel map and prior decisions.
@@ -657,7 +657,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.4": """
+"E2.4": """
 **What it covers.** Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 
 **Why a security engineer needs it.** Coverage gaps nobody mapped. The control it builds is: detection-as-code with agents inside the CI loop.
@@ -665,7 +665,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.2": """
+"E2.2": """
 **What it covers.** Write five detections for agent misbehaviour and fire each one.
 
 **Why a security engineer needs it.** Scope drift, unusual tool sequencing, off-hours autonomous action. The control it builds is: detections whose subject is a non-human principal.
@@ -673,7 +673,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.3": """
+"E1.3": """
 **What it covers.** Two halves of one job: scoring actors on timing, sequencing and volume to find the agents that are in no registry, then deciding per-field retention on the traces you inherit once you keep them.
 
 **Why a security engineer needs it.** Shadow autonomy is invisible to a stack that reads an agent as the person whose credential it holds, and the threshold that finds it is set by cost rather than accuracy — a flagged human costs half an analyst-hour, a missed agent costs forty. The trace you then hold is the most useful log source you have and the most sensitive, because it carries the reasoning and whatever was in the context window.
@@ -681,7 +681,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.1": """
+"E1.1": """
 **What it covers.** Scoring the four sensor classes an estate already owns — EDR, DLP, CSPM, CNAPP — against nine things an agent does in an ordinary day, and reading the actions no class sees at all.
 
 **Why a security engineer needs it.** "We already have visibility" is the most common answer to an agent detection roadmap and it is answerable with a matrix rather than an opinion. The distinction that makes it honest is visibility rather than alerting: a sensor that is not in the path cannot be tuned into one that is, so the uncovered rows are an architecture finding and not a backlog item.
@@ -689,7 +689,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.1": """
+"E2.1": """
 **What it covers.** Deriving a storage tier for each telemetry source from the fastest query that reads it, and pricing that against indexing everything hot.
 
 **Why a security engineer needs it.** The lake is designed twice — once on a whiteboard and once when the invoice arrives — and the second design is made by somebody with no information about what the SOC asks. Deriving the tier from the queries collapses that into one decision, and it is what keeps agent prompts alive: they are the biggest source, read by one query that can wait hours, and the first line cut when nobody has priced them properly.
@@ -697,7 +697,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.2": """
+"E1.2": """
 **What it covers.** Change the model underneath and catch the detection regression.
 
 **Why a security engineer needs it.** A detection that worked last month is silently degraded. The control it builds is: watch model updates, prompt changes, index refreshes, tool versions.
@@ -705,7 +705,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.9": """
+"E3.9": """
 **What it covers.** Build a synthesis loop that must cite or abstain.
 
 **Why a security engineer needs it.** Unsourced confidence in synthesis loops. The control it builds is: provenance discipline; refuse claims without a source.
@@ -713,7 +713,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.3": """
+"E2.3": """
 **What it covers.** Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
 
 **Why a security engineer needs it.** Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside. The control it builds is: named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
@@ -721,7 +721,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.8": """
+"E3.8": """
 **What it covers.** Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
 
 **Why a security engineer needs it.** Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not. The control it builds is: fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).
@@ -729,7 +729,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.6": """
+"E2.6": """
 **What it covers.** Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
 
 **Why a security engineer needs it.** Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned. The control it builds is: canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
@@ -737,7 +737,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.5": """
+"E3.5": """
 **What it covers.** Reconstruct a timeline from raw logs with a context-loaded agent.
 
 **Why a security engineer needs it.** Reaching for the agent once you're already behind. The control it builds is: pre-load logs, telemetry, segmentation model and playbooks.
@@ -745,15 +745,15 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.4": """
-**What it covers.** Attribute an incident through the A2 `act` chain.
+"E3.4": """
+**What it covers.** Attribute an incident through the B2 `act` chain.
 
 **Why a security engineer needs it.** "Which user" is now the wrong first question. The control it builds is: attribute to agent, authority, delegation chain and prompt.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.7": """
+"E3.7": """
 **What it covers.** Scope a multi-agent incident end to end.
 
 **Why a security engineer needs it.** The initiating agent is not the acting one. The control it builds is: reconstruct the action chain across all three planes.
@@ -761,7 +761,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D4.3": """
+"E4.3": """
 **What it covers.** Exercise the ladder against a live misbehaving agent.
 
 **Why a security engineer needs it.** Mass revocation takes down the business. The control it builds is: throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.
@@ -769,7 +769,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D5.1": """
+"E5.1": """
 **What it covers.** Replay an agent run for a regulator-grade record.
 
 **Why a security engineer needs it.** Non-determinism as an evidentiary problem. The control it builds is: log at design time what replay will need.
@@ -777,7 +777,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D5.3": """
+"E5.3": """
 **What it covers.** Pick the right layer for five real incidents.
 
 **Why a security engineer needs it.** Fixing the prompt when the bug is in the control plane. The control it builds is: choose among model, prompt, tool, policy, sandbox, identity, eval.
@@ -785,7 +785,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D4.4": """
+"E4.4": """
 **What it covers.** Time your own stop authority end to end.
 
 **Why a security engineer needs it.** Nobody has rehearsed halting an autonomous workflow. The control it builds is: named holder, measured time-to-stop, tested.
@@ -793,15 +793,15 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D5.6": """
+"E5.6": """
 **What it covers.** Run the first-hour checklist in a tabletop.
 
-**Why a security engineer needs it.** Notification obligations discovered in week two. The control it builds is: feed Track E2 in hour one.
+**Why a security engineer needs it.** Notification obligations discovered in week two. The control it builds is: feed Track F2 in hour one.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D4.5": """
+"E4.5": """
 **What it covers.** Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.
 
 **Why a security engineer needs it.** Terminating agents while their tokens stay valid leaves the persistence in place. In the incident, third-party access ended when the third party revoked keys — not when the agents stopped. The control it builds is: a tested kill path independent of the agent execution path, snapshot before terminate, revocation in the same action, a measured activation target and named authority to pull it (C8.3).
@@ -809,7 +809,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.0": """
+"F1.0": """
 **What it covers.** Take the seven properties and assign each an owner in your own organisation. The gaps are the programme.
 
 **Why a security engineer needs it.** A trustworthy-AI statement with no owner per property, so every property is somebody else's job. The control it builds is: one register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked.
@@ -817,7 +817,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is an **orientation** lesson. It has no code — it exists so the chapters after it are read in the right order.
 """,
 
-"E1.1": """
+"F1.1": """
 **What it covers.** Change a prompt and show the control evidence going stale in real time.
 
 **Why a security engineer needs it.** An annual review certifies nothing about a system that changed the week after it was reviewed. The control it builds is: continuous assurance; control effectiveness redefined for probabilistic systems.
@@ -825,7 +825,7 @@ This is an **orientation** lesson. It has no code — it exists so the chapters 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.2": """
+"F1.2": """
 **What it covers.** Discover agents from gateway and identity telemetry; build the register.
 
 **Why a security engineer needs it.** Shadow AI and shadow agents — the inventory is the control most orgs still lack. The control it builds is: discovery, registration, ownership, risk tiering.
@@ -833,7 +833,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.3": """
+"F1.3": """
 **What it covers.** Tier ten real workflows and assign approval authority.
 
 **Why a security engineer needs it.** Tiering by model name instead of by what the thing can do. The control it builds is: autonomy level × action class × data sensitivity.
@@ -841,23 +841,23 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.4": """
-**What it covers.** Map the A2/A3 controls onto your control library.
+"F1.4": """
+**What it covers.** Map the B2/B3 controls onto your control library.
 
 **Why a security engineer needs it.** Inventing new controls where an existing one applied to a new principal type. The control it builds is: map identity, secrets, sandbox, eval and telemetry onto the existing library.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.5": """
-**What it covers.** Take the B2.19 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
+"F1.5": """
+**What it covers.** Take the C2.19 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 
 **Why a security engineer needs it.** Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy. The control it builds is: read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.6": """
+"F1.6": """
 **What it covers.** Classify your own guardrails into the two buckets.
 
 **Why a security engineer needs it.** Frameworks specify how the system works; regulators care what it produced. The control it builds is: constrain both, and know which evidence answers which question.
@@ -865,7 +865,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.7": """
+"F1.7": """
 **What it covers.** Automate one evidence package on a schedule.
 
 **Why a security engineer needs it.** Automating judgment instead of evidence collection. The control it builds is: agent-assisted evidence collection, drift detection, exception tracking.
@@ -873,7 +873,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.8": """
+"F1.8": """
 **What it covers.** Run a real AIBOM against a vendor model artefact.
 
 **Why a security engineer needs it.** Vendor AI features enabled by default; sub-processor chains you never mapped. The control it builds is: questions that actually discriminate between vendors.
@@ -881,7 +881,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.9": """
+"F1.9": """
 **What it covers.** Write the gate that a re-index has to pass.
 
 **Why a security engineer needs it.** Re-indexing treated as maintenance, not change. The control it builds is: retraining, fine-tuning and re-indexing as change-management events.
@@ -889,7 +889,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.10": """
+"F1.10": """
 **What it covers.** Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.
 
 **Why a security engineer needs it.** Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one. The control it builds is: a stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.
@@ -897,7 +897,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.11": """
+"F1.11": """
 **What it covers.** Take a validated model, add one tool, and show which parts of the validation are now void.
 
 **Why a security engineer needs it.** The classical model-risk playbook silently breaks once the model can act: conceptual soundness was validated, and then the agent was granted write access nobody validated. The control it builds is: extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems, and name where it still holds.
@@ -905,7 +905,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E1.12": """
+"F1.12": """
 **What it covers.** Trace one artefact across three functions and find the consumer who never received it.
 
 **Why a security engineer needs it.** The handoffs fail, not the functions: privacy assessment into control design, legal position into system prompt, MRM validation into security evidence. The control it builds is: joint runbooks for the seams — one artefact, many consumers, one owner.
@@ -913,7 +913,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.1": """
+"F2.1": """
 **What it covers.** Build the crosswalk for your own sector.
 
 **Why a security engineer needs it.** One programme per regime; four times the work, none of it joined up. The control it builds is: one control set that satisfies several regimes. Verify current status before relying on any date.
@@ -921,7 +921,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.2": """
+"F2.2": """
 **What it covers.** Classify three workflows and defend the boundary cases.
 
 **Why a security engineer needs it.** "We only deployed it, we didn't build it" — sometimes true, often not. The control it builds is: risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.
@@ -929,7 +929,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.3": """
+"F2.3": """
 **What it covers.** Hang two regulator mappings off one framework spine.
 
 **Why a security engineer needs it.** Regime-specific mappings with nothing to hang off. The control it builds is: aI RMF / management-system standards as the structure; regulator mappings as overlays.
@@ -937,7 +937,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.4": """
+"F2.4": """
 **What it covers.** Map one agent to existing model-risk obligations.
 
 **Why a security engineer needs it.** An agent is already a "model" under model-risk rules you already comply with. The control it builds is: find the regime you're already in before inventing a new one.
@@ -945,7 +945,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.5": """
+"F2.5": """
 **What it covers.** Run PII redaction inside the trust boundary with Presidio before anything crosses out.
 
 **Why a security engineer needs it.** Deletion when the data is in weights, not a database. The control it builds is: lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.
@@ -953,15 +953,15 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.6": """
+"F2.6": """
 **What it covers.** Draft the notification for an agentic incident.
 
-**Why a security engineer needs it.** Materiality assessed for an autonomous actor with a human-actor playbook. The control it builds is: coordinate with D2 in hour one.
+**Why a security engineer needs it.** Materiality assessed for an autonomous actor with a human-actor playbook. The control it builds is: coordinate with E2 in hour one.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.7": """
+"F2.7": """
 **What it covers.** Assemble the pack for one high-risk workflow.
 
 **Why a security engineer needs it.** "Explainability" for a system with no deterministic reasoning. The control it builds is: system documentation, data lineage, eval records, oversight evidence, decision logs.
@@ -969,15 +969,15 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.8": """
-**What it covers.** Produce an audit trail from the A2 chain that names authority at every hop.
+"F2.8": """
+**What it covers.** Produce an audit trail from the B2 chain that names authority at every hop.
 
 **Why a security engineer needs it.** No trail showing under whose authority the agent acted. The control it builds is: the delegation chain *is* the audit trail.
 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E2.9": """
+"F2.9": """
 **What it covers.** Defend one workflow in a mock supervisory conversation.
 
 **Why a security engineer needs it.** Overclaiming control, or triggering a moratorium. The control it builds is: explain bounded autonomy with evidence, and anticipate the real questions.
@@ -985,7 +985,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E3.1": """
+"F3.1": """
 **What it covers.** Convert one blast-radius measurement into a board paragraph.
 
 **Why a security engineer needs it.** Blast radius explained in engineering terms to a board that needs consequence. The control it builds is: what can happen, how fast, who can stop it.
@@ -993,7 +993,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E3.2": """
+"F3.2": """
 **What it covers.** Write the delegated-authority policy.
 
 **Why a security engineer needs it.** A per-tool review queue becomes a bottleneck and then a bypass. The control it builds is: a policy on delegated authority instead of tool-by-tool approval.
@@ -1001,7 +1001,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E3.3": """
+"F3.3": """
 **What it covers.** Sequence your first three workflows and name the no.
 
 **Why a security engineer needs it.** Starting with the workflow that is most visible rather than most winnable. The control it builds is: use the maturity model to order investment; choose your first hard "no".
@@ -1009,7 +1009,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E3.4": """
+"F3.4": """
 **What it covers.** Draw your org's ownership map against the topic matrix.
 
 **Why a security engineer needs it.** Harness engineering with no home; research as a hobby. The control it builds is: identity owns the control plane; BUs own grants; security owns stop authority.
@@ -1017,7 +1017,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E3.5": """
+"F3.5": """
 **What it covers.** Instrument the six metrics from your lab stack.
 
 **Why a security engineer needs it.** Reporting activity instead of exposure. The control it builds is: inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.
@@ -1025,7 +1025,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E3.6": """
+"F3.6": """
 **What it covers.** Write one enforceable conditional approval.
 
 **Why a security engineer needs it.** Conditional approval that is aspirational rather than enforceable. The control it builds is: autonomy promotion as an earned event with named evidence.
@@ -1033,7 +1033,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E3.7": """
+"F3.7": """
 **What it covers.** Write the interview loop for an agentic security engineer.
 
 **Why a security engineer needs it.** Hiring for conceptual familiarity instead of practice. The control it builds is: interview questions that separate the two; internal transition paths.
@@ -1041,7 +1041,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"E3.8": """
+"F3.8": """
 **What it covers.** Re-score your programme on the resilience axis.
 
 **Why a security engineer needs it.** Trying to enumerate every failure mode of a probabilistic system. The control it builds is: maturity measured by containment, detection and recovery — not prevention.
@@ -1062,53 +1062,53 @@ for _k, _v in _NEW.items():
 
 
 # Function C rebuild.
-from .framing_c import ABOUT as _C_ABOUT  # noqa: E402
+from .framing_d import ABOUT as _C_ABOUT  # noqa: E402
 ABOUT.update(_C_ABOUT)
 
 
 # ---------------------------------------------------------------- Function G
 ABOUT.update({
- "G1.0": "What an agent is — software that plans, calls tools and acts on what "
+ "A1.0": "What an agent is — software that plans, calls tools and acts on what "
          "it reads — and a map of the seven components you build across this "
          "chapter, with the edges where trust changes marked before any of them "
          "is written.",
- "G1.1": "The reasoning loop in three stages: the model proposes, your code "
+ "A1.1": "The reasoning loop in three stages: the model proposes, your code "
          "disposes, and something independent of the model verifies. Plus the "
          "exit condition, which cannot be the model agreeing that it is done.",
- "G1.2": "Two MCP resource servers behind a process boundary, split by trust "
+ "A1.2": "Two MCP resource servers behind a process boundary, split by trust "
          "domain rather than by convenience, each with its own audience — and "
          "why a tool called in-process leaves nowhere to put a check.",
- "G1.3": "Three principals in every agent action: the human who asked, the "
+ "A1.3": "Three principals in every agent action: the human who asked, the "
          "workload that acted, and the individual call. Each gets a name, and "
          "the human's token is shown to grant nothing downstream.",
- "G1.4": "RFC 8693 token exchange: one audience, one scope, two minutes, minted "
+ "A1.4": "RFC 8693 token exchange: one audience, one scope, two minutes, minted "
          "after the model has chosen and verified at the resource server — "
          "with least privilege keyed to the human's role rather than the "
          "agent's.",
- "G1.5": "Agent memory built so it cannot become a persistence mechanism: "
+ "A1.5": "Agent memory built so it cannot become a persistence mechanism: "
          "origin recorded with content, recall scoped to one person, and delete "
          "and export both present.",
- "G1.6": "Agent-to-agent messaging with a signed envelope that names its "
+ "A1.6": "Agent-to-agent messaging with a signed envelope that names its "
          "sender, carries the human through every hop, labels a peer's text as "
          "data, and stops at a hop ceiling.",
- "G1.7": "The two ceilings on an agent loop — a human gate on irreversible "
+ "A1.7": "The two ceilings on an agent loop — a human gate on irreversible "
          "actions, and budgets on steps and tool calls — including what a run "
          "returns when it hits one, and why a present-but-saturated gate is not "
          "a control.",
- "G2.0": "What separates a demo from a system: a trace, an audit trail and an "
+ "A2.0": "What separates a demo from a system: a trace, an audit trail and an "
          "evaluation. The lesson measures the gap before building any of them, "
          "because the list is shorter and more useful than \"add logging\".",
- "G2.1": "The agent run as spans — which agent, which step, which tool, what "
+ "A2.1": "The agent run as spans — which agent, which step, which tool, what "
          "the delegated token said — with one trace id joining reasoning to "
          "action, secrets summarised rather than carried, and refusals recorded "
          "with the boundary that produced them.",
- "G2.2": "The four questions an audit trail has to answer — which human, which "
+ "A2.2": "The four questions an audit trail has to answer — which human, which "
          "workload, which call, what motivated it — and what append-only "
          "actually requires beyond a convention not to issue an UPDATE.",
- "G2.3": "An evaluation suite over the agent you built: cases that fail on the "
+ "A2.3": "An evaluation suite over the agent you built: cases that fail on the "
          "old build, scores with intervals, and a test for the dilution that "
          "lifts a number without changing a system.",
- "G2.4": "The handover into Function A. Every component built in this function "
+ "A2.4": "The handover into Function A. Every component built in this function "
          "re-read as an attack surface, every control re-read as something with "
          "a bypass, and the agent's blast radius measured as the number the "
          "next function argues with.",
@@ -1116,95 +1116,95 @@ ABOUT.update({
 
 
 ABOUT.update({
- "A2.6": "Marking untrusted text where it enters, in the file the reader "
+ "B2.6": "Marking untrusted text where it enters, in the file the reader "
          "already wrote: a Span carrying its origin, assigned at the boundary "
          "because that is the only place that honestly knows, and rendered to "
          "the model with delimiters a span cannot forge. Including the part "
          "people skip — marking is not filtering, and this closes nothing on "
          "its own.",
- "A2.8": "Turning an append-only convention into a detectable property: each "
+ "B2.8": "Turning an append-only convention into a detectable property: each "
          "audit row carries the hash of the one before it, so an edit, a "
          "deletion or an insertion anywhere breaks every hash after it and is "
          "visible in one pass. What it does not do is stop the write, which is "
-         "why A3.8 moves the log somewhere the workload cannot reach.",
+         "why B3.8 moves the log somewhere the workload cannot reach.",
 })
 
 
 ABOUT.update({
- "A2.1": "Replacing a hand-edited set of agent names with a registry: "
+ "B2.1": "Replacing a hand-edited set of agent names with a registry: "
          "identities as records that carry an approver, a registration time "
          "and a state, so the system can answer when an identity started "
          "existing and whether it still should.",
- "A2.2": "The bootstrap problem — a workload needs a credential to prove who "
+ "B2.2": "The bootstrap problem — a workload needs a credential to prove who "
          "it is and has to prove who it is to get one — answered by not "
          "issuing a first secret at all. Attestation against properties the "
          "platform already observes, for a short-lived identity document.",
- "A2.3": "Making a delegation chain narrow rather than merely exist: each hop "
+ "B2.3": "Making a delegation chain narrow rather than merely exist: each hop "
          "bounded by what the hop before it held, and the actor claim nested "
          "so an investigator reads every hop instead of the last one.",
- "A2.4": "Binding a delegated token to the exact call it was minted for, so a "
+ "B2.4": "Binding a delegated token to the exact call it was minted for, so a "
          "captured token cannot be replayed against different arguments — "
          "including a clear statement of what that does not close, which is "
          "whether the object belongs to the caller.",
- "A2.5": "The non-human identity lifecycle: rotation, revocation that takes "
+ "B2.5": "The non-human identity lifecycle: rotation, revocation that takes "
          "effect at the next call rather than the next restart, and finding "
          "orphans in both directions.",
- "A2.7": "Recording what motivated an action, not only who took it — the "
+ "B2.7": "Recording what motivated an action, not only who took it — the "
          "fourth investigation question, answerable only once ingress marks "
          "where text came from, and recorded as a digest rather than the text.",
 })
 
 
-# Chapter A3, rewired onto the tree the reader built. Each entry names the
-# mechanism rather than restating the risk, because by A3 the reader has the
+# Chapter B3, rewired onto the tree the reader built. Each entry names the
+# mechanism rather than restating the risk, because by B3 the reader has the
 # system in front of them and the question is what changes in it.
 ABOUT.update({
- "A3.1": "Replacing a lookup table that answers yes or no with a decision that "
+ "B3.1": "Replacing a lookup table that answers yes or no with a decision that "
          "answers why: one call per tool, evaluated on identity, tool and "
          "arguments, returning a reason and any obligations. Including what "
          "default-deny actually means — the default *branch* is a denial, not "
          "merely that the list is an allow-list with a permissive fallback.",
- "A3.2": "A sandbox profile as an allow-list in three dimensions — paths, "
+ "B3.2": "A sandbox profile as an allow-list in three dimensions — paths, "
          "environment, hosts — and the half teams skip: measuring what the "
          "running process actually has and reporting the gap. A profile "
          "deployed without the isolation that enforces it keeps describing a "
          "containment that was never applied.",
- "A3.3": "Egress control for a destination chosen at run time by a model, "
+ "B3.3": "Egress control for a destination chosen at run time by a model, "
          "which is what makes it different from a firewall rule written "
          "against a deployment. Both halves: the destination, and what is "
          "being sent to it — because a vendor API the agent is supposed to "
          "call is a perfectly good channel for data to leave through.",
- "A3.4": "Ceilings that bound what the loop does to any one place, not only "
+ "B3.4": "Ceilings that bound what the loop does to any one place, not only "
          "how long it runs: per-target call limits and a token budget, with "
          "the exhausted ceiling named so the incident is actionable rather "
          "than just a stopped run.",
- "A3.5": "The return path, which every outbound control leaves open: a schema "
+ "B3.5": "The return path, which every outbound control leaves open: a schema "
          "per tool for the shape, and an independent verifier for the content, "
          "because a result that conforms perfectly can still answer a question "
          "nobody asked. Conformance is a statement about the serialiser.",
- "A3.6": "Measuring an approval gate rather than enabling one — approvals per "
+ "B3.6": "Measuring an approval gate rather than enabling one — approvals per "
          "reviewer per hour against what reading one takes — and the trap that "
          "makes it necessary: coverage stays at 100% while review collapses, "
          "and the risk register records a control that has stopped being one.",
- "A3.7": "Moving controls that each live where they were convenient to write "
+ "B3.7": "Moving controls that each live where they were convenient to write "
          "behind a single entry point, and the number that finds the agent "
          "still holding a direct route. Plus the cost, stated rather than "
          "hidden: one choke point is a single point of failure and a queue.",
- "A3.8": "The channel no per-run check can see: an artefact one run writes and "
+ "B3.8": "The channel no per-run check can see: an artefact one run writes and "
          "an unrelated run reads. Per-run namespaces, a write-once cache, "
          "provenance verified at consumption, and a query that reports the "
          "surfaces actually crossing between runs.",
- "A3.9": "Turning a control off as a recorded, scoped, expiring decision — a "
+ "B3.9": "Turning a control off as a recorded, scoped, expiring decision — a "
          "reference, a reason, a named approver and an end date, none of them "
          "optional — and counting the exemptions that have run out and are "
          "still in the file, which is a control set describing a system nobody "
          "is running.",
- "A3.10": "Building the third option for an agent that notices something "
+ "B3.10": "Building the third option for an agent that notices something "
           "outside its task, and the three properties that decide whether it "
           "is ever used: cheap, non-terminal, signposted in the prompt. Get "
           "one wrong and the tool is present and never called, which is "
           "indistinguishable from an agent that noticed nothing.",
- "A3.11": "Containment for the coding agent in the developer's own IDE, which "
+ "B3.11": "Containment for the coding agent in the developer's own IDE, which "
           "has none of the controls it helped build and holds git credentials, "
           "cloud credentials and a shell. Ordered by the friction a developer "
           "feels — credential deny-list, then workspace confinement, then "
@@ -1219,89 +1219,89 @@ ABOUT.update({
 # claim, because by B the reader has a pipeline and the question is what its
 # output means.
 ABOUT.update({
- "B2.0": "The pipeline as one system, split by what each half can honestly "
+ "C2.0": "The pipeline as one system, split by what each half can honestly "
          "assert: before a deploy there is source and no running thing, so "
          "every finding is a hypothesis; after it there is a disposable "
          "replica, so a finding can be demonstrated. Including where the "
          "pipeline lives, and why exempting it from its own stages is the "
          "expensive choice.",
- "B2.1": "What separates a harness from a loop with a model in it: structured "
+ "C2.1": "What separates a harness from a loop with a model in it: structured "
          "output, a verifier that is not the producer, and a budget that stops "
          "with the work unfinished. Built around the failure that does not "
          "announce itself — a model grading its own findings files a clean "
          "trace either way.",
- "B2.2": "A threat model derived from the tree rather than remembered from a "
+ "C2.2": "A threat model derived from the tree rather than remembered from a "
          "workshop: assets from the schema, entry points from the code, trust "
          "boundaries from the layout — plus the column a machine cannot fill "
          "in, and a drift check that turns 'this is out of date' into a list.",
- "B2.3": "Two passes, and why the split follows from the defects rather than "
+ "C2.3": "Two passes, and why the split follows from the defects rather than "
          "from taste: deterministic rules for what a pattern can express, a "
          "model for the class where the defect is the absence of a call and "
          "there is nothing to match at any ruleset width. Including the case "
          "in between — a house wrapper that makes every rule naming the "
          "library blind.",
- "B2.4": "Two cheap stages that decide whether the queue is usable: collapsing "
+ "C2.4": "Two cheap stages that decide whether the queue is usable: collapsing "
          "the reports of one defect into one row while keeping how many "
          "independent tracks reached it, and refuting the finding that names a "
          "function nobody wrote — which is otherwise perfectly formed.",
- "B2.5": "Asking whether an external caller can reach the sink before anybody "
+ "C2.5": "Asking whether an external caller can reach the sink before anybody "
          "is paged, with the property that decides how the answer may be used: "
          "the walk over-approximates, so it is safe to rank with and unsafe to "
          "delete with, and an unreachable sink is reported as unreachable.",
- "B2.6": "A disposable replica, and the refusal that makes it one — a stage "
+ "C2.6": "A disposable replica, and the refusal that makes it one — a stage "
          "that quietly downgrades to something safe-looking produces output "
          "nobody can interpret. Plus the isolation bug the stage finds in "
          "itself, because a replica has to be checked rather than assumed.",
- "B2.7": "What a dependency scan actually says — nothing declared has a known "
+ "C2.7": "What a dependency scan actually says — nothing declared has a known "
          "vulnerability — and the two checks that say something about the "
          "system: reconciling the manifest against what the code imports, and "
          "reading the compiled artefact that no manifest entry covers.",
- "B2.8": "Turning hypotheses into demonstrations against the replica, and the "
+ "C2.8": "Turning hypotheses into demonstrations against the replica, and the "
          "half that matters as much: a hypothesis that cannot be demonstrated "
          "is dropped rather than shipped as a medium somebody has to carry. An "
          "exploit that does not fire is undetermined, not refuted.",
- "B2.9": "Composing confirmed findings into sequences and scoring the chain "
+ "C2.9": "Composing confirmed findings into sequences and scoring the chain "
          "rather than the links, because a chain is invisible from inside a "
          "queue row — with the rule that keeps it a finding: every link "
          "confirmed, or what you have is a story.",
- "B2.10": "The offensive loop, and the control that has to sit outside it. "
+ "C2.10": "The offensive loop, and the control that has to sit outside it. "
           "Scope enforced at the request boundary rather than requested in a "
           "prompt, because a prompt-level rule is addressed to the component "
           "an attacker is trying to influence.",
- "B2.11": "What full source actually buys, which is not a longer list: every "
+ "C2.11": "What full source actually buys, which is not a longer list: every "
           "candidate carrying the path that reaches it and the authorisation "
           "predicate on that path, so presence stops being reported where "
           "reachability was the question.",
- "B2.12": "Keeping observation and inference apart structurally rather than "
+ "C2.12": "Keeping observation and inference apart structurally rather than "
           "editorially — an inference cannot carry a severity, an observation "
           "cannot exist without evidence — and publishing the ratio, which is "
           "what makes the observed part worth acting on.",
- "B2.13": "Why endpoint coverage is the wrong denominator for object-level "
+ "C2.13": "Why endpoint coverage is the wrong denominator for object-level "
           "authorisation, and the grid that is the right one: roles by objects "
           "by verbs, with the untested cells ranked by blast radius rather "
           "than listed.",
- "B2.14": "The preflight an offensive agent starts behind: a gate rather than "
+ "C2.14": "The preflight an offensive agent starts behind: a gate rather than "
           "a checklist, refusing until every control is present — including "
           "telling the SOC, because unannounced offensive traffic is "
           "indistinguishable from the real thing by design.",
- "B2.15": "Calibrating severity from what this run established rather than "
+ "C2.15": "Calibrating severity from what this run established rather than "
           "copying it from the rule that fired, and reporting per-stage "
           "economics instead of a finding count — what each stage cost and "
           "what it removed.",
- "B2.16": "The stage whose wrong outcome looks exactly like the right one. "
+ "C2.16": "The stage whose wrong outcome looks exactly like the right one. "
           "Three pieces of evidence for a patch, none of them the scanner "
           "going quiet, and the one that is usually skipped: a regression test "
           "that fails against the unpatched code.",
- "B2.17": "Slicing context on the source-to-sink path rather than on distance, "
+ "C2.17": "Slicing context on the source-to-sink path rather than on distance, "
           "and the case that decides the rule — a defect that is the "
           "difference between two functions needs both of them in the window, "
           "and the cut is measured rather than claimed.",
- "B2.18": "Binding control claims to a deployment so they can be re-checked "
+ "C2.18": "Binding control claims to a deployment so they can be re-checked "
           "rather than re-asserted: per-control verdicts with evidence URIs, "
           "framework mappings gathered once, drift against the last "
           "attestation — and two controls capped at PARTIAL because this "
           "pipeline cannot prove them.",
- "B2.19": "A reference implementation read as a reference rather than bought "
+ "C2.19": "A reference implementation read as a reference rather than bought "
           "as a product: mapping its stages onto the ones you built, finding "
           "what it does not have, and scoring it against a key it has never "
           "seen before trusting its output.",
@@ -1312,54 +1312,54 @@ ABOUT.update({
 # lesson builds and the claim it is allowed to make, because by C the reader
 # has a running system and the question is what an attack result means.
 ABOUT.update({
- "C1.0": "The arithmetic an offensive result needs before it is a finding: a "
+ "D1.0": "The arithmetic an offensive result needs before it is a finding: a "
          "criterion stated before the run and applied by something that is not "
          "the model under test, a rate with an interval that behaves at the "
          "ends, benign cases so a technique that fires on everything cannot "
          "report a perfect score, and an ablation that separates what the "
          "model did from what the scaffolding did.",
- "C1.1": "Inventorying the paths by which text somebody else wrote reaches the "
+ "D1.1": "Inventorying the paths by which text somebody else wrote reaches the "
          "agent, with the column an integration list does not have — who can "
          "write here, and does it arrive labelled. Including the path people "
          "miss, which is memory: an ingestion path with a delay.",
- "C1.2": "Writing into one of those paths and measuring how far it gets, with "
+ "D1.2": "Writing into one of those paths and measuring how far it gets, with "
          "the criterion set on effect rather than on the model's reply — plus "
          "the gate that keeps the measurement honest when somebody tidies the "
          "planted instruction away and every trial silently measures nothing.",
- "C1.3": "What it takes to report a technique rather than a transcript: the "
+ "D1.3": "What it takes to report a technique rather than a transcript: the "
          "same technique across phrasings and seeds, the seed spread published "
          "beside the rate, and the distinction between a technique and one "
          "phrasing that happens to work.",
- "C1.4": "Separating an agent from a person using only the shape of the trace "
+ "D1.4": "Separating an agent from a person using only the shape of the trace "
          "— rate, gap variance, tool breadth, burst — and choosing the "
          "threshold by the cost of each mistake rather than by accuracy, since "
          "the two mistakes are never equally expensive.",
- "C1.5": "The signals that exist only across runs: an artefact one run wrote "
+ "D1.5": "The signals that exist only across runs: an artefact one run wrote "
          "and another read, trajectories converging, a token appearing "
          "everywhere and in no baseline. Every run passes its own checks; the "
          "finding is between them.",
- "C1.6": "Why a rule's precision is the wrong thing to report to the people "
+ "D1.6": "Why a rule's precision is the wrong thing to report to the people "
          "who have to work it. The same rule at two volumes, with the alert "
          "count and the analyst-days it implies — and the rule that gets "
          "muted while coverage still counts it.",
- "C1.7": "Triage when the queue is longer than the day: ranking, an explicit "
+ "D1.7": "Triage when the queue is longer than the day: ranking, an explicit "
          "capacity cut, and the sample taken from below the line so the rule "
          "that closes most of the queue is itself measured rather than "
          "trusted.",
- "C1.8": "Deception as the one alert with no triage step, and the placement "
+ "D1.8": "Deception as the one alert with no triage step, and the placement "
          "rule that keeps it that way — if you cannot name why nothing reads "
          "it, it is not a canary. Plus the two things canary write-ups skip: "
          "decay, and a volume threshold that swallows the conclusive alert.",
- "C1.9": "The second question about a kill switch, which is the one that gets "
+ "D1.9": "The second question about a kill switch, which is the one that gets "
          "asked on the night: what is still able to act after it is thrown. "
          "Measured as coverage over the act-paths, with the conflict between "
          "containment and evidence decided in advance rather than at 3am.",
- "C1.10": "Whether a finished run can be reconstructed from the record or only "
+ "D1.10": "Whether a finished run can be reconstructed from the record or only "
           "summarised — the four investigation questions put to the audit "
           "rows, the difference between replay and rerun, and the property "
           "that decides whether any of it is worth anything: that the actor "
           "cannot amend it.",
- "C1.11": "What has to exist before a finding is finished — an eval case, a "
+ "D1.11": "What has to exist before a finding is finished — an eval case, a "
           "control and a detection, each with a named owner — and the check "
           "that makes the eval case real: it must fail against the old build. "
           "A test that passes both ways is testing the weather.",
@@ -1369,111 +1369,111 @@ ABOUT.update({
 # Function D, rewired onto cybertravels/soc/. Each entry names the mechanism
 # and the stage of the incident clock it sits on.
 ABOUT.update({
- "D1.0": "The SOC as one system with a clock, and the observation the whole "
+ "E1.0": "The SOC as one system with a clock, and the observation the whole "
          "function turns on: the estate's detection content was written for "
          "an actor that acts a few times a minute and is now watching one "
          "that acts a thousand times an hour. Including where the clock "
          "actually goes, which is establishing who acted.",
- "D1.1": "Changing the denominator of a coverage report from products "
+ "E1.1": "Changing the denominator of a coverage report from products "
          "deployed to agent actions observable, so the uncovered rows come "
          "back named rather than as a percentage — and each product states "
          "what it cannot see, in its own row.",
- "D1.2": "The surfaces that change an agent's behaviour without a commit — "
+ "E1.2": "The surfaces that change an agent's behaviour without a commit — "
          "model version, system prompt, retrieval index, tool descriptions, "
          "memory — baselined and diffed, with the column that makes it a "
          "finding: which of them anybody approves.",
- "D1.3": "Onboarding what the agent already emits, and settling the retention "
+ "E1.3": "Onboarding what the agent already emits, and settling the retention "
          "argument at the granularity where it can be won: per field, so the "
          "parts that make a run attributable outlive the parts that are "
          "somebody's prose.",
- "D2.1": "Tiering each telemetry source by the queries the SOC runs against "
+ "E2.1": "Tiering each telemetry source by the queries the SOC runs against "
          "it rather than by how important it feels, with the cost of each "
          "tier stated — because the alternative to a tiering decision is a "
          "retention cut applied everywhere at once.",
- "D2.2": "Detections whose subject is a non-human principal, mapped to ATT&CK "
+ "E2.2": "Detections whose subject is a non-human principal, mapped to ATT&CK "
          "and ATLAS, and written about relationships rather than volumes: a "
          "widened scope, an unseen tool pair, an action with no human behind "
          "it, an approval faster than reading.",
- "D2.3": "Why a workload-layer detection cannot see a platform-layer "
+ "E2.3": "Why a workload-layer detection cannot see a platform-layer "
          "compromise, and the named primitives that can — a spawn under a "
          "profile that forbids it, a cache entry that differs from its "
          "manifest, an exemption that expired while the control stayed off.",
- "D2.4": "The gate between a model-written detection and a deployed one: a "
+ "E2.4": "The gate between a model-written detection and a deployed one: a "
          "measured false-positive rate at the volume it will actually see, a "
          "technique mapping so coverage can be reasoned about, and a human "
          "who accepts it.",
- "D2.5": "Why a rule generated from an incident always matches that incident, "
+ "E2.5": "Why a rule generated from an incident always matches that incident, "
          "and the benign corpus that tells an overfitted rule from a "
          "generalising one — the measurement that turns a guess into a rule.",
- "D3.1": "Supervising a triage loop rather than re-reading it: the list of "
+ "E3.1": "Supervising a triage loop rather than re-reading it: the list of "
          "alerts that bypass ranking entirely, and a sample of what the loop "
          "closed, so the closing rule is measured rather than trusted.",
- "D3.2": "Scoping the investigation itself, because an agent granted broad "
+ "E3.2": "Scoping the investigation itself, because an agent granted broad "
          "read to find the problem moves more data than most incidents do — "
          "a declared admission set per class, enforced at the tool boundary, "
          "with named human grants for anything beyond it.",
- "D3.3": "What a triage agent has to be given before it beats a junior "
+ "E3.3": "What a triage agent has to be given before it beats a junior "
          "analyst: the baseline, the known false positives, the crown-jewel "
          "map and the prior decisions — all of which the system already holds.",
- "D3.4": "The three responder instincts that are correct for a person and "
+ "E3.4": "The three responder instincts that are correct for a person and "
          "wrong for an agent, and the four questions that replace 'which "
          "user' — with the record answering them or naming which it cannot.",
- "D3.5": "Reconstruction as something pre-loaded rather than reached for once "
+ "E3.5": "Reconstruction as something pre-loaded rather than reached for once "
          "you are already behind, and the difference between a timeline built "
          "from inputs and one built from the agent's account of them.",
- "D3.6": "An investigation that is structurally allowed to change its mind: a "
+ "E3.6": "An investigation that is structurally allowed to change its mind: a "
          "plan record, a replan trigger that counts contradicting evidence, "
          "and abandoned branches that stay visible in the trace.",
- "D3.7": "Scoping an agentic incident by walking the delegation graph, "
+ "E3.7": "Scoping an agentic incident by walking the delegation graph, "
          "because the agent that made the call is not the one that started "
          "the work, and the difference is one edge back.",
- "D3.8": "Correlation at fleet level, where coordination between runs that "
+ "E3.8": "Correlation at fleet level, where coordination between runs that "
          "are supposed to be independent becomes visible — every run normal, "
          "the population not.",
- "D3.9": "Provenance discipline on intelligence intake: a claim with no "
+ "E3.9": "Provenance discipline on intelligence intake: a claim with no "
          "source cannot carry a severity and cannot become a detection, "
          "because a synthesis loop's output is formatted identically whether "
          "anything backs it or not.",
- "D3.10": "A standing hunt over agent traces for what no rule was written "
+ "E3.10": "A standing hunt over agent traces for what no rule was written "
           "against, hypothesis-first, with an explicit rule for when a "
           "finding graduates into a detection and when it means an existing "
           "rule is muted.",
- "D4.1": "One remediation policy keyed on blast radius and reversibility, "
+ "E4.1": "One remediation policy keyed on blast radius and reversibility, "
          "from which every runbook's tier is derived rather than chosen by "
          "whoever wrote it — including why wide-and-reversible should be "
          "automated.",
- "D4.2": "What separates a human-in-the-loop tier from a confirmation dialog: "
+ "E4.2": "What separates a human-in-the-loop tier from a confirmation dialog: "
          "specificity, an explicit statement of what cannot be undone, and a "
          "narrower option, so the choice is not act-or-abandon.",
- "D4.3": "Containment as a ladder climbed in order — throttle, scope-reduce, "
+ "E4.3": "Containment as a ladder climbed in order — throttle, scope-reduce, "
          "reroute, force approval, revoke, hard stop — so a response can "
          "start immediately with something reversible and escalate only as "
          "far as it has to.",
- "D4.4": "Stop authority as something rehearsed and timed rather than "
+ "E4.4": "Stop authority as something rehearsed and timed rather than "
          "assigned: a named holder, a deputy, out-of-hours reachability that "
          "was tested by calling them, and a time-to-stop from a real attempt.",
- "D4.5": "A kill path independent of the agent's own execution path, in the "
+ "E4.5": "A kill path independent of the agent's own execution path, in the "
          "order that matters — snapshot before terminate, revoke in the same "
          "action rather than after it, because terminating agents whose "
          "tokens stay valid leaves the persistence in place.",
- "D5.1": "Replay as reconstruction from the record rather than a rerun, with "
+ "E5.1": "Replay as reconstruction from the record rather than a rerun, with "
          "the two things that are explicitly not evidence about the run that "
          "happened: a second run, and the agent's own account of the first.",
- "D5.2": "A root cause record that names a control rather than a person or a "
+ "E5.2": "A root cause record that names a control rather than a person or a "
          "narrative, with all three fields required — what failed, what "
          "should have detected it, and the specific change proposed.",
- "D5.3": "Choosing the layer a fix belongs in, ordered by how long a fix "
+ "E5.3": "Choosing the layer a fix belongs in, ordered by how long a fix "
          "there survives, and the specific trap: fixing the prompt when the "
          "model can be argued out of the prompt.",
- "D5.4": "Closing a remediation on a re-measurement rather than on a ticket, "
+ "E5.4": "Closing a remediation on a re-measurement rather than on a ticket, "
          "with the before and after attached to the incident — and an "
          "indicator that cannot be measured reported as unmeasured rather "
          "than as a pass.",
- "D5.5": "The policy change as a diff generated from the root cause record, "
+ "E5.5": "The policy change as a diff generated from the root cause record, "
          "carrying the incident as its evidence and stating what it does not "
          "fix — because a change presented as closing everything is one "
          "nobody scrutinises.",
- "D5.6": "Which notification clocks a given incident starts, counted from "
+ "E5.6": "Which notification clocks a given incident starts, counted from "
          "awareness rather than from confirmation, and why 'we were still "
          "investigating' describes the period the clock was running rather "
          "than excusing it.",
@@ -1483,109 +1483,109 @@ ABOUT.update({
 # Function E, rewired onto cybertravels/governance/ — the package that
 # measures the controls the other functions built, by calling them.
 ABOUT.update({
- "E1.0": "Governance stated as a table rather than a value: each property a "
+ "F1.0": "Governance stated as a table rather than a value: each property a "
          "trustworthy-AI claim makes, the function that owns it, and the "
          "artefact that evidences it — because a property with no artefact "
          "is a value, and values do not survive an audit.",
- "E1.1": "Turning a framework control into a key control indicator that can "
+ "F1.1": "Turning a framework control into a key control indicator that can "
          "be computed this week without asking anybody, since the only "
          "alternative is a measurement taken once, at audit time, by "
          "somebody who knows what answer is wanted.",
- "E1.2": "Why an AI inventory built by survey returns the complement of the "
+ "F1.2": "Why an AI inventory built by survey returns the complement of the "
          "set you want, and how to derive one instead — plus the two "
          "directions of orphan, because teams check one.",
- "E1.3": "Tiering by what a deployment can do — autonomy, data reach, "
+ "F1.3": "Tiering by what a deployment can do — autonomy, data reach, "
          "external effect — and the comparison that makes the case: what "
          "tiering by model name would have said about the same system.",
- "E1.4": "Mapping controls outward to frameworks rather than inward from "
+ "F1.4": "Mapping controls outward to frameworks rather than inward from "
          "them, so the output is which clauses nothing covers — and the "
          "prior question, which is whether an existing control already "
          "applies to a new principal type.",
- "E1.5": "What an evaluation result is and is not evidence of: a best-of-k "
+ "F1.5": "What an evaluation result is and is not evidence of: a best-of-k "
          "demonstration, a rate with no interval, a score against tuned-on "
          "cases, and conformance reported where accuracy was asked for.",
- "E1.6": "Separating guardrails that something enforces from outcomes that "
+ "F1.6": "Separating guardrails that something enforces from outcomes that "
          "something measures, and refusing to file the third kind — enforced "
          "by nothing, measured by nothing — as a control.",
- "E1.7": "What continuous control verification can automate, which is "
+ "F1.7": "What continuous control verification can automate, which is "
          "gathering the artefact, and what it cannot, which is the adequacy "
          "judgement and the name that goes on it.",
- "E1.8": "The vendor assessment's two blind spots: AI features that arrive "
+ "F1.8": "The vendor assessment's two blind spots: AI features that arrive "
          "enabled by default so no purchase event triggers a review, and the "
          "sub-processor chain behind the vendor, which is where the data "
          "actually goes.",
- "E1.9": "Which changes to an agentic system are changes for governance "
+ "F1.9": "Which changes to an agentic system are changes for governance "
          "purposes, decided on whether they alter behaviour rather than on "
          "whether they touched code — which is how re-indexing gets filed as "
          "maintenance.",
- "E1.10": "Where the estate is held, and the distinction that matters: a "
+ "F1.10": "Where the estate is held, and the distinction that matters: a "
           "part two functions share is not safer than one nobody holds, "
           "because it is a gap that looks covered from both sides.",
- "E1.11": "How the classical model-risk playbook breaks once the model can "
+ "F1.11": "How the classical model-risk playbook breaks once the model can "
           "act — a validation complete on conceptual soundness, accuracy and "
           "monitoring, and silent on authority, reversibility, blast radius, "
           "reachability and containment.",
- "E1.12": "Tracing each handoff to the artefact the receiving function should "
+ "F1.12": "Tracing each handoff to the artefact the receiving function should "
           "now be holding, because a handoff is nobody's deliverable and "
           "therefore nobody's deadline.",
- "E1.13": "Measuring the control set against the running system rather than "
+ "F1.13": "Measuring the control set against the running system rather than "
           "against the register, so removing a control moves the number — "
           "with the known absences shipped alongside, since a register "
           "reporting no gaps on a system with gaps is one nobody should "
           "believe.",
- "E2.1": "One control set mapped to many regimes instead of one programme "
+ "F2.1": "One control set mapped to many regimes instead of one programme "
          "per regime, with the reuse counted — the number that argues "
          "against quadrupling the work for an eighty per cent overlap.",
- "E2.2": "The four specific things that move a deployer into a provider's "
+ "F2.2": "The four specific things that move a deployer into a provider's "
          "obligations, each of which an engineering team does without "
          "thinking of it as a regulatory event — and the show-me test for "
          "turning prose requirements into controls.",
- "E2.3": "Choosing the framework that covers the most of the controls you "
+ "F2.3": "Choosing the framework that covers the most of the controls you "
          "actually have as a spine and supplying the remainder from the "
          "others, rather than building a programme shaped like a document.",
- "E2.4": "Finding the sector rules you are already complying with under "
+ "F2.4": "Finding the sector rules you are already complying with under "
          "another name, which is usually the cheapest control in the "
          "programme — an agent that decides is a model, and model rules "
          "already have inventory, validation and change requirements.",
- "E2.5": "Where personal data actually is once an agent has touched it, and "
+ "F2.5": "Where personal data actually is once an agent has touched it, and "
          "how far an erasure request reaches — including the two surfaces it "
          "does not reach, one of which has no good answer.",
- "E2.6": "Breaking a disclosure deadline into its phases to find the one "
+ "F2.6": "Breaking a disclosure deadline into its phases to find the one "
          "that consumes it, which for an agentic incident is establishing "
          "who acted rather than containment.",
- "E2.7": "What supervisory documentation can contain for a system with no "
+ "F2.7": "What supervisory documentation can contain for a system with no "
          "deterministic reasoning — purpose, authority, bounds, a run "
          "record, decisions and known limitations — none of which is an "
          "explanation of the model and all of which a supervisor can use.",
- "E2.8": "Whether the record can say under whose authority an autonomous "
+ "F2.8": "Whether the record can say under whose authority an autonomous "
          "action was taken, asked as a governance question in advance rather "
          "than as an investigation question afterwards.",
- "E2.9": "Preparing the assurance conversation as arithmetic rather than "
+ "F2.9": "Preparing the assurance conversation as arithmetic rather than "
          "rhetoric: accuracy and conformance reported separately, coverage "
          "with the gaps named first, and the three openings that actually "
          "get used.",
- "E3.1": "Translating blast radius into consequence, so the sentence a board "
+ "F3.1": "Translating blast radius into consequence, so the sentence a board "
          "hears is about what one compromised run can move rather than about "
          "which scope the agent holds.",
- "E3.2": "Approving a rung of autonomy rather than a tool, because a "
+ "F3.2": "Approving a rung of autonomy rather than a tool, because a "
          "per-tool review queue becomes a bottleneck and then a bypass — "
          "with the top rung left ungranted and the reason stated.",
- "E3.3": "Sequencing by winnability rather than visibility, weighting the "
+ "F3.3": "Sequencing by winnability rather than visibility, weighting the "
          "workflow whose controls the next one inherits over the one the "
          "sponsor mentioned.",
- "E3.4": "The two functions that fall between org charts — harness "
+ "F3.4": "The two functions that fall between org charts — harness "
          "engineering and research — and the failure mode of both, which is "
          "not dramatic: they quietly do not happen.",
- "E3.5": "Replacing activity metrics with exposure ones, starting from the "
+ "F3.5": "Replacing activity metrics with exposure ones, starting from the "
          "observation that an activity metric moves in the right direction "
          "when the work gets bigger.",
- "E3.6": "What a flat no costs in visibility, and what makes a conditional "
+ "F3.6": "What a flat no costs in visibility, and what makes a conditional "
          "yes enforceable rather than aspirational — testable, time-bound, "
          "owned, and with a stated consequence.",
- "E3.7": "A build order in which each stage's output is the next stage's "
+ "F3.7": "A build order in which each stage's output is the next stage's "
          "input, and the comparison with the order that produces demos — "
          "including why the red team comes last.",
- "E3.8": "Organising around recovery rather than around enumerating the "
+ "F3.8": "Organising around recovery rather than around enumerating the "
          "failure modes of a probabilistic system, using four numbers this "
          "curriculum has already produced.",
 })

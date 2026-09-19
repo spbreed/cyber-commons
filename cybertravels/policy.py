@@ -1,4 +1,4 @@
-# step:file A3.1
+# step:file B3.1
 """The decision point — default-deny on the tool call.
 
 Function G had a policy table: `config.TOOL_POLICY` maps a tool to the audience
@@ -10,7 +10,7 @@ three places:
   operator as an absence rather than a reason;
 * it reads the tool name and nothing else — not who is calling, not with what
   arguments, not what the result would reach;
-* there is nowhere to hang the things A3.6 and A3.9 need, which are the rate a
+* there is nowhere to hang the things B3.6 and B3.9 need, which are the rate a
   human is being asked to approve and whether a control is currently switched
   off.
 
@@ -85,9 +85,9 @@ def decide(tool, args, session, *, exemptions=None):
 
     obligations = ["human-approval"] if rule["high_risk"] else []
 
-    # step:A3.9 add
+    # step:B3.9 add
     # An exemption can lift an obligation — that is the whole point of one —
-    # and it cannot lift the decision. A3.9's argument is that turning a
+    # and it cannot lift the decision. B3.9's argument is that turning a
     # control off has to be a recorded, expiring, scoped thing rather than a
     # comment in a config file, and a lifted obligation still leaves a
     # Decision that says which exemption lifted it.
@@ -96,17 +96,17 @@ def decide(tool, args, session, *, exemptions=None):
             obligations = [o for o in obligations if o not in ex.lifts]
             return Decision(True, f"allowed, under exemption {ex.ref}",
                             "exemption", tool, principal, obligations)
-    # step:A3.9 end
+    # step:B3.9 end
 
     return Decision(True, "allowed by policy", "tool-policy", tool, principal,
                     obligations)
 
 
-# step:A3.6 add
+# step:B3.6 add
 # --------------------------------------------------------------------------- #
-# A3.6 — approval that survives volume
+# B3.6 — approval that survives volume
 # --------------------------------------------------------------------------- #
-# The gate G1.7 built is present and, at enough volume, does nothing. Coverage
+# The gate A1.7 built is present and, at enough volume, does nothing. Coverage
 # stays at 100% while actual review collapses, and nothing in the system
 # reports that — which is why the control has to be *measured* rather than
 # merely enabled.
@@ -144,12 +144,12 @@ def approval_load(window=3600):
 
 def reset_approvals():
     _APPROVALS.clear()
-# step:A3.6 end
+# step:B3.6 end
 
 
-# step:A3.9 add
+# step:B3.9 add
 # --------------------------------------------------------------------------- #
-# A3.9 — turning a control off, without turning the system into an experiment
+# B3.9 — turning a control off, without turning the system into an experiment
 # --------------------------------------------------------------------------- #
 class Exemption:
     """A control switched off, on purpose, with an end date.
@@ -193,8 +193,8 @@ class Exemption:
 def expired(exemptions, now=None):
     """The ones that have run out and are still in the file.
 
-    This is A3.9's Day 2 number. A register full of expired exemptions is a
+    This is B3.9's Day 2 number. A register full of expired exemptions is a
     control set that describes a system nobody is running.
     """
     return [e.as_dict() for e in exemptions if not e.active(now)]
-# step:A3.9 end
+# step:B3.9 end

@@ -4,7 +4,7 @@ CyberTravels has four agents and they talk to each other. The naive version of
 that is `messaging/bus.py`, which is still in this tree and still used: a dict
 of lists, text in and text out, no sender identity that survives the hop. It is
 there because it is what almost every A2A layer looks like at first, and
-because A1.7 needs something to fix.
+because B1.7 needs something to fix.
 
 This module is the fix. Three properties, and each one closes a specific way a
 peer message goes wrong:
@@ -17,7 +17,7 @@ check and an investigator cannot either.
 **The human is carried through.** An envelope holds the `on_behalf_of` subject
 from the originating request. An agent that hands work to a peer does not get
 to launder whose authority it is acting under — that is the hop where a
-delegation chain usually breaks, and A2.6 is the lesson.
+delegation chain usually breaks, and B2.6 is the lesson.
 
 **A peer's text is data, not instruction.** `content` is always labelled with
 its origin when it reaches a model. A message from a peer agent is exactly as
@@ -28,9 +28,9 @@ four compromised agents.
 The envelope is a plain dict so it can be logged, diffed and asserted on. The
 signature is an HMAC over the canonical JSON: enough to detect a forged sender
 inside one deployment, and explicitly not a substitute for real workload
-identity, which A2.1 builds.
+identity, which B2.1 builds.
 """
-# step:file G1.6
+# step:file A1.6
 import hashlib
 import hmac
 import json

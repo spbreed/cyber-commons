@@ -32,7 +32,7 @@ HTTP = _HTTP()
 
 
 def route(path):
-    """The framework's handler decorator. An entry point, in A1.1's language."""
+    """The framework's handler decorator. An entry point, in B1.1's language."""
     def wrap(fn):
         fn.__route__ = path
         return fn

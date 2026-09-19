@@ -1,4 +1,4 @@
-# step:file B2.7
+# step:file C2.7
 """Supply chain — reconcile the manifest against the disk, then read the binary.
 
 A dependency scan reads a manifest. That is the whole of what it does, and it

@@ -35,22 +35,28 @@ optional — several of them are about not fabricating a benchmark result.
 **CyberTravels**, a corporate travel company whose product is an agentic
 platform of four agents — a workflow agent that books and refunds, a retrieval
 advisor, a coding agent, and a file-system agent reading vendor documents. Alex
-is the engineer who shipped it. Function G builds that platform; the five that
-follow ask different questions of the thing the reader now owns:
+is the engineer who shipped it. **Function A sets the reader's machine up and
+builds that platform**; the five that follow ask different questions of the
+thing the reader now owns:
 
 | | function | asks |
 |---|---|---|
-| G | Getting Started — Building Agentic AI | how is it built, and what did building it leave open |
-| A | Securing AI Architectures | what can go wrong here, and what closes it |
-| B | Application Security with an AI SDLC | how do we review its code, at its speed |
-| C | Agentic Evaluation and Red Teaming | can we break it before somebody else does |
-| D | The Agentic SOC | would we see it happening, and could we stop it |
-| E | Governance and Assurance | who signed off, and can they still evidence it |
+| A | Getting Started — Building Agentic AI | how do I set up, and how is it built |
+| B | Securing AI Architectures | what can go wrong here, and what closes it |
+| C | Application Security with an AI SDLC | how do we review its code, at its speed |
+| D | Agentic Evaluation and Red Teaming | can we break it before somebody else does |
+| E | The Agentic SOC | would we see it happening, and could we stop it |
+| F | AI Governance for Agentic Systems | who signed off, and can they still evidence it |
+
+The letters run in reading order and there is no gap: `A0.0` is the dev
+environment and IDE setup, `A0.1` is how to use the commons, and `A1.0` starts
+building. The function that was lettered `G` while it was bolted on the front
+is simply `A` now, and every other function moved one letter down.
 
 `cybertravels/` is the running application those lessons build, one increment
 at a time. It is **not** a fixture to read: `scripts/checkpoint.py --at <id>`
 writes the tree as it stood at the end of any lesson, so a reader joining at
-A3.5 gets everything up to it and nothing after. §5 rows 11 and 12 are the
+B3.5 gets everything up to it and nothing after. §5 rows 11 and 12 are the
 gates that keep that true.
 
 Current shape, measured rather than typed — `check_claims.py` fails CI when any
@@ -152,7 +158,7 @@ that are enforced or that get broken most.
   common way a good lesson lands badly. `check_lessons.py` enforces the order.
 - **Grounded in CyberTravels.** One system, every lesson. A sharper example is
   not worth the reader holding a second system.
-- **Chapters cited by id, never by number.** "Chapter D3", not "Chapter 11" —
+- **Chapters cited by id, never by number.** "Chapter E3", not "Chapter 11" —
   the number is an ordinal that is rendered nowhere and goes stale on insert.
 - **No weekday as a stand-in for "at any time"**, no culture-specific idiom.
   `check_clarity.py` reads the rendered page and fails on both. This caught
@@ -219,8 +225,8 @@ person.
 | 8 | `check_clarity.py --check` | weekday idioms and culture-specific phrasing, read from the rendered page |
 | 9 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |
 | 10 | `render_diagrams.py --check` | a diagram source that Graphviz or PlantUML will not lay out — which ships as an empty or smeared SVG behind a green build. With a model reachable it runs the skills and also checks the committed source is fresh; in CI, where there is no model and every skill refuses, it validates the committed sources and says freshness is not covered. It used to fail every CI run with "no skill emitted a diagram", which is a gate nobody keeps |
-| 11 | `checkpoint.py --check` | a lesson checkpoint that no longer materialises. `cybertravels/` carries `step:` markers saying which lesson introduced each file and each block, so a reader can get the tree as it stood at any lesson. Checks the last checkpoint against the committed tree with a second implementation of the rule (a gate that asserts a function equals itself protects nothing), that every checkpoint parses, and that every `was` line is `#~`-commented — an uncommented one makes the committed application run the naive branch as well as the real one. It also refuses a region opened while another is still open: a missing `step:A3.10 end` once swallowed `class Budget:` whole, and every gate passed because what it ate still parsed |
-| 12 | `checkpoint.py --run` | a checkpoint that parses and does not work. Materialises every checkpoint and runs its own `cybertravels/tests/smoke_test.py` — the suite grows as the lessons add controls and stages (8 assertions at G2.3, 19 at A2.8, 38 at A3.11, 73 at B2.18, 99 at C1.11, 127 at D5.6, 161 at E3.8) and every checkpoint has to pass the one it carries. Found two `was` branches in `db.audit` binding the wrong number of values whenever one of A2.7/A2.8 was applied and not the other; all of them parsed and G2.4 raised on the first INSERT. Needs PyJWT and skips cleanly without it |
+| 11 | `checkpoint.py --check` | a lesson checkpoint that no longer materialises. `cybertravels/` carries `step:` markers saying which lesson introduced each file and each block, so a reader can get the tree as it stood at any lesson. Checks the last checkpoint against the committed tree with a second implementation of the rule (a gate that asserts a function equals itself protects nothing), that every checkpoint parses, and that every `was` line is `#~`-commented — an uncommented one makes the committed application run the naive branch as well as the real one. It also refuses a region opened while another is still open: a missing `step:B3.10 end` once swallowed `class Budget:` whole, and every gate passed because what it ate still parsed |
+| 12 | `checkpoint.py --run` | a checkpoint that parses and does not work. Materialises every checkpoint and runs its own `cybertravels/tests/smoke_test.py` — the suite grows as the lessons add controls and stages (8 assertions at A2.3, 19 at B2.8, 38 at B3.11, 73 at C2.18, 99 at D1.11, 127 at E5.6, 161 at F3.8) and every checkpoint has to pass the one it carries. Found two `was` branches in `db.audit` binding the wrong number of values whenever one of B2.7/B2.8 was applied and not the other; all of them parsed and A2.4 raised on the first INSERT. Needs PyJWT and skips cleanly without it |
 | 13 | `check_labels.py --check` | `cybertravels/LABELS.md` naming a file or unit that is no longer in the tree, or a skill scoring recall against one. The skills hard-code those names on purpose — a key derived from a scanner is a description of the scanner — so a rename would otherwise make every recall number wrong with nothing failing. It also holds the **line numbers** in the SAST key inside the unit they name: two of them had drifted — `download_invoice` cited a blank line four lines above the function — and a key whose lines are wrong scores a model that reported the right place as wrong |
 | 14 | `check_claims.py --check` | any count in the docs that has drifted from the tree |
 | 15 | `check_claude_md.py --check` | **this file**, drifted from the repo — a script it names that does not exist, a gate it promises that CI does not run, a gate CI runs that it never mentions, a dead link |
@@ -346,7 +352,14 @@ down should not block a deploy. Nothing else is.
 
 ## 8 · vulnbench — the eval harness
 
-Separate subsystem, under `labs/b2.10-eval-harness/`. It benchmarks an AI
+Separate subsystem, under `labs/b2.10-eval-harness/`. **The directory name is
+historical and is not a lesson id** — it predates two renumberings, and the
+lesson it was named after is now C2.10, which is about agentic penetration
+testing rather than this harness. It is left alone on purpose: the path is
+embedded in the Claude skills, the Copilot prompts and the benchmark's own
+tooling, and renaming it would move a subsystem the curriculum does not own.
+
+It benchmarks an AI
 security harness by scoring its findings against ground truth (SAST code, real
 CVEs, IaC config). Claude Code skills in [`.claude/skills/`](.claude/skills) and
 Copilot prompts in [`.github/prompts/`](.github/prompts) both call the same
@@ -442,4 +455,4 @@ Every line here cost a debugging session. Read it before you spend the same one.
 - **A `--check` flag a script does not define is silently ignored.**
   `build_curriculum.py` took no arguments and was run with `--check` for
   months; it exited 0 every time without comparing anything, which is why a
-  clarity fix reached the site and never reached `curriculum/track-e1.md`.
+  clarity fix reached the site and never reached `curriculum/track-f1.md`.

@@ -45,11 +45,11 @@ INCIDENT = {
 
 # Every control that could have caught this, and whether it did.
 CHAIN = [
-    ("A2.6", "provenance marking at ingress",            "absent"),
-    ("A3.1", "default-deny on the tool call",            "present-but-scoped-wrong"),
-    ("D2.4", "detection on refund without approval",     "absent"),
-    ("D1.2", "drift monitor on vendor tool descriptions", "absent"),
-    ("D4.4", "stop authority within the refund window",  "present"),
+    ("B2.6", "provenance marking at ingress",            "absent"),
+    ("B3.1", "default-deny on the tool call",            "present-but-scoped-wrong"),
+    ("E2.4", "detection on refund without approval",     "absent"),
+    ("E1.2", "drift monitor on vendor tool descriptions", "absent"),
+    ("E4.4", "stop authority within the refund window",  "present"),
 ]
 
 CANDIDATES = [

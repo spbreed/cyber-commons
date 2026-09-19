@@ -12,10 +12,10 @@ truth. It is a **separate subsystem** from the curriculum — unrelated in code,
 sharing only the repository.
 
 The lessons that drive it, measured from `curriculum/labs.json` rather than
-remembered: **C1.3** (run the comparison and see the inflated number), **E1.5**
-(read the output as audit evidence), **E3.5** and **E3.7** (the metrics, and
+remembered: **D1.3** (run the comparison and see the inflated number), **F1.5**
+(read the output as audit evidence), **F3.5** and **F3.7** (the metrics, and
 building the capability). The directory is named `b2.10-eval-harness` for
-historical reasons; B2.10 is now a different lesson, and renaming the directory
+historical reasons; C2.10 is now a different lesson, and renaming the directory
 would break every committed path.
 
 ## The entrypoint, and why it is the only one

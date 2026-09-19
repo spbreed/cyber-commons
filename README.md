@@ -67,14 +67,14 @@ the contract, and is not a model result.
 **[A0.1](https://cybercommons.ai/lessons/A0.1.html)** is the whole introduction
 on one page: who this is for, what a lesson is made of, which track to open
 first, and what Day 0/1/2 mean. Then
-**[A1.0](https://cybercommons.ai/lessons/A1.0.html)**, which introduces
+**[B1.0](https://cybercommons.ai/lessons/B1.0.html)**, which introduces
 CyberTravels — the one system every lesson is grounded in.
 
 Every lesson page carries the exact command. Run it against the skill's
 committed fixture:
 
 ```bash
-python3 skills/threats/instruction-channel-check/scripts/instruction_channel_check.py   # A1.2, prompt injection
+python3 skills/threats/instruction-channel-check/scripts/instruction_channel_check.py   # B1.2, prompt injection
 ```
 
 **Or install the skills into your own agent and ask in your own words.** Each
@@ -100,28 +100,31 @@ the model, not a package tree.
 
 ## 3 · Then take the spine, then your chapter
 
-Nobody takes all 148. Everyone takes the **common spine** first — twenty
-lessons, in order, that carry the vocabulary the rest runs on. Then the
+Nobody takes all 148. Everyone takes the **common spine** first — twenty-four
+lessons, in order, that carry the vocabulary the rest runs on. It opens by
+setting your machine up and building the agent, because every control in the
+five functions after it attaches to a mechanism you will have written. Then the
 chapters for the chair you sit in, then one adjacent chapter, because the
 failures happen in the seams.
 
-> **Spine:** A0.1 → A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 →
-> A2.3 → A2.4 → A3.1 → A3.2 → A3.5 → **B2.0** → **B2.1** → B2.3 → **D1.0** →
-> D1.3 → **E1.0** → E1.10
+> **Spine:** **A0.0** → A0.1 → **A1.0** → A1.1 → A1.3 → A1.4 → A2.0 →
+> **A2.4** → B1.0 → B1.1 → B1.2 → **B1.10** → **B1.12** → B2.1 → B2.3 →
+> B2.4 → B3.1 → B3.2 → B3.5 → **C2.0** → C2.3 → **E1.0** → **F1.0** → F1.10
 
 | If you are… | after the spine, open |
 |---|---|
-| a security architect, or you own the design review | **A2** and **A3** — identity and ingress, then runtime and the gateway |
-| an AppSec engineer or you review agent-written code | **B2** — the AI SDLC, fifteen stages, built end to end |
-| a red teamer or an eval engineer | **C1** — one red-team lifecycle, start to finish |
-| in the SOC — detection, IR, threat hunting | **D1**→**D5** — discover, detect, understand, respond, recover |
-| in GRC, risk, audit, or you carry the regulator | **E1**→**E3** — risk and control, regulatory, running the programme |
+| building an agentic feature, and new to all of it | **A1** and **A2** — the loop and the tools, then the harness around them |
+| a security architect, or you own the design review | **B2** and **B3** — identity and ingress, then runtime and the gateway |
+| an AppSec engineer or you review agent-written code | **C2** — the AI SDLC, fifteen stages, built end to end |
+| a red teamer or an eval engineer | **D1** — one red-team lifecycle, start to finish |
+| in the SOC — detection, IR, threat hunting | **E1**→**E5** — discover, detect, understand, respond, recover |
+| in GRC, risk, audit, or you carry the regulator | **F1**→**F3** — risk and control, regulatory, running the programme |
 
 **Recording or teaching this?** [LIGHTBOARD.md](LIGHTBOARD.md) is a
 **word-for-word** script for every lesson — open it and talk. Read every plain
 line as written; never read a line in square brackets, which are the stage
 directions. Five beats each, about two minutes, four hours in total, generated
-from the same sources the lessons are. It tells you to record the six entry
+from the same sources the lessons are. It tells you to record the seven entry
 points first: those carry an extra ground-rules beat for somebody who has never
 shipped an agent, and every lesson after them assumes you said it.
 
@@ -208,7 +211,7 @@ result. So there is no stand-in.
 | [`redteam/`](skills/redteam) · [`research/`](skills/research) | 14 — campaigns, reproducibility, corpus integrity, supply chain, published incidents |
 | [`detection/`](skills/detection) · [`response/`](skills/response) · [`secops/`](skills/secops) | 21 — agent tempo, drift, fleet correlation, canaries, containment, stop authority |
 | [`grc/`](skills/grc) · [`regulatory/`](skills/regulatory) · [`programme/`](skills/programme) | 27 — tiering, control mapping, obligations, disclosure, sequencing, metrics |
-| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 14 — turn a control claim into a signed statement bound to one deployment ([B2.18](https://cybercommons.ai/lessons/B2.18.html), run against 10 real OSS agent/MCP repos) |
+| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 14 — turn a control claim into a signed statement bound to one deployment ([C2.18](https://cybercommons.ai/lessons/C2.18.html), run against 10 real OSS agent/MCP repos) |
 
 ## The programme
 
@@ -220,7 +223,7 @@ idea looks like in that system, and a twelve-row risk register ties the whole
 curriculum together.
 
 That is a deliberate constraint, not a shortage of examples. The refund limit
-an attacker walks past in A1.2 is the same one a detection watches in Function
+an attacker walks past in B1.2 is the same one a detection watches in Function
 D and a report counts in Function E. By the fourth function you are not
 learning a fourth example — you are watching a system you already understand
 fail in a new way.
@@ -230,11 +233,11 @@ lesson** that meets CyberTravels and asks its own question of it.
 
 | Function | The question it asks of CyberTravels | Chapters | Lessons |
 |---|---|---|---|
-| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [A0](curriculum/track-a0.md) Introduction · [A1](curriculum/track-a1.md) Architecture and every risk · [A2](curriculum/track-a2.md) Identity and ingress · [A3](curriculum/track-a3.md) Runtime and the gateway | 40 |
-| **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [B2](curriculum/track-b2.md) The AI SDLC pipeline, and agentic pentesting | 20 |
-| **C · Agentic Evaluation and Red Teaming** | can we break it before somebody else does | [C1](curriculum/track-c1.md) One red-team lifecycle, end to end | 12 |
-| **D · The Agentic SOC** | would we see it happening, and could we stop it | [D1](curriculum/track-d1.md) Discover · [D2](curriculum/track-d2.md) Detect · [D3](curriculum/track-d3.md) Understand · [D4](curriculum/track-d4.md) Respond · [D5](curriculum/track-d5.md) Recover and root cause | 31 |
-| **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [E1](curriculum/track-e1.md) Risk and control · [E2](curriculum/track-e2.md) Regulatory and compliance · [E3](curriculum/track-e3.md) Running the programme | 31 |
+| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [A0](curriculum/track-a0.md) Introduction · [B1](curriculum/track-b1.md) Architecture and every risk · [B2](curriculum/track-b2.md) Identity and ingress · [B3](curriculum/track-b3.md) Runtime and the gateway | 40 |
+| **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [C2](curriculum/track-c2.md) The AI SDLC pipeline, and agentic pentesting | 20 |
+| **C · Agentic Evaluation and Red Teaming** | can we break it before somebody else does | [D1](curriculum/track-d1.md) One red-team lifecycle, end to end | 12 |
+| **D · The Agentic SOC** | would we see it happening, and could we stop it | [E1](curriculum/track-e1.md) Discover · [E2](curriculum/track-e2.md) Detect · [E3](curriculum/track-e3.md) Understand · [E4](curriculum/track-e4.md) Respond · [E5](curriculum/track-e5.md) Recover and root cause | 31 |
+| **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [F1](curriculum/track-f1.md) Risk and control · [F2](curriculum/track-f2.md) Regulatory and compliance · [F3](curriculum/track-f3.md) Running the programme | 31 |
 | | | **14 chapters** | **134** |
 
 Chapters are cited by id and never by number — the ordinal is rendered nowhere
@@ -242,16 +245,16 @@ and goes stale the moment one is inserted.
 
 Two chapters carry a single artefact end to end:
 
-- **[A1](curriculum/track-a1.md)** opens on CyberTravels as built, then the agentic
+- **[B1](curriculum/track-b1.md)** opens on CyberTravels as built, then the agentic
   reference architecture — drawn rather than coded — then one risk per lesson
   grounded in the OWASP Agentic Top 10, each naming the component of CyberTravels it
   attacks. It closes on the **CyberTravels risk register**: twelve risks, each
-  with a scene, a component, a control and the lesson that owns it. Chapters A2
-  and A3 are those controls.
-- **[B2](curriculum/track-b2.md)** is the AI SDLC itself — a five-phase,
+  with a scene, a component, a control and the lesson that owns it. Chapters B2
+  and B3 are those controls.
+- **[C2](curriculum/track-c2.md)** is the AI SDLC itself — a five-phase,
   fifteen-stage agentic AppSec pipeline built over seventeen sessions, attested in
-  [B2.18](https://cybercommons.ai/lessons/B2.18.html) and closed in
-  [B2.19](https://cybercommons.ai/lessons/B2.19.html) by scoring Google's Mantis against a
+  [C2.18](https://cybercommons.ai/lessons/C2.18.html) and closed in
+  [C2.19](https://cybercommons.ai/lessons/C2.19.html) by scoring Google's Mantis against a
   held-out key — a reference implementation is something you evaluate, not
   something you trust.
 
@@ -384,10 +387,10 @@ file inside the tree. Install the guard once:
 site/data/curriculum.json   source of truth: 148 sessions, 14 chapters
 curriculum/                 generated chapter docs + labs.json + frameworks.json
 scripts/exercises/          the lessons themselves, one module per track
-cybertravels/               the sample repository: A1.1's architecture as source,
+cybertravels/               the sample repository: B1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
 skills/                     139 agent skills, plus _runtime/ — the one shared library
-labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation
+labs/                       attestation · incident-register · b2.10-eval-harness · b2-delegation
 labs/evidence/              the recorded offline run of every skill script
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · check_* · install_skills.py

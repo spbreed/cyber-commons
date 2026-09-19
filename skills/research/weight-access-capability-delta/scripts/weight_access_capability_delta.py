@@ -36,15 +36,15 @@ SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
 REPLACEMENTS = {
- "rate limiting":            ("A2.7 choke point / A3.6 runtime levers",
+ "rate limiting":            ("B2.7 choke point / B3.6 runtime levers",
                               "bound attempts per identity per window"),
- "abuse monitoring":         ("D2.2 detection for agents",
+ "abuse monitoring":         ("E2.2 detection for agents",
                               "your telemetry is the only signal now"),
- "refusal behaviour":        ("A3.5 tool policy + C1.2 provenance",
+ "refusal behaviour":        ("B3.5 tool policy + C1.2 provenance",
                               "do not rely on the model refusing; refuse at the tool"),
- "immutable logging":        ("A2.5 act chains + D5.1 replay",
+ "immutable logging":        ("B2.5 act chains + E5.1 replay",
                               "you own retention and integrity"),
- "model version stability":  ("D1.2 drift monitoring",
+ "model version stability":  ("E1.2 drift monitoring",
                               "you now own upgrades AND their behavioural changes"),
 }
 

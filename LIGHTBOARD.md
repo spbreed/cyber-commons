@@ -22,13 +22,13 @@ built an agent:
 
 | order | lesson | opens |
 |---|---|---|
-| 1 | **G1.0** | the front door — what an agent is, and that you are about to build one |
+| 1 | **A1.0** | the front door — what an agent is, and that you are about to build one |
 | 2 | **A0.1** | the commons itself: the five functions on top of what you built |
-| 3 | **A1.0** | Function A, and CyberTravels read adversarially. The one that has to land |
-| 4 | **B2.0** | Function B — the AI SDLC |
-| 5 | **C1.0** | Function C — red teaming agents, not models |
-| 6 | **D1.0** | Function D — the SOC |
-| 7 | **E1.0** | Function E — governance |
+| 3 | **B1.0** | Function A, and CyberTravels read adversarially. The one that has to land |
+| 4 | **C2.0** | Function B — the AI SDLC |
+| 5 | **D1.0** | Function C — red teaming agents, not models |
+| 6 | **E1.0** | Function D — the SOC |
+| 7 | **F1.0** | Function E — governance |
 
 Say the ground rules once, in those 7, and never again. Every lesson after
 them assumes you said it.
@@ -83,734 +83,21 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 ---
 
 
-## Function G — Getting Started — Building Agentic AI
+## Function A — Getting Started — Building Agentic AI
 
 *[Who is watching: Engineers building an agentic feature, and equally the AppSec engineers, red teamers, SOC analysts and GRC leads who will be handed one. It assumes you can read a Python function. It assumes no security background at all, and no prior agent work.]*
 
 *[The pitch for the whole function, if you need it in one breath: Every control in the other four functions attaches to a mechanism. Hand somebody a control before they have built the mechanism and they apply it as a sentence in a document — which is the single most common reason agentic security guidance is read, agreed with, and not implemented.]*
 
----
-
-### G1.0 · What an agent is, and what you are about to build
-
-Chapter G1 · lesson 1 of 8 · runs a skill · 427 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/G1.0.html)
-
-**⓪ Ground rules — only on this lesson**
-
-*[Draw nothing yet. Talk to camera.]*
-
-Before anything else, thirty seconds on what an agent actually is, because if you have never built one, none of the rest of this will land properly.
-
-A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong.
-
-So here is how this works. You are going to build one. Not read about one — build it, on your own machine, over this chapter and the next. Then the four functions after that take the thing you built and attack it, review it, watch it and govern it. Everything is free and nothing needs an account.
-
-**① Open**
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-WHAT YOU ARE ABOUT TO BUILD
-```
-
-Alex has a working prototype: a model, a booking API, and a loop that joins them. It cancels the right flight four times out of five. The fifth time it cancels a different one, and there is no record of why it chose that booking, no way to stop it mid-run, and nothing to point at when somebody asks. The prototype is not the problem. The absence of everything around it is, and that absence is what this chapter fills in.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-Security guidance handed to somebody who has never built an agent lands as a list of rules with no mechanism attached, and gets filed as paperwork.
-
-Same company, same four agents, new way of failing. This is CyberTravels itself, before it exists. The seven components you map are the ones Alex shipped, and cybertravels/README.md is the picture you are about to make true on your own machine.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Draw the seven components of the system you are about to build, and mark the edges where trust changes.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Edges marked as trust boundaries, against total edges. The second number is always larger, and the gap is the part worth arguing about.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> The seven components, the edges between them, and the subset of those edges where trust changes — which is a smaller set than the edge count and is the only part worth arguing about.
-
-**⑤ Hand it over**
-
-Add an eighth component: an egress gateway. CyberTravels does not have one, which is why A3.7 exists.
-
-Next up: G1.1, The loop — model, tools, and the step that turns text into an action.
-
----
-
-### G1.1 · The loop — model, tools, and the step that turns text into an action
-
-Chapter G1 · lesson 2 of 8 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/G1.1.html)
-
-**① Open**
-
-Still inside chapter G1. Last one was What an agent is, and what you are about to build.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-PLAN, ACT, VERIFY
-```
-
-The difference between a demo and a system is one line. In the demo, the model decides to call a tool and the tool is called. In the system, the model proposes and separate code decides. Every control in the rest of this commons lives in the gap between those two sentences, and a loop written without the gap has nowhere to put any of them.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-A loop that accepts whatever the model says it did has no controls in it, because there is nowhere to put one.
-
-Same company, same four agents, new way of failing. The loop is cybertravels/runtime.py. execute tool is the line where the model stops proposing and CyberTravels' own code starts deciding — every control in Function A attaches to it.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Write the loop in three stages — plan, act, verify — with the verifier independent of the model.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Runs the verifier rejected. Zero means either the loop is perfect or the verifier is not independent, and it is the second one.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> The loop's three stages named, the exit condition stated explicitly, and the verifier identified as independent of the model or flagged as not being so.
-
-**⑤ Hand it over**
-
-Delete the verifier and run the same task. The loop still finishes and still reports success.
-
-Next up: G1.2, Tools over MCP — a resource server, and why it is a separate process.
-
----
-
-### G1.2 · Tools over MCP — a resource server, and why it is a separate process
-
-Chapter G1 · lesson 3 of 8 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G1.2.html)
-
-**① Open**
-
-Still inside chapter G1. Last one was The loop — model, tools, and the step that turns text into an action.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-WHY THE TOOL IS A SEPARATE PROCESS
-```
-
-It is faster to import the booking client and let the agent call it directly. It works on the first afternoon and it is still working months later, which is the trap: the tool now runs with whatever authority the agent has, and the only place to add a check is inside the component an attacker is trying to influence.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-A tool called in-process runs with the agent's authority, and the only place left for a check is inside the component under attack.
-
-Same company, same four agents, new way of failing. CyberTravels has two resource servers: mcp/internal server.py for bookings and payments, and mcp/vendor server.py, which is a travel vendor's process running on CyberTravels' host.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Stand up two MCP resource servers, split by trust domain, each with its own audience.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Tools reachable with a token minted for the other server. It should be zero, and it is worth proving rather than assuming.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> Both servers' tools enumerated, each with its audience and the scope it requires, and any tool whose declared surface is wider than its implementation.
-
-**⑤ Hand it over**
-
-Change one tool's description to claim it is read-only while leaving it a write. Nothing in the protocol stops you.
-
-Next up: G1.3, Identity — the human, the workload, and the call.
-
----
-
-### G1.3 · Identity — the human, the workload, and the call
-
-Chapter G1 · lesson 4 of 8 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G1.3.html)
-
-**① Open**
-
-Still inside chapter G1. Last one was Tools over MCP — a resource server, and why it is a separate process.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-THREE PRINCIPALS, NOT ONE
-```
-
-One API key in an environment variable, shared by four agents. Every action in the log reads service-account-prod. Nine weeks later somebody asks which agent issued a particular refund and on whose behalf, and the honest answer is that the system cannot tell — not slowly, not with effort. It never recorded it.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-One shared key makes every action in the log identical, and 'which agent, on whose behalf' has no answer at all.
-
-Same company, same four agents, new way of failing. Four agents, four workload identities, in cybertravels/config.py. Dana is a traveller, Alex runs agent operations, Priya is in finance — and the difference between them is the whole of the next lesson.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Give each agent a workload identity, and the human a session token that grants nothing downstream.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Audit rows that name both the human and the specific agent, as a fraction of all rows. Anything below 100 percent is a row you cannot investigate.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> Three principals named, the agent's identity separated from any credential it holds, and the human's token shown to grant nothing beyond invoking an agent.
-
-**⑤ Hand it over**
-
-Give two agents the same workload identity. Everything still runs.
-
-Next up: G1.4, Delegation — one token per action.
-
----
-
-### G1.4 · Delegation — one token per action
-
-Chapter G1 · lesson 5 of 8 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G1.4.html)
-
-**① Open**
-
-Still inside chapter G1. Last one was Identity — the human, the workload, and the call.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-ONE TOKEN, ONE ACTION
-```
-
-The token has every scope because that never fails. It is the setting that makes the demo smooth and it is also the setting under which one ambiguous sentence in a vendor document turns a read into a refund. The alternative costs a function call per action and closes the gap entirely.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-An agent holding a long-lived token with every scope is one ambiguous sentence away from using all of them.
-
-Same company, same four agents, new way of failing. cybertravels/identity.py. Sign in as Dana and ask for a refund: the exchange refuses, because a traveller's role cannot delegate payments:refund, and the resource server is never even asked.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Exchange a token per action — one audience, one scope, two minutes — and verify it at the resource server rather than logging it.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Scopes a delegated token carries: one. And the count of refusals the exchange produced for scopes the human's role may not delegate.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> A delegated token whose subject is the human and whose actor is the agent, addressed to one audience with one scope — and a refusal, with the reason, when a traveller's role is asked to delegate a refund.
-
-**⑤ Hand it over**
-
-Take a token minted for the internal server and present it to the vendor server. Read the refusal.
-
-Next up: G1.5, Memory — what it remembers, and where that came from.
-
----
-
-### G1.5 · Memory — what it remembers, and where that came from
-
-Chapter G1 · lesson 6 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/G1.5.html)
-
-**① Open**
-
-Still inside chapter G1. Last one was Delegation — one token per action.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-ORIGIN TRAVELS WITH CONTENT
-```
-
-The agent remembers that this traveller prefers aisle seats, which is useful. It also remembers a sentence it read in a vendor notice three weeks ago, which it now repeats with the same confidence. Nothing distinguishes the two, because when they were written down nothing recorded where either came from.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-Text an agent read becomes a fact an agent learned, and one vendor sentence outlives the request that fetched it.
-
-Same company, same four agents, new way of failing. cybertravels/memory.py. The vendor notice CyberTravels fetches for a Northwind Rail booking contains an instruction aimed at automated agents, and it is what gets written down if origin is not recorded.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Record origin with every memory entry, scope recall to one person, and provide delete and export.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Entries carrying an origin: all of them. Cross-owner recalls: zero. Both are assertions you can run rather than claims.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> Entries carrying an origin and a trust flag, recall that refuses to cross an owner boundary, and the prompt block rendering untrusted entries with the label still attached.
-
-**⑤ Hand it over**
-
-Drop the origin column and re-render the prompt block. The vendor's instruction now reads exactly like the policy.
-
-Next up: G1.6, Agent to agent — handing work over without laundering authority.
-
----
-
-### G1.6 · Agent to agent — handing work over without laundering authority
-
-Chapter G1 · lesson 7 of 8 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G1.6.html)
-
-**① Open**
-
-Still inside chapter G1. Last one was Memory — what it remembers, and where that came from.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-THE ENVELOPE
-```
-
-The retrieval advisor reads a vendor document and passes its conclusion to the workflow agent. The workflow agent treats it as an internal request, because it arrived from a peer. One sentence written by somebody outside the company is now an instruction inside it, and the log shows two agents doing their jobs correctly.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-A peer's message read as a colleague's instruction turns one injected document into four compromised agents.
-
-Same company, same four agents, new way of failing. CyberTravels' four agents hand work to each other. cybertravels/a2a/protocol.py is the envelope; cybertravels/messaging/bus.py is the version it replaces, still in the tree because it is what A1.7 attacks.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Sign every agent-to-agent envelope, carry the human through each hop, and cap the hops.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Tampered envelopes rejected: all. And the hop at which a cycle stops, which is a number you choose rather than discover.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> A signed envelope naming its sender and the human it acts for, a refusal on a tampered one, and a refusal on an envelope with no human in the chain.
-
-**⑤ Hand it over**
-
-Send a message with hops set one below the ceiling and let two agents bounce it. Count how many tool calls happen before the ceiling stops it, and multiply by your per-call cost.
-
-Next up: G1.7, The human gate, and the budget that stops the loop.
-
----
-
-### G1.7 · The human gate, and the budget that stops the loop
-
-Chapter G1 · lesson 8 of 8 · runs a skill · 388 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/G1.7.html)
-
-**① Open**
-
-Still inside chapter G1. Last one was Agent to agent — handing work over without laundering authority.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-TWO CEILINGS, OPPOSITE FAILURES
-```
-
-The agent is asked to reconcile a booking that cannot be reconciled. It tries, rephrases, tries again. Six hours later it has spent four hundred thousand tokens and exhausted a vendor's rate limit for everybody else on that integration. Nothing failed. There was simply no number at which it was supposed to stop.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-An unbounded loop against an impossible task spends until somebody notices, and a gate nobody can approve fast enough gets removed.
-
-Same company, same four agents, new way of failing. Cancelling a booking and issuing a refund are CyberTravels' two irreversible actions, and both are gated in cybertravels/config.py::TOOL_POLICY. The budgets are two lines above them.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Gate the irreversible actions on a named human, and bound both steps and tool calls.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Approvals per reviewer per hour — the number that says whether the gate is still a control — and the share of runs that hit a ceiling.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> A high-risk action pausing and naming its scope, an approval and a refusal both recorded as audit rows, and a budget ceiling returning an incomplete result rather than a summary.
-
-**⑤ Hand it over**
-
-Raise MAX_TOOL_CALLS to 500 and give the agent a task it cannot finish. Watch the cost, and then decide what the right number is for your own loop — it is not 500 and it is not 2.
-
-That closes chapter G1. A running agentic platform you built yourself: a reasoning loop with an independent verifier, two MCP resource servers behind a process boundary, a workload identity per agent, per-action delegation that a resource server actually enforces, memory that records where its contents came from, signed agent-to-agent envelopes, a human gate and a budget that binds.
-
-*[Slow down here. This is the reason anybody clicks the next chapter.]*
-
-And here is what it still cannot do. It runs, and you cannot yet tell anybody what it did. There is no trace, the audit rows cannot say what motivated an action, and the only evidence it works is that you watched it work once.
-
-G2.0 — why a demo is not a system, and the three things that separate them.
-
-Next up: G2.0, Why a demo is not a system — the harness around the loop.
-
----
-
-### G2.0 · Why a demo is not a system — the harness around the loop
-
-Chapter G2 · lesson 1 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/G2.0.html)
-
-**① Open**
-
-Chapter G1 left us here. It runs, and you cannot yet tell anybody what it did. That is what this chapter picks up.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-DEMO ──────────────────────► SYSTEM
-```
-
-The prototype is promoted with nobody changing a line of it. Three weeks later a traveller disputes a cancellation and the question is what the agent actually did. The answer is in a log line that says run completed. Everything needed to answer it was cheap to add and is now expensive, and none of it was ever a feature request.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-A demo promoted to production carries none of the machinery an incident needs, and the first investigation finds that out at the worst moment.
-
-Same company, same four agents, new way of failing. Alex's prototype became CyberTravels' production platform without anybody adding a trace, and the first disputed cancellation is where that is discovered.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Establish the gap first: put an investigation's questions to what your run currently emits.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Questions the current record cannot answer. Expect most of them, which is the point of measuring before building.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> The questions an investigation asks, checked against what your run currently emits, and a named list of the ones it cannot answer yet. Expect that list to be most of them — that is the point of running this first.
-
-**⑤ Hand it over**
-
-Answer the same questions about a system you actually work on. The gap is usually wider than for the agent you just built, because nobody chose it.
-
-Next up: G2.1, Observability — the run as spans.
-
----
-
-### G2.1 · Observability — the run as spans
-
-Chapter G2 · lesson 2 of 5 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/G2.1.html)
-
-**① Open**
-
-Still inside chapter G2. Last one was Why a demo is not a system — the harness around the loop.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-THE RUN, AS SPANS
-```
-
-The run produced the right answer, so nobody looked further. The trace would have shown that it reached for the refund tool first, was refused by the policy, and tried a different route — which is a signal about the input it was given, not about that run. Emitting only the answer threw away the only interesting part.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-A run that emits only its answer is unreviewable, and a trace of successes hides exactly the events worth alerting on.
-
-Same company, same four agents, new way of failing. cybertravels/observability.py. Every span carries the trace id that joins it to the audit row, which is the join Function D's detections are written against.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Emit the run as spans, joined by a trace id, with tokens summarised and refusals recorded with the boundary that produced them.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Spans per run carrying the trace id: all of them. Credentials appearing in a span: zero, and worth grepping for rather than believing.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> A run's spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it.
-
-**⑤ Hand it over**
-
-Put the whole delegated token in a span instead of its claims. Nothing breaks, the trace is more useful, and you have just put a credential in your log pipeline.
-
-Next up: G2.2, The audit trail, and the four questions it has to answer.
-
----
-
-### G2.2 · The audit trail, and the four questions it has to answer
-
-Chapter G2 · lesson 3 of 5 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/G2.2.html)
-
-**① Open**
-
-Still inside chapter G2. Last one was Observability — the run as spans.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-FOUR QUESTIONS AN AUDIT ROW MUST ANSWER
-```
-
-Every row in the audit log is correct and none of them is sufficient. They record that an agent issued a refund at 14:07. They do not record that the agent had, eleven seconds earlier, read a vendor notice containing an instruction to issue refunds. The action is visible and the cause is not, so the incident closes as an agent behaving oddly.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-A record that names an action without naming its cause closes an incident as 'the agent misbehaved'.
-
-Same company, same four agents, new way of failing. CyberTravels' audit table is append-only and every row carries the human => agent chain. The fourth question — what motivated the action — is the one its rows still cannot answer, and A1.14 is where that costs something.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Hold every audit row to four questions: which human, which workload, which call, and what motivated it.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Of the four, how many your rows answer. Three is common and the missing one is almost always the fourth.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> Each of the four questions answered or explicitly not, from real audit rows — and the fourth one probably failing, which is the finding worth carrying into Function D.
-
-**⑤ Hand it over**
-
-Add the motivating input and its origin to the audit row. Then re-run the check and notice that you have also just put traveller text into a long-lived store, which is E2.5's problem.
-
-Next up: G2.3, Evaluating what you built, before anybody attacks it.
-
----
-
-### G2.3 · Evaluating what you built, before anybody attacks it
-
-Chapter G2 · lesson 4 of 5 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/G2.3.html)
-
-**① Open**
-
-Still inside chapter G2. Last one was The audit trail, and the four questions it has to answer.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-A SCORE THAT MEANS SOMETHING
-```
-
-The suite went from 71 percent to 88 percent and the team shipped. Nothing about the system changed that week; thirty straightforward cases were added to the corpus and every one of them passed. The number moved, the capability did not, and the decision it justified had already been made.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-One successful run is an observation about one run, and an agent is not deterministic.
-
-Same company, same four agents, new way of failing. The suite runs against the CyberTravels agent you just built, which means a case that fails is a defect in your own work rather than in an example.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Build a suite whose cases fail on the old build, score it with intervals, and test it for dilution.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-The score, with its interval — and the change in that score when thirty easy cases are added, which should worry you.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> A score with a confidence interval, a control shown to move one surface and not the others, and the same suite scoring higher after easy cases are added — with the dilution named rather than celebrated.
-
-**⑤ Hand it over**
-
-Write one case for a behaviour you have not implemented yet. It should fail.
-
-Next up: G2.4, What you have built — and every way it can now go wrong.
-
----
-
-### G2.4 · What you have built — and every way it can now go wrong
-
-Chapter G2 · lesson 5 of 5 · runs a skill · 368 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/G2.4.html)
-
-**① Open**
-
-Still inside chapter G2. Last one was Evaluating what you built, before anybody attacks it.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-SAME MAP, READ BY SOMEBODY ELSE
-```
-
-Everything in this system works. That sentence is true and it is the beginning of the next four functions rather than the end of this one — because 'works' was measured against what you intended, and nobody has yet measured it against somebody who intends otherwise.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-A builder who has never seen their own system described adversarially ships the same defect in the next one.
-
-Same company, same four agents, new way of failing. The same CyberTravels architecture from G1.0, re-read by somebody who wants it to fail. Every row in that table is a lesson in Function A, by id.
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-Re-read every component you built as an attack surface, and measure what one run can reach and damage.
-
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
-**④ The number**
-
-And here is the number that tells you it worked.
-
-Blast radius: objects reachable, the subset writable, and the irreversible actions among them. That number decides how much autonomy the agent can carry into Function A.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> The set of objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports — which will be lower than the one you gave it.
-
-**⑤ Hand it over**
-
-Remove the human gate and recompute. The radius grows by exactly the irreversible actions, which is the argument for the gate stated as a number rather than as a principle.
-
-That closes chapter G2. The harness around the loop: spans that join reasoning to actions, an audit trail measured against the four questions an investigation asks, an evaluation suite with intervals and a test for its own dilution, and the blast radius of the agent you built, as a number.
-
-*[Slow down here. This is the reason anybody clicks the next chapter.]*
-
-And here is what it still cannot do. Everything you have measured, you measured against what you intended. Nobody has yet read this system as somebody trying to make it do something else — and every component you added is, from that side, a way in.
-
-A1.0 — the same architecture, read adversarially, and the zero-trust rules that survive contact with agents.
-
-Next up: A0.0, Set up your machine — the AI tools, and the model every lesson runs on.
-
----
-
-
-## Function A — Securing AI Architectures
-
-*[Who is watching: Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship.]*
-
-*[The pitch for the whole function, if you need it in one breath: You are about to build, review or approve an agentic system. Before any control is worth choosing you need the picture: which components exist, what each one can reach, and which risks attach to each.]*
-
 *[Record A1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
 
 ---
 
-### A0.0 · Set up your machine — the AI tools, and the model every lesson runs on
+### A0.0 · Dev environment and IDE setup — the AI tools, and the model every lesson runs on
 
-Chapter A0 · lesson 1 of 2 · runs a skill · 319 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+Chapter A0 · lesson 1 of 2 · runs a skill · 279 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
 
 **① Open**
-
-That is Function G done. Function A asks a different question of the same company: Securing AI Architectures.
-
-Chapter G2 left us here. Everything you have measured, you measured against what you intended. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -826,7 +113,7 @@ Here is what that costs you.
 
 An unconfigured machine does not fail loudly and specifically. It fails in a way a newcomer reads as "this repository is broken", and they leave before lesson one.
 
-Same company, same four agents, new way of failing. Nothing in CyberTravels yet — you meet the company in A1.0. This lesson is about the machine you will attack and defend it from, and the model that will do the work when you do.
+Same company, same four agents, new way of failing. Nothing in CyberTravels yet — you meet the company in B1.0. This lesson is about the machine you will attack and defend it from, and the model that will do the work when you do.
 
 **③ What we do about it**
 
@@ -858,7 +145,7 @@ Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 2 of 2 · runs a skill · 605 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · runs a skill · 608 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -872,7 +159,7 @@ So, what this is. Five functions on top of the one you just built. It is free, t
 
 **① Open**
 
-Still inside chapter A0. Last one was Set up your machine — the AI tools, and the model every lesson runs on.
+Still inside chapter A0. Last one was Dev environment and IDE setup — the AI tools, and the model every lesson runs on.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -920,15 +207,728 @@ That closes chapter A0. You can run any lesson in the commons on either route, y
 
 And here is what it still cannot do. You have run a procedure and you cannot yet say what it is for. The preflight proved the machinery works; it proved nothing about agentic systems, which is the only reason any of this exists.
 
-Chapter A1 draws the system everything else in the commons names — CyberTravels, its components, and the fifteen risks that architecture makes possible.
+Chapter B1 draws the system everything else in the commons names — CyberTravels, its components, and the fifteen risks that architecture makes possible.
 
-Next up: A1.0, Start here — what securing an AI architecture means.
+Next up: A1.0, What an agent is, and what you are about to build.
 
 ---
 
-### A1.0 · Start here — what securing an AI architecture means
+### A1.0 · What an agent is, and what you are about to build
 
-Chapter A1 · lesson 1 of 20 · reading lesson · 384 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
+Chapter A1 · lesson 1 of 8 · runs a skill · 461 words, about 3.3 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
+
+**⓪ Ground rules — only on this lesson**
+
+*[Draw nothing yet. Talk to camera.]*
+
+Before anything else, thirty seconds on what an agent actually is, because if you have never built one, none of the rest of this will land properly.
+
+A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong.
+
+So here is how this works. You are going to build one. Not read about one — build it, on your own machine, over this chapter and the next. Then the four functions after that take the thing you built and attack it, review it, watch it and govern it. Everything is free and nothing needs an account.
+
+**① Open**
+
+Chapter A0 left us here. You have run a procedure and you cannot yet say what it is for. That is what this chapter picks up.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+WHAT YOU ARE ABOUT TO BUILD
+```
+
+Alex has a working prototype: a model, a booking API, and a loop that joins them. It cancels the right flight four times out of five. The fifth time it cancels a different one, and there is no record of why it chose that booking, no way to stop it mid-run, and nothing to point at when somebody asks. The prototype is not the problem. The absence of everything around it is, and that absence is what this chapter fills in.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+Security guidance handed to somebody who has never built an agent lands as a list of rules with no mechanism attached, and gets filed as paperwork.
+
+And this is CyberTravels again — the same company, because a lot of people start watching here. This is CyberTravels itself, before it exists. The seven components you map are the ones Alex shipped, and cybertravels/README.md is the picture you are about to make true on your own machine.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Draw the seven components of the system you are about to build, and mark the edges where trust changes.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Edges marked as trust boundaries, against total edges. The second number is always larger, and the gap is the part worth arguing about.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The seven components, the edges between them, and the subset of those edges where trust changes — which is a smaller set than the edge count and is the only part worth arguing about.
+
+**⑤ Hand it over**
+
+Add an eighth component: an egress gateway. CyberTravels does not have one, which is why B3.7 exists.
+
+Next up: A1.1, The loop — model, tools, and the step that turns text into an action.
+
+---
+
+### A1.1 · The loop — model, tools, and the step that turns text into an action
+
+Chapter A1 · lesson 2 of 8 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A1.1.html)
+
+**① Open**
+
+Still inside chapter A1. Last one was What an agent is, and what you are about to build.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+PLAN, ACT, VERIFY
+```
+
+The difference between a demo and a system is one line. In the demo, the model decides to call a tool and the tool is called. In the system, the model proposes and separate code decides. Every control in the rest of this commons lives in the gap between those two sentences, and a loop written without the gap has nowhere to put any of them.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A loop that accepts whatever the model says it did has no controls in it, because there is nowhere to put one.
+
+Same company, same four agents, new way of failing. The loop is cybertravels/runtime.py. execute tool is the line where the model stops proposing and CyberTravels' own code starts deciding — every control in Function A attaches to it.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Write the loop in three stages — plan, act, verify — with the verifier independent of the model.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Runs the verifier rejected. Zero means either the loop is perfect or the verifier is not independent, and it is the second one.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The loop's three stages named, the exit condition stated explicitly, and the verifier identified as independent of the model or flagged as not being so.
+
+**⑤ Hand it over**
+
+Delete the verifier and run the same task. The loop still finishes and still reports success.
+
+Next up: A1.2, Tools over MCP — a resource server, and why it is a separate process.
+
+---
+
+### A1.2 · Tools over MCP — a resource server, and why it is a separate process
+
+Chapter A1 · lesson 3 of 8 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.2.html)
+
+**① Open**
+
+Still inside chapter A1. Last one was The loop — model, tools, and the step that turns text into an action.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+WHY THE TOOL IS A SEPARATE PROCESS
+```
+
+It is faster to import the booking client and let the agent call it directly. It works on the first afternoon and it is still working months later, which is the trap: the tool now runs with whatever authority the agent has, and the only place to add a check is inside the component an attacker is trying to influence.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A tool called in-process runs with the agent's authority, and the only place left for a check is inside the component under attack.
+
+Same company, same four agents, new way of failing. CyberTravels has two resource servers: mcp/internal server.py for bookings and payments, and mcp/vendor server.py, which is a travel vendor's process running on CyberTravels' host.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Stand up two MCP resource servers, split by trust domain, each with its own audience.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Tools reachable with a token minted for the other server. It should be zero, and it is worth proving rather than assuming.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Both servers' tools enumerated, each with its audience and the scope it requires, and any tool whose declared surface is wider than its implementation.
+
+**⑤ Hand it over**
+
+Change one tool's description to claim it is read-only while leaving it a write. Nothing in the protocol stops you.
+
+Next up: A1.3, Identity — the human, the workload, and the call.
+
+---
+
+### A1.3 · Identity — the human, the workload, and the call
+
+Chapter A1 · lesson 4 of 8 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.3.html)
+
+**① Open**
+
+Still inside chapter A1. Last one was Tools over MCP — a resource server, and why it is a separate process.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+THREE PRINCIPALS, NOT ONE
+```
+
+One API key in an environment variable, shared by four agents. Every action in the log reads service-account-prod. Nine weeks later somebody asks which agent issued a particular refund and on whose behalf, and the honest answer is that the system cannot tell — not slowly, not with effort. It never recorded it.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+One shared key makes every action in the log identical, and 'which agent, on whose behalf' has no answer at all.
+
+Same company, same four agents, new way of failing. Four agents, four workload identities, in cybertravels/config.py. Dana is a traveller, Alex runs agent operations, Priya is in finance — and the difference between them is the whole of the next lesson.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Give each agent a workload identity, and the human a session token that grants nothing downstream.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Audit rows that name both the human and the specific agent, as a fraction of all rows. Anything below 100 percent is a row you cannot investigate.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Three principals named, the agent's identity separated from any credential it holds, and the human's token shown to grant nothing beyond invoking an agent.
+
+**⑤ Hand it over**
+
+Give two agents the same workload identity. Everything still runs.
+
+Next up: A1.4, Delegation — one token per action.
+
+---
+
+### A1.4 · Delegation — one token per action
+
+Chapter A1 · lesson 5 of 8 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.4.html)
+
+**① Open**
+
+Still inside chapter A1. Last one was Identity — the human, the workload, and the call.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+ONE TOKEN, ONE ACTION
+```
+
+The token has every scope because that never fails. It is the setting that makes the demo smooth and it is also the setting under which one ambiguous sentence in a vendor document turns a read into a refund. The alternative costs a function call per action and closes the gap entirely.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+An agent holding a long-lived token with every scope is one ambiguous sentence away from using all of them.
+
+Same company, same four agents, new way of failing. cybertravels/identity.py. Sign in as Dana and ask for a refund: the exchange refuses, because a traveller's role cannot delegate payments:refund, and the resource server is never even asked.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Exchange a token per action — one audience, one scope, two minutes — and verify it at the resource server rather than logging it.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Scopes a delegated token carries: one. And the count of refusals the exchange produced for scopes the human's role may not delegate.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A delegated token whose subject is the human and whose actor is the agent, addressed to one audience with one scope — and a refusal, with the reason, when a traveller's role is asked to delegate a refund.
+
+**⑤ Hand it over**
+
+Take a token minted for the internal server and present it to the vendor server. Read the refusal.
+
+Next up: A1.5, Memory — what it remembers, and where that came from.
+
+---
+
+### A1.5 · Memory — what it remembers, and where that came from
+
+Chapter A1 · lesson 6 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A1.5.html)
+
+**① Open**
+
+Still inside chapter A1. Last one was Delegation — one token per action.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+ORIGIN TRAVELS WITH CONTENT
+```
+
+The agent remembers that this traveller prefers aisle seats, which is useful. It also remembers a sentence it read in a vendor notice three weeks ago, which it now repeats with the same confidence. Nothing distinguishes the two, because when they were written down nothing recorded where either came from.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+Text an agent read becomes a fact an agent learned, and one vendor sentence outlives the request that fetched it.
+
+Same company, same four agents, new way of failing. cybertravels/memory.py. The vendor notice CyberTravels fetches for a Northwind Rail booking contains an instruction aimed at automated agents, and it is what gets written down if origin is not recorded.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Record origin with every memory entry, scope recall to one person, and provide delete and export.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Entries carrying an origin: all of them. Cross-owner recalls: zero. Both are assertions you can run rather than claims.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Entries carrying an origin and a trust flag, recall that refuses to cross an owner boundary, and the prompt block rendering untrusted entries with the label still attached.
+
+**⑤ Hand it over**
+
+Drop the origin column and re-render the prompt block. The vendor's instruction now reads exactly like the policy.
+
+Next up: A1.6, Agent to agent — handing work over without laundering authority.
+
+---
+
+### A1.6 · Agent to agent — handing work over without laundering authority
+
+Chapter A1 · lesson 7 of 8 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.6.html)
+
+**① Open**
+
+Still inside chapter A1. Last one was Memory — what it remembers, and where that came from.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+THE ENVELOPE
+```
+
+The retrieval advisor reads a vendor document and passes its conclusion to the workflow agent. The workflow agent treats it as an internal request, because it arrived from a peer. One sentence written by somebody outside the company is now an instruction inside it, and the log shows two agents doing their jobs correctly.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A peer's message read as a colleague's instruction turns one injected document into four compromised agents.
+
+Same company, same four agents, new way of failing. CyberTravels' four agents hand work to each other. cybertravels/a2a/protocol.py is the envelope; cybertravels/messaging/bus.py is the version it replaces, still in the tree because it is what B1.7 attacks.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Sign every agent-to-agent envelope, carry the human through each hop, and cap the hops.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Tampered envelopes rejected: all. And the hop at which a cycle stops, which is a number you choose rather than discover.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A signed envelope naming its sender and the human it acts for, a refusal on a tampered one, and a refusal on an envelope with no human in the chain.
+
+**⑤ Hand it over**
+
+Send a message with hops set one below the ceiling and let two agents bounce it. Count how many tool calls happen before the ceiling stops it, and multiply by your per-call cost.
+
+Next up: A1.7, The human gate, and the budget that stops the loop.
+
+---
+
+### A1.7 · The human gate, and the budget that stops the loop
+
+Chapter A1 · lesson 8 of 8 · runs a skill · 388 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A1.7.html)
+
+**① Open**
+
+Still inside chapter A1. Last one was Agent to agent — handing work over without laundering authority.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+TWO CEILINGS, OPPOSITE FAILURES
+```
+
+The agent is asked to reconcile a booking that cannot be reconciled. It tries, rephrases, tries again. Six hours later it has spent four hundred thousand tokens and exhausted a vendor's rate limit for everybody else on that integration. Nothing failed. There was simply no number at which it was supposed to stop.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+An unbounded loop against an impossible task spends until somebody notices, and a gate nobody can approve fast enough gets removed.
+
+Same company, same four agents, new way of failing. Cancelling a booking and issuing a refund are CyberTravels' two irreversible actions, and both are gated in cybertravels/config.py::TOOL_POLICY. The budgets are two lines above them.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Gate the irreversible actions on a named human, and bound both steps and tool calls.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Approvals per reviewer per hour — the number that says whether the gate is still a control — and the share of runs that hit a ceiling.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A high-risk action pausing and naming its scope, an approval and a refusal both recorded as audit rows, and a budget ceiling returning an incomplete result rather than a summary.
+
+**⑤ Hand it over**
+
+Raise MAX_TOOL_CALLS to 500 and give the agent a task it cannot finish. Watch the cost, and then decide what the right number is for your own loop — it is not 500 and it is not 2.
+
+That closes chapter A1. A running agentic platform you built yourself: a reasoning loop with an independent verifier, two MCP resource servers behind a process boundary, a workload identity per agent, per-action delegation that a resource server actually enforces, memory that records where its contents came from, signed agent-to-agent envelopes, a human gate and a budget that binds.
+
+*[Slow down here. This is the reason anybody clicks the next chapter.]*
+
+And here is what it still cannot do. It runs, and you cannot yet tell anybody what it did. There is no trace, the audit rows cannot say what motivated an action, and the only evidence it works is that you watched it work once.
+
+A2.0 — why a demo is not a system, and the three things that separate them.
+
+Next up: A2.0, Why a demo is not a system — the harness around the loop.
+
+---
+
+### A2.0 · Why a demo is not a system — the harness around the loop
+
+Chapter A2 · lesson 1 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A2.0.html)
+
+**① Open**
+
+Chapter A1 left us here. It runs, and you cannot yet tell anybody what it did. That is what this chapter picks up.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+DEMO ──────────────────────► SYSTEM
+```
+
+The prototype is promoted with nobody changing a line of it. Three weeks later a traveller disputes a cancellation and the question is what the agent actually did. The answer is in a log line that says run completed. Everything needed to answer it was cheap to add and is now expensive, and none of it was ever a feature request.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A demo promoted to production carries none of the machinery an incident needs, and the first investigation finds that out at the worst moment.
+
+Same company, same four agents, new way of failing. Alex's prototype became CyberTravels' production platform without anybody adding a trace, and the first disputed cancellation is where that is discovered.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Establish the gap first: put an investigation's questions to what your run currently emits.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Questions the current record cannot answer. Expect most of them, which is the point of measuring before building.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The questions an investigation asks, checked against what your run currently emits, and a named list of the ones it cannot answer yet. Expect that list to be most of them — that is the point of running this first.
+
+**⑤ Hand it over**
+
+Answer the same questions about a system you actually work on. The gap is usually wider than for the agent you just built, because nobody chose it.
+
+Next up: A2.1, Observability — the run as spans.
+
+---
+
+### A2.1 · Observability — the run as spans
+
+Chapter A2 · lesson 2 of 5 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.1.html)
+
+**① Open**
+
+Still inside chapter A2. Last one was Why a demo is not a system — the harness around the loop.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+THE RUN, AS SPANS
+```
+
+The run produced the right answer, so nobody looked further. The trace would have shown that it reached for the refund tool first, was refused by the policy, and tried a different route — which is a signal about the input it was given, not about that run. Emitting only the answer threw away the only interesting part.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A run that emits only its answer is unreviewable, and a trace of successes hides exactly the events worth alerting on.
+
+Same company, same four agents, new way of failing. cybertravels/observability.py. Every span carries the trace id that joins it to the audit row, which is the join Function D's detections are written against.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Emit the run as spans, joined by a trace id, with tokens summarised and refusals recorded with the boundary that produced them.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Spans per run carrying the trace id: all of them. Credentials appearing in a span: zero, and worth grepping for rather than believing.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A run's spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it.
+
+**⑤ Hand it over**
+
+Put the whole delegated token in a span instead of its claims. Nothing breaks, the trace is more useful, and you have just put a credential in your log pipeline.
+
+Next up: A2.2, The audit trail, and the four questions it has to answer.
+
+---
+
+### A2.2 · The audit trail, and the four questions it has to answer
+
+Chapter A2 · lesson 3 of 5 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.2.html)
+
+**① Open**
+
+Still inside chapter A2. Last one was Observability — the run as spans.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+FOUR QUESTIONS AN AUDIT ROW MUST ANSWER
+```
+
+Every row in the audit log is correct and none of them is sufficient. They record that an agent issued a refund at 14:07. They do not record that the agent had, eleven seconds earlier, read a vendor notice containing an instruction to issue refunds. The action is visible and the cause is not, so the incident closes as an agent behaving oddly.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A record that names an action without naming its cause closes an incident as 'the agent misbehaved'.
+
+Same company, same four agents, new way of failing. CyberTravels' audit table is append-only and every row carries the human => agent chain. The fourth question — what motivated the action — is the one its rows still cannot answer, and B1.14 is where that costs something.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Hold every audit row to four questions: which human, which workload, which call, and what motivated it.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Of the four, how many your rows answer. Three is common and the missing one is almost always the fourth.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Each of the four questions answered or explicitly not, from real audit rows — and the fourth one probably failing, which is the finding worth carrying into Function D.
+
+**⑤ Hand it over**
+
+Add the motivating input and its origin to the audit row. Then re-run the check and notice that you have also just put traveller text into a long-lived store, which is F2.5's problem.
+
+Next up: A2.3, Evaluating what you built, before anybody attacks it.
+
+---
+
+### A2.3 · Evaluating what you built, before anybody attacks it
+
+Chapter A2 · lesson 4 of 5 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.3.html)
+
+**① Open**
+
+Still inside chapter A2. Last one was The audit trail, and the four questions it has to answer.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+A SCORE THAT MEANS SOMETHING
+```
+
+The suite went from 71 percent to 88 percent and the team shipped. Nothing about the system changed that week; thirty straightforward cases were added to the corpus and every one of them passed. The number moved, the capability did not, and the decision it justified had already been made.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+One successful run is an observation about one run, and an agent is not deterministic.
+
+Same company, same four agents, new way of failing. The suite runs against the CyberTravels agent you just built, which means a case that fails is a defect in your own work rather than in an example.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Build a suite whose cases fail on the old build, score it with intervals, and test it for dilution.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+The score, with its interval — and the change in that score when thirty easy cases are added, which should worry you.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> A score with a confidence interval, a control shown to move one surface and not the others, and the same suite scoring higher after easy cases are added — with the dilution named rather than celebrated.
+
+**⑤ Hand it over**
+
+Write one case for a behaviour you have not implemented yet. It should fail.
+
+Next up: A2.4, What you have built — and every way it can now go wrong.
+
+---
+
+### A2.4 · What you have built — and every way it can now go wrong
+
+Chapter A2 · lesson 5 of 5 · runs a skill · 362 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
+
+**① Open**
+
+Still inside chapter A2. Last one was Evaluating what you built, before anybody attacks it.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+SAME MAP, READ BY SOMEBODY ELSE
+```
+
+Everything in this system works. That sentence is true and it is the beginning of the next four functions rather than the end of this one — because 'works' was measured against what you intended, and nobody has yet measured it against somebody who intends otherwise.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A builder who has never seen their own system described adversarially ships the same defect in the next one.
+
+Same company, same four agents, new way of failing. The same CyberTravels architecture from A1.0, re-read by somebody who wants it to fail. Every row in that table is a lesson in Function A, by id.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Re-read every component you built as an attack surface, and measure what one run can reach and damage.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Blast radius: objects reachable, the subset writable, and the irreversible actions among them. That number decides how much autonomy the agent can carry into Function A.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> The set of objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports — which will be lower than the one you gave it.
+
+**⑤ Hand it over**
+
+Remove the human gate and recompute. The radius grows by exactly the irreversible actions, which is the argument for the gate stated as a number rather than as a principle.
+
+That closes chapter A2. The harness around the loop: spans that join reasoning to actions, an audit trail measured against the four questions an investigation asks, an evaluation suite with intervals and a test for its own dilution, and the blast radius of the agent you built, as a number.
+
+*[Slow down here. This is the reason anybody clicks the next chapter.]*
+
+And here is what it still cannot do. Everything you have measured, you measured against what you intended. Nobody has yet read this system as somebody trying to make it do something else — and every component you added is, from that side, a way in.
+
+B1.0 — the same architecture, read adversarially, and the zero-trust rules that survive contact with agents.
+
+Next up: B1.0, Start here — what securing an AI architecture means.
+
+---
+
+
+## Function B — Securing AI Architectures
+
+*[Who is watching: Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship.]*
+
+*[The pitch for the whole function, if you need it in one breath: You are about to build, review or approve an agentic system. Before any control is worth choosing you need the picture: which components exist, what each one can reach, and which risks attach to each.]*
+
+*[Record B1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
+
+---
+
+### B1.0 · Start here — what securing an AI architecture means
+
+Chapter B1 · lesson 1 of 20 · reading lesson · 398 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/B1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -942,7 +942,9 @@ Every lesson, in all five functions, is grounded in this same company. So the re
 
 **① Open**
 
-Chapter A0 left us here. You have run a procedure and you cannot yet say what it is for. That is what this chapter picks up.
+That is Function A done. Function B asks a different question of the same company: Securing AI Architectures.
+
+Chapter A2 left us here. Everything you have measured, you measured against what you intended. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -978,19 +980,19 @@ Nothing yet, honestly. This chapter produces the component map every later count
 
 **⑤ Hand it over**
 
-Draw your own CyberTravels before the next lesson — the agents you run, the MCP servers and APIs they reach, and which of them can move money or ship code. A1.1 gives you the standard names for the boxes; comparing your drawing to it is the fastest way to find the component you forgot you had.
+Draw your own CyberTravels before the next lesson — the agents you run, the MCP servers and APIs they reach, and which of them can move money or ship code. B1.1 gives you the standard names for the boxes; comparing your drawing to it is the fastest way to find the component you forgot you had.
 
-Next up: A1.1, The reference architecture for agentic AI.
+Next up: B1.1, The reference architecture for agentic AI.
 
 ---
 
-### A1.1 · The reference architecture for agentic AI
+### B1.1 · The reference architecture for agentic AI
 
-Chapter A1 · lesson 2 of 20 · runs a skill · 278 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A1.1.html)
+Chapter B1 · lesson 2 of 20 · runs a skill · 278 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B1.1.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Start here — what securing an AI architecture means.
+Still inside chapter B1. Last one was Start here — what securing an AI architecture means.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1032,17 +1034,17 @@ The number of trust-boundary crossings — computed, so it moves when the archit
 
 Draw your own system on one page, then mark the agent runtime, then tools edge on it. Everything in chapters 2 and 3 is an argument about what is allowed to stand on that arrow, and you will get more out of them having drawn it first.
 
-Next up: A1.2, Prompt injection.
+Next up: B1.2, Prompt injection.
 
 ---
 
-### A1.2 · Prompt injection
+### B1.2 · Prompt injection
 
-Chapter A1 · lesson 3 of 20 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A1.2.html)
+Chapter B1 · lesson 3 of 20 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B1.2.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was The reference architecture for agentic AI.
+Still inside chapter B1. Last one was The reference architecture for agentic AI.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1058,7 +1060,7 @@ Here is what that costs you.
 
 A user redirects their own agent past what the operator specified, bounded only by their own authority — which for a privileged user is the whole system.
 
-Same company, same four agents, new way of failing. The chat box is cybertravels/ingress/chat.py, which you wrote in G1.0 and which passes the traveller's text straight to the orchestrator. Take the A1.2 checkpoint and the injection works, because at that point nothing in the tree marks where a string came from. A2.6 is the lesson that changes it.
+Same company, same four agents, new way of failing. The chat box is cybertravels/ingress/chat.py, which you wrote in A1.0 and which passes the traveller's text straight to the orchestrator. Take the B1.2 checkpoint and the injection works, because at that point nothing in the tree marks where a string came from. B2.6 is the lesson that changes it.
 
 **③ What we do about it**
 
@@ -1084,17 +1086,17 @@ Share of tool calls whose selecting text came from a trusted origin.
 
 Find the system prompt for one agent you run and ask what it is relied on to prevent. Anything on that list that would matter if it failed needs a control below the model, not a sentence inside it.
 
-Next up: A1.3, Indirect prompt injection.
+Next up: B1.3, Indirect prompt injection.
 
 ---
 
-### A1.3 · Indirect prompt injection
+### B1.3 · Indirect prompt injection
 
-Chapter A1 · lesson 4 of 20 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A1.3.html)
+Chapter B1 · lesson 4 of 20 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B1.3.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Prompt injection.
+Still inside chapter B1. Last one was Prompt injection.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1110,7 +1112,7 @@ Here is what that costs you.
 
 Anyone who can write into a corpus the agent reads can steer it, using the victim's authority rather than their own.
 
-Same company, same four agents, new way of failing. Same file, the other handler: /webhook/vendor. The Northwind Rail notice in cybertravels/mcp/vendor server.py already carries an instruction addressed to automated agents — it is in the corpus rather than injected by a test, and at the A1.3 checkpoint the only thing standing between it and a refund is the system prompt.
+Same company, same four agents, new way of failing. Same file, the other handler: /webhook/vendor. The Northwind Rail notice in cybertravels/mcp/vendor server.py already carries an instruction addressed to automated agents — it is in the corpus rather than injected by a test, and at the B1.3 checkpoint the only thing standing between it and a refund is the system prompt.
 
 **③ What we do about it**
 
@@ -1136,17 +1138,17 @@ Share of retrieved spans carrying an origin tag, and the count that reached a to
 
 List the trust-0 and trust-1 components in one agent you operate and name who can write into each. Most teams find a path they had not counted, and it is usually a tool result: the output of a system they trust, carrying text a stranger wrote.
 
-Next up: A1.4, Memory poisoning.
+Next up: B1.4, Memory poisoning.
 
 ---
 
-### A1.4 · Memory poisoning
+### B1.4 · Memory poisoning
 
-Chapter A1 · lesson 5 of 20 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A1.4.html)
+Chapter B1 · lesson 5 of 20 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.4.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Indirect prompt injection.
+Still inside chapter B1. Last one was Indirect prompt injection.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1188,17 +1190,17 @@ Memory entries with a recorded origin and writer, as a share of all entries.
 
 Look at what your agent writes to long-term memory and ask which of it originated in content a user did not author. Then ask what would remove it, and who would notice it was there.
 
-Next up: A1.5, Tool misuse.
+Next up: B1.5, Tool misuse.
 
 ---
 
-### A1.5 · Tool misuse
+### B1.5 · Tool misuse
 
-Chapter A1 · lesson 6 of 20 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A1.5.html)
+Chapter B1 · lesson 6 of 20 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.5.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Memory poisoning.
+Still inside chapter B1. Last one was Memory poisoning.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1240,17 +1242,17 @@ Tool calls adjudicated by a policy decision rather than allowed because no rule 
 
 Take the most powerful tool one of your agents can call and write down the worst thing one call could do with attacker-chosen arguments. That sentence, not the tool's name, is what belongs in the risk register.
 
-Next up: A1.6, Privilege compromise.
+Next up: B1.6, Privilege compromise.
 
 ---
 
-### A1.6 · Privilege compromise
+### B1.6 · Privilege compromise
 
-Chapter A1 · lesson 7 of 20 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A1.6.html)
+Chapter B1 · lesson 7 of 20 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.6.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Tool misuse.
+Still inside chapter B1. Last one was Tool misuse.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1292,17 +1294,17 @@ Share of actions whose effective scope sits inside the requesting human's own ce
 
 Pick one agent and answer two questions: what identity does it authenticate as, and can you name the human behind any single action it took last week. If the second answer is no, you have this risk regardless of how the scopes are set.
 
-Next up: A1.7, Identity spoofing and impersonation.
+Next up: B1.7, Identity spoofing and impersonation.
 
 ---
 
-### A1.7 · Identity spoofing and impersonation
+### B1.7 · Identity spoofing and impersonation
 
-Chapter A1 · lesson 8 of 20 · runs a skill · 227 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A1.7.html)
+Chapter B1 · lesson 8 of 20 · runs a skill · 227 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.7.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Privilege compromise.
+Still inside chapter B1. Last one was Privilege compromise.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1344,17 +1346,17 @@ Agents with an attested, individually revocable identity, as a share of the flee
 
 Count the distinct credentials across your agents and divide by the number of agents. Any answer below one is this risk, and the number tells you how many innocent agents a revocation takes down.
 
-Next up: A1.8, Malicious code execution.
+Next up: B1.8, Malicious code execution.
 
 ---
 
-### A1.8 · Malicious code execution
+### B1.8 · Malicious code execution
 
-Chapter A1 · lesson 9 of 20 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A1.8.html)
+Chapter B1 · lesson 9 of 20 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.8.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Identity spoofing and impersonation.
+Still inside chapter B1. Last one was Identity spoofing and impersonation.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1396,17 +1398,17 @@ Share of code-executing runs inside an isolate, and the number of credentials vi
 
 For one agent that executes code, list what is in its process environment right now. The credentials in that list are the blast radius of the next ordinary bug, not of the next attack.
 
-Next up: A1.9, Injection through content the agent was asked to read.
+Next up: B1.9, Injection through content the agent was asked to read.
 
 ---
 
-### A1.9 · Injection through content the agent was asked to read
+### B1.9 · Injection through content the agent was asked to read
 
-Chapter A1 · lesson 10 of 20 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A1.9.html)
+Chapter B1 · lesson 10 of 20 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.9.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Malicious code execution.
+Still inside chapter B1. Last one was Malicious code execution.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1448,17 +1450,17 @@ State-changing calls whose selecting input came from read content. The target is
 
 List every place your CI reacts to something the pipeline can produce — comments, labels, branch names, commit trailers. Each one promotes an innocuous tool into a privileged one, without anyone editing the pipeline.
 
-Next up: A1.10, Agent communication poisoning.
+Next up: B1.10, Agent communication poisoning.
 
 ---
 
-### A1.10 · Agent communication poisoning
+### B1.10 · Agent communication poisoning
 
-Chapter A1 · lesson 11 of 20 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.10.html)
+Chapter B1 · lesson 11 of 20 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B1.10.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Injection through content the agent was asked to read.
+Still inside chapter B1. Last one was Injection through content the agent was asked to read.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1500,17 +1502,17 @@ Peer messages carrying a verified sender identity, as a share of messages acted 
 
 In your own multi-agent system, find where one agent's output becomes another's input and ask what validates it. If the answer is 'it came from our own agent', that is the trust asymmetry, stated.
 
-Next up: A1.11, Rogue agents in a multi-agent system.
+Next up: B1.11, Rogue agents in a multi-agent system.
 
 ---
 
-### A1.11 · Rogue agents in a multi-agent system
+### B1.11 · Rogue agents in a multi-agent system
 
-Chapter A1 · lesson 12 of 20 · runs a skill · 223 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A1.11.html)
+Chapter B1 · lesson 12 of 20 · runs a skill · 223 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.11.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Agent communication poisoning.
+Still inside chapter B1. Last one was Agent communication poisoning.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1552,17 +1554,17 @@ Agents observed in the topology that appear in the registry. The gap is the find
 
 Ask how your orchestrator decides which agents may receive work. If the answer is a config list or service discovery, write down what would have to be true for an extra entry to be noticed.
 
-Next up: A1.12, Cascading hallucination.
+Next up: B1.12, Cascading hallucination.
 
 ---
 
-### A1.12 · Cascading hallucination
+### B1.12 · Cascading hallucination
 
-Chapter A1 · lesson 13 of 20 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A1.12.html)
+Chapter B1 · lesson 13 of 20 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.12.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Rogue agents in a multi-agent system.
+Still inside chapter B1. Last one was Rogue agents in a multi-agent system.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1604,17 +1606,17 @@ Propagated claims carrying a verification result, as a share of claims that reac
 
 Take a finding your pipeline produced and try to walk it back to the step that first asserted it. If you cannot reach a step that checked something, you have found a cascade rather than a finding.
 
-Next up: A1.13, Resource overload.
+Next up: B1.13, Resource overload.
 
 ---
 
-### A1.13 · Resource overload
+### B1.13 · Resource overload
 
-Chapter A1 · lesson 14 of 20 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A1.13.html)
+Chapter B1 · lesson 14 of 20 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.13.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Cascading hallucination.
+Still inside chapter B1. Last one was Cascading hallucination.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1656,17 +1658,17 @@ Runs stopped by their own ceiling rather than by a downstream system, and cost p
 
 Find the ceiling on one agent loop you run. If there is a token budget but no cap on downstream calls, the cost is bounded and the availability risk is not.
 
-Next up: A1.14, Repudiation and untraceability.
+Next up: B1.14, Repudiation and untraceability.
 
 ---
 
-### A1.14 · Repudiation and untraceability
+### B1.14 · Repudiation and untraceability
 
-Chapter A1 · lesson 15 of 20 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A1.14.html)
+Chapter B1 · lesson 15 of 20 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.14.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Resource overload.
+Still inside chapter B1. Last one was Resource overload.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1682,7 +1684,7 @@ Here is what that costs you.
 
 You cannot say which user caused an action, or what made the agent decide, so the incident cannot be scoped.
 
-Same company, same four agents, new way of failing. cybertravels/db.py's audit table, as G2.2 left it. Every row names the human and the agent. None of them names the vendor notice the agent read eleven seconds earlier, which is the fourth question and the one A2.7 closes.
+Same company, same four agents, new way of failing. cybertravels/db.py's audit table, as A2.2 left it. Every row names the human and the agent. None of them names the vendor notice the agent read eleven seconds earlier, which is the fourth question and the one B2.7 closes.
 
 **③ What we do about it**
 
@@ -1708,17 +1710,17 @@ Actions whose full chain — human, agent, scope — can be reconstructed. Anyth
 
 Take yesterday's agent logs and try to answer 'which user caused this action'. Time how long it takes.
 
-Next up: A1.15, Overwhelming the human in the loop.
+Next up: B1.15, Overwhelming the human in the loop.
 
 ---
 
-### A1.15 · Overwhelming the human in the loop
+### B1.15 · Overwhelming the human in the loop
 
-Chapter A1 · lesson 16 of 20 · runs a skill · 224 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A1.15.html)
+Chapter B1 · lesson 16 of 20 · runs a skill · 224 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.15.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Repudiation and untraceability.
+Still inside chapter B1. Last one was Repudiation and untraceability.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1760,17 +1762,17 @@ Queue depth and median decision time per reviewer. A control that degrades with 
 
 Count how many approval requests one of your agents generates per day and ask the person approving them how many they read in full. The gap between those two numbers is the control's real coverage.
 
-Next up: A1.16, Misaligned and deceptive behaviour.
+Next up: B1.16, Misaligned and deceptive behaviour.
 
 ---
 
-### A1.16 · Misaligned and deceptive behaviour
+### B1.16 · Misaligned and deceptive behaviour
 
-Chapter A1 · lesson 17 of 20 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A1.16.html)
+Chapter B1 · lesson 17 of 20 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.16.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Overwhelming the human in the loop.
+Still inside chapter B1. Last one was Overwhelming the human in the loop.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1812,17 +1814,17 @@ Claims independently verified, as a share of claims acted on.
 
 Write down the objective one of your agents optimises and then write the cheapest way to satisfy that sentence without doing the work. If you can find one in under a minute, so can the loop.
 
-Next up: A1.17, Attacks that target the humans.
+Next up: B1.17, Attacks that target the humans.
 
 ---
 
-### A1.17 · Attacks that target the humans
+### B1.17 · Attacks that target the humans
 
-Chapter A1 · lesson 18 of 20 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A1.17.html)
+Chapter B1 · lesson 18 of 20 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.17.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Misaligned and deceptive behaviour.
+Still inside chapter B1. Last one was Misaligned and deceptive behaviour.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1864,17 +1866,17 @@ Outbound machine-generated messages carrying a label, as a share of those sent.
 
 Take one permission a user is denied and see whether an agent they can talk to holds it. That pair is a laundering path, and it is invisible to any review that checks permissions one hop at a time.
 
-Next up: A1.18, The CyberTravels risk register.
+Next up: B1.18, The CyberTravels risk register.
 
 ---
 
-### A1.18 · The CyberTravels risk register
+### B1.18 · The CyberTravels risk register
 
-Chapter A1 · lesson 19 of 20 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.18.html)
+Chapter B1 · lesson 19 of 20 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B1.18.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was Attacks that target the humans.
+Still inside chapter B1. Last one was Attacks that target the humans.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1916,17 +1918,17 @@ Rows with an owning lesson. This is the register's own coverage, and it is the n
 
 Write the same four columns for one agentic system you run. The column that will be hardest is the fourth: for each control, where is it taught, tested and evidenced in your organisation?
 
-Next up: A1.19, The control index — every control CyberTravels needs, not only the new ones.
+Next up: B1.19, The control index — every control CyberTravels needs, not only the new ones.
 
 ---
 
-### A1.19 · The control index — every control CyberTravels needs, not only the new ones
+### B1.19 · The control index — every control CyberTravels needs, not only the new ones
 
-Chapter A1 · lesson 20 of 20 · runs a skill · 452 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/A1.19.html)
+Chapter B1 · lesson 20 of 20 · runs a skill · 452 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/B1.19.html)
 
 **① Open**
 
-Still inside chapter A1. Last one was The CyberTravels risk register.
+Still inside chapter B1. Last one was The CyberTravels risk register.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -1968,25 +1970,25 @@ Coverage per era, never blended. CyberTravels scores 50 percent on the foundatio
 
 Write the same table for one system you run, foundation rows first and before you write a single agentic row — the order matters, because a list started from what is currently interesting inherits that shape. Then score it against what is running rather than what is documented.
 
-That closes chapter A1. You can draw an agentic system as named components, say which of the five patterns it is, and place any of fifteen risks on the component it attacks. That is the vocabulary the rest of the commons runs on.
+That closes chapter B1. You can draw an agentic system as named components, say which of the five patterns it is, and place any of fifteen risks on the component it attacks. That is the vocabulary the rest of the commons runs on.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
 And here is what it still cannot do. Not one of those fifteen lessons fixed anything. You can now describe precisely how a system fails and you have no control to point at — which is deliberate, because a control chosen before the risk is named is a control chosen by whoever sold it to you.
 
-Chapter A2 starts closing them, and it starts with the two that close the most: knowing who is calling, and marking what came in from outside.
+Chapter B2 starts closing them, and it starts with the two that close the most: knowing who is calling, and marking what came in from outside.
 
-Next up: A2.1, Agent identity — user, workload, agent.
+Next up: B2.1, Agent identity — user, workload, agent.
 
 ---
 
-### A2.1 · Agent identity — user, workload, agent
+### B2.1 · Agent identity — user, workload, agent
 
-Chapter A2 · lesson 1 of 8 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A2.1.html)
+Chapter B2 · lesson 1 of 8 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.1.html)
 
 **① Open**
 
-Chapter A1 left us here. Not one of those fifteen lessons fixed anything. That is what this chapter picks up.
+Chapter B1 left us here. Not one of those fifteen lessons fixed anything. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2002,7 +2004,7 @@ Here is what that costs you.
 
 A shared service account answers "what ran" and destroys "for whom", so no later control can be conditioned on the caller.
 
-Same company, same four agents, new way of failing. G1.3 put four SPIFFE names in a set in cybertravels/config.py. You replace it with cybertravels/registry.py: identities as records with an approver, a registration time and a state. identity.py stops asking "is this one of ours" and starts asking "is this still active".
+Same company, same four agents, new way of failing. A1.3 put four SPIFFE names in a set in cybertravels/config.py. You replace it with cybertravels/registry.py: identities as records with an approver, a registration time and a state. identity.py stops asking "is this one of ours" and starts asking "is this still active".
 
 **③ What we do about it**
 
@@ -2028,17 +2030,17 @@ Workloads holding a distinct identity, as a share of the fleet.
 
 For one agent, write down its three identities. If the workload and the user are the same value, you have inherited credentials; if the instance does not exist, you cannot revoke one run.
 
-Next up: A2.2, Bootstrapping the first credential.
+Next up: B2.2, Bootstrapping the first credential.
 
 ---
 
-### A2.2 · Bootstrapping the first credential
+### B2.2 · Bootstrapping the first credential
 
-Chapter A2 · lesson 2 of 8 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.2.html)
+Chapter B2 · lesson 2 of 8 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B2.2.html)
 
 **① Open**
 
-Still inside chapter A2. Last one was Agent identity — user, workload, agent.
+Still inside chapter B2. Last one was Agent identity — user, workload, agent.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2080,17 +2082,17 @@ Credentials issued against attestation rather than pre-shared, and their median 
 
 Find where one of your agents gets its first credential. If the answer is an environment variable or a mounted file, list everyone who can read it — that is the set of people who are currently that agent.
 
-Next up: A2.3, Delegation that narrows, and survives audit.
+Next up: B2.3, Delegation that narrows, and survives audit.
 
 ---
 
-### A2.3 · Delegation that narrows, and survives audit
+### B2.3 · Delegation that narrows, and survives audit
 
-Chapter A2 · lesson 3 of 8 · runs a skill · 279 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A2.3.html)
+Chapter B2 · lesson 3 of 8 · runs a skill · 279 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B2.3.html)
 
 **① Open**
 
-Still inside chapter A2. Last one was Bootstrapping the first credential.
+Still inside chapter B2. Last one was Bootstrapping the first credential.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2132,17 +2134,17 @@ Delegations whose result sits inside both the request and the ceiling, and the r
 
 Find your token exchange and check three things: does it set an act claim, does it check the actor's ceiling as well as the subset rule, and does anything downstream look at cnf? Most implementations do the subset rule only — it is the one the specification example shows.
 
-Next up: A2.4, Just-in-time authority.
+Next up: B2.4, Just-in-time authority.
 
 ---
 
-### A2.4 · Just-in-time authority
+### B2.4 · Just-in-time authority
 
-Chapter A2 · lesson 4 of 8 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
+Chapter B2 · lesson 4 of 8 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B2.4.html)
 
 **① Open**
 
-Still inside chapter A2. Last one was Delegation that narrows, and survives audit.
+Still inside chapter B2. Last one was Delegation that narrows, and survives audit.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2158,7 +2160,7 @@ Here is what that costs you.
 
 Permanent scope makes every injection a successful one, because the authority is already there when the attacker arrives.
 
-Same company, same four agents, new way of failing. You add bind call() and a cnf claim. A token minted for get booking(2) stops working against get booking(3). It does not stop get booking(2) returning Priya's booking to Dana — that is rows 1 and 4 of cybertravels/LABELS.md, and B2.3 is where it is found.
+Same company, same four agents, new way of failing. You add bind call() and a cnf claim. A token minted for get booking(2) stops working against get booking(3). It does not stop get booking(2) returning Priya's booking to Dana — that is rows 1 and 4 of cybertravels/LABELS.md, and C2.3 is where it is found.
 
 **③ What we do about it**
 
@@ -2184,17 +2186,17 @@ Median grant lifetime, and the amount of standing scope removed.
 
 Take one standing grant an agent holds and work out what would break if it expired in two minutes. That list is the real cost of just-in-time, and it is usually shorter than expected.
 
-Next up: A2.5, The non-human identity lifecycle.
+Next up: B2.5, The non-human identity lifecycle.
 
 ---
 
-### A2.5 · The non-human identity lifecycle
+### B2.5 · The non-human identity lifecycle
 
-Chapter A2 · lesson 5 of 8 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.5.html)
+Chapter B2 · lesson 5 of 8 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B2.5.html)
 
 **① Open**
 
-Still inside chapter A2. Last one was Just-in-time authority.
+Still inside chapter B2. Last one was Just-in-time authority.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2236,17 +2238,17 @@ Agents with an owner and a future expiry, as a share of those actually observed 
 
 Count your non-human identities and how many have a named human owner that resolves to a live account. The difference is the set nobody can revoke during an incident, because nobody can be asked whether it is still needed.
 
-Next up: A2.6, Ingress: marking untrusted content at the door.
+Next up: B2.6, Ingress: marking untrusted content at the door.
 
 ---
 
-### A2.6 · Ingress: marking untrusted content at the door
+### B2.6 · Ingress: marking untrusted content at the door
 
-Chapter A2 · lesson 6 of 8 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A2.6.html)
+Chapter B2 · lesson 6 of 8 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.6.html)
 
 **① Open**
 
-Still inside chapter A2. Last one was The non-human identity lifecycle.
+Still inside chapter B2. Last one was The non-human identity lifecycle.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2262,7 +2264,7 @@ Here is what that costs you.
 
 Concatenation destroys the one fact that separates an operator's instruction from an attacker's: where it came from.
 
-Same company, same four agents, new way of failing. You add cybertravels/provenance.py and change both handlers in ingress/chat.py to mark what they receive. --diff at A2.6 is the whole control. Then re-run the A1.2 attack against your new checkpoint and read the trace: the instruction is still there, and it is now labelled as a traveller's.
+Same company, same four agents, new way of failing. You add cybertravels/provenance.py and change both handlers in ingress/chat.py to mark what they receive. --diff at B2.6 is the whole control. Then re-run the B1.2 attack against your new checkpoint and read the trace: the instruction is still there, and it is now labelled as a traveller's.
 
 **③ What we do about it**
 
@@ -2288,17 +2290,17 @@ Ingress points that tag, and tool selections traceable to a trusted origin.
 
 List every place text enters your agent's context and check which of them attaches an origin. The untagged ones are the paths where this control does not exist, whatever the design document says.
 
-Next up: A2.7, Attribution: an audit trail that answers "who".
+Next up: B2.7, Attribution: an audit trail that answers "who".
 
 ---
 
-### A2.7 · Attribution: an audit trail that answers "who"
+### B2.7 · Attribution: an audit trail that answers "who"
 
-Chapter A2 · lesson 7 of 8 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.7.html)
+Chapter B2 · lesson 7 of 8 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B2.7.html)
 
 **① Open**
 
-Still inside chapter A2. Last one was Ingress: marking untrusted content at the door.
+Still inside chapter B2. Last one was Ingress: marking untrusted content at the door.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2314,7 +2316,7 @@ Here is what that costs you.
 
 Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.
 
-Same company, same four agents, new way of failing. The fourth question, which G2.2 left open. db.audit takes the provenance.Span that A2.6 made it possible to have, and records its origin plus a digest — not the text, because a refund request quoted in full puts traveller prose in a long-lived store.
+Same company, same four agents, new way of failing. The fourth question, which A2.2 left open. db.audit takes the provenance.Span that B2.6 made it possible to have, and records its origin plus a digest — not the text, because a refund request quoted in full puts traveller prose in a long-lived store.
 
 **③ What we do about it**
 
@@ -2340,17 +2342,17 @@ Actions with a complete chain. The share below 1.00 is precisely the part of the
 
 Take the last significant action one of your agents performed and try to fill in these four fields from what you actually logged. The missing one is almost always the motivating input.
 
-Next up: A2.8, An audit trail the workload cannot forge.
+Next up: B2.8, An audit trail the workload cannot forge.
 
 ---
 
-### A2.8 · An audit trail the workload cannot forge
+### B2.8 · An audit trail the workload cannot forge
 
-Chapter A2 · lesson 8 of 8 · runs a skill · 398 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A2.8.html)
+Chapter B2 · lesson 8 of 8 · runs a skill · 398 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/B2.8.html)
 
 **① Open**
 
-Still inside chapter A2. Last one was Attribution: an audit trail that answers "who".
+Still inside chapter B2. Last one was Attribution: an audit trail that answers "who".
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2392,25 +2394,25 @@ Transcript segments whose hash chain verifies, and the number of gaps the chain 
 
 Run the IAM check on your own agent workload: can its role read, write or list the bucket its transcripts land in, or decrypt with their key? If yes, every detection you have built on those transcripts is reporting on data the subject controls.
 
-That closes chapter A2. Every call now carries three identities, delegation narrows instead of widening, authority expires, every span in the context window arrives with an origin attached, and the record of all of it is one the workload cannot rewrite. Roughly half the chapter-1 risks are closed or badly weakened.
+That closes chapter B2. Every call now carries three identities, delegation narrows instead of widening, authority expires, every span in the context window arrives with an origin attached, and the record of all of it is one the workload cannot rewrite. Roughly half the chapter-1 risks are closed or badly weakened.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
-And here is what it still cannot do. All of it assumes identity holds. Nothing here helps once a credential is stolen, a delegation chain is forged, or an injection arrives through a channel you marked as principal — and A1.2 through A1.8 are all still reachable that way.
+And here is what it still cannot do. All of it assumes identity holds. Nothing here helps once a credential is stolen, a delegation chain is forged, or an injection arrives through a channel you marked as principal — and B1.2 through B1.8 are all still reachable that way.
 
-Chapter A3 is what holds after identity has already failed: the tool call, the sandbox, the network boundary, and the ceiling on the run.
+Chapter B3 is what holds after identity has already failed: the tool call, the sandbox, the network boundary, and the ceiling on the run.
 
-Next up: A3.1, Default-deny on the tool call.
+Next up: B3.1, Default-deny on the tool call.
 
 ---
 
-### A3.1 · Default-deny on the tool call
+### B3.1 · Default-deny on the tool call
 
-Chapter A3 · lesson 1 of 11 · runs a skill · 281 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A3.1.html)
+Chapter B3 · lesson 1 of 11 · runs a skill · 281 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B3.1.html)
 
 **① Open**
 
-Chapter A2 left us here. All of it assumes identity holds. That is what this chapter picks up.
+Chapter B2 left us here. All of it assumes identity holds. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2426,7 +2428,7 @@ Here is what that costs you.
 
 Allow-by-default authorization is defeated by any argument the model can be persuaded to produce.
 
-Same company, same four agents, new way of failing. config.TOOL_POLICY has answered yes or no since G1.4 and has never said why. You add cybertravels/policy.py: one decide() per call, returning a record with a reason and a list of obligations. The default branch is a denial, so delete everything — a tool nobody classified — is refused rather than falling through.
+Same company, same four agents, new way of failing. config.TOOL_POLICY has answered yes or no since A1.4 and has never said why. You add cybertravels/policy.py: one decide() per call, returning a record with a reason and a list of obligations. The default branch is a denial, so delete everything — a tool nobody classified — is refused rather than falling through.
 
 **③ What we do about it**
 
@@ -2450,19 +2452,19 @@ Calls denied by policy, and the share of tools reachable with no matching rule a
 
 **⑤ Hand it over**
 
-Take one tool policy you have and check whether it names the resource and the verb. If it grants run query rather than SELECT on these tables, it cannot express the difference that A1.5 and R1 both turn on.
+Take one tool policy you have and check whether it names the resource and the verb. If it grants run query rather than SELECT on these tables, it cannot express the difference that B1.5 and R1 both turn on.
 
-Next up: A3.2, Sandboxed execution.
+Next up: B3.2, Sandboxed execution.
 
 ---
 
-### A3.2 · Sandboxed execution
+### B3.2 · Sandboxed execution
 
-Chapter A3 · lesson 2 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.2.html)
+Chapter B3 · lesson 2 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B3.2.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was Default-deny on the tool call.
+Still inside chapter B3. Last one was Default-deny on the tool call.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2504,17 +2506,17 @@ Executions inside an isolate, and credentials reachable from within one — wher
 
 Run kubectl get networkpolicy -A and look for a policy with an empty podSelector and policyTypes: [Ingress, Egress]. If there isn't one in the namespace your agents run in, every narrow policy you have written is an allowance rather than a restriction, and every pod nobody wrote a policy for has the internet.
 
-Next up: A3.3, Egress control.
+Next up: B3.3, Egress control.
 
 ---
 
-### A3.3 · Egress control
+### B3.3 · Egress control
 
-Chapter A3 · lesson 3 of 11 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A3.3.html)
+Chapter B3 · lesson 3 of 11 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B3.3.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was Sandboxed execution.
+Still inside chapter B3. Last one was Sandboxed execution.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2556,17 +2558,17 @@ Outbound destinations outside the allow-list, and the bytes that reached them.
 
 Write the allow-list for one agent by listing the hosts it genuinely calls. If it is under five, you can ship this control this week; if it is unbounded, that is the finding.
 
-Next up: A3.4, Budgets and stop conditions.
+Next up: B3.4, Budgets and stop conditions.
 
 ---
 
-### A3.4 · Budgets and stop conditions
+### B3.4 · Budgets and stop conditions
 
-Chapter A3 · lesson 4 of 11 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A3.4.html)
+Chapter B3 · lesson 4 of 11 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B3.4.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was Egress control.
+Still inside chapter B3. Last one was Egress control.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2582,7 +2584,7 @@ Here is what that costs you.
 
 Without a ceiling the loop runs until an external system stops it, and the failure is denial of service to everything sharing the quota.
 
-Same company, same four agents, new way of failing. G1.7 bound the loop to eight steps and twelve calls. You add Budget.target() and Budget.tokens() to cybertravels/runtime.py and two ceilings to config.py, because twelve calls all landing on Northwind Rail is, from Northwind's side, an attack. exhausted() names which ceiling bound — "the run stopped" and "the run stopped hammering one vendor" are different incidents.
+Same company, same four agents, new way of failing. A1.7 bound the loop to eight steps and twelve calls. You add Budget.target() and Budget.tokens() to cybertravels/runtime.py and two ceilings to config.py, because twelve calls all landing on Northwind Rail is, from Northwind's side, an attack. exhausted() names which ceiling bound — "the run stopped" and "the run stopped hammering one vendor" are different incidents.
 
 **③ What we do about it**
 
@@ -2602,23 +2604,23 @@ Runs terminated by their own ceiling, and spend per run at the 95th percentile.
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The impossible task from A1.13 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries complete: False rather than reporting what it managed.
+> The impossible task from B1.13 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries complete: False rather than reporting what it managed.
 
 **⑤ Hand it over**
 
 Check whether your agent's budget bounds calls per downstream target. If it only bounds tokens, your cost is protected and the service your agent hammers is not.
 
-Next up: A3.5, Validating what comes back.
+Next up: B3.5, Validating what comes back.
 
 ---
 
-### A3.5 · Validating what comes back
+### B3.5 · Validating what comes back
 
-Chapter A3 · lesson 5 of 11 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A3.5.html)
+Chapter B3 · lesson 5 of 11 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B3.5.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was Budgets and stop conditions.
+Still inside chapter B3. Last one was Budgets and stop conditions.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2660,17 +2662,17 @@ Results that passed both checks, as a share of results acted on.
 
 Find one place a sub-agent's output becomes another agent's input and ask what oracle checks it. If the answer is the model's own confidence, that is the component grading its own work.
 
-Next up: A3.6, Human approval that survives volume.
+Next up: B3.6, Human approval that survives volume.
 
 ---
 
-### A3.6 · Human approval that survives volume
+### B3.6 · Human approval that survives volume
 
-Chapter A3 · lesson 6 of 11 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A3.6.html)
+Chapter B3 · lesson 6 of 11 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B3.6.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was Validating what comes back.
+Still inside chapter B3. Last one was Validating what comes back.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2686,7 +2688,7 @@ Here is what that costs you.
 
 An approval queue at volume approves everything, and the risk register still records it as a control.
 
-Same company, same four agents, new way of failing. The human gate you built in G1.7 is still there and, at volume, still 100 percent covered while nobody reads anything. You add approval load() to policy.py: approvals per reviewer per hour against what reading one actually takes. Sixty an hour reports saturated — and the coverage metric does not move.
+Same company, same four agents, new way of failing. The human gate you built in A1.7 is still there and, at volume, still 100 percent covered while nobody reads anything. You add approval load() to policy.py: approvals per reviewer per hour against what reading one actually takes. Sixty an hour reports saturated — and the coverage metric does not move.
 
 **③ What we do about it**
 
@@ -2712,17 +2714,17 @@ Approvals per reviewer per hour, and the share of them that are genuinely irreve
 
 Count how many approvals your agents generate daily and compare it with 25. If you are above it, decide which actions are reversible enough to be handled by policy instead — that list is usually most of them.
 
-Next up: A3.7, The agent gateway — one choke point when you scale.
+Next up: B3.7, The agent gateway — one choke point when you scale.
 
 ---
 
-### A3.7 · The agent gateway — one choke point when you scale
+### B3.7 · The agent gateway — one choke point when you scale
 
-Chapter A3 · lesson 7 of 11 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A3.7.html)
+Chapter B3 · lesson 7 of 11 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B3.7.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was Human approval that survives volume.
+Still inside chapter B3. Last one was Human approval that survives volume.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2764,17 +2766,17 @@ Share of agent traffic that transits the gateway. Whatever does not is unenforce
 
 Count your agents. If it is more than five, work out how you would currently answer 'is egress control on for all of them' — and how long that would take.
 
-Next up: A3.8, Shared infrastructure between agent runs.
+Next up: B3.8, Shared infrastructure between agent runs.
 
 ---
 
-### A3.8 · Shared infrastructure between agent runs
+### B3.8 · Shared infrastructure between agent runs
 
-Chapter A3 · lesson 8 of 11 · runs a skill · 265 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.8.html)
+Chapter B3 · lesson 8 of 11 · runs a skill · 265 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B3.8.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was The agent gateway — one choke point when you scale.
+Still inside chapter B3. Last one was The agent gateway — one choke point when you scale.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2816,17 +2818,17 @@ Runs sharing a mutable surface with another run — target zero, and the count i
 
 List every shared, mutable, agent-reachable surface in your own environment and put a byte capacity against each. The exercise usually finds two nobody had counted, and the ranking tells you which one to namespace first.
 
-Next up: A3.9, Turning a control off without turning the system into an experiment.
+Next up: B3.9, Turning a control off without turning the system into an experiment.
 
 ---
 
-### A3.9 · Turning a control off without turning the system into an experiment
+### B3.9 · Turning a control off without turning the system into an experiment
 
-Chapter A3 · lesson 9 of 11 · runs a skill · 263 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.9.html)
+Chapter B3 · lesson 9 of 11 · runs a skill · 263 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B3.9.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was Shared infrastructure between agent runs.
+Still inside chapter B3. Last one was Shared infrastructure between agent runs.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2868,17 +2870,17 @@ Live exemptions, the age of each, and the cap in force while it is open.
 
 Find one control currently disabled in your environment and ask three questions: who approved it, when does it expire, and what cap came with it. The third question is the one that usually has no answer.
 
-Next up: A3.10, The agent's escalation path.
+Next up: B3.10, The agent's escalation path.
 
 ---
 
-### A3.10 · The agent's escalation path
+### B3.10 · The agent's escalation path
 
-Chapter A3 · lesson 10 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.10.html)
+Chapter B3 · lesson 10 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B3.10.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was Turning a control off without turning the system into an experiment.
+Still inside chapter B3. Last one was Turning a control off without turning the system into an experiment.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2920,17 +2922,17 @@ Escalations raised per thousand runs. A rate of zero means the tool is missing, 
 
 Open your agent's tool list and look for the outbound path. If there is no way for it to tell you something you did not ask about, then whatever it finds, you will only learn from the transcript — if anyone reads it.
 
-Next up: A3.11, Securing the developers' coding agents.
+Next up: B3.11, Securing the developers' coding agents.
 
 ---
 
-### A3.11 · Securing the developers' coding agents
+### B3.11 · Securing the developers' coding agents
 
-Chapter A3 · lesson 11 of 11 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/A3.11.html)
+Chapter B3 · lesson 11 of 11 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/B3.11.html)
 
 **① Open**
 
-Still inside chapter A3. Last one was The agent's escalation path.
+Still inside chapter B3. Last one was The agent's escalation path.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -2972,7 +2974,7 @@ Developer agents with confinement applied, and the credentials still reachable f
 
 Ship the credential deny-list first — it is a config file, it takes an afternoon, and no developer will notice. Then find out how many agents in your organisation could read ~/.aws/credentials yesterday.
 
-That closes chapter A3. Layers now stand between a compromised agent and a consequence — the policy decision at the tool call, the sandbox, egress, the budget, the gateway — plus the three the incident register adds: shared infrastructure that is no longer a channel, exemptions that cost blast radius, and an agent that has somewhere to report.
+That closes chapter B3. Layers now stand between a compromised agent and a consequence — the policy decision at the tool call, the sandbox, egress, the budget, the gateway — plus the three the incident register adds: shared infrastructure that is no longer a channel, exemptions that cost blast radius, and an agent that has somewhere to report.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
@@ -2980,24 +2982,24 @@ And here is what it still cannot do. You have a secured architecture and nothing
 
 Function B builds that system as an SDLC, and holds it to every rule in this chapter.
 
-Next up: B2.0, The AI SDLC — what runs before a deploy, and what runs after.
+Next up: C2.0, The AI SDLC — what runs before a deploy, and what runs after.
 
 ---
 
 
-## Function B — Application Security with an AI SDLC
+## Function C — Application Security with an AI SDLC
 
 *[Who is watching: AppSec engineers, product security engineers, secure code reviewers and penetration testers — the people who already run a security gate on every release.]*
 
 *[The pitch for the whole function, if you need it in one breath: You already do this work: SAST, DAST, dependency and container scanning, and a penetration test before launch. Two things changed.]*
 
-*[Record B2.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
+*[Record C2.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
 
 ---
 
-### B2.0 · The AI SDLC — what runs before a deploy, and what runs after
+### C2.0 · The AI SDLC — what runs before a deploy, and what runs after
 
-Chapter B2 · lesson 1 of 20 · runs a skill · 416 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/B2.0.html)
+Chapter C2 · lesson 1 of 20 · runs a skill · 416 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/C2.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -3009,9 +3011,9 @@ The pipeline is not new. What is new is that code now arrives faster than any hu
 
 **① Open**
 
-That is Function A done. Function B asks a different question of the same company: Application Security with an AI SDLC.
+That is Function B done. Function C asks a different question of the same company: Application Security with an AI SDLC.
 
-Chapter A3 left us here. You have a secured architecture and nothing that builds on it. That is what this chapter picks up.
+Chapter B3 left us here. You have a secured architecture and nothing that builds on it. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3053,25 +3055,25 @@ Every stage after this reports its own number. This lesson's output is the order
 
 Write your own inventory into the same two columns, then delete every row that is deployed and muted. What is left is your coverage.
 
-Next up: B2.1, What building a harness means in security engineering.
+Next up: C2.1, What building a harness means in security engineering.
 
 ---
 
-### B2.1 · What building a harness means in security engineering
+### C2.1 · What building a harness means in security engineering
 
-Chapter B2 · lesson 2 of 20 · runs a skill · 300 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.1.html)
+Chapter C2 · lesson 2 of 20 · runs a skill · 272 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.1.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was The AI SDLC — what runs before a deploy, and what runs after.
+Still inside chapter C2. Last one was The AI SDLC — what runs before a deploy, and what runs after.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-a model                 a harness
+research output              what makes it a capability
 ```
 
-A model on its own is a text generator. Wrap it in a loop with tools and it reviews CyberTravels' pull requests; wrap it badly and it reviews them and tells you it found nothing. Every part of that wrapper is a security decision, and nobody else in the building is going to notice that the verifier is a shape check.
+A research function that produces papers is a cost centre with good intentions. One that produces controls somebody else deploys is a capability, and the difference is decided at scoping, not at publication.
 
 **② Why it costs something**
 
@@ -3105,25 +3107,25 @@ Agreement rate between the verifier and held-out ground truth, and the number of
 
 Name your pipeline's verifier out loud. If the sentence contains "the model checks" or "it looks right", you have a judge, and a judge approves confident prose — including prose that contradicts the finding it is attached to.
 
-Next up: B2.2, Threat modelling from what the estate already knows.
+Next up: C2.2, Threat modelling from what the estate already knows.
 
 ---
 
-### B2.2 · Threat modelling from what the estate already knows
+### C2.2 · Threat modelling from what the estate already knows
 
-Chapter B2 · lesson 3 of 20 · runs a skill · 304 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/B2.2.html)
+Chapter C2 · lesson 3 of 20 · runs a skill · 281 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C2.2.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was What building a harness means in security engineering.
+Still inside chapter C2. Last one was What building a harness means in security engineering.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-six static inputs, all already in the estate
+same prompt, same model, three runs, three outputs
 ```
 
-A threat model produced in a workshop describes the system as it was on the day of the workshop, and it is derived from the code alone — so two deployments of the same repository, one behind a private load balancer with no egress and one on the internet with a wildcard trust policy, get the same model. It is wrong about both.
+The model layer is the one place where the same input legitimately produces different output, which makes every naive experiment on it unrepeatable. Method is not a formality here; it is the only thing separating a finding from a coincidence.
 
 **② Why it costs something**
 
@@ -3157,25 +3159,25 @@ The diff between two runs. A threat model that produces no diff when the estate 
 
 Point the skill at one of your own services. The work is not the model, it is collecting the five inputs: if any of them is "in somebody's head", that is the input your threat model is currently guessing at, and the guess is always the optimistic one.
 
-Next up: B2.3, SAST for agentic code — deterministic Semgrep, then the model pass.
+Next up: C2.3, SAST for agentic code — deterministic Semgrep, then the model pass.
 
 ---
 
-### B2.3 · SAST for agentic code — deterministic Semgrep, then the model pass
+### C2.3 · SAST for agentic code — deterministic Semgrep, then the model pass
 
-Chapter B2 · lesson 4 of 20 · runs a skill · 308 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/B2.3.html)
+Chapter C2 · lesson 4 of 20 · runs a skill · 302 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/C2.3.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Threat modelling from what the estate already knows.
+Still inside chapter C2. Last one was Threat modelling from what the estate already knows.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-booking.py — 6 defects in the key, 5 of them a pattern
+what weight access gives you
 ```
 
-Semgrep's precision on this file is 1.00 at every ruleset width. Its recall goes from 0.17 to 0.67 depending on a config line nobody reads, and both scans exit zero. The number that decides whether a scan meant anything is the one almost nobody computes.
+Weight access changes what you can see and what you can change. It turns questions about behaviour into questions about mechanism — and it is also how a supply-chain attacker turns a helpful model into a specifically unhelpful one.
 
 **② Why it costs something**
 
@@ -3209,25 +3211,25 @@ The clearest before-and-after in the commons: Semgrep holds precision 1.00 and f
 
 Two things, and the second is the one people skip. Run Semgrep against one of your own repositories at your current ruleset and at seven packs, and count the difference — whatever that number is, it has been the number all year.
 
-Next up: B2.4, Deduplication and contextual verification.
+Next up: C2.4, Deduplication and contextual verification.
 
 ---
 
-### B2.4 · Deduplication and contextual verification
+### C2.4 · Deduplication and contextual verification
 
-Chapter B2 · lesson 5 of 20 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.4.html)
+Chapter C2 · lesson 5 of 20 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C2.4.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was SAST for agentic code — deterministic Semgrep, then the model pass.
+Still inside chapter C2. Last one was SAST for agentic code — deterministic Semgrep, then the model pass.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-raw findings                        after dedup + context
+three names for one problem: text somebody else wrote, read back as fact
 ```
 
-Three analysers found the same defect and reported it four times, in three vocabularies, at two severities. A queue that inflates by 3x is not a queue — it is a landfill with a ticket number.
+The corpus is a write surface. Training data, a RAG index and an agent's memory are three versions of the same problem: text somebody else authored, read back later as fact, long after anyone remembers where it came from.
 
 **② Why it costs something**
 
@@ -3261,25 +3263,25 @@ Findings before and after consolidation, and how many survived verification. Bot
 
 Add a fourth verification check: does the CWE class match the sink type? A CWE-22 finding on a conn.execute call is provably mislabelled, and that check costs nothing to run.
 
-Next up: B2.5, Feasibility filtering, reachability and dead code.
+Next up: C2.5, Feasibility filtering, reachability and dead code.
 
 ---
 
-### B2.5 · Feasibility filtering, reachability and dead code
+### C2.5 · Feasibility filtering, reachability and dead code
 
-Chapter B2 · lesson 6 of 20 · runs a skill · 307 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/B2.5.html)
+Chapter C2 · lesson 6 of 20 · runs a skill · 296 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/C2.5.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Deduplication and contextual verification.
+Still inside chapter C2. Last one was Deduplication and contextual verification.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-grep says            ast says
+what arrives from someone else
 ```
 
-The finding is real and the code is dead — a true positive about the code and a false positive about the risk. Telling those apart needs a call graph, a call graph needs the syntax tree, and the tree's own blind spot is the third bucket everyone collapses into the second.
+A model, a dataset, an adapter and an MCP server all arrive the way any dependency arrives — from someone else, usually unsigned, usually pinned to a tag that can move. Provenance questions produce real answers only when they are specific.
 
 **② Why it costs something**
 
@@ -3287,7 +3289,7 @@ Here is what that costs you.
 
 A finding in dead code costs exactly as much to triage as one on the login path.
 
-Same company, same four agents, new way of failing. appsec/reach.py walks from the entry points B2.2 defined. Two of your five findings are in units nothing calls — render template and sync vendor — and the stage marks them rather than dropping them, because the walk over-approximates and a deleted finding comes back the day somebody adds a route. The first version of this file collapsed four handle functions by assignment rather than union and reported two live sinks as dead; the comment in the file says so.
+Same company, same four agents, new way of failing. appsec/reach.py walks from the entry points C2.2 defined. Two of your five findings are in units nothing calls — render template and sync vendor — and the stage marks them rather than dropping them, because the walk over-approximates and a deleted finding comes back the day somebody adds a route. The first version of this file collapsed four handle functions by assignment rather than union and reported two live sinks as dead; the comment in the file says so.
 
 **③ What we do about it**
 
@@ -3313,25 +3315,25 @@ Share of findings with a reachable path from a real entry point — and the tria
 
 Two counts, and the second is the uncomfortable one. Count how many unknown cases your own reachability analysis produces and find out what your tooling does with them — if it reports them as clean, the number of real bugs you are dropping is the size of that bucket.
 
-Next up: B2.6, Sandbox replication.
+Next up: C2.6, Sandbox replication.
 
 ---
 
-### B2.6 · Sandbox replication
+### C2.6 · Sandbox replication
 
-Chapter B2 · lesson 7 of 20 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.6.html)
+Chapter C2 · lesson 7 of 20 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C2.6.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Feasibility filtering, reachability and dead code.
+Still inside chapter C2. Last one was Feasibility filtering, reachability and dead code.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-production            replica
+two effects, one number
 ```
 
-You cannot exploit a finding to confirm it without somewhere safe to do it. The replica is that place, and the fidelity you give it decides which findings you are able to confirm at all.
+Change the model and the harness at the same time and you have learned nothing about either. Separating those two effects is the whole job — and it is also how you read somebody else's published number without being misled by it.
 
 **② Why it costs something**
 
@@ -3365,25 +3367,25 @@ Probes executed in the sandbox, and connections from it to anything production �
 
 Check whether your dynamic testing currently runs against staging. If it does, list what staging shares with production — identity provider, message bus, data replica.
 
-Next up: B2.7, Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries.
+Next up: C2.7, Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries.
 
 ---
 
-### B2.7 · Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries
+### C2.7 · Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries
 
-Chapter B2 · lesson 8 of 20 · runs a skill · 301 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.7.html)
+Chapter C2 · lesson 8 of 20 · runs a skill · 284 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C2.7.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Sandbox replication.
+Still inside chapter C2. Last one was Sandbox replication.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-WHAT THE DEPENDENCY REPORT COUNTED
+durability ladder
 ```
 
-The dependency report is clean and it is correct. It is also a statement about a manifest, and the jar the booking provider dropped into lib/ is in no manifest — so it has no identifier, so it has no advisory, so it was counted as neither vulnerable nor safe. It was counted as nothing.
+The test of a research programme is not what it discovered. It is what still protects you after the person who discovered it has left — which is a much smaller list, and a much more useful one.
 
 **② Why it costs something**
 
@@ -3417,25 +3419,25 @@ Artefacts on disk that appear in the SBOM. The gap is the finding, and it is usu
 
 Generate an SBOM for one service you run, then list what is actually in the built image and diff the two. Every artefact on disk with no manifest entry has been scanned by nothing, and the clean report you have been reading each week was never about it.
 
-Next up: B2.8, Dynamic exploitation (DAST).
+Next up: C2.8, Dynamic exploitation (DAST).
 
 ---
 
-### B2.8 · Dynamic exploitation (DAST)
+### C2.8 · Dynamic exploitation (DAST)
 
-Chapter B2 · lesson 9 of 20 · runs a skill · 259 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.8.html)
+Chapter C2 · lesson 9 of 20 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.8.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries.
+Still inside chapter C2. Last one was Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-candidate finding
+report ------> register ------> owners
 ```
 
-A finding becomes a fact the moment something other than a model says so. Driving the running application is how you get that second opinion — and the oracle you choose is what makes it worth having.
+An investigation lands — somebody else's, into somebody else's incident. The research function's job is not to summarise it. It is to index it so each finding can be cited alone, type every control, and give each one an owner who will test it.
 
 **② Why it costs something**
 
@@ -3469,25 +3471,25 @@ Findings confirmed by execution versus refuted. Both are useful answers; only on
 
 Look at your DAST assertions. If any of them checks only for a non-error response, it is confirming findings it has not tested — and the control probe above is how you prove that in five minutes.
 
-Next up: B2.9, Exploit chaining.
+Next up: C2.9, Exploit chaining.
 
 ---
 
-### B2.9 · Exploit chaining
+### C2.9 · Exploit chaining
 
-Chapter B2 · lesson 10 of 20 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.9.html)
+Chapter C2 · lesson 10 of 20 · runs a skill · 284 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C2.9.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Dynamic exploitation (DAST).
+Still inside chapter C2. Last one was Dynamic exploitation (DAST).
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-alone                                chained
+browser                    Supabase Data API           agents table
 ```
 
-Three medium findings, each correctly scored, each individually not worth an engineer's afternoon. Chained, they read a file that ends the conversation about severity. Chains are where automated analysis earns its keep.
+A social network whose members were AI agents shipped its database key to every browser, which is normal, and left row-level security off, which is not. One query returned every agent's record — including the OpenAI, Anthropic and AWS keys of the people who created them, in plaintext.
 
 **② Why it costs something**
 
@@ -3521,25 +3523,25 @@ Chains discovered, and the severity of the chain against the highest severity of
 
 Take your current open findings and write down each one's preconditions and effects. The chaining falls out mechanically, and the finding you should fix first is usually not the one at the top of the severity-sorted queue.
 
-Next up: B2.10, Agentic penetration testing — the loop, and who runs each turn.
+Next up: C2.10, Agentic penetration testing — the loop, and who runs each turn.
 
 ---
 
-### B2.10 · Agentic penetration testing — the loop, and who runs each turn
+### C2.10 · Agentic penetration testing — the loop, and who runs each turn
 
-Chapter B2 · lesson 11 of 20 · runs a skill · 270 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.10.html)
+Chapter C2 · lesson 11 of 20 · runs a skill · 274 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C2.10.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Exploit chaining.
+Still inside chapter C2. Last one was Exploit chaining.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-recon --> hypothesis --> test --> escalate --> report
+two critical patterns, and they are not degrees of one thing
 ```
 
-An offensive harness reads only hostile input, by definition: every byte comes from a system you are attacking. It is the most dangerous agent in the building, and the thing that makes running it professional is that scope stops living in the tester's attention.
+Supabase has never been breached. Applications built on it leak constantly, and always through the same two doors — a table with no row policy, and an admin key in a frontend bundle. One write-up puts it at 73 percent of generated applications carrying at least one issue.
 
 **② Why it costs something**
 
@@ -3573,17 +3575,17 @@ Findings ranked against a severity-sorted baseline, and the number of out-of-sco
 
 Write your engagement scope as a data structure your harness reads, not as a paragraph in a PDF. Then ask what your current tooling would do if a target redirected to a host you were not authorised to touch.
 
-Next up: B2.11, White-box agentic pentest — the source, and what it lets you prove.
+Next up: C2.11, White-box agentic pentest — the source, and what it lets you prove.
 
 ---
 
-### B2.11 · White-box agentic pentest — the source, and what it lets you prove
+### C2.11 · White-box agentic pentest — the source, and what it lets you prove
 
-Chapter B2 · lesson 12 of 20 · runs a skill · 291 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.11.html)
+Chapter C2 · lesson 12 of 20 · runs a skill · 291 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/C2.11.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Agentic penetration testing — the loop, and who runs each turn.
+Still inside chapter C2. Last one was Agentic penetration testing — the loop, and who runs each turn.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3599,7 +3601,7 @@ Here is what that costs you.
 
 Full source produces a finding list nobody can act on, because presence is reported where reachability was needed.
 
-Same company, same four agents, new way of failing. pentest.candidate() joins a finding to B2.5's graph: the path that reaches it, the authorisation predicate on that path, and report as. Point it at render template and it comes back "unreachable — reported, not dropped", which is the difference between a white-box report somebody can act on and a list of every sink in the tree.
+Same company, same four agents, new way of failing. pentest.candidate() joins a finding to C2.5's graph: the path that reaches it, the authorisation predicate on that path, and report as. Point it at render template and it comes back "unreachable — reported, not dropped", which is the difference between a white-box report somebody can act on and a list of every sink in the tree.
 
 **③ What we do about it**
 
@@ -3625,17 +3627,17 @@ Sinks reachable from an entry point, and how many of those carry only an authent
 
 Take one endpoint in your own estate and trace it to its sink by hand. Count the hops that check the caller is somebody against the hops that check they own this object.
 
-Next up: B2.12, Black-box agentic pentest — inference, and refusing to report it as fact.
+Next up: C2.12, Black-box agentic pentest — inference, and refusing to report it as fact.
 
 ---
 
-### B2.12 · Black-box agentic pentest — inference, and refusing to report it as fact
+### C2.12 · Black-box agentic pentest — inference, and refusing to report it as fact
 
-Chapter B2 · lesson 13 of 20 · runs a skill · 299 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.12.html)
+Chapter C2 · lesson 13 of 20 · runs a skill · 299 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/C2.12.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was White-box agentic pentest — the source, and what it lets you prove.
+Still inside chapter C2. Last one was White-box agentic pentest — the source, and what it lets you prove.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3677,17 +3679,17 @@ Findings versus open questions — five and seven on the sample run — and what
 
 Take your last external report and mark every claim observed or inferred. The inferred ones that carry a severity are the ones a client can disprove, and disproving one is how they learn to discount the rest.
 
-Next up: B2.13, Grey-box agentic pentest — one credential per role, and the matrix it fills.
+Next up: C2.13, Grey-box agentic pentest — one credential per role, and the matrix it fills.
 
 ---
 
-### B2.13 · Grey-box agentic pentest — one credential per role, and the matrix it fills
+### C2.13 · Grey-box agentic pentest — one credential per role, and the matrix it fills
 
-Chapter B2 · lesson 14 of 20 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.13.html)
+Chapter C2 · lesson 14 of 20 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.13.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Black-box agentic pentest — inference, and refusing to report it as fact.
+Still inside chapter C2. Last one was Black-box agentic pentest — inference, and refusing to report it as fact.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3729,17 +3731,17 @@ Cell coverage, not endpoint coverage: 12 of 30 cells on the sample, with two mis
 
 Build the matrix for one service you own with two real accounts. The cell you least want to test — an admin verb on another tenant's object — is the one whose result you most need to know.
 
-Next up: B2.14, Bonus — testing safely: the controls an offensive agent runs inside.
+Next up: C2.14, Bonus — testing safely: the controls an offensive agent runs inside.
 
 ---
 
-### B2.14 · Bonus — testing safely: the controls an offensive agent runs inside
+### C2.14 · Bonus — testing safely: the controls an offensive agent runs inside
 
-Chapter B2 · lesson 15 of 20 · runs a skill · 296 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.14.html)
+Chapter C2 · lesson 15 of 20 · runs a skill · 296 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/C2.14.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Grey-box agentic pentest — one credential per role, and the matrix it fills.
+Still inside chapter C2. Last one was Grey-box agentic pentest — one credential per role, and the matrix it fills.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3781,17 +3783,17 @@ Blocking controls present out of six, and whether the SOC was briefed. The refus
 
 Write your own engagement scope as a structure the harness reads, not a paragraph in a PDF, and run this preflight against it. The control you cannot currently satisfy is the one to fix before the next engagement, not after it.
 
-Next up: B2.15, Severity calibration, triaging and reporting.
+Next up: C2.15, Severity calibration, triaging and reporting.
 
 ---
 
-### B2.15 · Severity calibration, triaging and reporting
+### C2.15 · Severity calibration, triaging and reporting
 
-Chapter B2 · lesson 16 of 20 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B2.15.html)
+Chapter C2 · lesson 16 of 20 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.15.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Bonus — testing safely: the controls an offensive agent runs inside.
+Still inside chapter C2. Last one was Bonus — testing safely: the controls an offensive agent runs inside.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3833,17 +3835,17 @@ Cost per confirmed finding at each stage, which is what tells you which stage to
 
 Recalculate severity for your current open findings using confirmation and reachability alone — you do not need chaining to see the effect. The queue reorders, and the items that fall are usually the ones people have been arguing about.
 
-Next up: B2.16, Remediation engineering — proven in a sandbox before the merge request.
+Next up: C2.16, Remediation engineering — proven in a sandbox before the merge request.
 
 ---
 
-### B2.16 · Remediation engineering — proven in a sandbox before the merge request
+### C2.16 · Remediation engineering — proven in a sandbox before the merge request
 
-Chapter B2 · lesson 17 of 20 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.16.html)
+Chapter C2 · lesson 17 of 20 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C2.16.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Severity calibration, triaging and reporting.
+Still inside chapter C2. Last one was Severity calibration, triaging and reporting.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3885,17 +3887,17 @@ Patches where the exploit no longer succeeds and the regression test fails pre-f
 
 Candidate D passes every automated gate and is still wrong. Write the rule that rejects it.
 
-Next up: B2.17, Context engineering — cutting the false positives.
+Next up: C2.17, Context engineering — cutting the false positives.
 
 ---
 
-### B2.17 · Context engineering — cutting the false positives
+### C2.17 · Context engineering — cutting the false positives
 
-Chapter B2 · lesson 18 of 20 · runs a skill · 291 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/B2.17.html)
+Chapter C2 · lesson 18 of 20 · runs a skill · 291 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/C2.17.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Remediation engineering — proven in a sandbox before the merge request.
+Still inside chapter C2. Last one was Remediation engineering — proven in a sandbox before the merge request.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3935,19 +3937,19 @@ False positives before and after slicing, against tokens spent. The point is tha
 
 **⑤ Hand it over**
 
-Apply the path-slice rule where the source is three functions away from the sink. That is the case where text windows break down entirely and the call graph the threat model derives (B2.2) earns its keep — a ±N window can never contain a source that is in another file.
+Apply the path-slice rule where the source is three functions away from the sink. That is the case where text windows break down entirely and the call graph the threat model derives (C2.2) earns its keep — a ±N window can never contain a source that is in another file.
 
-Next up: B2.18, Agentic AI in the pipeline — attesting control intent for agents and MCP servers.
+Next up: C2.18, Agentic AI in the pipeline — attesting control intent for agents and MCP servers.
 
 ---
 
-### B2.18 · Agentic AI in the pipeline — attesting control intent for agents and MCP servers
+### C2.18 · Agentic AI in the pipeline — attesting control intent for agents and MCP servers
 
-Chapter B2 · lesson 19 of 20 · runs a skill · 308 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/B2.18.html)
+Chapter C2 · lesson 19 of 20 · runs a skill · 308 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/C2.18.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Context engineering — cutting the false positives.
+Still inside chapter C2. Last one was Context engineering — cutting the false positives.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -3989,17 +3991,17 @@ Deployments with a verifiable attestation, and claims in the spreadsheet with no
 
 Run the analyser against one agent or MCP server you actually deploy. The interesting output is not the verdicts — it is the controls that come back NO_INTENT_FOUND, because those are the ones nobody has started.
 
-Next up: B2.19, Bonus — Google Mantis, the pipeline in production.
+Next up: C2.19, Bonus — Google Mantis, the pipeline in production.
 
 ---
 
-### B2.19 · Bonus — Google Mantis, the pipeline in production
+### C2.19 · Bonus — Google Mantis, the pipeline in production
 
-Chapter B2 · lesson 20 of 20 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/B2.19.html)
+Chapter C2 · lesson 20 of 20 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/C2.19.html)
 
 **① Open**
 
-Still inside chapter B2. Last one was Agentic AI in the pipeline — attesting control intent for agents and MCP servers.
+Still inside chapter C2. Last one was Agentic AI in the pipeline — attesting control intent for agents and MCP servers.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4041,7 +4043,7 @@ Its accuracy on your key, not its accuracy on its own — which is the only comp
 
 Run the real thing: clone google/mantis, point it at a repository you have ground truth for, and score its output with a scoring harness. The gap between its conformance and its expert accuracy on your code is the only number that should decide whether you adopt it.
 
-That closes chapter B2. A harness you can name the eight parts of, evaluate on a corpus with known answers rather than on how confident it sounds, price per confirmed finding across a run nobody watched, and salt with bait that has no false positives.
+That closes chapter C2. A harness you can name the eight parts of, evaluate on a corpus with known answers rather than on how confident it sounds, price per confirmed finding across a run nobody watched, and salt with bait that has no false positives.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
@@ -4049,24 +4051,24 @@ And here is what it still cannot do. Everything you have built so far is defensi
 
 Function C attacks it, starting with the loop pointed the other way round.
 
-Next up: C1.0, Start here — the evolution of non-deterministic threat simulation.
+Next up: D1.0, Start here — the evolution of non-deterministic threat simulation.
 
 ---
 
 
-## Function C — Agentic Evaluation and Red Teaming
+## Function D — Agentic Evaluation and Red Teaming
 
 *[Who is watching: Red team operators, AI security researchers and offensive ML engineers — and the defenders who have to receive what they find.]*
 
 *[The pitch for the whole function, if you need it in one breath: Nobody can tell you how your agentic system fails until somebody has tried to break it. Deterministic exploits have signatures; an agentic failure is a reasoning loop, code generated at run time and tool calls at machine speed, and none of that shows up in a scanner.]*
 
-*[Record C1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
+*[Record D1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
 
 ---
 
-### C1.0 · Start here — the evolution of non-deterministic threat simulation
+### D1.0 · Start here — the evolution of non-deterministic threat simulation
 
-Chapter C1 · lesson 1 of 12 · runs a skill · 408 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/C1.0.html)
+Chapter D1 · lesson 1 of 12 · runs a skill · 408 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/D1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -4078,9 +4080,9 @@ Getting a model to say something it should not say is a prompt result. Getting a
 
 **① Open**
 
-That is Function B done. Function C asks a different question of the same company: Agentic Evaluation and Red Teaming.
+That is Function C done. Function D asks a different question of the same company: Agentic Evaluation and Red Teaming.
 
-Chapter B2 left us here. Everything you have built so far is defensive and cooperative: it runs against systems that are not trying to defeat it. That is what this chapter picks up.
+Chapter C2 left us here. Everything you have built so far is defensive and cooperative: it runs against systems that are not trying to defeat it. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4122,17 +4124,17 @@ Every lesson after this reports a rate with a denominator, and ends in a control
 
 Take one finding you have reported and ask how far along this lifecycle it travelled. Most stop at 'reach'; the value is in the three stages after it.
 
-Next up: C1.1, Platform ingestion and supply-chain risks.
+Next up: D1.1, Platform ingestion and supply-chain risks.
 
 ---
 
-### C1.1 · Platform ingestion and supply-chain risks
+### D1.1 · Platform ingestion and supply-chain risks
 
-Chapter C1 · lesson 2 of 12 · runs a skill · 273 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C1.1.html)
+Chapter D1 · lesson 2 of 12 · runs a skill · 273 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D1.1.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Start here — the evolution of non-deterministic threat simulation.
+Still inside chapter D1. Last one was Start here — the evolution of non-deterministic threat simulation.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4148,7 +4150,7 @@ Here is what that costs you.
 
 The first surface an attacker reaches is the hub the model came from, and a squatted name is accepted because it looked right.
 
-Same company, same four agents, new way of failing. redteam/ingestion.py inventories the four ways text somebody else wrote reaches your agents, with the column teams do not have: who can write here. Three of the four arrive labelled untrusted because A2.6 marks them. The fourth is knowledge/retriever.py's CORPUS — anyone who can add a travel template, no review, no label — and unlabelled() returns exactly that one.
+Same company, same four agents, new way of failing. redteam/ingestion.py inventories the four ways text somebody else wrote reaches your agents, with the column teams do not have: who can write here. Three of the four arrive labelled untrusted because B2.6 marks them. The fourth is knowledge/retriever.py's CORPUS — anyone who can add a travel template, no review, no label — and unlabelled() returns exactly that one.
 
 **③ What we do about it**
 
@@ -4174,17 +4176,17 @@ Components with a pinned digest, as a share of what the pipeline pulls at train 
 
 List every model and dataset your pipeline pulls at train or deploy time. The ones with no pinned digest are the ones an attacker can change without touching your code.
 
-Next up: C1.2, Weaponizing the ingestion path.
+Next up: D1.2, Weaponizing the ingestion path.
 
 ---
 
-### C1.2 · Weaponizing the ingestion path
+### D1.2 · Weaponizing the ingestion path
 
-Chapter C1 · lesson 3 of 12 · runs a skill · 281 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.2.html)
+Chapter D1 · lesson 3 of 12 · runs a skill · 281 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.2.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Platform ingestion and supply-chain risks.
+Still inside chapter D1. Last one was Platform ingestion and supply-chain risks.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4200,7 +4202,7 @@ Here is what that costs you.
 
 A dataset is parsed before it is embedded, and a crafted record reaches code execution on the indexing host — which usually has more access than the serving one.
 
-Same company, same four agents, new way of failing. The Northwind Rail notice in mcp/vendor server.py already carries an instruction addressed to automated agents. It has been in your corpus since G1.2, which is the point: an attack somebody planted for the test is an attack that proves the test works. source of truth() is the gate that stops it being tidied away — without it every trial would measure an empty attack and report a rate of zero as a defence working.
+Same company, same four agents, new way of failing. The Northwind Rail notice in mcp/vendor server.py already carries an instruction addressed to automated agents. It has been in your corpus since A1.2, which is the point: an attack somebody planted for the test is an attack that proves the test works. source of truth() is the gate that stops it being tidied away — without it every trial would measure an empty attack and report a rate of zero as a defence working.
 
 **③ What we do about it**
 
@@ -4226,17 +4228,17 @@ Ingested records with a verifiable origin. The ones without are the route a payl
 
 Find the host that runs your embedding jobs and check what it can reach. It is usually the most privileged machine nobody threat-modelled.
 
-Next up: C1.3, Cognitive vulnerability and elicitation scaling.
+Next up: D1.3, Cognitive vulnerability and elicitation scaling.
 
 ---
 
-### C1.3 · Cognitive vulnerability and elicitation scaling
+### D1.3 · Cognitive vulnerability and elicitation scaling
 
-Chapter C1 · lesson 4 of 12 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C1.3.html)
+Chapter D1 · lesson 4 of 12 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D1.3.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Weaponizing the ingestion path.
+Still inside chapter D1. Last one was Weaponizing the ingestion path.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4278,17 +4280,17 @@ Reproduction rate across attempts, with its denominator. A screenshot has no den
 
 Take any jailbreak you have seen shared as a screenshot and run it twenty times. The reproduction rate is the finding; the screenshot was marketing.
 
-Next up: C1.4, Establishing telemetry and detecting the actor.
+Next up: D1.4, Establishing telemetry and detecting the actor.
 
 ---
 
-### C1.4 · Establishing telemetry and detecting the actor
+### D1.4 · Establishing telemetry and detecting the actor
 
-Chapter C1 · lesson 5 of 12 · runs a skill · 286 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.4.html)
+Chapter D1 · lesson 5 of 12 · runs a skill · 286 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.4.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Cognitive vulnerability and elicitation scaling.
+Still inside chapter D1. Last one was Cognitive vulnerability and elicitation scaling.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4304,7 +4306,7 @@ Here is what that costs you.
 
 To catch the actor you have just played, you have to be able to see it — and the model gateway logs none of the fields that would distinguish an agent from a person.
 
-Same company, same four agents, new way of failing. redteam/actor.py reads the spans G2.1 already emits and scores four shape signals — rate, gap variance, tool breadth, burst. Your planner run scores above 0.7; a person's session scores below 0.4. Then the part that matters: pick threshold() chooses by the cost of each mistake rather than by accuracy, and prints what accuracy would have picked. When those differ, accuracy was optimising something nobody asked for.
+Same company, same four agents, new way of failing. redteam/actor.py reads the spans A2.1 already emits and scores four shape signals — rate, gap variance, tool breadth, burst. Your planner run scores above 0.7; a person's session scores below 0.4. Then the part that matters: pick threshold() chooses by the cost of each mistake rather than by accuracy, and prints what accuracy would have picked. When those differ, accuracy was optimising something nobody asked for.
 
 **③ What we do about it**
 
@@ -4330,17 +4332,17 @@ Threshold chosen by expected cost rather than accuracy, and the unregistered act
 
 Check whether your model gateway logs the acting identity per call. If it logs only the API key, every agent is anonymous and this scoring is the only actor you have.
 
-Next up: C1.5, Emergent swarms and multi-agent proliferation.
+Next up: D1.5, Emergent swarms and multi-agent proliferation.
 
 ---
 
-### C1.5 · Emergent swarms and multi-agent proliferation
+### D1.5 · Emergent swarms and multi-agent proliferation
 
-Chapter C1 · lesson 6 of 12 · runs a skill · 257 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C1.5.html)
+Chapter D1 · lesson 6 of 12 · runs a skill · 257 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D1.5.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Establishing telemetry and detecting the actor.
+Still inside chapter D1. Last one was Establishing telemetry and detecting the actor.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4356,7 +4358,7 @@ Here is what that costs you.
 
 Each run examined alone is plausible work; the swarm exists only in the population, so per-run review cannot see it.
 
-Same company, same four agents, new way of failing. redteam/swarm.py reads the run artefacts table A3.8 added. Three runs, each passing every per-run check; one wrote a cache entry two others read. correlate() is the only view that can see it, and convergence is the ratio worth watching — a fleet doing varied work has many distinct trajectories, a driven one has few.
+Same company, same four agents, new way of failing. redteam/swarm.py reads the run artefacts table B3.8 added. Three runs, each passing every per-run check; one wrote a cache entry two others read. correlate() is the only view that can see it, and convergence is the ratio worth watching — a fleet doing varied work has many distinct trajectories, a driven one has few.
 
 **③ What we do about it**
 
@@ -4382,17 +4384,17 @@ Behaviours with a named control behind them. The ones without are what the case 
 
 Ask whether anything in your estate could spawn a child agent. If the answer is yes and you cannot attribute the child to a human, you already have the swarm's precondition.
 
-Next up: C1.6, High-concurrency detection engineering.
+Next up: D1.6, High-concurrency detection engineering.
 
 ---
 
-### C1.6 · High-concurrency detection engineering
+### D1.6 · High-concurrency detection engineering
 
-Chapter C1 · lesson 7 of 12 · runs a skill · 277 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.6.html)
+Chapter D1 · lesson 7 of 12 · runs a skill · 277 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.6.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Emergent swarms and multi-agent proliferation.
+Still inside chapter D1. Last one was Emergent swarms and multi-agent proliferation.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4434,17 +4436,17 @@ Alerts added to the queue per true positive. A rule at 301 to 1 is rejected with
 
 Take a detection you are proud of and compute how many times it fired last month against how many were true. If you cannot, the rule is unmeasured, which is the same as untuned.
 
-Next up: C1.7, Triaging the non-deterministic swarm.
+Next up: D1.7, Triaging the non-deterministic swarm.
 
 ---
 
-### C1.7 · Triaging the non-deterministic swarm
+### D1.7 · Triaging the non-deterministic swarm
 
-Chapter C1 · lesson 8 of 12 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C1.7.html)
+Chapter D1 · lesson 8 of 12 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D1.7.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was High-concurrency detection engineering.
+Still inside chapter D1. Last one was High-concurrency detection engineering.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4486,17 +4488,17 @@ Closures sampled to a human, and agreement on that sample — which is the only 
 
 Ask your SOC whether anyone checks, when an incident is confirmed, whether an earlier alert about it was auto-closed. If not, your loop's error rate is invisible.
 
-Next up: C1.8, Defensive deception and threshold failures.
+Next up: D1.8, Defensive deception and threshold failures.
 
 ---
 
-### C1.8 · Defensive deception and threshold failures
+### D1.8 · Defensive deception and threshold failures
 
-Chapter C1 · lesson 9 of 12 · runs a skill · 261 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C1.8.html)
+Chapter D1 · lesson 9 of 12 · runs a skill · 261 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D1.8.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Triaging the non-deterministic swarm.
+Still inside chapter D1. Last one was Triaging the non-deterministic swarm.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4538,17 +4540,17 @@ False-positive rate of zero by construction — and the count of canaries that l
 
 Plant one canary credential in a place only an over-reaching agent would look, and wire its use to a page. It is the cheapest high-signal detector you will build.
 
-Next up: C1.9, Machine-speed containment and fleet revocation.
+Next up: D1.9, Machine-speed containment and fleet revocation.
 
 ---
 
-### C1.9 · Machine-speed containment and fleet revocation
+### D1.9 · Machine-speed containment and fleet revocation
 
-Chapter C1 · lesson 10 of 12 · runs a skill · 276 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.9.html)
+Chapter D1 · lesson 10 of 12 · runs a skill · 276 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.9.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Defensive deception and threshold failures.
+Still inside chapter D1. Last one was Defensive deception and threshold failures.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4564,7 +4566,7 @@ Here is what that costs you.
 
 A fleet completes thousands of actions inside one human approval cycle, so containment is pre-authorised or it is too late.
 
-Same company, same four agents, new way of failing. Revoke the File System Agent and measure what actually stopped. The MCP path is genuinely closed — verify delegated checks registry.active on every call, which is what A2.5 built. The direct path is not: agents/file agent.py::handle calls payments api.download invoice in-process, so nothing on that route ever reaches a check. coverage() returns 0.4, and that is a finding about the architecture rather than about the switch — it is A1.1's "direct APIs, no policy point" card, priced.
+Same company, same four agents, new way of failing. Revoke the File System Agent and measure what actually stopped. The MCP path is genuinely closed — verify delegated checks registry.active on every call, which is what B2.5 built. The direct path is not: agents/file agent.py::handle calls payments api.download invoice in-process, so nothing on that route ever reaches a check. coverage() returns 0.4, and that is a finding about the architecture rather than about the switch — it is B1.1's "direct APIs, no policy point" card, priced.
 
 **③ What we do about it**
 
@@ -4590,17 +4592,17 @@ What the credentials can still do after the agents stop. Termination without rev
 
 Time how long it takes to revoke every credential one class of agent holds. If the answer is 'we would terminate the processes', you have not tested containment, only restart.
 
-Next up: C1.10, Forensic replay and control architecture.
+Next up: D1.10, Forensic replay and control architecture.
 
 ---
 
-### C1.10 · Forensic replay and control architecture
+### D1.10 · Forensic replay and control architecture
 
-Chapter C1 · lesson 11 of 12 · runs a skill · 274 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C1.10.html)
+Chapter D1 · lesson 11 of 12 · runs a skill · 274 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.10.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Machine-speed containment and fleet revocation.
+Still inside chapter D1. Last one was Machine-speed containment and fleet revocation.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4616,7 +4618,7 @@ Here is what that costs you.
 
 A finding is only as good as its reproduction, and the constant teams miss is the model version — which silently invalidates every other constant.
 
-Same company, same four agents, new way of failing. redteam/forensics.py puts the four investigation questions to your own audit rows. All four are answerable — but only because the chain carries priya => spiffe://…, which is identity.actor chain()'s doing rather than a column's. NOT_RECORDED names what is still absent: A2.2 issues an SVID with an attestation digest and no audit column carries it, so a row names which workload acted and cannot show it was the attested instance.
+Same company, same four agents, new way of failing. redteam/forensics.py puts the four investigation questions to your own audit rows. All four are answerable — but only because the chain carries priya => spiffe://…, which is identity.actor chain()'s doing rather than a column's. NOT_RECORDED names what is still absent: B2.2 issues an SVID with an attestation digest and no audit column carries it, so a row names which workload acted and cannot show it was the attested instance.
 
 **③ What we do about it**
 
@@ -4642,17 +4644,17 @@ Runs that reproduce identically. A run you cannot reproduce is a story, and stor
 
 Pick one agent run from last week and try to reproduce it. The first field you cannot recover is the one to start logging today.
 
-Next up: C1.11, Institutional governance and compliance.
+Next up: D1.11, Institutional governance and compliance.
 
 ---
 
-### C1.11 · Institutional governance and compliance
+### D1.11 · Institutional governance and compliance
 
-Chapter C1 · lesson 12 of 12 · runs a skill · 413 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/C1.11.html)
+Chapter D1 · lesson 12 of 12 · runs a skill · 413 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/D1.11.html)
 
 **① Open**
 
-Still inside chapter C1. Last one was Forensic replay and control architecture.
+Still inside chapter D1. Last one was Forensic replay and control architecture.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4668,7 +4670,7 @@ Here is what that costs you.
 
 A finding that stays in a notebook changes nothing and regresses unseen.
 
-Same company, same four agents, new way of failing. redteam/handoff.py is the shape the engagement has to end in. A Finding will not construct without a rate and an interval. verify() runs the eval case against both builds and refuses one that passes on the old — the same rule B2.16 applies to a patch, for the same reason. An artefact nobody accepted counts as missing, and durability() reports the report-only fraction, which is the work the next engagement will redo at full price.
+Same company, same four agents, new way of failing. redteam/handoff.py is the shape the engagement has to end in. A Finding will not construct without a rate and an interval. verify() runs the eval case against both builds and refuses one that passes on the old — the same rule C2.16 applies to a patch, for the same reason. An artefact nobody accepted counts as missing, and durability() reports the report-only fraction, which is the work the next engagement will redo at full price.
 
 **③ What we do about it**
 
@@ -4694,7 +4696,7 @@ Findings leaving with all three. Any missing one is a promise rather than a cont
 
 Take your last red-team finding and write the eval case that would fail if it regressed. If you cannot, the fix is a promise, not a control.
 
-That closes chapter C1. You can carry an agentic finding the whole distance: reach a supply-chain or elicitation surface, weaponise an ingestion path, prove a technique reproduces, turn it into gateway telemetry and a deployable detection, triage and contain a swarm at machine speed, replay the run for forensics, and hand it over as a governed policy with an eval case that fails on the old build.
+That closes chapter D1. You can carry an agentic finding the whole distance: reach a supply-chain or elicitation surface, weaponise an ingestion path, prove a technique reproduces, turn it into gateway telemetry and a deployable detection, triage and contain a swarm at machine speed, replay the run for forensics, and hand it over as a governed policy with an eval case that fails on the old build.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
@@ -4702,24 +4704,24 @@ And here is what it still cannot do. Every finding here is one you generated. No
 
 Function D is the operational half — the SOC that detects an actor acting a thousand times an hour and stops it, in five phases.
 
-Next up: D1.0, Start here — the agentic SOC, and the stack that runs it.
+Next up: E1.0, Start here — the agentic SOC, and the stack that runs it.
 
 ---
 
 
-## Function D — The Agentic SOC
+## Function E — The Agentic SOC
 
 *[Who is watching: SOC analysts, detection engineers, incident responders, threat hunters and DFIR leads — running a SOC that now has agents in it, and agents watching it.]*
 
 *[The pitch for the whole function, if you need it in one breath: Your SOC was tuned for people. One hour of an agent is roughly 1,400 tool calls across 260 resources; one hour of a person is twelve actions.]*
 
-*[Record D1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
+*[Record E1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
 
 ---
 
-### D1.0 · Start here — the agentic SOC, and the stack that runs it
+### E1.0 · Start here — the agentic SOC, and the stack that runs it
 
-Chapter D1 · lesson 1 of 4 · runs a skill · 359 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/D1.0.html)
+Chapter E1 · lesson 1 of 4 · runs a skill · 359 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/E1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -4731,9 +4733,9 @@ The question this whole chapter asks is narrower than that, and a bit more uncom
 
 **① Open**
 
-That is Function C done. Function D asks a different question of the same company: The Agentic SOC.
+That is Function D done. Function E asks a different question of the same company: The Agentic SOC.
 
-Chapter C1 left us here. Every finding here is one you generated. That is what this chapter picks up.
+Chapter D1 left us here. Every finding here is one you generated. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4775,17 +4777,17 @@ The five intervals themselves — discover, detect, understand, contain, recover
 
 Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8 and it is a telemetry problem rather than a detection one.
 
-Next up: D1.1, The sensor estate — EDR, DLP, CSPM and CNAPP against an agent.
+Next up: E1.1, The sensor estate — EDR, DLP, CSPM and CNAPP against an agent.
 
 ---
 
-### D1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent
+### E1.1 · The sensor estate — EDR, DLP, CSPM and CNAPP against an agent
 
-Chapter D1 · lesson 2 of 4 · runs a skill · 302 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/D1.1.html)
+Chapter E1 · lesson 2 of 4 · runs a skill · 302 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/E1.1.html)
 
 **① Open**
 
-Still inside chapter D1. Last one was Start here — the agentic SOC, and the stack that runs it.
+Still inside chapter E1. Last one was Start here — the agentic SOC, and the stack that runs it.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4827,17 +4829,17 @@ Four of nine ordinary agent actions seen by no sensor class at all. That column 
 
 Build the same matrix for your estate with your own actions in the rows. The number that matters is not the percentage — it is whether the uncovered rows have something in common.
 
-Next up: D1.2, Drift monitoring — behaviour that changes without a code change.
+Next up: E1.2, Drift monitoring — behaviour that changes without a code change.
 
 ---
 
-### D1.2 · Drift monitoring — behaviour that changes without a code change
+### E1.2 · Drift monitoring — behaviour that changes without a code change
 
-Chapter D1 · lesson 3 of 4 · runs a skill · 282 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.2.html)
+Chapter E1 · lesson 3 of 4 · runs a skill · 282 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/E1.2.html)
 
 **① Open**
 
-Still inside chapter D1. Last one was The sensor estate — EDR, DLP, CSPM and CNAPP against an agent.
+Still inside chapter E1. Last one was The sensor estate — EDR, DLP, CSPM and CNAPP against an agent.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4853,7 +4855,7 @@ Here is what that costs you.
 
 A detection that worked last month is silently degraded, because the model, the prompt or the tool list changed and none of it was a code change.
 
-Same company, same four agents, new way of failing. Six surfaces change what your agent does and only one of them is in this repository. drift() reports which moved and, in its own column, which have no approver — the model version on the vendor's schedule, the retrieval corpus anyone can add a template to, and the MCP tool descriptions A1.9 says can be rewritten after you approved them.
+Same company, same four agents, new way of failing. Six surfaces change what your agent does and only one of them is in this repository. drift() reports which moved and, in its own column, which have no approver — the model version on the vendor's schedule, the retrieval corpus anyone can add a template to, and the MCP tool descriptions B1.9 says can be rewritten after you approved them.
 
 **③ What we do about it**
 
@@ -4879,17 +4881,17 @@ Time between a behaviour change and its detection — and the share of controls 
 
 Compute the drift rate for one production agent from three months of telemetry, and set its control freshness window from that number rather than from the audit calendar.
 
-Next up: D1.3, Bonus — finding the agents, and keeping what they emit.
+Next up: E1.3, Bonus — finding the agents, and keeping what they emit.
 
 ---
 
-### D1.3 · Bonus — finding the agents, and keeping what they emit
+### E1.3 · Bonus — finding the agents, and keeping what they emit
 
-Chapter D1 · lesson 4 of 4 · runs a skill · 433 words, about 3.1 min spoken · [page](https://cybercommons.ai/lessons/D1.3.html)
+Chapter E1 · lesson 4 of 4 · runs a skill · 433 words, about 3.1 min spoken · [page](https://cybercommons.ai/lessons/E1.3.html)
 
 **① Open**
 
-Still inside chapter D1. Last one was Drift monitoring — behaviour that changes without a code change.
+Still inside chapter E1. Last one was Drift monitoring — behaviour that changes without a code change.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4905,7 +4907,7 @@ Here is what that costs you.
 
 An agent nobody registered acts under a person's credential, and conventional analytics read it as that person behaving oddly.
 
-Same company, same four agents, new way of failing. retention plan() decides per field rather than per record, because a record-level rule is decided by its most sensitive field: the whole run gets the prompt's retention and the investigation loses the chain. Here prompt text is seven days and chain, trace id and motive origin are a year, which is the set D3.4 needs and the smallest one.
+Same company, same four agents, new way of failing. retention plan() decides per field rather than per record, because a record-level rule is decided by its most sensitive field: the whole run gets the prompt's retention and the investigation loses the chain. Here prompt text is seven days and chain, trace id and motive origin are a year, which is the set E3.4 needs and the smallest one.
 
 **③ What we do about it**
 
@@ -4931,25 +4933,25 @@ Unregistered actors surfaced, and the threshold chosen by expected cost — a fl
 
 Run the scoring against a week of your own authentication logs and count the actors it flags that are not in your registry. Then check the retention period on whatever traces you keep for them: if it matches your firewall logs, one of those two numbers was chosen without anyone looking at what the traces contain.
 
-That closes chapter D1. You can measure the discover interval instead of assuming it: four sensor classes scored against what an agent actually does, drift caught without a code change, and — as a bonus — the agents nobody registered found on behaviour, with their traces kept per field.
+That closes chapter E1. You can measure the discover interval instead of assuming it: four sensor classes scored against what an agent actually does, drift caught without a code change, and — as a bonus — the agents nobody registered found on behaviour, with their traces kept per field.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
 And here is what it still cannot do. Four of the nine ordinary agent actions are seen by nothing you own, and the source that would see them lands nowhere. Everything here is a finding in a notebook; the detect interval is exactly where it was.
 
-Chapter D2 builds the place it lands and the rules that read it: the lake, tiered by the queries the SOC runs, and detections mapped to ATT and CK and ATLAS.
+Chapter E2 builds the place it lands and the rules that read it: the lake, tiered by the queries the SOC runs, and detections mapped to ATT and CK and ATLAS.
 
-Next up: D2.1, The detection data lake — where agent telemetry lands.
+Next up: E2.1, The detection data lake — where agent telemetry lands.
 
 ---
 
-### D2.1 · The detection data lake — where agent telemetry lands
+### E2.1 · The detection data lake — where agent telemetry lands
 
-Chapter D2 · lesson 1 of 6 · runs a skill · 335 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/D2.1.html)
+Chapter E2 · lesson 1 of 6 · runs a skill · 335 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/E2.1.html)
 
 **① Open**
 
-Chapter D1 left us here. Four of the nine ordinary agent actions are seen by nothing you own, and the source that would see them lands nowhere. That is what this chapter picks up.
+Chapter E1 left us here. Four of the nine ordinary agent actions are seen by nothing you own, and the source that would see them lands nowhere. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -4991,17 +4993,17 @@ And here is the number that tells you it worked.
 
 List the five queries your SOC actually ran last month, then tier your sources from them. Any source that appears in no query is the finding — you are paying to store something nobody asks.
 
-Next up: D2.2, Detections whose subject is the agent — mapped to ATT and CK and ATLAS.
+Next up: E2.2, Detections whose subject is the agent — mapped to ATT and CK and ATLAS.
 
 ---
 
-### D2.2 · Detections whose subject is the agent — mapped to ATT&CK and ATLAS
+### E2.2 · Detections whose subject is the agent — mapped to ATT&CK and ATLAS
 
-Chapter D2 · lesson 2 of 6 · runs a skill · 316 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/D2.2.html)
+Chapter E2 · lesson 2 of 6 · runs a skill · 316 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/E2.2.html)
 
 **① Open**
 
-Still inside chapter D2. Last one was The detection data lake — where agent telemetry lands.
+Still inside chapter E2. Last one was The detection data lake — where agent telemetry lands.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5017,7 +5019,7 @@ Here is what that costs you.
 
 Classic baselines call two countries in an hour an incident and 300 file reads a minute an incident; for an agent both are ordinary.
 
-Same company, same four agents, new way of failing. Four detections whose subject is the agent, each mapped to ATT and CK and ATLAS. They are about relationships rather than volumes: a scope that widened between hops (A2.3 says chains narrow), a tool pair never seen — lookup vendor doc then issue refund is the Northwind notice working — an action with no human in its chain, and an approval granted faster than the content could be read.
+Same company, same four agents, new way of failing. Four detections whose subject is the agent, each mapped to ATT and CK and ATLAS. They are about relationships rather than volumes: a scope that widened between hops (B2.3 says chains narrow), a tool pair never seen — lookup vendor doc then issue refund is the Northwind notice working — an action with no human in its chain, and an approval granted faster than the content could be read.
 
 **③ What we do about it**
 
@@ -5043,17 +5045,17 @@ Rules carrying a technique id, and the honest gap: indirect prompt injection has
 
 Take one human-baseline rule in your SIEM and check how it behaves against a service account. If it fires nightly, it is already tuned off for that actor — which means you have no detection there at all.
 
-Next up: D2.3, Detections whose subject is the agent platform.
+Next up: E2.3, Detections whose subject is the agent platform.
 
 ---
 
-### D2.3 · Detections whose subject is the agent platform
+### E2.3 · Detections whose subject is the agent platform
 
-Chapter D2 · lesson 3 of 6 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D2.3.html)
+Chapter E2 · lesson 3 of 6 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/E2.3.html)
 
 **① Open**
 
-Still inside chapter D2. Last one was Detections whose subject is the agent — mapped to ATT and CK and ATLAS.
+Still inside chapter E2. Last one was Detections whose subject is the agent — mapped to ATT and CK and ATLAS.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5069,7 +5071,7 @@ Here is what that costs you.
 
 Platform-layer compromise is invisible to workload-layer detection — not detected late, not detected at all.
 
-Same company, same four agents, new way of failing. When the harness is what is being attacked, a workload-layer detection is looking in the wrong place. Four named primitives rather than an anomaly score, and the sharpest is exemption reconciliation(): A3.9's Exemption carries an expiry, nothing reconciles the register against the running configuration, so the expiry is a date that passes and the control stays off.
+Same company, same four agents, new way of failing. When the harness is what is being attacked, a workload-layer detection is looking in the wrong place. Four named primitives rather than an anomaly score, and the sharpest is exemption reconciliation(): B3.9's Exemption carries an expiry, nothing reconciles the register against the running configuration, so the expiry is a date that passes and the control stays off.
 
 **③ What we do about it**
 
@@ -5095,17 +5097,17 @@ Platform events caught by named primitives versus by a generic anomaly score, wh
 
 Pick the orphaned-process rule and write it for your own platform. It is one query, it has a low false-positive rate, and on most agent platforms nobody has ever run it.
 
-Next up: D2.4, Agent-assisted detection engineering — written by a loop, shipped by a human.
+Next up: E2.4, Agent-assisted detection engineering — written by a loop, shipped by a human.
 
 ---
 
-### D2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human
+### E2.4 · Agent-assisted detection engineering — written by a loop, shipped by a human
 
-Chapter D2 · lesson 4 of 6 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D2.4.html)
+Chapter E2 · lesson 4 of 6 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E2.4.html)
 
 **① Open**
 
-Still inside chapter D2. Last one was Detections whose subject is the agent platform.
+Still inside chapter E2. Last one was Detections whose subject is the agent platform.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5121,7 +5123,7 @@ Here is what that costs you.
 
 An agent writes candidate rules faster than anyone can review them, and a rule at 5 percent precision is not 5 percent useful — it is negative.
 
-Same company, same four agents, new way of failing. review() calls C1.6's deployable() rather than restating it. Your sequence rule ships at 1,000 events a day and needs eleven analysts at 100,000 — same rule, same precision. And a candidate with no technique mapped is refused, because a rule nobody mapped is a rule nobody can reason about for coverage.
+Same company, same four agents, new way of failing. review() calls D1.6's deployable() rather than restating it. Your sequence rule ships at 1,000 events a day and needs eleven analysts at 100,000 — same rule, same precision. And a candidate with no technique mapped is refused, because a rule nobody mapped is a rule nobody can reason about for coverage.
 
 **③ What we do about it**
 
@@ -5147,17 +5149,17 @@ Firing volume per true positive. A rule at 301 alerts to 1 is rejected with its 
 
 Set your own alerts-per-true-positive budget and apply it to the rules already in production. Most SOCs discover that several long-standing rules would not pass the bar they would set today.
 
-Next up: D2.5, Rules generated from an incident — and the benign corpus that decides them.
+Next up: E2.5, Rules generated from an incident — and the benign corpus that decides them.
 
 ---
 
-### D2.5 · Rules generated from an incident — and the benign corpus that decides them
+### E2.5 · Rules generated from an incident — and the benign corpus that decides them
 
-Chapter D2 · lesson 5 of 6 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D2.5.html)
+Chapter E2 · lesson 5 of 6 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E2.5.html)
 
 **① Open**
 
-Still inside chapter D2. Last one was Agent-assisted detection engineering — written by a loop, shipped by a human.
+Still inside chapter E2. Last one was Agent-assisted detection engineering — written by a loop, shipped by a human.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5199,17 +5201,17 @@ False-positive rate on benign traffic: 21 percent buries the queue, 0 percent wi
 
 Add a benign run that the shipped rule fires on. If you cannot construct one, your corpus is too easy.
 
-Next up: D2.6, Honeypots, canaries and deception — the detector with no threshold.
+Next up: E2.6, Honeypots, canaries and deception — the detector with no threshold.
 
 ---
 
-### D2.6 · Honeypots, canaries and deception — the detector with no threshold
+### E2.6 · Honeypots, canaries and deception — the detector with no threshold
 
-Chapter D2 · lesson 6 of 6 · runs a skill · 344 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/D2.6.html)
+Chapter E2 · lesson 6 of 6 · runs a skill · 344 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/E2.6.html)
 
 **① Open**
 
-Still inside chapter D2. Last one was Rules generated from an incident — and the benign corpus that decides them.
+Still inside chapter E2. Last one was Rules generated from an incident — and the benign corpus that decides them.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5251,25 +5253,25 @@ A false-positive rate of zero by construction — and the number of canaries leg
 
 Place one canary credential in the environment your agents run in, wired to a real alert, and leave it. The interesting outcome is not the alert; it is discovering, six weeks later, which systems can even see it.
 
-That closes chapter D2. You can shorten detect: a lake tiered by the queries that read it rather than by whoever holds the invoice, detections for both subjects — the agent and the platform running it — each carrying a MITRE technique, rules scored against traffic that is not the incident, and the one detector that needs no threshold at all.
+That closes chapter E2. You can shorten detect: a lake tiered by the queries that read it rather than by whoever holds the invoice, detections for both subjects — the agent and the platform running it — each carrying a MITRE technique, rules scored against traffic that is not the incident, and the one detector that needs no threshold at all.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
 And here is what it still cannot do. A detection fires. It does not investigate.
 
-Chapter D3 shortens understand, and spends part of it deliberately: admission rules before anything runs, scope along the delegation graph, then intel and the hunt for what no rule covers.
+Chapter E3 shortens understand, and spends part of it deliberately: admission rules before anything runs, scope along the delegation graph, then intel and the hunt for what no rule covers.
 
-Next up: D3.1, From alert queue to loop operator.
+Next up: E3.1, From alert queue to loop operator.
 
 ---
 
-### D3.1 · From alert queue to loop operator
+### E3.1 · From alert queue to loop operator
 
-Chapter D3 · lesson 1 of 10 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D3.1.html)
+Chapter E3 · lesson 1 of 10 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E3.1.html)
 
 **① Open**
 
-Chapter D2 left us here. A detection fires. That is what this chapter picks up.
+Chapter E2 left us here. A detection fires. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5285,7 +5287,7 @@ Here is what that costs you.
 
 Supervising a loop by re-reading everything it did is not supervision, and a loop that closes a true positive does so silently.
 
-Same company, same four agents, new way of failing. supervise() wraps C1.7's triage with the list of alerts that bypass ranking entirely. A canary read is not a scoring question — C1.8 built it precisely so that it needs no triage — and the sample below the line is what makes the closing rule testable rather than trusted.
+Same company, same four agents, new way of failing. supervise() wraps D1.7's triage with the list of alerts that bypass ranking entirely. A canary read is not a scoring question — D1.8 built it precisely so that it needs no triage — and the sample below the line is what makes the closing rule testable rather than trusted.
 
 **③ What we do about it**
 
@@ -5311,17 +5313,17 @@ Alerts escalated versus closed against ground truth, and the severity floor no a
 
 Ask your SOC one question: when an incident is confirmed, does anyone check whether an earlier alert about it was closed? If nobody does, you have no measurement of your false-negative rate — with or without an agent.
 
-Next up: D3.2, Admission rules — what the investigating agent may touch.
+Next up: E3.2, Admission rules — what the investigating agent may touch.
 
 ---
 
-### D3.2 · Admission rules — what the investigating agent may touch
+### E3.2 · Admission rules — what the investigating agent may touch
 
-Chapter D3 · lesson 2 of 10 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.2.html)
+Chapter E3 · lesson 2 of 10 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.2.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was From alert queue to loop operator.
+Still inside chapter E3. Last one was From alert queue to loop operator.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5363,17 +5365,17 @@ This one spends time on purpose. Measure refusals logged with their query — th
 
 Write the admission set for a data-exfiltration investigation. It is not the same set, and working out why is the exercise.
 
-Next up: D3.3, The context that makes agent triage work.
+Next up: E3.3, The context that makes agent triage work.
 
 ---
 
-### D3.3 · The context that makes agent triage work
+### E3.3 · The context that makes agent triage work
 
-Chapter D3 · lesson 3 of 10 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.3.html)
+Chapter E3 · lesson 3 of 10 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.3.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was Admission rules — what the investigating agent may touch.
+Still inside chapter E3. Last one was Admission rules — what the investigating agent may touch.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5389,7 +5391,7 @@ Here is what that costs you.
 
 An alert about an agent without scope, identity and delegation is not triageable, so analysts escalate everything or quietly close everything.
 
-Same company, same four agents, new way of failing. The context that makes agent triage work is the context your own tree already holds: sensors.matrix() for what is observable, LABELS.md for the known defects, D1.2's baseline for what normal looks like this week, and the prior decisions in the audit log. A triage agent given none of it underperforms your worst analyst.
+Same company, same four agents, new way of failing. The context that makes agent triage work is the context your own tree already holds: sensors.matrix() for what is observable, LABELS.md for the known defects, E1.2's baseline for what normal looks like this week, and the prior decisions in the audit log. A triage agent given none of it underperforms your worst analyst.
 
 **③ What we do about it**
 
@@ -5415,17 +5417,17 @@ Analyst decisions matching ground truth with and without context — the same al
 
 Check which of the six fields your agent telemetry carries today. Scopes-held is the one almost nobody logs, and it is the one that decides the alert.
 
-Next up: D3.4, When the actor is an agent — three instincts that misfire.
+Next up: E3.4, When the actor is an agent — three instincts that misfire.
 
 ---
 
-### D3.4 · When the actor is an agent — three instincts that misfire
+### E3.4 · When the actor is an agent — three instincts that misfire
 
-Chapter D3 · lesson 4 of 10 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D3.4.html)
+Chapter E3 · lesson 4 of 10 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E3.4.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was The context that makes agent triage work.
+Still inside chapter E3. Last one was The context that makes agent triage work.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5441,7 +5443,7 @@ Here is what that costs you.
 
 Three responder instincts that are right for people misfire on agents, and each one burns the clock.
 
-Same company, same four agents, new way of failing. Three instincts, each correct for a person and confidently wrong for an agent. Run attribute() on a row whose chain reads priya => spiffe://… and it answers all four questions; run it on service-account — the estate before A2.x — and it answers one, naming the other three as gaps rather than guessing them.
+Same company, same four agents, new way of failing. Three instincts, each correct for a person and confidently wrong for an agent. Run attribute() on a row whose chain reads priya => spiffe://… and it answers all four questions; run it on service-account — the estate before B2.x — and it answers one, naming the other three as gaps rather than guessing them.
 
 **③ What we do about it**
 
@@ -5467,17 +5469,17 @@ Time lost to each misfire, and whether the bearer token was still valid after th
 
 Write your agentic incident runbook's first three steps. If step one is "disable the user account", rewrite it — and check whether you can currently revoke a single agent identity at all.
 
-Next up: D3.5, Agent-assisted reconstruction — a timeline you can challenge.
+Next up: E3.5, Agent-assisted reconstruction — a timeline you can challenge.
 
 ---
 
-### D3.5 · Agent-assisted reconstruction — a timeline you can challenge
+### E3.5 · Agent-assisted reconstruction — a timeline you can challenge
 
-Chapter D3 · lesson 5 of 10 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D3.5.html)
+Chapter E3 · lesson 5 of 10 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/E3.5.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was When the actor is an agent — three instincts that misfire.
+Still inside chapter E3. Last one was When the actor is an agent — three instincts that misfire.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5493,7 +5495,7 @@ Here is what that costs you.
 
 A model correlates thousands of log lines in seconds and will produce a fluent narrative from logs that never supported one.
 
-Same company, same four agents, new way of failing. Reconstruction is pre-loaded or it is late. Everything the timeline needs already exists — G2.1's spans, G2.2's rows, A2.7's motive — and D1.3 decided how long each field survives. The timeline you can challenge is the one built from inputs rather than from the model's account of them.
+Same company, same four agents, new way of failing. Reconstruction is pre-loaded or it is late. Everything the timeline needs already exists — A2.1's spans, A2.2's rows, B2.7's motive — and E1.3 decided how long each field survives. The timeline you can challenge is the one built from inputs rather than from the model's account of them.
 
 **③ What we do about it**
 
@@ -5519,17 +5521,17 @@ Claims with a log line behind them, as a share of claims in the timeline. A fast
 
 Take a real incident timeline from your own history and ask what it would look like if an agent had been operating on the user's credential. If you cannot tell from the logs, your reconstructions already carry this risk.
 
-Next up: D3.6, Plan, then replan — an investigation that changes its mind.
+Next up: E3.6, Plan, then replan — an investigation that changes its mind.
 
 ---
 
-### D3.6 · Plan, then replan — an investigation that changes its mind
+### E3.6 · Plan, then replan — an investigation that changes its mind
 
-Chapter D3 · lesson 6 of 10 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.6.html)
+Chapter E3 · lesson 6 of 10 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.6.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was Agent-assisted reconstruction — a timeline you can challenge.
+Still inside chapter E3. Last one was Agent-assisted reconstruction — a timeline you can challenge.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5571,17 +5573,17 @@ Branches considered and dropped, visible to a reviewer. A trace with one branch 
 
 Add evidence that refutes the final hypothesis too. An investigation that cannot end undecided is not investigating.
 
-Next up: D3.7, Scoping an agentic incident — following the delegation graph.
+Next up: E3.7, Scoping an agentic incident — following the delegation graph.
 
 ---
 
-### D3.7 · Scoping an agentic incident — following the delegation graph
+### E3.7 · Scoping an agentic incident — following the delegation graph
 
-Chapter D3 · lesson 7 of 10 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D3.7.html)
+Chapter E3 · lesson 7 of 10 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.7.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was Plan, then replan — an investigation that changes its mind.
+Still inside chapter E3. Last one was Plan, then replan — an investigation that changes its mind.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5597,7 +5599,7 @@ Here is what that costs you.
 
 The agent that touched the resource is usually the last actor in a chain, and the earlier ones had more authority, not less.
 
-Same company, same four agents, new way of failing. delegation graph() builds the edges out of the act chains A2.3 made nest, and blast scope() walks forward from one principal. Scoping to the acting agent alone returns the last hop; the run that asked for it is one edge back.
+Same company, same four agents, new way of failing. delegation graph() builds the edges out of the act chains B2.3 made nest, and blast scope() walks forward from one principal. Scoping to the acting agent alone returns the last hop; the run that asked for it is one edge back.
 
 **③ What we do about it**
 
@@ -5623,17 +5625,17 @@ Resources found by walking the graph versus by scoping the acting agent alone. T
 
 For your last incident involving a service account, recompute the scope by walking what else that account could reach. The number is almost always larger than what was written in the report.
 
-Next up: D3.8, Fleet-level correlation — seeing a swarm.
+Next up: E3.8, Fleet-level correlation — seeing a swarm.
 
 ---
 
-### D3.8 · Fleet-level correlation — seeing a swarm
+### E3.8 · Fleet-level correlation — seeing a swarm
 
-Chapter D3 · lesson 8 of 10 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.8.html)
+Chapter E3 · lesson 8 of 10 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.8.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was Scoping an agentic incident — following the delegation graph.
+Still inside chapter E3. Last one was Scoping an agentic incident — following the delegation graph.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5649,7 +5651,7 @@ Here is what that costs you.
 
 Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction, not by tuning.
 
-Same company, same four agents, new way of failing. Imports C1.5's correlate(). The run artefacts table A3.8 added is what it reads, and the finding is the one no per-run check can produce: every run passed, and one of them wrote the cache entry three others read.
+Same company, same four agents, new way of failing. Imports D1.5's correlate(). The run artefacts table B3.8 added is what it reads, and the finding is the one no per-run check can produce: every run passed, and one of them wrote the cache entry three others read.
 
 **③ What we do about it**
 
@@ -5675,17 +5677,17 @@ Coordinated runs detected across the population versus zero detected within any 
 
 Build the shared-artefact graph for one day of your own fleet — writer identity on one side, object on the other. You do not need a model for it, and the answer arrives in an afternoon.
 
-Next up: D3.9, Third-party threat intelligence, and the tactics it names.
+Next up: E3.9, Third-party threat intelligence, and the tactics it names.
 
 ---
 
-### D3.9 · Third-party threat intelligence, and the tactics it names
+### E3.9 · Third-party threat intelligence, and the tactics it names
 
-Chapter D3 · lesson 9 of 10 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/D3.9.html)
+Chapter E3 · lesson 9 of 10 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.9.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was Fleet-level correlation — seeing a swarm.
+Still inside chapter E3. Last one was Fleet-level correlation — seeing a swarm.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5701,7 +5703,7 @@ Here is what that costs you.
 
 Intelligence that stays a narrative about adversary trends moves nothing, however well written.
 
-Same company, same four agents, new way of failing. intake() splits incoming intelligence by whether anything backs it. Same rule as B2.12, at the other end of the pipe: an unsourced claim cannot carry a severity and cannot become a detection, because a rule whose provenance is a model's fluency is a rule nobody can defend.
+Same company, same four agents, new way of failing. intake() splits incoming intelligence by whether anything backs it. Same rule as C2.12, at the other end of the pipe: an unsourced claim cannot carry a severity and cannot become a detection, because a rule whose provenance is a model's fluency is a rule nobody can defend.
 
 **③ What we do about it**
 
@@ -5727,17 +5729,17 @@ Detections produced per intelligence report. It is the only measure of an intel 
 
 Compute your own three numbers for last quarter: indicators received, rules deployed, alerts actioned. The ratio between the first and third is the honest value of the programme.
 
-Next up: D3.10, Hunting in agent telemetry.
+Next up: E3.10, Hunting in agent telemetry.
 
 ---
 
-### D3.10 · Hunting in agent telemetry
+### E3.10 · Hunting in agent telemetry
 
-Chapter D3 · lesson 10 of 10 · runs a skill · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/D3.10.html)
+Chapter E3 · lesson 10 of 10 · runs a skill · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/E3.10.html)
 
 **① Open**
 
-Still inside chapter D3. Last one was Third-party threat intelligence, and the tactics it names.
+Still inside chapter E3. Last one was Third-party threat intelligence, and the tactics it names.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5779,25 +5781,25 @@ Precision of the hunt: a hypothesis matching fourteen runs to find two, because 
 
 Write a fourth hypothesis for CyberTravels and score it. If its precision is near the base rate, you have described normal work.
 
-That closes chapter D3. You can end the understand interval honestly: the investigator bounded before it starts, an alert carrying the fields agent triage needs, a trace where the first theory was abandoned in the open, scope walked along the delegation graph, coordination that exists only in the population, third-party intel that had to become a rule to count, and a hunt scored on precision.
+That closes chapter E3. You can end the understand interval honestly: the investigator bounded before it starts, an alert carrying the fields agent triage needs, a trace where the first theory was abandoned in the open, scope walked along the delegation graph, coordination that exists only in the population, third-party intel that had to become a rule to count, and a hunt scored on precision.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
 And here is what it still cannot do. You know what happened and you have not stopped it. Every lever you might pull is still chosen in the moment by whoever is awake, so the contain interval is whatever that person's night is like.
 
-Chapter D4 makes contain a number you set in advance: the remediation policy that decides what may happen without asking, and the three runbook tiers that policy produces.
+Chapter E4 makes contain a number you set in advance: the remediation policy that decides what may happen without asking, and the three runbook tiers that policy produces.
 
-Next up: D4.1, Remediation policy — what may be done without asking.
+Next up: E4.1, Remediation policy — what may be done without asking.
 
 ---
 
-### D4.1 · Remediation policy — what may be done without asking
+### E4.1 · Remediation policy — what may be done without asking
 
-Chapter D4 · lesson 1 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.1.html)
+Chapter E4 · lesson 1 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E4.1.html)
 
 **① Open**
 
-Chapter D3 left us here. You know what happened and you have not stopped it. That is what this chapter picks up.
+Chapter E3 left us here. You know what happened and you have not stopped it. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5839,17 +5841,17 @@ Actions with a tier derived from policy rather than chosen by an author — and 
 
 Add an action your team performs during an incident. If you cannot answer 'reversible without a human', that is the finding.
 
-Next up: D4.2, Runbook tiers — fully automated, human in the loop, manual.
+Next up: E4.2, Runbook tiers — fully automated, human in the loop, manual.
 
 ---
 
-### D4.2 · Runbook tiers — fully automated, human in the loop, manual
+### E4.2 · Runbook tiers — fully automated, human in the loop, manual
 
-Chapter D4 · lesson 2 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.2.html)
+Chapter E4 · lesson 2 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E4.2.html)
 
 **① Open**
 
-Still inside chapter D4. Last one was Remediation policy — what may be done without asking.
+Still inside chapter E4. Last one was Remediation policy — what may be done without asking.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5891,17 +5893,17 @@ And here is the number that tells you it worked.
 
 Put your own detection's false-positive rate in and see whether the tier you already ship still looks right.
 
-Next up: D4.3, Containment at machine speed.
+Next up: E4.3, Containment at machine speed.
 
 ---
 
-### D4.3 · Containment at machine speed
+### E4.3 · Containment at machine speed
 
-Chapter D4 · lesson 3 of 5 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.3.html)
+Chapter E4 · lesson 3 of 5 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E4.3.html)
 
 **① Open**
 
-Still inside chapter D4. Last one was Runbook tiers — fully automated, human in the loop, manual.
+Still inside chapter E4. Last one was Runbook tiers — fully automated, human in the loop, manual.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5943,17 +5945,17 @@ Actions taken during containment: roughly 2,400 with a human in the path, about 
 
 Time your own containment path end to end, step by step. The revocation is almost never the slow part — queue depth and approval are, and both are policy choices rather than technical limits.
 
-Next up: D4.4, Stop authority — who halts a fleet, and how long it takes.
+Next up: E4.4, Stop authority — who halts a fleet, and how long it takes.
 
 ---
 
-### D4.4 · Stop authority — who halts a fleet, and how long it takes
+### E4.4 · Stop authority — who halts a fleet, and how long it takes
 
-Chapter D4 · lesson 4 of 5 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D4.4.html)
+Chapter E4 · lesson 4 of 5 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E4.4.html)
 
 **① Open**
 
-Still inside chapter D4. Last one was Containment at machine speed.
+Still inside chapter E4. Last one was Containment at machine speed.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -5969,7 +5971,7 @@ Here is what that costs you.
 
 Stop authority is the control everyone assumes exists and almost nobody has timed.
 
-Same company, same four agents, new way of failing. Five checks and only the last has a number in it. measured time to stop has to come from a real attempt, because the first time a stop authority is exercised is the worst possible moment to discover how long it takes — and C1.9's time to stop says twenty thousand revocations is not instant.
+Same company, same four agents, new way of failing. Five checks and only the last has a number in it. measured time to stop has to come from a real attempt, because the first time a stop authority is exercised is the worst possible moment to discover how long it takes — and D1.9's time to stop says twenty thousand revocations is not instant.
 
 **③ What we do about it**
 
@@ -5993,19 +5995,19 @@ Measured time-to-stop, end to end, from a real exercise. An untimed stop authori
 
 **⑤ Hand it over**
 
-Run the game day. The deliverable is the number, and the number is what goes in the evidence pack for E1.7 and the board slide for E3.5.
+Run the game day. The deliverable is the number, and the number is what goes in the evidence pack for F1.7 and the board slide for F3.5.
 
-Next up: D4.5, The fleet kill switch.
+Next up: E4.5, The fleet kill switch.
 
 ---
 
-### D4.5 · The fleet kill switch
+### E4.5 · The fleet kill switch
 
-Chapter D4 · lesson 5 of 5 · runs a skill · 397 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/D4.5.html)
+Chapter E4 · lesson 5 of 5 · runs a skill · 397 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/E4.5.html)
 
 **① Open**
 
-Still inside chapter D4. Last one was Stop authority — who halts a fleet, and how long it takes.
+Still inside chapter E4. Last one was Stop authority — who halts a fleet, and how long it takes.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6021,7 +6023,7 @@ Here is what that costs you.
 
 Terminating agents while their credentials stay valid leaves the persistence exactly where it was.
 
-Same company, same four agents, new way of failing. Imports C1.9's coverage() rather than recomputing it, so the red team and the SOC cannot disagree about the number mid-incident. What this adds is the ordering: snapshot before terminate, and revoke in the same action. A plan that terminates without revoking leaves the tokens valid, and the first version of this check called such a plan correct — the comment in the file says why.
+Same company, same four agents, new way of failing. Imports D1.9's coverage() rather than recomputing it, so the red team and the SOC cannot disagree about the number mid-incident. What this adds is the ordering: snapshot before terminate, and revoke in the same action. A plan that terminates without revoking leaves the tokens valid, and the first version of this check called such a plan correct — the comment in the file says why.
 
 **③ What we do about it**
 
@@ -6047,25 +6049,25 @@ What the credentials can still do after the processes stop. That is the number t
 
 Ask who in your organisation is allowed to stop every agent at once, without asking anyone. If the answer is a committee, you do not have a kill switch — you have an escalation path, and they take different amounts of time.
 
-That closes chapter D4. You can fix the contain interval before the incident — actions classified on reversibility and radius, tiers derived from that rather than from their author, containment timed against a measured breakout, and a fleet stop that revokes as well as terminates.
+That closes chapter E4. You can fix the contain interval before the incident — actions classified on reversibility and radius, tiers derived from that rather than from their author, containment timed against a measured breakout, and a fleet stop that revokes as well as terminates.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
 And here is what it still cannot do. The incident is contained and nothing has been learned. No control has been named, no measurement re-read, and the policy that permitted it is exactly as it was — so the next occurrence starts every interval again from the top.
 
-Chapter D5 is the last interval, recover: the root cause record, the layer the fix belongs in, the re-measurement that decides whether it worked, and the policy change with the incident attached.
+Chapter E5 is the last interval, recover: the root cause record, the layer the fix belongs in, the re-measurement that decides whether it worked, and the policy change with the incident attached.
 
-Next up: D5.1, Replay and forensics — reproducing a run you can defend.
+Next up: E5.1, Replay and forensics — reproducing a run you can defend.
 
 ---
 
-### D5.1 · Replay and forensics — reproducing a run you can defend
+### E5.1 · Replay and forensics — reproducing a run you can defend
 
-Chapter D5 · lesson 1 of 6 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D5.1.html)
+Chapter E5 · lesson 1 of 6 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E5.1.html)
 
 **① Open**
 
-Chapter D4 left us here. The incident is contained and nothing has been learned. That is what this chapter picks up.
+Chapter E4 left us here. The incident is contained and nothing has been learned. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6081,7 +6083,7 @@ Here is what that costs you.
 
 Miss one of the four runtime constants and you can describe what happened but never demonstrate it.
 
-Same company, same four agents, new way of failing. Imports C1.10's reconstruct() and adds the evidentiary question the red team did not have to ask. Two things are explicitly not evidence: a rerun of the agent, because non-determinism makes it a different run, and the agent's own account, because that is a claim by the subject of the investigation.
+Same company, same four agents, new way of failing. Imports D1.10's reconstruct() and adds the evidentiary question the red team did not have to ask. Two things are explicitly not evidence: a rerun of the agent, because non-determinism makes it a different run, and the agent's own account, because that is a claim by the subject of the investigation.
 
 **③ What we do about it**
 
@@ -6107,17 +6109,17 @@ Runs that reproduce identically. The model version is the field most often missi
 
 Add model version and seed to your agent's run records this week. Both are one field each, and together they are the difference between forensics and storytelling.
 
-Next up: D5.2, The root cause record — naming a control, not a person.
+Next up: E5.2, The root cause record — naming a control, not a person.
 
 ---
 
-### D5.2 · The root cause record — naming a control, not a person
+### E5.2 · The root cause record — naming a control, not a person
 
-Chapter D5 · lesson 2 of 6 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D5.2.html)
+Chapter E5 · lesson 2 of 6 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E5.2.html)
 
 **① Open**
 
-Still inside chapter D5. Last one was Replay and forensics — reproducing a run you can defend.
+Still inside chapter E5. Last one was Replay and forensics — reproducing a run you can defend.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6159,17 +6161,17 @@ A mechanical test: does the root cause name a control? "The engineer missed the 
 
 Take your last postmortem's root cause and run the test on it. If it names a person or an intention, rewrite it as a control.
 
-Next up: D5.3, Post-incident change surface — picking the layer the fix belongs in.
+Next up: E5.3, Post-incident change surface — picking the layer the fix belongs in.
 
 ---
 
-### D5.3 · Post-incident change surface — picking the layer the fix belongs in
+### E5.3 · Post-incident change surface — picking the layer the fix belongs in
 
-Chapter D5 · lesson 3 of 6 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D5.3.html)
+Chapter E5 · lesson 3 of 6 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/E5.3.html)
 
 **① Open**
 
-Still inside chapter D5. Last one was The root cause record — naming a control, not a person.
+Still inside chapter E5. Last one was The root cause record — naming a control, not a person.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6211,17 +6213,17 @@ Post-incident changes that went through a process leaving a record — the ones 
 
 Take your last incident's action list and mark each item's landing surface. Anything landing in a console has no record and no verification path — move those into git before the next one.
 
-Next up: D5.4, Validating the fix — re-measuring the indicators the incident moved.
+Next up: E5.4, Validating the fix — re-measuring the indicators the incident moved.
 
 ---
 
-### D5.4 · Validating the fix — re-measuring the indicators the incident moved
+### E5.4 · Validating the fix — re-measuring the indicators the incident moved
 
-Chapter D5 · lesson 4 of 6 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D5.4.html)
+Chapter E5 · lesson 4 of 6 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E5.4.html)
 
 **① Open**
 
-Still inside chapter D5. Last one was Post-incident change surface — picking the layer the fix belongs in.
+Still inside chapter E5. Last one was Post-incident change surface — picking the layer the fix belongs in.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6263,17 +6265,17 @@ Indicators restored to target versus merely improved. Detection went from 194 mi
 
 Add a sixth indicator that regressed — better than target before, worse after. The report has nowhere to put it yet.
 
-Next up: D5.5, Proposing the policy change — the diff, and what it does not fix.
+Next up: E5.5, Proposing the policy change — the diff, and what it does not fix.
 
 ---
 
-### D5.5 · Proposing the policy change — the diff, and what it does not fix
+### E5.5 · Proposing the policy change — the diff, and what it does not fix
 
-Chapter D5 · lesson 5 of 6 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D5.5.html)
+Chapter E5 · lesson 5 of 6 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E5.5.html)
 
 **① Open**
 
-Still inside chapter D5. Last one was Validating the fix — re-measuring the indicators the incident moved.
+Still inside chapter E5. Last one was Validating the fix — re-measuring the indicators the incident moved.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6289,7 +6291,7 @@ Here is what that costs you.
 
 Most incidents change what is deployed and leave what is allowed untouched, so the next system reproduces the conditions.
 
-Same company, same four agents, new way of failing. propose() will not construct without does not fix. A proposal presented as closing the whole class is one nobody reads carefully, and this one says plainly that it leaves the direct API path C1.9 measured. The diff is the deliverable; the postmortem is the reasoning behind it and changes nothing on its own.
+Same company, same four agents, new way of failing. propose() will not construct without does not fix. A proposal presented as closing the whole class is one nobody reads carefully, and this one says plainly that it leaves the direct API path D1.9 measured. The diff is the deliverable; the postmortem is the reasoning behind it and changes nothing on its own.
 
 **③ What we do about it**
 
@@ -6315,17 +6317,17 @@ Clauses changed, and the indicators no policy change can fix — which are engin
 
 Write the fourth clause — the one your organisation would refuse. A proposal whose every line is easy did not come from a real incident.
 
-Next up: D5.6, The regulatory clock — awareness, not confirmation.
+Next up: E5.6, The regulatory clock — awareness, not confirmation.
 
 ---
 
-### D5.6 · The regulatory clock — awareness, not confirmation
+### E5.6 · The regulatory clock — awareness, not confirmation
 
-Chapter D5 · lesson 6 of 6 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/D5.6.html)
+Chapter E5 · lesson 6 of 6 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/E5.6.html)
 
 **① Open**
 
-Still inside chapter D5. Last one was Proposing the policy change — the diff, and what it does not fix.
+Still inside chapter E5. Last one was Proposing the policy change — the diff, and what it does not fix.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6341,7 +6343,7 @@ Here is what that costs you.
 
 The clock starts at awareness, not at confirmation, and it does not pause while you work out who acted.
 
-Same company, same four agents, new way of failing. clock check() runs from awareness, not from confirmation. Personal data and a significant incident put you on a 24-hour NIS2 early warning and a 72-hour GDPR clock simultaneously, and "we were still confirming" is not a defence — it is a description of the period the clock was running. This is the hour-one handoff into Track E2.
+Same company, same four agents, new way of failing. clock check() runs from awareness, not from confirmation. Personal data and a significant incident put you on a 24-hour NIS2 early warning and a 72-hour GDPR clock simultaneously, and "we were still confirming" is not a defence — it is a description of the period the clock was running. This is the hour-one handoff into Track F2.
 
 **③ What we do about it**
 
@@ -6367,32 +6369,32 @@ Hours from awareness to a disclosure decision, against the deadline. Containing 
 
 Build your shortest-clock register: every obligation, its deadline, and who notifies. Then check whether your runbook starts the clock at awareness or at confirmation.
 
-That closes chapter D5. You can close an incident properly: a run you can reproduce, a root cause naming a control rather than a person, the fix at the right layer, the indicators re-read to see which actually came back, and the policy change as a reviewable diff.
+That closes chapter E5. You can close an incident properly: a run you can reproduce, a root cause naming a control rather than a person, the fix at the right layer, the indicators re-read to see which actually came back, and the policy change as a reviewable diff.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
 And here is what it still cannot do. All five intervals are now yours to measure — and one is not. The regulatory clock started at awareness, and nothing here tells you which controls a supervisor will ask for, on what date, or what evidence they will accept.
 
-Function E is governance, and it is told in the unit D5.4 already used: the key control indicator. E1.1 defines it, and the rest of the function builds it, evidences it and runs it as a programme.
+Function E is governance, and it is told in the unit E5.4 already used: the key control indicator. F1.1 defines it, and the rest of the function builds it, evidences it and runs it as a programme.
 
-Next up: E1.0, Start here — what AI governance means.
+Next up: F1.0, Start here — what AI governance means.
 
 ---
 
 
-## Function E — AI Governance for Agentic Systems
+## Function F — AI Governance for Agentic Systems
 
 *[Who is watching: GRC analysts, risk and compliance managers, control owners, privacy engineers, BISOs and the CISO office — anyone who has to answer for the estate rather than build it.]*
 
 *[The pitch for the whole function, if you need it in one breath: Somebody signed off on the platform when it was a chatbot. It now moves money, ships code and reads contracts, and nothing in the approval process noticed.]*
 
-*[Record E1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
+*[Record F1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
 
 ---
 
-### E1.0 · Start here — what AI governance means
+### F1.0 · Start here — what AI governance means
 
-Chapter E1 · lesson 1 of 14 · runs a skill · 386 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/E1.0.html)
+Chapter F1 · lesson 1 of 14 · runs a skill · 386 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/F1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -6404,9 +6406,9 @@ Here is what I actually mean by it: being able to show, later, and to somebody w
 
 **① Open**
 
-That is Function D done. Function E asks a different question of the same company: AI Governance for Agentic Systems.
+That is Function E done. Function F asks a different question of the same company: AI Governance for Agentic Systems.
 
-Chapter D5 left us here. All five intervals are now yours to measure — and one is not. That is what this chapter picks up.
+Chapter E5 left us here. All five intervals are now yours to measure — and one is not. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6448,17 +6450,17 @@ Properties with a named owner. Security owns one of seven outright, which is why
 
 Find the approval record for one agent you run and compare it to what that agent does today. The gap is the programme, and the reason nobody noticed it is what chapter 10 is for.
 
-Next up: E1.1, From framework control to key control indicator.
+Next up: F1.1, From framework control to key control indicator.
 
 ---
 
-### E1.1 · From framework control to key control indicator
+### F1.1 · From framework control to key control indicator
 
-Chapter E1 · lesson 2 of 14 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.1.html)
+Chapter F1 · lesson 2 of 14 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.1.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Start here — what AI governance means.
+Still inside chapter F1. Last one was Start here — what AI governance means.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6500,17 +6502,17 @@ The unit itself: a key control indicator. Everything else in this function produ
 
 Pick your three most important AI controls and set a freshness window for each from the observed change rate of what it tests. Then recompute your posture.
 
-Next up: E1.2, Building the AI and agent inventory.
+Next up: F1.2, Building the AI and agent inventory.
 
 ---
 
-### E1.2 · Building the AI and agent inventory
+### F1.2 · Building the AI and agent inventory
 
-Chapter E1 · lesson 3 of 14 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.2.html)
+Chapter F1 · lesson 3 of 14 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F1.2.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was From framework control to key control indicator.
+Still inside chapter F1. Last one was From framework control to key control indicator.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6526,7 +6528,7 @@ Here is what that costs you.
 
 You cannot govern, tier, test or revoke what you cannot list, and most of it is already in production.
 
-Same company, same four agents, new way of failing. inventory() comes from registry.all workloads(), not a survey — and the reason is exact: a survey returns the agents somebody declared, which is the complement of the set you are looking for. shadow() wraps A2.5's orphans() and answers both directions, because teams check one.
+Same company, same four agents, new way of failing. inventory() comes from registry.all workloads(), not a survey — and the reason is exact: a survey returns the agents somebody declared, which is the complement of the set you are looking for. shadow() wraps B2.5's orphans() and answers both directions, because teams check one.
 
 **③ What we do about it**
 
@@ -6552,17 +6554,17 @@ The denominator for every other indicator. A share whose denominator is unknown 
 
 Run the egress query for real: one week of traffic to model-provider domains, joined against your inventory. It takes an hour and it always finds something.
 
-Next up: E1.3, Risk tiering agentic use cases.
+Next up: F1.3, Risk tiering agentic use cases.
 
 ---
 
-### E1.3 · Risk tiering agentic use cases
+### F1.3 · Risk tiering agentic use cases
 
-Chapter E1 · lesson 4 of 14 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.3.html)
+Chapter F1 · lesson 4 of 14 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.3.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Building the AI and agent inventory.
+Still inside chapter F1. Last one was Building the AI and agent inventory.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6604,17 +6606,17 @@ The target each indicator carries. The same measurement means different things o
 
 Re-tier your top ten AI use cases using only the four questions. Note which ones move, and be ready to explain the movement to whoever wrote the original questionnaire — the model question is usually question one.
 
-Next up: E1.4, Control mapping for agents.
+Next up: F1.4, Control mapping for agents.
 
 ---
 
-### E1.4 · Control mapping for agents
+### F1.4 · Control mapping for agents
 
-Chapter E1 · lesson 5 of 14 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.4.html)
+Chapter F1 · lesson 5 of 14 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.4.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Risk tiering agentic use cases.
+Still inside chapter F1. Last one was Risk tiering agentic use cases.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6656,17 +6658,17 @@ Mapped controls with an indicator behind them. Those without are unevidenced, an
 
 Take one framework clause your programme claims to satisfy and ask which operating control produces its evidence. If the answer is a policy document, the clause is ticked and undefended.
 
-Next up: E1.5, Evaluation output as audit evidence.
+Next up: F1.5, Evaluation output as audit evidence.
 
 ---
 
-### E1.5 · Evaluation output as audit evidence
+### F1.5 · Evaluation output as audit evidence
 
-Chapter E1 · lesson 6 of 14 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.5.html)
+Chapter F1 · lesson 6 of 14 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.5.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Control mapping for agents.
+Still inside chapter F1. Last one was Control mapping for agents.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6682,7 +6684,7 @@ Here is what that costs you.
 
 A vendor's best-of-k demo is not assurance, and schema conformance is not accuracy.
 
-Same company, same four agents, new way of failing. evidences() reads an eval result and separates what it supports from what it does not. A best-of-8 demonstration shows the system can produce the answer; a control needs the rate. And conformance reported where accuracy was asked for is refused outright — it runs at about 100 percent, it is structural, and B2.18 caps two controls at PARTIAL for the same reason.
+Same company, same four agents, new way of failing. evidences() reads an eval result and separates what it supports from what it does not. A best-of-8 demonstration shows the system can produce the answer; a control needs the rate. And conformance reported where accuracy was asked for is refused outright — it runs at about 100 percent, it is structural, and C2.18 caps two controls at PARTIAL for the same reason.
 
 **③ What we do about it**
 
@@ -6708,17 +6710,17 @@ An eval result read as an indicator: sample size is the denominator, the pass ba
 
 Find an eval number your organisation has quoted, internally or externally, and determine which of the two it was. Then check whether it has an expiry.
 
-Next up: E1.6, Operating vs outcome guardrails.
+Next up: F1.6, Operating vs outcome guardrails.
 
 ---
 
-### E1.6 · Operating vs outcome guardrails
+### F1.6 · Operating vs outcome guardrails
 
-Chapter E1 · lesson 7 of 14 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.6.html)
+Chapter F1 · lesson 7 of 14 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.6.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Evaluation output as audit evidence.
+Still inside chapter F1. Last one was Evaluation output as audit evidence.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6760,17 +6762,17 @@ Two different indicators. An operating one says the constraint was applied; an o
 
 Pick one outcome guardrail your programme has agreed and specify its metric, threshold, source and cadence precisely enough that someone could dispute the result. If you cannot, say so in the coverage report rather than counting it.
 
-Next up: E1.7, Continuous control verification.
+Next up: F1.7, Continuous control verification.
 
 ---
 
-### E1.7 · Continuous control verification
+### F1.7 · Continuous control verification
 
-Chapter E1 · lesson 8 of 14 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.7.html)
+Chapter F1 · lesson 8 of 14 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.7.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Operating vs outcome guardrails.
+Still inside chapter F1. Last one was Operating vs outcome guardrails.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6812,17 +6814,17 @@ Controls currently evidenced — passing and in window — rather than controls 
 
 Automate the control with the shortest freshness window first — it is the one costing the most manual effort and going stale most often. One automated test converts an annual assertion into a live control.
 
-Next up: E1.8, Third-party and model supply chain risk.
+Next up: F1.8, Third-party and model supply chain risk.
 
 ---
 
-### E1.8 · Third-party and model supply chain risk
+### F1.8 · Third-party and model supply chain risk
 
-Chapter E1 · lesson 9 of 14 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.8.html)
+Chapter F1 · lesson 9 of 14 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F1.8.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Continuous control verification.
+Still inside chapter F1. Last one was Continuous control verification.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6864,17 +6866,17 @@ Third-party controls carrying an unexpired attestation. It is a weaker instrumen
 
 Add "can this change without notifying us?" to your third-party assessment form. For hosted models the answer is usually yes, and it should carry an explicit control-test expiry.
 
-Next up: E1.9, Model and agent lifecycle governance.
+Next up: F1.9, Model and agent lifecycle governance.
 
 ---
 
-### E1.9 · Model and agent lifecycle governance
+### F1.9 · Model and agent lifecycle governance
 
-Chapter E1 · lesson 10 of 14 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.9.html)
+Chapter F1 · lesson 10 of 14 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.9.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Third-party and model supply chain risk.
+Still inside chapter F1. Last one was Third-party and model supply chain risk.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6890,7 +6892,7 @@ Here is what that costs you.
 
 A retrain, a fine-tune or a re-index is treated as maintenance, and it invalidates every reading taken before it.
 
-Same company, same four agents, new way of failing. lifecycle gaps() returns the three surfaces from D1.2 that change behaviour and are routinely filed as maintenance — the retrieval index, memory, and the MCP tool descriptions A1.9 says can be rewritten after approval. The test is whether it alters what the system does, not whether it touched code.
+Same company, same four agents, new way of failing. lifecycle gaps() returns the three surfaces from E1.2 that change behaviour and are routinely filed as maintenance — the retrieval index, memory, and the MCP tool descriptions B1.9 says can be rewritten after approval. The test is whether it alters what the system does, not whether it touched code.
 
 **③ What we do about it**
 
@@ -6916,17 +6918,17 @@ Indicators marked stale by a lifecycle event — the difference between continuo
 
 Query your identity provider for non-human identities whose service is retired but which authenticated in the last 30 days. Every hit is either an undocumented dependency or someone else's foothold, and you cannot tell which from the directory alone.
 
-Next up: E1.10, The stakeholder map — who owns what.
+Next up: F1.10, The stakeholder map — who owns what.
 
 ---
 
-### E1.10 · The stakeholder map — who owns what
+### F1.10 · The stakeholder map — who owns what
 
-Chapter E1 · lesson 11 of 14 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E1.10.html)
+Chapter F1 · lesson 11 of 14 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.10.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Model and agent lifecycle governance.
+Still inside chapter F1. Last one was Model and agent lifecycle governance.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -6968,17 +6970,17 @@ One reading, five readers. The question nobody asked is the one no indicator was
 
 Pick one of the four seams and find out, today, who owns it in your organisation. The answer 'I assume security does' from one side and 'I assume privacy does' from the other is the finding.
 
-Next up: E1.11, Model risk management for AI systems.
+Next up: F1.11, Model risk management for AI systems.
 
 ---
 
-### E1.11 · Model risk management for AI systems
+### F1.11 · Model risk management for AI systems
 
-Chapter E1 · lesson 12 of 14 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.11.html)
+Chapter F1 · lesson 12 of 14 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F1.11.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was The stakeholder map — who owns what.
+Still inside chapter F1. Last one was The stakeholder map — who owns what.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7020,17 +7022,17 @@ Ongoing monitoring, which is a key control indicator programme in older vocabula
 
 Take one validated model in your estate and list the tools it holds today. If any of them post-dates the validation report, the report is describing a different system.
 
-Next up: E1.12, Working the seams.
+Next up: F1.12, Working the seams.
 
 ---
 
-### E1.12 · Working the seams
+### F1.12 · Working the seams
 
-Chapter E1 · lesson 13 of 14 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E1.12.html)
+Chapter F1 · lesson 13 of 14 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F1.12.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Model risk management for AI systems.
+Still inside chapter F1. Last one was Model risk management for AI systems.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7072,17 +7074,17 @@ Seams with an owned artefact. An indicator with two consumers and no owner gets 
 
 Pick the artefact your function produces for someone else and ask the recipient when they last received it. The gap between 'we produce that' and 'we receive that' is the seam, and it is usually measured in quarters.
 
-Next up: E1.13, Measuring the controls on CyberTravels — gaps and mitigations.
+Next up: F1.13, Measuring the controls on CyberTravels — gaps and mitigations.
 
 ---
 
-### E1.13 · Measuring the controls on CyberTravels — gaps and mitigations
+### F1.13 · Measuring the controls on CyberTravels — gaps and mitigations
 
-Chapter E1 · lesson 14 of 14 · runs a skill · 374 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/E1.13.html)
+Chapter F1 · lesson 14 of 14 · runs a skill · 374 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/F1.13.html)
 
 **① Open**
 
-Still inside chapter E1. Last one was Working the seams.
+Still inside chapter F1. Last one was Working the seams.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7098,7 +7100,7 @@ Here is what that costs you.
 
 A control asserted in a register and never measured has no evidence behind it until an incident supplies some.
 
-Same company, same four agents, new way of failing. The number. measure() walks the controls Functions A to D built and calls each one — A2.1's approvers, A3.1's default-deny, A3.2's empty environment, A3.9's expiry, B2.3's five findings, C1.9's coverage, D1.1's matrix. Add a credential to sandbox.CODING_AGENT.env keys and coverage drops below 1.0, which is what makes it a measurement. known gaps() ships four absences with the file that admits each one.
+Same company, same four agents, new way of failing. The number. measure() walks the controls Functions A to D built and calls each one — B2.1's approvers, B3.1's default-deny, B3.2's empty environment, B3.9's expiry, C2.3's five findings, D1.9's coverage, E1.1's matrix. Add a credential to sandbox.CODING_AGENT.env keys and coverage drops below 1.0, which is what makes it a measurement. known gaps() ships four absences with the file that admits each one.
 
 **③ What we do about it**
 
@@ -7124,25 +7126,25 @@ Six indicators against CyberTravels: five gaps and one pass. The pass is what pr
 
 Write a seventh indicator for a control CyberTravels does have, and check it reads as met. An instrument that only ever says GAP is not measuring.
 
-That closes chapter E1. A key control indicator you can compute, and everything it needs to be one: an inventory for its denominator, a risk tier for its target, a control map for its subject, an owner against its name, and verification that re-reads it instead of citing last year.
+That closes chapter F1. A key control indicator you can compute, and everything it needs to be one: an inventory for its denominator, a risk tier for its target, a control map for its subject, an owner against its name, and verification that re-reads it instead of citing last year.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
 And here is what it still cannot do. Every one of those indicators answers to you. A regulator does not ask what you measured; they ask which obligation it discharges, on what evidence, and whether the reading predates the incident.
 
-Chapter E2 points the same indicators outward — one measured control set quoted to several regimes, and documentation that is a series of readings rather than a description.
+Chapter F2 points the same indicators outward — one measured control set quoted to several regimes, and documentation that is a series of readings rather than a description.
 
-Next up: E2.1, The regulatory map.
+Next up: F2.1, The regulatory map.
 
 ---
 
-### E2.1 · The regulatory map
+### F2.1 · The regulatory map
 
-Chapter E2 · lesson 1 of 9 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.1.html)
+Chapter F2 · lesson 1 of 9 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.1.html)
 
 **① Open**
 
-Chapter E1 left us here. Every one of those indicators answers to you. That is what this chapter picks up.
+Chapter F1 left us here. Every one of those indicators answers to you. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7158,7 +7160,7 @@ Here is what that costs you.
 
 One programme per regime is four times the work and none of it joined up.
 
-Same company, same four agents, new way of failing. map obligations() shows one control answering several regimes — D1.3's per-field retention answers GDPR storage limitation and EU AI Act record-keeping, D5.6 answers GDPR Art. 33 and NIS2 Art. 23. That reuse is the argument against one programme per regime, and it is a number rather than an assertion.
+Same company, same four agents, new way of failing. map obligations() shows one control answering several regimes — E1.3's per-field retention answers GDPR storage limitation and EU AI Act record-keeping, E5.6 answers GDPR Art. 33 and NIS2 Art. 23. That reuse is the argument against one programme per regime, and it is a number rather than an assertion.
 
 **③ What we do about it**
 
@@ -7184,17 +7186,17 @@ Regimes an indicator can be quoted to. They overlap on evidence, not on wording.
 
 Build the shortest-clock register for your highest-tier AI system. Most teams discover the binding deadline is a sector overlay or a customer contract, not the AI regulation they have been reading.
 
-Next up: E2.2, Horizontal AI regulation.
+Next up: F2.2, Horizontal AI regulation.
 
 ---
 
-### E2.2 · Horizontal AI regulation
+### F2.2 · Horizontal AI regulation
 
-Chapter E2 · lesson 2 of 9 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.2.html)
+Chapter F2 · lesson 2 of 9 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.2.html)
 
 **① Open**
 
-Still inside chapter E2. Last one was The regulatory map.
+Still inside chapter F2. Last one was The regulatory map.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7236,17 +7238,17 @@ Themes with a control and an artefact behind them. Oversight is the hardest, bec
 
 Take one clause your programme claims to satisfy and trace it to an artefact with a date. If the trail ends at a policy document, the clause is ticked and undefended.
 
-Next up: E2.3, Voluntary frameworks as your spine.
+Next up: F2.3, Voluntary frameworks as your spine.
 
 ---
 
-### E2.3 · Voluntary frameworks as your spine
+### F2.3 · Voluntary frameworks as your spine
 
-Chapter E2 · lesson 3 of 9 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.3.html)
+Chapter F2 · lesson 3 of 9 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.3.html)
 
 **① Open**
 
-Still inside chapter E2. Last one was Horizontal AI regulation.
+Still inside chapter F2. Last one was Horizontal AI regulation.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7288,17 +7290,17 @@ Indicators the spine already computes that each new overlay can reuse — and th
 
 Pick your spine and justify it in one sentence to an assessor. "It has the best coverage of the controls we actually operate" is far stronger than "it is the one our regulator mentioned".
 
-Next up: E2.4, Sector overlays.
+Next up: F2.4, Sector overlays.
 
 ---
 
-### E2.4 · Sector overlays
+### F2.4 · Sector overlays
 
-Chapter E2 · lesson 4 of 9 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E2.4.html)
+Chapter F2 · lesson 4 of 9 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/F2.4.html)
 
 **① Open**
 
-Still inside chapter E2. Last one was Voluntary frameworks as your spine.
+Still inside chapter F2. Last one was Voluntary frameworks as your spine.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7340,17 +7342,17 @@ Thresholds that move rather than indicators that are new — a much smaller job 
 
 Find the clause in your own sector overlay that already covers autonomous action without naming AI. Citing it is faster, cheaper and more persuasive than any new AI policy you could write.
 
-Next up: E2.5, Privacy and data protection.
+Next up: F2.5, Privacy and data protection.
 
 ---
 
-### E2.5 · Privacy and data protection
+### F2.5 · Privacy and data protection
 
-Chapter E2 · lesson 5 of 9 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E2.5.html)
+Chapter F2 · lesson 5 of 9 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/F2.5.html)
 
 **① Open**
 
-Still inside chapter E2. Last one was Sector overlays.
+Still inside chapter F2. Last one was Sector overlays.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7366,7 +7368,7 @@ Here is what that costs you.
 
 The context window is a disclosure and the trace is a record, so personal data lands in a system nobody reviewed.
 
-Same company, same four agents, new way of failing. erasure reach() returns 0.714 against your own tree: five surfaces a deletion request reaches and two it does not — the model provider's logs, and weights if anything was fine-tuned. Then audit trace() scans the rows you are keeping for a year: A2.7's digest keeps the motive clean, and nothing protects detail, which is where a tool's arguments land.
+Same company, same four agents, new way of failing. erasure reach() returns 0.714 against your own tree: five surfaces a deletion request reaches and two it does not — the model provider's logs, and weights if anything was fine-tuned. Then audit trace() scans the rows you are keeping for a year: B2.7's digest keeps the motive clean, and nothing protects detail, which is where a tool's arguments land.
 
 **③ What we do about it**
 
@@ -7392,17 +7394,17 @@ Paths rather than outcomes: where inference ran, what retrieval touched, how lon
 
 Time-box this to an hour: can you delete one customer's data from your agent traces today? The answer usually arrives in ten minutes and is usually no — and the eval corpus is the system people forget entirely.
 
-Next up: E2.6, Incident and disclosure obligations.
+Next up: F2.6, Incident and disclosure obligations.
 
 ---
 
-### E2.6 · Incident and disclosure obligations
+### F2.6 · Incident and disclosure obligations
 
-Chapter E2 · lesson 6 of 9 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.6.html)
+Chapter F2 · lesson 6 of 9 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.6.html)
 
 **① Open**
 
-Still inside chapter E2. Last one was Privacy and data protection.
+Still inside chapter F2. Last one was Privacy and data protection.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7418,7 +7420,7 @@ Here is what that costs you.
 
 The clock starts at awareness and broken attribution consumes it, so containing fast buys no reporting time.
 
-Same company, same four agents, new way of failing. D5.6 started the clocks in hour one. This is the phase breakdown underneath them, and the finding is where the time goes: establishing who acted is the largest block, which D1.0's clock already measured and which would be near zero for a human actor.
+Same company, same four agents, new way of failing. E5.6 started the clocks in hour one. This is the phase breakdown underneath them, and the finding is where the time goes: establishing who acted is the largest block, which E1.0's clock already measured and which would be near zero for a human actor.
 
 **③ What we do about it**
 
@@ -7444,17 +7446,17 @@ Whether the pre-incident reading existed at all. During an incident you are eith
 
 Draft the disclosure sentence you would send when you know an agent acted but cannot say which one. Getting legal to agree that wording takes weeks in peacetime and is impossible at hour 60.
 
-Next up: E2.7, Documentation that survives supervision.
+Next up: F2.7, Documentation that survives supervision.
 
 ---
 
-### E2.7 · Documentation that survives supervision
+### F2.7 · Documentation that survives supervision
 
-Chapter E2 · lesson 7 of 9 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E2.7.html)
+Chapter F2 · lesson 7 of 9 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/F2.7.html)
 
 **① Open**
 
-Still inside chapter E2. Last one was Incident and disclosure obligations.
+Still inside chapter F2. Last one was Incident and disclosure obligations.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7470,7 +7472,7 @@ Here is what that costs you.
 
 Documentation that restates intent is what supervision fails.
 
-Same company, same four agents, new way of failing. Six sections, none of which is an explanation of the model's reasoning and all of which a supervisor can act on: purpose, authority, bounds, a run record, who decided, and the known limitations — including E1.13's known gaps(), which is the section that makes the other five believable.
+Same company, same four agents, new way of failing. Six sections, none of which is an explanation of the model's reasoning and all of which a supervisor can act on: purpose, authority, bounds, a run record, who decided, and the known limitations — including F1.13's known gaps(), which is the section that makes the other five believable.
 
 **③ What we do about it**
 
@@ -7496,17 +7498,17 @@ Indicator readings with dates on them. A narrative describing a control is not e
 
 Rewrite one paragraph of your AI policy in the strong shape. Any sentence that cannot name an artefact is intent — label it as such rather than deleting it, and the document gets more credible.
 
-Next up: E2.8, Auditability of autonomous action.
+Next up: F2.8, Auditability of autonomous action.
 
 ---
 
-### E2.8 · Auditability of autonomous action
+### F2.8 · Auditability of autonomous action
 
-Chapter E2 · lesson 8 of 9 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E2.8.html)
+Chapter F2 · lesson 8 of 9 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.8.html)
 
 **① Open**
 
-Still inside chapter E2. Last one was Documentation that survives supervision.
+Still inside chapter F2. Last one was Documentation that survives supervision.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7522,7 +7524,7 @@ Here is what that costs you.
 
 Without attribution and replay captured at the moment of the action, neither can be reconstructed afterwards.
 
-Same company, same four agents, new way of failing. Calls C1.10's reconstruct(). The regulator's question — under whose authority did the agent act, show me for a specific action — is the investigation's question asked earlier by a different person, and a second implementation would give a second answer.
+Same company, same four agents, new way of failing. Calls D1.10's reconstruct(). The regulator's question — under whose authority did the agent act, show me for a specific action — is the investigation's question asked earlier by a different person, and a second implementation would give a second answer.
 
 **③ What we do about it**
 
@@ -7548,17 +7550,17 @@ Share of autonomous actions whose full chain can be reconstructed. Anything belo
 
 Run the drill on three real production actions from last week. The field you cannot fill is your auditability gap, stated precisely — and a number like "1 of 3" is far more useful to a supervisor than a paragraph about comprehensive logging.
 
-Next up: E2.9, Regulator and auditor conversations.
+Next up: F2.9, Regulator and auditor conversations.
 
 ---
 
-### E2.9 · Regulator and auditor conversations
+### F2.9 · Regulator and auditor conversations
 
-Chapter E2 · lesson 9 of 9 · runs a skill · 351 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/E2.9.html)
+Chapter F2 · lesson 9 of 9 · runs a skill · 351 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/F2.9.html)
 
 **① Open**
 
-Still inside chapter E2. Last one was Auditability of autonomous action.
+Still inside chapter F2. Last one was Auditability of autonomous action.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7600,25 +7602,25 @@ Coverage stated honestly, including stale and unevidenced controls. Volunteering
 
 Generate this script from your own live control state rather than writing it. If it cannot be generated, your coverage number is being assembled by hand for each meeting — which is why it differs between meetings.
 
-That closes chapter E2. The same indicator set read as evidence: mapped to a horizontal regime, a sector overlay and a privacy position; a disclosure clock that runs on readings taken before the incident; and documentation that survives supervision because it is dated measurements rather than narrative.
+That closes chapter F2. The same indicator set read as evidence: mapped to a horizontal regime, a sector overlay and a privacy position; a disclosure clock that runs on readings taken before the incident; and documentation that survives supervision because it is dated measurements rather than narrative.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
 And here is what it still cannot do. You can now say what each indicator proves and to whom. You still cannot say which one to fix first, who is funded to fix it, or what happens when the board is shown a number nobody in the room can re-compute.
 
-Chapter E3 runs the indicators as a programme, from the CISO office.
+Chapter F3 runs the indicators as a programme, from the CISO office.
 
-Next up: E3.1, Translating agentic risk upward.
+Next up: F3.1, Translating agentic risk upward.
 
 ---
 
-### E3.1 · Translating agentic risk upward
+### F3.1 · Translating agentic risk upward
 
-Chapter E3 · lesson 1 of 8 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E3.1.html)
+Chapter F3 · lesson 1 of 8 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/F3.1.html)
 
 **① Open**
 
-Chapter E2 left us here. You can now say what each indicator proves and to whom. That is what this chapter picks up.
+Chapter F2 left us here. You can now say what each indicator proves and to whom. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7660,17 +7662,17 @@ Three indicators the board sees, chosen from the set that already exists so anyo
 
 Write these four lines for your highest-tier system. If you cannot fill the likelihood line with a measurement, that is the first thing to fund — an assessment is not a number.
 
-Next up: E3.2, Governing autonomy rather than approving tools.
+Next up: F3.2, Governing autonomy rather than approving tools.
 
 ---
 
-### E3.2 · Governing autonomy rather than approving tools
+### F3.2 · Governing autonomy rather than approving tools
 
-Chapter E3 · lesson 2 of 8 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.2.html)
+Chapter F3 · lesson 2 of 8 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F3.2.html)
 
 **① Open**
 
-Still inside chapter E3. Last one was Translating agentic risk upward.
+Still inside chapter F3. Last one was Translating agentic risk upward.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7686,7 +7688,7 @@ Here is what that costs you.
 
 A per-tool review queue becomes a bottleneck and then a bypass, within about a quarter.
 
-Same company, same four agents, new way of failing. Five rungs, and the decision is about the rung rather than the tool — which is what lets the next tool ship without a review queue that becomes a bottleneck and then a bypass. Rung 4 is not granted in this system, and the reason is A3.6: the gate stops working before you get there.
+Same company, same four agents, new way of failing. Five rungs, and the decision is about the rung rather than the tool — which is what lets the next tool ship without a review queue that becomes a bottleneck and then a bypass. Rung 4 is not granted in this system, and the reason is B3.6: the gate stops working before you get there.
 
 **③ What we do about it**
 
@@ -7712,17 +7714,17 @@ What an agent may do without asking, as a function of measured containment rathe
 
 Write your own per-rung policy in four lines and check what L1 costs a team today. If registering a read-only copilot needs an approval, your inventory is already incomplete and you cannot see by how much.
 
-Next up: E3.3, Sequencing the programme.
+Next up: F3.3, Sequencing the programme.
 
 ---
 
-### E3.3 · Sequencing the programme
+### F3.3 · Sequencing the programme
 
-Chapter E3 · lesson 3 of 8 · runs a skill · 229 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.3.html)
+Chapter F3 · lesson 3 of 8 · runs a skill · 229 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/F3.3.html)
 
 **① Open**
 
-Still inside chapter E3. Last one was Governing autonomy rather than approving tools.
+Still inside chapter F3. Last one was Governing autonomy rather than approving tools.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7764,17 +7766,17 @@ The order itself is the deliverable. Doing evaluation before identity produces a
 
 Locate your programme on the six steps honestly. Most are between 2 and 3 while reporting on 5, which is exactly the gap this sequence prevents — and the fix is to stop reporting 5 until 2 and 3 are done.
 
-Next up: E3.4, Org design and ownership.
+Next up: F3.4, Org design and ownership.
 
 ---
 
-### E3.4 · Org design and ownership
+### F3.4 · Org design and ownership
 
-Chapter E3 · lesson 4 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.4.html)
+Chapter F3 · lesson 4 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F3.4.html)
 
 **① Open**
 
-Still inside chapter E3. Last one was Sequencing the programme.
+Still inside chapter F3. Last one was Sequencing the programme.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7816,17 +7818,17 @@ Seams with a name against them. If nobody owns the measurement, the indicator ex
 
 Put a name against each of the six seams this week. Any seam where two people both say "them" is the one that will stall your next incident, and finding it now costs one meeting.
 
-Next up: E3.5, The metrics that matter at your level.
+Next up: F3.5, The metrics that matter at your level.
 
 ---
 
-### E3.5 · The metrics that matter at your level
+### F3.5 · The metrics that matter at your level
 
-Chapter E3 · lesson 5 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.5.html)
+Chapter F3 · lesson 5 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F3.5.html)
 
 **① Open**
 
-Still inside chapter E3. Last one was Org design and ownership.
+Still inside chapter F3. Last one was Org design and ownership.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7868,17 +7870,17 @@ Each is computed rather than assessed. A metric that does not degrade when ignor
 
 Which of the five can you produce today without a project? Start reporting that one monthly and let the missing ones become conspicuous — that is a cheaper way to get the others funded than asking for all five at once.
 
-Next up: E3.6, Saying no, and saying yes with conditions.
+Next up: F3.6, Saying no, and saying yes with conditions.
 
 ---
 
-### E3.6 · Saying no, and saying yes with conditions
+### F3.6 · Saying no, and saying yes with conditions
 
-Chapter E3 · lesson 6 of 8 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.6.html)
+Chapter F3 · lesson 6 of 8 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F3.6.html)
 
 **① Open**
 
-Still inside chapter E3. Last one was The metrics that matter at your level.
+Still inside chapter F3. Last one was The metrics that matter at your level.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7920,17 +7922,17 @@ Conditions met, each evidenced by an indicator crossing a threshold. Without one
 
 Take a request you refused in the last year and write the five conditions that would have made it a yes. Send them to the team that asked — they will usually accept, and you get the visibility you lost by refusing.
 
-Next up: E3.7, Building the capability.
+Next up: F3.7, Building the capability.
 
 ---
 
-### E3.7 · Building the capability
+### F3.7 · Building the capability
 
-Chapter E3 · lesson 7 of 8 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E3.7.html)
+Chapter F3 · lesson 7 of 8 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F3.7.html)
 
 **① Open**
 
-Still inside chapter E3. Last one was Saying no, and saying yes with conditions.
+Still inside chapter F3. Last one was Saying no, and saying yes with conditions.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7946,7 +7948,7 @@ Here is what that costs you.
 
 Hiring for conceptual familiarity produces a team that can discuss the problem and not measure it.
 
-Same company, same four agents, new way of failing. build order() starts with the inventory and puts the red team last, because its findings need somewhere to land — that is C1.11's handoff read as a hiring plan. Call it with demos first=True and it returns what that produces: striking findings with nowhere to land, and a coverage number nobody computed.
+Same company, same four agents, new way of failing. build order() starts with the inventory and puts the red team last, because its findings need somewhere to land — that is D1.11's handoff read as a hiring plan. Call it with demos first=True and it returns what that produces: striking findings with nowhere to land, and a coverage number nobody computed.
 
 **③ What we do about it**
 
@@ -7972,17 +7974,17 @@ What the team can evidence, quarter by quarter. Quarter one produces an inventor
 
 Map your existing team onto the four roles. Most organisations have three of them under other names and are missing the identity one entirely — which is also the one that unblocks everything else.
 
-Next up: E3.8, Resilience over perfection.
+Next up: F3.8, Resilience over perfection.
 
 ---
 
-### E3.8 · Resilience over perfection
+### F3.8 · Resilience over perfection
 
-Chapter E3 · lesson 8 of 8 · runs a skill · 339 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/E3.8.html)
+Chapter F3 · lesson 8 of 8 · runs a skill · 339 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/F3.8.html)
 
 **① Open**
 
-Still inside chapter E3. Last one was Building the capability.
+Still inside chapter F3. Last one was Building the capability.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
@@ -7998,7 +8000,7 @@ Here is what that costs you.
 
 A programme judged on prevention is judged on something a probabilistic system cannot deliver.
 
-Same company, same four agents, new way of failing. readiness() asks four questions this curriculum has already answered with numbers — time to detect (D1.0), time to stop (D4.4), containment coverage (C1.9's 0.4), reconstructable (C1.10). A programme that cannot fill them in has been enumerating failure modes, which does not terminate, instead of measuring recovery, which does.
+Same company, same four agents, new way of failing. readiness() asks four questions this curriculum has already answered with numbers — time to detect (E1.0), time to stop (E4.4), containment coverage (D1.9's 0.4), reconstructable (D1.10). A programme that cannot fill them in has been enumerating failure modes, which does not terminate, instead of measuring recovery, which does.
 
 **③ What we do about it**
 
@@ -8014,7 +8016,7 @@ That is not a screenshot. It just ran, and you can run the identical command on 
 
 And here is the number that tells you it worked.
 
-Containment, detection and recovery indicators — the same ones D5.4 re-reads after a fix. Prevention has no honest indicator here.
+Containment, detection and recovery indicators — the same ones E5.4 re-reads after a fix. Prevention has no honest indicator here.
 
 *[Point at the output on screen. Do not read it out.]*
 
@@ -8024,13 +8026,13 @@ Containment, detection and recovery indicators — the same ones D5.4 re-reads a
 
 Run a game day that assumes containment failed. Measure notice, stop and recover as three separate numbers.
 
-That closes chapter E3. A programme sequenced on which indicators sit furthest from target, staffed by people who can turn a control into something computable, governed by autonomy level rather than product list, with promotion as an earned event and a maturity model measured on containment, detection and recovery rather than on prevention.
+That closes chapter F3. A programme sequenced on which indicators sit furthest from target, staffed by people who can turn a control into something computable, governed by autonomy level rather than product list, with promotion as an earned event and a maturity model measured on containment, detection and recovery rather than on prevention.
 
 *[Slow down here. This is the ending — do not rush it, and do not pretend the subject is finished.]*
 
-And here is what it still cannot do. Nothing here is finished, because none of it holds still. The models change, the patterns change, and the risks in A1 will not be the last fifteen.
+And here is what it still cannot do. Nothing here is finished, because none of it holds still. The models change, the patterns change, and the risks in B1 will not be the last fifteen.
 
-Go back to A1.1 and draw your own system again. It will be a different picture from the one you drew before Function B, and the components you left off the first time are the ones worth your next quarter.
+Go back to B1.1 and draw your own system again. It will be a different picture from the one you drew before Function B, and the components you left off the first time are the ones worth your next quarter.
 
 *[That is the last lesson in the commons. Thank them, and name one real thing you would go and do first thing tomorrow — a real thing, not “keep learning”.]*
 

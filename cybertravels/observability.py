@@ -17,7 +17,7 @@ Three rules the emitting code follows, and each one is a lesson in Function D:
 * **Refusals are spans too.** A trace that records only successful tool calls
   hides exactly the events worth alerting on.
 """
-# step:file G1.1
+# step:file A1.1
 import json
 import time
 import uuid

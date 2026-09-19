@@ -1,11 +1,11 @@
-# step:file D2.1
+# step:file E2.1
 """Where agent telemetry lands, and what each tier costs to query.
 
 The failure is not technical and it happens every time. Nobody prices the new
 source, so it is indexed hot like everything else. The bill arrives, retention
 is cut **across the board** because that is the lever the console offers, and
 the traces go first — they are the newest source, the least defended in a
-budget meeting, and the only one that answers D3.4.
+budget meeting, and the only one that answers E3.4.
 
 The decision this file forces is per source, and it is driven by the queries
 the SOC actually runs rather than by how important the source feels. A source

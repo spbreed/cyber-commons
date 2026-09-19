@@ -1,4 +1,4 @@
-"""Lessons added with the five-phase Function D restructure, plus E1.13.
+"""Lessons added with the five-phase Function D restructure, plus F1.13.
 
 These live in one file rather than being scattered into the five `track_d*`
 modules because they were written together and read as a set: the discover →
@@ -14,8 +14,8 @@ from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
 
-# ---------------------------------------------------------------- D3.10
-"D3.10": {
+# ---------------------------------------------------------------- E3.10
+"E3.10": {
  "concept": """
 A detection encodes a behaviour somebody already understood. Hunting goes the
 other way: you state a hypothesis about behaviour that *would* be suspicious,
@@ -52,8 +52,8 @@ many."""),
               "precision is near the base rate, you have described normal work.",
 },
 
-# ---------------------------------------------------------------- D2.5
-"D2.5": {
+# ---------------------------------------------------------------- E2.5
+"E2.5": {
  "concept": """
 The fastest source of a good detection is an incident you have just had. The
 trap is that **every candidate rule catches the incident** — that is how it was
@@ -86,8 +86,8 @@ rule a choice rather than an assumption."""),
               "construct one, your corpus is too easy.",
 },
 
-# ---------------------------------------------------------------- D3.2
-"D3.2": {
+# ---------------------------------------------------------------- E3.2
+"E3.2": {
  "concept": """
 An investigating agent is handed broad read across the estate so it can find the
 problem. Broad read across the estate is frequently what the problem *was*.
@@ -119,8 +119,8 @@ will ask about an agent that read production during an outage."""),
               "is not the same set, and working out why is the exercise.",
 },
 
-# ---------------------------------------------------------------- D3.6
-"D3.6": {
+# ---------------------------------------------------------------- E3.6
+"E3.6": {
  "concept": """
 Every investigator is wrong at step one. What separates an investigator from an
 expensive autocomplete is what happens when the evidence stops fitting.
@@ -153,8 +153,8 @@ no refund step."""),
               "investigation that cannot end undecided is not investigating.",
 },
 
-# ---------------------------------------------------------------- D4.1
-"D4.1": {
+# ---------------------------------------------------------------- E4.1
+"E4.1": {
  "concept": """
 If each runbook picks its own automation tier, the blast radius of your response
 is unknown until the response happens.
@@ -188,8 +188,8 @@ manual work is not reversible for an incident that lasts twenty minutes."""),
               "answer 'reversible without a human', that is the finding.",
 },
 
-# ---------------------------------------------------------------- D4.2
-"D4.2": {
+# ---------------------------------------------------------------- E4.2
+"E4.2": {
  "concept": """
 The three tiers are not levels of ambition. They are three different trades
 between **time to contain** and **the cost of acting on a bad signal** — and
@@ -222,8 +222,8 @@ unstated one."""),
               "tier you already ship still looks right.",
 },
 
-# ---------------------------------------------------------------- D5.2
-"D5.2": {
+# ---------------------------------------------------------------- E5.2
+"E5.2": {
  "concept": """
 "The on-call engineer missed the alert" is true and useless — it will happen
 again next quarter to a different engineer. "We should have been more careful"
@@ -253,10 +253,10 @@ gap, which is a different finding and a different fix."""),
               "it names a person or an intention, rewrite it as a control.",
 },
 
-# ---------------------------------------------------------------- D5.4
-"D5.4": {
+# ---------------------------------------------------------------- E5.4
+"E5.4": {
  "concept": """
-A fix is a claim. The key control indicators built in E1.1 are how the claim
+A fix is a claim. The key control indicators built in F1.1 are how the claim
 gets checked: re-measure the indicators the incident moved, and see which came
 back to target.
 
@@ -285,8 +285,8 @@ incident touched."""),
               "worse after. The report has nowhere to put it yet.",
 },
 
-# ---------------------------------------------------------------- D5.5
-"D5.5": {
+# ---------------------------------------------------------------- E5.5
+"E5.5": {
  "concept": """
 Most incidents end with a change to what is **deployed**. The policy that
 permitted the incident is usually untouched — so the next system built under it
@@ -318,8 +318,8 @@ what stops it falling between the two functions forever."""),
               "incident.",
 },
 
-# ---------------------------------------------------------------- E1.13
-"E1.13": {
+# ---------------------------------------------------------------- F1.13
+"F1.13": {
  "concept": """
 A control indicator is only an indicator if something measures it. Otherwise it
 is a sentence in a policy, and the first evidence that a control was missing is
@@ -329,7 +329,7 @@ The test is mechanical: can you compute this number from the estate, today,
 without asking anyone? "Object handlers that compare an owner" passes.
 "Is authorisation adequate" does not.
 
-So these are computed from `cybertravels/` — the same tree B2.3 scans and A1.1
+So these are computed from `cybertravels/` — the same tree C2.3 scans and B1.1
 draws — and the output is a **gap list**, not a maturity score. A governance
 report whose only artefact is a percentage changes nothing, because nobody can
 action 72%.

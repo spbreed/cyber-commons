@@ -1,12 +1,12 @@
 # vulnbench — evaluating a security harness
 
 **The lessons that drive it**, taken from `curriculum/labs.json` rather than
-remembered: [C1.3](../../curriculum/track-c1.md) (run the comparison and see the
-inflated number) · [E1.5](../../curriculum/track-e1.md) (read the output as
-audit evidence) · [E3.5](../../curriculum/track-e3.md) and
-[E3.7](../../curriculum/track-e3.md) (the metrics, and building the capability).
+remembered: [D1.3](../../curriculum/track-d1.md) (run the comparison and see the
+inflated number) · [F1.5](../../curriculum/track-f1.md) (read the output as
+audit evidence) · [F3.5](../../curriculum/track-f3.md) and
+[F3.7](../../curriculum/track-f3.md) (the metrics, and building the capability).
 
-The directory is named `b2.10-eval-harness` for historical reasons — B2.10 is a
+The directory is named `b2.10-eval-harness` for historical reasons — C2.10 is a
 different lesson now, and renaming it would break every committed path.
 
 This is the most complete lab in the commons: a working benchmark that scores an
@@ -77,8 +77,8 @@ for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M scripts/vulnbench.sh compare; don
 ```
 
 That reproduction — the same harness across three open-weight families — is what
-[C1.3](../../curriculum/track-c1.md) runs to see the inflated number, and what
-[E1.5](../../curriculum/track-e1.md) captures as audit evidence.
+[D1.3](../../curriculum/track-d1.md) runs to see the inflated number, and what
+[F1.5](../../curriculum/track-f1.md) captures as audit evidence.
 
 ## Execution-based benchmarks
 

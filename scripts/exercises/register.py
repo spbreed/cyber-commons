@@ -16,7 +16,7 @@ RUNTIME_STEP = runtime_step()
 
 EXERCISES: dict[str, dict] = {
 
-"A1.18": {
+"B1.18": {
  "concept": """
 Fifteen lessons, fifteen risks, each one named against a component of CyberTravels.
 This is the lesson where they stop being a list and become a register.
@@ -97,9 +97,9 @@ is the useful part — it tells Alex which afternoon to spend first.
               "The rows with no answer are the ones that will recur.",
 },
 
-"A1.19": {
+"B1.19": {
  "concept": """
-A1.18 registered the twelve risks the agents brought. This lesson is the other
+B1.18 registered the twelve risks the agents brought. This lesson is the other
 index, and it is the one that gets skipped: **every control CyberTravels needs,
 including the dozen that were required before it shipped a single agent.**
 

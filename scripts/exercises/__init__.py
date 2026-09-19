@@ -2,7 +2,7 @@
 
 Schema
 ------
-    "A2.5": {
+    "B2.5": {
         "concept":   str,   REQUIRED markdown — introduce the idea BEFORE any risk
         "steps":     [("md" | "py", source), ...],
         "expect":    str,   what a correct run prints
@@ -24,31 +24,31 @@ from .casestudies import EXERCISES as _cases
 from .register import EXERCISES as _register
 from .incident import EXERCISES as _incident
 from .intros import EXERCISES as _intro
-from .track_g import EXERCISES as _g        # Function G — build it first
+from .track_a import EXERCISES as _a        # Function A — build it first
 from .track_a0 import EXERCISES as _a0      # how to run the commons at all
-from .track_a1 import EXERCISES as _a1
-from .track_a2 import EXERCISES as _a2
-from .track_a3 import EXERCISES as _a3
-from .track_b2a import EXERCISES as _b2a      # the SDLC pipeline, part 1
-from .track_b2b import EXERCISES as _b2b      # the SDLC pipeline, part 2
-from .track_b2c import EXERCISES as _b2c      # agentic pentest, B2.10-B2.14
-from .track_c1 import EXERCISES as _c1
-from .track_c2 import EXERCISES as _c2
+from .track_b1 import EXERCISES as _b1
+from .track_b2 import EXERCISES as _b2
+from .track_b3 import EXERCISES as _b3
+from .track_c2a import EXERCISES as _c2a      # the SDLC pipeline, part 1
+from .track_c2b import EXERCISES as _c2b      # the SDLC pipeline, part 2
+from .track_c2c import EXERCISES as _c2c      # agentic pentest, C2.10-C2.14
 from .track_d1 import EXERCISES as _d1
 from .track_d2 import EXERCISES as _d2
 from .track_e1 import EXERCISES as _e1
 from .track_e2 import EXERCISES as _e2
-from .track_e3 import EXERCISES as _e3
-from .track_new import EXERCISES as _new   # the five-phase D lessons, E1.13
+from .track_f1 import EXERCISES as _f1
+from .track_f2 import EXERCISES as _f2
+from .track_f3 import EXERCISES as _f3
+from .track_new import EXERCISES as _new   # the five-phase E lessons, F1.13
 
 EXERCISES: dict[str, dict] = {
     **_intro,
     **_incident,
     **_cases,
     **_register,
-    **_g,
-    **_a0, **_a1, **_a2, **_a3, **_b2a, **_b2b, **_b2c,
-    **_c1, **_c2, **_d1, **_d2, **_e1, **_e2, **_e3, **_new,
+    **_a,
+    **_a0, **_b1, **_b2, **_b3, **_c2a, **_c2b, **_c2c,
+    **_d1, **_d2, **_e1, **_e2, **_f1, **_f2, **_f3, **_new,
 }
 
 # The hook and the diagram live in framing.py rather than beside the lesson

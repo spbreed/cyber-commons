@@ -1,4 +1,4 @@
-# step:file A3.2
+# step:file B3.2
 """Sandboxed execution — what the agent's code can reach when it runs.
 
 CyberTravels' Coding Agent writes code and runs it. Everything in `agents/` up
@@ -54,7 +54,7 @@ CODING_AGENT = Profile(
     name="coding-agent",
     paths=[config.PROJECT_ROOT / "data" / "workspace"],
     env_keys=set(),                 # nothing. Not "no secrets" — nothing.
-    hosts=set(),                    # egress is A3.3's allow-list, not here
+    hosts=set(),                    # egress is B3.3's allow-list, not here
     may_spawn=False,                # `_open_branch` reaches a shell. It should not.
     wall_seconds=30,
 )

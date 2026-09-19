@@ -15,9 +15,9 @@ another traveller's entries. A shared memory pool across principals is the
 cheapest cross-tenant leak there is, and nothing in the model layer will catch
 it because the model is doing exactly what it was asked.
 
-A1.4 is the lesson this file is the worked example for.
+B1.4 is the lesson this file is the worked example for.
 """
-# step:file G1.5
+# step:file A1.5
 import json
 import time
 
@@ -78,7 +78,7 @@ def as_prompt_block(owner_id, limit=6):
 
 def forget(owner_id):
     """Delete one owner's memory. A traveller asking to be forgotten is a
-    request the system has to be able to satisfy — E2.4 is the lesson, and a
+    request the system has to be able to satisfy — F2.4 is the lesson, and a
     memory with no delete path makes that answer 'no'."""
     c = db.conn()
     n = c.execute("DELETE FROM memory WHERE owner_id = ?", (owner_id,)).rowcount

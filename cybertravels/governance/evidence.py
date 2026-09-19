@@ -1,4 +1,4 @@
-# step:file E1.5
+# step:file F1.5
 """Evidence, measured off the tree — including the controls that are absent.
 
 This is the file that makes the rest of the function something other than
@@ -8,16 +8,16 @@ moves when somebody deletes one.
 
 Six lessons:
 
-    E1.5  what evaluation output is and is not evidence of
-    E1.6  operating guardrails, which are enforceable, and outcome guardrails,
+    F1.5  what evaluation output is and is not evidence of
+    F1.6  operating guardrails, which are enforceable, and outcome guardrails,
           which need a measurement before they mean anything
-    E1.7  continuous verification — collect evidence, do not automate judgement
-    E1.8  the third party, and the sub-processors nobody mapped
-    E1.9  lifecycle — the change that is treated as maintenance
-    E1.13 the measurement itself, on CyberTravels, with the gaps named
+    F1.7  continuous verification — collect evidence, do not automate judgement
+    F1.8  the third party, and the sub-processors nobody mapped
+    F1.9  lifecycle — the change that is treated as maintenance
+    F1.13 the measurement itself, on CyberTravels, with the gaps named
 
 **The single most misleading thing available here is conformance.** A schema
-check passes at about 100% and says nothing about correctness. B2.18 caps two
+check passes at about 100% and says nothing about correctness. C2.18 caps two
 controls at PARTIAL for the same reason: an attestation that says PASS
 everywhere is evidence of nothing.
 """
@@ -25,7 +25,7 @@ import time
 
 
 # --------------------------------------------------------------------------- #
-# E1.5 — what an evaluation result actually evidences
+# F1.5 — what an evaluation result actually evidences
 # --------------------------------------------------------------------------- #
 def evidences(result):
     """Split an eval result into what it supports and what it does not.
@@ -55,11 +55,11 @@ def evidences(result):
             "usable_as_control_evidence": bool(claims) and not refused}
 
 
-# step:E1.6 add
+# step:F1.6 add
 # --------------------------------------------------------------------------- #
-# E1.6 — two kinds of guardrail, and only one is enforceable today
+# F1.6 — two kinds of guardrail, and only one is enforceable today
 # --------------------------------------------------------------------------- #
-# "The agent must not act outside its authority" is enforceable: A3.1 decides
+# "The agent must not act outside its authority" is enforceable: B3.1 decides
 # it per call. "The agent must not mislead a customer" is not — not because it
 # is unimportant, but because nothing in the system can evaluate it, and a
 # policy containing a rule nobody can enforce teaches its readers that the
@@ -81,12 +81,12 @@ def classify_guardrail(text, *, enforced_by=None, measured_by=None):
             "why": "nothing enforces it and nothing measures it. Specify the "
                    "measurement, or take it out of the policy — a rule nobody "
                    "can enforce teaches readers the policy is decorative"}
-# step:E1.6 end
+# step:F1.6 end
 
 
-# step:E1.7 add
+# step:F1.7 add
 # --------------------------------------------------------------------------- #
-# E1.7 — automate the collection, not the judgement
+# F1.7 — automate the collection, not the judgement
 # --------------------------------------------------------------------------- #
 # Continuous control verification goes wrong in one specific way: a model is
 # asked whether the control is adequate, answers yes, and the answer is filed
@@ -103,12 +103,12 @@ def collect(control_id, collector, *, judged_by):
             "judgement": None,
             "why": "the verdict field is empty on purpose; it is filled by "
                    "the named person, not by this function"}
-# step:E1.7 end
+# step:F1.7 end
 
 
-# step:E1.8 add
+# step:F1.8 add
 # --------------------------------------------------------------------------- #
-# E1.8 — the vendor, and the chain behind the vendor
+# F1.8 — the vendor, and the chain behind the vendor
 # --------------------------------------------------------------------------- #
 # Two failures, and the second is the one nobody has mapped. Vendor AI
 # features arrive enabled by default in a product you already bought, so
@@ -124,23 +124,23 @@ def assess_third_party(vendor):
         gaps.append("no sub-processor list — the chain behind this vendor is "
                     "where the data actually goes")
     if vendor.get("trains_on_customer_data"):
-        gaps.append("trains on customer data; E2.5's deletion question has no "
+        gaps.append("trains on customer data; F2.5's deletion question has no "
                     "good answer once it is in weights")
     if not vendor.get("change_notification"):
-        gaps.append("no notification on model change — D1.2's first drift "
+        gaps.append("no notification on model change — E1.2's first drift "
                     "surface, on somebody else's schedule")
     return {"vendor": vendor.get("name"), "gaps": gaps,
             "acceptable": not gaps,
             "depth_mapped": len(vendor.get("sub_processors", []))}
-# step:E1.8 end
+# step:F1.8 end
 
 
-# step:E1.9 add
+# step:F1.9 add
 # --------------------------------------------------------------------------- #
-# E1.9 — the change that is filed as maintenance
+# F1.9 — the change that is filed as maintenance
 # --------------------------------------------------------------------------- #
 # Re-indexing the retrieval corpus is treated as maintenance because it
-# touches no code. It changes what the agent says. D1.2 listed the surfaces;
+# touches no code. It changes what the agent says. E1.2 listed the surfaces;
 # this decides which of them are changes for governance purposes, and the rule
 # is behaviour rather than artefact: if it alters what the system does, it is
 # a change.
@@ -162,12 +162,12 @@ def is_a_change(surface):
 
 def lifecycle_gaps():
     return sorted(FILED_AS_MAINTENANCE & BEHAVIOUR_CHANGING)
-# step:E1.9 end
+# step:F1.9 end
 
 
-# step:E1.13 add
+# step:F1.13 add
 # --------------------------------------------------------------------------- #
-# E1.13 — measure the controls on CyberTravels, and name the gaps
+# F1.13 — measure the controls on CyberTravels, and name the gaps
 # --------------------------------------------------------------------------- #
 # Everything above is machinery. This is the number. Each row asks one
 # question of the tree and answers it by calling the thing, so a control that
@@ -194,23 +194,23 @@ def measure():
     from ..soc import sensors
 
     checks = [
-        ("A2.1", "workload identities are records with an approver",
+        ("B2.1", "workload identities are records with an approver",
          lambda: all(w["approved_by"] for w in registry.all_workloads())),
-        ("A2.5", "a revoked workload stops acting",
+        ("B2.5", "a revoked workload stops acting",
          lambda: registry.active(config.AGENT_IDS["workflow"])),
-        ("A3.1", "an unclassified tool is denied by default",
+        ("B3.1", "an unclassified tool is denied by default",
          lambda: not policy.decide("nope", {}, type("S", (), {
              "user_id": "priya", "role": "finance"})()).allowed),
-        ("A3.2", "the coding agent's profile grants no ambient credentials",
+        ("B3.2", "the coding agent's profile grants no ambient credentials",
          lambda: sandbox.CODING_AGENT.env_keys == set()),
-        ("A3.9", "an exemption cannot exist without an expiry",
+        ("B3.9", "an exemption cannot exist without an expiry",
          lambda: _refuses(policy.Exemption, "E", ["t"], ["human-approval"],
                           "why", "alex", 0)),
-        ("B2.3", "the deterministic pass finds the expressible defects",
+        ("C2.3", "the deterministic pass finds the expressible defects",
          lambda: len(sast.scan(str(_tree()))) == 5),
-        ("C1.9", "the kill switch reports the paths it is not on",
+        ("D1.9", "the kill switch reports the paths it is not on",
          lambda: containment.coverage()["coverage"] < 1.0),
-        ("D1.1", "the sensor estate is measured per agent action",
+        ("E1.1", "the sensor estate is measured per agent action",
          lambda: sensors.matrix()["coverage"] == 1.0),
     ]
     rows = []
@@ -240,7 +240,7 @@ def known_gaps():
     return [
         {"gap": "containment and egress are decided in-process",
          "named_in": "cybertravels/sandbox.py, egress.py",
-         "mitigation": "A3.7's gateway moves the decision to one point; "
+         "mitigation": "B3.7's gateway moves the decision to one point; "
                        "enforcement outside the process is not modelled"},
         {"gap": "the kill switch is not on the direct API path",
          "named_in": "cybertravels/redteam/containment.py",
@@ -267,4 +267,4 @@ def _refuses(fn, *args):
 def _tree():
     from pathlib import Path
     return Path(__file__).resolve().parent.parent
-# step:E1.13 end
+# step:F1.13 end

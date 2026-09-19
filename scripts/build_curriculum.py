@@ -7,7 +7,7 @@ say the same thing *once this has been run*. It had not been, and that is why
 `--check` exists: these fifteen files are committed, and nothing compared them
 against their source. A fix to "a system that changed on Tuesday" landed in
 curriculum.json and in the rendered page, and sat uncorrected in
-`curriculum/track-e1.md` — where `check_clarity.py` could not see it, because
+`curriculum/track-f1.md` — where `check_clarity.py` could not see it, because
 that gate reads the site.
 
     python3 scripts/build_curriculum.py            # write curriculum/*.md

@@ -13,14 +13,14 @@ allowed-tools: Read, Grep, Glob
 Otherwise it is a sentence in a policy. The test is mechanical: can you compute
 this number from the estate, today, without asking anyone?
 
-So these are computed from `cybertravels/` — the same tree B2.3 scans and A1.1
+So these are computed from `cybertravels/` — the same tree C2.3 scans and B1.1
 draws — and the output is a list of gaps each naming the lesson that closes it,
 not a maturity score. A governance report whose only artefact is a number
 changes nothing.
 
 ## When to use this
 
-After control mapping (E1.4) and before any assurance claim. Re-run it after
+After control mapping (F1.4) and before any assurance claim. Re-run it after
 every change to the estate: an indicator measured once is a snapshot, and the
 whole argument for KCIs is that point-in-time testing fails for systems that
 change weekly.

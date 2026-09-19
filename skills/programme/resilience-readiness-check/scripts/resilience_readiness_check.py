@@ -64,12 +64,12 @@ PROGRAMMES = {
 
 # Close the curriculum: what you built, and what it is for.
 BUILT = [
- ("A1-A3", "a control plane: planes, identity, containment"),
+ ("B1-B3", "a control plane: planes, identity, containment"),
  ("B1",    "a 15-stage AppSec pipeline, ending in confirmed-by-exploitation severity"),
- ("B2",    "a harness whose verifier does not lie"),
- ("C1-C2", "the ability to attack it and to research it repeatably"),
- ("D1-D2", "the ability to notice, stop and recover"),
- ("E1-E3", "the ability to evidence all of it, and to decide"),
+ ("C2",    "a harness whose verifier does not lie"),
+ ("D1-C2", "the ability to attack it and to research it repeatably"),
+ ("E1-E2", "the ability to notice, stop and recover"),
+ ("F1-F3", "the ability to evidence all of it, and to decide"),
 ]
 # ------------------------------------------------------------------------ run
 

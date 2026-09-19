@@ -131,6 +131,17 @@ CLAIMS = [
      "CLAUDE.md's shape line, skill count"),
     ("CLAUDE.md", r"a (\d+)-lesson curriculum on securing agentic AI", "sessions",
      "CLAUDE.md's one-line description of the commons"),
+    # The homepage's own counts. It is hand-written outside its markers, so
+    # nothing regenerates these — and nothing was reading them either: the
+    # meta description said 135 lessons and the share text said 134 while the
+    # tree carried 148. The page a stranger sees first is the worst place for
+    # a number nobody checks.
+    ("site/index.html", r"(\d+) lessons that run on your own machine", "sessions",
+     "the homepage meta description"),
+    ("site/index.html", r"(\d+) lessons, runnable on your own machine", "sessions",
+     "the homepage Twitter card"),
+    ("site/index.html", r"Six tracks, (\d+) runnable lessons", "sessions",
+     "the homepage share text"),
 ]
 
 WORDS = {"six": 6, "seven": 7, "eight": 8}

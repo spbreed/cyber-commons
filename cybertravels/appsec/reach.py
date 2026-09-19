@@ -1,4 +1,4 @@
-# step:file B2.5
+# step:file C2.5
 """Stage 10 — can an external caller actually get here?
 
 A finding in dead code costs exactly what a finding on the money path costs:
@@ -17,7 +17,7 @@ route it cannot see.
 That direction matters and it decides how the result is used. Over-approximate
 reachability is safe to *rank* with and unsafe to *drop* with. So nothing here
 deletes a finding. `classify` marks it, the report says which, and a reviewer
-decides — which is B2.11's rule stated as code: unreachable sinks are reported
+decides — which is C2.11's rule stated as code: unreachable sinks are reported
 as unreachable rather than dropped.
 """
 import ast
@@ -70,7 +70,7 @@ class Graph:
 
     @staticmethod
     def _is_entry(node, rel):
-        """Where the walk starts — B2.2's answer, not a second one.
+        """Where the walk starts — C2.2's answer, not a second one.
 
         The threat model already had to decide what an entry point is. Asking
         the question again here would give two stages their own idea of where

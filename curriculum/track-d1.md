@@ -1,27 +1,27 @@
-# Track D1 — Discover — the Sensors, and the Agent-Shaped Hole in Them
+# Track D1 — One Red-Team Lifecycle, End to End
 
-**Function D · The Agentic SOC**  
-*Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
+**Function D · Agentic Evaluation and Red Teaming**  
+*Red-team CyberTravels as a non-deterministic actor: one lifecycle from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, to the telemetry, containment and forensic governance every finding must end in.*
 
-**Job titles:** SOC Analyst, Security Engineer, Cloud Security Engineer, Security Data Engineer
+**Job titles:** Red Team Operator, AI Security Researcher, Offensive ML Engineer
 
-**What changes:** What already watches the estate — EDR, DLP, CSPM, CNAPP — what each sees when the actor is an agent, the drift that arrives without a code change, and a bonus on finding the agents nobody registered. 4 lessons.
+**What changes:** A single lifecycle: from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, into the telemetry, detection, triage, containment and forensic replay a researcher hands the defender, and out to institutional governance. 12 lessons.
 
-**Autonomy focus:** You watch an L2.5 fleet with four products bought for L0 humans, and the uncovered column gets named rather than assumed.
+**Autonomy focus:** You red-team at L3 the systems deployed at L2.5, and every finding leaves as a control the SOC can run.
 
-**Deliverable:** A sensor coverage matrix for your own estate, with the agent actions no sensor class covers listed by name.
+**Deliverable:** One finding carried the whole distance — reproduced, turned into a detection, and handed over with an eval case that fails on the old build.
 
 > Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### D1.0 — Start here — the agentic SOC, and the stack that runs it
+### D1.0 — Start here — the evolution of non-deterministic threat simulation
 
-- **Risk** — A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.
-- **Control** — Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.
-- **Lab** — Put one agent trace and one human session side by side and list what separates them.
+- **Risk** — Offensive work that produces anecdotes: a result that worked once, on one target, with no rate and no reproduction.
+- **Control** — A campaign with a stated criterion, a harness that separates the model effect from the harness effect, and a handoff that ends in a control.
+- **Lab** — Take one published agentic attack and list what you would need to reproduce it.
 
-**Run it** — Put one agent trace and one human session side by side and list what separates them.
+**Run it** — Take one published agentic attack and list what you would need to reproduce it.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -36,36 +36,28 @@ python3 scripts/checkpoint.py --at D1.0 --diff      # what this lesson changed
 # --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
 claude --version        # prints a version? nothing else to configure
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py
-
-# --- or install it into your own agent and ask in your own words ---
+# --- 4 · a reading lesson: no skill to run. When you reach one
+#         that does, this links them all into your agent. ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.
+*Expect:* The three attack surfaces of an agent print with what each covers, and the same claim scores as anecdote, measurement, result or evidence depending on whether it carries a rate, a control comparison and an independent reproduction.
 
 ---
 
-### D1.1 — The sensor estate — EDR, DLP, CSPM and CNAPP against an agent
+### D1.1 — Platform ingestion and supply-chain risks
 
-- **Risk** — Four products are bought, the estate is assumed covered, and the agent's whole working day falls between them.
-- **Control** — A coverage matrix computed per sensor and per agent action, with the uncovered actions named rather than counted.
-- **Lab** — Score four sensor classes against nine real agent actions and read the column none of them covers.
-- **Tools** — `Wazuh`, `Prowler`, `Falco`
+- **Lab** — Dependency-squatting and malicious uploads to model hubs, and the ingress filters that should catch them.
+- **Tools** — `Sigstore`, `OSV`
 
 ---
 
-### D1.2 — Drift monitoring — behaviour that changes without a code change
+### D1.2 — Weaponizing the ingestion path
 
-- **Risk** — A detection that worked last month is silently degraded.
-- **Control** — Watch model updates, prompt changes, index refreshes, tool versions.
-- **Lab** — Change the model underneath and catch the detection regression.
-- **Tools** — `promptfoo`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+- **Lab** — Data-layer payloads that exploit parsers to reach code execution during automated embedding generation.
+- **Tools** — `OpenTelemetry`
 
-**Run it** — Change the model underneath and catch the detection regression.
+**Run it** — Data-layer payloads that exploit parsers to reach code execution during automated embedding generation.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -81,24 +73,22 @@ python3 scripts/checkpoint.py --at D1.2 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/detection/behavioural-drift-monitor/scripts/behavioural_drift_monitor.py
+python3 skills/research/training-data-provenance-manifest/scripts/training_data_provenance_manifest.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A rule that passed last month fails now. Nothing in your code changed.
+*Expect:* No defence gives ASR 1.00. The keyword filter gives ASR 0.67 with false alarms on 2 of 4 benign security-writing cases. Provenance gives ASR 0.00 with no false alarms — until the payload is delivered through the principal channel, where ASR returns to 1.00. The same two numbers then score all three surfaces in one table.
 
 ---
 
-### D1.3 — Bonus — finding the agents, and keeping what they emit
+### D1.3 — Cognitive vulnerability and elicitation scaling
 
-- **Risk** — Prompts, traces, tool calls and approvals never reach the SIEM.
-- **Control** — Onboard agent telemetry deliberately; decide retention.
-- **Lab** — Ship OTEL agent traces into OpenSearch and query them.
-- **Tools** — `OpenTelemetry`, `OpenSearch`
+- **Lab** — Cross-prompt attention degradation and jailbreaks that strip safety while retaining tool use, scored on reproduction.
+- **Tools** — `Inspect`
 
-**Run it** — Ship OTEL agent traces into OpenSearch and query them.
+**Run it** — Cross-prompt attention degradation and jailbreaks that strip safety while retaining tool use, scored on reproduction.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -114,14 +104,92 @@ python3 scripts/checkpoint.py --at D1.3 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
+python3 skills/research/technique-reproducibility-test/scripts/technique_reproducibility_test.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
+```
+
+*Expect:* You reproduce an inflated score, then patch the harness so the same trick fails.
+
+---
+
+### D1.4 — Establishing telemetry and detecting the actor
+
+- **Lab** — JSON-wrapped model-gateway trace logging, and scoring actors to tell agent tool calls from human behaviour.
+- **Tools** — `OpenTelemetry`, `OpenSearch`
+
+**Run it** — JSON-wrapped model-gateway trace logging, and scoring actors to tell agent tool calls from human behaviour.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · your copy of CyberTravels as it stood at the END of D1.4:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at D1.4 --out work/cybertravels
+python3 scripts/checkpoint.py --at D1.4 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 4 · run the skill against its committed fixture ---
 python3 skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_scoring.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A working classifier — your earliest Shadow Autonomy signal.
+*Expect:* A finding with a reproduction rate (e.g. 7/10), not a claim of determinism the system cannot offer.
 
 ---
 
-**Adjacency requirement:** also complete A2.3–A2.4 — the failures happen in the seams.
+### D1.5 — Emergent swarms and multi-agent proliferation
+
+- **Lab** — Case studies where agents bridge sandboxes via shared mounts or spawn child nodes without attribution.
+- **Tools** — `MITRE ATLAS`
+
+---
+
+### D1.6 — High-concurrency detection engineering
+
+- **Lab** — Semantic drift and runtime-objective anomalies, and choosing rules by the queue volume they add.
+- **Tools** — `Sigma`
+
+---
+
+### D1.7 — Triaging the non-deterministic swarm
+
+- **Lab** — Multi-threaded delegation graphs and triage loops defended against deceptive self-correction.
+- **Tools** — `TheHive`
+
+---
+
+### D1.8 — Defensive deception and threshold failures
+
+- **Lab** — Canary files and weaponised tokens inside data indexes, catching harvesters with no threshold.
+- **Tools** — `Canarytokens`
+
+---
+
+### D1.9 — Machine-speed containment and fleet revocation
+
+- **Lab** — Zero-trust runtime gatekeepers and dynamic token revocation that isolate a fleet at machine speed.
+- **Tools** — `SPIFFE`
+
+---
+
+### D1.10 — Forensic replay and control architecture
+
+- **Lab** — Deterministic runtime constraints that reproduce, replay and document an agentic exploit path.
+- **Tools** — `Velociraptor`
+
+---
+
+### D1.11 — Institutional governance and compliance
+
+- **Lab** — Findings translated into engineering policies, change-surface patches and reporting timelines.
+- **Tools** — `NIST AI RMF`
+
+---

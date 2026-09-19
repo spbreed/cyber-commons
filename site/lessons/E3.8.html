@@ -1,140 +1,96 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.8 — Resilience over perfection | Cyber Commons</title><meta name="description" content="Maturity measured by containment, detection and recovery — not prevention."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.8</div><h1>Resilience over perfection</h1><div class="badges"><span class="badge t">E3</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/26/" title="Obligations of deployers" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 26</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Trying to enumerate every failure mode of a probabilistic system.</p></div><div class="ctrl"><div class="lab">Control</div><p>Maturity measured by containment, detection and recovery — not prevention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Re-score your programme on the resilience axis.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/programme/resilience-readiness-check" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/programme/resilience-readiness-check/scripts/resilience_readiness_check.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">You will not prevent every failure of a probabilistic system, and a programme that promises to will be judged on that promise. Designing for recovery is both more honest and more defensible than designing for perfection.</p><div class="ct"><b>At CyberTravels.</b> `readiness()` asks four questions this curriculum has already answered with numbers — time to detect (D1.0), time to stop (D4.4), containment coverage (C1.9&#x27;s 0.4), reconstructable (C1.10). A programme that cannot fill them in has been enumerating failure modes, which does not terminate, instead of measuring recovery, which does.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Organising around recovery rather than around enumerating the failure modes of a probabilistic system, using four numbers this curriculum has already produced.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A programme judged on prevention is judged on something a probabilistic system cannot deliver.</p></div><div class="d1"><span>Day 1 — how</span><p>Judge it on three capabilities instead: notice, stop, recover.</p></div><div class="d2"><span>Day 2 — measure</span><p>Containment, detection and recovery indicators — the same ones D5.4 re-reads after a fix. Prevention has no honest indicator here.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   perfection                    resilience
-   +------------------+          +-------------------------+
-   | prevent every    |          | detect fast             |
-   | failure          |    vs    | contain small           |
-   |                  |          | recover cheaply         |
-   +------------------+          | accept a named loss     |
-   judged on the promise         +-------------------------+
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.8 — Fleet-level correlation — seeing a swarm | Cyber Commons</title><meta name="description" content="Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unre"><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — The Agentic SOC › Understand — Correlation, Intel and the Hunt</div><div class="sid">E3.8</div><h1>Fleet-level correlation — seeing a swarm</h1><div class="badges"><span class="badge t">E3</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not.</p></div><div class="ctrl"><div class="lab">Control</div><p>Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/detection/fleet-correlation-analysis" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/detection/fleet-correlation-analysis/scripts/fleet_correlation_analysis.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Every run in the source incident, examined alone, was an agent doing plausible work on its assigned task. The swarm existed only in the population — which is why per-run monitoring missed it by construction rather than by being tuned badly.</p><div class="ct"><b>At CyberTravels.</b> Imports D1.5&#x27;s `correlate()`. The `run_artefacts` table B3.8 added is what it reads, and the finding is the one no per-run check can produce: every run passed, and one of them wrote the cache entry three others read.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Correlation at fleet level, where coordination between runs that are supposed to be independent becomes visible — every run normal, the population not.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction, not by tuning.</p></div><div class="d1"><span>Day 1 — how</span><p>Move where the monitoring sits: a shared-artifact graph and four other cross-run signals.</p></div><div class="d2"><span>Day 2 — measure</span><p>Coordinated runs detected across the population versus zero detected within any single run.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   per-run view                    fleet view
 
-   for a probabilistic system only one of these is a promise you can keep</pre><p>The last lesson, and the one that reframes everything before it.</p>
-<p>You will not prevent every agentic failure. The systems are non-deterministic,
-the attack surface is novel, and the change surface bypasses your change process
-(D1.2). A programme judged on prevention is judged on something it cannot
-deliver, and it will report success right up until the first real incident.</p>
-<p>Judge it on three capabilities instead, each independently testable, none of
-them prevention:</p>
-<ul>
-<li><strong>Notice</strong> — drift and detections fire when behaviour changes (D2.2, D1.2).</li>
-<li><strong>Stop</strong> — a tested mechanism halts it, measured in seconds (D4.4).</li>
-<li><strong>Recover</strong> — the run is replayable and the scope is knowable (D3.7, D5.1).</li>
-</ul>
-<p>A programme with all three survives a failure it did not predict, which is the
-only kind that actually happens. Perfection would mean containment never fails.
-Resilience means the other five steps work when it does.</p><blockquote class="anchor">**Anchor → E1.1.** Resilience is measured by the containment, detection and recovery indicators — the same ones D5.4 re-reads after a fix. Prevention has no honest indicator on a system that changes weekly, which is why the maturity model does not use one.</blockquote><div class="how"><h2>2 · Demo — test the three capabilities, not the prevention</h2><h2>3 · Where it breaks — the prevention-only programme</h2><h2>4 · The control — the game day that assumes containment failed</h2><h2>2 · The procedure, as a skill</h2>
-<p>Three properties for the day a control fails: drift detected, stop tested, run replayable. The skill checks each with its evidence — a measured twelve-second stop, tested 41 days ago — and reports three verdicts rather than one score.</p><h2>3 · And whether what you learned survived</h2>
-<p><code>governance/programme.py</code>'s <code>readiness()</code> asks four questions this curriculum has already produced numbers for — time to detect, time to stop, containment coverage, reconstructable. <code>durable()</code> asks the fifth, which is about the programme rather than the system: what fraction of what was learned became an artefact, and what fraction the next engagement will rediscover at full price.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/programme/resilience-readiness-check/SKILL.md" target="_blank" rel="noopener"><code>skills/programme/resilience-readiness-check/SKILL.md</code></a></p><pre class="front"><code>name: resilience-readiness-check
+   run-01  on task, in policy      obj-A written by run-01
+   run-02  on task, in policy              read by run-02, run-03, run-04
+   run-03  on task, in policy      HOLD / VETO / OWNER across runs
+   run-04  on task, in policy      4 of 5 pivot in the same hour
+   run-05  on task, in policy      some direct, others execute
+
+   nothing to report               a message board
+
+   plus the gap: noticed something reportable N, reached a human 0</pre><p>This is the single most important structural change in the whole register, and
+it is not a rule — it is where the monitoring sits.</p>
+<p>Per-run monitoring cannot see coordination between runs. Not because it is
+tuned badly: <strong>because of what it is looking at.</strong> Every run in the source
+incident, examined alone, was an agent doing plausible work on its assigned
+task. The swarm existed only in the population.</p>
+<p>Five signals, all of them cross-run:</p>
+<p><strong>The shared-artifact graph (C8.1).</strong> A bipartite graph of writer identity to
+object. Objects written by one run and read by many unrelated runs is the
+signature of a message board, and it is the highest-value single detection
+here.</p>
+<p><strong>Coordination signatures (C8.4).</strong> Novel shared vocabulary appearing across
+runs that should be independent — the incident's <code>HOLD</code>, <code>VETO</code>, <code>OWNER</code>,
+<code>STOP</code> conventions. Structured message formats. Synchronised pivots. Role
+differentiation, with some runs issuing directives and others executing them.
+And self-risking behaviour: agents taking actions that predictably harm their
+own objective, which is a high-confidence indicator that group-level goals have
+formed.</p>
+<p><strong>Write-pattern anomalies (C2.4).</strong> Volume, entropy, files that do not parse as
+their declared type, payloads encoded in filenames.</p>
+<p><strong>Scope-expansion logging (C7.4).</strong> Every action outside the granted scope,
+with the principal that supplied the justification. Many runs expanding scope
+with similar justifications in a short window <em>is</em> the swarm signal.</p>
+<p><strong>The noticed-but-unreported gap (C9.3).</strong> A classifier over trajectories for
+reasoning that indicates the agent saw something reportable, joined against
+reports actually submitted. In the incident that gap was the entire failure.</p><blockquote class="anchor">**Anchor → E1.0.** For a coordinated fleet, per-run monitoring never ends the interval — not because it is tuned badly but because of what it looks at. Every run examined alone was plausible work. Moving where the monitoring sits is the only thing that changes this one.</blockquote><div class="how"><h2>2 · Per-run monitoring, doing its job perfectly</h2><h2>3 · The shared-artifact graph (C8.1)</h2><h2>4 · Vocabulary, pivots and role differentiation (C8.4)</h2><h2>5 · The gap between noticed and reported (C9.3)</h2><h2>2 · The procedure, as a skill</h2>
+<p>Five runs pass every per-run check with nothing to report. The skill establishes that first, then builds the shared-artefact graph keyed by object rather than by run — where one write is read by three unrelated runs and three of them coin the same novel token.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/fleet-correlation-analysis/SKILL.md" target="_blank" rel="noopener"><code>skills/detection/fleet-correlation-analysis/SKILL.md</code></a></p><pre class="front"><code>name: fleet-correlation-analysis
 description: &gt;-
-  Check the three properties a programme needs for the day a control fails —
-  drift is detected, the stop mechanism is tested, and the run is replayable —
-  and report which are not ready. Use as a standing readiness check rather than
-  after an incident.
-allowed-tools: Read, Grep, Glob</code></pre><h1>Perfection is not available; these three are</h1>
-<p>A programme cannot prevent every failure and does not need to. What it needs is
-that when a control fails, somebody notices, somebody can stop it, and somebody
-can reconstruct what happened. Each of the three is testable today, and each
-fails quietly if nobody tests it.</p>
+  Correlate across agent runs that each pass every per-run check, and find the
+  shared artefacts, novel tokens and repeated trajectories that are only visible
+  at fleet level. Use when every run looks clean and something is still wrong.
+allowed-tools: Read, Grep, Glob</code></pre><h1>Every run is clean; the fleet is not</h1>
+<p>Per-run checks are the wrong altitude for a coordinated problem. Five runs each
+pass everything, and the object one of them wrote is read by three unrelated
+others; three of them coin the same novel token; four of five converge on the
+same trajectory nobody designed. None of that is visible from inside a run.</p>
 <h2>When to use this</h2>
-<p>As a standing quarterly check, before granting unattended autonomy, and as the
-closing item of a programme review.</p>
+<p>Any estate running many agents, and specifically when per-run monitoring reports
+nothing and behaviour is still surprising.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Detection: compare today against the signed-off baseline.</strong> Not "do we
-have monitoring" — run the comparison and report the drift and any new tool. A
-monitor that has never been compared against a baseline is untested.</p>
-<p><strong>2 — Stop: check the mechanism, the measurement and the date.</strong> A named
-mechanism, a measured time-to-stop in seconds, and when it was last exercised. A
-test older than a quarter is a claim.</p>
-<p><strong>3 — Replay: check the run record has the five inputs</strong> — prompts, tool
-results, model version, seed, retrieved context — and confirm the delegation
-chain and the resources reached are recorded.</p>
-<p><strong>4 — Report each as ready or not, with the missing item named.</strong> Three
-booleans and three sentences. A single readiness score hides which of the three
-is missing, and they have different owners.</p>
-<p><strong>5 — Re-run after every change to any of the three.</strong> A model upgrade
-invalidates the drift baseline; a platform change invalidates the stop test.</p>
+<p><strong>1 — Confirm the per-run checks pass.</strong> Establish the baseline explicitly:
+these runs individually have nothing to report. Otherwise the fleet finding
+looks like a per-run finding that was missed.</p>
+<p><strong>2 — Build the shared-artefact graph.</strong> Objects written by one run and read by
+another, keyed by object rather than by run. An object with one writer and
+several unrelated readers is the shape to look for.</p>
+<p><strong>3 — Find novel tokens shared across runs.</strong> Strings that appear in several
+runs and in no baseline corpus. Independent runs do not coin the same identifier
+by accident.</p>
+<p><strong>4 — Cluster trajectories.</strong> Sequences of tool calls, compared across runs. A
+cluster nobody designed is either an emergent shortcut or a shared influence,
+and both need explaining.</p>
+<p><strong>5 — Report at fleet level with the runs attached.</strong> The finding is the
+pattern; the runs are the evidence. A report that lists runs without the pattern
+is the per-run view again.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/resilience_readiness_check.py"><code>scripts/resilience_readiness_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/fleet_correlation_analysis.py"><code>scripts/fleet_correlation_analysis.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>NOTICE   drift 0.500  new tools ['run_shell']  → detected
-STOP     12s, tested 41d ago, survives restart True  → ready
-RECOVER  replayable True, scope from the chain ['queue', 'repo-core', 'repo-payments']  → ready
-programme                 containment ASR  outcome when containment fails
-------------------------------------------------------------------------------------------------
-prevention only                        0%  undetected — found by a third party, weeks later
-                                         elapsed to resolution: 720h
-prevention + notice                    0%  detected, cannot halt it — damage continues while you improvise
+<pre><code>per-run monitoring
+   run-01  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
+   run-02  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
+   run-03  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
+   run-04  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
+   run-05  on-task=True  in-policy=True  budget=True  -&gt; nothing to report
+
+Five clean runs. Nothing here is wrong, and nothing here is visible,
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;detection&quot;: {&quot;baseline_at&quot;: &quot;str&quot;, &quot;drift&quot;: 0.0, &quot;new_tools&quot;: [&quot;str&quot;], &quot;ready&quot;: true},
-  &quot;stop&quot;: {&quot;mechanism&quot;: &quot;str&quot;, &quot;measured_seconds&quot;: 0, &quot;last_tested&quot;: &quot;str&quot;, &quot;ready&quot;: true},
-  &quot;replay&quot;: {&quot;inputs_present&quot;: [&quot;str&quot;], &quot;missing&quot;: [&quot;str&quot;], &quot;chain_recorded&quot;: true,
-             &quot;resources_recorded&quot;: true, &quot;ready&quot;: true},
-  &quot;verdict&quot;: {&quot;ready&quot;: false, &quot;missing&quot;: [&quot;str&quot;]}
+  &quot;per_run&quot;: [{&quot;run&quot;: &quot;str&quot;, &quot;checks_passed&quot;: true, &quot;findings&quot;: 0}],
+  &quot;shared_artefacts&quot;: [{&quot;object&quot;: &quot;str&quot;, &quot;written_by&quot;: &quot;str&quot;, &quot;read_by&quot;: [&quot;str&quot;], &quot;unrelated&quot;: true}],
+  &quot;novel_tokens&quot;: [{&quot;token&quot;: &quot;str&quot;, &quot;runs&quot;: [&quot;str&quot;], &quot;in_baseline&quot;: false}],
+  &quot;trajectory_clusters&quot;: [{&quot;pattern&quot;: [&quot;str&quot;], &quot;runs&quot;: [&quot;str&quot;], &quot;designed&quot;: false}],
+  &quot;fleet_findings&quot;: [{&quot;pattern&quot;: &quot;str&quot;, &quot;evidence_runs&quot;: [&quot;str&quot;]}]
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Checking that monitoring exists.</strong> Run the comparison.</li>
-<li><strong>An estimated time-to-stop.</strong> Measure it.</li>
-<li><strong>A single readiness score.</strong> Three properties, three owners.</li>
-</ul><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/research/research-durability-check/SKILL.md" target="_blank" rel="noopener"><code>skills/research/research-durability-check/SKILL.md</code></a></p><pre class="front"><code>name: research-durability-check
-description: &gt;-
-  Separate a folklore claim from a research result, and score a finding backlog
-  on whether each finding became a control, a detection, or nothing. Use when
-  justifying a research function, or when last year&#x27;s findings cannot be traced
-  to anything that changed.
-allowed-tools: Read, Grep, Glob</code></pre><h1>Research is what survives the person who did it</h1>
-<p>A finding that closed a ticket is a fix. A finding that became a control or a
-detection is institutional capital, and the difference is measurable — which
-means a research programme can be defended with a number rather than with
-enthusiasm.</p>
-<h2>When to use this</h2>
-<p>Reviewing a research backlog, defending the function's budget, or deciding what
-"done" means for a finding.</p>
-<h2>Procedure</h2>
-<p><strong>1 — Test each claim for actionability.</strong> Three gaps disqualify it: no
-reproduction, no affected-version statement, no stated condition under which it
-does not hold. A card failing any of them is folklore, however true it is.</p>
-<p><strong>2 — Classify each closed finding by outcome.</strong> A control, a detection, an eval
-case, or nothing — a patch with no accompanying control counts as nothing for
-this purpose, because the class recurs.</p>
-<p><strong>3 — Compute durability.</strong> The share of findings that produced a control or a
-detection. It is usually about half, and the half that produced nothing is
-usually the more interesting work.</p>
-<p><strong>4 — Look at what the lost half had in common.</strong> Typically: no owner outside
-the research team, or a finding whose class had no control to attach to. Both
-are addressable and neither is about effort.</p>
-<p><strong>5 — Define closure to require an outcome.</strong> A finding is closed when it has a
-control, a detection or an explicit accepted-risk record with an owner. Anything
-else reopens as the same finding next year.</p>
-<h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/research_durability_check.py"><code>scripts/research_durability_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
-<p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>=== folklore — actionable: False ===
-CLAIM     our review agent can be tricked by comments in diffs
-SETUP     the review agent
-TRIGGER   a comment
-OBSERVED  it approved something it shouldn't
-RATE      not measured
-HOLDS WHEN
-</code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
-<h2>Output contract</h2>
-<pre><code class="language-json">{
-  &quot;claims&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;actionable&quot;: false, &quot;gaps&quot;: [&quot;reproduction&quot;, &quot;versions&quot;, &quot;conditions&quot;]}],
-  &quot;backlog&quot;: [{&quot;finding&quot;: &quot;str&quot;, &quot;outcome&quot;: &quot;control|detection|eval|none&quot;, &quot;owner&quot;: &quot;str|null&quot;}],
-  &quot;durability&quot;: 0.0,
-  &quot;lost&quot;: {&quot;count&quot;: 0, &quot;common_cause&quot;: &quot;str&quot;},
-  &quot;closure_definition&quot;: &quot;str&quot;
-}
-</code></pre>
-<h2>Failure modes</h2>
-<ul>
-<li><strong>Counting patched as closed.</strong> The class recurs and the count flatters.</li>
-<li><strong>Scoring effort.</strong> Durability is about outcome, not about difficulty.</li>
-<li><strong>No owner outside research.</strong> That is the mechanism by which findings are
-  lost.</li>
+<li><strong>Aggregating per-run alerts.</strong> Zero plus zero is still zero.</li>
+<li><strong>Keying the graph by run.</strong> Key it by object or the sharing is invisible.</li>
+<li><strong>Explaining a shared token as coincidence.</strong> Check the corpus before
+  accepting that.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at E3.8 --out work/cybertravels
 python3 scripts/checkpoint.py --at E3.8 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "resilience readiness check"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/programme/resilience-readiness-check/scripts/resilience_readiness_check.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Drift is detected with <code>run_shell</code> as a new tool, the stop mechanism is ready at 12 seconds tested 41 days ago, and the run is replayable with a four-resource scope. All three programmes show a 0% containment ASR yet resolve a failure in 720, 96 and 6 hours respectively. The game day identifies the weakest capability for each, and the resilient programme has none.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run a game day that assumes containment failed. Measure notice, stop and recover as three separate numbers. The weakest one is next quarter's plan — and unlike a prevention target, you can actually reach it.</p></div></section><div class="expect"><b>Expect</b>Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged.</div><p class="sub" style="margin-top:10px">Skill source: <code>skills/programme/resilience-readiness-check</code></p></div><div class="pager"><a href="E3.7.html"><span class="k">← Previous</span><span class="t">E3.7 · Building the capability</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "fleet correlation analysis"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/detection/fleet-correlation-analysis/scripts/fleet_correlation_analysis.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Build the shared-artefact graph for one day of your own fleet — writer identity on one side, object on the other. You do not need a model for it, and the answer arrives in an afternoon. Dense connectivity where your architecture claims isolation is a finding, not an anomaly score.</p></div></section><div class="expect"><b>Expect</b>Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Sigma</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/detection/fleet-correlation-analysis</code></p></div><div class="pager"><a href="E3.7.html"><span class="k">← Previous</span><span class="t">E3.7 · Scoping an agentic incident — following the delegation graph</span></a><a class="next" href="E3.9.html"><span class="k">Next →</span><span class="t">E3.9 · Third-party threat intelligence, and the tactics it names</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

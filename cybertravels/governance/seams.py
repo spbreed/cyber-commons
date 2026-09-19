@@ -1,4 +1,4 @@
-# step:file E1.10
+# step:file F1.10
 """The programme does not fail at the functions. It fails at the seams.
 
 Legal, compliance, privacy, cyber and model risk each hold part of the AI
@@ -8,11 +8,11 @@ because a handoff is nobody's deliverable and therefore nobody's deadline.
 
 Three lessons, and they are one argument:
 
-    E1.10  who holds which part, and where two of them both think the other
+    F1.10  who holds which part, and where two of them both think the other
            has it
-    E1.11  model risk management, whose playbook silently breaks once the
+    F1.11  model risk management, whose playbook silently breaks once the
            model can act
-    E1.12  the handoffs themselves, traced from producer to consumer
+    F1.12  the handoffs themselves, traced from producer to consumer
 """
 
 
@@ -51,9 +51,9 @@ def seam_map():
                    "unowned one that looks covered from both sides"}
 
 
-# step:E1.11 add
+# step:F1.11 add
 # --------------------------------------------------------------------------- #
-# E1.11 — model risk management, once the model can act
+# F1.11 — model risk management, once the model can act
 # --------------------------------------------------------------------------- #
 # The classical playbook is sound and it validates the wrong surface here. It
 # asks whether the model is conceptually sound, whether its outputs are
@@ -73,11 +73,11 @@ CLASSICAL = {
 }
 
 ONCE_IT_CAN_ACT = {
-    "authority": "what can it cause, and under whose identity — A2.3",
-    "action reversibility": "which of its effects can be undone — D4.1",
-    "blast radius": "what one run can reach at worst — A3.4's ceilings",
-    "adversarial reachability": "can a third party steer it — C1.2",
-    "containment": "can it be stopped, and which paths is the stop on — C1.9",
+    "authority": "what can it cause, and under whose identity — B2.3",
+    "action reversibility": "which of its effects can be undone — E4.1",
+    "blast radius": "what one run can reach at worst — B3.4's ceilings",
+    "adversarial reachability": "can a third party steer it — D1.2",
+    "containment": "can it be stopped, and which paths is the stop on — D1.9",
 }
 
 
@@ -107,29 +107,29 @@ def capability_delta(before, after):
     return {"gained": gained, "retier": bool(gained),
             "why": "more capability is a governance event even when the "
                    "release note calls it an improvement"}
-# step:E1.11 end
+# step:F1.11 end
 
 
-# step:E1.12 add
+# step:F1.12 add
 # --------------------------------------------------------------------------- #
-# E1.12 — trace each handoff to the thing it was supposed to become
+# F1.12 — trace each handoff to the thing it was supposed to become
 # --------------------------------------------------------------------------- #
 # A handoff is agreed in a meeting, both sides leave satisfied, and neither
 # has a deliverable. The check is blunt: for each handoff, name the artefact
 # the consumer should now be holding, and go and look for it.
 HANDOFFS = [
     ("privacy", "cyber", "privacy impact assessment",
-     "a retention parameter per telemetry field — D1.3"),
+     "a retention parameter per telemetry field — E1.3"),
     ("legal", "cyber", "legal position on autonomy",
      "a line in the system prompt and a tier in the autonomy ladder"),
     ("model risk", "cyber", "validation report",
-     "the KCIs in E1.1 that re-measure what validation asserted"),
+     "the KCIs in F1.1 that re-measure what validation asserted"),
     ("cyber", "compliance", "control evidence",
-     "the artefacts an obligation maps to — E2.1"),
+     "the artefacts an obligation maps to — F2.1"),
     ("red team", "cyber", "a finding",
-     "an eval case, a control and a detection — C1.11"),
+     "an eval case, a control and a detection — D1.11"),
     ("SOC", "compliance", "incident awareness",
-     "the regulatory clock, started in hour one — D5.6"),
+     "the regulatory clock, started in hour one — E5.6"),
 ]
 
 
@@ -146,4 +146,4 @@ def delivered(held_by_consumer):
             "rate": round((len(rows) - len(missing)) / len(rows), 3),
             "why": "both sides agreed each of these and neither had a "
                    "deliverable, which is why the artefact column exists"}
-# step:E1.12 end
+# step:F1.12 end

@@ -1,27 +1,30 @@
-# Track E3 — Running the Programme — the CISO Office
+# Track E3 — Understand — Correlation, Intel and the Hunt
 
-**Function E · AI Governance for Agentic Systems**  
-*Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
+**Function E · The Agentic SOC**  
+*Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Job titles:** BISO, Deputy CISO, Head of Security Strategy, CISO
+**Job titles:** Incident Responder, SOC Analyst, DFIR Lead, Threat Hunter, Threat Intelligence Analyst
 
-**What changes:** Sequencing, org design, metrics and stop authority for an estate that will not stop at four agents. 8 lessons.
+**What changes:** Understanding what happened and who is doing it: an investigation bounded before it starts, a trace where the first theory was abandoned in the open, scope along the delegation graph, correlation across the population, third-party intel that names the tactic, and a hunt for what no rule covers. 10 lessons.
 
-**Autonomy focus:** You hold the authority to move any workflow down a rung — and the obligation to use it.
+**Autonomy focus:** The investigating agent runs at L2.5 — broad read, bounded per investigation class, every refusal logged with its query.
 
-**Deliverable:** A one-page autonomy governance policy and a board-level narrative for one agentic programme.
+**Deliverable:** One agentic incident understood end to end, plus one scored hunt with its hypothesis and population stated up front.
 
 > Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### E3.1 — Translating agentic risk upward
+### E3.1 — From alert queue to loop operator
 
-- **Risk** — Blast radius explained in engineering terms to a board that needs consequence.
-- **Control** — What can happen, how fast, who can stop it.
-- **Lab** — Convert one blast-radius measurement into a board paragraph.
+- **Risk** — Supervising by re-reading everything the loop did.
+- **Control** — Know what the loop must escalate and sample the rest.
+- **Lab** — Run a triage loop over Wazuh alerts and supervise by exception.
+- **Tools** — `Wazuh`, `OpenSearch`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Convert one blast-radius measurement into a board paragraph.
+**Run it** — Run a triage loop over Wazuh alerts and supervise by exception.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -37,23 +40,24 @@ python3 scripts/checkpoint.py --at E3.1 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/risk-translation-upward/scripts/risk_translation_upward.py
+python3 skills/detection/triage-loop-with-floor/scripts/triage_loop_with_floor.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* What can happen, how fast, who can stop it — with the engineering vocabulary stripped out.
+*Expect:* The loop clears the known-benign and escalates the rest with its reasoning attached.
 
 ---
 
-### E3.2 — Governing autonomy rather than approving tools
+### E3.2 — Admission rules — what the investigating agent may touch
 
-- **Risk** — A per-tool review queue becomes a bottleneck and then a bypass.
-- **Control** — A policy on delegated authority instead of tool-by-tool approval.
-- **Lab** — Write the delegated-authority policy.
+- **Risk** — The investigation is itself the breach: an agent granted broad read to 'find the problem' exfiltrates more than the incident did.
+- **Control** — A declared admission set per investigation class, enforced at the tool boundary and logged, with anything outside it requiring a human grant.
+- **Lab** — Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded.
+- **Tools** — `OPA`
 
-**Run it** — Write the delegated-authority policy.
+**Run it** — Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -69,23 +73,26 @@ python3 scripts/checkpoint.py --at E3.2 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/autonomy-ladder-decisions/scripts/autonomy_ladder_decisions.py
+python3 skills/secops/investigation-admission-rules/scripts/investigation_admission_rules.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The linter rejects aspirational language and demands named authority.
+*Expect:* Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded.
 
 ---
 
-### E3.3 — Sequencing the programme
+### E3.3 — The context that makes agent triage work
 
-- **Risk** — Starting with the workflow that is most visible rather than most winnable.
-- **Control** — Use the maturity model to order investment; choose your first hard "no".
-- **Lab** — Sequence your first three workflows and name the no.
+- **Risk** — Generic triage agents underperform your worst analyst.
+- **Control** — Feed the baseline, known FPs, crown-jewel map and prior decisions.
+- **Lab** — A/B a generic prompt vs a context-loaded one on the same alert set.
+- **Tools** — `Wazuh`
+- **Open-weight models** — `GLM-4.6`, `Llama 3.3`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Sequence your first three workflows and name the no.
+**Run it** — A/B a generic prompt vs a context-loaded one on the same alert set.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -101,23 +108,24 @@ python3 scripts/checkpoint.py --at E3.3 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/programme-sequencing/scripts/programme_sequencing.py
+python3 skills/secops/detection-triage/scripts/detection_triage.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Ordered by winnability × risk retired, with one explicit refusal. A programme without a 'no' has no policy.
+*Expect:* The generic loop underperforms your worst analyst; the loaded one does not. Same model both times.
 
 ---
 
-### E3.4 — Org design and ownership
+### E3.4 — When the actor is an agent — three instincts that misfire
 
-- **Risk** — Harness engineering with no home; research as a hobby.
-- **Control** — Identity owns the control plane; BUs own grants; security owns stop authority.
-- **Lab** — Draw your org's ownership map against the topic matrix.
+- **Risk** — "Which user" is now the wrong first question.
+- **Control** — Attribute to agent, authority, delegation chain and prompt.
+- **Lab** — Attribute an incident through the B2 `act` chain.
+- **Tools** — `Keycloak`, `OpenSearch`
 
-**Run it** — Draw your org's ownership map against the topic matrix.
+**Run it** — Attribute an incident through the B2 `act` chain.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -133,24 +141,26 @@ python3 scripts/checkpoint.py --at E3.4 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/ownership-seam-audit/scripts/ownership_seam_audit.py
+python3 skills/response/agent-actor-containment/scripts/agent_actor_containment.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Every topic cluster with zero owners or two owners is a finding — usually harness engineering and research.
+*Expect:* Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it.
 
 ---
 
-### E3.5 — The metrics that matter at your level
+### E3.5 — Agent-assisted reconstruction — a timeline you can challenge
 
-- **Risk** — Reporting activity instead of exposure.
-- **Control** — Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.
-- **Lab** — Instrument the six metrics from your lab stack.
-- **Tools** — `OpenSearch`
+- **Risk** — Reaching for the agent once you're already behind.
+- **Control** — Pre-load logs, telemetry, segmentation model and playbooks.
+- **Lab** — Reconstruct a timeline from raw logs with a context-loaded agent.
+- **Tools** — `Velociraptor`, `OpenSearch`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Instrument the six metrics from your lab stack.
+**Run it** — Reconstruct a timeline from raw logs with a context-loaded agent.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -166,23 +176,24 @@ python3 scripts/checkpoint.py --at E3.5 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/programme-metrics-selection/scripts/programme_metrics_selection.py
+python3 skills/response/incident-reconstruction-check/scripts/incident_reconstruction_check.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.
+*Expect:* The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered.
 
 ---
 
-### E3.6 — Saying no, and saying yes with conditions
+### E3.6 — Plan, then replan — an investigation that changes its mind
 
-- **Risk** — Conditional approval that is aspirational rather than enforceable.
-- **Control** — Autonomy promotion as an earned event with named evidence.
-- **Lab** — Write one enforceable conditional approval.
+- **Risk** — The agent anchors on its first hypothesis and spends the whole incident gathering evidence for it.
+- **Control** — An explicit plan record with a replan trigger, so an abandoned branch is visible in the trace rather than silently dropped.
+- **Lab** — Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded.
+- **Tools** — `OpenTelemetry`
 
-**Run it** — Write one enforceable conditional approval.
+**Run it** — Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -198,23 +209,26 @@ python3 scripts/checkpoint.py --at E3.6 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/conditional-approval-design/scripts/conditional_approval_design.py
+python3 skills/secops/investigation-replan-trace/scripts/investigation_replan_trace.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Any condition that cannot be automatically verified is flagged. 'They'll be careful' does not compile.
+*Expect:* Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded.
 
 ---
 
-### E3.7 — Building the capability
+### E3.7 — Scoping an agentic incident — following the delegation graph
 
-- **Risk** — Hiring for conceptual familiarity instead of practice.
-- **Control** — Interview questions that separate the two; internal transition paths.
-- **Lab** — Write the interview loop for an agentic security engineer.
+- **Risk** — The initiating agent is not the acting one.
+- **Control** — Reconstruct the action chain across all three planes.
+- **Lab** — Scope a multi-agent incident end to end.
+- **Tools** — `OpenTelemetry`
+- **Open-weight models** — `Kimi K2`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Write the interview loop for an agentic security engineer.
+**Run it** — Scope a multi-agent incident end to end.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -230,23 +244,24 @@ python3 scripts/checkpoint.py --at E3.7 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/capability-build-order/scripts/capability_build_order.py
+python3 skills/secops/incident-scoping/scripts/incident_scoping.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Questions with artefacts attached. Handing a candidate a real eval report separates the two groups fast.
+*Expect:* The action-plane actor is a sub-agent two hops from the prompt that started it.
 
 ---
 
-### E3.8 — Resilience over perfection
+### E3.8 — Fleet-level correlation — seeing a swarm
 
-- **Risk** — Trying to enumerate every failure mode of a probabilistic system.
-- **Control** — Maturity measured by containment, detection and recovery — not prevention.
-- **Lab** — Re-score your programme on the resilience axis.
+- **Risk** — Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not.
+- **Control** — Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).
+- **Lab** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
+- **Tools** — `OpenTelemetry`, `Sigma`
 
-**Run it** — Re-score your programme on the resilience axis.
+**Run it** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -262,12 +277,80 @@ python3 scripts/checkpoint.py --at E3.8 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/resilience-readiness-check/scripts/resilience_readiness_check.py
+python3 skills/detection/fleet-correlation-analysis/scripts/fleet_correlation_analysis.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged.
+*Expect:* Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.
+
+---
+
+### E3.9 — Third-party threat intelligence, and the tactics it names
+
+- **Risk** — Unsourced confidence in synthesis loops.
+- **Control** — Provenance discipline; refuse claims without a source.
+- **Lab** — Build a synthesis loop that must cite or abstain.
+- **Tools** — `MISP`, `OpenCTI`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Build a synthesis loop that must cite or abstain.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.9:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.9 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.9 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 4 · run the skill against its committed fixture ---
+python3 skills/detection/threat-intel-to-rules/scripts/threat_intel_to_rules.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
+```
+
+*Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
+
+---
+
+### E3.10 — Hunting in agent telemetry
+
+- **Risk** — Everything not covered by a rule is invisible, and the rules were written against last quarter's agent behaviour.
+- **Control** — A standing hunt over agent traces, hypothesis-first, whose confirmed findings graduate into detections rather than staying in a notebook.
+- **Lab** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
+- **Tools** — `OpenTelemetry`
+
+**Run it** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · your copy of CyberTravels as it stood at the END of E3.10:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at E3.10 --out work/cybertravels
+python3 scripts/checkpoint.py --at E3.10 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 4 · run the skill against its committed fixture ---
+python3 skills/detection/agent-telemetry-hunt/scripts/agent_telemetry_hunt.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
+```
+
+*Expect:* Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
 
 ---

@@ -1,7 +1,7 @@
-# step:file C1.4
+# step:file D1.4
 """Telling the agent from the person, from the trace CyberTravels already emits.
 
-G2.1 built `observability.Trace`, so every run leaves spans. This reads them
+A2.1 built `observability.Trace`, so every run leaves spans. This reads them
 and answers a question the SOC will be asked in Function D and cannot currently
 answer: **was that a person or an agent?**
 

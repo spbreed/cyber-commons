@@ -1,4 +1,4 @@
-# step:file D5.1
+# step:file E5.1
 """From stopped to back at target — and the change that closes it.
 
 The incident ends, the ticket closes, and two quarters later the same control
@@ -12,14 +12,14 @@ postmortem that names a person, a process or "a lack of rigour" is a document
 that changes nothing, and everybody involved already knows that when they
 write it.
 
-D5.1 imports C1.10's replay audit rather than restating it. The red team and
+E5.1 imports D1.10's replay audit rather than restating it. The red team and
 the SOC ask the same question of the same record; the difference is only when.
 """
 from ..redteam.forensics import answerable, reconstruct, replayable  # noqa: F401
 
 
 def replay_readiness(rows, spans, verify_chain):
-    """D5.1, from the defender's side: can we defend this reconstruction?
+    """E5.1, from the defender's side: can we defend this reconstruction?
 
     The extra question the red team did not have to ask — non-determinism as
     an *evidentiary* problem. Rerunning the agent produces a second run, and a
@@ -36,9 +36,9 @@ def replay_readiness(rows, spans, verify_chain):
     return r
 
 
-# step:D5.2 add
+# step:E5.2 add
 # --------------------------------------------------------------------------- #
-# D5.2 — the root cause record names a control
+# E5.2 — the root cause record names a control
 # --------------------------------------------------------------------------- #
 # Not a person, and not a narrative. Three fields, all required, all
 # answerable from the incident: which control was absent or failed, which
@@ -86,12 +86,12 @@ class RootCause:
                 "detection": self.detection_that_should_have_fired,
                 "change": self.change_proposed,
                 "contributing": self.contributing}
-# step:D5.2 end
+# step:E5.2 end
 
 
-# step:D5.3 add
+# step:E5.3 add
 # --------------------------------------------------------------------------- #
-# D5.3 — which layer does the fix belong in
+# E5.3 — which layer does the fix belong in
 # --------------------------------------------------------------------------- #
 # The instinct is to fix the prompt, because the prompt is editable, visible
 # and the change can ship this afternoon. It is almost never the right layer,
@@ -101,11 +101,11 @@ class RootCause:
 # Seven surfaces, ordered by how durable a fix at that layer is. A fix at a
 # lower layer survives a model change, a prompt rewrite and a new agent.
 SURFACES = [
-    ("identity", 7, "who may act, and for whom — A2.x"),
-    ("policy", 6, "what may be called, and under what obligation — A3.1"),
-    ("sandbox", 5, "what an execution can reach — A3.2"),
+    ("identity", 7, "who may act, and for whom — B2.x"),
+    ("policy", 6, "what may be called, and under what obligation — B3.1"),
+    ("sandbox", 5, "what an execution can reach — B3.2"),
     ("tool", 4, "what the tool itself permits, regardless of caller"),
-    ("eval", 3, "the case that fails if this regresses — C1.11"),
+    ("eval", 3, "the case that fails if this regresses — D1.11"),
     ("prompt", 2, "what the model is told; durable until anyone edits it"),
     ("model", 1, "the vendor's, on their schedule"),
 ]
@@ -125,12 +125,12 @@ def choose_surface(symptom, *, model_can_be_persuaded, survives_prompt_edit):
                                 if a["appropriate"]),
             "note": "if the answer is 'prompt' and the model can be persuaded "
                     "out of it, the answer is not prompt"}
-# step:D5.3 end
+# step:E5.3 end
 
 
-# step:D5.4 add
+# step:E5.4 add
 # --------------------------------------------------------------------------- #
-# D5.4 — the fix is done when the indicator moved
+# E5.4 — the fix is done when the indicator moved
 # --------------------------------------------------------------------------- #
 # Not when the ticket closed. The two are routinely different and only one of
 # them is checkable, so re-measure the indicators the incident moved and
@@ -151,12 +151,12 @@ def validate_fix(before, after, *, indicators):
             "unmeasured": unmeasured,
             "why": "an unmeasured indicator is the ticket closing on its own "
                    "authority"}
-# step:D5.4 end
+# step:E5.4 end
 
 
-# step:D5.5 add
+# step:E5.5 add
 # --------------------------------------------------------------------------- #
-# D5.5 — the policy change, as a diff
+# E5.5 — the policy change, as a diff
 # --------------------------------------------------------------------------- #
 # The lesson from the incident lives in a postmortem nobody reads, and the
 # policy that permitted it is unchanged — so the next incident is permitted
@@ -177,12 +177,12 @@ def propose(root_cause, *, policy_line, was, now, does_not_fix):
         "why": "the diff is the deliverable; a postmortem is the reasoning "
                "behind it and does not change anything on its own",
     }
-# step:D5.5 end
+# step:E5.5 end
 
 
-# step:D5.6 add
+# step:E5.6 add
 # --------------------------------------------------------------------------- #
-# D5.6 — the clock started at awareness, not at confirmation
+# E5.6 — the clock started at awareness, not at confirmation
 # --------------------------------------------------------------------------- #
 # The obligation is discovered in week two, and the deadline was counted from
 # an hour in week one. The distinction that catches people is that most
@@ -190,7 +190,7 @@ def propose(root_cause, *, policy_line, was, now, does_not_fix):
 # completion of an investigation — so "we were still confirming" is not a
 # defence, it is a description of the period the clock was running.
 #
-# This is the handoff into Track E2, and it happens in hour one.
+# This is the handoff into Track F2, and it happens in hour one.
 REGIMES = [
     ("GDPR Art. 33", 72, "awareness of a personal data breach",
      "supervisory authority"),
@@ -218,4 +218,4 @@ def clock_check(aware_at, *, personal_data, significant, financial_entity,
             "tightest_hours": min((r["hours"] for r in out), default=None),
             "why": "the clock starts at awareness; an investigation that is "
                    "still confirming is an investigation running on the clock"}
-# step:D5.6 end
+# step:E5.6 end

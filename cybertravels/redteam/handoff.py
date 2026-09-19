@@ -1,4 +1,4 @@
-# step:file C1.11
+# step:file D1.11
 """The handoff — what has to exist before a finding is finished.
 
 A red-team engagement ends with a report, the report is read, and six months
@@ -20,7 +20,7 @@ The eval case is the load-bearing one and it is the one that gets skipped,
 because writing a test that passes feels like finishing. A test that passes
 against the unpatched build is testing the weather. `verify()` below runs it
 both ways and refuses the handoff if it does not discriminate — the same rule
-B2.16 applies to a patch, for the same reason.
+C2.16 applies to a patch, for the same reason.
 
 The fourth artefact is the one nobody writes down: **who accepted it.** A
 handoff with no named owner per artefact is three tickets in a backlog.
@@ -41,7 +41,7 @@ class Finding:
         if rate is None or interval is None:
             raise HandoffRejected(
                 f"{title}: a finding with no rate and no interval is an "
-                f"anecdote. C1.0 exists to stop this one reaching a report")
+                f"anecdote. D1.0 exists to stop this one reaching a report")
         if not evidence:
             raise HandoffRejected(f"{title}: no evidence attached")
         self.title = title
@@ -110,7 +110,7 @@ def complete(finding):
 
 
 def durability(findings):
-    """C1.11's Day 2: how much of the engagement outlived it.
+    """D1.11's Day 2: how much of the engagement outlived it.
 
     Report the fraction with all three artefacts, and separately the fraction
     with only a report. The second number is the honest one — it is the work

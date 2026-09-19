@@ -1,0 +1,543 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.3 — SAST for agentic code — deterministic Semgrep, then the model pass | Cyber Commons</title><meta name="description" content="Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Application Security with an AI SDLC › The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">C2.3</div><h1>SAST for agentic code — deterministic Semgrep, then the model pass</h1><div class="badges"><span class="badge t">C2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM05</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Attack Staging</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Pattern matching floods the queue; the false-positive rate is what actually changed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Score grep, taint rules and model review against the same corpus, then combine them behind a confidence gate.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/appsec/sast-semgrep-deterministic" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/appsec/sast-semgrep-deterministic/scripts/sast_semgrep_deterministic.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Weight access changes what you can see and what you can change. It turns questions about behaviour into questions about mechanism — and it is also how a supply-chain attacker turns a helpful model into a specifically unhelpful one.</p><div class="ct"><b>At CyberTravels.</b> `appsec/sast.py`, run against your own `tools/` and `agents/`. It returns exactly five findings — the four `yes` rows of `cybertravels/LABELS.md` plus the `library` row — and **none** of the three IDOR-only rows. Clear `sast.WRAPPERS` and `sync_vendor` disappears: that one line is the whole of the `library` column, and the reason a mature codebase scans cleaner than it is.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Two passes, and why the split follows from the defects rather than from taste: deterministic rules for what a pattern can express, a model for the class where the defect is the absence of a call and there is nothing to match at any ruleset width. Including the case in between — a house wrapper that makes every rule naming the library blind.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>Pattern matching floods the queue, and the classes that matter in agentic code cannot be written as patterns at all.</p></div><div class="d1"><span>Day 1 — how</span><p>Deterministic rules for what rules do well, then a model pass for what they cannot express.</p></div><div class="d2"><span>Day 2 — measure</span><p>The clearest before-and-after in the commons: Semgrep holds precision 1.00 and finds about one real defect in seven; the reasoning pass finds about six in ten. Four times the recall, same code — and the extra false positives are what the next four stages exist to remove.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   what weight access gives you
+
+   see            interpretability probes, refusal boundaries, features
+   change         fine-tuning, distillation, adapters
+
+   the same two verbs an attacker has:
+   a poisoned adapter is a small file that changes behaviour
+   in exactly one situation nobody tests</pre><p><strong>Stage 7 — Vulnerability auditing.</strong> The stage people mean when they say
+"SAST", and the one where the two halves of this pipeline are easiest to
+confuse with each other.</p>
+<p><strong>The deterministic half is a real scanner with real rules.</strong> Semgrep, CodeQL,
+OpenGrep. Parse the code to a graph, ask a rule a question about it, and get
+the same answer every time. That repeatability is what lets you gate a merge on
+it — a probabilistic check cannot block a build, because the same commit can
+pass on one run and fail on the next.</p>
+<p>Its limit is not accuracy. On the file below Semgrep's precision is <strong>1.00 at
+every ruleset width</strong>; it does not report bugs that are not there. Its limit is
+that a rule only finds the pattern somebody wrote, so its <strong>recall is a
+configuration decision</strong> — and one that is invisible, because a narrow scan and
+a wide scan both exit <code>0</code>.</p>
+<p><strong>The probabilistic half reads the code and reasons.</strong> No rule needs to exist
+first, which is exactly its value, and it is the only thing that reaches a
+defect that is the <strong>absence</strong> of a call. It also invents defects, confidently,
+with a similar-looking confidence number attached.</p>
+<p>So the two are not competing generations where the newer one wins. They answer
+different questions and fail in opposite directions, and this lesson runs each
+as its own skill:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>deterministic — Semgrep</th>
+<th>probabilistic — the model pass</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>same answer twice</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>can gate a merge</td>
+<td><strong>yes</strong></td>
+<td>no</td>
+</tr>
+<tr>
+<td>finds what no rule expresses</td>
+<td>no</td>
+<td><strong>yes</strong></td>
+</tr>
+<tr>
+<td>typical failure</td>
+<td>missed it entirely</td>
+<td>reported it and it was not there</td>
+</tr>
+<tr>
+<td>output is a</td>
+<td><strong>finding</strong></td>
+<td><strong>hypothesis</strong></td>
+</tr>
+</tbody>
+</table>
+<p>That last row is the load-bearing one. Everything the model says enters the
+pipeline as a hypothesis, and stages 8–12 are what turn one into a finding.</p><div class="how"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote><h2>2 · The repository, and the key written before anything ran</h2>
+<p>Everything this chapter scans is one tree:
+<a href="https://github.com/spbreed/cyber-commons/tree/master/cybertravels"><code>cybertravels/</code></a>
+— the reference architecture from B1.1, as source. Ingress, orchestrator, the
+four agents, the tools, both MCP servers, knowledge, messaging. <code>egress/</code> is
+absent, because CyberTravels has no gateway.</p>
+<p>Eight defects, enumerated by hand in
+<a href="https://github.com/spbreed/cyber-commons/blob/master/cybertravels/LABELS.md"><code>LABELS.md</code></a>
+<strong>before</strong> any scanner saw it — a key written afterwards is a description of
+the scan. Four correct functions are in the key too, because a corpus where
+everything is broken cannot measure precision.</p>
+<pre><code class="language-python"># tools/bookings_api.py
+def get_booking(session, booking_id):          # 20  CWE-639  no owner check
+def get_my_booking(session, booking_id):       #     the same read, authorised
+def cancel_booking(session, booking_id):       # 34  CWE-639  and it writes
+def search_bookings(session, reference):       # 41  CWE-89 + CWE-639
+# tools/payments_api.py
+def issue_refund(session, booking_id, amount): #  8  CWE-639  on the money path
+def download_invoice(session, path):           # 23  CWE-22 + CWE-639
+</code></pre>
+<p>Look at <code>get_booking</code> and <code>get_my_booking</code>. They are four lines apart and
+almost identical; one of them is a critical finding. The difference is a call
+that is <strong>present in the second and absent in the first</strong>, and holding that in
+mind is the whole of this lesson.</p><h2>3 · Real Semgrep, at three widths, with the rule as a file</h2>
+<p>Not a forty-line taint engine written to fit in a lesson. Semgrep <strong>1.176.0</strong>,
+against that file, three configurations —
+<a href="https://github.com/spbreed/cyber-commons/tree/master/labs/tools/semgrep-sast"><code>run.sh</code></a>
+reproduces all three and the raw JSON is committed beside the skill.</p>
+<p>The third is a custom taint rule, which is what a real one looks like:</p>
+<pre><code class="language-yaml">rules:
+  - id: cybertravels-sql-concat
+    languages: [python]
+    severity: ERROR
+    message: &gt;-
+      Caller-controlled input is concatenated into a SQL string. Use a
+      parameterised query.
+    mode: taint
+    pattern-sources:
+      - pattern: |
+          def $F(..., $X, ...):
+            ...
+    pattern-sinks:
+      - pattern: $CUR.execute(...)
+</code></pre>
+<p><code>mode: taint</code> is the whole difference between generations of scanner: not a
+better pattern, a different question — <em>does caller-controlled input reach this
+sink?</em></p><h2>4 · The deterministic half, as a skill</h2>
+<p>The skill scores each of the three real runs against the six-defect key and reports precision and recall <strong>separately</strong>, because merging them into one "accuracy" number hides the only one that moves. Then it partitions what every width missed into the two classes that matter: a defect a rule <em>could</em> match and nobody wrote (write the rule) and a defect no rule can express (the next skill).</p><h2>5 · What changed when SAST learned to reason</h2>
+<p>For twenty years the answer to "can a scanner find this?" was decided by one
+question: <strong>is there a pattern?</strong> Everything else followed. Rules were written
+per defect class and per library, coverage was a config decision, and a class
+with no syntax to match — a missing check, a wrong comparison, an absent expiry
+— was simply outside the tool.</p>
+<p>That boundary moved. Systems that <em>reason about a class</em> rather than match a
+pattern now find defects that no rule expresses, and IDOR is the honest place to
+look at it: the class is defined by absence, so it is the case where pattern
+matching scores exactly zero and any number above that is new capability.</p>
+<p>Semgrep published a benchmark for it in 2026 — 275 hand-reviewed labels across
+four repositories, the same revisions for every system
+(<a href="https://semgrep.dev/blog/2026/idor-detection-benchmark-semgrep-multimodal/">write-up</a>):</p>
+<table>
+<thead>
+<tr>
+<th>system</th>
+<th>recall</th>
+<th>precision</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semgrep Multimodal</td>
+<td><strong>59.9%</strong></td>
+<td>57.5%</td>
+<td>57.1%</td>
+</tr>
+<tr>
+<td>Claude Security with Mythos</td>
+<td>13.9%</td>
+<td><strong>80.1%</strong></td>
+<td>23.7%</td>
+</tr>
+<tr>
+<td>Codex Security</td>
+<td>11.3%</td>
+<td>—</td>
+<td>17.7%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Read it as a recall table, because that is what it is.</strong> The two bold cells
+are the argument. The most <em>precise</em> system on that board found roughly <strong>one
+IDOR in seven</strong> — it is right when it speaks and it stays quiet about six of
+every seven real defects. The best recall is <strong>six in ten</strong>, four times as many,
+from a system reasoning about the class.</p>
+<p>Three things follow, and the third is the one that changes how you build the
+pipeline.</p>
+<p><strong>Precision is the easy half.</strong> A detector that reports nothing is perfectly
+precise. Any access-control tool that leads with its precision number is leading
+with the metric that improves when it finds less.</p>
+<p><strong>Recall needs a key, which is why nobody publishes it.</strong> You cannot compute
+what fraction of the real defects were found without knowing the real defects.
+That is expensive, it is manual, and it is the only thing that turns "the scan
+was clean" into a statement with content. This is why <code>cybertravels/LABELS.md</code>
+exists and why it was written before anything ran.</p>
+<p><strong>Six in ten is a real change and it is not a solved problem.</strong> It is the
+difference between a class you could not scan for at all and one you can scan
+for imperfectly — and at 57.5% precision it means roughly two in five reports
+are wrong. That is a hypothesis stream, not a finding stream, which is exactly
+how C2.4 and C2.5 are going to treat it.</p><h2>5 · Which of the two misses justifies a model</h2>
+<p>One of them does not. Line 22 is a hardcoded key — lexical, and <code>p/secrets</code> was
+enabled and did not fire only because the string matches no known provider's
+format. That is a rule somebody writes this afternoon, and reaching for a model
+to find it is buying a language model to do a regex's job.</p>
+<p>Line 7 is different in kind. There is no syntax for "this function should have
+called <code>require_owner</code> and did not", and there is no width of ruleset that
+reaches it — the defect only exists relative to the authority the caller holds,
+which is in a different file. That is the boundary, and it is narrow. Cross it
+deliberately and you have a reason to spend the model pass; cross it because
+the deterministic scan felt disappointing and you have bought noise.</p><h2>6 · IDOR on the CyberTravels tree, scored on recall</h2>
+<p>The same repository, the class that has no pattern. The skill builds the <strong>denominator</strong> first — every unit that takes an identifier and touches a record — because recall without a denominator is not a number. Then it runs two detectors over it: what a rule can express, and the ownership comparison it cannot see.</p>
+<p>Watch the row where two of the five were already in a scanner's output, for a different defect in the same function.</p><h2>7 · The finding count went down and the risk did not</h2>
+<p><code>search_bookings</code> concatenates its reference into SQL <strong>and</strong> returns every
+owner's bookings. Semgrep finds the first at the widest width. Nothing finds the
+second.</p>
+<p>So the ticket says <em>SQL injection in search_bookings</em>, somebody parameterises
+the query, the finding closes, and the scan is green. The authorisation defect
+is untouched and now has no finding attached to it at all. The count went to
+zero and the risk did not move.</p>
+<p>That is the failure mode this section exists for, and it is not exotic — it is
+what happens by default whenever one function carries a defect a rule can see
+and a defect it cannot. The fix is not a better rule. It is running the second
+detector over a denominator, and reporting recall against a key.</p><h2>6 · The probabilistic half, as a skill</h2>
+<p>The same adapter every model-facing skill in this commons uses: offline a labelled replay, and against a served open-weight model the identical code. It is asked one question with a checkable answer, over the smallest slice in which the defect is decidable — the function, its signature, and the authority its caller holds.</p>
+<p>The two functions it reviews are not retyped into the skill. They are cut out of <code>cybertravels/tools/bookings_api.py</code> with <code>ast</code>: <strong><code>get_booking</code></strong>, which the Semgrep run above missed at all three widths, and <strong><code>get_my_booking</code></strong> eleven lines below it, which does the same read and compares an owner. The second one is there because a review pass that is never wrong has not been tested.</p><h2>7 · Where it breaks — gating on the confidence number</h2>
+<p>In the offline run the replay returns 0.82 on the function with the defect and
+0.77 on the one without it. Five points of confidence separate a real finding
+from a correct all-clear. It is tempting to read a threshold into a gap that
+size, and every pipeline that does it ships one.</p>
+<p>Two reasons not to. The number is <strong>uncalibrated</strong> — 0.82 does not mean the
+claim is right 82% of the time, it means nothing in particular. And it is
+<strong>unstable</strong>: the same slice, the same model, ten runs, and the confidence moves
+further than the distance between your accept and reject bands. Sort a human's
+queue with it if you like. Do not let it decide anything on its own.</p>
+<p>What kills a fabricated claim instead costs nothing and requires no judgement:
+<strong>the quoted line is not in the file</strong>. That check generalises, and C2.4 is
+where it becomes a stage.</p>
+<blockquote>
+<p><strong>A result from running this against a real model, worth keeping.</strong> The skill
+is written so the verifier is tested directly, against a quote known not to be
+in the slice — rather than by waiting for the model to fabricate one. That is
+not fastidiousness. An earlier version asserted that the model <em>would</em> invent
+a defect in the already-authorised control function, and against a served
+Qwen2.5-7B it did not: it read the function correctly and declined. The
+assertion failed because the model behaved well, which is a bug in the
+assertion. A pipeline check has to hold whether or not the model misbehaves on
+the day you run it.</p>
+</blockquote><h2>8 · An agent drives both, because you cannot afford both everywhere</h2>
+<p>Semgrep is cheap enough to run over the whole repository. The model pass is
+not — at four million lines it costs more than the finding is worth, and a
+model asked to review everything reviews nothing carefully.</p>
+<p>So neither half is the interesting part. <strong>The allocation is</strong>, and the policy
+is three rules:</p>
+<ol>
+<li>run the deterministic scanner everywhere, at the widest ruleset that is not
+   noisy, because it is nearly free and it can gate the merge;</li>
+<li>spend the model pass only where stage 1 says risk lives <strong>and</strong> the rules
+   were silent — silence in a high-risk zone is the signal, not the noise;</li>
+<li>mark everything the model says as a hypothesis, never a finding.</li>
+</ol>
+<p>Get rule 2 wrong in the cheap direction and the authorisation defect on line 7
+is never reviewed by anything, because the deterministic scan was green and
+nobody was surprised by that.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/sast-semgrep-deterministic/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/sast-semgrep-deterministic/SKILL.md</code></a></p><pre class="front"><code>name: sast-semgrep-deterministic
+description: &gt;-
+  Score a real Semgrep run against a ground-truth key and report recall per
+  ruleset width, not just the finding count. Use when choosing or reviewing a
+  SAST configuration, when a scan comes back clean, or when asked how much of
+  the codebase a scanner is actually looking at.
+allowed-tools: Read, Grep, Glob, Bash</code></pre><h1>What did Semgrep look for, and what did it never look for?</h1>
+<p>Deterministic SAST parses code to a graph and asks a rule a question about it.
+Given the same file and the same rules it returns the same findings, every
+time — which is what makes it the half of the audit you can gate a merge on.</p>
+<p>The mistake is reading its output as a measure of the file. It is a measure of
+the <strong>rules that were enabled</strong>. A scan with one pack and a scan with seven
+disagree by a factor of four on the same file and both exit <code>0</code>, so the number
+that matters is never the finding count — it is <strong>recall against a key</strong>, and
+almost nobody computes it because it requires knowing the answer in advance.</p>
+<h2>When to use this</h2>
+<p>Before trusting any clean scan, and whenever a SAST configuration is chosen,
+widened or inherited. Also the honest way to compare two scanners: run both
+against a file whose defects you have enumerated by hand, and compare recall
+rather than volume.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate the defects by hand first.</strong> One line per defect, with its CWE
+and whether it is expressible as a pattern at all. Do this before running
+anything; a key written after the scan is a description of the scan.</p>
+<p><strong>2 — Run the scanner at every width you are considering.</strong> The default pack,
+the widest set your team would plausibly enable, and any custom rules you
+wrote. Keep the raw JSON — the finding's rule id is what tells you <em>which</em>
+rule fired, and that is what you tune.</p>
+<p><strong>3 — Score each width against the key.</strong> Precision and recall separately.
+Deterministic SAST usually has excellent precision and the recall is the
+number under discussion; reporting them merged as "accuracy" hides exactly
+that.</p>
+<p><strong>4 — Partition what was missed into two classes.</strong> A defect a rule <em>could</em>
+match but none did is a <strong>coverage gap</strong> — someone writes the rule. A defect
+that is the <strong>absence</strong> of a call, or depends on the caller's authority, is
+not expressible as a pattern and no amount of rule-writing reaches it. Only
+the second class justifies a model pass.</p>
+<p><strong>5 — Report the width, not just the result.</strong> Every finding count is
+meaningless without the config that produced it. A report that says "Semgrep:
+1 finding" and not "p/python + p/secrets" has withheld the part that decides
+whether the scan meant anything.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/sast_semgrep_deterministic.py"><code>scripts/sast_semgrep_deterministic.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>semgrep 1.176.0 · booking.py · 6 defects in the key, 5 of them expressible as a pattern
+
+config                   found  tp  fp   prec  recall
+p/python + p/secrets         1   1   0   1.00    0.17
+seven registry packs         4   4   0   1.00    0.67
+custom taint rule            2   2   0   1.00    0.33
+
+Nothing about the file changed between those rows. Three of the four
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;key&quot;: {&quot;defects&quot;: 0, &quot;pattern_expressible&quot;: 0},
+  &quot;runs&quot;: [{&quot;config&quot;: &quot;str&quot;, &quot;findings&quot;: 0, &quot;true_positives&quot;: 0,
+            &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0}],
+  &quot;missed_by_all&quot;: [{&quot;line&quot;: 0, &quot;cwe&quot;: &quot;str&quot;, &quot;class&quot;: &quot;coverage-gap|not-expressible&quot;}],
+  &quot;widest_recall&quot;: 0.0
+}
+</code></pre>
+<p><code>class: not-expressible</code> is the only honest argument for adding a
+probabilistic reviewer. If every miss is a coverage gap, the fix is a rule and
+it is cheaper.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reading a clean scan as a clean file.</strong> It means no enabled rule matched.</li>
+<li><strong>Comparing scanners on finding count.</strong> The noisier one wins, which is
+  backwards.</li>
+<li><strong>Writing the key after the run.</strong> It converts recall into 1.00 by
+  construction.</li>
+<li><strong>Enabling every pack to fix recall.</strong> Recall rises and so does triage cost;
+  the widest width here still misses a third of the key, so width alone was
+  never going to be the answer.</li>
+</ul><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/idor-detection-recall/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/idor-detection-recall/SKILL.md</code></a></p><pre class="front"><code>name: idor-detection-recall
+description: &gt;-
+  Find missing ownership checks on caller-supplied identifiers, and score the
+  result on recall against a labelled key rather than on finding count. Use when
+  auditing endpoints or tools that take a record id, when evaluating a scanner
+  that claims to detect broken object-level authorisation, or when a clean
+  access-control scan needs a number behind it.
+allowed-tools: Read, Grep, Glob</code></pre><h1>The defect is what is missing, so the metric has to be recall</h1>
+<p>An IDOR — broken object-level authorisation — is a function that takes an
+identifier from the caller, loads the record it names, and returns or mutates
+it without comparing an owner. Two things follow, and both change how you
+measure.</p>
+<p><strong>There is no pattern.</strong> <code>get_booking</code> and <code>get_my_booking</code> differ by one call
+that is present in the second and absent in the first. A rule matches syntax
+that is there; nothing matches syntax that is not. This is why the class
+survives every ruleset width in
+<a href="../sast-semgrep-deterministic/SKILL.md"><code>sast-semgrep-deterministic</code></a>.</p>
+<p><strong>So precision is the easy half and recall is the whole problem.</strong> A scanner
+that reports nothing has perfect precision. The number that decides whether an
+access-control audit meant anything is what fraction of the real defects it
+found, and that requires a key — which is why almost nobody publishes one.</p>
+<p>Semgrep did, in
+<a href="https://semgrep.dev/blog/2026/idor-detection-benchmark-semgrep-multimodal/">a 2026 IDOR benchmark</a>:
+275 manually reviewed labels across four repositories, the same revisions for
+every system.</p>
+<table>
+<thead>
+<tr>
+<th>system</th>
+<th>recall</th>
+<th>precision</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semgrep Multimodal</td>
+<td><strong>59.9%</strong></td>
+<td>57.5%</td>
+<td>57.1%</td>
+</tr>
+<tr>
+<td>Claude Security with Mythos</td>
+<td>13.9%</td>
+<td><strong>80.1%</strong></td>
+<td>23.7%</td>
+</tr>
+<tr>
+<td>Codex Security</td>
+<td>11.3%</td>
+<td>—</td>
+<td>17.7%</td>
+</tr>
+</tbody>
+</table>
+<p>Read the two bold cells together, because they are the shape of the problem.
+The most <em>precise</em> system found roughly <strong>one IDOR in seven</strong>. The best recall
+on the board is <strong>six in ten</strong> — from a system that reasons about the class
+rather than matching a pattern, and that is a real change from what rules could
+do. It is also not a solved problem, and a report that quotes only precision is
+quoting the number that improves when you find less.</p>
+<h2>When to use this</h2>
+<p>On any surface where a caller passes a record identifier: REST handlers, RPC
+methods, and — the one people forget — <strong>agent tools</strong>, where the identifier
+arrives in a model-proposed argument and the tool runs with the agent's scope
+rather than the requester's. Also whenever an access-control scan comes back
+clean, because clean and unmeasured look identical.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Enumerate the object-handling units first, not the findings.</strong> Every
+function that takes an identifier and touches a record. This is the
+denominator; without it you cannot compute recall and every later number is
+decoration.</p>
+<p><strong>2 — For each, find the ownership comparison, or its absence.</strong> A call that
+compares something from the record against something from the session. Trace
+it through helpers — a check inside <code>require_owner</code> counts, and a check in a
+decorator counts.</p>
+<p><strong>3 — Include the correct ones in the key.</strong> A corpus where everything is
+broken cannot measure precision. The near-identical safe twin of each defect is
+what catches a detector that flags on shape rather than on the missing check.</p>
+<p><strong>4 — Score recall and precision separately, and report the denominator.</strong>
+"Three findings" is not a result. "Three of the five object-handling units,
+against a key of eight" is.</p>
+<p><strong>5 — Weight by the authority the caller holds, not by the CWE.</strong> The same
+missing check is a different severity in a tool the Workflow Agent invokes with
+<code>payments.refund</code> than in one a traveller invokes with their own session. CVSS
+does not know that; your architecture map does.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of
+<a href="scripts/idor_detection_recall.py"><code>scripts/idor_detection_recall.py</code></a>, scanning
+the <code>cybertravels/</code> sample repository against <code>cybertravels/LABELS.md</code>.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>cybertravels/ · 7 object-handling units, 4 of them authorised
+detector                        found  tp  fp   prec  recall
+pattern rule (execute + id)         0   0   0   0.00    0.00
+ownership-comparison analysis       3   3   0   1.00    1.00
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code>
+executes it on every build, so this block cannot drift from what the skill
+actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;units&quot;: [{&quot;file&quot;: &quot;str&quot;, &quot;unit&quot;: &quot;str&quot;, &quot;takes_id&quot;: true,
+             &quot;ownership_check&quot;: &quot;present|absent|via-helper&quot;}],
+  &quot;detectors&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;found&quot;: 0, &quot;true_positives&quot;: 0,
+                 &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0}],
+  &quot;findings&quot;: [{&quot;unit&quot;: &quot;str&quot;, &quot;cwe&quot;: &quot;CWE-639&quot;, &quot;caller_authority&quot;: &quot;str&quot;,
+                &quot;severity&quot;: &quot;str&quot;}],
+  &quot;denominator&quot;: 0
+}
+</code></pre>
+<p><code>denominator</code> is the field that makes recall meaningful, and the one a scanner
+that reports only findings cannot give you.</p>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>The check is in a decorator.</strong> <code>@requires_owner</code> above the function is an
+  ownership check and a naive body scan misses it, reporting a false positive
+  on correct code.</li>
+<li><strong>The check is on the wrong object.</strong> Comparing <code>session.user_id</code> to the id
+  the <em>caller supplied</em> rather than to the one on the <em>loaded record</em> passes
+  every structural test and authorises nothing.</li>
+<li><strong>The identifier is not obviously an id.</strong> A slug, a reference string, a
+  filename. <code>download_invoice(session, path)</code> is the same defect wearing a
+  different parameter name.</li>
+<li><strong>List endpoints.</strong> <code>list_my_bookings</code> takes no id at all — it is scoped by
+  the session, so there is nothing to tamper with. Including it in the
+  denominator understates recall.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting precision without recall.</strong> The number that looks best is the one
+  that improves when the detector finds less.</li>
+<li><strong>Scoring without a key.</strong> Then "no findings" and "no defects" are the same
+  sentence, and only one of them is good news.</li>
+<li><strong>Treating a reasoning detector's output as findings.</strong> 59.9% recall at 57.5%
+  precision means roughly two in five reports are wrong; they are hypotheses,
+  and C2.4 is what promotes them.</li>
+<li><strong>Ranking by CWE.</strong> Every IDOR is CWE-639. The one on the refund path is not
+  the same finding as the one on a read.</li>
+</ul><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/sast-model-pass/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/sast-model-pass/SKILL.md</code></a></p><pre class="front"><code>name: sast-model-pass
+description: &gt;-
+  Run a language model over a slice that deterministic rules structurally cannot
+  reach, and record what it says as a hypothesis rather than a finding. Use
+  after a rule-based scan has been scored, when a defect is the absence of a
+  call rather than the presence of a pattern, or when deciding whether an
+  unverified model confidence score may gate a pipeline.
+allowed-tools: Read, Grep, Glob</code></pre><h1>The pass that finds what no rule can express — and the price of it</h1>
+<p>A rule matches syntax that is present. Some defects are the <strong>absence</strong> of
+something: no authorisation check, no ownership comparison, no expiry. There
+is nothing to match, so no ruleset finds them at any width, and that is the
+only defensible reason to put a model in an audit pipeline.</p>
+<p>The price is that a model also reports defects that are not there, in the same
+tone, with a similar confidence number. So the output of this pass is not a
+finding list. It is a <strong>hypothesis list</strong>, and something else promotes a
+hypothesis to a finding.</p>
+<h2>When to use this</h2>
+<p>After the deterministic scan is scored, on the files where the key says a
+defect exists and the rules were silent — never as a first pass over the whole
+repository. A model asked to review everything reviews nothing carefully, and
+at four million lines the pass costs more than the finding is worth.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Take only the slice where the defect is decidable.</strong> The function, its
+signature, and the authority its caller holds. The signature is the part
+people drop and it is the part that decides the answer.</p>
+<p><strong>2 — Ask a question with a checkable answer.</strong> "Review this for security"
+returns an essay. "Does this function verify that the caller owns the record
+it returns — yes or no, and quote the line that does it" returns something you
+can check without a second opinion.</p>
+<p><strong>3 — Verify the quote against the file.</strong> If the model quotes a line, the
+line must exist. If it names a symbol, the symbol must be in the file. This
+costs nothing and kills the largest class of model error before a human sees
+it.</p>
+<p><strong>4 — Record every survivor as <code>hypothesis</code>, never <code>finding</code>.</strong> Carry the
+model, the prompt slice and the confidence with it, so the promotion decision
+downstream can be argued with rather than inherited.</p>
+<p><strong>5 — Do not gate on the confidence number.</strong> It is not calibrated and it is
+not stable across runs. Run the same slice ten times before you let any
+threshold into a pipeline; the variance is usually wider than the gap between
+your accept and reject bands.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — two functions cut out of <code>cybertravels/tools/bookings_api.py</code> with
+<code>ast</code>, not retyped: <code>get_booking</code>, which Semgrep missed at all three widths in
+<a href="../sast-semgrep-deterministic/SKILL.md"><code>sast-semgrep-deterministic</code></a>, and its
+authorised twin <code>get_my_booking</code> eleven lines below it. Each is prefixed with
+the authority its caller holds, which is the one line no file contains.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>get_booking
+   model says   : MISSING CWE-639 at confidence 0.82
+   quoting      : def get_booking(session, booking_id):
+   -&gt; HYPOTHESIS: quote verified, status hypothesis (not a finding)
+
+get_my_booking
+   model says   : PRESENT CWE-639 at confidence 0.77
+   quoting      : require_owner(session, row[&quot;owner_id&quot;] if row else None)
+   -&gt; NO CLAIM  : reviewed, nothing asserted, nothing to promote
+</code></pre>
+<p>One hypothesis from two functions. The control returning <code>NO CLAIM</code> is the
+half of the result that matters: a review pass that flags both is not detecting
+the defect, it is detecting that a function reads a booking.</p>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;backend&quot;: {&quot;kind&quot;: &quot;replay|open-weight&quot;, &quot;model&quot;: &quot;str&quot;},
+  &quot;hypotheses&quot;: [{&quot;unit&quot;: &quot;str&quot;, &quot;cwe&quot;: &quot;str&quot;, &quot;confidence&quot;: 0.0,
+                  &quot;quote_verified&quot;: true, &quot;status&quot;: &quot;hypothesis&quot;}],
+  &quot;rejected&quot;: [{&quot;unit&quot;: &quot;str&quot;, &quot;why&quot;: &quot;quote-not-in-file|symbol-absent&quot;}],
+  &quot;promoted&quot;: 0
+}
+</code></pre>
+<p><code>promoted</code> is 0 here on purpose. This skill does not promote anything —
+deduplication, contextual verification, reachability and dynamic validation
+do, and a pipeline that lets the audit stage promote its own output has no
+independent step in it at all.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting model output as findings.</strong> They enter a queue people trust and
+  leave it as lost credibility.</li>
+<li><strong>Trusting the confidence.</strong> Uncalibrated, unstable, and the first thing an
+  eager pipeline gates on.</li>
+<li><strong>Sending the whole file.</strong> The defect gets diluted and the answer degrades;
+  the slice that makes it decidable is smaller than the file.</li>
+<li><strong>Dropping the signature from the slice.</strong> The identical body is a critical
+  defect in a handler and irrelevant in a migration script.</li>
+</ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at C2.3 --out work/cybertravels
+python3 scripts/checkpoint.py --at C2.3 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
+# then, in your agent: ask for "sast semgrep deterministic"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/appsec/sast-semgrep-deterministic/scripts/sast_semgrep_deterministic.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Semgrep’s precision is 1.00 at all three widths and its recall is not: 0.12 on the default Python pack, 0.38 across seven registry packs, 0.25 on the custom taint rule — same tree, same engine, every scan exits 0. Five of the eight defects survive every width, in three classes: one coverage gap somebody fixes by writing a rule; one where the defect is textbook and the rule is written against <code>requests</code> while CyberTravels calls its own HTTP wrapper; and three IDORs that no pattern reaches at any width. The IDOR skill then builds the denominator — seven units that take an identifier and touch a record, two of them correctly authorised — and scores two detectors on it: the pattern rule finds 0 of 5, the ownership-comparison analysis finds 5 of 5. Two of those five were already in a scanner’s output for a <em>different</em> defect in the same function. The model pass then finds the missing-authorisation defect at 0.82 confidence, recorded as a hypothesis, and its claim about the already-authorised control function is rejected for quoting a line that is not in the file.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Two things, and the second is the one people skip. Run Semgrep against one of your own repositories at your current ruleset and at seven packs, and count the difference — whatever that number is, it has been the number all year. Then point the model pass at a real GLM-4.6 or Kimi K2 through Ollama and run one slice ten times. The variance in what it reports, and in its confidence, is what decides whether you can gate on confidence at all, and you cannot learn it from one run.</p></div></section><div class="expect"><b>Expect</b>The unprotected run emits the attacker&#x27;s verdict; the tagged run does not.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenGrep</span><span>Semgrep OSS</span><span>CodeQL</span><span>GLM-4.6</span><span>Kimi K2</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/appsec/sast-semgrep-deterministic</code></p></div><div class="pager"><a href="C2.2.html"><span class="k">← Previous</span><span class="t">C2.2 · Threat modelling from what the estate already knows</span></a><a class="next" href="C2.4.html"><span class="k">Next →</span><span class="t">C2.4 · Deduplication and contextual verification</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -3,7 +3,7 @@ name: Publish lightboard recording
 # Two ways to publish a chapter recording:
 #
 #  1. Upload the file to the repo under recordings/<SESSION>.mp4 (e.g.
-#     recordings/A2.5.mp4) and push — this workflow uploads it to YouTube and
+#     recordings/B2.5.mp4) and push — this workflow uploads it to YouTube and
 #     links it to the chapter automatically.
 #
 #  2. Run it manually (Actions → Publish lightboard recording → Run workflow)
@@ -19,7 +19,7 @@ on:
   workflow_dispatch:
     inputs:
       session:
-        description: 'Curriculum session id (e.g. A2.5, M0.1)'
+        description: 'Curriculum session id (e.g. B2.5, M0.1)'
         required: true
       file:
         description: 'Path to the recording in the repo (leave blank if using youtube_id)'

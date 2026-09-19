@@ -88,4 +88,4 @@ paragraph telling the model to ignore later instructions is `advisory`.
 - **Recording a refusal as separation.** Refusal is a behaviour under one
   phrasing; separation is a property of the window.
 - **Reporting it at the severity of indirect injection.** This one is bounded
-  by the requesting user's own authority; A1.3's is not.
+  by the requesting user's own authority; B1.3's is not.

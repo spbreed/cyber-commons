@@ -1,102 +1,197 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.4 — Just-in-time authority | Cyber Commons</title><meta name="description" content="Short-lived, purpose-bound grants issued per task and expiring with it."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">A2.4</div><h1>Just-in-time authority</h1><div class="badges"><span class="badge t">A2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T3</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T9</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Credential Access</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives.</p></div><div class="ctrl"><div class="lab">Control</div><p>Short-lived, purpose-bound grants issued per task and expiring with it.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Issue a scoped grant, use it, then replay it after expiry and after the task closed.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/attestation/entitlement-overprivilege-analyzer" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/attestation/entitlement-overprivilege-analyzer/scripts/entitlement_overprivilege_analyzer.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Standing authority means a successful injection always finds a live credential waiting. Just-in-time authority means the attacker has to arrive during the ninety seconds the grant exists, and be doing the one task it was scoped to.</p><div class="ct"><b>At CyberTravels.</b> You add `bind_call()` and a `cnf` claim. A token minted for `get_booking(2)` stops working against `get_booking(3)`. It does **not** stop `get_booking(2)` returning Priya&#x27;s booking to Dana — that is rows 1 and 4 of `cybertravels/LABELS.md`, and B2.3 is where it is found.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Binding a delegated token to the exact call it was minted for, so a captured token cannot be replayed against different arguments — including a clear statement of what that does not close, which is whether the object belongs to the caller.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>Permanent scope makes every injection a successful one, because the authority is already there when the attacker arrives.</p></div><div class="d1"><span>Day 1 — how</span><p>Short-lived, purpose-bound grants issued per task and expiring with it.</p></div><div class="d2"><span>Day 2 — measure</span><p>Median grant lifetime, and the amount of standing scope removed.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   standing                       just-in-time
-   +-----------------+            +---------------------+
-   | granted once    |            | granted per task    |
-   | lives forever   |            | expires in 90s      |
-   | any task        |            | this resource only  |
-   +-----------------+            +---------------------+
-   injection always finds         injection has to arrive
-   a live credential              during the window, on that task</pre><p><strong>Mitigates: T3 Privilege Compromise · T2 Tool Misuse.</strong></p>
-<p>A2.3 narrows authority at the moment of delegation. This lesson removes it when
-the task is over.</p>
-<p>Standing authority is the reason an injection is always worth attempting: the
-credential is there, permanently, waiting. Every successful A1.3 lands on a live
-grant. Just-in-time authority changes the arithmetic — the attacker has to
-arrive during a window that exists only while a specific task is running, and
-that is bound to a specific resource.</p>
-<p>Three properties, and the third is the one usually skipped:</p>
-<p><strong>Short-lived.</strong> Minutes, not months. Theft has a deadline.</p>
-<p><strong>Purpose-bound.</strong> Scoped to <em>this</em> resource, not to the resource class. Not
-<code>reports:write</code> but <code>reports:write</code> on report 8812.</p>
-<p><strong>Revoked on completion.</strong> The grant ends when the task ends, not when the timer
-does. A task that finishes in ten seconds should not leave a fifteen-minute
-credential lying around, which is the difference between a TTL and an actual
-lifecycle.</p>
-<p>The operational cost is real and worth stating plainly: something must issue
-these, and if that path breaks, work stops. That is the trade — a system that
-fails closed under a control outage, in exchange for a system that has no
-standing authority to steal.</p><div class="how"><blockquote>
-<p><strong>What this control closes.</strong></p>
-<p>Removes the <strong>standing</strong> grant an injection needs. The attacker must now arrive inside a window bound to one task and one resource.</p>
-</blockquote>
-<h2>2 · The control</h2><h2>2 · Finding the standing grants, as a skill</h2>
-<p>Just-in-time authority is only worth building where standing authority exists today, and at CyberTravels that list is not the one in the design document — it is in the authorisation graph and in the OAuth scopes the credential provider stored when someone first connected the payments API. The procedure diffs what each identity <em>holds</em> against what its declared tools actually <em>need</em>, and flags every permanent grant. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/entitlement-overprivilege-analyzer/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/entitlement-overprivilege-analyzer/SKILL.md</code></a></p><pre class="front"><code>name: entitlement-overprivilege-analyzer
-description: &gt;-
-  Analyse entitlement and identity registries to find over-privileged access
-  held by a deployment&#x27;s identities. Use to check granted entitlements
-  against what the declared tools actually need, to find over-broad OAuth
-  scopes on credential providers, or to find standing privilege.
-allowed-tools: Bash, Read</code></pre><h1>Entitlement Overprivilege Analyzer</h1>
-<p><strong>Controls:</strong> Controls 1 and 3 — over-privileged access</p>
-<h2>What this adds beyond the IAM verifier</h2>
-<p>The IAM verifier measures cloud permissions against cloud usage. This skill
-measures <strong>application-level entitlements</strong> — relationship-graph authorisation,
-OAuth scopes on stored credential providers, and identity-registry
-relationships — against what the declared tool surface actually requires.</p>
-<p>An agent can hold a minimal cloud role and an OAuth token with full mailbox
-access.</p>
-<h2>When to use this</h2>
-<p>After the IAM baseline is verified, not instead of it. The IAM verifier asks
-whether the role is default-deny; this asks whether the entitlements actually
-granted exceed what the declared tools need. Reach for it when scopes were
-granted at integration time, when a credential provider holds OAuth scopes
-nobody has reviewed, or when looking for standing privilege.</p>
-<h2>Procedure</h2>
-<ol>
-<li><strong>Take the required capability set</strong> from the code-surface analyzer. This is
-   the denominator: what the declared tools genuinely need.</li>
-<li><strong>Enumerate granted entitlements</strong> from the authorisation graph for every
-   identity in the deployment manifest.</li>
-<li><strong>Enumerate credential-provider scopes.</strong> Stored OAuth scopes are frequently
-   far wider than the tool needs, because the consent screen offered a bundle.</li>
-<li><strong>Diff.</strong> Every grant with no corresponding requirement is an over-privilege
-   finding, and each needs a justification gap recorded — the grant, the
-   requirement it was presumably for, and the absence.</li>
-<li><strong>Flag standing privilege.</strong> Any grant that is permanent rather than issued
-   per task.</li>
-</ol>
-<h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/entitlement_overprivilege_analyzer.py"><code>scripts/entitlement_overprivilege_analyzer.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
-<p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>   the task's own write      ok      permitted
-   a different report        REFUSED bound to report/8812
-   a different scope         REFUSED scoped to reports:write
-   after the task completes  REFUSED task closed
-   after the TTL expires     REFUSED expired
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.4 — What you have built — and every way it can now go wrong | Cyber Commons</title><meta name="description" content="The same architecture map, annotated with what an attacker reaches for at each edge."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Getting Started — Building Agentic AI › Harness Engineering — Making a Demo Into a System</div><div class="sid">A2.4</div><h1>What you have built — and every way it can now go wrong</h1><div class="badges"><span class="badge t">A2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Builders who never see their own system described adversarially ship the same defect in the next one.</p></div><div class="ctrl"><div class="lab">Control</div><p>The same architecture map, annotated with what an attacker reaches for at each edge.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compute the blast radius of the agent you just built.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/architecture/blast-radius-review" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/architecture/blast-radius-review/scripts/blast_radius_review.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Everything in this system works. That sentence is true and it is the beginning of the next four functions rather than the end of this one — because &#x27;works&#x27; was measured against what you intended, and nobody has yet measured it against somebody who intends otherwise.</p><div class="ct"><b>At CyberTravels.</b> The same CyberTravels architecture from A1.0, re-read by somebody who wants it to fail. Every row in that table is a lesson in Function A, by id.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>The handover into Function A. Every component built in this function re-read as an attack surface, every control re-read as something with a bypass, and the agent's blast radius measured as the number the next function argues with.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A builder who has never seen their own system described adversarially ships the same defect in the next one.</p></div><div class="d1"><span>Day 1 — how</span><p>Re-read every component you built as an attack surface, and measure what one run can reach and damage.</p></div><div class="d2"><span>Day 2 — measure</span><p>Blast radius: objects reachable, the subset writable, and the irreversible actions among them. That number decides how much autonomy the agent can carry into Function A.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">        SAME MAP, READ BY SOMEBODY ELSE
 
-An injection landing at 09:14 needs a task to be open, on the resource
-it wants, holding the scope it wants. Standing authority required none
+   ingress          ─►  prompt injection            B1.2
+   vendor MCP       ─►  indirect injection          B1.3
+   tool description ─►  rug-pull after approval     B1.9
+   memory           ─►  persistence                 B1.4
+   a2a              ─►  one becomes four            B1.7
+   the human gate   ─►  saturation                  B3.9</pre><p>This is the handover, and it is a deliberate change of stance.</p>
+<p>For thirteen lessons you have been the builder. Everything you added was a
+capability, and every decision was about making the system work. From the next
+lesson on, every one of those components is read by somebody trying to make it
+do something you did not intend — and every control you added is read as
+something with a bypass.</p>
+<h3>The same map, annotated differently</h3>
+<table>
+<thead>
+<tr>
+<th>what you built</th>
+<th>what it becomes in Function A</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ingress accepting traveller text</td>
+<td>B1.2 — prompt injection</td>
+</tr>
+<tr>
+<td>the vendor MCP server</td>
+<td>B1.3 — indirect injection, through a document you fetched</td>
+</tr>
+<tr>
+<td>tool descriptions you trusted</td>
+<td>B1.9 — a rug-pull after approval</td>
+</tr>
+<tr>
+<td>memory with origin recorded</td>
+<td>B1.4 — what happens when the origin is dropped</td>
+</tr>
+<tr>
+<td>agent-to-agent envelopes</td>
+<td>B1.7 — one injection reaching four agents</td>
+</tr>
+<tr>
+<td>the per-action token exchange</td>
+<td>B2.3 — and the systems that log it without enforcing it</td>
+</tr>
+<tr>
+<td>the human gate</td>
+<td>B3.9 — at four hundred approvals a day</td>
+</tr>
+<tr>
+<td>the audit trail</td>
+<td>B1.14 — and the question it still cannot answer</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing in that column is a criticism of the build. It is what the build looks
+like to somebody who wants it to fail, and a builder who has never seen their
+own system described that way ships the same defect in the next one.</p>
+<h3>Blast radius is the number you carry forward</h3>
+<p>Before you go on, measure one thing: what the agent you just built can reach and
+damage in a single run, if every instruction it followed were chosen by an
+attacker. That number decides how much autonomy it can be given, and it is the
+input to almost every decision in Function A.</p><div class="how"><h2>2 · Measure what you just built can reach</h2>
+<p>The skill below computes reach and damage for a single run and maps that to an autonomy level. It is the last thing you do as the builder and the first number Function A argues with.</p><h3>The skill</h3></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/architecture/blast-radius-review/SKILL.md" target="_blank" rel="noopener"><code>skills/architecture/blast-radius-review/SKILL.md</code></a></p><pre class="front"><code>name: blast-radius-review
+description: &gt;-
+  Compute what an agent can reach and damage in a single run, and decide the
+  autonomy level its blast radius can support. Use when reviewing an agent
+  design or deployment, deciding whether an action needs human approval, sizing
+  a sandbox, or answering how bad it would be if an agent were fully
+  compromised.
+allowed-tools: Read, Grep, Glob</code></pre><h1>Blast radius as a design metric</h1>
+<p>Blast radius is not an adjective. It is the set of resources an agent can
+change before anyone can stop it, and it is <strong>computed</strong> from three inputs:</p>
+<pre><code>blast_radius = reachable_resources × action_irreversibility × time_to_human_stop
+</code></pre>
+<p>Treating it as a number is what lets it be a design constraint instead of a
+discussion.</p>
+<h2>When to use this</h2>
+<p>At design review, before raising an agent's autonomy, and after any change that
+adds a tool, a credential, or a scheduled trigger.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate reachable resources.</strong> For each tool the agent can call, list
+what it can touch with attacker-chosen arguments — not what it touches in the
+happy path. A <code>Bash</code> tool with unrestricted arguments reaches everything the
+process can reach; record it that way rather than as one row.</p>
+<p><strong>2 — Grade irreversibility.</strong> Per action:</p>
+<table>
+<thead>
+<tr>
+<th>Grade</th>
+<th>Meaning</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>read-only</td>
+<td>query, list</td>
+</tr>
+<tr>
+<td>1</td>
+<td>reversible with effort</td>
+<td>write a file, open a PR</td>
+</tr>
+<tr>
+<td>2</td>
+<td>reversible only with a backup</td>
+<td>delete a row, force-push</td>
+</tr>
+<tr>
+<td>3</td>
+<td>irreversible or externally visible</td>
+<td>send an email, pay, publish, rotate a key</td>
+</tr>
+</tbody>
+</table>
+<p>Grade 3 actions are the whole reason approval gates exist. An agent whose
+worst action is grade 0 does not need one.</p>
+<p><strong>3 — Measure time-to-human-stop.</strong> How long between the agent deciding and a
+human being able to intervene? Interactive with a prompt is seconds. A
+scheduled run at 03:00 with notifications off is hours. This term dominates the
+product more often than people expect, and it is usually the cheapest to fix.</p>
+<p><strong>4 — Place it on the autonomy ladder.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Meaning</th>
+<th>Requires</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L1</td>
+<td>suggests; human executes</td>
+<td>nothing</td>
+</tr>
+<tr>
+<td>L2</td>
+<td>acts within a bounded sandbox</td>
+<td>reversible actions only</td>
+</tr>
+<tr>
+<td>L2.5</td>
+<td>acts, but grade-3 actions need approval</td>
+<td>a working approval path</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>acts unattended</td>
+<td>demonstrated containment + audit + stop authority</td>
+</tr>
+</tbody>
+</table>
+<p>An agent at L3 whose grade-3 actions are unbounded is misclassified, not brave.</p>
+<p><strong>5 — Find the cheapest reduction.</strong> Usually one of: remove a credential from
+the environment, split one broad tool into two narrow ones, add a choke point
+in front of the irreversible action, or shorten time-to-stop with a
+notification. Recommend the one with the best radius reduction per unit of
+friction, and say what it costs.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/blast_radius_review.py"><code>scripts/blast_radius_review.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>action              reversible  external  routing         per day
+delete_row          False       False     human approval  6
+issue_refund        False       True      human approval  2
+read_report         True        False     policy only     400
+rotate_credential   False       False     human approval  1
+send_email          False       True      human approval  3
+update_ticket       True        False     policy only     260
+write_draft         True        False     policy only     120
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;identities&quot;: [
-    {&quot;id&quot;: &quot;str&quot;,
-     &quot;granted&quot;: [&quot;str&quot;],
-     &quot;required_by_tools&quot;: [&quot;str&quot;],
-     &quot;excess&quot;: [{&quot;grant&quot;: &quot;str&quot;, &quot;justification_gap&quot;: &quot;str&quot;}]}
-  ],
-  &quot;oauth_scope_excess&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;granted_scope&quot;: &quot;str&quot;, &quot;needed_scope&quot;: &quot;str&quot;}],
-  &quot;standing_privilege&quot;: [&quot;str&quot;],
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+  &quot;resources&quot;: [{&quot;tool&quot;: &quot;str&quot;, &quot;reachable&quot;: [&quot;str&quot;], &quot;unbounded&quot;: false}],
+  &quot;actions&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;irreversibility&quot;: 0, &quot;why&quot;: &quot;str&quot;}],
+  &quot;time_to_human_stop_seconds&quot;: 0,
+  &quot;blast_radius&quot;: {&quot;score&quot;: 0, &quot;inputs&quot;: {&quot;resources&quot;: 0, &quot;max_irreversibility&quot;: 0, &quot;seconds&quot;: 0}},
+  &quot;autonomy&quot;: {&quot;current&quot;: &quot;L1|L2|L2.5|L3&quot;, &quot;supported&quot;: &quot;L1|L2|L2.5|L3&quot;, &quot;mismatch&quot;: false},
+  &quot;reductions&quot;: [{&quot;change&quot;: &quot;str&quot;, &quot;new_score&quot;: 0, &quot;friction&quot;: &quot;low|medium|high&quot;}]
 }
 </code></pre>
+<p>Show <code>inputs</code>. A blast-radius score without its terms cannot be challenged, and
+an unchallengeable metric stops being used.</p>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Comparing grants against other grants.</strong> The denominator is the tool
-  surface, not a peer deployment.</li>
-<li><strong>Accepting a bundled OAuth scope</strong> because it was what the provider offered.</li>
-<li><strong>Missing standing privilege</strong> because the scope itself looked narrow.</li>
+<li><strong>Counting the happy path.</strong> Enumerate with attacker-chosen arguments.</li>
+<li><strong>Ignoring time-to-stop</strong> because it is not about permissions. It is the term
+  that separates an incident from a near miss.</li>
+<li><strong>Raising autonomy because the agent has been reliable.</strong> Reliability is not
+  containment; it is the absence of an adversary so far.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at A2.4 --out work/cybertravels
 python3 scripts/checkpoint.py --at A2.4 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "entitlement overprivilege analyzer"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/attestation/entitlement-overprivilege-analyzer/scripts/entitlement_overprivilege_analyzer.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape. Note what its procedure insists on: the denominator is the capability set the tools require, not another set of grants — comparing grants against grants is how a review concludes that an over-privileged agent is normal — and a narrow-looking scope still counts as standing privilege if it never expires.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take one standing grant an agent holds and work out what would break if it expired in two minutes. That list is the real cost of just-in-time, and it is usually shorter than expected.</p></div></section><div class="expect"><b>Expect</b>A grant bound to one scope, one resource and one task permits only the task&#x27;s own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Keycloak</span><span>OPA</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/entitlement-overprivilege-analyzer</code></p></div><div class="pager"><a href="A2.3.html"><span class="k">← Previous</span><span class="t">A2.3 · Delegation that narrows, and survives audit</span></a><a class="next" href="A2.5.html"><span class="k">Next →</span><span class="t">A2.5 · The non-human identity lifecycle</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "blast radius review"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/architecture/blast-radius-review/scripts/blast_radius_review.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The set of objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports — which will be lower than the one you gave it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Remove the human gate and recompute. The radius grows by exactly the irreversible actions, which is the argument for the gate stated as a number rather than as a principle.</p></div></section><div class="expect"><b>Expect</b>Objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>MITRE ATLAS</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/architecture/blast-radius-review</code></p></div><div class="pager"><a href="A2.3.html"><span class="k">← Previous</span><span class="t">A2.3 · Evaluating what you built, before anybody attacks it</span></a><a class="next" href="B1.0.html"><span class="k">Next →</span><span class="t">B1.0 · Start here — what securing an AI architecture means</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

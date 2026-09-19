@@ -1,0 +1,188 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>F1.0 — Start here — what AI governance means | Cyber Commons</title><meta name="description" content="One register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function F — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">F1.0</div><h1>Start here — what AI governance means</h1><div class="badges"><span class="badge t">F1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T7</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/F1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A trustworthy-AI statement with no owner per property, so every property is somebody else&#x27;s job.</p></div><div class="ctrl"><div class="lab">Control</div><p>One register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Take the seven properties and assign each an owner in your own organisation. The gaps are the programme.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/regulatory/framework-reference-lookup" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/regulatory/framework-reference-lookup/scripts/framework_reference_lookup.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">A list of approved products works at forty products. It does not survive a thousand agents, most of them assembled by people who do not think of themselves as building software. Governing autonomy is a different exercise from approving tools.</p><div class="ct"><b>At CyberTravels.</b> `cybertravels/governance/__init__.py` is six trustworthy-AI properties with two columns beside each: the function that owns it and the **artefact** that evidences it. Call `unowned()` with the properties your own statement claims and it returns the ones nothing in this system evidences — usually a longer list than anybody expects, because a statement is written before the artefacts are.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Governance stated as a table rather than a value: each property a trustworthy-AI claim makes, the function that owns it, and the artefact that evidences it — because a property with no artefact is a value, and values do not survive an audit.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A trustworthy-AI statement with no owner per property means every property is somebody else&#x27;s job.</p></div><div class="d1"><span>Day 1 — how</span><p>Assign each of the seven properties an owner, and read the three chapters as one unit built, evidenced and run.</p></div><div class="d2"><span>Day 2 — measure</span><p>Properties with a named owner. Security owns one of seven outright, which is why this is not a security document.</p></div></div><div class="fnday"><b>Who this function is for.</b> GRC analysts, risk and compliance managers, control owners, privacy engineers, BISOs and the CISO office — anyone who has to answer for the estate rather than build it.</div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   approving tools                governing autonomy
+   +-------------------+          +---------------------------+
+   | a list of 40      |          | levels + conditions        |
+   | grows forever     |    vs    | attach to behaviour        |
+   | governs nothing   |          | still works at 1000 agents |
+   +-------------------+          +---------------------------+
+
+   seven trustworthy-AI properties, one owner each
+   valid+reliable . safe . secure+resilient . accountable+transparent
+   explainable . privacy-enhanced . fair
+
+   security owns one of the seven outright</pre><p>Someone at CyberTravels signed off on the platform. Function E is about whether
+that signature still means anything.</p>
+<p>It has to, because the sign-off happened when CyberTravels was a chatbot. It now
+issues refunds, writes code, reads invoices and indexes contracts. Nothing about
+the approval was wrong on the day; everything about it is stale, and the
+approval process has no step that notices.</p>
+<p><strong>Governing autonomy rather than approving tools</strong> is the shift. A list of
+approved products works at forty products. CyberTravels will not stop at four
+agents, and neither will the list.</p>
+<p>The vocabulary is <strong>trustworthy AI</strong>, and it is worth being precise about,
+because it is used loosely everywhere else. Seven properties, and not one of
+them belongs to a single team:</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>what it means for CyberTravels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>valid and reliable</td>
+<td>it recommends hotels that exist, repeatably, and somebody measured that</td>
+</tr>
+<tr>
+<td>safe</td>
+<td>a wrong recommendation does not become a $5,000 refund</td>
+</tr>
+<tr>
+<td>secure and resilient</td>
+<td>it withstands the twelve risks in the register, and recovers</td>
+</tr>
+<tr>
+<td>accountable and transparent</td>
+<td>a named person owns it, and its actions are visible</td>
+</tr>
+<tr>
+<td>explainable</td>
+<td>the reason it issued a refund can be recovered afterwards</td>
+</tr>
+<tr>
+<td>privacy-enhanced</td>
+<td>passport numbers do not end up in a log or a vector store</td>
+</tr>
+<tr>
+<td>fair, harmful bias managed</td>
+<td>it does not quietly serve some travellers worse</td>
+</tr>
+</tbody>
+</table>
+<p>Security owns one of the seven outright. That ratio is the whole reason this
+function exists as more than a security document.</p>
+<p>Contributing evidence to six properties you do not own only works if the
+evidence is in a form the other six owners can use, which is why the whole of
+Function E is written in one unit: a <strong>key control indicator</strong>. F1.1 defines it
+— a number computed from the estate, with a denominator, and a target set before
+the measurement is taken — and the three chapters are that one unit built,
+evidenced and run:</p>
+<ul>
+<li><strong>Chapter F1 — risk and control.</strong> Where the indicators come from. The
+  register supplies the denominator, risk tiering supplies the target, control
+  mapping supplies the subject, and F1.13 computes six of them against the
+  CyberTravels repository and reports the gaps.</li>
+<li><strong>Chapter F2 — regulatory and compliance.</strong> The same indicators read as
+  evidence. A travel company holds passports, payment data and health
+  information, and each regime asks for a reading rather than a description —
+  quotable to several of them because it was computed once.</li>
+<li><strong>Chapter F3 — the CISO office.</strong> The indicators run as a programme:
+  sequenced by distance from target, owned by name, and reported to a board in
+  numbers somebody in the room can re-compute.</li>
+</ul>
+<p>Every lesson in this function carries a line under its concept saying what it
+contributes to that indicator or takes from it. Where a lesson looks like it
+belongs to a different argument, that line is the place to check.</p>
+<p>Two rows of the register belong to this function outright: <strong>R2</strong>, where a
+guardrail was disabled for a demo and nobody had to approve it, and <strong>R12</strong>,
+where contracts were indexed for better answers and became searchable by
+contractors.</p><div class="how"><h2>2 · Seven properties, and who at CyberTravels owns each</h2><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">trustworthy-AI property</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">who owns it at CyberTravels</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">security&#x27;s share</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">valid and reliable</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">engineering + the eval harness (C2.19)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">safe</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the CyberTravels product owner + risk</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">secure and resilient</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">security</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>owns it</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">accountable and transparent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the named system owner</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">explainable and interpretable</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">engineering + model risk</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">privacy-enhanced</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">privacy office + engineering</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">fair, harmful bias managed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">product owner + legal</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">contributes evidence</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Security owns one of the seven and contributes evidence to the other six. A trustworthy-AI statement with no owner per property is a statement that every property is somebody else's job.</div><h2>3 · What the sign-off actually covered</h2>
+<p>The approval was accurate when it was given. This is what changed underneath it, and which of those changes raised a ticket.</p><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">at approval</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">today</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">did it go through change management?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">one agent, answers questions</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">four agents</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">read-only</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">issues refunds</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no repository access</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">opens and self-approves pull requests</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no document store</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">indexes contracts and pricing models</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">hosted model, fixed version</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">provider upgrades it silently</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no — you may not be told</b></td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Five material changes, none of them ticketed. This is R2 and the lifecycle problem of F1.9 in one table, and it is why chapter 10 starts with an inventory rather than a policy.</div><h2>4 · Three distances from the same question</h2><svg viewBox="0 0 700 140" width="100%" style="max-width:700px;height:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d93a3"/></marker></defs><rect x="6" y="14" width="218" height="84" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="115.0" y="53.0" text-anchor="middle" fill="currentColor">chapter 10</text><text x="115.0" y="69.0" text-anchor="middle" fill="#4a6172" font-size="10.5">risk and control</text><text x="115" y="62" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">inventory · tiering</text><text x="115" y="78" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">mapping · evidence</text><rect x="242" y="14" width="218" height="84" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="351.0" y="53.0" text-anchor="middle" fill="currentColor">chapter 11</text><text x="351.0" y="69.0" text-anchor="middle" fill="#4a6172" font-size="10.5">regulatory</text><text x="351" y="62" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">obligations · documentation</text><text x="351" y="78" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">supervision</text><rect x="478" y="14" width="216" height="84" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="586.0" y="53.0" text-anchor="middle" fill="currentColor">chapter 12</text><text x="586.0" y="69.0" text-anchor="middle" fill="#4a6172" font-size="10.5">the CISO office</text><text x="586" y="62" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">sequencing · org design</text><text x="586" y="78" text-anchor="middle" fill="#4a6172" font-size="11" font-weight="normal">metrics · stop authority</text><line x1="224" y1="56" x2="240" y2="56" stroke="#7d93a3" stroke-width="1.4" marker-end="url(#a)"/><line x1="460" y1="56" x2="476" y2="56" stroke="#7d93a3" stroke-width="1.4" marker-end="url(#a)"/><text x="350" y="124" text-anchor="middle" fill="#4a6172" font-size="11.5" font-weight="normal">inside CyberTravels  →  to a regulator  →  to the board</text></svg><h2>4 · Which vocabulary is this control already in?</h2>
+<p>Governance work is mostly translation, and the first translation is the cheapest: a control you already operate is usually named in several framework vocabularies at once. <code>cybertravels/governance/__init__.py</code> is the tree increment this lesson adds — six trustworthy-AI properties, each with the function that owns it and the <strong>artefact</strong> that evidences it, because a property with no artefact is a value and values do not survive an audit. This skill is the lookup in the other direction:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/regulatory/framework-reference-lookup/SKILL.md" target="_blank" rel="noopener"><code>skills/regulatory/framework-reference-lookup/SKILL.md</code></a></p><pre class="front"><code>name: framework-reference-lookup
+description: &gt;-
+  Look up which control vocabularies a lesson maps to, and which lessons address
+  a given control, from the commons&#x27; own mapping file. Use when answering &quot;where
+  is this framework covered&quot;, when preparing an audit response, or when checking
+  a framework&#x27;s coverage for gaps.
+allowed-tools: Read, Grep, Glob</code></pre><h1>Two directions, and the second one is the one people actually ask for</h1>
+<p>Nobody asks what a lesson maps to. They ask <strong>"show me where human oversight is
+addressed"</strong>, and the answer has to be a list of things that exist rather than a
+paragraph asserting coverage.</p>
+<p>This reads <code>curriculum/frameworks.json</code> — the same file every lesson page is
+labelled from — so a reference table and a lesson's chips cannot disagree.</p>
+<h2>The four vocabularies</h2>
+<table>
+<thead>
+<tr>
+<th>framework</th>
+<th>what it is</th>
+<th>when it is the right lens</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://genai.owasp.org/llm-top-10/">OWASP Top 10 for LLM Applications</a></td>
+<td>LLM01–LLM10, application-level risks</td>
+<td>reviewing a feature that calls a model</td>
+</tr>
+<tr>
+<td><a href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/">OWASP Agentic AI Top 10</a></td>
+<td>T1–T15, threats specific to agents</td>
+<td>the system plans and calls tools</td>
+</tr>
+<tr>
+<td><a href="https://atlas.mitre.org/">MITRE ATLAS</a></td>
+<td>adversary tactics against AI systems</td>
+<td>describing what an attacker did</td>
+</tr>
+<tr>
+<td><a href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF">NIST AI RMF 1.0</a></td>
+<td>GOVERN, MAP, MEASURE, MANAGE</td>
+<td>organising a programme, not a bug</td>
+</tr>
+<tr>
+<td><a href="https://artificialintelligenceact.eu/">EU AI Act</a></td>
+<td>Regulation 2024/1689, by article</td>
+<td>an obligation, with a deadline</td>
+</tr>
+</tbody>
+</table>
+<p>The first three describe <em>what can go wrong</em>. NIST describes <em>how you organise
+to find out</em>. The EU AI Act describes <em>what you must be able to show</em>. A control
+usually needs one of each, which is why lessons carry several.</p>
+<h2>When to use this</h2>
+<p>Preparing an audit or assurance response, checking coverage before claiming it,
+and picking the right vocabulary for a finding — an ATLAS tactic in a risk
+register and a NIST function in an incident write-up are both category errors.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Decide which direction you need.</strong> Lesson → controls for a reader;
+control → lessons for an auditor.</p>
+<p><strong>2 — Use the vocabulary the audience uses.</strong> Do not translate a regulator's
+article into a threat id for them.</p>
+<p><strong>3 — Read the coverage counts as a gap finder.</strong> A control with one lesson is
+thin; one with none is a hole.</p>
+<p><strong>4 — Follow the link before quoting the label.</strong> The labels are indicative
+mappings, not a certification.</p>
+<h2>Example</h2>
+<p><strong>Output</strong> — from a real run:</p>
+<pre><code>   Art. 14  Human oversight                                      17 lessons
+   B1.2    OWASP LLM01 · OWASP T6 · ATLAS AML.T0051 · ATLAS Initial Access · NIST MAP · EUAI Art. 15
+</code></pre>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;frameworks&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;url&quot;: &quot;str&quot;, &quot;size&quot;: &quot;str&quot;}],
+  &quot;euai_articles&quot;: [{&quot;article&quot;: &quot;str&quot;, &quot;title&quot;: &quot;str&quot;, &quot;lessons&quot;: 0}],
+  &quot;coverage&quot;: {&quot;nist&quot;: {&quot;GOVERN&quot;: 0}, &quot;owasp&quot;: {&quot;LLM01&quot;: 0}},
+  &quot;lookup&quot;: {&quot;by_lesson&quot;: {&quot;B1.2&quot;: [&quot;str&quot;]}, &quot;by_control&quot;: {&quot;Art. 14&quot;: [&quot;str&quot;]}}
+}
+</code></pre>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>A lesson carries no labels.</strong> A0 is setup and maps to no control on
+  purpose; that is declared, not missing.</li>
+<li><strong>One article dominates.</strong> Art. 15 covers accuracy, robustness <em>and</em>
+  cybersecurity, so it is broad by construction.</li>
+<li><strong>A label with one lesson.</strong> Thin coverage, not necessarily wrong — check
+  whether the control deserves more.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Quoting a mapping as compliance.</strong> These are indicative. Studying a lesson
+  discharges no obligation.</li>
+<li><strong>Maintaining a second copy of the tables.</strong> They will diverge; read the one
+  file.</li>
+<li><strong>Assuming a framework's ids are stable.</strong> OWASP renumbered the LLM Top 10
+  slugs between editions, which is why the links are fetched in CI.</li>
+</ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at F1.0 --out work/cybertravels
+python3 scripts/checkpoint.py --at F1.0 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
+# then, in your agent: ask for "framework reference lookup"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/regulatory/framework-reference-lookup/scripts/framework_reference_lookup.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Seven trustworthy-AI properties with a named owner each and security owning exactly one outright. Five material changes to CyberTravels since its approval, none of which raised a ticket. The three chapters laid out by how far from the system each one sits.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Find the approval record for one agent you run and compare it to what that agent does today. The gap is the programme, and the reason nobody noticed it is what chapter 10 is for.</p></div></section><div class="expect"><b>Expect</b>Seven trustworthy-AI properties print with a typical owner each. Security owns exactly one outright and contributes evidence to the other six — which is the reason this function exists as more than a security document.</div><p class="sub" style="margin-top:10px">Skill source: <code>skills/regulatory/framework-reference-lookup</code></p></div><div class="pager"><a href="E5.6.html"><span class="k">← Previous</span><span class="t">E5.6 · The regulatory clock — awareness, not confirmation</span></a><a class="next" href="F1.1.html"><span class="k">Next →</span><span class="t">F1.1 · From framework control to key control indicator</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

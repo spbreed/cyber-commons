@@ -1,7 +1,7 @@
-# step:file C1.9
+# step:file D1.9
 """The kill switch — and the paths it does not reach.
 
-A2.5 built revocation and it works: `registry.revoke()` retires a workload,
+B2.5 built revocation and it works: `registry.revoke()` retires a workload,
 and `identity.verify_delegated()` refuses anything it signed from that moment
 rather than at token expiry. That is a real control and it is the reason this
 lesson is not "build a kill switch".
@@ -14,7 +14,7 @@ In this tree, three things are, and each is a different kind of gap:
 1. **The direct API path.** `agents/file_agent.py::handle` calls
    `payments_api.download_invoice` in-process. No token is minted, so
    `verify_delegated` is never reached, so revocation is not on that path at
-   all. A1.1's architecture map has a card for exactly this — *direct APIs, no
+   all. B1.1's architecture map has a card for exactly this — *direct APIs, no
    MCP in the path, so no policy point either* — and this is what that card
    costs on the night.
 2. **The in-flight call.** A run already past the exchange and inside the
@@ -43,10 +43,10 @@ PATHS = [
     {"path": "direct API call", "via": "agents/file_agent.py::handle",
      "stopped_by_revocation": False,
      "why": "calls tools/payments_api.download_invoice in-process — no token "
-            "is minted, so no check is reached. A1.1's 'direct APIs' card"},
+            "is minted, so no check is reached. B1.1's 'direct APIs' card"},
     {"path": "shell", "via": "agents/coding_agent.py::_open_branch",
      "stopped_by_revocation": False,
-     "why": "subprocess, in the orchestrator's own process. A3.2's sandbox "
+     "why": "subprocess, in the orchestrator's own process. B3.2's sandbox "
             "profile forbids it; nothing enforces the profile"},
     {"path": "in-flight call", "via": "a run already past the exchange",
      "stopped_by_revocation": False,
@@ -58,7 +58,7 @@ PATHS = [
 def coverage():
     """What fraction of the act-paths the kill switch is actually on.
 
-    C1.9's Day 2 number, and it is not 1.0 in this tree. Report it that way:
+    D1.9's Day 2 number, and it is not 1.0 in this tree. Report it that way:
     a kill switch described as covering the fleet, measured at 0.4, is a
     finding about the architecture rather than about the switch.
     """
@@ -97,11 +97,11 @@ def preserves_evidence(plan):
     """Does this stop plan keep what an investigation needs?
 
     The conflict is real and both sides are right. Containment wants the
-    process gone; C1.10 wants the run state. Deciding it in advance is the
+    process gone; D1.10 wants the run state. Deciding it in advance is the
     control — deciding it during the incident means whoever types faster wins.
     """
     needs = {
-        "audit_rows": "the chain A2.8 built; kill the database and it is gone",
+        "audit_rows": "the chain B2.8 built; kill the database and it is gone",
         "trace_spans": "what the agent was doing, and why",
         "in_flight_args": "the arguments of the call that was running",
         "memory_rows": "what the agent had been told in earlier runs",

@@ -4,7 +4,7 @@
 This is the executable half of `kci-control-measurement`. A KCI is only a
 control indicator if something measures it; otherwise it is a sentence in a
 policy. So this reads the actual repository — `cybertravels/`, the same tree
-B2.3 scans and A1.1 draws — and computes each indicator from the source.
+C2.3 scans and B1.1 draws — and computes each indicator from the source.
 
 The output is deliberately not a score. It is a list of gaps, each with the
 lesson that closes it, because a governance report whose only artefact is a
@@ -69,20 +69,20 @@ KCIS = [
     ("KCI-01", "object handlers that compare an owner", "== 1.00",
      len(authorised) / len(handlers) if handlers else 0.0,
      f"{len(handlers) - len(authorised)} of {len(handlers)} handlers do not",
-     "A2.4 and B2.3 — the ownership check, and finding the ones that lack it"),
+     "B2.4 and C2.3 — the ownership check, and finding the ones that lack it"),
     ("KCI-02", "outbound HTTP calls verifying TLS", "== 1.00",
      tls_ok / len(tls_calls) if tls_calls else 1.0,
      f"{len(tls_calls) - tls_ok} of {len(tls_calls)} disable verification",
-     "B2.7 — a rule that names your own HTTP wrapper, not requests"),
+     "C2.7 — a rule that names your own HTTP wrapper, not requests"),
     ("KCI-03", "no evaluation of caller-supplied text", "== 0",
      float(len(evals)), f"{len(evals)} function(s) call eval or exec",
-     "A3.4 — default-deny on the tool call"),
+     "B3.4 — default-deny on the tool call"),
     ("KCI-04", "no shell carrying a model-supplied argument", "== 0",
      float(len(shells)), f"{len(shells)} function(s) reach a shell",
-     "A3.4 and B2.3 — CWE-78 is expressible; a rule catches it"),
+     "B3.4 and C2.3 — CWE-78 is expressible; a rule catches it"),
     ("KCI-05", "egress control present", "== 1", float(egress),
      "no egress component exists in the architecture",
-     "A3.7 — the agent gateway as one choke point"),
+     "B3.7 — the agent gateway as one choke point"),
     ("KCI-06", "no credential literal in the source", "== 0",
      float(len(secrets)), f"{len(secrets)} module(s) carry one",
      "already met — kept so the set can be seen to discriminate"),

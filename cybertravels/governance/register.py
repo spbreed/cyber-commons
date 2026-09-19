@@ -1,4 +1,4 @@
-# step:file E1.1
+# step:file F1.1
 """From a framework control to a number somebody can check this week.
 
 An annual review certifies nothing about a system that changed the week after
@@ -13,10 +13,10 @@ wanted.
 
 Four lessons build this file:
 
-    E1.1  the KCI itself — control -> measurement -> threshold
-    E1.2  the inventory, derived from the tree rather than from a survey
-    E1.3  tiering by what the thing can do, not by which model it uses
-    E1.4  mapping outward to frameworks, never inward from them
+    F1.1  the KCI itself — control -> measurement -> threshold
+    F1.2  the inventory, derived from the tree rather than from a survey
+    F1.3  tiering by what the thing can do, not by which model it uses
+    F1.4  mapping outward to frameworks, never inward from them
 """
 from .. import config
 
@@ -54,9 +54,9 @@ class KCI:
                 "source": self.source, "cadence_days": self.cadence_days}
 
 
-# step:E1.2 add
+# step:F1.2 add
 # --------------------------------------------------------------------------- #
-# E1.2 — the inventory, and why a survey produces the wrong one
+# F1.2 — the inventory, and why a survey produces the wrong one
 # --------------------------------------------------------------------------- #
 # The inventory is the control most organisations still lack, and the reason is
 # that it is usually built by asking. A survey returns the agents somebody
@@ -87,7 +87,7 @@ def inventory():
 def shadow(live_ids):
     """Running workloads nobody registered, and registered ones nothing runs.
 
-    Both directions, because teams check one. A2.5 built `orphans()`; this is
+    Both directions, because teams check one. B2.5 built `orphans()`; this is
     the governance reading of it.
     """
     from .. import registry
@@ -97,12 +97,12 @@ def shadow(live_ids):
             "shadow_count": len(o["running_but_unregistered"]),
             "why": "a survey returns the agents somebody declared, which is "
                    "the complement of the set you are looking for"}
-# step:E1.2 end
+# step:F1.2 end
 
 
-# step:E1.3 add
+# step:F1.3 add
 # --------------------------------------------------------------------------- #
-# E1.3 — tier by what it can do
+# F1.3 — tier by what it can do
 # --------------------------------------------------------------------------- #
 # Tiering by model name is the default because the model name is the thing on
 # the form. It produces a register where every large-model deployment is high
@@ -141,12 +141,12 @@ def tier_the_workflow_agent():
     return tier("acts-with-approval", "payments" if moves_money else "personal",
                 "money-moves" if moves_money else "customer-visible",
                 model=config.CLAUDE_MODEL)
-# step:E1.3 end
+# step:F1.3 end
 
 
-# step:E1.4 add
+# step:F1.4 add
 # --------------------------------------------------------------------------- #
-# E1.4 — map outward, never inward
+# F1.4 — map outward, never inward
 # --------------------------------------------------------------------------- #
 # Starting from a framework produces a control per clause, which is a
 # programme shaped like a document. Starting from the controls you have and
@@ -154,15 +154,15 @@ def tier_the_workflow_agent():
 # you which clauses nothing covers — which is the question the framework was
 # for.
 #
-# The other half is the one E1.4's risk line names: before inventing a control
+# The other half is the one F1.4's risk line names: before inventing a control
 # for agents, check whether an existing one applies to a new principal type.
 # Most of them do, and a new control is a new thing to maintain and evidence.
 EXISTING_CONTROL_APPLIES = {
     "access review": "an agent's entitlements are entitlements; the review "
                      "needs a non-human principal type, not a new control",
-    "change management": "a system prompt change is a change — D1.2 counts "
+    "change management": "a system prompt change is a change — E1.2 counts "
                          "the surfaces that avoid this one",
-    "joiner-mover-leaver": "A2.5's revoke is the leaver process; what is "
+    "joiner-mover-leaver": "B2.5's revoke is the leaver process; what is "
                            "missing is the trigger, not the capability",
     "privileged access management": "a delegated token is privileged access "
                                     "with a two-minute lifetime",
@@ -196,4 +196,4 @@ def needs_a_new_control(proposed, *, for_principal="agent"):
             "why": f"nothing in the existing set covers {proposed!r} for a "
                    f"{for_principal} principal — this one is genuinely new, "
                    f"and it now has to be maintained and evidenced"}
-# step:E1.4 end
+# step:F1.4 end

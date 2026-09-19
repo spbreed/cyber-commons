@@ -1,675 +1,491 @@
-"""E1 — The GRC Practitioner (Risk & Control). Nine sessions.
+"""Eight Function D lessons, from the two-track era of the Agentic SOC.
 
-The governing insight for the whole E function: **point-in-time control testing
-fails for AI**, because the thing you tested is not the thing running next week
-and none of the changes that break it are code changes.
+    E1.3  agent telemetry as a log source
+    E1.3  distinguishing agent from human
+    E3.9  threat intelligence that becomes a detection
+    E1.2  drift monitoring
+    E2.2  detections whose subject is the agent
+    E2.4  agent-assisted detection engineering
+    E3.1  from alert queue to loop operator
+    E3.3  the context that makes agent triage work
 
-    E1.1  why point-in-time testing fails
-    E1.2  the inventory — you cannot govern what you cannot list
-    E1.3  risk tiering by authority and data, not by model
-    E1.4  control mapping (control → framework, never the reverse)
-    E1.5  evaluation output as audit evidence
-    E1.6  operating vs outcome guardrails
-    E1.7  continuous control verification
-    E1.8  third-party and model supply chain
-    E1.9  model and agent lifecycle governance
+The file name is historical: Function D was two tracks when these were written
+and is now five, so the lessons here span three chapters. Nothing depends on
+which module a lesson lives in — `exercises/__init__.py` merges them and
+`site/data/curriculum.json` is what decides order and chapter. Splitting these
+into five files is a tidy-up nobody has needed yet; do not infer structure from
+the filename.
 """
 
-from .skills import SKILL_RUNTIME, runtime_step
+MODEL_NOTE = """
+> **About the model in this notebook.** It runs offline against a deterministic
+> replay so the lesson executes on a Kaggle kernel with no network. To run the
+> same triage against a real open-weight model:
+>
+> ```bash
+> ollama pull glm-4.6            # or kimi-k2, llama3.3
+> export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
+> ```
+"""
+
+from .skills import SKILL_RUNTIME
 
 from . import diagrams as D
-
-RUNTIME_STEP = runtime_step()
 
 from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
 
-"E1.1": {
+"E3.1": {
  "concept": """
-Classical control testing has a simple shape: a control is designed, an auditor
-tests it once or twice a year, and a passing test is recorded for the period.
+The classic SOC job is a queue: alerts arrive, an analyst reads each one,
+decides, and moves on. The constraint is human attention, and it does not scale
+— which is why tier-1 burnout and alert fatigue are structural rather than
+cultural problems.
 
-That works when the thing being tested changes only through a process that
-generates evidence. For an agent, the four things that change its behaviour are:
+The agentic version replaces "read every alert" with "operate a loop that reads
+every alert". The analyst's job becomes:
 
-- the **model version** — changed by your provider, possibly without notice,
-- the **prompt** — edited in a console,
-- the **tool manifest** — a config change,
-- the **approval settings** — a toggle in an admin UI.
+- deciding **what the loop is allowed to conclude** (the verifier, C2.0),
+- deciding **what it may do about it** (the tool policy, B3.5),
+- and handling the cases it escalates.
 
-None of them is a code change. None generates a change record. All of them
-invalidate the conditions the control was tested under.
-
-The honest consequence is that a control tested six months ago is not passing —
-it is **unevidenced**, which is a third state most GRC tooling cannot represent.
-Introducing that third state is the first half of this lesson.
-
-The second half is what you use instead, and it is the unit the rest of Function
-E is written in: a **key control indicator**. A number computed from the estate,
-with a denominator, and a target set before the measurement is taken. Section 5
-below builds them from the framework controls in A0.1; every other lesson in
-this function either produces an indicator, supplies its denominator, sets its
-target, decides who owns it, or presents it as evidence to somebody outside the
-organisation. Each of them says which, in a line under its own concept.
+The skill that transfers is not triage speed. It is knowing which signals the
+loop may believe — because a triage loop with a weak verifier closes true
+positives at machine speed, and closing a true positive is silent.
 """,
  "steps": [
-  ("md", "## 2 · Demo — the same evidence, two ways of reading it"),
-("md", "## 3 · Where it breaks — the two numbers those readings produce"),
-("md", "## 4 · The control — a freshness window per control, derived from drift\n\n"
-         "The window is not an audit-calendar choice. It comes from **how fast "
-         "the thing the control tests actually changes.**"),
-
-  ("md", """## 5 · From a framework control to something you can compute
-
-A control in a framework is written to be *general*, which is exactly what makes
-it untestable. "Accuracy, robustness and cybersecurity" (EU AI Act Art. 15) is
-an obligation, not a measurement. The work is turning it into a number the
-estate can produce on demand.
-
-The test for whether you have finished is mechanical: **can this be computed
-from the estate today, without asking anyone?**
-
-| framework control | the question it asks | a KCI that answers it |
-|---|---|---|
-| EU AI Act Art. 15 | is it robust and secure? | share of tool calls carrying provenance |
-| EU AI Act Art. 12 | can you reconstruct it? | share of agent runs with a complete trace |
-| EU AI Act Art. 14 | is there human oversight? | share of irreversible actions behind an approval |
-| NIST AI RMF MEASURE | do you know how it performs? | detections with a measured false-positive rate |
-| OWASP Agentic T2 | can a tool be misused? | object handlers that compare an owner |
-| OWASP Agentic T3 | can privilege be escalated? | agents operating inside declared scope |
-
-Three rules make the difference between a KCI and a metric somebody reports.
-
-**It names a denominator.** "Twelve tool calls carried provenance" is a number;
-"41% of tool calls carried provenance" is an indicator. Without the
-denominator you cannot tell improvement from reduced traffic.
-
-**It has a target, written before it is measured.** An indicator with no target
-cannot be met or missed, so it can only be discussed.
-
-**It is computed from the estate, not read from a register.** A register
-records what somebody believed when they filled it in, which is the state the
-freshness window above says you cannot trust."""),
-
-  ("md", """## 6 · The three ways a KCI goes wrong
-
-**It measures the instrument.** If renaming a function moves the number, the
-indicator measures naming. This is the most common failure and the hardest to
-see, because the number looks responsive.
-
-**It has no denominator, so it drops when traffic drops.** An indicator that
-improves during an outage is measuring the outage.
-
-**Every indicator in the set fails.** A set that always reports a gap cannot be
-shown to discriminate, and a reader has no way to tell the instrument works
-from the estate being uniformly broken. Keep at least one the estate passes.
-
-E1.13 computes six of these against the CyberTravels repository, and D5.4
-re-measures them after a fix to decide whether the remediation actually
-restored anything — which is the whole reason for defining them here."""),
-
-  ("md", "## 5 · What replaces the annual test, as a skill\n\n"
-         "If the window is short, something has to re-run inside it, and that "
-         "something is an attestation: collect each control's verdict, resolve "
-         "every evidence pointer, compute drift against the image digest and the "
-         "tool manifest, and sign the result. Two rules in the procedure are the "
-         "whole difference between an attestation and a slide — a missing "
-         "verdict is not a pass, and a capped verdict does not get raised "
-         "because the other evidence looked good. This is the file in this "
-         "repository:"),
-  ("skill", "attestation/attestation-signer-lifecycle"),
-  ("skill_script", "attestation/attestation-signer-lifecycle/scripts/attestation_signer_lifecycle.py"),
+("md", "## 2 · Demo — the queue, and the loop that reads it"),
+("md", "## 3 · Where it breaks — closing a true positive is silent\n\n"
+         "Every triage decision has two error directions and they are not "
+         "symmetric. Escalating a false positive costs an analyst ten minutes. "
+         "**Closing a true positive costs you the incident**, and nothing tells "
+         "you it happened."),
+("md", "## 4 · The control — the loop may close, but not silently\n\n"
+         "Three rules make an agentic triage loop safe to run, and none of them "
+         "is about model quality."),
+  *skill_steps('detection/triage-loop-with-floor',
+               '## 2 · The procedure, as a skill\n\nThe skill scores a triage loop against ground truth, sweeps the confidence bar so the trade between analyst minutes and missed incidents is made explicitly, and adds the severity floor that no automatic closure may cross whatever its confidence.'),
 ],
- "expect": "The skill loads and reports its shape, and its failure modes are the "
-           "governance lesson stated as engineering: the relying party must fail "
-           "closed on a missing attestation, because reading absence as a pass "
-           "is exactly the annual-test habit arriving in a new format. Drift "
-           "against the digest and the manifest is what re-triggers it, not the "
-           "calendar.",
- "challenge": "Pick your three most important AI controls and set a freshness "
-              "window for each from the observed change rate of what it tests. "
-              "Then recompute your posture. The number will drop, and it will be "
-              "the first honest one you have had.",
+ "expect": "The triage loop escalates 4 alerts and closes 4, matching ground "
+           "truth on all 8. Lowering the confidence bar trades analyst minutes "
+           "against missed incidents. The severity floor converts any high or "
+           "critical closure into an escalation, and the closure sampling routes "
+           "a fraction of routine closures to a human for quality measurement.",
+ "challenge": "Ask your SOC one question: when an incident is confirmed, does "
+              "anyone check whether an earlier alert about it was closed? If "
+              "nobody does, you have no measurement of your false-negative rate — "
+              "with or without an agent.",
 },
 
-"E1.2": {
+"E3.3": {
  "concept": """
-You cannot govern, tier, test or revoke what you cannot list. The AI inventory is
-therefore the first control, not a documentation exercise.
+An alert about a human is triageable with three facts: who, what, when. An alert
+about an agent needs three more, and without them every analyst has to guess.
 
-The honest finding of every first inventory is the same: **most of it was already
-in production.** Not because anyone was reckless, but because AI features arrive
-inside products you already bought, and agents get created programmatically by
-other agents.
+- **The acting identity** and the principal it acted for (B2.1).
+- **The scopes it held** at the time. This is the decisive field: reading
+  `.env` is alarming for an agent scoped `repo:read` and routine for a
+  secrets-rotation agent.
+- **The delegation chain**, so the analyst can see who caused the task.
 
-Three sources, and the third finds what the first two miss:
-
-1. the **model registry** — what your ML team registered,
-2. **procurement and expense** — what someone bought,
-3. **egress logs to model-provider domains** — what is actually being used.
-
-Source 3 is the one that discovers the department using a frontier API on a
-personal card, and the SaaS product that quietly added an AI feature.
+Without scope in the alert, the analyst's only options are to escalate
+everything or to develop a habit of closing agent alerts. Both happen, and the
+second one happens quietly.
 """,
  "steps": [
-  ("md", "## 2 · Demo — build the inventory from three sources"),
-("md", "## 3 · Where it breaks — the gap distribution is always like this"),
-("md", "## 4 · The control — a discovery query you can re-run"),
+  ("md", "## 2 · Demo — the same alert, with and without context"),
+("md", "## 3 · Where it breaks — measure the analyst's decision quality"),
+("md", "## 4 · The control — the six fields, and what each one decides"),
 
-  ("md", "## 5 · Resolving one row into a deployment, as a skill\n\n"
-         "Discovery finds that a thing exists. Governing it needs the row "
-         "resolved into artefacts: which repository at which commit, which image "
-         "**digest** rather than which tag, which IAM role and SPIFFE ID, which "
-         "gateway and guardrail, and every downstream its tools call. Every "
-         "other attestation skill consumes this graph, which is why it runs "
-         "first. This is the file in this repository:"),
-  ("skill", "attestation/deployment-inventory-resolver"),
-  ("skill_script", "attestation/deployment-inventory-resolver/scripts/deployment_inventory_resolver.py"),
+  ("md", "## 6 · Triage as a skill — and the sample that keeps it honest\n\n"
+         "Context turns a guess into a verdict. Automating the verdict without "
+         "automating the audit of it is how a closing rule quietly starts "
+         "closing real incidents.\n\n"
+         "The skill therefore requires a sampling rule over anything "
+         "auto-closed, and requires its seed to come from something **stable**. "
+         "Sampling seeded from `hash()` picks a different subset on every run, "
+         "so you can never tell whether a change in findings came from the rule "
+         "or from the dice."),
+  ("skill", "secops/detection-triage"),
+  ("skill_script", "secops/detection-triage/scripts/detection_triage.py"),
+
 ],
- "expect": "The skill loads and reports its shape. Two of its rules are what "
-           "make an inventory hold: resolve digests rather than tags, because a "
-           "tag is mutable and the thing you attested is not the thing running; "
-           "and never record an unresolvable artefact as absent — \"no gateway "
-           "configured\" and \"could not read the gateway\" are different "
-           "findings with different owners.",
- "challenge": "Run the egress query for real: one week of traffic to model-"
-              "provider domains, joined against your inventory. It takes an hour "
-              "and it always finds something.",
+ "expect": "The bare alert is identical for both agents. Enriched, the "
+           "secrets-rotation agent is within remit and the patch agent is not. "
+           "Context-free triage escalates both — generating a nightly false "
+           "positive — while scope-aware triage matches ground truth on both.",
+ "challenge": "Check which of the six fields your agent telemetry carries today. "
+              "Scopes-held is the one almost nobody logs, and it is the one that "
+              "decides the alert.",
+},
+
+"E2.4": {
+ "concept": """
+Using an agent to write detections is genuinely effective: it produces candidate
+rules quickly, across more log sources than a human would attempt.
+
+What it cannot supply is the judgement that decides whether a rule ships, because
+that judgement depends on a cost the telemetry does not contain: **analyst
+trust**. A rule with 5% precision is not 5% useful — it is negatively useful,
+because it spends attention that the good rules need.
+
+So the workflow is: the agent generates candidates, and a scoring step against
+real historical telemetry decides which survive. The scoring step is the job, and
+it is the part teams skip.
+""",
+ "steps": [
+("md", "## 2 · Demo — five candidate rules for one concern"),
+("md", "## 3 · Where it breaks — every rule 'works'\n\n"
+         "All five detect something. R1 has perfect recall on http traffic and "
+         "would put 301 alerts a day in the queue. R4 has 100% precision on "
+         "nothing useful. The deployable set is decided by a threshold nobody "
+         "writes down."),
+("md", "## 4 · The control — generate many, score against history, ship few"),
+  *skill_steps('detection/detection-rule-deployability',
+               '## 2 · The procedure, as a skill\n\nEvery candidate rule detects something. The skill replays each against real history and scores the third property nobody checks — firing volume — so a rule that produces 301 alerts for one true positive is rejected with its numbers rather than with an adjective.'),
+],
+ "expect": "All five rules detect something. R1 fires 301 times for 1 true "
+           "positive; R5 fires twice for 2 true positives with perfect precision "
+           "and recall. The deployability check rejects the broad rules and the "
+           "failed-action rule, shipping only the precise ones with a small daily "
+           "queue impact.",
+ "challenge": "Set your own alerts-per-true-positive budget and apply it to the "
+              "rules already in production. Most SOCs discover that several "
+              "long-standing rules would not pass the bar they would set today.",
+},
+
+"E2.1": {
+ "concept": """
+Every rule in this chapter is written against something. This lesson is that
+something, and it is designed twice if you are not careful: once on a whiteboard
+where everything is indexed, and once when the bill arrives and retention is cut
+across the board by whoever is holding the invoice.
+
+The second design is the one you run, and it is made with no information about
+what the SOC actually asks.
+
+**Derive the tier from the queries.** Write down what the SOC runs and how fast
+each needs an answer — triage in seconds, a hunt in minutes, a forensic replay
+in hours — then tier each source by the *fastest* query that reads it. Nothing
+else about the source decides it: not its volume, not how interesting it feels,
+not who asked for it.
+
+| tier | answers in | what belongs there |
+|---|---|---|
+| hot | seconds | anything triage or scoping reads |
+| warm | minutes | anything a hunt reads |
+| cold | hours | anything only forensics reads |
+| drop | never | anything no query reads at all |
+
+That last row is the one people skip. A source no query reads is not cheap
+storage — it is a liability with a bill attached.
+
+The saving is the headline. What the tiering *protects* is the point: agent
+prompts are the single largest source in most estates and are read by exactly
+one query, which can wait hours. Priced hot they are the line that gets cut, and
+cutting them removes the only thing E5.1 can replay a run from.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — five real SOC queries, and what each one reads"),
+("md", "## 3 · Where it breaks — index everything, then read the bill"),
+("md", "## 4 · The control — one tier per source, derived and defensible"),
+  *skill_steps('detection/telemetry-tiering-cost',
+               '## 2 · The procedure, as a skill\n\nThe skill tiers six CyberTravels sources by the fastest query that reads each, prices hot against tiered, and names the source that would have been cut.'),
+],
+ "expect": "Four sources go hot because triage and scoping read them in seconds, "
+           "host EDR goes warm, and agent prompts go cold — read by one query "
+           "that can wait hours. Tiering costs about 29% less than indexing "
+           "everything hot, and the prompts that are 23% of the volume survive "
+           "at 1% of the hot price rather than being deleted.",
+ "challenge": "List the five queries your SOC actually ran last month, then tier "
+              "your sources from them. Any source that appears in no query is "
+              "the finding — you are paying to store something nobody asks.",
+},
+
+"E2.2": {
+ "concept": """
+This is the new work, and it starts by discarding baselines that have served the
+SOC well for twenty years.
+
+Human behavioural detection assumes irregularity, working hours, and a rate
+ceiling set by typing speed. An agent violates all three *while behaving
+correctly*:
+
+| Classic signal | For a human | For an agent |
+|---|---|---|
+| two countries in an hour | incident | routine (multi-region) |
+| 300 file reads a minute | incident | idle |
+| activity at 03:00 | suspicious | meaningless |
+| the same action 500 times | suspicious | a stuck loop — but not malicious |
+
+Applying human baselines to agents produces an alert on every session, so the
+rule gets tuned down, and then it never fires again — including when something
+is genuinely wrong.
+
+The signals that *do* work for agents are about **change**: a tool it has never
+used, a mix that has shifted, a scope exercised that was never needed before.
+
+### Where each one sits in MITRE
+
+A rule with no technique against it cannot be gap-analysed, cannot be handed to
+another team, and cannot be argued about with an auditor. Two matrices are
+needed and they are not interchangeable: **ATT&CK** describes what the actor did
+to your estate, **ATLAS** describes what was done to the model.
+
+| agent signal | ATT&CK | ATLAS tactic |
+|---|---|---|
+| a tool it has never used, on inherited credentials | T1078 Valid Accounts | ML Attack Staging |
+| bulk reads across a repository it has no task in | T1213 Data from Information Repositories | Exfiltration |
+| output posted to an allowed SaaS domain | T1567 Exfiltration Over Web Service | Exfiltration |
+| shell spawned from a model-produced string | T1059 Command and Scripting Interpreter | ML Attack Staging |
+| instruction arriving in retrieved content | — | Initial Access · AML.T0051 |
+
+Read the last row twice. Indirect prompt injection has **no ATT&CK technique**,
+because ATT&CK has no notion of an instruction channel that is also a data
+channel. Mapping it to something adjacent to make the coverage chart look
+complete is the single most common way an agent detection programme lies to
+itself.
+
+ATLAS technique identifiers move faster than ATT&CK's, so re-check any specific
+`AML.T####` against the live matrix before you put it in a report.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — classic baselines against agent traffic"),
+("md", "## 3 · The control — detect change, not activity"),
+("md", "## 4 · Verify — the alert text an analyst can act on\n\n"
+         "\"Anomaly detected\" fails both tests: it does not say what changed, and "
+         "it does not say what to do."),
+  *skill_steps('detection/agent-aware-rule-review',
+               "## 2 · The procedure, as a skill\n\nAll three classic rules fire on CyberTravels' patch agent doing exactly its job, and only the rate rule fires on the human. The skill runs both, then measures drift from a signed-off baseline week by week — naming the new tool rather than reporting a distance."),
+],
+ "expect": "All three classic rules fire on an agent doing its job and only the "
+           "rate rule fires on the human. Drift is within tolerance at week 1, "
+           "significant at week 4 with `write_file` and `repo:write` new, and "
+           "larger at week 8 with `run_shell` and an `exec` scope. The alert text "
+           "names what changed, why it matters and what to do.",
+ "challenge": "Take one human-baseline rule in your SIEM and check how it behaves "
+              "against a service account. If it fires nightly, it is already "
+              "tuned off for that actor — which means you have no detection there "
+              "at all.",
 },
 
 "E1.3": {
  "concept": """
-Risk-tier by what the system **can do**, not by which model it uses.
+The two questions in this lesson are one question asked twice: **which of the
+actors in your logs is software, and what does its trace contain once you keep
+it?** Neither has an answer in a standard SIEM, and the second only becomes
+urgent once the first one works.
 
-Tiering on model capability is the common mistake and it tracks vendor marketing
-rather than exposure: every GPT-class deployment becomes "high" and every small
-model "low". That gets the answer exactly backwards for the case that matters —
-a small local model with production deploy rights and regulated data.
+### Finding the actor
 
-Three inputs determine consequence, and none of them is the model:
+The agents you most need to find are the ones in no registry (B3.7), and they
+act under a person's authority in a person's name — so conventional UEBA reads
+them as that person behaving strangely. Three behavioural signals separate them,
+none sufficient alone:
 
-- **Autonomy** — what its output can trigger without a human.
-- **Data** — what it can read, especially regulated or customer data.
-- **Reach** — whether it can act externally.
+- **Regularity** — the coefficient of variation of inter-arrival times. People
+  are irregular; loops are metronomic.
+- **Rate** — sustained multi-action-per-second activity is not typing.
+- **Continuity** — software has no evenings.
 
-The model matters for *likelihood* of a bad output, which is a different and
-smaller term than consequence.
-""",
- "steps": [
-  ("md", "## 2 · Demo — tier by authority and data"),
-("md", "## 3 · Where it breaks — tier by model instead, and compare"),
-("md", "## 4 · The control — the four questions the questionnaire should ask"),
-  *skill_steps('grc/agentic-risk-tiering',
-               '## 2 · The procedure, as a skill\n\nThe skill tiers five assets by autonomy, data and reach, then re-tiers them with the questionnaire that leads with the model question — and reports the inversion, where a small local model with deploy rights and regulated data moves from low to critical.'),
-],
- "expect": "The public read-only chatbot tiers low; the small local model with "
-           "deploy rights and regulated data tiers critical at score 12. Tiering "
-           "by model disagrees on 4 of 5 assets, most sharply inverting the small "
-           "local model from low to critical. The worked example tiers the refund "
-           "agent as high.",
- "challenge": "Re-tier your top ten AI use cases using only the four questions. "
-              "Note which ones move, and be ready to explain the movement to "
-              "whoever wrote the original questionnaire — the model question is "
-              "usually question one.",
-},
+The error directions are not symmetric, and that is what sets the threshold. A
+**human misclassified as an agent** triggers an investigation: mild, and
+self-correcting. An **agent misclassified as human** stays invisible, which is
+the entire risk you were trying to address. Cost-weighting therefore picks a
+lower threshold than accuracy-maximisation would.
 
-"E1.4": {
- "concept": """
-Control mapping runs one way: **control → framework.**
+### Keeping its trace
 
-Starting from the framework produces a checklist that is complete, satisfies an
-assessor, and defends nothing — because it enumerates clauses rather than
-capabilities, and a clause with no operating control behind it evidences nothing.
+Once you have found it, agent telemetry turns out to have a property no other
+log source has: it contains the **reasoning**, not just the action. The trace
+records what the agent was trying to do, what it considered, and what the
+verifier said.
 
-Starting from controls produces the opposite: a smaller list of things you
-actually do, each of which happens to satisfy several framework clauses. The
-framework coverage is an **output**, and that is the only mapping that survives a
-supervisor asking "show me".
-""",
- "steps": [
-  ("md", "## 2 · Demo — the control catalogue, and what it satisfies"),
-("md", "## 3 · Where it breaks — start from the framework instead"),
-("md", "## 4 · The control — evidence flows from the control, not the clause"),
-  *skill_steps('grc/control-to-framework-mapping',
-               '## 2 · The procedure, as a skill\n\nThe skill maps eight operating controls outward to clauses across five frameworks, attaches the evidence artefact each control would be shown by, and derives what a critical tier requires — so coverage comes out as an output rather than a claim.'),
-],
- "expect": "The catalogue's 8 controls map to framework clauses across NIST AI "
-           "RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier "
-           "requires all 8 and satisfies 12 clauses; medium requires 5. Working "
-           "framework-first leaves 3 of 7 clauses with no operating control. The "
-           "evidence pack shows one artefact satisfying several clauses.",
- "challenge": "Take one framework clause your programme claims to satisfy and ask "
-              "which operating control produces its evidence. If the answer is a "
-              "policy document, the clause is ticked and undefended.",
-},
+That is enormously useful for investigation and it is a retention and privacy
+problem, because reasoning traces contain whatever was in the context window —
+routinely customer data, source code and secrets the agent read legitimately.
+So retention is decided **per field**, not per record:
 
-"E1.5": {
- "concept": """
-Evaluation output is the strongest audit evidence an AI programme can produce,
-and it only works if you present the right number.
-
-B2.19 established the distinction; this lesson turns it into evidence:
-
-- **Conformance** — schema validity. ~100% by construction. A build-health
-  signal, not a quality claim.
-- **Expert accuracy** — correctness against a held-out key. The number that
-  evidences anything.
-
-Four properties make an eval result auditable:
-
-1. the key was **held out** — the harness never saw it,
-2. the number reported is **accuracy**, not conformance,
-3. the **sample size** is stated,
-4. it **expires**, so it cannot silently age into a claim.
-
-Miss the fourth and you have produced a number that will be quoted three years
-from now about a system that has since had six model upgrades.
-""",
- "steps": [
-  ("md", "## 2 · Demo — produce the evidence"),
-("md", "## 3 · Where it breaks — the number that gets quoted"),
-  ("html", D.table(
-    ["the claim, as written", "what it measures", "defensible?"],
-    [["Our AI security harness scores 100%.", "conformance", "<b>no</b>"],
-     ["Our harness achieves 100% schema conformance.", "conformance", "yes"],
-     ["Our harness scores 0.81 expert accuracy on a 24-question held-out set.",
-      "accuracy", "yes"],
-     ["Our harness passes all automated checks.", "unspecified", "<b>no</b>"]],
-    emphasise=2,
-    caption="The first is true and misleading — conformance really is 100%. The "
-            "last is the most common of the four and evidences nothing at all.")),
-  ("md", "## 4 · The control — evidence with an expiry"),
-
-  ("md", "## 6 · The evidence pack, as a skill\n\n"
-         "An evaluation result becomes evidence only when it tested the control "
-         "that is claimed, ran on the system that is **deployed**, and states "
-         "its failure mode. Most evidence fails the second.\n\n"
-         "The contract carries a field most packs would rather not have: "
-         "`conformance_reported`. Setting it true should be read as a defect in "
-         "the evidence, not a feature of it."),
-  ("skill", "grc/control-evidence"),
-  ("skill_script", "grc/control-evidence/scripts/control_evidence.py"),
-
-
-  ("md", "## 7 · Where it breaks — the pack that leads with conformance\n\n"
-         "The most common overstatement in automated assurance, and it is "
-         "usually made in good faith."),
-],
- "expect": "Conformance is 1.0000 while expert accuracy lands around 0.81 on 24 "
-           "held-out questions. Two of four sample claims are defensible. The EV-2 "
-           "control test passes against a stated 0.80 threshold, is valid for 30 "
-           "days, and reads STALE at 45 days. All five auditability checks pass.",
- "challenge": "Find an eval number your organisation has quoted, internally or "
-              "externally, and determine which of the two it was. Then check "
-              "whether it has an expiry. Most do not, and are still being cited.",
-},
-
-"E1.6": {
- "concept": """
-Guardrails come in two kinds, and confusing them is how a programme passes audit
-while missing harm.
-
-**Operating guardrails** constrain *how the system runs*: all egress through the
-gateway, privileged tools gated below L3, every action logged. They are testable
-today, cheap to verify, and produce clean evidence.
-
-**Outcome guardrails** constrain *what results are acceptable*: no unrecoverable
-customer data loss, no increase in customer-facing incidents, no disparate
-outcomes across segments. They matter more and most need a measurement you do
-not yet have.
-
-The failure is not choosing one. It is shipping only the first column, reporting
-it as coverage, and never labelling the second column as unmeasured.
-""",
- "steps": [
-  ("md", "## 2 · Demo — classify a real guardrail set"),
-("md", "## 3 · Where it breaks — the coverage number that lies"),
-("md", "## 4 · The control — define the measurement, or label it unmeasured"),
-  *skill_steps('grc/guardrail-specification',
-               '## 2 · The procedure, as a skill\n\nFour operating guardrails are enforceable today; three outcome guardrails are enforceable only where a measurement exists. The skill classifies each rule, specifies the missing measurements, and counts coverage twice — against what shipped and against what was agreed.'),
-],
- "expect": "Four operating guardrails are all enforceable today; three outcome "
-           "guardrails are enforceable only where a measurement exists. Counting "
-           "only what shipped gives 100% coverage; counting all agreed guardrails "
-           "gives 71%. One outcome guardrail is fully specified and enforceable; "
-           "the other is labelled an aspiration and excluded from coverage.",
- "challenge": "Pick one outcome guardrail your programme has agreed and specify "
-              "its metric, threshold, source and cadence precisely enough that "
-              "someone could dispute the result. If you cannot, say so in the "
-              "coverage report rather than counting it.",
-},
-
-"E1.7": {
- "concept": """
-Continuous control verification is the operating model that follows from E1.1.
-
-The number that matters is not how much passed once. It is **how much is
-currently evidenced** — controls whose most recent test is passing *and* within
-its freshness window.
-
-Three states, and the third is the one classical GRC tooling cannot express:
-
-- **PASS** — tested, passing, in window.
-- **FAIL** — tested, failing. Honest and actionable.
-- **STALE** — tested, was passing, out of window. **Not a pass.**
-
-Plus the absence state: no evidence at all, which is different from failing and
-is often the largest category in a first assessment.
-""",
- "steps": [
-  ("md", "## 2 · Demo — the posture, computed honestly"),
-("md", "## 3 · Where it breaks — what a point-in-time report would have said"),
-("md", "## 4 · The control — automate one test and watch the posture hold"),
-
-  ("md", "## 5 · Collecting the runtime evidence, as a skill\n\n"
-         "Automating a control means something has to go and look. For the "
-         "network and logging controls that underwrite every default-deny claim "
-         "CyberTravels makes, that is a posture collector: egress rules, private "
-         "endpoints, route tables, key policies, and whether the audit trail is "
-         "not merely enabled but **delivering**. It collects; it does not "
-         "conclude. This is the file in this repository:"),
-  ("skill", "attestation/aws-runtime-posture-collector"),
-  ("skill_script", "attestation/aws-runtime-posture-collector/scripts/aws_runtime_posture_collector.py"),
-],
- "expect": "The skill loads and reports its shape, and the line to take from it "
-           "is the boundary it draws: configuration is not enforcement. A "
-           "private endpoint next to a route table with a NAT gateway is a "
-           "recorded fact and an open path at the same time, and logging that is "
-           "switched on but not delivering evidences nothing at all.",
- "challenge": "Automate the control with the shortest freshness window first — it "
-              "is the one costing the most manual effort and going stale most "
-              "often. One automated test converts an annual assertion into a live "
-              "control.",
-},
-
-"E1.8": {
- "concept": """
-Third-party risk for AI has the ordinary supply-chain problem plus a question
-nobody's assessment form asks:
-
-> **Can this component change without telling us?**
-
-For a library the answer is no — you pin a version. For a hosted model the
-answer is usually yes, and it changes the risk rating, because every control you
-tested was tested against behaviour the vendor can replace at any time, without
-telling you and without a version number changing.
-
-Three artefact classes, with genuinely different maturity:
-
-- **Libraries** — signing, version pinning, download signals. Mature.
-- **Model weights or a hosted model** — attestation possible and rare; no
-  popularity signal that means anything; version stability is a contractual
-  question, not a technical one.
-- **Prompt and tool packages (MCP, skills)** — no signing convention, and they
-  run with your agent's authority.
-
-Saying which signals are unavailable is part of the assessment, not a gap in it.
-""",
- "steps": [
-  ("md", "## 2 · Demo — the ordinary signals, and where they run out"),
-("md", "## 3 · Where it breaks — the silent change, priced"),
-("md", "## 4 · The control — the four questions, and stating the gaps"),
-  *skill_steps('grc/third-party-ai-assessment',
-               "## 2 · The procedure, as a skill\n\nThe skill scores each AI component on the two properties that make it different — silent change, and running with the agent's authority — then invalidates every control test taken before the model changed, because a test against a different model is evidence about something else."),
-],
- "expect": "The hosted model and the MCP tool package both tier high — one for "
-           "silent change, one for running with agent authority. The silent model "
-           "change invalidates all three control tests taken before it. The signal "
-           "table shows libraries with 4 of 4 signals available and hosted models "
-           "with 0 of 4, and each assessment statement names what was unavailable.",
- "challenge": "Add \"can this change without notifying us?\" to your third-party "
-              "assessment form. For hosted models the answer is usually yes, and "
-              "it should carry an explicit control-test expiry.",
-},
-
-"E1.9": {
- "concept": """
-Lifecycle governance is about the events that have no ticket.
-
-A model or agent has a lifecycle — requested, approved, deployed, changed,
-retired. Classical governance covers the first, second and third. The events that
-actually change your risk are the fourth and fifth, and they mostly happen
-outside any process:
-
-| Event | Ticketed? | Why it matters |
+| Field | Forensic value | Sensitivity |
 |---|---|---|
-| new agent deployed | usually | caught by existing process |
-| tool added to manifest | no | changes blast radius silently |
-| prompt edited | no | changes behaviour, not code |
-| provider upgrades the model | no | you may not be told |
-| scope widened in IAM | sometimes | depends on your IAM review |
-| **agent decommissioned** | rarely | **the identity outlives the agent** |
+| timestamps, tool, target | high | low |
+| verifier detail | high | low |
+| acting identity + chain | high | low |
+| model prompts | medium | **high** |
+| tool results | high | **high** |
 
-The last row is the one most first reviews find: a retired agent whose identity
-still exists is a standing credential with no owner and nobody watching it,
-because everyone believes it is gone.
+The first three are cheap and should be kept long. The last two are where the
+retention conversation actually is.
 """,
  "steps": [
-  ("md", "## 2 · Demo — the lifecycle, and which events generate a record"),
+  ("md", "## 2 · Demo — score actors from timing alone"),
+("md", "## 3 · Where it breaks — sweep the threshold and read both errors"),
+("md", "## 4 · The control — pick the threshold from the cost, not from accuracy"),
+  *skill_steps('detection/agent-versus-human-scoring',
+               '## 2 · Finding the actor, as a skill\n\nThe skill scores five actors on behaviour rather than on what they claim to be, sweeps the threshold, and then picks it by expected cost — because a flagged human costs half an analyst-hour and a missed agent costs forty.'),
+
+  ("md", "## 3 · What the trace you just started keeping contains"),
+  *skill_steps('detection/agent-telemetry-retention',
+               '## 4 · Keeping the trace, as a skill\n\nThe run record contains a payment-card pattern, in a source file the agent read legitimately. The skill scans every field, then sets retention per field so timestamps and verdicts survive for 400 days and prompts do not survive 30.'),
+],
+ "expect": "First: the service indexer and unknown token score highest, the human "
+           "lowest, with the IDE user and the politely-jittered agent in between. "
+           "The threshold sweep shows humans flagged rising and agents missed "
+           "falling as it drops, cost-weighting selects a low one, and joining "
+           "against the registry names the unregistered actors as shadow agents. "
+           "Then the trace of one of them: a payment-card pattern in a source "
+           "file it read legitimately, and per-field retention that keeps "
+           "timestamps, tool, target and verifier for 400 days while dropping "
+           "prompts at 30 and tool results at 7. After 90 days no sensitive "
+           "content remains and the record still answers what the agent did.",
+ "challenge": "Run the scoring against a week of your own authentication logs and "
+              "count the actors it flags that are not in your registry. Then check "
+              "the retention period on whatever traces you keep for them: if it "
+              "matches your firewall logs, one of those two numbers was chosen "
+              "without anyone looking at what the traces contain.",
+},
+
+"E1.1": {
+ "concept": """
+Nobody starts an agentic SOC from nothing. Four classes of sensor are already
+deployed, already paid for, and already producing alerts:
+
+| class | what it watches | open-source reference |
+|---|---|---|
+| **EDR** | processes, files and network on a host | Wazuh agent |
+| **DLP** | sensitive content leaving a monitored channel | regex + file integrity monitoring |
+| **CSPM** | cloud configuration, evaluated on a schedule | Prowler, ScoutSuite |
+| **CNAPP** | container runtime and image contents | Falco, Trivy |
+
+All four work. The question is not whether they are good — it is **which parts
+of an agent's working day they are in the path of at all.**
+
+That is a matrix, and it is worth building before a roadmap rather than after,
+because the answer decides whether the next quarter is spent tuning or spent
+building a source that does not exist yet.
+
+The distinction that makes the matrix honest is **visibility, not alerting**.
+"Would this fire" is a tuning question. "Is this sensor in the path" is a fact
+about architecture, and a sensor that is not in the path cannot be tuned into
+one that is.
+
+Read the uncovered rows rather than the percentage. If they are arbitrary, tune.
+If they share a property — every one inside the reasoning loop, or behind an API
+the host never observes — then a fifth product of the same four kinds will not
+move them.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — four sensors against nine ordinary agent actions"),
+("md", "## 3 · Where it breaks — the combined column, and the four rows in it"),
+("md", "## 4 · The control — derive the next source from the uncovered set"),
+  *skill_steps('detection/sensor-coverage-matrix',
+               '## 2 · The procedure, as a skill\n\nThe skill scores four sensor classes against nine things CyberTravels\' agents do in an ordinary day, takes the union per row rather than summing the columns, and prints the actions no class sees at all.'),
+],
+ "expect": "EDR and CNAPP each cover about a third of the agent's day, DLP and "
+           "CSPM almost none of it, and all four combined still leave four of "
+           "the nine actions seen by nothing: reading a customer record through "
+           "an internal API, placing it in a prompt, calling a vendor MCP tool, "
+           "and issuing a refund. Those four share a property, and it is the "
+           "argument for E1.3 and E2.1 rather than for a fifth product.",
+ "challenge": "Build the same matrix for your estate with your own actions in "
+              "the rows. The number that matters is not the percentage — it is "
+              "whether the uncovered rows have something in common.",
+},
+
+"E1.2": {
+ "concept": """
+Drift monitoring exists because an agent's behaviour changes **without a code
+change**. A new model version, an edited prompt, an added tool — none of these
+pass through the change management process built for code, and all of them
+invalidate the testing your controls were signed off against.
+
+That is the precise claim: the control was tested against a behaviour that no
+longer exists. It has not failed; it is *unevidenced*, which is a different and
+more honest state.
+
+Two things are needed:
+
+1. A **signed-off baseline** — what normal looked like when the control passed.
+2. A **freshness window** on the control test, derived from how fast the thing
+   it tests actually drifts.
+
+F1.7 turns the second into a compliance posture. This lesson produces the signal.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — drift across a quarter"),
+("md", "## 3 · Where it breaks — none of these was a code change"),
   ("html", D.table(
-    ["lifecycle event", "does it raise a ticket?", "why it matters"],
-    [["new agent deployed", "usually", "the existing change process catches it"],
-     ["tool added to the manifest", "<b>no</b>",
-      "changes blast radius, and no pull request is raised"],
-     ["prompt edited in a console", "<b>no</b>",
-      "changes behaviour, not code"],
-     ["provider upgrades the model", "<b>no</b>",
-      "you may not be told at all"],
-     ["scope widened in IAM", "sometimes",
-      "depends entirely on your access-review cadence"],
-     ["agent decommissioned", "<b>rarely</b>",
-      "the identity usually outlives the agent"]],
+    ["change surface", "in change management?", "what happens today"],
+    [["application code", "yes", "pull request, review, CI"],
+     ["agent prompt", "<b>no</b>", "edited in a console"],
+     ["tool manifest", "<b>no</b>", "a config change, with no threat-model diff"],
+     ["model version", "<b>no</b>", "provider-side; you may not be told"],
+     ["policy", "yes", "if it is in git — often it is not"],
+     ["approval settings", "<b>no</b>", "a toggle in an admin UI"]],
     emphasise=1,
-    caption="Four of six generate no reliable record. A lifecycle you cannot "
-            "observe is a lifecycle you are not governing.")),
-  ("md", "## 3 · Where it breaks — the identity that outlived the agent"),
-("md", "## 4 · The control — two automated checks that close the loop"),
-  *skill_steps('grc/agent-lifecycle-governance',
-               '## 2 · The procedure, as a skill\n\nFour of six lifecycle events leave no reliable record. The skill starts from the identity provider rather than the register, joins to services and owners, and ranks what it finds by what the credential can still do.'),
+    caption="Four of six surfaces bypass change management entirely. Drift is "
+            "the failure mode with no adversary, and this table is why it is "
+            "also the failure mode with no ticket.")),
+  ("md", "## 4 · The control — freshness derived from the observed drift rate"),
+  *skill_steps('detection/behavioural-drift-monitor',
+               "## 2 · The procedure, as a skill\n\nFour of six things that change an agent's behaviour never reach change management. The skill counts them, then tracks drift across a quarter and attributes the rise that coincides with the model upgrade — and the one that does not."),
 ],
- "expect": "Four of six lifecycle events generate no reliable record at all. The identity "
-           "review flags `sunset-agent` as critical — an active credential for a "
-           "decommissioned service — plus two orphans with no authentication in "
-           "300+ days. The manifest diff shows the blast radius rising from 0 to "
-           "40, requiring re-tiering and a fresh control test.",
- "challenge": "Query your identity provider for non-human identities whose "
-              "service is retired but which authenticated in the last 30 days. "
-              "Every hit is either an undocumented dependency or someone else's "
-              "foothold, and you cannot tell which from the directory alone.",
+ "expect": "Drift rises across the quarter from 0.0 at sign-off to roughly 0.35 "
+           "after the model upgrade, with `run_shell` appearing as a new tool. "
+           "Four of six change surfaces bypass change management. The observed "
+           "drift rate yields a freshness window, and the 90-day-old control test "
+           "is reported STALE rather than passing.",
+ "challenge": "Compute the drift rate for one production agent from three months "
+              "of telemetry, and set its control freshness window from that "
+              "number rather than from the audit calendar.",
 },
 
-"E1.10": {
+"E3.9": {
  "concept": """
-Five functions hold the AI control estate between them, and **none of them holds
-all of it.** The programme does not fail inside any one function. It fails at the
-seams, where each side reasonably believed the other had it.
+Threat intel is judged by exactly one thing: **how many detections came out of
+it.** Everything else — feed volume, report quality, briefing frequency — is
+input, not outcome.
 
-| Stakeholder | The question they are actually asking |
-|---|---|
-| **Legal** | Can we be held liable, and under what theory? |
-| **Compliance** | Which obligations apply, and can we demonstrate we meet them? |
-| **Data Privacy** | Whose data is in this, on what basis, and for how long? |
-| **Cyber Security** | Can this be attacked, and can we contain it if it is? |
-| **Model Risk** | Is this fit for its stated purpose, and will we know when it stops being so? |
+An indicator is actionable when two things are true:
 
-Two seats are routinely forgotten. The **business or product owner** in the
-first line, who defines intended purpose and risk appetite and funds
-remediation — if that seat is empty, the other five are governing an orphan. And
-**internal audit** in the third line, whose job is independent assurance that the
-five are doing what they claim.
+- it is a **type you can match on** (a host, a hash, a specific technique with a
+  concrete precondition), and
+- its **confidence justifies the false-positive cost** of the rule it becomes.
 
-What makes this a lesson rather than an org chart is the four gaps below. Each
-one is a real failure that happens because *both* sides made a reasonable
-assumption about the other.
+A narrative about adversary trends is not intelligence you can operate. It may
+be genuinely useful for planning and it should not be counted as detection
+coverage, because counting it that way makes a programme look covered when it is
+not.
 """,
  "steps": [
-  ("md", "## 2 · Who operates which control"),
+  ("md", "## 2 · Demo — a feed, converted"),
+("md", "## 3 · Where it breaks — conversion is only the first of three numbers"),
+("md", "## 4 · The control — agent-specific intel is mostly internal"),
   ("html", D.table(
-    ["function", "the question it is asking", "the controls it holds"],
-    [["legal", "can we be held liable, and under what theory",
-      "contract clauses · acceptable-use terms · IP screening · e-discovery retention"],
-     ["compliance", "which obligations apply, can we demonstrate we meet them",
-      "AI policy · use-case classification · attestations · disclosure triggers"],
-     ["privacy", "whose data, on what basis, for how long",
-      "impact-assessment gate · PII redaction · retention schedules · transfers"],
-     ["cyber", "can this be attacked, can we contain it",
-      "agent identity and JIT authz · tool permissions · sandbox and egress · "
-      "guardrails · telemetry · kill switch"],
-     ["model risk", "is it fit for purpose, will we know when it stops being",
-      "pre-deployment validation · thresholds · drift alerting · revalidation"]],
-    caption="Plus two more that hold no controls and decide everything: the "
-            "business owner, accountable for the use case and its risk appetite, "
-            "and internal audit, independently assuring that the five above do "
-            "what they claim. 22 controls across five functions, and no function "
-            "holds more than a quarter of them.")),
-
-  ("md", "## 3 · The four seams, each with two reasonable assumptions"),
-  ("html", D.table(
-    ["the seam", "one side assumed…", "the other assumed…", "what happened"],
-    [["agent traces are full of personal data",
-      "<i>cyber:</i> privacy owns retention of anything containing personal data",
-      "<i>privacy:</i> security owns the log store, so security sets its schedule",
-      "<b>no schedule was set; three years of prompts are discoverable</b>"],
-     ["the model was validated, the tools were not",
-      "<i>model risk:</i> validation covered the model, which is our scope",
-      "<i>cyber:</i> MRM signed it off, so the deployment was approved",
-      "<b>an agent holds production write access that was never in scope</b>"],
-     ["“no training on our data” was negotiated, never instrumented",
-      "<i>legal:</i> the clause is in the contract and it is binding",
-      "<i>cyber:</i> legal handled the vendor, so the restriction is handled",
-      "<b>nobody built the control that verifies the vendor honours it</b>"],
-     ["the use case was risk-tiered before it had tools",
-      "<i>compliance:</i> classified low-risk — it was a chatbot when we saw it",
-      "<i>business owner:</i> we shipped features, not a new use case",
-      "<b>it files tickets, sends mail and moves money at the low-risk tier</b>"]],
-    emphasise=3,
-    caption="Neither assumption in any pair is unreasonable. That is what makes "
-            "these seams rather than mistakes — and why naming the handoff is "
-            "the control.")),
-
-  ("md", "## 4 · Where it breaks — every function reports green"),
-
-  ("md", "## 5 · The control — name the handoff, give it one owner"),
-
-  ("md", "## 6 · Verify — the two forgotten seats"),
-  *skill_steps('programme/stakeholder-seam-map',
-               '## 2 · The procedure, as a skill\n\nFive functions, every one reporting coverage, and four use cases nobody governed. The skill counts the controls each function *operates* rather than opines on, then walks real use cases through the map to find the seams.'),
+    ["intel source", "converts to a detection", "why"],
+    [["your own incidents", "<b>100%</b>", "the technique that worked against you"],
+     ["your red team (D1)", "<b>90%</b>",
+      "attack-suite results become detections directly"],
+     ["your drift monitor (E1.2)", "<b>80%</b>",
+      "baseline changes are leading indicators"],
+     ["vendor advisories", "50%", "useful for the supply chain (D1.1)"],
+     ["commercial feed", "30%",
+      "generic indicators; little agent-specific content yet"]],
+    emphasise=1,
+    caption="The highest-converting sources are all internal. For agentic "
+            "threats the intel programme is mostly a feedback loop out of D1 and "
+            "E1.2, not a purchase.")),
+   *skill_steps('detection/threat-intel-to-rules',
+               '## 2 · The procedure, as a skill\n\nFour of seven indicators convert; the two narratives and the low-confidence host are dropped with reasons. The skill then reports the three numbers a renewal conversation needs: converted, alerted, actioned.'),
 ],
- "expect": "Five control functions, the question each is asking and the "
-           "controls each operates — 22 in total. Four seam failures laid out as "
-           "pairs of individually reasonable assumptions, "
-           "and every function still self-reports green while all four gaps are "
-           "open. Naming one accountable owner per handoff closes them, and a "
-           "use case with all five control functions and no business owner is "
-           "shown to be ungoverned.",
- "challenge": "Pick one of the four seams and find out, today, who owns it in "
-              "your organisation. The answer 'I assume security does' from one "
-              "side and 'I assume privacy does' from the other is the finding.",
-},
-
-"E1.11": {
- "concept": """
-Model risk management is not new. The SR 11-7 lineage has governed models in
-regulated institutions for over a decade, and its three pillars are sound:
-
-1. **Conceptual soundness** — is the method appropriate for the purpose?
-2. **Ongoing monitoring** — is it still performing as validated?
-3. **Independent validation** — did someone other than the builder check?
-
-All three still hold for AI systems. What breaks is not the framework but a
-silent assumption underneath it: **that a model produces an output, and a human
-decides what to do with it.**
-
-Once the model can call a tool, that assumption is void. Validation scoped to
-the model's *predictions* says nothing about the model's *actions*. You can hold
-a perfectly valid validation report for a system that has since been granted
-write access to a production database, and nothing in the classical process is
-required to notice.
-
-So the extension is narrow and specific: the unit of validation becomes the
-**model plus its tool surface plus its autonomy level**, and any change to any of
-the three triggers revalidation — not just a change to the weights.
-""",
- "steps": [
-  ("md", "## 2 · The three pillars, and what each assumes"),
-
-  ("md", "## 3 · The unit of validation, before and after tools"),
-
-  ("md", "## 4 · Where it breaks — monitoring the wrong thing well"),
-
-  ("md", "## 5 · The control — revalidate on the triple, not on the weights"),
-
-  ("md", "## 6 · Verify — what a validation record must now carry"),
-  *skill_steps('grc/model-risk-validation-scope',
-               '## 2 · The procedure, as a skill\n\nA model validated with no tools at L1 is deployed with three tools at L3 — same model, same version, different system. The skill diffs validated against deployed and lists what the monitoring never observes.'),
-  *skill_steps('research/weight-access-capability-delta',
-               "## 3 · And the change that ships as an improvement\n\n"
-               "`cybertravels/governance/seams.py` separates a classical "
-               "validation scope from the five activities that only exist "
-               "once the model can act — authority, reversibility, blast "
-               "radius, adversarial reachability, containment. A validation "
-               "can be complete against the classical list and say nothing "
-               "about any of them. `capability_delta()` is the trigger: more "
-               "capability is a re-tiering event even when the release note "
-               "calls it an improvement, and this skill measures the delta."),
-],
- "expect": "The three SR 11-7 pillars, each with the assumption it quietly makes. A "
-           "system validated with no tools at L1 is shown deployed with three "
-           "tools at L3 — same model, same version — and the validation no "
-           "longer covers it. Monitoring reports 200 clean runs of summarisation "
-           "accuracy while four action-level metrics have no threshold at all, "
-           "and four revalidation triggers classical MRM would miss are named.",
- "challenge": "Take one validated model in your estate and list the tools it "
-              "holds today. If any of them post-dates the validation report, "
-              "the report is describing a different system.",
-},
-
-"E1.12": {
- "concept": """
-Everything in this chapter has pointed at the same conclusion: the functions
-work, and the **handoffs** are where the programme leaks.
-
-A seam is not a disagreement. Both sides are usually competent, usually right
-about their own scope, and usually assuming the other side has the piece in the
-middle. Nobody is wrong, and the gap is real.
-
-The control is a **joint runbook** per seam, and it has exactly three
-properties:
-
-- **One artefact.** A named, versioned thing that exists — not a meeting, not an
-  understanding.
-- **One owner.** Accountable for the artefact existing and being current.
-  Contributors are named; owners are singular.
-- **Named consumers.** Who receives it, and what they are entitled to assume
-  once they have. A handoff nobody consumes was never a handoff.
-
-The three seams below are the ones that fail most often, and each is traced
-here from producer to consumer to see exactly where it stops.
-""",
- "steps": [
-  ("md", "## 2 · Three seams, traced end to end"),
-
-  ("md", "## 3 · Where it breaks — the consumer who never received it"),
-
-  ("md", "## 4 · What each undelivered handoff actually costs"),
-
-  ("md", "## 5 · The control — deliver, and record the delivery"),
-
-  ("md", "## 6 · Verify — one artefact, many consumers, one owner"),
-  *skill_steps('programme/handoff-delivery-check',
-               '## 2 · The procedure, as a skill\n\nThree joint runbooks, and three handoffs that were agreed and never delivered. The skill asks the consumer rather than the owner, and records the specific consequence of each — model risk computing a tier without the privacy input.'),
-],
- "expect": "Three joint runbooks are traced from owner to consumer, and three "
-           "handoffs turn out never to have been delivered — model risk never "
-           "receives the privacy assessment, and neither security nor internal "
-           "audit receives the validation report. Each undelivered handoff is a "
-           "control that was built, works, and is invisible to the function "
-           "whose decision depends on it. A four-property check runs over the "
-           "seams and goes from several problems to zero.",
- "challenge": "Pick the artefact your function produces for someone else and ask "
-              "the recipient when they last received it. The gap between 'we "
-              "produce that' and 'we receive that' is the seam, and it is "
-              "usually measured in quarters.",
+ "expect": "Four of seven indicators convert to rules — the two narratives and "
+           "the low-confidence host are dropped with reasons. The rules fire on "
+           "three of five events with concrete responses. The three-number "
+           "summary shows a 57% conversion rate and 67% of alerts actioned, and "
+           "the source table ranks internal sources highest.",
+ "challenge": "Compute your own three numbers for last quarter: indicators "
+              "received, rules deployed, alerts actioned. The ratio between the "
+              "first and third is the honest value of the programme.",
 },
 }

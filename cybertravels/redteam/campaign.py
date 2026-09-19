@@ -1,4 +1,4 @@
-# step:file C1.0
+# step:file D1.0
 """The campaign — the arithmetic that makes an attack result a finding.
 
 Everything in this file exists to stop one sentence being written: *"we got it

@@ -36,12 +36,12 @@ SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
 SEAMS = [
- ("AppSec", "Platform",     "who owns the agent's sandbox?",              "A3.1"),
- ("Identity", "SecOps",     "who revokes a non-human identity at 03:00?", "A3.6"),
- ("GRC", "Engineering",     "who decides an autonomy rung?",              "E3.2"),
- ("SOC", "Data",            "who retains agent traces, and for how long?","D1.3"),
- ("CISO office", "Legal",   "who starts the regulatory clock?",           "E2.6"),
- ("AppSec", "SOC",          "who owns detections FOR agents?",            "D2.2"),
+ ("AppSec", "Platform",     "who owns the agent's sandbox?",              "B3.1"),
+ ("Identity", "SecOps",     "who revokes a non-human identity at 03:00?", "B3.6"),
+ ("GRC", "Engineering",     "who decides an autonomy rung?",              "F3.2"),
+ ("SOC", "Data",            "who retains agent traces, and for how long?","E1.3"),
+ ("CISO office", "Legal",   "who starts the regulatory clock?",           "F2.6"),
+ ("AppSec", "SOC",          "who owns detections FOR agents?",            "E2.2"),
 ]
 
 ANSWERS = {

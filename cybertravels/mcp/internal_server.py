@@ -12,14 +12,14 @@ caller is "internal" has no boundary, it has a naming convention.
 What it does *not* do is fix the tools it calls. `get_booking` and
 `issue_refund` are reached with a valid, correctly-scoped token and still
 return another traveller's record, because scope authorises the *action* and
-nothing here authorises the *object*. That gap is the whole of A2.5, and
+nothing here authorises the *object*. That gap is the whole of B2.5, and
 LABELS.md records it as rows 1 and 4.
 
 Run standalone against an MCP inspector:
 
     python -m cybertravels.mcp.internal_server
 """
-# step:file G1.2
+# step:file A1.2
 import json
 import sys
 from pathlib import Path

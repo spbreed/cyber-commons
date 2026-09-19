@@ -48,7 +48,7 @@ committed, and it runs as a pre-commit hook and in CI.
 
 | Family | Why it's here | Weights licence | Good for |
 |--------|---------------|-----------------|----------|
-| **Llama** (Meta) — Llama 3.3 70B, Llama 4, **Llama Guard 4** | The most widely hosted open family; Guard variants are purpose-built safety classifiers used in the guardrail labs | Llama Community Licence (open weights, some use restrictions — read it) | General agent work, and Guard for B2/E1 guardrail labs |
+| **Llama** (Meta) — Llama 3.3 70B, Llama 4, **Llama Guard 4** | The most widely hosted open family; Guard variants are purpose-built safety classifiers used in the guardrail labs | Llama Community Licence (open weights, some use restrictions — read it) | General agent work, and Guard for C2/F1 guardrail labs |
 | **Kimi** (Moonshot AI) — Kimi K2 | Strong agentic/tool-use behaviour, which is exactly what the harness tracks exercise | Modified MIT | Harness loops, offensive planning, long-horizon tasks |
 | **GLM** (Z.ai / Zhipu) — GLM-4.6, GLM-4.5-Air | Strong code reasoning at a size that self-hosts comfortably | MIT | Code review, SAST triage, SOC triage |
 
@@ -95,25 +95,25 @@ here is the same file `scripts/test_skills.py` runs offline.
 
 | | reached the model | acceptance property held |
 |---|---|---|
-| Qwen2.5-**1.5B**-Instruct | 6/6 | **3/6** — B2.3, B2.16 and B2.10 fail |
+| Qwen2.5-**1.5B**-Instruct | 6/6 | **3/6** — C2.3, C2.16 and C2.10 fail |
 | Qwen2.5-**7B**-Instruct | 6/6 | **6/6** |
 
-At 1.5B: B2.16 hands back the SQL injection unfixed, B2.10 ranks TLS 1.0 above an
-unauthenticated endpoint, and B2.3 answers `MISSING` for both the unauthorised
+At 1.5B: C2.16 hands back the SQL injection unfixed, C2.10 ranks TLS 1.0 above an
+unauthenticated endpoint, and C2.3 answers `MISSING` for both the unauthorised
 function and the already-authorised one — it cannot tell them apart, which is
 the entire job of that stage. All three clear at 7B. So **7B is the floor for
 the acceptance criteria**; below it the lessons still run and still teach, but
 three of them will not hit their numbers.
 
-The exception is the one worth reading: **B2.1 holds at 1.5B**, on the same SQL
-task B2.16 fails at that size — because it asks for one line and checks the
+The exception is the one worth reading: **C2.1 holds at 1.5B**, on the same SQL
+task C2.16 fails at that size — because it asks for one line and checks the
 answer with an independent verifier, rather than asking for a corrected function
 and trusting what comes back. That is the chapter's argument, measured.
 
 **Two of these results were bugs in the test, not in the model**, and both are
 worth knowing before you write your own acceptance property:
 
-- B2.3's first version asserted that the model *would* invent a defect in an
+- C2.3's first version asserted that the model *would* invent a defect in an
   already-authorised function. Qwen2.5-7B read it correctly and declined, and
   the assertion failed because the model behaved well. A gate cannot depend on
   the model misbehaving on the day you run it.
@@ -180,7 +180,7 @@ limits — they move):
 
 - **OpenRouter** — aggregates many providers; some open models are exposed with
   a `:free` suffix on a shared rate limit. One key, many models — handy for the
-  detection-rule scoring labs (C1.6, D2.4), which run one candidate set across backbones.
+  detection-rule scoring labs (D1.6, E2.4), which run one candidate set across backbones.
 - **Groq / Cerebras** — very fast inference for Llama-family models on a free
   developer tier.
 - **Together AI** — free credits and some always-free open endpoints.
@@ -219,16 +219,16 @@ litellm --config labs/shared/litellm.config.yaml   # routes llama/glm/kimi behin
 | Lab type | Model | Why |
 |---|---|---|
 | Code review / SAST triage | **GLM-4.6** | strongest code reasoning per unit of RAM |
-| Harness loops, tool use (B2.1) | **Kimi K2** | built for agentic tool sequences |
-| Offensive planning (C1) | **Kimi K2** or GLM-4.6 | multi-step planning |
+| Harness loops, tool use (C2.1) | **Kimi K2** | built for agentic tool sequences |
+| Offensive planning (D1) | **Kimi K2** or GLM-4.6 | multi-step planning |
 | Guardrails / classification | **Llama Guard** | purpose-built, and cheap at volume |
-| SOC triage (D3) | **GLM-4.6** or Llama 3.3 | cheap, high volume |
-| Exploit chaining (B2.9), research (C1) | **Kimi K2** | multi-file adversarial reasoning |
-| Multi-backbone rule scoring (C1.6, D2.4) | **all three** | separating model effects from harness effects *is* the lab |
+| SOC triage (E3) | **GLM-4.6** or Llama 3.3 | cheap, high volume |
+| Exploit chaining (C2.9), research (D1) | **Kimi K2** | multi-file adversarial reasoning |
+| Multi-backbone rule scoring (D1.6, E2.4) | **all three** | separating model effects from harness effects *is* the lab |
 | Anything, on a laptop with no GPU | **Qwen2.5-7B-Instruct** | the size the acceptance criteria were established at |
 
 For most of these lessons the difference a larger model makes is smaller than
-the difference a better prompt makes — which is B2.1's point, demonstrated at
+the difference a better prompt makes — which is C2.1's point, demonstrated at
 1.5B.
 
 **Six skills call a model.** They import `ask()` from the shared runtime, and

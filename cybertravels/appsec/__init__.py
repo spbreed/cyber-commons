@@ -1,4 +1,4 @@
-# step:file B2.0
+# step:file C2.0
 """The AppSec pipeline — what reviews CyberTravels, shipping inside CyberTravels.
 
 Function G built the product. Function A put controls on it. This package is
@@ -9,7 +9,7 @@ team runs **over** this repository, stage by stage, one stage per lesson.
 in its own repository is a pipeline that drifts from the thing it reviews and
 that nobody runs locally. The cost of keeping it here is stated rather than
 hidden: `appsec/` is inside the tree the scanners walk, so the pipeline is
-subject to its own findings. That is B2.0's argument — a security pipeline
+subject to its own findings. That is C2.0's argument — a security pipeline
 built as if it were exempt from the risks it exists to find is the most
 expensive kind, because its failures are reported as clean runs.
 
@@ -18,12 +18,12 @@ work Function A did; this package starts where B does.
 
     before a deploy                        after a deploy
     ---------------                        --------------
-     5  threat model      B2.2             10  feasibility       B2.5
-     6  context slice     B2.17            11  sandbox replica   B2.6
-     7  SAST              B2.3             12  dynamic exploit   B2.8
-     8  deduplication     B2.4             13  exploit chaining  B2.9
-     9  verification      B2.4             14  remediation       B2.16
-                                           15  severity + report B2.15
+     5  threat model      C2.2             10  feasibility       C2.5
+     6  context slice     C2.17            11  sandbox replica   C2.6
+     7  SAST              C2.3             12  dynamic exploit   C2.8
+     8  deduplication     C2.4             13  exploit chaining  C2.9
+     9  verification      C2.4             14  remediation       C2.16
+                                           15  severity + report C2.15
 
 The split is not chronological tidiness. It is about what each half is allowed
 to claim. Before a deploy you have the source and no running system, so every
@@ -36,7 +36,7 @@ The two halves differ in one more way, and it is the practical one. The
 **before** stages never import the application — they read it as text and as an
 AST, so they run against a checkout that could not be imported, which is most
 checkouts most of the time. The **after** stages import and run it, inside the
-replica B2.6 builds, because a claim that something was exploited cannot be
+replica C2.6 builds, because a claim that something was exploited cannot be
 made by reading. Which half a stage is in tells you what it is allowed to say.
 """
 
@@ -46,27 +46,27 @@ made by reading. Which half a stage is in tells you what it is allowed to say.
 # is reachable" and "this was exploited", and a report that blurs them is a
 # report nobody can act on.
 STAGES = [
-    (5,  "threat model",   "before", "B2.2",
+    (5,  "threat model",   "before", "C2.2",
      "these are the assets and entry points, derived from the tree"),
-    (6,  "context slice",  "before", "B2.17",
+    (6,  "context slice",  "before", "C2.17",
      "this is the smallest source-to-sink context that supports a decision"),
-    (7,  "static analysis", "before", "B2.3",
+    (7,  "static analysis", "before", "C2.3",
      "a pattern matched here, or a model read here — labelled which"),
-    (8,  "deduplication",  "before", "B2.4",
+    (8,  "deduplication",  "before", "C2.4",
      "these reports are one finding"),
-    (9,  "verification",   "before", "B2.4",
+    (9,  "verification",   "before", "C2.4",
      "this finding names code that exists"),
-    (10, "feasibility",    "after",  "B2.5",
+    (10, "feasibility",    "after",  "C2.5",
      "an external caller can, or cannot, reach this sink"),
-    (11, "sandbox replica", "after", "B2.6",
+    (11, "sandbox replica", "after", "C2.6",
      "this is the system, running, with no path to production"),
-    (12, "dynamic exploit", "after", "B2.8",
+    (12, "dynamic exploit", "after", "C2.8",
      "this was exploited, here is the request and the response"),
-    (13, "exploit chain",  "after",  "B2.9",
+    (13, "exploit chain",  "after",  "C2.9",
      "these findings compose, and the chain scores higher than its links"),
-    (14, "remediation",    "after",  "B2.16",
+    (14, "remediation",    "after",  "C2.16",
      "this patch stops the exploit, and a test fails without it"),
-    (15, "severity",       "after",  "B2.15",
+    (15, "severity",       "after",  "C2.15",
      "this severity was calibrated from evidence, not copied from a rule"),
 ]
 

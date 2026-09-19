@@ -137,6 +137,6 @@ that reports only findings cannot give you.
   sentence, and only one of them is good news.
 - **Treating a reasoning detector's output as findings.** 59.9% recall at 57.5%
   precision means roughly two in five reports are wrong; they are hypotheses,
-  and B2.4 is what promotes them.
+  and C2.4 is what promotes them.
 - **Ranking by CWE.** Every IDOR is CWE-639. The one on the refund path is not
   the same finding as the one on a read.

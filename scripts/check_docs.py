@@ -12,7 +12,7 @@ expect — each one found by hand, which is the argument for this file existing:
   `../notebooks/C2.8.ipynb`, a lesson removed in the Function C trim.
 - **`labs/b2.10-eval-harness/README.md`** linked to `../../docs/…` from inside
   the lab, which resolves to a `docs/` at the repository root that has never
-  existed, and to `curriculum/track-c2.md` for a chapter that is now C1.
+  existed, and to `curriculum/track-c2.md` for a chapter that is now D1.
 - **`MODELS.md`** ended on `[Open an issue](../../issues)` — a GitHub-relative
   path that only works in the web UI and resolves nowhere in a clone.
 

@@ -1,99 +1,89 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.7 — Identity spoofing and impersonation | Cyber Commons</title><meta name="description" content="Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5)."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="sid">A1.7</div><h1>Identity spoofing and impersonation</h1><div class="badges"><span class="badge t">A1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm092025-misinformation/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM09</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T5</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Impact</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Have two agents share a credential, then try to work out which one made the call.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/threats/shared-credential-attribution-check" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/threats/shared-credential-attribution-check/scripts/shared_credential_attribution_check.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Four agents share one service account. The audit log answers &quot;what happened&quot; perfectly and cannot answer &quot;which one&quot; at all — and neither can the downstream service that was deciding whether to trust the caller.</p><div class="ct"><b>At CyberTravels.</b> All four agents share one service account, `cybertravels-svc`. The payments API can see that CyberTravels called it and cannot see which of the four — so the refund and the itinerary lookup are indistinguishable to the thing deciding whether to trust the caller. R11.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p><strong>What it covers.</strong> Have two agents share a credential, then try to work out which one made the call.</p>
-<p><strong>Why a security engineer needs it.</strong> Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them. The control it builds is: per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>You cannot say which agent acted, so you cannot revoke one without stopping all of them.</p></div><div class="d1"><span>Day 1 — how</span><p>Per-workload identity with attestation, and a lifecycle that can revoke a single agent.</p></div><div class="d2"><span>Day 2 — measure</span><p>Agents with an attested, individually revocable identity, as a share of the fleet.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   agent A --+
-   agent B --+---&gt; one service account ---&gt; downstream service
-   agent C --+          &quot;svc-automation&quot;          |
-   agent D --+                                    v
-                                        &quot;who called me?&quot;  -&gt; unanswerable
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.7 — The human gate, and the budget that stops the loop | Cyber Commons</title><meta name="description" content="High-risk actions gated on a named human; budgets that bind and are recorded when they bind."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Getting Started — Building Agentic AI › Build the Agent — From a Loop to a Running Platform</div><div class="sid">A1.7</div><h1>The human gate, and the budget that stops the loop</h1><div class="badges"><span class="badge t">A1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MAP</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An unbounded loop against an impossible task spends until somebody notices, and a gate nobody can approve fast enough is a gate that gets removed.</p></div><div class="ctrl"><div class="lab">Control</div><p>High-risk actions gated on a named human; budgets that bind and are recorded when they bind.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Approve one action, refuse another, then exhaust the budget on purpose.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/runtime/budget-and-stop-condition-audit" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_condition_audit.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">The agent is asked to reconcile a booking that cannot be reconciled. It tries, rephrases, tries again. Six hours later it has spent four hundred thousand tokens and exhausted a vendor&#x27;s rate limit for everybody else on that integration. Nothing failed. There was simply no number at which it was supposed to stop.</p><div class="ct"><b>At CyberTravels.</b> Cancelling a booking and issuing a refund are CyberTravels&#x27; two irreversible actions, and both are gated in `cybertravels/config.py::TOOL_POLICY`. The budgets are two lines above them.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>The two ceilings on an agent loop — a human gate on irreversible actions, and budgets on steps and tool calls — including what a run returns when it hits one, and why a present-but-saturated gate is not a control.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>An unbounded loop against an impossible task spends until somebody notices, and a gate nobody can approve fast enough gets removed.</p></div><div class="d1"><span>Day 1 — how</span><p>Gate the irreversible actions on a named human, and bound both steps and tool calls.</p></div><div class="d2"><span>Day 2 — measure</span><p>Approvals per reviewer per hour — the number that says whether the gate is still a control — and the share of runs that hit a ceiling.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">        TWO CEILINGS, OPPOSITE FAILURES
 
-   the audit log is complete and useless: every row has the same subject</pre><p><strong>OWASP T9 — Identity Spoofing &amp; Impersonation.</strong></p>
-<p>A1.6 was about an agent holding too much authority. This one is about the
-<strong>identity</strong> component being unable to say <em>which agent</em> is calling at all.</p>
-<p>When several agents share one credential — the same service account, the same
-API key baked into the same image — they are, to every downstream system, the
-same principal. There is no spoofing step required. Impersonation is the
-default state, because there was never a distinction to defeat.</p>
-<p>Three consequences follow, and the third is the one that hurts during an
-incident:</p>
-<p><strong>Authorization cannot differ.</strong> Every agent gets the union of what any of them
-needs, which is A1.6 again, arriving through a different door.</p>
-<p><strong>Attribution is impossible.</strong> "Which agent called this?" has no answer. Not a
-hard answer — no answer, because the information was never present.</p>
-<p><strong>Revocation is all-or-nothing.</strong> You have one misbehaving agent and one
-credential shared by forty. Rotating it stops the incident and stops the other
-thirty-nine, so the decision becomes a business call in the middle of a
-response, at whatever hour it is.</p>
-<p>In a multi-agent topology this compounds. A peer's message is trusted because it
-came from a peer — but if identity cannot distinguish peers, "it came from a
-peer" is a claim anyone inside the perimeter can make.</p><div class="how"><blockquote>
-<p><strong>Where this lands on the reference architecture.</strong></p>
-<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
-                               |              |
-                         messaging        tools / mcp
-                               |              |
-                      knowledge / memory   egress
-           identity + policy wrap every call · observability records it</code></p>
-</blockquote>
-<h2>2 · The risk, realised</h2>
-<p>Three agents, one credential, one incident.</p><h2>2 · The check, as a skill</h2>
-<p>Three CyberTravels agents share one API key, so the payments API records one caller on every line. The skill measures both costs: what the record can attribute, and what revoking the key would stop.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/shared-credential-attribution-check/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/shared-credential-attribution-check/SKILL.md</code></a></p><pre class="front"><code>name: shared-credential-attribution-check
+   human gate    present but saturated  ─► coverage 100%, review 0%
+   budget        absent                 ─► spend until somebody notices
+
+   at the ceiling: return INCOMPLETE, and say so</pre><p>Two ceilings on the same loop, and they fail in opposite directions.</p>
+<h3>The human gate</h3>
+<p>Some actions are worth pausing for. In CyberTravels those are <code>cancel_booking</code>
+and <code>issue_refund</code> — the ones that are hard to reverse. The runtime pauses,
+names the action and the scope it is about to request, and waits for a person.</p>
+<p>The failure mode is not that the gate is missing. It is that <strong>the gate stops
+working while still being present</strong>: at ten approvals a day a person reads each
+one, at four hundred they approve the queue. Coverage stays at 100% and actual
+review collapses, which is why the control is measured by approvals per reviewer
+per hour rather than by whether it exists. B3.9 is the lesson that models it.</p>
+<h3>The budget</h3>
+<p>A loop against an impossible task does not stop. It retries, rephrases, and
+spends — tokens, money, and somebody else's rate limit. CyberTravels bounds two
+things:</p>
+<pre><code>  MAX_STEPS       8    model turns
+  MAX_TOOL_CALLS  12   tool invocations
+</code></pre>
+<p>The important property is what happens at the ceiling: the run returns <strong>an
+incomplete result that says so</strong>, not a confident summary of what it managed.
+A budget that silently truncates is worse than none, because the output looks
+finished.</p>
+<p>And hitting a ceiling is recorded as a span. A loop that quietly hit its limit
+on 40% of runs last week is a thing you want to know.</p><div class="how"><h2>2 · Approve one, refuse one, then exhaust the budget</h2>
+<p>The skill below audits whether a loop's ceilings actually bind and what a run returns when one does. B1.13 runs it on somebody else's agent; run it on yours before that happens.</p><h3>The skill</h3></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/runtime/budget-and-stop-condition-audit/SKILL.md" target="_blank" rel="noopener"><code>skills/runtime/budget-and-stop-condition-audit/SKILL.md</code></a></p><pre class="front"><code>name: budget-and-stop-condition-audit
 description: &gt;-
-  Find credentials held by more than one agent and show what sharing does to
-  attribution and to containment — who the downstream records, and what
-  revoking it stops. Use when several agents call the same API, or when asked
-  which agent did something and the record cannot say.
-allowed-tools: Read, Grep, Glob</code></pre><h1>One credential, three agents, one line in the log</h1>
-<p>A shared credential is usually adopted for convenience and paid for during an
-incident. It costs two things at once: the downstream cannot attribute an
-action to an agent, and the only containment available stops <strong>every</strong> holder.</p>
+  Check that an agent loop has ceilings that actually bind — per-target, token
+  and action — and that hitting one returns an incomplete result rather than a
+  summary of what it managed. Use when reviewing loop termination, retries, or
+  an agent that runs unattended.
+allowed-tools: Read, Grep, Glob</code></pre><h1>The ceiling that binds first is the only one that matters</h1>
+<p>A loop usually has several budgets and only one of them ever fires. Which one
+fires, and how early, is the design; the rest are decoration. The second half
+matters more: what the loop <strong>returns</strong> when it stops. A run that halts and
+reports its partial work as an answer has converted a budget into a quality
+problem.</p>
 <h2>When to use this</h2>
-<p>Whenever more than one agent, job or replica authenticates downstream. Also
-before an incident: this is the check whose absence turns a contained problem
-into an outage.</p>
+<p>Any agentic loop, particularly one that retries, and any agent that runs on a
+schedule with nobody watching.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Enumerate holders per credential.</strong> Group by the secret, not by the
-service. Environment variables, mounted files, a shared secrets-manager path
-and a baked-in image layer are all the same credential when the value matches.</p>
-<p><strong>2 — Read a downstream record.</strong> Whatever the caller is identified by — an API
-key id, a client id, a service account — record what the downstream can print.
-If three agents map to one identifier, attribution ends there.</p>
-<p><strong>3 — Simulate the destructive call.</strong> Have one holder perform something
-irreversible. Ask, from the downstream record alone, which holder did it. Write
-down the answer even when it is "cannot be determined"; that sentence is the
-finding.</p>
-<p><strong>4 — Cost the containment.</strong> Revoke the credential on paper and list what
-stops. The count of unrelated things that stop is the number to report.</p>
-<p><strong>5 — Propose per-workload identity,</strong> and say what it costs: one credential
-per agent, issued by the platform rather than pasted, so revocation is
-per-agent and attribution is free.</p>
+<p><strong>1 — Enumerate every ceiling.</strong> Steps, tokens, wall clock, cost, actions,
+per-target attempts. For each, where it is checked and what it does on breach.</p>
+<p><strong>2 — Order them by when they bind.</strong> Run a task that consumes all resources
+and record which fires first. A per-target ceiling usually binds long before a
+token budget, which means the token budget was never the control.</p>
+<p><strong>3 — Test the breach path.</strong> The result must carry an explicit incomplete
+flag. Check what a caller does with it: a loop that returns <code>complete: False</code>
+into a pipeline that ignores the field has the same outcome as no budget.</p>
+<p><strong>4 — Check the ceiling is not resettable by the agent.</strong> A budget the loop can
+extend on its own behalf — by starting a sub-task, spawning a child, or
+retrying at a new target — is advisory.</p>
+<p><strong>5 — Derive the numbers from observation.</strong> State the p95 of a legitimate run
+and set each ceiling above it. A round number either strangles real work or
+never fires.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/shared_credential_attribution_check.py"><code>scripts/shared_credential_attribution_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/budget_and_stop_condition_audit.py"><code>scripts/budget_and_stop_condition_audit.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>what the downstream service recorded:
-   caller=svc-agent-7f3a1c  read    reports
-   caller=svc-agent-7f3a1c  read    reports
-   caller=svc-agent-7f3a1c  read    reports
-   caller=svc-agent-7f3a1c  delete  prod.customers
+<pre><code>steps taken : 6
+stopped by  : per_target (reports-db)
+complete    : False   &lt;- visible in the output, not silent
 
-incident: delete on prod.customers
-which agent did it? candidates: ['deploy-agent', 'patch-agent', 'triage-agent']
+ceiling           limit     used
+tokens            50000    10800
+seconds              60      2.4
+actions              20        6
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;credentials&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;holders&quot;: [&quot;str&quot;], &quot;source&quot;: &quot;env|file|manager|image&quot;}],
-  &quot;downstream_identifier&quot;: {&quot;field&quot;: &quot;str&quot;, &quot;distinguishes_holders&quot;: false},
-  &quot;destructive_probe&quot;: {&quot;actor&quot;: &quot;str&quot;, &quot;recoverable_from_record&quot;: false},
-  &quot;containment&quot;: {&quot;revoking_stops&quot;: [&quot;str&quot;], &quot;collateral&quot;: 0}
+  &quot;ceilings&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;value&quot;: 0, &quot;checked_at&quot;: &quot;str&quot;, &quot;binds_at_step&quot;: 0}],
+  &quot;first_to_bind&quot;: &quot;str&quot;,
+  &quot;breach&quot;: {&quot;returns_incomplete&quot;: true, &quot;caller_respects_flag&quot;: false},
+  &quot;agent_resettable&quot;: [&quot;str&quot;],
+  &quot;basis&quot;: {&quot;p95_legitimate_run&quot;: {&quot;steps&quot;: 0, &quot;tokens&quot;: 0}}
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Grouping by service instead of by secret value.</strong> Two names, one key, is
-  still one credential.</li>
-<li><strong>Assuming the log will disambiguate.</strong> Read an actual row before assuming a
-  field exists.</li>
-<li><strong>Reporting only attribution.</strong> The containment cost is what makes it urgent.</li>
+<li><strong>Listing budgets without ordering them.</strong> Only the first one exists.</li>
+<li><strong>Returning partial work as an answer.</strong> The flag is the control; the number
+  is the trigger.</li>
+<li><strong>A ceiling the agent can reset by spawning.</strong> Count the whole tree.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at A1.7 --out work/cybertravels
 python3 scripts/checkpoint.py --at A1.7 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "shared credential attribution check"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/threats/shared-credential-attribution-check/scripts/shared_credential_attribution_check.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Count the distinct credentials across your agents and divide by the number of agents. Any answer below one is this risk, and the number tells you how many innocent agents a revocation takes down.</p></div></section><div class="expect"><b>Expect</b>Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>SPIFFE/SPIRE</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/threats/shared-credential-attribution-check</code></p></div><div class="pager"><a href="A1.6.html"><span class="k">← Previous</span><span class="t">A1.6 · Privilege compromise</span></a><a class="next" href="A1.8.html"><span class="k">Next →</span><span class="t">A1.8 · Malicious code execution</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "budget and stop condition audit"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_condition_audit.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A high-risk action pausing and naming its scope, an approval and a refusal both recorded as audit rows, and a budget ceiling returning an incomplete result rather than a summary.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Raise MAX_TOOL_CALLS to 500 and give the agent a task it cannot finish. Watch the cost, and then decide what the right number is for your own loop — it is not 500 and it is not 2.</p></div></section><div class="expect"><b>Expect</b>A high-risk action pausing and naming its scope, an approval and a refusal both recorded, and a budget ceiling returning an incomplete result rather than a summary.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OPA</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/runtime/budget-and-stop-condition-audit</code></p></div><div class="pager"><a href="A1.6.html"><span class="k">← Previous</span><span class="t">A1.6 · Agent to agent — handing work over without laundering authority</span></a><a class="next" href="A2.0.html"><span class="k">Next →</span><span class="t">A2.0 · Why a demo is not a system — the harness around the loop</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

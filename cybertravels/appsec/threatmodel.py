@@ -1,4 +1,4 @@
-# step:file B2.2
+# step:file C2.2
 """Stage 5 — a threat model derived from the tree, and re-derivable.
 
 Threat models are not wrong because the people writing them are careless. They
@@ -35,7 +35,7 @@ ASSET_VALUE = {
     "refunds": "the money path — the only table where a write costs cash",
     "audit": "the record of what happened; valuable to change, not to read",
     "memory": "what the agent remembers about a traveller, across sessions",
-    "run_artefacts": "what one run touched; the surface A3.8 is about",
+    "run_artefacts": "what one run touched; the surface B3.8 is about",
 }
 
 
@@ -50,7 +50,7 @@ def assets(root):
 
 
 # Which shapes are entry points. Defined here because this is the stage that
-# has to decide it, and inherited by B2.5's call graph — that stage starts its
+# has to decide it, and inherited by C2.5's call graph — that stage starts its
 # walk from this set rather than deciding the question a second time. Two
 # stages with their own idea of where the system begins is two stages that
 # disagree without either of them being wrong.

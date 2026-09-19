@@ -1,17 +1,17 @@
-# step:file C1.5
+# step:file D1.5
 """Many runs at once — and the three problems that only exist at that scale.
 
 One agent is a system you can reason about. Two hundred running concurrently
 is a different object, and the difference is not arithmetic. Three lessons
 here, each about something that is invisible from inside a single run:
 
-    C1.5  correlation — every run passes its own checks, and together they
+    D1.5  correlation — every run passes its own checks, and together they
           are doing one thing
-    C1.6  detections that survive the volume — a rule with 2% false positives
+    D1.6  detections that survive the volume — a rule with 2% false positives
           is excellent at ten runs an hour and unusable at ten thousand
-    C1.7  triage with a floor — what happens to the queue nobody can read
+    D1.7  triage with a floor — what happens to the queue nobody can read
 
-A3.8 built the record this reads: `db.run_artefacts` says which run touched
+B3.8 built the record this reads: `db.run_artefacts` says which run touched
 which object. That table exists because per-run isolation checks cannot see a
 channel between runs, and this is the analysis it was built for.
 """
@@ -20,14 +20,14 @@ from collections import Counter
 
 
 # --------------------------------------------------------------------------- #
-# C1.5 — what only shows up across runs
+# D1.5 — what only shows up across runs
 # --------------------------------------------------------------------------- #
 def correlate(runs):
     """`runs` is [{"trace_id", "tools", "targets", "artefacts"}, ...].
 
     Three signals, and none of them is anomalous inside one run:
 
-    * a **shared artefact** — one run writes, others read (A3.8's channel);
+    * a **shared artefact** — one run writes, others read (B3.8's channel);
     * a **repeated trajectory** — the same tool sequence, which is either a
       fleet doing its job or a fleet being driven;
     * a **novel token** — a string that appears in many runs and in no
@@ -66,9 +66,9 @@ def novel_tokens(runs, baseline, *, min_runs=3):
     return sorted(t for t, n in seen.items() if n >= min_runs)
 
 
-# step:C1.6 add
+# step:D1.6 add
 # --------------------------------------------------------------------------- #
-# C1.6 — a rule's false-positive rate is a volume, not a percentage
+# D1.6 — a rule's false-positive rate is a volume, not a percentage
 # --------------------------------------------------------------------------- #
 # Detection engineering habitually reports precision. Precision is a ratio and
 # an analyst's day is a count, so the useful question is not "how precise is
@@ -106,12 +106,12 @@ def deployable(rule, events_per_day, *, analysts=1):
                     f"needs {v['analyst_days']} analysts and has {analysts} — "
                     f"this rule will be muted, and coverage will still count it")
     return v
-# step:C1.6 end
+# step:D1.6 end
 
 
-# step:C1.7 add
+# step:D1.7 add
 # --------------------------------------------------------------------------- #
-# C1.7 — triage with a floor
+# D1.7 — triage with a floor
 # --------------------------------------------------------------------------- #
 # When the queue is longer than the day, something is not going to be looked
 # at. That is arithmetic, and pretending otherwise is how the thing nobody
@@ -165,4 +165,4 @@ def queue_pressure(arrivals_per_day, capacity_per_day, days=30):
     return {"final_backlog": series[-1], "peak": max(series),
             "stable": series[-1] == 0,
             "mean": round(statistics.mean(series), 1)}
-# step:C1.7 end
+# step:D1.7 end

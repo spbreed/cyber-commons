@@ -1,84 +1,96 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.6 — Incident and disclosure obligations | Cyber Commons</title><meta name="description" content="Coordinate with D2 in hour one."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.6</div><h1>Incident and disclosure obligations</h1><div class="badges"><span class="badge t">E2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Materiality assessed for an autonomous actor with a human-actor playbook.</p></div><div class="ctrl"><div class="lab">Control</div><p>Coordinate with D2 in hour one.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Draft the notification for an agentic incident.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/regulatory/disclosure-phase-breakdown" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/regulatory/disclosure-phase-breakdown/scripts/disclosure_phase_breakdown.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">The question &quot;is this reportable&quot; has to be answerable in hours, by someone who is already busy. Trigger criteria written during an incident are written under the worst conditions available.</p><div class="ct"><b>At CyberTravels.</b> D5.6 started the clocks in hour one. This is the phase breakdown underneath them, and the finding is where the time goes: establishing **who acted** is the largest block, which D1.0&#x27;s clock already measured and which would be near zero for a human actor.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Breaking a disclosure deadline into its phases to find the one that consumes it, which for an agentic incident is establishing who acted rather than containment.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>The clock starts at awareness and broken attribution consumes it, so containing fast buys no reporting time.</p></div><div class="d1"><span>Day 1 — how</span><p>Write the trigger criteria before they are needed, with separate owners for containment and disclosure.</p></div><div class="d2"><span>Day 2 — measure</span><p>Whether the pre-incident reading existed at all. During an incident you are either quoting a measurement or guessing.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   the question, asked at 2am, by someone already busy
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.6 — Honeypots, canaries and deception — the detector with no threshold | Cyber Commons</title><meta name="description" content="Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3)."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — The Agentic SOC › Detect — the Lake, and Rules Mapped to MITRE</div><div class="sid">E2.6</div><h1>Honeypots, canaries and deception — the detector with no threshold</h1><div class="badges"><span class="badge t">E2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.</p></div><div class="ctrl"><div class="lab">Control</div><p>Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/detection/canary-and-honeypot-design" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/detection/canary-and-honeypot-design/scripts/canary_and_honeypot_design.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Every detector in this chapter needs a threshold, and every threshold is a trade. A canary needs neither: nothing legitimate has any reason to touch it, so its false-positive rate is zero by construction rather than by tuning.</p><div class="ct"><b>At CyberTravels.</b> A canary credential in CyberTravels&#x27; environment and a honeypot task in the benchmark: two detectors with no threshold to tune, because nothing legitimate has any reason to touch either.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p><strong>What it covers.</strong> Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.</p>
+<p><strong>Why a security engineer needs it.</strong> Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned. The control it builds is: canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>Every other detector needs a threshold, and every threshold trades misses against false alarms.</p></div><div class="d1"><span>Day 1 — how</span><p>Place canaries and honeypot tasks where nothing legitimate has a reason to go.</p></div><div class="d2"><span>Day 2 — measure</span><p>A false-positive rate of zero by construction — and the number of canaries legitimate work reaches, which destroys that property.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   tuned detector                     deception
 
-   is it reportable?  --&gt; to whom?  --&gt; by when?
+   threshold ---&gt; TP and FP           canary ---&gt; any touch is a hit
+   needs triage                       needs none: nothing legitimate
+   finds more                          has a reason to touch it
+                                      finds less, at precision 1.00
 
-   +---------------------------------------------+
-   | trigger criteria, written in advance:       |
-   | data class . autonomy . harm . jurisdiction |
-   +---------------------------------------------+
+   canary token in env/config/docs    honeypot task with an instrumented
+   real prefix, real length            shortcut that logs and scores 0
 
-   criteria written during an incident are written badly</pre><p>Incident and disclosure obligations meet agentic incidents badly, for one
-specific reason: <strong>broken attribution consumes the clock.</strong></p>
-<p>The clock starts at <em>awareness</em> — when you know a reportable event may have
-occurred. It does not pause while you work out who did it. So if your logs
-attribute an agent's actions to the human whose credential it borrowed (D3.4),
-the days you spend establishing what actually happened are deadline days.</p>
-<p>Two consequences worth internalising:</p>
-<ol>
-<li><strong>Containing fast does not buy reporting time.</strong> You can contain in an hour
-   and still miss a 72-hour deadline.</li>
-<li><strong>You will have to disclose before attribution is complete.</strong> So the sentence
-   you send when you know an agent acted but cannot yet say which one needs to
-   be drafted <em>now</em>, not during the incident.</li>
-</ol><blockquote class="anchor">**Anchor → E1.1.** A disclosure clock runs on facts you either measured before the incident or are guessing at during it. D5.4 re-measures the indicators after the fix; this lesson is why the pre-incident reading has to have existed at all.</blockquote><div class="how"><h2>2 · Demo — the clock, and what attribution costs it</h2><h2>3 · The control — fix attribution, and pre-draft the hard sentence</h2><h2>2 · The procedure, as a skill</h2>
-<p>Containment takes an hour and establishing who acted takes forty-eight, on a seventy-two hour clock. The skill breaks the deadline into phases, finds the dominant one, and re-runs it with delegation chains recorded.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/regulatory/disclosure-phase-breakdown/SKILL.md" target="_blank" rel="noopener"><code>skills/regulatory/disclosure-phase-breakdown/SKILL.md</code></a></p><pre class="front"><code>name: disclosure-phase-breakdown
+   both decay: bait that is not rotated is bait that has been learned</pre><p>Every detector in this chapter has needed a threshold, and every threshold is a
+trade between missing things and crying wolf. Deception is the exception:
+<strong>a canary has a false-positive rate of zero by construction</strong>, because nothing
+legitimate ever touches it.</p>
+<p>Two controls from the incident register live here, and both are about the
+environment your harness builds rather than the code it analyses.</p>
+<p><strong>Credential canaries (C4.4).</strong> Tokens that look genuine — same prefix, same
+format, same length — placed where an agent or an attacker would plausibly
+look: config files, environment listings, documentation, artifact metadata. The
+issuing service alerts on any authentication attempt. There is no legitimate
+use, so a hit is a confirmed compromise and opens an incident automatically. In
+the source incident, live credentials found on the public internet were
+redistributed to the swarm within minutes; a canary alongside them would have
+carried source IP, user agent and timestamp.</p>
+<p><strong>Honeypot tasks (C10.3).</strong> Benchmark tasks salted with a plausible-looking
+shortcut that is instrumented rather than functional, plus tasks whose scoring
+<em>appears</em> manipulable but where manipulation is detected rather than rewarded.
+The cheat-attempt rate on those tasks is a leading indicator for the whole
+fleet — available continuously, not after the fact.</p>
+<p>Both share one operational requirement: <strong>rotate them</strong>. Bait that stays put is
+bait that gets learned, and a learned canary is worse than none because it
+tells you the environment is clean when it is only well-mapped.</p><blockquote class="anchor">**Anchor → E1.0.** The only detector whose interval is the moment of touch. Every other one in the chapter trades detect time against false positives through a threshold; a canary has no threshold to trade, because nothing legitimate has any reason to touch it.</blockquote><div class="how"><h2>2 · A canary, and why its false-positive rate is zero</h2><h2>3 · Honeypot tasks — a shortcut that is logged, not rewarded</h2><h2>4 · Where it breaks — bait that was learned</h2><h2>5 · Verify — what deception buys next to a tuned detector</h2><h2>2 · The procedure, as a skill</h2>
+<p>A canary credential nothing legitimate uses produces an alert with no structurally possible false positive. The skill places them, attaches source and user agent to each hit, adds honeypot tasks that measure inclination, and models the decay that sets the rotation interval.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/canary-and-honeypot-design/SKILL.md" target="_blank" rel="noopener"><code>skills/detection/canary-and-honeypot-design/SKILL.md</code></a></p><pre class="front"><code>name: canary-and-honeypot-design
 description: &gt;-
-  Break a disclosure deadline into its phases and find the one that consumes
-  most of it — usually establishing who acted rather than containment. Use when
-  a reporting obligation is being planned for, or was missed.
-allowed-tools: Read, Grep, Glob</code></pre><h1>Two-thirds of the clock is establishing who acted</h1>
-<p>Disclosure planning concentrates on containment because that is the exciting
-part. The phase breakdown says otherwise: containment in an hour, and
-establishing the acting identity in forty-eight, on a seventy-two hour clock.
-The delay is attribution, and attribution is fixed months earlier by what the
-logs record.</p>
+  Place credential canaries and honeypot tasks in an agent&#x27;s environment so that
+  an alert has no structurally possible false positive, and measure how fast the
+  signal decays as agents learn. Use when deception is being added, or when a
+  detection needs to be one nobody has to triage.
+allowed-tools: Read, Grep, Glob</code></pre><h1>An alert with no possible false positive</h1>
+<p>A canary credential that nothing legitimate uses produces an alert that needs no
+triage: the only way it authenticates is that somebody read it and tried it.
+That property is structural, not statistical, and it is why deception belongs in
+an agent environment where every other signal is ambiguous.</p>
 <h2>When to use this</h2>
-<p>Planning for a reporting obligation, and at post-incident review when a deadline
-was met late or narrowly.</p>
+<p>Designing detection for agent environments, and whenever an existing detection's
+false-positive rate is the reason it is ignored.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Enumerate the phases.</strong> Detection, triage, containment, establishing who
-acted, scoping affected subjects, drafting, approval, submission. All of them,
-including the approval step everyone forgets.</p>
-<p><strong>2 — Attribute hours to each from a real incident</strong> or a tabletop. Estimates
-here are systematically optimistic; use measured values where you have them and
-mark the rest as estimates.</p>
-<p><strong>3 — Find the dominant phase.</strong> It is usually attribution or scoping. Report it
-as a proportion of the whole clock, which is what makes it actionable.</p>
-<p><strong>4 — Re-run with delegation chains recorded.</strong> Model what attribution costs
-when the acting identity and the chain are on every record. The difference is
-the business case for A2.7-style attribution, in hours against a regulatory
-deadline.</p>
-<p><strong>5 — Pre-draft what can be pre-drafted.</strong> The regime, the template, the
-distribution list, the approver. Drafting under time pressure is where the
-avoidable hours are.</p>
+<p><strong>1 — Place canaries where only reading them is unusual.</strong> Environment
+variables, config files, the fixtures a code agent walks. They must be
+indistinguishable from real ones — a canary named <code>canary_key</code> is a filter, not
+a trap.</p>
+<p><strong>2 — Ensure nothing legitimate uses them.</strong> This is the whole property. Check
+the code, the tests and the deployment. One legitimate reference and the alert
+becomes triage.</p>
+<p><strong>3 — Instrument the authentication path</strong> to capture source address and user
+agent on use. A canary alert with no context tells you that it happened and
+nothing about who.</p>
+<p><strong>4 — Add honeypot tasks for behaviour rather than credentials.</strong> A task with an
+available shortcut that nothing legitimate would take. Log the attempt and score
+it; this measures inclination, which no credential can.</p>
+<p><strong>5 — Measure decay.</strong> Agents and operators learn. Model the hit rate over days
+since placement, with and without rotation, and set the rotation interval from
+the curve rather than from a calendar.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/disclosure_phase_breakdown.py"><code>scripts/disclosure_phase_breakdown.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/canary_and_honeypot_design.py"><code>scripts/canary_and_honeypot_design.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>scenario                          contain   report   met   margin
-------------------------------------------------------------------
-attribution sound                     2.0     20.0  True     52.0
-attribution broken, 3d scope          6.0     92.0 False    -20.0
-fast containment, slow scope          1.0     80.0 False     -8.0
+<pre><code>token                     source        agent                 verdict
+hf_liveTokenNotShown      10.2.0.11     ci-runner             normal use
+hf_CANARY7Fq2mXvLpR8s     203.0.113.9   python-requests/2.31  CONFIRMED COMPROMISE
+ghp_alsoLive              10.2.0.11     ci-runner             normal use
+sk-CANARYd3Vn8yHc2Uae     203.0.113.9   python-requests/2.31  CONFIRMED COMPROMISE
 
-The third row contained in ONE HOUR and missed by 8 hours.
-phase                                   hours  cumulative  note
+canary hits: 2  false positives possible: 0
+Not zero because the detector is good - zero because nothing legitimate
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;obligation&quot;: {&quot;regime&quot;: &quot;str&quot;, &quot;hours&quot;: 0},
-  &quot;phases&quot;: [{&quot;phase&quot;: &quot;str&quot;, &quot;hours&quot;: 0, &quot;measured&quot;: false}],
-  &quot;total_hours&quot;: 0,
-  &quot;dominant&quot;: {&quot;phase&quot;: &quot;str&quot;, &quot;share&quot;: 0.0},
-  &quot;with_attribution&quot;: {&quot;phase_hours&quot;: 0, &quot;total_hours&quot;: 0, &quot;meets_deadline&quot;: true},
-  &quot;pre_drafted&quot;: [&quot;str&quot;]
+  &quot;canaries&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;placed_in&quot;: &quot;str&quot;, &quot;indistinguishable&quot;: true, &quot;legitimate_refs&quot;: 0}],
+  &quot;alerts&quot;: [{&quot;canary&quot;: &quot;str&quot;, &quot;source_ip&quot;: &quot;str&quot;, &quot;user_agent&quot;: &quot;str&quot;, &quot;false_positive_possible&quot;: false}],
+  &quot;honeypot_tasks&quot;: [{&quot;task&quot;: &quot;str&quot;, &quot;shortcut&quot;: &quot;str&quot;, &quot;attempts&quot;: 0}],
+  &quot;decay&quot;: {&quot;days&quot;: [0], &quot;hit_rate&quot;: [0.0], &quot;rotation_days&quot;: 0}
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Optimising containment.</strong> It is already the fast phase.</li>
-<li><strong>Estimating attribution.</strong> Measure it once; it is worse than you think.</li>
-<li><strong>Omitting approval.</strong> It is a real phase with a real queue.</li>
+<li><strong>A canary anything legitimate touches.</strong> The property is gone and the alert
+  becomes noise.</li>
+<li><strong>Naming it as a canary.</strong> It becomes a filter for the competent attacker.</li>
+<li><strong>Never rotating.</strong> The signal decays and the absence of alerts reads as
+  safety.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at E2.6 --out work/cybertravels
 python3 scripts/checkpoint.py --at E2.6 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "disclosure phase breakdown"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/regulatory/disclosure-phase-breakdown/scripts/disclosure_phase_breakdown.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>One-hour containment still misses the 72-hour deadline when scoping is slow. The phase breakdown totals 92 hours, of which establishing who acted is 48 — two-thirds of the entire deadline. Recording act chains cuts the total to 44.5 hours and meets the deadline. The runbook check flags a shared owner, a late clock start and a missing pre-drafted disclosure.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Draft the disclosure sentence you would send when you know an agent acted but cannot say which one. Getting legal to agree that wording takes weeks in peacetime and is impossible at hour 60.</p></div></section><div class="expect"><b>Expect</b>A draft that names the agent, the authority and the containment — the questions a supervisor asks first.</div><p class="sub" style="margin-top:10px">Skill source: <code>skills/regulatory/disclosure-phase-breakdown</code></p></div><div class="pager"><a href="E2.5.html"><span class="k">← Previous</span><span class="t">E2.5 · Privacy and data protection</span></a><a class="next" href="E2.7.html"><span class="k">Next →</span><span class="t">E2.7 · Documentation that survives supervision</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "canary and honeypot design"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/detection/canary-and-honeypot-design/scripts/canary_and_honeypot_design.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Place one canary credential in the environment your agents run in, wired to a real alert, and leave it. The interesting outcome is not the alert; it is discovering, six weeks later, which systems can even see it.</p></div></section><div class="expect"><b>Expect</b>Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary&#x27;s detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Canarytokens</span><span>Inspect</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/detection/canary-and-honeypot-design</code></p></div><div class="pager"><a href="E2.5.html"><span class="k">← Previous</span><span class="t">E2.5 · Rules generated from an incident — and the benign corpus that decides them</span></a><a class="next" href="E3.1.html"><span class="k">Next →</span><span class="t">E3.1 · From alert queue to loop operator</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

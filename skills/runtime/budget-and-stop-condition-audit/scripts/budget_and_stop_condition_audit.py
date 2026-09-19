@@ -29,7 +29,7 @@ class Budget:
         return True, None
 
 def loop(budget):
-    """A task that cannot succeed - A1.13's exact scenario, now bounded."""
+    """A task that cannot succeed - B1.13's exact scenario, now bounded."""
     steps = 0
     while True:
         steps += 1
@@ -54,5 +54,5 @@ print("action budget. That is the ceiling that protects everyone else, and it is
 print("the one most budgets do not have.")
 print()
 print("`complete: False` is the other half. A run that stops silently and")
-print("reports what it managed becomes A1.16 with extra steps.")
+print("reports what it managed becomes B1.16 with extra steps.")
 assert r["stopped_by"].startswith("per_target") and not r["complete"]

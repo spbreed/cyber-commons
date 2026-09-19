@@ -42,7 +42,7 @@ GOOD = "#047857"
 # The rule used to be "treat the cell as HTML if it STARTS with `<`", which is
 # a trap: markup in the middle of a sentence was escaped and rendered as
 # literal `<b>` on the page, with a green build behind it. Three lessons
-# shipped that way — A1.0 and D3.4 showed `<b>`, A3.11 showed `<code>` — and a
+# shipped that way — B1.0 and E3.4 showed `<b>`, B3.11 showed `<code>` — and a
 # fourth was about to, with every student sign-up link in A0.0 printed as
 # angle-bracket source.
 _INLINE = ("b", "i", "em", "strong", "code", "a", "span", "br", "small", "sub", "sup")

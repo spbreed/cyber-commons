@@ -70,7 +70,7 @@ providers' accounts, and the platform cannot revoke them for you.
 
 **The second surface was never touched.** Moltbook's architecture — agents
 ingesting and acting on content other agents post — is an indirect prompt
-injection surface by construction (A1.3). The breach did not use it. It did not
+injection surface by construction (B1.3). The breach did not use it. It did not
 need to.
 
 The fix was two SQL statements.
@@ -119,11 +119,11 @@ The fix was two SQL statements.
   ("html", D.table(
     ["surface", "status in this incident", "where it is taught"],
     [["credential store readable by anyone",
-      "<b>used — this was the breach</b>", "A3.8, and the Supabase pattern in C2.10"],
+      "<b>used — this was the breach</b>", "B3.8, and the Supabase pattern in C2.10"],
      ["agents ingest and act on other agents' posts",
-      "present, untouched", "A1.3 indirect prompt injection, A1.10 comms poisoning"],
+      "present, untouched", "B1.3 indirect prompt injection, B1.10 comms poisoning"],
      ["agents coordinating at population scale",
-      "present, untouched", "A1.11, D3.8 fleet correlation"]],
+      "present, untouched", "B1.11, E3.8 fleet correlation"]],
     caption="An architecture can hold two novel risks and still be undone by a "
             "missing row policy. Novelty is not the same as likelihood.")),
    *skill_steps('research/row-level-policy-check',
@@ -176,7 +176,7 @@ The structural fix is the one worth taking away. From 2026, new Supabase
 projects **no longer expose public-schema tables through the Data API by
 default** — closing the gap at the level of the default rather than at the level
 of everyone remembering. That is the same argument as default-deny on the tool
-call (A3.1), arriving at a database.
+call (B3.1), arriving at a database.
 """,
  "steps": [
   ("md", SOURCES_SUPABASE),
@@ -216,7 +216,7 @@ call (A3.1), arriving at a database.
     + D.label(534, 58, "tables are not exposed through the Data API", anchor="middle")
     + D.label(534, 76, "unless something opts them in", anchor="middle")
     + D.label(534, 96, "the Supabase default since 2026", anchor="middle")
-    + D.label(350, 138, "the same argument as default-deny on the tool call (A3.1), "
+    + D.label(350, 138, "the same argument as default-deny on the tool call (B3.1), "
                         "arriving at a database", anchor="middle", size=11.5),
     height=152,
     caption="A control that depends on everyone remembering is a control with a "
@@ -226,15 +226,15 @@ call (A3.1), arriving at a database.
   ("html", D.table(
     ["finding here", "the control, and where it lives"],
     [["credential-shaped data in a client-readable table",
-      "A3.8 — shared infrastructure between agent runs"],
+      "B3.8 — shared infrastructure between agent runs"],
      ["an admin key reachable from the client",
-      "A3.8 — admin plane off the workload path"],
+      "B3.8 — admin plane off the workload path"],
      ["a default that is open until closed",
-      "A3.1 — default-deny, applied to data rather than tools"],
+      "B3.1 — default-deny, applied to data rather than tools"],
      ["a schema check no application test expresses",
-      "D2.3 — detections whose subject is the platform"],
+      "E2.3 — detections whose subject is the platform"],
      ["73% of generated apps carrying at least one issue",
-      "A3.11 — securing the developers' coding agents"]],
+      "B3.11 — securing the developers' coding agents"]],
     caption="Every row is a control that already exists in this curriculum. The "
             "case study's job was to show you why it is there.")),
    *skill_steps('research/generated-schema-audit',

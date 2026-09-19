@@ -1,60 +1,37 @@
-# Track E2 — Building the Governance Platform — Regulatory and Compliance
+# Track E2 — Detect — the Lake, and Rules Mapped to MITRE
 
-**Function E · AI Governance for Agentic Systems**  
-*Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
+**Function E · The Agentic SOC**  
+*Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Job titles:** Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead
+**Job titles:** Detection Engineer, SOC Engineer, Security Data Engineer
 
-**What changes:** What a travel company holding passports, payment and health data owes, to whom, and how to evidence it once rather than per regulator. 9 lessons.
+**What changes:** The lake the rules are written against, then detections for two different subjects — the agent and the platform running it — mapped to ATT&CK and ATLAS, plus the loop that writes rules, the corpus that decides whether they ship, and the one detector that needs no threshold. 6 lessons.
 
-**Autonomy focus:** You determine which action classes are legally prohibited from ever reaching L2.5, irrespective of measured performance.
+**Autonomy focus:** Rules are written at L3 and shipped by a human, because the cost that decides deployment is analyst trust and the telemetry does not contain it.
 
-**Deliverable:** One control set mapped to three regimes, plus an evidence pack for a single high-risk agentic workflow.
+**Deliverable:** A detection pack for agent behaviour, every rule carrying a MITRE technique and a measured false-positive rate.
 
 > Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### E2.1 — The regulatory map
+### E2.1 — The detection data lake — where agent telemetry lands
 
-- **Risk** — One programme per regime; four times the work, none of it joined up.
-- **Control** — One control set that satisfies several regimes. Verify current status before relying on any date.
-- **Lab** — Build the crosswalk for your own sector.
-- **Tools** — `OSCAL`
-
-**Run it** — Build the crosswalk for your own sector.
-
-```bash
-# --- 1 · the repository. master is the trunk. ---
-git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-
-# --- 2 · your copy of CyberTravels as it stood at the END of E2.1:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at E2.1 --out work/cybertravels
-python3 scripts/checkpoint.py --at E2.1 --diff      # what this lesson changed
-
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
-
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/obligation-mapping/scripts/obligation_mapping.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
-```
-
-*Expect:* One spine, several overlays. Orphans are your programme backlog.
+- **Risk** — Everything is indexed hot because nobody priced it, so retention is cut across the board and the traces go first.
+- **Control** — A tiering decision per source, driven by the queries the SOC actually runs, with the cost of each tier stated.
+- **Lab** — Tier six sources against the queries that need them and compare the bill with index-everything.
+- **Tools** — `OpenSearch`, `OpenTelemetry`
 
 ---
 
-### E2.2 — Horizontal AI regulation
+### E2.2 — Detections whose subject is the agent — mapped to ATT&CK and ATLAS
 
-- **Risk** — "We only deployed it, we didn't build it" — sometimes true, often not.
-- **Control** — Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.
-- **Lab** — Classify three workflows and defend the boundary cases.
+- **Risk** — Scope drift, unusual tool sequencing, off-hours autonomous action.
+- **Control** — Detections whose subject is a non-human principal.
+- **Lab** — Write five detections for agent misbehaviour and fire each one.
+- **Tools** — `Falco`, `Sigma`
 
-**Run it** — Classify three workflows and defend the boundary cases.
+**Run it** — Write five detections for agent misbehaviour and fire each one.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -70,24 +47,24 @@ python3 scripts/checkpoint.py --at E2.2 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/horizontal-requirement-to-control/scripts/horizontal_requirement_to_control.py
+python3 skills/detection/agent-aware-rule-review/scripts/agent_aware_rule_review.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Shows where 'we only deployed it' holds and where agentic deployment pulls you into provider obligations.
+*Expect:* All five fire on synthetic-but-real agent telemetry from the B3/C2 labs.
 
 ---
 
-### E2.3 — Voluntary frameworks as your spine
+### E2.3 — Detections whose subject is the agent platform
 
-- **Risk** — Regime-specific mappings with nothing to hang off.
-- **Control** — AI RMF / management-system standards as the structure; regulator mappings as overlays.
-- **Lab** — Hang two regulator mappings off one framework spine.
-- **Tools** — `NIST AI RMF`, `OSCAL`
+- **Risk** — Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.
+- **Control** — Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
+- **Lab** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
+- **Tools** — `Falco`, `Gitleaks`, `Sigstore`
 
-**Run it** — Hang two regulator mappings off one framework spine.
+**Run it** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -103,23 +80,26 @@ python3 scripts/checkpoint.py --at E2.3 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/framework-spine-selection/scripts/framework_spine_selection.py
+python3 skills/detection/agent-platform-detections/scripts/agent_platform_detections.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Valid OSCAL, one spine, two overlays — instead of two disconnected programmes.
+*Expect:* Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.
 
 ---
 
-### E2.4 — Sector overlays
+### E2.4 — Agent-assisted detection engineering — written by a loop, shipped by a human
 
-- **Risk** — An agent is already a "model" under model-risk rules you already comply with.
-- **Control** — Find the regime you're already in before inventing a new one.
-- **Lab** — Map one agent to existing model-risk obligations.
+- **Risk** — Coverage gaps nobody mapped.
+- **Control** — Detection-as-code with agents inside the CI loop.
+- **Lab** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
+- **Tools** — `Sigma`, `Wazuh`
+- **Open-weight models** — `Kimi K2`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Map one agent to existing model-risk obligations.
+**Run it** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -135,24 +115,24 @@ python3 scripts/checkpoint.py --at E2.4 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/sector-overlay-assessment/scripts/sector_overlay_assessment.py
+python3 skills/detection/detection-rule-deployability/scripts/detection_rule_deployability.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The agent is often already a 'model' under rules you already comply with. Cheaper than inventing a new programme.
+*Expect:* Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.
 
 ---
 
-### E2.5 — Privacy and data protection
+### E2.5 — Rules generated from an incident — and the benign corpus that decides them
 
-- **Risk** — Deletion when the data is in weights, not a database.
-- **Control** — Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.
-- **Lab** — Run PII redaction inside the trust boundary with Presidio before anything crosses out.
-- **Tools** — `Presidio`, `GLiNER-PII`
+- **Risk** — A rule generated from one incident matches that incident and nothing else, or matches everything and buries the queue.
+- **Control** — Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess.
+- **Lab** — Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
+- **Tools** — `Sigma`
 
-**Run it** — Run PII redaction inside the trust boundary with Presidio before anything crosses out.
+**Run it** — Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -168,23 +148,26 @@ python3 scripts/checkpoint.py --at E2.5 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/trace-personal-data-audit/scripts/trace_personal_data_audit.py
+python3 skills/detection/detection-rule-synthesis/scripts/detection_rule_synthesis.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* PII is removed before egress; the redaction decision is logged as evidence for E2.7.
+*Expect:* Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
 
 ---
 
-### E2.6 — Incident and disclosure obligations
+### E2.6 — Honeypots, canaries and deception — the detector with no threshold
 
-- **Risk** — Materiality assessed for an autonomous actor with a human-actor playbook.
-- **Control** — Coordinate with D2 in hour one.
-- **Lab** — Draft the notification for an agentic incident.
+- **Risk** — Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.
+- **Control** — Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
+- **Lab** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
+- **Tools** — `Canarytokens`, `Inspect`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Draft the notification for an agentic incident.
+**Run it** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -200,110 +183,12 @@ python3 scripts/checkpoint.py --at E2.6 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/disclosure-phase-breakdown/scripts/disclosure_phase_breakdown.py
+python3 skills/detection/canary-and-honeypot-design/scripts/canary_and_honeypot_design.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A draft that names the agent, the authority and the containment — the questions a supervisor asks first.
-
----
-
-### E2.7 — Documentation that survives supervision
-
-- **Risk** — "Explainability" for a system with no deterministic reasoning.
-- **Control** — System documentation, data lineage, eval records, oversight evidence, decision logs.
-- **Lab** — Assemble the pack for one high-risk workflow.
-- **Tools** — `OSCAL`, `Model Cards`
-
-**Run it** — Assemble the pack for one high-risk workflow.
-
-```bash
-# --- 1 · the repository. master is the trunk. ---
-git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-
-# --- 2 · your copy of CyberTravels as it stood at the END of E2.7:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at E2.7 --out work/cybertravels
-python3 scripts/checkpoint.py --at E2.7 --diff      # what this lesson changed
-
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
-
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/supervisory-documentation-score/scripts/supervisory_documentation_score.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
-```
-
-*Expect:* A pack with a self-audit attached, including an honest statement of what 'explainability' can mean here.
-
----
-
-### E2.8 — Auditability of autonomous action
-
-- **Risk** — No trail showing under whose authority the agent acted.
-- **Control** — The delegation chain *is* the audit trail.
-- **Lab** — Produce an audit trail from the A2 chain that names authority at every hop.
-- **Tools** — `Keycloak`
-
-**Run it** — Produce an audit trail from the A2 chain that names authority at every hop.
-
-```bash
-# --- 1 · the repository. master is the trunk. ---
-git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-
-# --- 2 · your copy of CyberTravels as it stood at the END of E2.8:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at E2.8 --out work/cybertravels
-python3 scripts/checkpoint.py --at E2.8 --diff      # what this lesson changed
-
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
-
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/autonomous-action-auditability/scripts/autonomous_action_auditability.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
-```
-
-*Expect:* Which agent, under whose authority, in what scope, verified by which control, reviewable by whom — all from the `act` chain.
-
----
-
-### E2.9 — Regulator and auditor conversations
-
-- **Risk** — Overclaiming control, or triggering a moratorium.
-- **Control** — Explain bounded autonomy with evidence, and anticipate the real questions.
-- **Lab** — Defend one workflow in a mock supervisory conversation.
-
-**Run it** — Defend one workflow in a mock supervisory conversation.
-
-```bash
-# --- 1 · the repository. master is the trunk. ---
-git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-
-# --- 2 · your copy of CyberTravels as it stood at the END of E2.9:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at E2.9 --out work/cybertravels
-python3 scripts/checkpoint.py --at E2.9 --diff      # what this lesson changed
-
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
-
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/assurance-conversation-prep/scripts/assurance_conversation_prep.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
-```
-
-*Expect:* You get asked the real questions. Overclaiming control is scored as harshly as underclaiming.
+*Expect:* Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.
 
 ---

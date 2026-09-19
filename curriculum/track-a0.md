@@ -1,7 +1,7 @@
-# Track A0 — Introduction — What This Is, Who It Is For, and How to Use It
+# Track A0 — Set Up — Your Development Environment, and How to Use This
 
-**Function A · Securing AI Architectures**  
-*CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
+**Function A · Getting Started — Building Agentic AI**  
+*Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Everything the other four functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
 **Job titles:** Anyone, in any of the five roles. This chapter assumes no security background. It does assume you can install software on the machine in front of you.
 
@@ -15,7 +15,7 @@
 
 ---
 
-### A0.0 — Set up your machine — the AI tools, and the model every lesson runs on
+### A0.0 — Dev environment and IDE setup — the AI tools, and the model every lesson runs on
 
 - **Risk** — A reader arrives, clones the repository, runs a lesson and gets an error they read as a broken repository rather than as an unconfigured machine — and leaves. Nothing in the commons executes without a model endpoint, and that is the first thing anybody hits.
 - **Control** — One setup lesson that ends in a verified model call: the tool chosen against its real context window and cost, the clone from master, the three environment variables, and a skill run whose output names the model that produced it.

@@ -35,7 +35,7 @@ as a proportion of the whole clock, which is what makes it actionable.
 
 **4 — Re-run with delegation chains recorded.** Model what attribution costs
 when the acting identity and the chain are on every record. The difference is
-the business case for A2.7-style attribution, in hours against a regulatory
+the business case for B2.7-style attribution, in hours against a regulatory
 deadline.
 
 **5 — Pre-draft what can be pre-drafted.** The regime, the template, the

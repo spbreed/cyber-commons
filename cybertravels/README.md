@@ -81,7 +81,7 @@ python3 -m cybertravels.tests.smoke_test    # 8 assertions, all about refusals
 | the defects | `tools/`, `agents/` | the corpus the AppSec lessons scan |
 
 Those files arrive one lesson at a time. `python3 scripts/checkpoint.py --at <id>`
-writes the tree as it stood at the end of any lesson, so a reader joining at A3.5
+writes the tree as it stood at the end of any lesson, so a reader joining at B3.5
 gets everything up to it and nothing after.
 
 ## Four things it does that most demos do not
@@ -103,7 +103,7 @@ calls hides the events worth alerting on.
 **Untrusted text is labelled where it enters.** Vendor documents arrive with
 `origin` and `trusted: false` attached, and the runtime marks them before the
 model sees them. `mcp/vendor_server.py` carries a notice with an instruction
-aimed at automated agents — that is the fixture A1.2 and C1.3 use, and it is
+aimed at automated agents — that is the fixture B1.2 and D1.3 use, and it is
 in the corpus rather than injected by a test.
 
 ## It is meant to be defective
@@ -116,7 +116,7 @@ exists.
 
 Five of the eight defects are a missing ownership check, and no pattern reaches
 any of them — which is the whole argument of
-[B2.3](https://cybercommons.ai/lessons/B2.3.html). The four labelled
+[C2.3](https://cybercommons.ai/lessons/C2.3.html). The four labelled
 *non*-defects are in the key on purpose: a corpus where everything is broken
 cannot measure precision.
 
@@ -130,7 +130,7 @@ retrieval; attestation modelled as matching observed selectors instead of real
 SVIDs signed by SPIRE; containment and egress **decided in-process** rather
 than enforced by an isolate and a network boundary the agent cannot reach —
 which is the weaker placement, is said so in `sandbox.py` and `egress.py`, and
-is the reason A3.7 exists.
+is the reason B3.7 exists.
 
 Not simplified, because they are the point: per-action down-scoped delegation,
 an actor claim carried end to end, audience and scope **enforced at the

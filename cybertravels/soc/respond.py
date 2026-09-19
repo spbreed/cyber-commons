@@ -1,4 +1,4 @@
-# step:file D4.1
+# step:file E4.1
 """From a conclusion to the actor actually stopped.
 
 Five lessons, and they are all about the same thing: response automation is
@@ -57,13 +57,13 @@ def policy():
             for a, (r, rev) in sorted(ACTIONS.items())]
 
 
-# step:D4.2 add
+# step:E4.2 add
 # --------------------------------------------------------------------------- #
-# D4.2 — the human-in-the-loop tier has to carry a real decision
+# E4.2 — the human-in-the-loop tier has to carry a real decision
 # --------------------------------------------------------------------------- #
 # A confirmation dialog is not a decision point. It arrives with one button
 # that continues and one that abandons the incident, at a moment when the
-# person is already committed, and it will be clicked. A3.6 measured what
+# person is already committed, and it will be clicked. B3.6 measured what
 # happens to a gate at volume; this is what happens to one at urgency.
 #
 # A real decision point has three properties, and a runbook that cannot
@@ -96,12 +96,12 @@ def assign(runbook):
     if derived == "human-in-the-loop":
         out["decision_point"] = decision_point(runbook)
     return out
-# step:D4.2 end
+# step:E4.2 end
 
 
-# step:D4.3 add
+# step:E4.3 add
 # --------------------------------------------------------------------------- #
-# D4.3 — containment in order, cheapest first
+# E4.3 — containment in order, cheapest first
 # --------------------------------------------------------------------------- #
 # Mass revocation stops the incident and the business in the same instant, and
 # the incident review is then about the outage. The ladder exists so that the
@@ -115,15 +115,15 @@ LADDER = [
     ("throttle", "rate-limit the loop", True,
      "buys minutes and costs latency"),
     ("scope-reduce", "narrow what the next token exchange may request", True,
-     "A2.3's narrowing, applied deliberately"),
+     "B2.3's narrowing, applied deliberately"),
     ("reroute", "send the agent's work to a supervised queue", True,
      "the work continues, a human sees it"),
     ("force-HITL", "every call needs approval", True,
-     "G1.7's gate, turned all the way up — and A3.6 says this does not scale"),
+     "A1.7's gate, turned all the way up — and B3.6 says this does not scale"),
     ("revoke", "retire the workload identities", False,
-     "A2.5; stops the token paths, and C1.9 measured which paths it misses"),
+     "B2.5; stops the token paths, and D1.9 measured which paths it misses"),
     ("hard-stop", "kill the processes", False,
-     "and with them the run state D5.1 needs"),
+     "and with them the run state E5.1 needs"),
 ]
 
 
@@ -146,12 +146,12 @@ def ladder_report(reached):
             "skipped": [],
             "why": "starting at the bottom is a decision; arriving there "
                    "because the rungs were never built is not"}
-# step:D4.3 end
+# step:E4.3 end
 
 
-# step:D4.4 add
+# step:E4.4 add
 # --------------------------------------------------------------------------- #
-# D4.4 — who is allowed to stop it, and how long they take
+# E4.4 — who is allowed to stop it, and how long they take
 # --------------------------------------------------------------------------- #
 # The authority exists on paper, held by somebody who has never used it, for a
 # system that did not exist when the policy was written. The readiness check
@@ -170,14 +170,14 @@ def readiness(state):
             "why": "an unrehearsed stop authority is a paragraph; the first "
                    "time it is exercised will be the worst time to find out "
                    "how long it takes"}
-# step:D4.4 end
+# step:E4.4 end
 
 
-# step:D4.5 add
+# step:E4.5 add
 # --------------------------------------------------------------------------- #
-# D4.5 — the kill switch, from the defender's side
+# E4.5 — the kill switch, from the defender's side
 # --------------------------------------------------------------------------- #
-# C1.9 measured this from the attacker's side and found coverage of 0.4 in
+# D1.9 measured this from the attacker's side and found coverage of 0.4 in
 # this tree. The same measurement is the defender's readiness check, and it is
 # imported rather than rewritten — two teams computing the same number
 # separately is how they end up disagreeing about it during the incident.
@@ -191,7 +191,7 @@ from ..redteam.containment import coverage, preserves_evidence, time_to_stop  # 
 
 
 KILL_ORDER = [
-    ("snapshot", "run state, audit rows, in-flight arguments — D5.1 needs "
+    ("snapshot", "run state, audit rows, in-flight arguments — E5.1 needs "
                  "them and terminate destroys them"),
     ("revoke", "in the same action as the stop, not after it"),
     ("terminate", "the processes"),
@@ -219,7 +219,7 @@ def kill_path(plan):
     if not missing:
         if ordered.index("snapshot") > ordered.index("terminate"):
             problems.append("terminate runs before snapshot, which destroys "
-                            "the run state D5.1 needs")
+                            "the run state E5.1 needs")
         if ordered.index("revoke") > ordered.index("terminate"):
             problems.append("terminate runs before revoke, so the processes "
                             "stop and the tokens stay valid — the persistence "
@@ -239,4 +239,4 @@ def kill_path(plan):
         "why": "a kill path that runs through the agent's own execution path "
                "is one the incident can interfere with",
     }
-# step:D4.5 end
+# step:E4.5 end

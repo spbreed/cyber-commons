@@ -66,7 +66,7 @@ CORPUS = [
   "sinks": 5,
   "annotated": True,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "PARTIAL",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -81,7 +81,7 @@ CORPUS = [
   "sinks": 5,
   "annotated": False,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "PARTIAL",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -96,7 +96,7 @@ CORPUS = [
   "sinks": 3,
   "annotated": False,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "PARTIAL",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -111,7 +111,7 @@ CORPUS = [
   "sinks": 5,
   "annotated": False,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "PARTIAL",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -126,7 +126,7 @@ CORPUS = [
   "sinks": 4,
   "annotated": False,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "NO_INTENT_FOUND",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -141,7 +141,7 @@ CORPUS = [
   "sinks": 5,
   "annotated": True,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "PARTIAL",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -156,7 +156,7 @@ CORPUS = [
   "sinks": 4,
   "annotated": True,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "PARTIAL",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -171,7 +171,7 @@ CORPUS = [
   "sinks": 3,
   "annotated": True,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "NO_INTENT_FOUND",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -186,7 +186,7 @@ CORPUS = [
   "sinks": 2,
   "annotated": True,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "NO_INTENT_FOUND",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",
@@ -201,7 +201,7 @@ CORPUS = [
   "sinks": 5,
   "annotated": False,
   "verdicts": {
-   "C1": "INTENT_EVIDENCED",
+   "D1": "INTENT_EVIDENCED",
    "C2": "PARTIAL",
    "C3": "INTENT_EVIDENCED",
    "C4": "INTENT_EVIDENCED",

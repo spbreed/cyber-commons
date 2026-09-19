@@ -1,309 +1,104 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Threat modelling from what the estate already knows | Cyber Commons</title><meta name="description" content="Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.2</div><h1>Threat modelling from what the estate already knows</h1><div class="badges"><span class="badge t">B2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM05</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Attack Staging</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Threat models are written once, by hand, against a system that has since changed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Turn an architecture map into a ranked threat model, then diff it after one entry point is added.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/appsec/threat-model-stride" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/appsec/threat-model-stride/scripts/threat_model.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">A threat model produced in a workshop describes the system as it was on the day of the workshop, and it is derived from the code alone — so two deployments of the same repository, one behind a private load balancer with no egress and one on the internet with a wildcard trust policy, get the same model. It is wrong about both.</p><div class="ct"><b>At CyberTravels.</b> `appsec/threatmodel.py` reads the assets out of `db.py`&#x27;s schema and the entry points out of the tree. Run it and one asset comes back **UNCLASSIFIED** — `policies`, which nobody has said is worth anything. `drift()` then compares a stored model against the tree, so &quot;the threat model is out of date&quot; becomes the two entry points that appeared since.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>A threat model derived from the tree rather than remembered from a workshop: assets from the schema, entry points from the code, trust boundaries from the layout — plus the column a machine cannot fill in, and a drift check that turns 'this is out of date' into a list.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>Threat models are written once, by hand, against a system that has changed since.</p></div><div class="d1"><span>Day 1 — how</span><p>Derive assets, entry points and attack vectors mechanically from the map the estate already holds.</p></div><div class="d2"><span>Day 2 — measure</span><p>The diff between two runs. A threat model that produces no diff when the estate changed is not being derived.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   six static inputs, all already in the estate
-
-   code analysis      what the code COULD reach     (stage 4)
-   cloud policy       is it on the internet         (security groups, WAF)
-   CSPM               is the bucket public TODAY
-   entitlements       what the role may do
-   IAM                who can become that role
-   egress policy      can anything leave
-          |
-          v  derive, mechanically
-   +---------------------------+
-   | ranked threats, as data   |
-   +---------------------------+
-          |
-        DIFFED against the last run - and the diff has to count
-        ESCALATION, not only arrival, or a terraform-only pull
-        request raises every score and passes the gate</pre><p>Stage 5 is the one everybody claims to do and almost nobody re-runs.</p>
-<p>A threat model produced in a workshop describes the system as it was on the day
-of the workshop. It is stale the moment an entry point is added, and entry
-points get added in the course of ordinary work, without anyone calling it a
-change to the threat model. So this stage does not <em>write</em> a threat model — it
-<strong>derives</strong> one, from evidence the estate already holds, and the useful artefact
-is the diff between two runs.</p>
-<p><strong>STRIDE</strong> gives six questions. Against an agentic system each has a shape a
-web-application threat model does not:</p>
-<table>
-<thead>
-<tr>
-<th>STRIDE</th>
-<th>In an agentic system</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>S</strong>poofing</td>
-<td>agents share a service account, so "which agent" is unanswerable</td>
-</tr>
-<tr>
-<td><strong>T</strong>ampering</td>
-<td>untrusted content the agent read becomes an instruction it follows</td>
-</tr>
-<tr>
-<td><strong>R</strong>epudiation</td>
-<td>the delegation chain is not on the token, so no log answers "on whose behalf"</td>
-</tr>
-<tr>
-<td><strong>I</strong>nformation disclosure</td>
-<td>an over-broad tool return, or egress that permits anything</td>
-</tr>
-<tr>
-<td><strong>D</strong>enial of service</td>
-<td>an unbounded loop, or a budget nobody set</td>
-</tr>
-<tr>
-<td><strong>E</strong>levation of privilege</td>
-<td>a role assumable by <code>*</code>, or a scope that included refunds because it included payments</td>
-</tr>
-</tbody>
-</table>
-<h3>Derived from five inputs, not one</h3>
-<p>The architecture map says what the code <em>could</em> reach. It cannot say whether
-that path is exposed, what identity walks it, or whether anything can leave at
-the end of it — and those three decide whether a finding is a fire.</p>
-<table>
-<thead>
-<tr>
-<th>Input</th>
-<th>What only it can tell you</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>architecture</strong></td>
-<td>components, flows, sinks, trust levels</td>
-</tr>
-<tr>
-<td><strong>CSPM</strong></td>
-<td>that the bucket behind that sink is public <em>today</em></td>
-</tr>
-<tr>
-<td><strong>IAM</strong></td>
-<td>who can assume the role, and whether MFA is required</td>
-</tr>
-<tr>
-<td><strong>network</strong></td>
-<td>is it internet-facing, and can anything leave</td>
-</tr>
-<tr>
-<td><strong>entitlements</strong></td>
-<td>what the identity may do once it is through</td>
-</tr>
-</tbody>
-</table>
-<p>Read only the first and you produce a model that is identical for two
-deployments of the same repository — one behind a private load balancer with no
-egress, one on the internet with a wildcard trust policy. It is wrong about
-both.</p>
-<p>This lesson runs the <code>threat-model-stride</code> skill. You do not write the code;
-you read the procedure, execute it, and read what it produced.</p><div class="how"><h2>2 · The skill</h2>
-<p>This is <code>skills/appsec/threat-model-stride/SKILL.md</code>, verbatim. The frontmatter is what routes a request to it; the body is the procedure a model follows.</p><h2>3 · Its script</h2>
-<p>The deterministic half of the skill — the part that has to give the same answer twice so two runs can be diffed. Embedded from <code>skills/appsec/threat-model-stride/scripts/</code>.</p><h2>4 · The assets, read out of the catalogue</h2>
-<p><code>cybertravels/appsec/threatmodel.py</code> derives the asset list from <code>db.py</code>'s <code>CREATE TABLE</code> statements rather than from a workshop, and one of them comes back <strong>UNCLASSIFIED</strong> — <code>policies</code>, which nobody has said is worth anything. That is the same reading this skill performs on a generated scaffold: work from the catalogue, not from the application's own queries, because the table the application never queries is the one nobody put a policy on.</p><h2>5 · Execute it against CyberTravels</h2>
-<p>Five synthetic inputs, standing in for what a real estate already holds.</p><h2>5 · The diagram it emits</h2>
-<p>Mermaid, so it renders here and on the lesson page without a library. Double arrows are trust-boundary crossings — the edges every finding turned out to live on.</p><h2>6 · The same code, a hardened estate</h2>
-<p>Not one line of CyberTravels' source changes. Only the four evidence inputs around it do.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/threat-model-stride/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/threat-model-stride/SKILL.md</code></a></p><pre class="front"><code>name: threat-model-stride
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Bootstrapping the first credential | Cyber Commons</title><meta name="description" content="Platform attestation exchanged for a short-lived, workload-bound credential."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">B2.2</div><h1>Bootstrapping the first credential</h1><div class="badges"><span class="badge t">B2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T3</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T9</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Credential Access</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.</p></div><div class="ctrl"><div class="lab">Control</div><p>Platform attestation exchanged for a short-lived, workload-bound credential.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Exchange an attestation for a credential, then show a copied secret failing the same exchange.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/identity/workload-attestation-check" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/identity/workload-attestation-check/scripts/workload_attestation_check.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">An agent needs a credential to prove who it is, and it cannot be given one safely without already proving who it is. Every long-lived secret in your estate exists because somebody resolved that circle by giving up.</p><div class="ct"><b>At CyberTravels.</b> You add `registry.attest()`. CyberTravels&#x27; agents stop being handed `IDP_SECRET` at deploy time and start presenting what the platform already observed about them — module and image — for a five-minute SVID. The smoke test presents the wrong image and is refused.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>The bootstrap problem — a workload needs a credential to prove who it is and has to prove who it is to get one — answered by not issuing a first secret at all. Attestation against properties the platform already observes, for a short-lived identity document.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.</p></div><div class="d1"><span>Day 1 — how</span><p>Exchange platform attestation for a short-lived, workload-bound credential.</p></div><div class="d2"><span>Day 2 — measure</span><p>Credentials issued against attestation rather than pre-shared, and their median lifetime.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   to get a credential you must prove who you are
+   to prove who you are you need a credential
+                  |
+             attestation breaks the circle
+                  v
+   platform says &quot;this workload is what it claims&quot;  (hardware/orchestrator)
+                  |
+                  v
+   short-lived identity document ---&gt; rotated automatically, never stored</pre><p><strong>Mitigates: T9 Identity Spoofing &amp; Impersonation.</strong></p>
+<p>B2.1 says the workload needs its own identity. This lesson is about how it gets
+one, because there is a circularity: to receive a credential securely the
+workload must already prove who it is.</p>
+<p>The wrong answer is a <strong>pre-shared secret</strong> — a key in the image, a token in an
+environment variable, a file mounted at deploy time. All of them are copyable,
+and a copyable secret makes possession the proof of identity. Anyone who reads
+the image is the agent.</p>
+<p>The control is <strong>attestation</strong>. The platform that started the workload already
+knows things nobody else can forge: which image ran, in which namespace, under
+which service account, on which node. It signs a statement to that effect, and
+an identity service exchanges that statement for a short-lived credential bound
+to that workload.</p>
+<p>Three properties matter:</p>
+<ul>
+<li><strong>Non-copyable.</strong> The attestation describes a running process. Copying the
+  document to another machine produces a claim the platform will not sign.</li>
+<li><strong>Short-lived.</strong> The credential expires in minutes, so theft has a deadline.</li>
+<li><strong>Bound.</strong> It is issued <em>to</em> that workload identity, so presenting it from
+  elsewhere fails.</li>
+</ul>
+<p>This is what SPIFFE/SPIRE and every cloud workload-identity system do. The
+lesson models the exchange, not the product.</p><div class="how"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>Makes <strong>possession stop being proof</strong>. Without it, B1.7 is unavoidable: a copyable secret means every holder is the agent.</p>
+</blockquote>
+<h2>2 · The control</h2><h2>2 · The check, as a skill</h2>
+<p>Whether CyberTravels' agents hold a credential or a secret is settled by four probes, not by reading the deployment manifest. The skill runs them: an unattested process, a genuine image nobody registered, a credential presented from another node, and one presented after its TTL.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/identity/workload-attestation-check/SKILL.md" target="_blank" rel="noopener"><code>skills/identity/workload-attestation-check/SKILL.md</code></a></p><pre class="front"><code>name: workload-attestation-check
 description: &gt;-
-  Build a STRIDE threat model for an agentic system from the evidence an estate
-  already holds — source code, CSPM findings, IAM policies, network policies and
-  the tool surface — and emit a ranked threat table plus a trust-boundary
-  diagram. Use when asked what could go wrong with an architecture, to
-  threat-model an agent, a pipeline or a service, when a threat model needs
-  regenerating after an architecture change, or when someone asks which STRIDE
-  categories a design actually exposes.
-allowed-tools: Read, Grep, Glob, Bash</code></pre><h1>STRIDE threat modelling for an agentic system</h1>
-<p>A threat model written in a workshop describes the system as it was on the day
-of the workshop. This one is <strong>derived</strong>: every threat traces to a line of
-evidence that already exists somewhere in the estate, so regenerating it is
-cheap and the useful artefact is the <strong>diff between two runs</strong>.</p>
-<p>STRIDE gives six categories. Against an agentic system each one has a specific
-shape that a web-application threat model does not:</p>
-<table>
-<thead>
-<tr>
-<th>STRIDE</th>
-<th>In an agentic system</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>S</strong>poofing</td>
-<td>An agent calls downstream as a shared service account, so "which agent" is unanswerable</td>
-</tr>
-<tr>
-<td><strong>T</strong>ampering</td>
-<td>Untrusted content the agent read becomes an instruction it follows</td>
-</tr>
-<tr>
-<td><strong>R</strong>epudiation</td>
-<td>The delegation chain is not on the token, so no log answers "on whose behalf"</td>
-</tr>
-<tr>
-<td><strong>I</strong>nformation disclosure</td>
-<td>An over-broad tool return, or egress that permits anything</td>
-</tr>
-<tr>
-<td><strong>D</strong>enial of service</td>
-<td>An unbounded loop, or a budget nobody set</td>
-</tr>
-<tr>
-<td><strong>E</strong>levation of privilege</td>
-<td>A role assumable by <code>*</code>, or a scope that includes refunds because it included payments</td>
-</tr>
-</tbody>
-</table>
+  Establish how a workload receives its first credential and whether possession
+  of that credential is still proof of identity — testing an unattested process,
+  an unregistered image, presentation from another node, and use after expiry.
+  Use when reviewing bootstrap, SPIFFE/SPIRE, or any secret mounted at deploy
+  time.
+allowed-tools: Read, Grep, Glob</code></pre><h1>Where the first credential comes from</h1>
+<p>There is a circularity at the start of every workload identity: to receive a
+credential securely the workload must already prove who it is. A pre-shared
+secret resolves it by making <strong>possession</strong> the proof, which means everyone who
+can read the image is the agent. Attestation resolves it by having the platform
+sign what only the platform knows.</p>
 <h2>When to use this</h2>
-<p>Threat-modelling an agent, an MCP server, or a review pipeline; re-running a
-model after an architecture change; or answering "which STRIDE categories does
-this design actually expose" with something better than an opinion.</p>
-<h2>Inputs it expects</h2>
-<p>Five evidence sources. Any one alone produces a model that is wrong in a
-predictable direction — code alone cannot tell you whether a path is exposed,
-and CSPM alone cannot tell you what reaches it.</p>
-<table>
-<thead>
-<tr>
-<th>Input</th>
-<th>What only it can tell you</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>architecture</code></td>
-<td>components, flows, sinks, trust levels — what <em>could</em> be reached</td>
-</tr>
-<tr>
-<td><code>cspm</code></td>
-<td>live posture findings: what is public <em>today</em></td>
-</tr>
-<tr>
-<td><code>iam</code></td>
-<td>which roles exist, who may assume them, whether MFA is required</td>
-</tr>
-<tr>
-<td><code>network</code></td>
-<td>ingress exposure and egress policy — can anything leave</td>
-</tr>
-<tr>
-<td><code>entitlements</code></td>
-<td>what the running identity may do once it is through</td>
-</tr>
-</tbody>
-</table>
+<p>Reviewing how any agent, job or pod authenticates for the first time. The
+answer decides whether every later identity control rests on something or on a
+copied file.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Load the five inputs.</strong> Refuse to proceed on fewer. A model built on
-<code>architecture</code> alone should say so in its output rather than silently scoring as
-though the estate were hardened.</p>
-<p><strong>2 — Walk each entry point to each sink.</strong> For every reachable pair, ask the
-six STRIDE questions. A category that has no evidence behind it is not a threat;
-do not invent one to fill the row.</p>
-<p><strong>3 — Score from evidence, not from feeling.</strong> Base severity comes from the
-asset. Then adjust <em>only</em> where an input says so: internet-facing, no WAF, a
-live CSPM finding on the resource, a role that holds write, a trust policy with
-a wildcard, egress open. Record which adjustment fired — the reasons are the
-part a reviewer argues with.</p>
-<p><strong>4 — Emit the trust-boundary diagram.</strong> Nodes are components, edges are flows,
-and an edge crossing from a lower trust level to a higher one is a boundary.
-Boundaries are where findings live; render them differently from ordinary edges.</p>
-<p><strong>5 — Diff against the previous run.</strong> Report new threats <em>and</em> escalated ones.
-A pull request that changes only infrastructure introduces no new threat and
-raises every existing score, so a gate that counts arrivals alone waves it
-through.</p>
+<p><strong>1 — Find the first credential.</strong> Trace back from a downstream call to where
+the credential entered the process: an environment variable, a mounted file, a
+secrets manager fetch, or an attestation exchange.</p>
+<p><strong>2 — Ask who else can read it.</strong> For a secret, that set is the set of people
+who are currently the agent. Enumerate it — image layers, CI logs, anyone with
+<code>exec</code> on the namespace, anyone who can read the manifest.</p>
+<p><strong>3 — Test the unattested process.</strong> A process that is not what the platform
+started should receive nothing. If it receives a credential, the exchange is
+authenticating a claim rather than a workload.</p>
+<p><strong>4 — Test the unregistered-but-genuine image.</strong> A real workload nobody
+registered is the case people forget: attestation proves <em>what</em> is running, and
+registration decides whether it should be. Both must refuse.</p>
+<p><strong>5 — Test binding and lifetime.</strong> Present a legitimately issued credential
+from a different node, and again after its TTL. Both must fail. A credential
+that travels is a secret with extra steps.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/threat_model.py"><code>scripts/threat_model.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/workload_attestation_check.py"><code>scripts/workload_attestation_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>id      entry           sink           score  why
---------------------------------------------------------------------------------------------
-T-10  I upload_voucher  store             11  a live CSPM finding on the resource this path reaches
-T-01  S get_booking     load_booking      11  the running role is assumable by *
-T-05  D get_booking     load_booking      10  internet-facing with no WAF in front of it
-T-06  E get_booking     load_booking      10  the identity holds write, not just read
-T-03  R get_booking     load_booking      10  no MFA on the assumable role, so the actor is not established
-T-04  I get_booking     load_booking       9  no open CSPM finding on the resource
+<pre><code>   proc-1        spiffe://corp/reports-agent     issued
+   proc-2        -                               image is not registered to any identity
+   proc-stolen   -                               no attestation - unattested process
+
+   presented from n-7 at t=1100: ok (accepted)
+   presented from n-9 at t=1100: REFUSED (bound to n-7)
+   presented from n-7 at t=2000: REFUSED (expired)
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;inputs_present&quot;: [&quot;architecture&quot;, &quot;cspm&quot;, &quot;iam&quot;, &quot;network&quot;, &quot;entitlements&quot;],
-  &quot;threats&quot;: [
-    {&quot;id&quot;: &quot;T-01&quot;, &quot;stride&quot;: &quot;S|T|R|I|D|E&quot;, &quot;entry&quot;: &quot;str&quot;, &quot;sink&quot;: &quot;str&quot;,
-     &quot;asset&quot;: &quot;str&quot;, &quot;score&quot;: 0, &quot;reasons&quot;: [&quot;internet-facing&quot;, &quot;...&quot;],
-     &quot;evidence&quot;: {&quot;source&quot;: &quot;cspm|iam|network|entitlements|architecture&quot;,
-                  &quot;detail&quot;: &quot;str&quot;}}
-  ],
-  &quot;boundaries&quot;: [{&quot;from&quot;: &quot;str&quot;, &quot;to&quot;: &quot;str&quot;, &quot;trust&quot;: &quot;0-&gt;2&quot;}],
-  &quot;diagram&quot;: &quot;mermaid or svg source&quot;,
-  &quot;diff&quot;: {&quot;new&quot;: [&quot;T-07&quot;], &quot;escalated&quot;: [{&quot;id&quot;: &quot;T-01&quot;, &quot;from&quot;: 13, &quot;to&quot;: 17}]}
+  &quot;source&quot;: &quot;env|file|manager|attestation&quot;,
+  &quot;readable_by&quot;: [&quot;str&quot;],
+  &quot;probes&quot;: {&quot;unattested&quot;: &quot;issued|refused&quot;, &quot;unregistered_image&quot;: &quot;issued|refused&quot;,
+             &quot;wrong_node&quot;: &quot;accepted|refused&quot;, &quot;expired&quot;: &quot;accepted|refused&quot;},
+  &quot;properties&quot;: {&quot;non_copyable&quot;: false, &quot;short_lived&quot;: false, &quot;bound&quot;: false},
+  &quot;ttl_seconds&quot;: 0
 }
 </code></pre>
+<p>All three properties, or the credential is a secret: non-copyable because it
+describes a running process, short-lived so theft has a deadline, bound so
+presenting it elsewhere fails.</p>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Modelling the code and calling it the system.</strong> The same repository behind
-  a private load balancer with default-deny egress and on the internet with a
-  wildcard trust policy is two different threat models. Read all five inputs.</li>
-<li><strong>Counting new threats only.</strong> Escalation is the signal a terraform-only
-  change produces, and it is the majority of how an estate gets worse.</li>
-<li><strong>One row per STRIDE letter.</strong> Six categories is a checklist, not a quota. An
-  agent with no state has no meaningful tampering row.</li>
-<li><strong>Scoring without recording why.</strong> A score nobody can argue with is a score
-  nobody will act on.</li>
-</ul><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/research/generated-schema-audit/SKILL.md" target="_blank" rel="noopener"><code>skills/research/generated-schema-audit/SKILL.md</code></a></p><pre class="front"><code>name: generated-schema-audit
-description: &gt;-
-  Audit a generated database scaffold for tables that hold secrets and carry no
-  access policy, working from the catalogue rather than from the application&#x27;s
-  own queries. Use after any scaffold, migration or agent-authored schema
-  change.
-allowed-tools: Read, Grep, Glob</code></pre><h1>Everything works, and two tables are open</h1>
-<p>A generated scaffold produces a schema that runs. Whether it is safe is a
-different question and the application cannot answer it, because the application
-only touches the tables it uses. The catalogue knows about all of them, and the
-gap between those two sets is where this finding lives.</p>
-<h2>When to use this</h2>
-<p>After a scaffold generator, an agent-authored migration, or any schema change
-nobody reviewed statement by statement.</p>
-<h2>Procedure</h2>
-<p><strong>1 — Read the statements as written.</strong> Table by table, column by column. Flag
-every column that holds a credential, a token, a session or personal data — an
-<code>api_key</code> column in a profiles table is the shape to look for.</p>
-<p><strong>2 — Check policy per table, not per application feature.</strong> For each table:
-does an access policy exist at all, and does it name a subject. "No policy" and
-"a policy that permits everyone" are different findings.</p>
-<p><strong>3 — Enumerate from the catalogue.</strong> Query the system catalogue for every table
-in the schema. Compare against the tables the application references. The
-difference is the set nobody has looked at.</p>
-<p><strong>4 — Classify by sensitivity and policy together.</strong> Sensitive with no policy is
-critical. Non-sensitive with no policy is a finding with a lower number and the
-same cause.</p>
-<p><strong>5 — Report per table with the statement that created it.</strong> A finding that
-points at a line in a migration gets fixed; one that says "enable RLS" gets
-discussed.</p>
-<h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/generated_schema_audit.py"><code>scripts/generated_schema_audit.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
-<p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>tables created : profiles, posts
-findings       : 2
-
-table       severity   why
-profiles    critical   RLS disabled - open via the public API
-posts       high       policy matches every row
-
-The application works. Every feature passes. `profiles` holds an api_key
-</code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
-<h2>Output contract</h2>
-<pre><code class="language-json">{
-  &quot;statements&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;columns&quot;: [&quot;str&quot;], &quot;sensitive_columns&quot;: [&quot;str&quot;]}],
-  &quot;policies&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;policy&quot;: &quot;none|open|scoped&quot;, &quot;subject&quot;: &quot;str|null&quot;}],
-  &quot;catalogue&quot;: {&quot;tables&quot;: [&quot;str&quot;], &quot;referenced_by_app&quot;: [&quot;str&quot;], &quot;unreviewed&quot;: [&quot;str&quot;]},
-  &quot;findings&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium&quot;, &quot;created_by&quot;: &quot;str&quot;}]
-}
-</code></pre>
-<h2>Failure modes</h2>
-<ul>
-<li><strong>Auditing the application's queries.</strong> They cover the tables it uses.</li>
-<li><strong>Treating "no policy" as "open policy".</strong> They are different fixes.</li>
-<li><strong>Reporting the table without the statement.</strong> Nobody knows where to change
-  it.</li>
+<li><strong>Accepting a secrets manager as attestation.</strong> It answers "who may fetch
+  this", which is the same circularity one layer down.</li>
+<li><strong>Testing only the unattested case.</strong> The unregistered genuine workload is
+  the one that gets through.</li>
+<li><strong>Recording a long TTL as acceptable</strong> because rotation exists. Rotation is
+  not a deadline for a copy already taken.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at B2.2 --out work/cybertravels
 python3 scripts/checkpoint.py --at B2.2 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "threat model stride"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/appsec/threat-model-stride/scripts/threat_model.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Point the skill at one of your own services. The work is not the model, it is collecting the five inputs: if any of them is "in somebody's head", that is the input your threat model is currently guessing at, and the guess is always the optimistic one.</p></div></section><div class="expect"><b>Expect</b>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP Threat Dragon</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/appsec/threat-model-stride</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · What building a harness means in security engineering</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · SAST for agentic code — deterministic Semgrep, then the model pass</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "workload attestation check"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/identity/workload-attestation-check/scripts/workload_attestation_check.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Find where one of your agents gets its first credential. If the answer is an environment variable or a mounted file, list everyone who can read it — that is the set of people who are currently that agent.</p></div></section><div class="expect"><b>Expect</b>An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>SPIFFE/SPIRE</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/identity/workload-attestation-check</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · Agent identity — user, workload, agent</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · Delegation that narrows, and survives audit</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

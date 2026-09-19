@@ -5,7 +5,7 @@ A lesson page links into the repository constantly — the skills tree, a
 `SKILL.md`, the CyberTravels sample, the raw notebook Kaggle fetches. Each of
 those URLs carries a branch name, and the name was written out longhand in nine
 files. One of them had drifted to a branch that does not exist on the remote at
-all: `track_a2.py` linked to `.../tree/main/labs/tools/keycloak-obo`, and there
+all: `track_b2.py` linked to `.../tree/main/labs/tools/keycloak-obo`, and there
 has never been a `main`. It rendered as an ordinary link and returned 404.
 
 Nothing caught it, because it falls between two gates. `check_docs.py` checks

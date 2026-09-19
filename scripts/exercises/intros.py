@@ -15,7 +15,7 @@ from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
 
-"A1.0": {
+"B1.0": {
  "concept": """
 ### First, what CyberTravels is — and why it is in every lesson you will read
 
@@ -33,7 +33,7 @@ when Function E counts a control, it counts CyberTravels' controls.
 
 That is a deliberate cost. Any given lesson could find a sharper example of its
 own idea somewhere else, and several would. What you get instead is
-**accumulation**: the refund limit an attacker walks past in A1.2 is the same
+**accumulation**: the refund limit an attacker walks past in B1.2 is the same
 refund limit a detection watches for in Function D and a report counts in
 Function E. By the fourth function you are not learning a fourth example — you
 are watching a system you already understand fail in a new way.
@@ -119,20 +119,20 @@ A **control lesson** builds the mechanism, then breaks it, so you can see what
 the control is actually load-bearing for. A control whose limits you cannot
 state is one you will over-trust.
 
-- **Chapter A1 — the architecture, and every risk it carries.** The component
+- **Chapter B1 — the architecture, and every risk it carries.** The component
   map, then one lesson per risk, each grounded in the OWASP Agentic AI threat
   taxonomy. It introduces no control at all, on purpose. It ends with two
-  indexes: the twelve-row AI risk register in A1.18, and in **A1.19 the full
+  indexes: the twelve-row AI risk register in B1.18, and in **B1.19 the full
   control index** — every control CyberTravels needs, the agentic ones and the
   ordinary ones it still has to get right, with the lesson that owns each.
-- **Chapter A2 — securing it: identity and ingress.** Who is calling, on whose
+- **Chapter B2 — securing it: identity and ingress.** Who is calling, on whose
   behalf, and what came in from outside. These two close more of CyberTravels'
   risks than anything else, which is why they come first.
-- **Chapter A3 — securing it: runtime and the gateway.** What holds after
+- **Chapter B3 — securing it: runtime and the gateway.** What holds after
   identity has been defeated, and how the controls collapse into one enforcement
   point once CyberTravels runs more than four agents.
 
-One warning about the shape of this function, and it is the reason A1.19
+One warning about the shape of this function, and it is the reason B1.19
 exists. The agentic risks are the new ones, not the only ones. CyberTravels
 still has to scan its dependencies, segregate production from everything else,
 encrypt at rest and in transit, manage credentials and keys, validate input and
@@ -155,22 +155,22 @@ is not an agentic security problem; it is an ordinary one wearing a new hat.
       "Each of the four agents gets its own attested identity. A shared "
       "service account means you cannot say which agent acted, and cannot "
       "revoke one without breaking all four.",
-      "A2.1 &middot; A2.2 &middot; A2.5"],
+      "B2.1 &middot; B2.2 &middot; B2.5"],
      ["<b>Authority is per call</b>",
       "<code>booking.create</code> issued for this task and expiring with it, "
       "never <code>booking.*</code> held for the session. This is what stops "
       "an injected instruction reaching the refund endpoint.",
-      "A2.3 &middot; A2.4"],
+      "B2.3 &middot; B2.4"],
      ["<b>Instructions are data until proven otherwise</b>",
       "The operator prompt, the traveller's message and a retrieved document "
       "arrive as the same kind of token. Provenance at ingress is what stops "
       "the third one selecting a tool.",
-      "A2.6 &middot; A3.1"],
+      "B2.6 &middot; B3.1"],
      ["<b>The decision is adjudicated outside the agent</b>",
       "A model asked to enforce its own policy is both subject and guard. "
       "Default-deny sits at the gateway in front of the tool call, with the "
       "sandbox and egress control behind it.",
-      "A3.1 &middot; A3.2 &middot; A3.3"]],
+      "B3.1 &middot; B3.2 &middot; B3.3"]],
     caption="Stated in the negative, which is how you audit it: the system "
             "prompt is not a control, the network boundary is not a control, "
             "and \u2018the model was told not to\u2019 is not a control.")),
@@ -217,18 +217,18 @@ is not an agentic security problem; it is an ordinary one wearing a new hat.
     + D.arrow(320, 58, 96, 120) + D.arrow(335, 58, 250, 120)
     + D.arrow(365, 58, 424, 120) + D.arrow(380, 58, 600, 120),
     height=200,
-    caption="Chapter A1 introduces no control at all, on purpose: you cannot "
+    caption="Chapter B1 introduces no control at all, on purpose: you cannot "
             "choose a control for a risk you cannot yet name.")),
 
   ("md", "## 7 · Function A, in order"),
   ("html", D.table(
     ["chapter", "what it covers", "kind of lesson"],
-    [["A1", "the architecture, every risk it carries, and the two indexes "
+    [["B1", "the architecture, every risk it carries, and the two indexes "
             "that close it", "risk"],
-     ["A2", "securing it — identity and ingress", "control"],
-     ["A3", "securing it — runtime and the gateway", "control"]],
-    caption="Chapter A1 is the picture the other two stand on, and it ends on "
-            "the index: A1.18 for the twelve agentic risks, A1.19 for every "
+     ["B2", "securing it — identity and ingress", "control"],
+     ["B3", "securing it — runtime and the gateway", "control"]],
+    caption="Chapter B1 is the picture the other two stand on, and it ends on "
+            "the index: B1.18 for the twelve agentic risks, B1.19 for every "
             "control CyberTravels needs including the ones that predate it.")),
  ],
  "expect": "CyberTravels as built — four agents, two MCP servers, direct API calls "
@@ -238,12 +238,12 @@ is not an agentic security problem; it is an ordinary one wearing a new hat.
            "what each borrows from this chapter's component map.",
  "challenge": "Draw your own CyberTravels before the next lesson — the agents you "
               "run, the MCP servers and APIs they reach, and which of them can "
-              "move money or ship code. A1.1 gives you the standard names for "
+              "move money or ship code. B1.1 gives you the standard names for "
               "the boxes; comparing your drawing to it is the fastest way to "
               "find the component you forgot you had.",
 },
 
-"B2.0": {
+"C2.0": {
  "concept": """
 CyberTravels ships faster than Alex can read. The Coding Agent opens pull
 requests that touch a hundred files, and the review that used to be a careful
@@ -318,7 +318,7 @@ is covered.
      ["Guardrails and egress enforcement", "config only", "<b>yes</b>",
       "the request that was actually attempted"],
      ["Runtime posture and drift", "no", "<b>yes</b>",
-      "a guardrail switched off after the demo \u2014 A3.9"],
+      "a guardrail switched off after the demo \u2014 B3.9"],
      ["Detection and canaries", "no", "<b>yes</b>",
       "somebody using a credential nothing legitimate touches"],
      ["Attestation", "signs the claim", "re-checks it",
@@ -352,7 +352,7 @@ because a control exists, it runs, and it reports. It reports *afterwards*. The
 sign-off is not wrong about the control; it is wrong about what the control
 does.
 
-**Uncovered.** One, and it is the subject of B2.7: an artefact in the build with
+**Uncovered.** One, and it is the subject of C2.7: an artefact in the build with
 no manifest entry has no identifier, so the SCA pass on the left never had
 anything to look up and the report was clean about it. That is a gap nothing on
 either side is currently pointed at."""),
@@ -362,7 +362,7 @@ either side is currently pointed at."""),
            "preventable, and invisible once shipped \u2014 and three only after "
            "it, where detection is the whole of the control and the merge that "
            "caused it already went through. One is covered by nothing on either "
-           "side, and that one is the undeclared vendored binary B2.7 goes "
+           "side, and that one is the undeclared vendored binary C2.7 goes "
            "after.",
  "challenge": "Write your own inventory into the same two columns, then delete "
               "every row that is deployed and muted. What is left is your "
@@ -370,7 +370,7 @@ either side is currently pointed at."""),
               "believes is preventative and is in the right-hand column.",
 },
 
-"C1.0": {
+"D1.0": {
  "concept": """
 Traditional security validation relies on deterministic attack paths — exploits
 with predictable signatures targeting static software vulnerabilities. The
@@ -402,13 +402,13 @@ can run — a red team that produces only a slide has produced nothing.
          "prove it reproduces, then translate it into something the SOC deploys."),
   ("html", D.table(
     ["stage", "the lessons", "what it produces"],
-    [["reach", "C1.1-C1.3 ingestion, elicitation",
+    [["reach", "D1.1-D1.3 ingestion, elicitation",
       "findings on the surfaces an attacker meets first"],
-     ["see", "C1.4-C1.6 telemetry, swarms, detection",
+     ["see", "D1.4-D1.6 telemetry, swarms, detection",
       "the signals that make an agent observable"],
-     ["respond", "C1.7-C1.9 triage, deception, containment",
+     ["respond", "D1.7-D1.9 triage, deception, containment",
       "playbooks that hold at machine speed"],
-     ["carry forward", "C1.10-C1.11 forensic replay, governance",
+     ["carry forward", "D1.10-D1.11 forensic replay, governance",
       "reproducible evidence and institutional policy"]],
     caption="Deterministic validation stops at 'reach'. The novelty of an "
             "agentic threat is that the other three stages are where the work "
@@ -439,7 +439,7 @@ can run — a red team that produces only a slide has produced nothing.
               "three stages after it.",
 },
 
-"D1.0": {
+"E1.0": {
  "concept": """
 CyberTravels has a SOC. It was built for people.
 
@@ -452,8 +452,8 @@ Agent is roughly 1,400 tool calls across 260 resources in 96 sessions. One hour
 of Alex is twelve actions. Every threshold, baseline and playbook CyberTravels
 owns was tuned against the second number.
 
-And the actor is not only the adversary. It is also the instrument: chapter D2
-puts an agent on detection engineering and chapter D3 puts one on the alert
+And the actor is not only the adversary. It is also the instrument: chapter E2
+puts an agent on detection engineering and chapter E3 puts one on the alert
 queue. Both work, and both bring the same failure mode — a loop that concludes
 confidently can conclude wrongly at machine speed.
 
@@ -465,11 +465,11 @@ control that stopped it being back at target:
 
 | interval | from | to | chapter |
 |---|---|---|---|
-| **discover** | the behaviour happens | somebody could see it at all | D1 |
-| **detect** | it is visible | an alert exists | D2 |
-| **understand** | the alert exists | a conclusion you can act on | D3 |
-| **contain** | the conclusion | the actor stopped | D4 |
-| **recover** | stopped | the control measurably back at target | D5 |
+| **discover** | the behaviour happens | somebody could see it at all | E1 |
+| **detect** | it is visible | an alert exists | E2 |
+| **understand** | the alert exists | a conclusion you can act on | E3 |
+| **contain** | the conclusion | the actor stopped | E4 |
+| **recover** | stopped | the control measurably back at target | E5 |
 
 Every lesson in this function shortens one of those five, or spends one
 deliberately to buy something else — and each says which, in a line under its
@@ -501,43 +501,43 @@ find out what it does not cover, which is the part that matters.
 | **respond** | orchestration and runbooks | **Shuffle** |
 | | revocation | your own IdP and gateway, driven from the runbook |
 | **recover** | host and memory forensics | **Velociraptor** |
-| | run replay | the harness from B2.1, pinned per D5.1 |
+| | run replay | the harness from C2.1, pinned per E5.1 |
 
 Two honest notes about that table.
 
 **The DLP row is the weakest.** There is no open-source DLP with the maturity of
 the other three, which is why the row names a pattern rather than a product —
-and why D1.1 scores DLP at almost no coverage of an agent's day. That is a real
+and why E1.1 scores DLP at almost no coverage of an agent's day. That is a real
 finding about the market, not a gap in the reading.
 
 **The agent-telemetry row does not exist in any of the products.** Wazuh will
 tell you a process wrote a file. Nothing in the list tells you which prompt
-caused it. That row is instrumentation you write, it lands in the lake D2.1
-designs, and its absence is what D1.1 measures.
+caused it. That row is instrumentation you write, it lands in the lake E2.1
+designs, and its absence is what E1.1 measures.
 
 ### The five chapters
 
-**D1 — discover.** The four sensor classes you already own, scored against what
+**E1 — discover.** The four sensor classes you already own, scored against what
 an agent actually does; drift, the failure with no adversary at all; and a bonus
 on finding the agents nobody registered and keeping what they emit.
 
-**D2 — detect.** The lake every rule is written against, then detections for two
+**E2 — detect.** The lake every rule is written against, then detections for two
 subjects that are not the same subject — the agent, and the platform running it
 — mapped to ATT&CK and ATLAS, plus the loop that writes rules, the benign corpus
 that decides whether they ship, and the one detector that needs no threshold.
 
-**D3 — understand.** An investigation an agent can run: bounded before it
+**E3 — understand.** An investigation an agent can run: bounded before it
 starts, given the fields an agent alert needs, willing to abandon its first
 theory in the open, scoped along the delegation graph, widened to the
 population — and then the two proactive halves, third-party intelligence that
 has to become a rule and a hunt for behaviour no rule covers.
 
-**D4 — respond.** A response whose blast radius is known before it fires.
+**E4 — respond.** A response whose blast radius is known before it fires.
 Actions classified on reversibility and radius, tiers derived from that rather
 than from their author, containment timed against the attacker, and a fleet stop
 that revokes as well as terminates.
 
-**D5 — recover and root cause.** A run you can reproduce, a root cause that
+**E5 — recover and root cause.** A run you can reproduce, a root cause that
 names a control rather than a person, the fix put at the layer it belongs in,
 the indicators re-measured to see which actually came back — and a regulatory
 clock that started before anyone knew.
@@ -567,11 +567,11 @@ told you.
   ("md", "## 4 · What CyberTravels has to emit before any of this works"),
   ("html", D.table(
     ["what the SOC needs", "is it in an application log?", "which lesson gets it"],
-    [["the prompt that motivated the action", "<b>no</b>", "D1.3"],
-     ["the tool call, with arguments", "<b>no</b>", "D1.3"],
-     ["the decision, and what it was based on", "<b>no</b>", "D5.1"],
-     ["which agent acted", "<b>no</b>", "D1.3"],
-     ["which human it acted for", "<b>no</b>", "A2.7 · D1.3"],
+    [["the prompt that motivated the action", "<b>no</b>", "E1.3"],
+     ["the tool call, with arguments", "<b>no</b>", "E1.3"],
+     ["the decision, and what it was based on", "<b>no</b>", "E5.1"],
+     ["which agent acted", "<b>no</b>", "E1.3"],
+     ["which human it acted for", "<b>no</b>", "B2.7 · E1.3"],
      ["the HTTP request the tool made", "yes", "already there"]],
     emphasise=1,
     caption="Five of six do not exist yet. R10 in the register is the sixth "
@@ -591,7 +591,7 @@ told you.
               "rather than a detection one.",
 },
 
-"E1.0": {
+"F1.0": {
  "concept": """
 Someone at CyberTravels signed off on the platform. Function E is about whether
 that signature still means anything.
@@ -624,20 +624,20 @@ function exists as more than a security document.
 
 Contributing evidence to six properties you do not own only works if the
 evidence is in a form the other six owners can use, which is why the whole of
-Function E is written in one unit: a **key control indicator**. E1.1 defines it
+Function E is written in one unit: a **key control indicator**. F1.1 defines it
 — a number computed from the estate, with a denominator, and a target set before
 the measurement is taken — and the three chapters are that one unit built,
 evidenced and run:
 
-- **Chapter E1 — risk and control.** Where the indicators come from. The
+- **Chapter F1 — risk and control.** Where the indicators come from. The
   register supplies the denominator, risk tiering supplies the target, control
-  mapping supplies the subject, and E1.13 computes six of them against the
+  mapping supplies the subject, and F1.13 computes six of them against the
   CyberTravels repository and reports the gaps.
-- **Chapter E2 — regulatory and compliance.** The same indicators read as
+- **Chapter F2 — regulatory and compliance.** The same indicators read as
   evidence. A travel company holds passports, payment data and health
   information, and each regime asks for a reading rather than a description —
   quotable to several of them because it was computed once.
-- **Chapter E3 — the CISO office.** The indicators run as a programme:
+- **Chapter F3 — the CISO office.** The indicators run as a programme:
   sequenced by distance from target, owned by name, and reported to a board in
   numbers somebody in the room can re-compute.
 
@@ -654,7 +654,7 @@ contractors.
   ("md", "## 2 · Seven properties, and who at CyberTravels owns each"),
   ("html", D.table(
     ["trustworthy-AI property", "who owns it at CyberTravels", "security's share"],
-    [["valid and reliable", "engineering + the eval harness (B2.19)",
+    [["valid and reliable", "engineering + the eval harness (C2.19)",
       "contributes evidence"],
      ["safe", "the CyberTravels product owner + risk", "contributes evidence"],
      ["secure and resilient", "security", "<b>owns it</b>"],
@@ -684,7 +684,7 @@ contractors.
       "<b>no — you may not be told</b>"]],
     emphasise=2,
     caption="Five material changes, none of them ticketed. This is R2 and the "
-            "lifecycle problem of E1.9 in one table, and it is why chapter 10 "
+            "lifecycle problem of F1.9 in one table, and it is why chapter 10 "
             "starts with an inventory rather than a policy.")),
 
   ("md", "## 4 · Three distances from the same question"),

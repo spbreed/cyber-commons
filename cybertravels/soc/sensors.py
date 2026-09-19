@@ -1,4 +1,4 @@
-# step:file D1.1
+# step:file E1.1
 """The sensor estate, measured against what the agent actually does.
 
 Four products are bought — EDR, DLP, CSPM, CNAPP — the estate is declared
@@ -55,7 +55,7 @@ ESTATE = [
            "the delegation chain behind it"),
     Sensor("agent telemetry", {"span", "token-mint", "tool-call", "approval",
                                "memory-write", "a2a-message"},
-           "nothing, and it is the one nobody onboarded — D1.3"),
+           "nothing, and it is the one nobody onboarded — E1.3"),
 ]
 
 
@@ -72,7 +72,7 @@ def actions():
         {"action": "mint a delegated token", "kind": "token-mint",
          "detail": "RFC 8693 exchange — the moment authority is created"},
         {"action": "ask for human approval", "kind": "approval",
-         "detail": "the gate G1.7 built"},
+         "detail": "the gate A1.7 built"},
         {"action": "write to memory", "kind": "memory-write",
          "detail": "what the next run will read as context"},
         {"action": "message a peer agent", "kind": "a2a-message",
@@ -82,7 +82,7 @@ def actions():
         {"action": "read an invoice", "kind": "file-read",
          "detail": "tools/payments_api.py::download_invoice"},
         {"action": "call a vendor API", "kind": "egress-content",
-         "detail": "an allowed destination, per A3.3"},
+         "detail": "an allowed destination, per B3.3"},
     ]
     return out
 
@@ -116,9 +116,9 @@ def blind_spots(estate=None):
             for s in (estate or ESTATE)]
 
 
-# step:D1.2 add
+# step:E1.2 add
 # --------------------------------------------------------------------------- #
-# D1.2 — behaviour that changes with no code change
+# E1.2 — behaviour that changes with no code change
 # --------------------------------------------------------------------------- #
 # The detection that worked last month degraded and nothing in the change log
 # explains it, because none of the things that changed go through change
@@ -136,7 +136,7 @@ DRIFT_SURFACES = {
     "retrieval_index": ("knowledge/retriever.py::CORPUS — anyone who can add "
                         "a template", False),
     "mcp_tool_descriptions": ("the vendor server's, rewritable after you "
-                              "approved them — A1.9", False),
+                              "approved them — B1.9", False),
     "memory": ("what previous runs wrote", False),
 }
 
@@ -161,15 +161,15 @@ def drift(was, now):
             "outside_change_management": unmanaged,
             "why": "a detection degrades when any of these move; only the "
                    "managed ones leave a record somebody reviews"}
-# step:D1.2 end
+# step:E1.2 end
 
 
-# step:D1.3 add
+# step:E1.3 add
 # --------------------------------------------------------------------------- #
-# D1.3 — onboarding what the agent emits, and deciding retention per field
+# E1.3 — onboarding what the agent emits, and deciding retention per field
 # --------------------------------------------------------------------------- #
-# The agent already emits everything an investigation needs: G2.1's spans,
-# G2.2's audit rows, A2.7's motive. None of it reaches the SIEM, because
+# The agent already emits everything an investigation needs: A2.1's spans,
+# A2.2's audit rows, B2.7's motive. None of it reaches the SIEM, because
 # onboarding a source is a project and nobody has asked for this one.
 #
 # Retention is the argument that stops the onboarding, and it is usually had at
@@ -179,7 +179,7 @@ def drift(was, now):
 # and the parts that are somebody's prose are neither.
 FIELD_RETENTION = {
     "trace_id": (365, "joins an audit row to the reasoning that caused it"),
-    "chain": (365, "which human, which workload — D3.4's whole question"),
+    "chain": (365, "which human, which workload — E3.4's whole question"),
     "tool": (365, "what was done"),
     "outcome": (365, "including refusals, which are the rows worth alerting on"),
     "motive_origin": (365, "where the motivating text came from"),
@@ -213,6 +213,6 @@ def onboarded(sources, *, required=("span", "audit", "approval")):
     missing = [r for r in required if r not in sources]
     return {"onboarded": sorted(sources), "missing": missing,
             "complete": not missing,
-            "why": "every rule in D2 is written against these; a rule over a "
+            "why": "every rule in E2 is written against these; a rule over a "
                    "source nobody onboarded is a rule that never fires"}
-# step:D1.3 end
+# step:E1.3 end

@@ -86,7 +86,7 @@ lesson. Offering a command on a page of diagrams teaches the reader that the
 command is decorative everywhere else too.
 
 Three lessons are in that state, and all three are function
-introductions. A1.1 used to be a fifth — a drawing lesson — until its map
+introductions. B1.1 used to be a fifth — a drawing lesson — until its map
 became a skill that *computes* the trust-boundary crossings from the levels
 rather than listing them. That is the test for whether a picture should
 execute: if changing an input should change the picture, it is a computation
@@ -141,27 +141,27 @@ each is told in one unit:
 
 | function | unit | defined in |
 |---|---|---|
-| **D** | an **interval** — discover, detect, understand, contain, recover | D1.0 |
-| **E** | a **key control indicator** — computed, with a denominator and a target | E1.1 |
+| **D** | an **interval** — discover, detect, understand, contain, recover | E1.0 |
+| **E** | a **key control indicator** — computed, with a denominator and a target | F1.1 |
 
 Every other lesson in those two functions carries one line in `ANCHORS`
 (`scripts/exercises/anchors.py`) saying which part of that unit it moves,
 rendered as a blockquote under its concept:
 
 ```python
-"E1.2":
- "**Anchor → E1.1.** The inventory is the **denominator**. ..."
-"D3.2":
- "**Anchor → D1.0.** This one **spends** the interval on purpose. ..."
+"F1.2":
+ "**Anchor → F1.1.** The inventory is the **denominator**. ..."
+"E3.2":
+ "**Anchor → E1.0.** This one **spends** the interval on purpose. ..."
 ```
 
-A lesson that lengthens an interval says so. D3.2's admission rules and D4.2's
+A lesson that lengthens an interval says so. E3.2's admission rules and E4.2's
 human-in-the-loop tier both cost time deliberately, and writing that down is
 more honest than presenting every lesson as an improvement.
 
 `check_lessons.py` fails on a D or E lesson with no anchor, on an anchor naming
 a lesson outside those functions, and on an anchor that is defined but not
-rendered. D1.0 and E1.1 are exempt because they define the unit; E1.0 is exempt
+rendered. E1.0 and F1.1 are exempt because they define the unit; F1.0 is exempt
 because it introduces the function the unit is told in.
 
 What the gate cannot check is whether an anchor is **true**. Reading the first
@@ -222,7 +222,7 @@ that drown the findings you can act on.
 
 ## 9 · Chapters are cited by id, never by number
 
-Prose says **Chapter D3**, not "Chapter 9". The number in `curriculum.json` is
+Prose says **Chapter E3**, not "Chapter 9". The number in `curriculum.json` is
 an ordinal, it is rendered on no page, and a reader who meets "Chapter 11" has
 no way to resolve it. It also goes stale silently: Function D grew from two
 chapters to five and every "Chapter 8 — detection" in the text stayed put.
@@ -238,7 +238,7 @@ curriculum that changed.
 
 ```python
 # scripts/exercises/track_<id>.py
-"B2.3": {
+"C2.3": {
  "concept": """...the idea, in prose...""",
  "steps": [
    ("md", "## 2 · Demo — the idea working"),
@@ -259,8 +259,8 @@ narration around a procedure that already works.
 
 ```python
 # scripts/exercises/framing.py
-HOOKS["B2.3"] = "..."       # 20-90 words, a consequence
-DIAGRAMS["B2.3"] = """..."""  # ASCII, ~60 columns
+HOOKS["C2.3"] = "..."       # 20-90 words, a consequence
+DIAGRAMS["C2.3"] = """..."""  # ASCII, ~60 columns
 ```
 
 Then:
@@ -287,16 +287,16 @@ checkpoints are **derived** from it by markers in the source, and
 
 **A file says when it appeared** with one comment near the top:
 
-    # step:file G1.4
+    # step:file A1.4
 
 **A block says when it appeared** with four markers:
 
-    # step:G1.4 was
+    # step:A1.4 was
     #~ delegated = "dev-token-all-scopes"
-    # step:G1.4 now
+    # step:A1.4 now
     ex = identity.token_exchange(user_token, agent_token, audience, scope)
     delegated = ex["access_token"]
-    # step:G1.4 end
+    # step:A1.4 end
 
 Three rules when authoring one, and each exists because of a specific failure:
 
@@ -305,8 +305,8 @@ Three rules when authoring one, and each exists because of a specific failure:
   cannot be live code in it. Left live, the naive assignment executes
   immediately before the real one and the application breaks.
 - **`was` is not scaffolding — it is what the next function attacks.** A reader
-  at A1.2 should get the ingress with no provenance so the injection actually
-  works, and A2.6 flips the region so it stops. The vulnerability is real at
+  at B1.2 should get the ingress with no provenance so the injection actually
+  works, and B2.6 flips the region so it stops. The vulnerability is real at
   that checkpoint rather than described, which is the whole reason for the
   mechanism.
 - **Use `add` when nothing existed before.** An empty `was` says the same thing

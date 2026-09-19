@@ -1,4 +1,4 @@
-# step:file A3.11
+# step:file B3.11
 """Containment for the coding agent Alex runs in the IDE — not the one we ship.
 
 Every control up to here guards an agent CyberTravels deploys: it has a
@@ -28,7 +28,7 @@ the happy path, which is the only reason they survive contact with a deadline.
 Nothing here contains anything by itself — enforcement is the agent CLI's, and
 this is the policy it should be given plus a way to check the configuration a
 machine is actually running. A policy nobody compared against the live config
-is A3.2's mistake in a different file.
+is B3.2's mistake in a different file.
 """
 import fnmatch
 import os
@@ -145,7 +145,7 @@ def review(agent_config):
 
 
 def containment_score(agent_config):
-    """A3.11's Day 2 number.
+    """B3.11's Day 2 number.
 
     Fraction of the containments that are on, weighted by nothing — a simple
     count, deliberately, because a weighted score invites arguing the weights

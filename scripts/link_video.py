@@ -5,8 +5,8 @@ Writes site/data/videos.json, which the website reads to show a ▶ Watch link o
 the right chapter. Used both by hand and by the publish-video workflow after a
 successful YouTube upload.
 
-    python3 scripts/link_video.py --session A2.5 --youtube-id dQw4w9WgXcQ \
-        --title "A2.5 — Delegation that survives audit"
+    python3 scripts/link_video.py --session B2.5 --youtube-id dQw4w9WgXcQ \
+        --title "B2.5 — Delegation that survives audit"
 
     python3 scripts/link_video.py --list          # what's published, what's missing
 """
@@ -41,7 +41,7 @@ def load() -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--session", help="curriculum session id, e.g. A2.5 or M0.1")
+    ap.add_argument("--session", help="curriculum session id, e.g. B2.5 or M0.1")
     ap.add_argument("--youtube-id")
     ap.add_argument("--url", help="full URL instead of a YouTube id")
     ap.add_argument("--title")

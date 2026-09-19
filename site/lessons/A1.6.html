@@ -1,100 +1,90 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.6 — Privilege compromise | Cyber Commons</title><meta name="description" content="Delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1)."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="sid">A1.6</div><h1>Privilege compromise</h1><div class="badges"><span class="badge t">A1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm042025-data-and-model-poisoning/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM04</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T1</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Persistence</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MAP</a><a class="fw" href="https://artificialintelligenceact.eu/article/10/" title="Data and data governance" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 10</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human.</p></div><div class="ctrl"><div class="lab">Control</div><p>Delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Have an agent inherit a privileged token and reach something its requester never could.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/threats/authorization-subject-check" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/threats/authorization-subject-check/scripts/authorization_subject_check.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">An engineer&#x27;s agent inherits the engineer&#x27;s standing permissions, because that is the fastest way to make it useful. It now holds production write access at three in the morning, when its principal is asleep and cannot be surprised by anything it does.</p><div class="ct"><b>At CyberTravels.</b> CyberTravels inherits Alex&#x27;s standing permissions because that was the fastest way to make it useful. It now holds production write access at three in the morning, when Alex is asleep and cannot be surprised by anything it does. R1.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p><strong>What it covers.</strong> Have an agent inherit a privileged token and reach something its requester never could.</p>
-<p><strong>Why a security engineer needs it.</strong> The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human. The control it builds is: delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1).</p>
-<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>The agent acts with more authority than the person who asked, and the log records a service account rather than either of them.</p></div><div class="d1"><span>Day 1 — how</span><p>Delegation that narrows, grants that expire, and default-deny underneath both.</p></div><div class="d2"><span>Day 2 — measure</span><p>Share of actions whose effective scope sits inside the requesting human&#x27;s own ceiling.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   human principal                      agent
-   +-------------------+                +------------------+
-   | repo:write        |  inherits ALL  | repo:write       |
-   | deploy:prod       | -------------&gt; | deploy:prod      |
-   | secrets:read      |   standing     | secrets:read     |
-   +-------------------+                +------------------+
-     awake 8 hours/day                    awake 24 hours/day
-     asked before acting                  acts on retrieved text</pre><p><strong>OWASP T3 — Privilege Compromise. LLM06 — Excessive Agency.</strong></p>
-<p>Tool misuse is about what a tool can do. Privilege compromise is about <strong>whose
-authority it does it with</strong> — the <strong>identity</strong> component rather than the tools
-component.</p>
-<p>Three patterns produce it, and all three are things teams do for good reasons.</p>
-<p><strong>Inherited human credentials.</strong> The agent runs with the token of the user who
-started it. Convenient, and it means the agent holds every permission that user
-holds — including the ones irrelevant to the task, and including the ones they
-hold because of a role they were given three years ago.</p>
-<p><strong>Shared service accounts.</strong> Every agent authenticates as <code>agent-svc</code>. That
-account needs the union of everything any agent ever needs, so each agent holds
-the maximum of the set.</p>
-<p><strong>Standing scope.</strong> The grant is permanent because renewing it was operationally
-awkward. The authority is therefore present at the moment any injection lands.</p>
-<p>What makes this distinct from ordinary over-permissioning is the <strong>direction of
-the audit trail</strong>. When a human has too much access and misuses it, the log
-names them. When an agent does it, the log names the service account — and the
-human who caused it is not in the record at all. The compromise is of privilege
-<em>and</em> of attribution, at the same time.</p><div class="how"><blockquote>
-<p><strong>Where this lands on the reference architecture.</strong></p>
-<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
-                               |              |
-                         messaging        tools / mcp
-                               |              |
-                      knowledge / memory   egress
-           identity + policy wrap every call · observability records it</code></p>
-</blockquote>
-<h2>2 · The risk, realised</h2>
-<p>A read-only user asks for something, and the agent has more authority than they do.</p><h2>2 · The check, as a skill</h2>
-<p>Everything turns on which principal the decision was evaluated against. The skill runs the asymmetric probe — a traveller holding <code>reports:read</code> asking for something that needs <code>db:admin</code> — and then reads one audit row to see whether a human can be recovered from it.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/authorization-subject-check/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/authorization-subject-check/SKILL.md</code></a></p><pre class="front"><code>name: authorization-subject-check
-description: &gt;-
-  Establish which principal a tool call is actually authorised against — the
-  requesting human, or the agent&#x27;s own service account — and what the resulting
-  audit row can name. Use when a user reaches a scope they do not hold, or when
-  every log line shows the same caller.
-allowed-tools: Read, Grep, Glob</code></pre><h1>Authorised as whom?</h1>
-<p>Privilege compromise in an agentic system is rarely a stolen credential. It is
-authorisation evaluated against the <strong>agent's</strong> identity while the request came
-from a user who does not hold the scope — and an audit trail that then names
-the agent on every row, so the human cannot be recovered at all.</p>
-<h2>When to use this</h2>
-<p>Any time an agent calls something on a user's behalf. Run it before designing
-delegation, because the answer decides whether delegation is missing or merely
-unenforced.</p>
-<h2>Procedure</h2>
-<p><strong>1 — Find the authorisation decision point.</strong> The single place where a scope
-is compared against a holder. If there are several, list them all; they will
-disagree.</p>
-<p><strong>2 — Name the subject at that point.</strong> Is the compared identity the requesting
-user, or the process's own account? A service account with a union of every
-scope any user might need is the shape to look for.</p>
-<p><strong>3 — Run the asymmetric probe.</strong> Have a user holding a narrow scope request an
-action requiring a wider one. If it succeeds, authorisation is on the workload,
-not the requester.</p>
-<p><strong>4 — Read one audit row.</strong> Does it name a human? A row naming <code>agent-svc</code> is
-complete, well-formed and useless: it answers "what ran", never "who caused
-it".</p>
-<p><strong>5 — Separate the two fixes.</strong> Authorising on the requester and <em>recording</em>
-the requester are different changes with different owners; a report that merges
-them gets half-implemented.</p>
-<h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/authorization_subject_check.py"><code>scripts/authorization_subject_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
-<p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>requestertheir scopes                                asked for       allowed?
-dana    ['reports:read']                            db:admin        True
-priya   ['db:admin', 'reports:read', 'reports:write']db:admin        True
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.6 — Agent to agent — handing work over without laundering authority | Cyber Commons</title><meta name="description" content="Signed envelopes, the human carried through every hop, and a ceiling on hops."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Getting Started — Building Agentic AI › Build the Agent — From a Loop to a Running Platform</div><div class="sid">A1.6</div><h1>Agent to agent — handing work over without laundering authority</h1><div class="badges"><span class="badge t">A1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MAP</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A peer&#x27;s message read as a colleague&#x27;s instruction turns one injected document into four compromised agents.</p></div><div class="ctrl"><div class="lab">Control</div><p>Signed envelopes, the human carried through every hop, and a ceiling on hops.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Forge a peer message and watch verification refuse it.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/threats/peer-message-propagation-trace" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/threats/peer-message-propagation-trace/scripts/peer_message_propagation_trace.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">The retrieval advisor reads a vendor document and passes its conclusion to the workflow agent. The workflow agent treats it as an internal request, because it arrived from a peer. One sentence written by somebody outside the company is now an instruction inside it, and the log shows two agents doing their jobs correctly.</p><div class="ct"><b>At CyberTravels.</b> CyberTravels&#x27; four agents hand work to each other. `cybertravels/a2a/protocol.py` is the envelope; `cybertravels/messaging/bus.py` is the version it replaces, still in the tree because it is what B1.7 attacks.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Agent-to-agent messaging with a signed envelope that names its sender, carries the human through every hop, labels a peer's text as data, and stops at a hop ceiling.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A peer&#x27;s message read as a colleague&#x27;s instruction turns one injected document into four compromised agents.</p></div><div class="d1"><span>Day 1 — how</span><p>Sign every agent-to-agent envelope, carry the human through each hop, and cap the hops.</p></div><div class="d2"><span>Day 2 — measure</span><p>Tampered envelopes rejected: all. And the hop at which a cycle stops, which is a number you choose rather than discover.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">        THE ENVELOPE
 
-AUDIT TRAIL
-   actor=agent-svc  tool=drop_table   allowed=True
-   actor=agent-svc  tool=drop_table   allowed=True
+   from  spiffe://…/agent/rag-advisor   ── signed
+   for   dana                           ── the human, carried through
+   origin vendor-document / UNTRUSTED   ── a peer is as trusted as what it read
+   hops  2 of 4                         ── and then it stops</pre><p>CyberTravels has four agents and they hand work to each other. The naive
+version of that is a dict of lists — text in, text out — and it is what almost
+every agent-to-agent layer looks like on the first day.</p>
+<p>It fails in a specific way: <strong>a peer's message reads like a colleague's
+instruction</strong>. An agent that has just read a poisoned vendor document and passes
+its conclusion to a peer has laundered untrusted text into what looks like an
+internal request. One injection becomes four compromised agents, and the log
+shows four agents doing their jobs.</p>
+<h3>The envelope</h3>
+<p>Three properties, and each closes one of those:</p>
+<ul>
+<li><strong>The sender is named, and the naming is signed.</strong> "The coding agent asked me
+  to" becomes checkable rather than claimed.</li>
+<li><strong>The human is carried through.</strong> An envelope holds the <code>on_behalf_of</code>
+  subject from the originating request. An agent handing work to a peer does not
+  get to launder whose authority it is acting under — that hop is where a
+  delegation chain usually breaks.</li>
+<li><strong>A peer's text is data.</strong> Content is labelled with its origin, exactly as
+  memory is. A peer is precisely as trustworthy as whatever it last read.</li>
+</ul>
+<h3>And a hop ceiling</h3>
+<p>Four agents that can each call each other will, given one ambiguous
+instruction, and the bill arrives before the loop does. <code>MAX_HOPS</code> is four and
+an envelope that exceeds it is refused rather than dropped silently — a refusal
+you can see beats a cycle you cannot.</p><div class="how"><h2>2 · Forge a peer message, and watch verification refuse it</h2>
+<p><code>cybertravels/a2a/protocol.py</code> is the file. The skill below traces how a message propagates between peers and what survives each hop — B1.7 runs it to follow an injection; you are running it to see what your envelope actually preserves.</p><h3>The skill</h3></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/peer-message-propagation-trace/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/peer-message-propagation-trace/SKILL.md</code></a></p><pre class="front"><code>name: peer-message-propagation-trace
+description: &gt;-
+  Follow a payload read by one agent as it becomes a message to its peers, and
+  record how many agents act on it and where the source attribution is lost.
+  Use when reviewing agent-to-agent messaging, hand-offs, or any topology where
+  one agent summarises for another.
+allowed-tools: Read, Grep, Glob</code></pre><h1>The hand-off is where provenance dies</h1>
+<p>One agent reads a poisoned document. What spreads is not the document — it is
+the agent's <strong>summary</strong> of it, and summarising is exactly the operation that
+drops the sentence identifying where the claim came from. By the second hop the
+claim has no source and looks like a colleague's conclusion.</p>
+<h2>When to use this</h2>
+<p>Any multi-agent topology: an orchestrator with workers, a pipeline of
+specialists, agents that publish to a shared channel or queue.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Draw the topology as edges.</strong> Who can send to whom, and whether messages
+fan out. Include the shared surfaces — a queue, a board, a memory both read —
+because they are edges too.</p>
+<p><strong>2 — Mark a payload so it is traceable.</strong> Include a phrase that identifies the
+source. It will let you see the hop where attribution is lost, which is the
+finding.</p>
+<p><strong>3 — Inject at one agent and step the topology.</strong> After each hop record: which
+agent holds it, whether the marker survived, and whether the agent acted.</p>
+<p><strong>4 — Count actors, not hops.</strong> The number that matters is how many agents took
+an action on a claim that entered through one document. One is a bug; three is
+a topology problem.</p>
+<p><strong>5 — Ask what the receiver could have checked.</strong> If a peer message carries no
+origin, the receiving agent has no way to treat it as untrusted, and the fix is
+on the sender's format rather than on the receiver's judgement.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/peer_message_propagation_trace.py"><code>scripts/peer_message_propagation_trace.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>one poisoned document, summarised by pricing-agent, sent to its peers:
+
+   pricing-agent   applied 90% discount
+   billing-agent   applied 90% discount
+
+agents that acted on it: 2
+agents actually attacked : 1
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;decision_points&quot;: [{&quot;site&quot;: &quot;str&quot;, &quot;subject&quot;: &quot;requester|workload|both&quot;}],
-  &quot;probe&quot;: {&quot;user_scopes&quot;: [&quot;str&quot;], &quot;required&quot;: &quot;str&quot;, &quot;succeeded&quot;: true},
-  &quot;audit_row&quot;: {&quot;names_human&quot;: false, &quot;fields&quot;: [&quot;str&quot;]},
-  &quot;fixes&quot;: {&quot;authorize_on_requester&quot;: true, &quot;record_requester&quot;: true}
+  &quot;topology&quot;: {&quot;edges&quot;: [[&quot;str&quot;, &quot;str&quot;]], &quot;shared_surfaces&quot;: [&quot;str&quot;]},
+  &quot;hops&quot;: [{&quot;agent&quot;: &quot;str&quot;, &quot;marker_present&quot;: true, &quot;acted&quot;: false}],
+  &quot;actors&quot;: 0,
+  &quot;attribution_lost_at&quot;: &quot;str&quot;,
+  &quot;message_format&quot;: {&quot;carries_origin&quot;: false}
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Accepting that the user is "in the request".</strong> Present in the payload is
-  not the same as compared at the decision point.</li>
-<li><strong>Testing with an admin.</strong> The probe needs a user who genuinely lacks the
-  scope.</li>
-<li><strong>Reporting the audit gap as a logging bug.</strong> It is the reason the incident
-  cannot be scoped later.</li>
+<li><strong>Tracing the document instead of the message.</strong> The document stops at hop
+  one; the summary is what travels.</li>
+<li><strong>Counting hops as the impact.</strong> Actors are the impact.</li>
+<li><strong>Putting the fix on the receiver.</strong> A receiver cannot re-derive an origin
+  the sender did not transmit.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at A1.6 --out work/cybertravels
 python3 scripts/checkpoint.py --at A1.6 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "authorization subject check"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/threats/authorization-subject-check/scripts/authorization_subject_check.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A user holding only <code>reports:read</code> triggers a <code>db:admin</code> action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names <code>agent-svc</code> on every row, so the human who caused it cannot be recovered from it at all.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pick one agent and answer two questions: what identity does it authenticate as, and can you name the human behind any single action it took last week. If the second answer is no, you have this risk regardless of how the scopes are set.</p></div></section><div class="expect"><b>Expect</b>A user holding only `reports:read` triggers a `db:admin` action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names `agent-svc` on every row, so the human who caused it cannot be recovered from it at all.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Keycloak</span><span>SPIFFE/SPIRE</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/threats/authorization-subject-check</code></p></div><div class="pager"><a href="A1.5.html"><span class="k">← Previous</span><span class="t">A1.5 · Tool misuse</span></a><a class="next" href="A1.7.html"><span class="k">Next →</span><span class="t">A1.7 · Identity spoofing and impersonation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "peer message propagation trace"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/threats/peer-message-propagation-trace/scripts/peer_message_propagation_trace.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A signed envelope naming its sender and the human it acts for, a refusal on a tampered one, and a refusal on an envelope with no human in the chain.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Send a message with <code>hops</code> set one below the ceiling and let two agents bounce it. Count how many tool calls happen before the ceiling stops it, and multiply by your per-call cost.</p></div></section><div class="expect"><b>Expect</b>A signed envelope naming its sender and the human it acts for, plus refusals on a tampered envelope and on one with no human in the chain.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>A2A</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/threats/peer-message-propagation-trace</code></p></div><div class="pager"><a href="A1.5.html"><span class="k">← Previous</span><span class="t">A1.5 · Memory — what it remembers, and where that came from</span></a><a class="next" href="A1.7.html"><span class="k">Next →</span><span class="t">A1.7 · The human gate, and the budget that stops the loop</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

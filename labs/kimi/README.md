@@ -18,7 +18,7 @@ reach is a **base** model and base models complete text rather than obey
 instructions. Prompted as a base model — priming the output shape — it produced
 **contract-conforming output that is substantively wrong**: the right JSON, the
 wrong CWE, and the contract's own type placeholders copied in as values. That
-second result is now teaching material in B2.5.
+second result is now teaching material in C2.5.
 
 ## Which Kimi model, and why
 
@@ -108,7 +108,7 @@ Three defects, zero schema violations. This is **conformance ≠ accuracy** —
 the thesis the curriculum keeps asserting — demonstrated by a real open-weight
 model on real hardware rather than by a constructed example. It is now the
 closing section of
-[B2.5](https://cybercommons.ai/lessons/B2.5.html), quoted verbatim.
+[C2.5](https://cybercommons.ai/lessons/C2.5.html), quoted verbatim.
 
 Worth noting which invariant catches it. Monotonicity passes: `[0,0,0,0]` is
 non-increasing. The check that fires is `counts.verified == len(findings)`, and

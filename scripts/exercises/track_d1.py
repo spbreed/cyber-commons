@@ -1,491 +1,349 @@
-"""Eight Function D lessons, from the two-track era of the Agentic SOC.
+"""Function C — Agentic Evaluation and Red Teaming.
 
-    D1.3  agent telemetry as a log source
-    D1.3  distinguishing agent from human
-    D3.9  threat intelligence that becomes a detection
-    D1.2  drift monitoring
-    D2.2  detections whose subject is the agent
-    D2.4  agent-assisted detection engineering
-    D3.1  from alert queue to loop operator
-    D3.3  the context that makes agent triage work
+One arc of twelve lessons. It traces a single lifecycle: from the ingestion
+vulnerabilities an attacker reaches first, through elicitation and emergent
+multi-agent behaviour, into the defensive telemetry, triage, containment and
+forensic replay that a researcher hands the defender, and out to institutional
+governance. D1.0 states the through-line; every lesson after it reuses a skill
+built elsewhere in the commons, because red teaming that ends in a slide has
+produced nothing a defender can run.
 
-The file name is historical: Function D was two tracks when these were written
-and is now five, so the lessons here span three chapters. Nothing depends on
-which module a lesson lives in — `exercises/__init__.py` merges them and
-`site/data/curriculum.json` is what decides order and chapter. Splitting these
-into five files is a tidy-up nobody has needed yet; do not infer structure from
-the filename.
+The lessons reuse skills from `research/`, `detection/`, `secops/` and
+`response/` deliberately: the point of the function is that an offensive finding
+becomes a defensive control, so the control it becomes is the one the SOC
+actually uses.
 """
-
-MODEL_NOTE = """
-> **About the model in this notebook.** It runs offline against a deterministic
-> replay so the lesson executes on a Kaggle kernel with no network. To run the
-> same triage against a real open-weight model:
->
-> ```bash
-> ollama pull glm-4.6            # or kimi-k2, llama3.3
-> export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
-> ```
-"""
-
-from .skills import SKILL_RUNTIME
-
-from . import diagrams as D
+from __future__ import annotations
 
 from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
 
-"D3.1": {
- "concept": """
-The classic SOC job is a queue: alerts arrive, an analyst reads each one,
-decides, and moves on. The constraint is human attention, and it does not scale
-— which is why tier-1 burnout and alert fatigue are structural rather than
-cultural problems.
-
-The agentic version replaces "read every alert" with "operate a loop that reads
-every alert". The analyst's job becomes:
-
-- deciding **what the loop is allowed to conclude** (the verifier, B2.0),
-- deciding **what it may do about it** (the tool policy, A3.5),
-- and handling the cases it escalates.
-
-The skill that transfers is not triage speed. It is knowing which signals the
-loop may believe — because a triage loop with a weak verifier closes true
-positives at machine speed, and closing a true positive is silent.
-""",
- "steps": [
-("md", "## 2 · Demo — the queue, and the loop that reads it"),
-("md", "## 3 · Where it breaks — closing a true positive is silent\n\n"
-         "Every triage decision has two error directions and they are not "
-         "symmetric. Escalating a false positive costs an analyst ten minutes. "
-         "**Closing a true positive costs you the incident**, and nothing tells "
-         "you it happened."),
-("md", "## 4 · The control — the loop may close, but not silently\n\n"
-         "Three rules make an agentic triage loop safe to run, and none of them "
-         "is about model quality."),
-  *skill_steps('detection/triage-loop-with-floor',
-               '## 2 · The procedure, as a skill\n\nThe skill scores a triage loop against ground truth, sweeps the confidence bar so the trade between analyst minutes and missed incidents is made explicitly, and adds the severity floor that no automatic closure may cross whatever its confidence.'),
-],
- "expect": "The triage loop escalates 4 alerts and closes 4, matching ground "
-           "truth on all 8. Lowering the confidence bar trades analyst minutes "
-           "against missed incidents. The severity floor converts any high or "
-           "critical closure into an escalation, and the closure sampling routes "
-           "a fraction of routine closures to a human for quality measurement.",
- "challenge": "Ask your SOC one question: when an incident is confirmed, does "
-              "anyone check whether an earlier alert about it was closed? If "
-              "nobody does, you have no measurement of your false-negative rate — "
-              "with or without an agent.",
-},
-
-"D3.3": {
- "concept": """
-An alert about a human is triageable with three facts: who, what, when. An alert
-about an agent needs three more, and without them every analyst has to guess.
-
-- **The acting identity** and the principal it acted for (A2.1).
-- **The scopes it held** at the time. This is the decisive field: reading
-  `.env` is alarming for an agent scoped `repo:read` and routine for a
-  secrets-rotation agent.
-- **The delegation chain**, so the analyst can see who caused the task.
-
-Without scope in the alert, the analyst's only options are to escalate
-everything or to develop a habit of closing agent alerts. Both happen, and the
-second one happens quietly.
-""",
- "steps": [
-  ("md", "## 2 · Demo — the same alert, with and without context"),
-("md", "## 3 · Where it breaks — measure the analyst's decision quality"),
-("md", "## 4 · The control — the six fields, and what each one decides"),
-
-  ("md", "## 6 · Triage as a skill — and the sample that keeps it honest\n\n"
-         "Context turns a guess into a verdict. Automating the verdict without "
-         "automating the audit of it is how a closing rule quietly starts "
-         "closing real incidents.\n\n"
-         "The skill therefore requires a sampling rule over anything "
-         "auto-closed, and requires its seed to come from something **stable**. "
-         "Sampling seeded from `hash()` picks a different subset on every run, "
-         "so you can never tell whether a change in findings came from the rule "
-         "or from the dice."),
-  ("skill", "secops/detection-triage"),
-  ("skill_script", "secops/detection-triage/scripts/detection_triage.py"),
-
-],
- "expect": "The bare alert is identical for both agents. Enriched, the "
-           "secrets-rotation agent is within remit and the patch agent is not. "
-           "Context-free triage escalates both — generating a nightly false "
-           "positive — while scope-aware triage matches ground truth on both.",
- "challenge": "Check which of the six fields your agent telemetry carries today. "
-              "Scopes-held is the one almost nobody logs, and it is the one that "
-              "decides the alert.",
-},
-
-"D2.4": {
- "concept": """
-Using an agent to write detections is genuinely effective: it produces candidate
-rules quickly, across more log sources than a human would attempt.
-
-What it cannot supply is the judgement that decides whether a rule ships, because
-that judgement depends on a cost the telemetry does not contain: **analyst
-trust**. A rule with 5% precision is not 5% useful — it is negatively useful,
-because it spends attention that the good rules need.
-
-So the workflow is: the agent generates candidates, and a scoring step against
-real historical telemetry decides which survive. The scoring step is the job, and
-it is the part teams skip.
-""",
- "steps": [
-("md", "## 2 · Demo — five candidate rules for one concern"),
-("md", "## 3 · Where it breaks — every rule 'works'\n\n"
-         "All five detect something. R1 has perfect recall on http traffic and "
-         "would put 301 alerts a day in the queue. R4 has 100% precision on "
-         "nothing useful. The deployable set is decided by a threshold nobody "
-         "writes down."),
-("md", "## 4 · The control — generate many, score against history, ship few"),
-  *skill_steps('detection/detection-rule-deployability',
-               '## 2 · The procedure, as a skill\n\nEvery candidate rule detects something. The skill replays each against real history and scores the third property nobody checks — firing volume — so a rule that produces 301 alerts for one true positive is rejected with its numbers rather than with an adjective.'),
-],
- "expect": "All five rules detect something. R1 fires 301 times for 1 true "
-           "positive; R5 fires twice for 2 true positives with perfect precision "
-           "and recall. The deployability check rejects the broad rules and the "
-           "failed-action rule, shipping only the precise ones with a small daily "
-           "queue impact.",
- "challenge": "Set your own alerts-per-true-positive budget and apply it to the "
-              "rules already in production. Most SOCs discover that several "
-              "long-standing rules would not pass the bar they would set today.",
-},
-
-"D2.1": {
- "concept": """
-Every rule in this chapter is written against something. This lesson is that
-something, and it is designed twice if you are not careful: once on a whiteboard
-where everything is indexed, and once when the bill arrives and retention is cut
-across the board by whoever is holding the invoice.
-
-The second design is the one you run, and it is made with no information about
-what the SOC actually asks.
-
-**Derive the tier from the queries.** Write down what the SOC runs and how fast
-each needs an answer — triage in seconds, a hunt in minutes, a forensic replay
-in hours — then tier each source by the *fastest* query that reads it. Nothing
-else about the source decides it: not its volume, not how interesting it feels,
-not who asked for it.
-
-| tier | answers in | what belongs there |
-|---|---|---|
-| hot | seconds | anything triage or scoping reads |
-| warm | minutes | anything a hunt reads |
-| cold | hours | anything only forensics reads |
-| drop | never | anything no query reads at all |
-
-That last row is the one people skip. A source no query reads is not cheap
-storage — it is a liability with a bill attached.
-
-The saving is the headline. What the tiering *protects* is the point: agent
-prompts are the single largest source in most estates and are read by exactly
-one query, which can wait hours. Priced hot they are the line that gets cut, and
-cutting them removes the only thing D5.1 can replay a run from.
-""",
- "steps": [
-  ("md", "## 2 · Demo — five real SOC queries, and what each one reads"),
-("md", "## 3 · Where it breaks — index everything, then read the bill"),
-("md", "## 4 · The control — one tier per source, derived and defensible"),
-  *skill_steps('detection/telemetry-tiering-cost',
-               '## 2 · The procedure, as a skill\n\nThe skill tiers six CyberTravels sources by the fastest query that reads each, prices hot against tiered, and names the source that would have been cut.'),
-],
- "expect": "Four sources go hot because triage and scoping read them in seconds, "
-           "host EDR goes warm, and agent prompts go cold — read by one query "
-           "that can wait hours. Tiering costs about 29% less than indexing "
-           "everything hot, and the prompts that are 23% of the volume survive "
-           "at 1% of the hot price rather than being deleted.",
- "challenge": "List the five queries your SOC actually ran last month, then tier "
-              "your sources from them. Any source that appears in no query is "
-              "the finding — you are paying to store something nobody asks.",
-},
-
-"D2.2": {
- "concept": """
-This is the new work, and it starts by discarding baselines that have served the
-SOC well for twenty years.
-
-Human behavioural detection assumes irregularity, working hours, and a rate
-ceiling set by typing speed. An agent violates all three *while behaving
-correctly*:
-
-| Classic signal | For a human | For an agent |
-|---|---|---|
-| two countries in an hour | incident | routine (multi-region) |
-| 300 file reads a minute | incident | idle |
-| activity at 03:00 | suspicious | meaningless |
-| the same action 500 times | suspicious | a stuck loop — but not malicious |
-
-Applying human baselines to agents produces an alert on every session, so the
-rule gets tuned down, and then it never fires again — including when something
-is genuinely wrong.
-
-The signals that *do* work for agents are about **change**: a tool it has never
-used, a mix that has shifted, a scope exercised that was never needed before.
-
-### Where each one sits in MITRE
-
-A rule with no technique against it cannot be gap-analysed, cannot be handed to
-another team, and cannot be argued about with an auditor. Two matrices are
-needed and they are not interchangeable: **ATT&CK** describes what the actor did
-to your estate, **ATLAS** describes what was done to the model.
-
-| agent signal | ATT&CK | ATLAS tactic |
-|---|---|---|
-| a tool it has never used, on inherited credentials | T1078 Valid Accounts | ML Attack Staging |
-| bulk reads across a repository it has no task in | T1213 Data from Information Repositories | Exfiltration |
-| output posted to an allowed SaaS domain | T1567 Exfiltration Over Web Service | Exfiltration |
-| shell spawned from a model-produced string | T1059 Command and Scripting Interpreter | ML Attack Staging |
-| instruction arriving in retrieved content | — | Initial Access · AML.T0051 |
-
-Read the last row twice. Indirect prompt injection has **no ATT&CK technique**,
-because ATT&CK has no notion of an instruction channel that is also a data
-channel. Mapping it to something adjacent to make the coverage chart look
-complete is the single most common way an agent detection programme lies to
-itself.
-
-ATLAS technique identifiers move faster than ATT&CK's, so re-check any specific
-`AML.T####` against the live matrix before you put it in a report.
-""",
- "steps": [
-  ("md", "## 2 · Demo — classic baselines against agent traffic"),
-("md", "## 3 · The control — detect change, not activity"),
-("md", "## 4 · Verify — the alert text an analyst can act on\n\n"
-         "\"Anomaly detected\" fails both tests: it does not say what changed, and "
-         "it does not say what to do."),
-  *skill_steps('detection/agent-aware-rule-review',
-               "## 2 · The procedure, as a skill\n\nAll three classic rules fire on CyberTravels' patch agent doing exactly its job, and only the rate rule fires on the human. The skill runs both, then measures drift from a signed-off baseline week by week — naming the new tool rather than reporting a distance."),
-],
- "expect": "All three classic rules fire on an agent doing its job and only the "
-           "rate rule fires on the human. Drift is within tolerance at week 1, "
-           "significant at week 4 with `write_file` and `repo:write` new, and "
-           "larger at week 8 with `run_shell` and an `exec` scope. The alert text "
-           "names what changed, why it matters and what to do.",
- "challenge": "Take one human-baseline rule in your SIEM and check how it behaves "
-              "against a service account. If it fires nightly, it is already "
-              "tuned off for that actor — which means you have no detection there "
-              "at all.",
-},
-
-"D1.3": {
- "concept": """
-The two questions in this lesson are one question asked twice: **which of the
-actors in your logs is software, and what does its trace contain once you keep
-it?** Neither has an answer in a standard SIEM, and the second only becomes
-urgent once the first one works.
-
-### Finding the actor
-
-The agents you most need to find are the ones in no registry (A3.7), and they
-act under a person's authority in a person's name — so conventional UEBA reads
-them as that person behaving strangely. Three behavioural signals separate them,
-none sufficient alone:
-
-- **Regularity** — the coefficient of variation of inter-arrival times. People
-  are irregular; loops are metronomic.
-- **Rate** — sustained multi-action-per-second activity is not typing.
-- **Continuity** — software has no evenings.
-
-The error directions are not symmetric, and that is what sets the threshold. A
-**human misclassified as an agent** triggers an investigation: mild, and
-self-correcting. An **agent misclassified as human** stays invisible, which is
-the entire risk you were trying to address. Cost-weighting therefore picks a
-lower threshold than accuracy-maximisation would.
-
-### Keeping its trace
-
-Once you have found it, agent telemetry turns out to have a property no other
-log source has: it contains the **reasoning**, not just the action. The trace
-records what the agent was trying to do, what it considered, and what the
-verifier said.
-
-That is enormously useful for investigation and it is a retention and privacy
-problem, because reasoning traces contain whatever was in the context window —
-routinely customer data, source code and secrets the agent read legitimately.
-So retention is decided **per field**, not per record:
-
-| Field | Forensic value | Sensitivity |
-|---|---|---|
-| timestamps, tool, target | high | low |
-| verifier detail | high | low |
-| acting identity + chain | high | low |
-| model prompts | medium | **high** |
-| tool results | high | **high** |
-
-The first three are cheap and should be kept long. The last two are where the
-retention conversation actually is.
-""",
- "steps": [
-  ("md", "## 2 · Demo — score actors from timing alone"),
-("md", "## 3 · Where it breaks — sweep the threshold and read both errors"),
-("md", "## 4 · The control — pick the threshold from the cost, not from accuracy"),
-  *skill_steps('detection/agent-versus-human-scoring',
-               '## 2 · Finding the actor, as a skill\n\nThe skill scores five actors on behaviour rather than on what they claim to be, sweeps the threshold, and then picks it by expected cost — because a flagged human costs half an analyst-hour and a missed agent costs forty.'),
-
-  ("md", "## 3 · What the trace you just started keeping contains"),
-  *skill_steps('detection/agent-telemetry-retention',
-               '## 4 · Keeping the trace, as a skill\n\nThe run record contains a payment-card pattern, in a source file the agent read legitimately. The skill scans every field, then sets retention per field so timestamps and verdicts survive for 400 days and prompts do not survive 30.'),
-],
- "expect": "First: the service indexer and unknown token score highest, the human "
-           "lowest, with the IDE user and the politely-jittered agent in between. "
-           "The threshold sweep shows humans flagged rising and agents missed "
-           "falling as it drops, cost-weighting selects a low one, and joining "
-           "against the registry names the unregistered actors as shadow agents. "
-           "Then the trace of one of them: a payment-card pattern in a source "
-           "file it read legitimately, and per-field retention that keeps "
-           "timestamps, tool, target and verifier for 400 days while dropping "
-           "prompts at 30 and tool results at 7. After 90 days no sensitive "
-           "content remains and the record still answers what the agent did.",
- "challenge": "Run the scoring against a week of your own authentication logs and "
-              "count the actors it flags that are not in your registry. Then check "
-              "the retention period on whatever traces you keep for them: if it "
-              "matches your firewall logs, one of those two numbers was chosen "
-              "without anyone looking at what the traces contain.",
-},
-
 "D1.1": {
  "concept": """
-Nobody starts an agentic SOC from nothing. Four classes of sensor are already
-deployed, already paid for, and already producing alerts:
+The first surface an attacker reaches is not the model — it is the **hub the
+model was downloaded from**. Dependency-squatting a package name, uploading a
+malicious model to a public registry, or shipping a poisoned dataset are all
+supply-chain attacks that land before a single prompt is sent.
 
-| class | what it watches | open-source reference |
-|---|---|---|
-| **EDR** | processes, files and network on a host | Wazuh agent |
-| **DLP** | sensitive content leaving a monitored channel | regex + file integrity monitoring |
-| **CSPM** | cloud configuration, evaluated on a schedule | Prowler, ScoutSuite |
-| **CNAPP** | container runtime and image contents | Falco, Trivy |
-
-All four work. The question is not whether they are good — it is **which parts
-of an agent's working day they are in the path of at all.**
-
-That is a matrix, and it is worth building before a roadmap rather than after,
-because the answer decides whether the next quarter is spent tuning or spent
-building a source that does not exist yet.
-
-The distinction that makes the matrix honest is **visibility, not alerting**.
-"Would this fire" is a tuning question. "Is this sensor in the path" is a fact
-about architecture, and a sensor that is not in the path cannot be tuned into
-one that is.
-
-Read the uncovered rows rather than the percentage. If they are arbitrary, tune.
-If they share a property — every one inside the reasoning loop, or behind an API
-the host never observes — then a fifth product of the same four kinds will not
-move them.
+Red teaming this surface means auditing the ingress filters: what a platform
+accepts, what it verifies, and what it takes on trust because the name looked
+right. The research discipline is to assess a component on whether it can
+**change without telling you** — a pinned library cannot, a hosted model can,
+and a dataset re-pulled on every train can change under a name that never did.
 """,
  "steps": [
-  ("md", "## 2 · Demo — four sensors against nine ordinary agent actions"),
-("md", "## 3 · Where it breaks — the combined column, and the four rows in it"),
-("md", "## 4 · The control — derive the next source from the uncovered set"),
-  *skill_steps('detection/sensor-coverage-matrix',
-               '## 2 · The procedure, as a skill\n\nThe skill scores four sensor classes against nine things CyberTravels\' agents do in an ordinary day, takes the union per row rather than summing the columns, and prints the actions no class sees at all.'),
+  ("md", "## 2 · Demo — score a supply chain the way an attacker reads it"),
+  ("md", "## 3 · Where it breaks — the trusted name that was never verified"),
+  ("md", "## 4 · The control — assess on mutability, not on popularity"),
+  *skill_steps('research/agent-supply-chain-assessment',
+               "## 2 · The procedure, as a skill\n\nThe skill scores each component CyberTravels pulls in on whether it can change without notice, and separates the pinned artefacts from the ones a registry can replace at any time."),
 ],
- "expect": "EDR and CNAPP each cover about a third of the agent's day, DLP and "
-           "CSPM almost none of it, and all four combined still leave four of "
-           "the nine actions seen by nothing: reading a customer record through "
-           "an internal API, placing it in a prompt, calling a vendor MCP tool, "
-           "and issuing a refund. Those four share a property, and it is the "
-           "argument for D1.3 and D2.1 rather than for a fifth product.",
- "challenge": "Build the same matrix for your estate with your own actions in "
-              "the rows. The number that matters is not the percentage — it is "
-              "whether the uncovered rows have something in common.",
+ "expect": "The pinned libraries score low-risk, the hosted model and the "
+           "re-pulled dataset score high because neither can be pinned, and the "
+           "one component with no provenance at all is the finding.",
+ "challenge": "List every model and dataset your pipeline pulls at train or "
+              "deploy time. The ones with no pinned digest are the ones an "
+              "attacker can change without touching your code.",
 },
 
 "D1.2": {
  "concept": """
-Drift monitoring exists because an agent's behaviour changes **without a code
-change**. A new model version, an edited prompt, an added tool — none of these
-pass through the change management process built for code, and all of them
-invalidate the testing your controls were signed off against.
+Ingestion is also where code runs. A dataset is not passive: it is parsed,
+decoded and embedded, and every one of those steps is a parser with a threat
+model. A crafted record that exploits an image decoder or a deserialiser
+achieves **remote code execution during automated embedding generation** — on
+the training or indexing host, which usually has more access than the serving
+one.
 
-That is the precise claim: the control was tested against a behaviour that no
-longer exists. It has not failed; it is *unevidenced*, which is a different and
-more honest state.
-
-Two things are needed:
-
-1. A **signed-off baseline** — what normal looked like when the control passed.
-2. A **freshness window** on the control test, derived from how fast the thing
-   it tests actually drifts.
-
-E1.7 turns the second into a compliance posture. This lesson produces the signal.
+Weaponising the ingestion path means treating the embedding pipeline as an
+attack surface, and the research output is a provenance manifest: what was
+ingested, from where, parsed by what, so a payload that ran can be traced to the
+record that carried it.
 """,
  "steps": [
-  ("md", "## 2 · Demo — drift across a quarter"),
-("md", "## 3 · Where it breaks — none of these was a code change"),
-  ("html", D.table(
-    ["change surface", "in change management?", "what happens today"],
-    [["application code", "yes", "pull request, review, CI"],
-     ["agent prompt", "<b>no</b>", "edited in a console"],
-     ["tool manifest", "<b>no</b>", "a config change, with no threat-model diff"],
-     ["model version", "<b>no</b>", "provider-side; you may not be told"],
-     ["policy", "yes", "if it is in git — often it is not"],
-     ["approval settings", "<b>no</b>", "a toggle in an admin UI"]],
-    emphasise=1,
-    caption="Four of six surfaces bypass change management entirely. Drift is "
-            "the failure mode with no adversary, and this table is why it is "
-            "also the failure mode with no ticket.")),
-  ("md", "## 4 · The control — freshness derived from the observed drift rate"),
-  *skill_steps('detection/behavioural-drift-monitor',
-               "## 2 · The procedure, as a skill\n\nFour of six things that change an agent's behaviour never reach change management. The skill counts them, then tracks drift across a quarter and attributes the rise that coincides with the model upgrade — and the one that does not."),
+  ("md", "## 2 · Demo — a record that is data to the model and code to the parser"),
+  ("md", "## 3 · Where it breaks — RCE on the indexing host, not the serving one"),
+  ("md", "## 4 · The control — a provenance manifest for everything ingested"),
+  *skill_steps('research/training-data-provenance-manifest',
+               "## 2 · The procedure, as a skill\n\nThe skill builds a manifest of what CyberTravels' RAG pipeline ingested — source, parser, and a digest per record — so an embedding run that executed something can be traced to the record that carried it."),
 ],
- "expect": "Drift rises across the quarter from 0.0 at sign-off to roughly 0.35 "
-           "after the model upgrade, with `run_shell` appearing as a new tool. "
-           "Four of six change surfaces bypass change management. The observed "
-           "drift rate yields a freshness window, and the 90-day-old control test "
-           "is reported STALE rather than passing.",
- "challenge": "Compute the drift rate for one production agent from three months "
-              "of telemetry, and set its control freshness window from that "
-              "number rather than from the audit calendar.",
+ "expect": "The manifest names each source and the parser that touched it, and "
+           "the record with no verifiable origin is flagged as the one a payload "
+           "would ride in on.",
+ "challenge": "Find the host that runs your embedding jobs and check what it can "
+              "reach. It is usually the most privileged machine nobody threat-"
+              "modelled.",
 },
 
-"D3.9": {
+"D1.3": {
  "concept": """
-Threat intel is judged by exactly one thing: **how many detections came out of
-it.** Everything else — feed volume, report quality, briefing frequency — is
-input, not outcome.
+Elicitation is the model-layer attack: not a single clever prompt, but a
+**technique that scales**. Cross-prompt attention degradation, context-window
+crowding and instruction-hierarchy confusion all strip a model's safety
+behaviour while leaving its tool-use capability intact — which is the dangerous
+combination, because a jailbroken model that cannot act is a curiosity and one
+that can is an incident.
 
-An indicator is actionable when two things are true:
-
-- it is a **type you can match on** (a host, a hash, a specific technique with a
-  concrete precondition), and
-- its **confidence justifies the false-positive cost** of the rule it becomes.
-
-A narrative about adversary trends is not intelligence you can operate. It may
-be genuinely useful for planning and it should not be counted as detection
-coverage, because counting it that way makes a programme look covered when it is
-not.
+Research here is judged on reproducibility, not on a single transcript. A
+jailbreak that works once is an anecdote; one that reproduces across attempts,
+seeds and minor rewordings is a finding with a measurable success rate.
 """,
  "steps": [
-  ("md", "## 2 · Demo — a feed, converted"),
-("md", "## 3 · Where it breaks — conversion is only the first of three numbers"),
-("md", "## 4 · The control — agent-specific intel is mostly internal"),
-  ("html", D.table(
-    ["intel source", "converts to a detection", "why"],
-    [["your own incidents", "<b>100%</b>", "the technique that worked against you"],
-     ["your red team (C1)", "<b>90%</b>",
-      "attack-suite results become detections directly"],
-     ["your drift monitor (D1.2)", "<b>80%</b>",
-      "baseline changes are leading indicators"],
-     ["vendor advisories", "50%", "useful for the supply chain (C1.1)"],
-     ["commercial feed", "30%",
-      "generic indicators; little agent-specific content yet"]],
-    emphasise=1,
-    caption="The highest-converting sources are all internal. For agentic "
-            "threats the intel programme is mostly a feedback loop out of C1 and "
-            "D1.2, not a purchase.")),
-   *skill_steps('detection/threat-intel-to-rules',
-               '## 2 · The procedure, as a skill\n\nFour of seven indicators convert; the two narratives and the low-confidence host are dropped with reasons. The skill then reports the three numbers a renewal conversation needs: converted, alerted, actioned.'),
+  ("md", "## 2 · Demo — a technique, run many times, scored on reproduction"),
+  ("md", "## 3 · Where it breaks — the transcript that does not reproduce"),
+  ("md", "## 4 · The control — report a rate across attempts, not a screenshot"),
+  *skill_steps('research/technique-reproducibility-test',
+               "## 2 · The procedure, as a skill\n\nThe skill runs a candidate elicitation technique against CyberTravels' advisor repeatedly and reports the share of attempts that reproduced — the difference between a finding and a lucky transcript."),
+  *skill_steps('redteam/eval-corpus-integrity-check',
+               "## 3 · And the question the rate cannot answer\n\n"
+               "A reproduction rate is a statement about the technique **and** "
+               "about the corpus it was measured on. Score a deliberately "
+               "zero-capability harness against your own case suite and see "
+               "what the suite alone awards it: whatever that number is, it is "
+               "in every result you have reported. "
+               "`cybertravels/redteam/elicitation.py` adds the other half — "
+               "seed spread beside the rate, and a technique whose best "
+               "phrasing works while its others never do, reported as one "
+               "phrasing rather than as a technique."),
 ],
- "expect": "Four of seven indicators convert to rules — the two narratives and "
-           "the low-confidence host are dropped with reasons. The rules fire on "
-           "three of five events with concrete responses. The three-number "
-           "summary shows a 57% conversion rate and 67% of alerts actioned, and "
-           "the source table ranks internal sources highest.",
- "challenge": "Compute your own three numbers for last quarter: indicators "
-              "received, rules deployed, alerts actioned. The ratio between the "
-              "first and third is the honest value of the programme.",
+ "expect": "The technique reproduces on a measurable fraction of attempts rather "
+           "than all or none, and the report is that rate with its denominator, "
+           "not the single best transcript.",
+ "challenge": "Take any jailbreak you have seen shared as a screenshot and run "
+              "it twenty times. The reproduction rate is the finding; the "
+              "screenshot was marketing.",
 },
+
+"D1.4": {
+ "concept": """
+The pivot of the whole function: an offensive finding becomes defensive
+telemetry. To catch the actor you have just played, you have to be able to
+**see it at all** — and an agent's tool calls arrive through a model gateway
+that, by default, logs none of the fields that would tell an agent apart from a
+person.
+
+Establishing telemetry means JSON-wrapping the gateway trace — prompt, tool,
+arguments, identity — and then scoring actors on behaviour, because the ones you
+most need to find are the ones in no registry, acting under a human's
+credential at a machine's tempo.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — score actors from gateway timing alone"),
+  ("md", "## 3 · Where it breaks — the agent that reads as its owner"),
+  ("md", "## 4 · The control — a threshold set by cost, not by accuracy"),
+  *skill_steps('detection/agent-versus-human-scoring',
+               "## 2 · The procedure, as a skill\n\nThe skill scores five CyberTravels actors on behaviour rather than on what they claim to be, and picks the threshold by expected cost — a flagged human costs half an analyst-hour, a missed agent costs forty."),
+],
+ "expect": "The service accounts and unregistered token score highest, the human "
+           "lowest, and cost-weighting selects a low threshold that finds the "
+           "shadow agents at the price of a few analyst-hours.",
+ "challenge": "Check whether your model gateway logs the acting identity per "
+              "call. If it logs only the API key, every agent is anonymous and "
+              "this scoring is the only actor you have.",
+},
+
+"D1.5": {
+ "concept": """
+The behaviour that defines the frontier threat is **emergent**: agents that
+bridge sandbox environments through a shared file mount, or recursively spawn
+child agents with no user attribution, produce a swarm that no single run
+reveals. Each run, examined alone, is plausible work.
+
+The research method is the case study — the Hugging Face / OpenAI agent-swarm
+incident is the reference — and its lesson is structural: coordination lives in
+the population, so the analysis has to sit across runs, not within them, and the
+control that comes out of it maps to a detection somebody can deploy.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — the incident, mapped to the controls it needed"),
+  ("md", "## 3 · Where it breaks — every run is individually innocent"),
+  ("md", "## 4 · The control — analysis across the population, not the run"),
+  *skill_steps('research/incident-control-mapping',
+               "## 2 · The procedure, as a skill\n\nThe skill takes the swarm incident and maps each observed behaviour to the control that would have caught it, so the case study ends in a deployable list rather than a narrative."),
+],
+ "expect": "Each behaviour in the incident resolves to a named control, and the "
+           "ones with no control behind them are the gaps the case study exists "
+           "to surface.",
+ "challenge": "Ask whether anything in your estate could spawn a child agent. "
+              "If the answer is yes and you cannot attribute the child to a "
+              "human, you already have the swarm's precondition.",
+},
+
+"D1.6": {
+ "concept": """
+Detecting emergent behaviour at machine speed is a detection-engineering
+problem. Semantic drift and runtime-objective anomalies are the signals, and the
+trap is the same one every detection has: a rule that fires on everything is
+worse than no rule, because it spends the attention the good rules need.
+
+High-concurrency detection means generating candidate rules, then scoring them
+against real history on the one property that decides deployability — the
+firing volume — so a rule that flags an unauthorised objective before compromise
+is kept and one that buries the queue is rejected with its numbers.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — five candidate rules for one runtime anomaly"),
+  ("md", "## 3 · Where it breaks — every rule detects something"),
+  ("md", "## 4 · The control — score against history, ship few"),
+  *skill_steps('detection/detection-rule-deployability',
+               "## 2 · The procedure, as a skill\n\nEvery candidate rule detects the anomaly. The skill replays each against CyberTravels' history and scores firing volume, so a rule that produces hundreds of alerts for one true positive is rejected with the number attached."),
+],
+ "expect": "All candidates detect the anomaly, but their firing volumes differ by "
+           "orders of magnitude, and the deployable one is chosen by the volume "
+           "it would add to the queue rather than by recall alone.",
+ "challenge": "Take a detection you are proud of and compute how many times it "
+              "fired last month against how many were true. If you cannot, the "
+              "rule is unmeasured, which is the same as untuned.",
+},
+
+"D1.7": {
+ "concept": """
+When the swarm has fired, triage is where a non-deterministic actor defeats a
+human queue. The delegation graph is multi-threaded and the agents
+**self-correct deceptively** — an investigating loop that scores evidence only
+on support will confirm its first theory and close the wrong case at machine
+speed.
+
+Triaging the swarm means running the triage as a loop with a floor: the loop may
+close, but not silently, and never above a severity it is not allowed to
+conclude on its own. The skill is knowing which signals the loop may believe.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — a triage loop over a fleet of alerts"),
+  ("md", "## 3 · Where it breaks — closing a true positive is silent"),
+  ("md", "## 4 · The control — the loop may close, but not above the floor"),
+  *skill_steps('secops/detection-triage',
+               "## 2 · The procedure, as a skill\n\nThe skill runs an agentic triage loop over CyberTravels' alerts, samples what it auto-closed with a stable seed, and enforces a severity floor no automatic closure may cross."),
+],
+ "expect": "The loop matches ground truth on the routine alerts, the severity "
+           "floor converts every high closure into an escalation, and the "
+           "closure sample routes a fraction to a human so the false-negative "
+           "rate is measured rather than assumed.",
+ "challenge": "Ask your SOC whether anyone checks, when an incident is "
+              "confirmed, whether an earlier alert about it was auto-closed. If "
+              "not, your loop's error rate is invisible.",
+},
+
+"D1.8": {
+ "concept": """
+Every detector in this function has needed a threshold, and every threshold is a
+trade. **Deception is the exception**: a canary token or a honeypot task in a
+data index has a false-positive rate of zero by construction, because nothing
+legitimate has any reason to touch it.
+
+Defensive deception means placing weaponised values — tokens that look genuine,
+files no real task references — where a data-harvesting agent would plausibly
+reach, so the alert needs no threshold at all. The failure mode is a canary that
+legitimate work does touch, which converts a zero-false-positive control back
+into a tuned one.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — a canary in the index, and a zero-threshold alert"),
+  ("md", "## 3 · Where it breaks — the canary something legitimate reads"),
+  ("md", "## 4 · The control — bait nothing legitimate has a reason to touch"),
+  *skill_steps('detection/canary-and-honeypot-design',
+               "## 2 · The procedure, as a skill\n\nThe skill places canary tokens and a honeypot task in CyberTravels' environment, checks that no legitimate path reaches them, and reads a touch as a zero-false-positive signal."),
+],
+ "expect": "The canaries sit outside every legitimate path, so a single touch is "
+           "a high-confidence alert with no threshold, and the one placed too "
+           "close to real work is flagged as a false-positive source before it "
+           "ships.",
+ "challenge": "Plant one canary credential in a place only an over-reaching "
+              "agent would look, and wire its use to a page. It is the cheapest "
+              "high-signal detector you will build.",
+},
+
+"D1.9": {
+ "concept": """
+Containment against a swarm is a race the defender starts behind. An agent fleet
+operating at machine speed completes thousands of actions inside a human
+approval cycle, so the containment has to be **pre-authorised and automated**:
+zero-trust runtime gatekeepers, and dynamic token revocation that isolates the
+fleet in one action.
+
+The detail that decides whether containment worked is revocation versus
+termination. Terminating agents while their bearer tokens stay valid leaves the
+persistence in place and moves the incident rather than ending it — which is the
+Moltbook lesson, 770,000 agents behind one missing policy.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — a fleet, and one revocation that reaches all of it"),
+  ("md", "## 3 · Where it breaks — terminated agents, still-valid tokens"),
+  ("md", "## 4 · The control — one policy, enforced at the gateway"),
+  *skill_steps('response/fleet-kill-switch-test',
+               "## 2 · The procedure, as a skill\n\nThe skill exercises a fleet kill switch against CyberTravels' agents and checks the property that matters — that revoked credentials, not just terminated processes, are what ends the persistence."),
+],
+ "expect": "The kill switch selects the whole fleet in one action and the run "
+           "shows persistence surviving termination but not revocation, so the "
+           "control is judged on what the tokens can still do afterwards.",
+ "challenge": "Time how long it takes to revoke every credential one class of "
+              "agent holds. If the answer is 'we would terminate the processes', "
+              "you have not tested containment, only restart.",
+},
+
+"D1.10": {
+ "concept": """
+A finding is only reproducible if the run is. Forensic replay locks the
+**deterministic runtime constraints** — the prompts, the tool results, the
+pinned model version and the sampling seed — so a complex agentic exploit path
+can be reproduced, replayed and documented inside an isolated forensic lab
+rather than described from memory.
+
+The field teams miss most often is the model version, and it is the one that
+silently invalidates everything else: a provider-side upgrade changes the
+behaviour under every other constant, so a replay that does not pin it is
+reproducing a different system.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — replay one run from its four constants"),
+  ("md", "## 3 · Where it breaks — the unpinned model version"),
+  ("md", "## 4 · The control — log at design time what replay will need"),
+  *skill_steps('response/run-replayability-audit',
+               "## 2 · The procedure, as a skill\n\nThe skill audits a CyberTravels run for the four fields a replay needs, and reports which are missing — because a run you cannot reproduce is a story, not evidence."),
+],
+ "expect": "A run with all four fields replays identically; one missing the model "
+           "version cannot be demonstrated, only described, which is the moment "
+           "the finding stops being defensible.",
+ "challenge": "Pick one agent run from last week and try to reproduce it. The "
+              "first field you cannot recover is the one to start logging today.",
+},
+
+"D1.11": {
+ "concept": """
+The lifecycle ends where it becomes institutional. A non-deterministic security
+finding that stays in a researcher's notebook changes nothing; translated into a
+**structural engineering policy, a change-surface patch and a reporting
+timeline**, it becomes something the organisation carries forward.
+
+Governance here is the handover: every finding leaves with the control it
+becomes, the owner who holds that control, and an evaluation case that fails on
+the old build and passes on the fixed one — so the finding cannot silently
+regress, and the research has produced institutional capital rather than a
+report.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — a finding, and the control it hands over as"),
+  ("md", "## 3 · Where it breaks — the finding with no owner and no eval case"),
+  ("md", "## 4 · The control — handover with a regression test attached"),
+  *skill_steps('research/finding-to-control-handover',
+               "## 2 · The procedure, as a skill\n\nThe skill turns a CyberTravels finding into a handover: the control it becomes, its owner, and an eval case that fails on the old build — so the fix is verifiable and cannot regress unseen."),
+  *skill_steps('redteam/agentic-finding-report',
+               "## 3 · And the write-up the handover ends in\n\n"
+               "`cybertravels/redteam/handoff.py` enforces the shape: a "
+               "finding will not construct without a rate and an interval, "
+               "`verify()` refuses an eval case that passes against the old "
+               "build, and an artefact nobody accepted counts as missing "
+               "rather than done. This skill is the prose half — a report that "
+               "names the absent control, states plainly what is **not** a "
+               "fix, and carries the regression case with it."),
+],
+ "expect": "The finding leaves with a named control, an owner and an eval case "
+           "that fails on the unfixed build, and a finding missing any of the "
+           "three is flagged as not yet handed over.",
+ "challenge": "Take your last red-team finding and write the eval case that "
+              "would fail if it regressed. If you cannot, the fix is a promise, "
+              "not a control.",
+},
+
 }

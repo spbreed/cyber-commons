@@ -6,22 +6,22 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 
 | Track | Role | Sessions | Function |
 |---|---|---|---|
-| [G1](track-g1.md) | Build the Agent — From a Loop to a Running Platform | 8 | G — Getting Started — Building Agentic AI |
-| [G2](track-g2.md) | Harness Engineering — Making a Demo Into a System | 5 | G — Getting Started — Building Agentic AI |
-| [A0](track-a0.md) | Introduction — What This Is, Who It Is For, and How to Use It | 2 | A — Securing AI Architectures |
-| [A1](track-a1.md) | CyberTravels' Architecture, and Every Risk It Carries | 20 | A — Securing AI Architectures |
-| [A2](track-a2.md) | Securing the Architecture — Identity and Ingress | 8 | A — Securing AI Architectures |
-| [A3](track-a3.md) | Securing the Architecture — Runtime and the Gateway | 11 | A — Securing AI Architectures |
-| [B2](track-b2.md) | The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy | 20 | B — Application Security with an AI SDLC |
-| [C1](track-c1.md) | One Red-Team Lifecycle, End to End | 12 | C — Agentic Evaluation and Red Teaming |
-| [D1](track-d1.md) | Discover — the Sensors, and the Agent-Shaped Hole in Them | 4 | D — The Agentic SOC |
-| [D2](track-d2.md) | Detect — the Lake, and Rules Mapped to MITRE | 6 | D — The Agentic SOC |
-| [D3](track-d3.md) | Understand — Correlation, Intel and the Hunt | 10 | D — The Agentic SOC |
-| [D4](track-d4.md) | Respond — From a Conclusion to the Actor Stopped | 5 | D — The Agentic SOC |
-| [D5](track-d5.md) | Recover and Root Cause — From Stopped to Back at Target | 6 | D — The Agentic SOC |
-| [E1](track-e1.md) | Building the Governance Framework — Risk and Control | 14 | E — AI Governance for Agentic Systems |
-| [E2](track-e2.md) | Building the Governance Platform — Regulatory and Compliance | 9 | E — AI Governance for Agentic Systems |
-| [E3](track-e3.md) | Running the Programme — the CISO Office | 8 | E — AI Governance for Agentic Systems |
+| [A0](track-a0.md) | Set Up — Your Development Environment, and How to Use This | 2 | A — Getting Started — Building Agentic AI |
+| [A1](track-a1.md) | Build the Agent — From a Loop to a Running Platform | 8 | A — Getting Started — Building Agentic AI |
+| [A2](track-a2.md) | Harness Engineering — Making a Demo Into a System | 5 | A — Getting Started — Building Agentic AI |
+| [B1](track-b1.md) | CyberTravels' Architecture, and Every Risk It Carries | 20 | B — Securing AI Architectures |
+| [B2](track-b2.md) | Securing the Architecture — Identity and Ingress | 8 | B — Securing AI Architectures |
+| [B3](track-b3.md) | Securing the Architecture — Runtime and the Gateway | 11 | B — Securing AI Architectures |
+| [C2](track-c2.md) | The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy | 20 | C — Application Security with an AI SDLC |
+| [D1](track-d1.md) | One Red-Team Lifecycle, End to End | 12 | D — Agentic Evaluation and Red Teaming |
+| [E1](track-e1.md) | Discover — the Sensors, and the Agent-Shaped Hole in Them | 4 | E — The Agentic SOC |
+| [E2](track-e2.md) | Detect — the Lake, and Rules Mapped to MITRE | 6 | E — The Agentic SOC |
+| [E3](track-e3.md) | Understand — Correlation, Intel and the Hunt | 10 | E — The Agentic SOC |
+| [E4](track-e4.md) | Respond — From a Conclusion to the Actor Stopped | 5 | E — The Agentic SOC |
+| [E5](track-e5.md) | Recover and Root Cause — From Stopped to Back at Target | 6 | E — The Agentic SOC |
+| [F1](track-f1.md) | Building the Governance Framework — Risk and Control | 14 | F — AI Governance for Agentic Systems |
+| [F2](track-f2.md) | Building the Governance Platform — Regulatory and Compliance | 9 | F — AI Governance for Agentic Systems |
+| [F3](track-f3.md) | Running the Programme — the CISO Office | 8 | F — AI Governance for Agentic Systems |
 
 ## Seniority overlay
 

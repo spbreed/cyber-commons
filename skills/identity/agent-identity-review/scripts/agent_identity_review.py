@@ -29,7 +29,7 @@ def attribute(p, action):
 
 def memory_key(p, workspace):
     """Memory is scoped to the USER, not the workspace - this is the write that
-    let A1.4 leak a poisoned note between people."""
+    let B1.4 leak a poisoned note between people."""
     return f"{workspace}:{p.user}"
 
 dana = Principal("dana@corp", "reports-agent", "run-8812",
@@ -49,8 +49,8 @@ print(f"   priya -> {memory_key(priya, 'acme')}")
 print(f"   shared? {memory_key(dana, 'acme') == memory_key(priya, 'acme')}")
 print()
 print("db:admin is refused because the WORKLOAD never held it - so no user can")
-print("borrow it through the agent, which is A1.6 closed. The audit line names")
-print("dana, which is A1.14 closed. And a note written in dana's session cannot")
-print("be read back in priya's, which is A1.4 closed.")
+print("borrow it through the agent, which is B1.6 closed. The audit line names")
+print("dana, which is B1.14 closed. And a note written in dana's session cannot")
+print("be read back in priya's, which is B1.4 closed.")
 assert not authorize(dana, "db:admin")
 assert memory_key(dana, "acme") != memory_key(priya, "acme")

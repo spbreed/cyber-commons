@@ -55,7 +55,7 @@ documented, and the honest output is a capped PARTIAL rather than a pass.
 ```
 destination                           deny-list   allow-list  note
 api.corp.example                      allow       allow       the one it actually needs
-archive.evil.example                  block       block       A1.3's exfiltration target
+archive.evil.example                  block       block       B1.3's exfiltration target
 attacker-bucket.s3.amazonaws.com      allow       block       a bucket anyone can create
 169.254.169.254                       allow       block       cloud metadata - every credential
 pastebin.example                      allow       block       not on anyone's deny-list

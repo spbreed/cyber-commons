@@ -20,7 +20,7 @@ records:
     the analysis itself     -> Function C   (security research)
 
 Six of the forty land on lessons that already existed — parser sandboxing is
-A3.2, micro-segmentation is A3.3, short-lived credentials are A2.4 — and are
+B3.2, micro-segmentation is B3.3, short-lived credentials are B2.4 — and are
 mapped rather than duplicated. The nine lessons here carry the rest.
 """
 
@@ -28,46 +28,46 @@ mapped rather than duplicated. The nine lessons here carry the rest.
 # with labs/incident-register/register.json by scripts/check_register.py.
 REGISTER = '''REGISTER = [
  # id      name                                     type   NIST     owning lesson
- ("C1.1",   "out-of-band telemetry capture",         "P/D", "AU-9",  "A2.8"),
- ("C1.2",  "hash-chained WORM transcript store",    "P",   "AU-10", "A2.8"),
- ("C1.3",  "logging-plane isolation",               "P",   "SC-39", "A2.8"),
- ("C1.4",  "escape detection",                      "D",   "SI-7",  "D2.3"),
- ("C2.1",  "per-run namespace isolation",           "P",   "SC-4",  "A3.8"),
- ("C2.2",  "immutable / write-once artifact cache", "P",   "AC-4",  "A3.8"),
- ("C2.3",  "covert channel analysis",               "D",   "SC-31", "D3.8"),
- ("C2.4",  "write-pattern anomaly detection",       "D",   "SI-4",  "D3.8"),
- ("C3.1",  "parser sandboxing",                     "P",   "SI-3",  "A3.2"),
- ("C3.2",  "credential removal from workers",       "P",   "AC-6",  "A2.4"),
- ("C3.3",  "micro-segmentation, default-deny egress","P",  "SC-7",  "A3.3"),
- ("C3.4",  "dataset and upload content scanning",   "D",   "SI-10", "D2.3"),
- ("C4.1",  "secret scanning, automated revocation", "D/C", "IA-5",  "D2.3"),
- ("C4.2",  "short-lived workload credentials",      "P",   "IA-5",  "A2.4"),
- ("C4.3",  "scope minimisation",                    "P",   "AC-6",  "A2.3"),
- ("C4.4",  "credential canaries",                   "D",   "SI-4",  "D2.6"),
- ("C5.1",  "artifact signing verified at pull",     "P",   "SR-11", "A3.8"),
- ("C5.2",  "provenance attestation",                "P",   "SR-4",  "A3.8"),
- ("C5.3",  "admin-plane separation, JIT elevation", "P/D", "AC-6",  "A3.8"),
- ("C5.4",  "cache integrity diffing",               "D",   "SI-7",  "D2.3"),
- ("C6.1",  "control-exemption gate",                "P",   "CM-3",  "A3.9"),
- ("C6.2",  "mandatory blast-radius caps",           "P",   "RA-3",  "A3.9"),
- ("C6.3",  "continuous exemption-state monitoring", "D/C", "CA-7",  "D2.3"),
- ("C6.4",  "exemption register at launch approval", "P",   "PM-9",  "A3.9"),
- ("C7.1",  "authenticated principal hierarchy",     "P",   "IA-9",  "A2.6"),
- ("C7.2",  "channel separation",                    "P",   "AC-3",  "A2.6"),
- ("C7.3",  "prompt-injection filtering",            "P/D", "SI-10", "A2.6"),
- ("C7.4",  "authorisation-decision logging",        "D",   "AU-2",  "D3.8"),
- ("C8.1",  "cross-trajectory correlation analytics","D",   "SI-4",  "D3.8"),
- ("C8.2",  "population and lifetime quotas",        "P",   "SC-6",  "A3.9"),
- ("C8.3",  "fleet kill switch",                     "C",   "IR-4",  "D4.5"),
- ("C8.4",  "coordination-signature detection",      "D",   "SI-4",  "D3.8"),
- ("C9.1",  "first-class report-to-human tool",      "P",   "IR-6",  "A3.10"),
- ("C9.2",  "escalation-path testing",               "D",   "IR-3",  "D3.8"),
- ("C9.3",  "non-use telemetry",                     "D",   "SI-4",  "D3.8"),
- ("C9.4",  "mandatory HITL checkpoint on discovery","P",   "AC-3",  "A3.10"),
- ("C10.1", "cheat-surface red team",                "P",   "SA-11", "C1.2"),
- ("C10.2", "explicit abstain affordance",           "P",   "SA-8",  "A3.10"),
- ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "D2.6"),
- ("C10.4", "scorer integrity separation",           "P",   "SC-7",  "A3.8"),
+ ("C1.1",   "out-of-band telemetry capture",         "P/D", "AU-9",  "B2.8"),
+ ("C1.2",  "hash-chained WORM transcript store",    "P",   "AU-10", "B2.8"),
+ ("C1.3",  "logging-plane isolation",               "P",   "SC-39", "B2.8"),
+ ("C1.4",  "escape detection",                      "D",   "SI-7",  "E2.3"),
+ ("C2.1",  "per-run namespace isolation",           "P",   "SC-4",  "B3.8"),
+ ("C2.2",  "immutable / write-once artifact cache", "P",   "AC-4",  "B3.8"),
+ ("C2.3",  "covert channel analysis",               "D",   "SC-31", "E3.8"),
+ ("C2.4",  "write-pattern anomaly detection",       "D",   "SI-4",  "E3.8"),
+ ("C3.1",  "parser sandboxing",                     "P",   "SI-3",  "B3.2"),
+ ("C3.2",  "credential removal from workers",       "P",   "AC-6",  "B2.4"),
+ ("C3.3",  "micro-segmentation, default-deny egress","P",  "SC-7",  "B3.3"),
+ ("C3.4",  "dataset and upload content scanning",   "D",   "SI-10", "E2.3"),
+ ("C4.1",  "secret scanning, automated revocation", "D/C", "IA-5",  "E2.3"),
+ ("C4.2",  "short-lived workload credentials",      "P",   "IA-5",  "B2.4"),
+ ("C4.3",  "scope minimisation",                    "P",   "AC-6",  "B2.3"),
+ ("C4.4",  "credential canaries",                   "D",   "SI-4",  "E2.6"),
+ ("C5.1",  "artifact signing verified at pull",     "P",   "SR-11", "B3.8"),
+ ("C5.2",  "provenance attestation",                "P",   "SR-4",  "B3.8"),
+ ("C5.3",  "admin-plane separation, JIT elevation", "P/D", "AC-6",  "B3.8"),
+ ("C5.4",  "cache integrity diffing",               "D",   "SI-7",  "E2.3"),
+ ("C6.1",  "control-exemption gate",                "P",   "CM-3",  "B3.9"),
+ ("C6.2",  "mandatory blast-radius caps",           "P",   "RA-3",  "B3.9"),
+ ("C6.3",  "continuous exemption-state monitoring", "D/C", "CA-7",  "E2.3"),
+ ("C6.4",  "exemption register at launch approval", "P",   "PM-9",  "B3.9"),
+ ("C7.1",  "authenticated principal hierarchy",     "P",   "IA-9",  "B2.6"),
+ ("C7.2",  "channel separation",                    "P",   "AC-3",  "B2.6"),
+ ("C7.3",  "prompt-injection filtering",            "P/D", "SI-10", "B2.6"),
+ ("C7.4",  "authorisation-decision logging",        "D",   "AU-2",  "E3.8"),
+ ("C8.1",  "cross-trajectory correlation analytics","D",   "SI-4",  "E3.8"),
+ ("C8.2",  "population and lifetime quotas",        "P",   "SC-6",  "B3.9"),
+ ("C8.3",  "fleet kill switch",                     "C",   "IR-4",  "E4.5"),
+ ("C8.4",  "coordination-signature detection",      "D",   "SI-4",  "E3.8"),
+ ("C9.1",  "first-class report-to-human tool",      "P",   "IR-6",  "B3.10"),
+ ("C9.2",  "escalation-path testing",               "D",   "IR-3",  "E3.8"),
+ ("C9.3",  "non-use telemetry",                     "D",   "SI-4",  "E3.8"),
+ ("C9.4",  "mandatory HITL checkpoint on discovery","P",   "AC-3",  "B3.10"),
+ ("C10.1", "cheat-surface red team",                "P",   "SA-11", "D1.2"),
+ ("C10.2", "explicit abstain affordance",           "P",   "SA-8",  "B3.10"),
+ ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "E2.6"),
+ ("C10.4", "scorer integrity separation",           "P",   "SC-7",  "B3.8"),
 ]
 '''
 
@@ -232,9 +232,9 @@ you write assurance arguments:
 },
 
 # ---------------------------------------------------------------- Function A
-"A2.8": {
+"B2.8": {
  "concept": """
-A2.7 made the audit trail answer *who*. This lesson is about whether it answers
+B2.7 made the audit trail answer *who*. This lesson is about whether it answers
 honestly.
 
 Every detective control in Function D reads a record. If the subject of the
@@ -287,7 +287,7 @@ a hash chain about nothing.
               "transcripts is reporting on data the subject controls.",
 },
 
-"A3.8": {
+"B3.8": {
  "concept": """
 Two agent runs that share a package repository, a cache, an object store, a DNS
 resolver or a metadata service are not isolated, whatever the orchestrator's
@@ -361,7 +361,7 @@ obtained from the workload side twice.
               "which one to namespace first.",
 },
 
-"A3.9": {
+"B3.9": {
  "concept": """
 Controls get disabled. A classifier blocks the evaluation you are trying to
 run; an egress rule breaks a legitimate integration; a rate limit makes a test
@@ -419,7 +419,7 @@ the risk: the same exemption is fine at 100 agents and unacceptable at 50,000.
               "no answer.",
 },
 
-"A3.10": {
+"B3.10": {
  "concept": """
 Every control so far in this chapter constrains what the agent may do. This one
 does the opposite: it gives the agent somewhere to go.
@@ -479,7 +479,7 @@ as well as a failed attempt, or you have priced honesty out of the run.
 },
 
 # ---------------------------------------------------------------- Function B
-"D2.6": {
+"E2.6": {
  "concept": """
 Every detector in this chapter has needed a threshold, and every threshold is a
 trade between missing things and crying wolf. Deception is the exception:
@@ -534,9 +534,9 @@ tells you the environment is clean when it is only well-mapped.
 },
 
 # ---------------------------------------------------------------- Function D
-"D2.3": {
+"E2.3": {
  "concept": """
-D2.2 wrote detections for what an agent does to your estate. These are
+E2.2 wrote detections for what an agent does to your estate. These are
 detections for what happens to **the platform running it** — and they are
 different rules, on different data, with different owners.
 
@@ -583,7 +583,7 @@ period.
      ["upload scanning (C3.4)", "the ingest team", "upload path"]],
     caption="Five detections, five different owners, and not one of them reads "
             "the workload's own logs. That is the property that makes them "
-            "useful after A2.8: they survive the subject of the investigation "
+            "useful after B2.8: they survive the subject of the investigation "
             "having had write access to everything else.")),
    *skill_steps('detection/agent-platform-detections',
                '## 2 · The procedure, as a skill\n\nA seven-event escape sequence scores 0.07 on a generic volume anomaly. The skill writes four named rules whose subject is the platform — orphaned processes, cache diffs, escape signatures — and runs both against the same events so the comparison is visible.'),
@@ -600,7 +600,7 @@ period.
               "on most agent platforms nobody has ever run it.",
 },
 
-"D3.8": {
+"E3.8": {
  "concept": """
 This is the single most important structural change in the whole register, and
 it is not a rule — it is where the monitoring sits.
@@ -661,9 +661,9 @@ reports actually submitted. In the incident that gap was the entire failure.
               "finding, not an anomaly score.",
 },
 
-"D4.5": {
+"E4.5": {
  "concept": """
-D4.3 contained one agent. This is the control for the case where the unit of
+E4.3 contained one agent. This is the control for the case where the unit of
 containment is the fleet.
 
 The source incident makes the requirement concrete in one detail: third-party

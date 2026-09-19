@@ -1,4 +1,4 @@
-# step:file E3.1
+# step:file F3.1
 """Running the programme — eight decisions the CISO office actually makes.
 
 Everything before this is machinery. This is where somebody has to choose what
@@ -10,11 +10,11 @@ that gets skipped.
 
 
 # --------------------------------------------------------------------------- #
-# E3.1 — translating blast radius into consequence
+# F3.1 — translating blast radius into consequence
 # --------------------------------------------------------------------------- #
 # A board does not need to know that the agent holds a `payments:refund` scope.
 # It needs to know that one compromised run can move money without a person,
-# and how much. The translation is mechanical once you have A3.4's ceilings —
+# and how much. The translation is mechanical once you have B3.4's ceilings —
 # and the engineering sentence is the thing that gets said instead.
 def translate(*, scope, max_calls, amount_per_call, reversible, detected_in):
     exposure = max_calls * amount_per_call
@@ -32,9 +32,9 @@ def translate(*, scope, max_calls, amount_per_call, reversible, detected_in):
     }
 
 
-# step:E3.2 add
+# step:F3.2 add
 # --------------------------------------------------------------------------- #
-# E3.2 — govern the autonomy, not the tool
+# F3.2 — govern the autonomy, not the tool
 # --------------------------------------------------------------------------- #
 # A per-tool review queue becomes a bottleneck, and a bottleneck becomes a
 # bypass — teams route around it and the queue stops seeing the interesting
@@ -46,10 +46,10 @@ RUNGS = [
     (2, "acts on reversible things at volume", "the autonomy board, with a "
                                                "measured containment time"),
     (3, "acts on irreversible things with a human gate", "the autonomy board, "
-                                                         "plus D4.2's real "
+                                                         "plus E4.2's real "
                                                          "decision point"),
     (4, "acts on irreversible things unattended", "not granted in this "
-                                                  "system; A3.6 says the gate "
+                                                  "system; B3.6 says the gate "
                                                   "stops working before this"),
 ]
 
@@ -76,12 +76,12 @@ def request(deployment):
             "over_asking": want is not None and want > supported,
             "why": "the request is for a tool; the decision is about a rung, "
                    "which is what lets the next tool ship without a review"}
-# step:E3.2 end
+# step:F3.2 end
 
 
-# step:E3.3 add
+# step:F3.3 add
 # --------------------------------------------------------------------------- #
-# E3.3 — most winnable, not most visible
+# F3.3 — most winnable, not most visible
 # --------------------------------------------------------------------------- #
 # The instinct is to start with the workflow the executive sponsor mentions.
 # It is usually the hardest one, and failing it publicly costs the programme
@@ -100,12 +100,12 @@ def sequence(candidates):
     return {"order": [c["name"] for c in scored], "scored": scored,
             "why": "control reuse is weighted double: the first workflow's "
                    "job is to produce controls the second one inherits"}
-# step:E3.3 end
+# step:F3.3 end
 
 
-# step:E3.4 add
+# step:F3.4 add
 # --------------------------------------------------------------------------- #
-# E3.4 — the two functions with no home
+# F3.4 — the two functions with no home
 # --------------------------------------------------------------------------- #
 # Harness engineering and research are the two that fall between org charts.
 # Harness engineering is not AppSec and not platform; research is treated as a
@@ -129,12 +129,12 @@ def ownership():
             "why": "neither of these fails loudly; they quietly do not "
                    "happen, and the first evidence is an incident nobody had "
                    "the tooling to investigate"}
-# step:E3.4 end
+# step:F3.4 end
 
 
-# step:E3.5 add
+# step:F3.5 add
 # --------------------------------------------------------------------------- #
-# E3.5 — exposure, not activity
+# F3.5 — exposure, not activity
 # --------------------------------------------------------------------------- #
 # Activity metrics are easy to collect and move in the right direction whether
 # or not anything improved. "Agents reviewed" goes up when the queue gets
@@ -144,10 +144,10 @@ INSTEAD_OF = {
     "agents reviewed": "agents running at a rung above what their blast "
                        "radius supports",
     "findings closed": "findings that became an eval case, a control and a "
-                       "detection — C1.11's durability",
+                       "detection — D1.11's durability",
     "alerts triaged": "the floor miss rate — what the closing rule missed",
     "controls implemented": "control coverage measured against the tree, "
-                            "with the gaps named — E1.13",
+                            "with the gaps named — F1.13",
     "policies published": "obligations satisfied by controls that exist",
     "training completed": "time to stop, measured from a real attempt",
 }
@@ -159,12 +159,12 @@ def replace(metric):
             "is_activity": better is not None,
             "why": "an activity metric moves when the work gets bigger, "
                    "which is the opposite of what it is read as meaning"}
-# step:E3.5 end
+# step:F3.5 end
 
 
-# step:E3.6 add
+# step:F3.6 add
 # --------------------------------------------------------------------------- #
-# E3.6 — saying yes with conditions that are real
+# F3.6 — saying yes with conditions that are real
 # --------------------------------------------------------------------------- #
 # A flat no costs visibility: the capability ships anyway, somewhere you
 # cannot see it, which is strictly worse than the thing you refused. A yes
@@ -188,28 +188,28 @@ def approve_with(conditions):
             "verdict": ("approved with conditions" if not unreal else
                         "this is a yes with a wish list; either make the "
                         "conditions testable or say no")}
-# step:E3.6 end
+# step:F3.6 end
 
 
-# step:E3.7 add
+# step:F3.7 add
 # --------------------------------------------------------------------------- #
-# E3.7 — build order for the capability, not the headcount plan
+# F3.7 — build order for the capability, not the headcount plan
 # --------------------------------------------------------------------------- #
 # Hiring for conceptual familiarity produces a team that can discuss the
 # problem. The order below produces a team that has done it, and it is chosen
 # so each quarter's output is the next quarter's input — which is also why it
 # starts with the inventory rather than with the red team.
 BUILD_ORDER = [
-    ("inventory and tiering", "E1.2, E1.3",
+    ("inventory and tiering", "F1.2, F1.3",
      "everything downstream needs to know what exists"),
-    ("control baseline and KCIs", "E1.1, E1.13",
+    ("control baseline and KCIs", "F1.1, F1.13",
      "so coverage is a number before anybody improves it"),
-    ("detection and telemetry", "D1.3, D2.2",
+    ("detection and telemetry", "E1.3, E2.2",
      "you cannot red-team what you cannot observe"),
-    ("harness engineering", "B2.1",
+    ("harness engineering", "C2.1",
      "the thing that makes the rest repeatable"),
-    ("red team", "C1.0",
-     "last, because its findings need somewhere to land — C1.11"),
+    ("red team", "D1.0",
+     "last, because its findings need somewhere to land — D1.11"),
 ]
 
 
@@ -224,12 +224,12 @@ def build_order(*, demos_first=False):
                           for s, l, w in BUILD_ORDER],
             "produces": "control coverage, measured, with each stage's output "
                         "as the next stage's input"}
-# step:E3.7 end
+# step:F3.7 end
 
 
-# step:E3.8 add
+# step:F3.8 add
 # --------------------------------------------------------------------------- #
-# E3.8 — resilience, because the enumeration does not terminate
+# F3.8 — resilience, because the enumeration does not terminate
 # --------------------------------------------------------------------------- #
 # A probabilistic system has no complete list of failure modes, so a programme
 # organised around enumerating them never finishes and never ships. The
@@ -239,10 +239,10 @@ def build_order(*, demos_first=False):
 # Four questions, all of which this commons has already produced numbers for.
 def readiness(state):
     questions = {
-        "time_to_detect": "D1.0's clock, measured rather than targeted",
-        "time_to_stop": "D4.4, from a real attempt",
-        "containment_coverage": "C1.9 — which act-paths the stop is on",
-        "reconstructable": "C1.10 — can the run be defended afterwards",
+        "time_to_detect": "E1.0's clock, measured rather than targeted",
+        "time_to_stop": "E4.4, from a real attempt",
+        "containment_coverage": "D1.9 — which act-paths the stop is on",
+        "reconstructable": "D1.10 — can the run be defended afterwards",
     }
     missing = {k: why for k, why in questions.items() if state.get(k) is None}
     return {
@@ -256,11 +256,11 @@ def readiness(state):
 
 
 def durable(findings_handed_over, findings_total):
-    """C1.11's durability, read as a programme metric rather than an
+    """D1.11's durability, read as a programme metric rather than an
     engagement one: the fraction of what was learned that survived."""
     total = findings_total or 1
     return {"durability": round(findings_handed_over / total, 3),
             "repeated_next_time": findings_total - findings_handed_over,
             "why": "the rest will be rediscovered by the next engagement at "
                    "full price, and reported as a new finding"}
-# step:E3.8 end
+# step:F3.8 end

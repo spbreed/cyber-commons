@@ -1,0 +1,115 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B3.3 — Egress control | Cyber Commons</title><meta name="description" content="An allow-list at the network boundary, enforced where the agent cannot rewrite it."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">B3.3</div><h1>Egress control</h1><div class="badges"><span class="badge t">B3</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T2</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T4</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Execution</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Defense Evasion</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B3.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent with unrestricted egress turns any successful injection into data loss.</p></div><div class="ctrl"><div class="lab">Control</div><p>An allow-list at the network boundary, enforced where the agent cannot rewrite it.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attempt exfiltration to several destinations under an allow-list and see which survive.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/attestation/sandbox-egress-verifier" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifier.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Every exfiltration path in the architecture ends at the same place: a packet leaving your network. That makes egress the highest-leverage control you have, and the one most often left as allow-all because it broke something once.</p><div class="ct"><b>At CyberTravels.</b> Nothing in your tree constrains where the agent reaches — `_stubs.HTTP` takes any URL and the only reason nothing leaves is that the stub is inert. You add `cybertravels/egress.py`: an allow-list of hosts **and** a check on what is being sent, because the vendor API the agent is supposed to call is a perfectly good channel for a key to leave through.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Egress control for a destination chosen at run time by a model, which is what makes it different from a firewall rule written against a deployment. Both halves: the destination, and what is being sent to it — because a vendor API the agent is supposed to call is a perfectly good channel for data to leave through.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>An agent with unrestricted egress turns any successful injection into data loss.</p></div><div class="d1"><span>Day 1 — how</span><p>An allow-list at the network boundary, enforced where the agent cannot rewrite it.</p></div><div class="d2"><span>Day 2 — measure</span><p>Outbound destinations outside the allow-list, and the bytes that reached them.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   every exfiltration path, whatever its start, ends here:
+
+   prompt leak  --+
+   tool abuse   --+---&gt; data assembled ---&gt; [ egress ] ---&gt; out
+   code exec    --+                            ^
+   memory read  --+                            |
+                                    one place to enforce, one to log
+
+   allow-all egress makes every control upstream best-effort</pre><p><strong>Mitigates: T2 Tool Misuse · T6 Intent Breaking · LLM02 Sensitive Information Disclosure.</strong></p>
+<p>Egress is the highest-leverage control in the architecture, for a structural
+reason: <strong>every exfiltration path ends at the network boundary</strong>, no matter how
+the agent was persuaded to take it.</p>
+<p>Injection, tool misuse, a compromised MCP server, model-authored code, a
+poisoned peer message — all of them converge on the same final step. Data leaves.
+A control at that step does not need to understand what happened upstream, which
+is exactly what makes it robust: it is the one place where you do not have to
+predict the attack.</p>
+<p>Two rules that decide whether it works:</p>
+<p><strong>Allow-list, never deny-list.</strong> You cannot enumerate the internet. A deny-list
+blocks the destinations you thought of.</p>
+<p><strong>Specific destinations.</strong> <code>*.googleapis.com</code> or <code>*.s3.amazonaws.com</code> is not an
+egress policy — anyone can create a bucket in those namespaces, and B1.3's
+attacker will. The allow-list holds the destinations this workload actually
+needs, and there are usually fewer than five.</p>
+<p>And one placement rule: enforce it <strong>where the agent cannot rewrite it</strong> — the
+network layer, the sidecar, the gateway. An egress check inside the agent's own
+process is a suggestion to the component being attacked.</p>
+<p>The cost is honest: an agent that needs the open internet cannot have this
+control, and that is a design decision to make deliberately rather than by
+default.</p><div class="how"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>The one control that does not need to know how the attack worked, because every exfiltration path ends here.</p>
+</blockquote>
+<h2>2 · The control</h2><h2>2 · Probing the sandbox, as a skill</h2>
+<p>An allow-list in a config file is a claim. CyberTravels' Coding Agent runs model-authored code, so the claim worth making is <em>this runtime has no egress</em>, and that one is settled by probing, in an environment you own. The procedure names the residual paths — DNS first, because it is the one that has actually been used — and requires you to record what you did <strong>not</strong> test, because a probe list is a statement about coverage. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/sandbox-egress-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/sandbox-egress-verifier/SKILL.md</code></a></p><pre class="front"><code>name: sandbox-egress-verifier
+description: &gt;-
+  Verify AI-generated code executes only in an approved sandbox with no
+  network egress, and probe the known bypass paths. Use when attesting a no-
+  egress execution claim, choosing a code-execution runtime, or asked
+  whether a sandbox actually contains model-authored code.
+allowed-tools: Bash, Read</code></pre><h1>Sandbox Egress Verifier</h1>
+<p><strong>Controls:</strong> Control 2 — sandboxed no-egress runtime</p>
+<h2>Confidence: PARTIAL — and this ceiling is not negotiable</h2>
+<p>You can prove a sandbox is <strong>misconfigured</strong>. You cannot prove the negative
+"no covert channel exists". Network isolation has documented bypass paths, and
+a verdict of PASS on this control would be a claim the evidence cannot support.</p>
+<p><strong>Cap every verdict this skill produces at PARTIAL.</strong></p>
+<h2>When to use this</h2>
+<p>When a deployment claims isolation. Run it knowing what it cannot do: absence
+of a covert channel is not provable, DNS and object-storage bypasses are
+documented, and the honest output is a capped PARTIAL rather than a pass.</p>
+<h2>Procedure</h2>
+<ol>
+<li>
+<p><strong>Identify the runtime and its network mode.</strong> Record which isolation
+   technology is in use and which mode it runs in. A mode that permits general
+   outbound network access is an immediate FAIL — no probing required.</p>
+</li>
+<li>
+<p><strong>Confirm the runtime is on the approved list.</strong> An approved sandbox in the
+   wrong mode and an unapproved sandbox in the right mode are both findings.</p>
+</li>
+<li>
+<p><strong>Probe the known residual paths</strong>, in an environment you own:</p>
+</li>
+<li><strong>DNS.</strong> Name resolution is frequently permitted where general egress is
+     not, and A/AAAA queries carry data outward. This has been demonstrated to
+     yield interactive command-and-control on a major managed sandbox.</li>
+<li><strong>Object storage reachability.</strong> Managed storage endpoints are commonly
+     left reachable and have been used as a command-and-control channel.</li>
+<li>
+<p><strong>Host escape.</strong> Subprocess spawning and any path from the sandboxed
+     process to the host.</p>
+</li>
+<li>
+<p><strong>Record what you did not test.</strong> A probe list is a statement about coverage,
+   and coverage is the honest part of this verdict.</p>
+</li>
+</ol>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/sandbox_egress_verifier.py"><code>scripts/sandbox_egress_verifier.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>destination                           deny-list   allow-list  note
+api.corp.example                      allow       allow       the one it actually needs
+archive.evil.example                  block       block       B1.3's exfiltration target
+attacker-bucket.s3.amazonaws.com      allow       block       a bucket anyone can create
+169.254.169.254                       allow       block       cloud metadata - every credential
+pastebin.example                      allow       block       not on anyone's deny-list
+
+deny-list lets through : 3  ['attacker-bucket.s3.amazonaws.com', '169.254.169.254', 'pastebin.example']
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;sandbox_runtime&quot;: &quot;str&quot;,
+  &quot;network_mode&quot;: &quot;str&quot;,
+  &quot;approved_runtime&quot;: true,
+  &quot;bypass_probes&quot;: [{&quot;path&quot;: &quot;dns|object_storage|host_escape&quot;, &quot;reachable&quot;: false, &quot;detail&quot;: &quot;str&quot;}],
+  &quot;untested_paths&quot;: [&quot;str&quot;],
+  &quot;verdict&quot;: &quot;PARTIAL|FAIL&quot;,
+  &quot;verdict_ceiling_reason&quot;: &quot;absence of a covert channel is not provable at runtime&quot;
+}
+</code></pre>
+<p><code>PASS</code> is not a permitted value. If a tool emits one, that tool is wrong.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting PASS</strong> because the configuration looked right. That is the whole
+  reason this skill has a ceiling.</li>
+<li><strong>Probing only general HTTP egress.</strong> DNS is the path that has actually been
+  used.</li>
+<li><strong>Testing against someone else's infrastructure.</strong> Probe only what you own.</li>
+</ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at B3.3 --out work/cybertravels
+python3 scripts/checkpoint.py --at B3.3 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
+# then, in your agent: ask for "sandbox egress verifier"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifier.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape. Its ceiling is PARTIAL and not negotiable: a configuration that looks right is not a PASS, and probing general HTTP while leaving DNS alone tests the path nobody uses. The untested list is part of the output, not an omission from it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Write the allow-list for one agent by listing the hosts it genuinely calls. If it is under five, you can ship this control this week; if it is unbounded, that is the finding.</p></div></section><div class="expect"><b>Expect</b>Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Cilium</span><span>agentgateway</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/sandbox-egress-verifier</code></p></div><div class="pager"><a href="B3.2.html"><span class="k">← Previous</span><span class="t">B3.2 · Sandboxed execution</span></a><a class="next" href="B3.4.html"><span class="k">Next →</span><span class="t">B3.4 · Budgets and stop conditions</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

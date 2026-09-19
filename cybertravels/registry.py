@@ -1,9 +1,9 @@
-# step:file A2.1
+# step:file B2.1
 """The workload identity registry — who the agents are, and how they prove it.
 
 Function G gave each agent a SPIFFE-style name and put the four of them in a
 `set` in `config.py`. That was enough to make an audit row name which agent
-acted, which was G1.3's point. It is not enough for anything A2 asks:
+acted, which was A1.3's point. It is not enough for anything B2 asks:
 
 * the set is edited by hand, so nothing records **when** an identity started
   existing or who approved it;
@@ -16,9 +16,9 @@ This module replaces the set with a registry, and it arrives in three stages —
 one per lesson, so the checkpoint at each one contains exactly what that lesson
 built:
 
-    A2.1  the registry itself: identities as records rather than strings
-    A2.2  issuance against attestation, so there is no first secret to steal
-    A2.5  the lifecycle: rotation, revocation, and finding the orphans
+    B2.1  the registry itself: identities as records rather than strings
+    B2.2  issuance against attestation, so there is no first secret to steal
+    B2.5  the lifecycle: rotation, revocation, and finding the orphans
 """
 import hashlib
 import time
@@ -30,7 +30,7 @@ class RegistryError(Exception):
     """An identity was refused, or asked for that does not exist."""
 
 
-# One record per workload. `selectors` is the part that matters in A2.2: the
+# One record per workload. `selectors` is the part that matters in B2.2: the
 # properties a workload can *demonstrate* rather than assert.
 class Workload:
     __slots__ = ("spiffe_id", "selectors", "registered_at", "approved_by",
@@ -87,9 +87,9 @@ def all_workloads():
                                         key=lambda w: w.spiffe_id)]
 
 
-# step:A2.2 add
+# step:B2.2 add
 # --------------------------------------------------------------------------- #
-# A2.2 — issuance against attestation
+# B2.2 — issuance against attestation
 # --------------------------------------------------------------------------- #
 # The bootstrap problem: a workload needs a credential to prove who it is, and
 # it has to prove who it is to get a credential. Handing every agent the same
@@ -136,12 +136,12 @@ def attest(spiffe_id, evidence: dict):
         "attested": hashlib.sha256(
             repr(sorted(w.selectors.items())).encode()).hexdigest()[:16],
     }
-# step:A2.2 end
+# step:B2.2 end
 
 
-# step:A2.5 add
+# step:B2.5 add
 # --------------------------------------------------------------------------- #
-# A2.5 — the lifecycle
+# B2.5 — the lifecycle
 # --------------------------------------------------------------------------- #
 # An identity that can be created and never stopped is half a control. These
 # three are the operations an NHI register has to support before anybody can
@@ -168,7 +168,7 @@ def revoke(spiffe_id, reason=""):
 
 def register(spiffe_id, selectors, approved_by):
     """Add one. `approved_by` is not optional: an identity nobody approved is
-    the row an auditor stops on, and A2.5's Day 2 counts exactly those."""
+    the row an auditor stops on, and B2.5's Day 2 counts exactly those."""
     if not approved_by:
         raise RegistryError("an identity needs a named approver")
     if spiffe_id in _WORKLOADS:
@@ -187,4 +187,4 @@ def orphans(live_ids):
             i for i in known - live if active(i)),
         "running_but_unregistered": sorted(live - known),
     }
-# step:A2.5 end
+# step:B2.5 end

@@ -1,110 +1,120 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.1 — What building a harness means in security engineering | Cyber Commons</title><meta name="description" content="An independent verifier, and a budget that stops the loop when it cannot pass."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.1</div><h1>What building a harness means in security engineering</h1><div class="badges"><span class="badge t">B2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/llmrisk/llm052025-improper-output-handling/" target="_blank" rel="noopener"><i>OWASP LLM</i>LLM05</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>ML Attack Staging</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds incorrectly, files a clean trace, and the bug is found by whoever merged the patch.</p></div><div class="ctrl"><div class="lab">Control</div><p>An independent verifier, and a budget that stops the loop when it cannot pass.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the same loop twice — once with no verifier, once with one.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/appsec/agentic-harness-loop" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">A model on its own is a text generator. Wrap it in a loop with tools and it reviews CyberTravels&#x27; pull requests; wrap it badly and it reviews them and tells you it found nothing. Every part of that wrapper is a security decision, and nobody else in the building is going to notice that the verifier is a shape check.</p><div class="ct"><b>At CyberTravels.</b> `appsec/findings.py`. A `Finding` carries its **basis** — pattern, model, reachability, executed exploit — so stage 7&#x27;s hypothesis cannot be reported with stage 12&#x27;s confidence. `run()` refuses when the producer and the verifier are the same callable, and refuses a verifier that cannot answer `undetermined`. Your smoke test proves both refusals, because a self-grading loop files a clean trace.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>What separates a harness from a loop with a model in it: structured output, a verifier that is not the producer, and a budget that stops with the work unfinished. Built around the failure that does not announce itself — a model grading its own findings files a clean trace either way.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds quietly and wrongly.</p></div><div class="d1"><span>Day 1 — how</span><p>Build an independent verifier, and a budget that stops the loop when it cannot pass.</p></div><div class="d2"><span>Day 2 — measure</span><p>Agreement rate between the verifier and held-out ground truth, and the number of loops stopped by budget rather than by success.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   a model                 a harness
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.1 — Agent identity — user, workload, agent | Cyber Commons</title><meta name="description" content="A distinct identity per workload, carrying the human principal alongside it, asserted on every call."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">B2.1</div><h1>Agent identity — user, workload, agent</h1><div class="badges"><span class="badge t">B2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T3</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T9</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Credential Access</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/15/" title="Accuracy, robustness and cybersecurity" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 15</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A shared service account answers &#x27;what ran&#x27; and destroys &#x27;for whom&#x27; — so no later control can be conditioned on the caller.</p></div><div class="ctrl"><div class="lab">Control</div><p>A distinct identity per workload, carrying the human principal alongside it, asserted on every call.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Separate the three identities and show a downstream service authorising on the agent while attributing to the human.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/identity/agent-identity-review" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/identity/agent-identity-review/scripts/agent_identity_review.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Three identities are present every time an agent acts: the person who asked, the workload that runs, and the agent instance doing the work. Collapse any two of them and you lose the ability to answer the only question that matters after an incident.</p><div class="ct"><b>At CyberTravels.</b> A1.3 put four SPIFFE names in a `set` in `cybertravels/config.py`. You replace it with `cybertravels/registry.py`: identities as records with an approver, a registration time and a state. `identity.py` stops asking &quot;is this one of ours&quot; and starts asking &quot;is this still active&quot;.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Replacing a hand-edited set of agent names with a registry: identities as records that carry an approver, a registration time and a state, so the system can answer when an identity started existing and whether it still should.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>A shared service account answers &quot;what ran&quot; and destroys &quot;for whom&quot;, so no later control can be conditioned on the caller.</p></div><div class="d1"><span>Day 1 — how</span><p>One identity per workload, carrying the human principal alongside it, asserted on every call.</p></div><div class="d2"><span>Day 2 — measure</span><p>Workloads holding a distinct identity, as a share of the fleet.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   who asked        what runs         what acted
+   +----------+     +-----------+     +--------------+
+   |  human   | --&gt; | workload  | --&gt; | agent        |
+   | dana@..  |     | pod/task  |     | instance #7  |
+   +----------+     +-----------+     +--------------+
+        |                |                   |
+      consent         attestation        the actor in the log
 
-   tokens in               PLAN   the model proposes
-   tokens out         -&gt;   ACT    the harness runs it against a tool
-   no memory               VERIFY something independent decides
-   no actions              STOP   verified, or a budget ran out
-   no notion of
-   &quot;did that work&quot;         the security decisions live in the last two
-
-   no verifier   -&gt; the loop accepts whatever came back
-   a shape check -&gt; it accepts anything well-formed
-   an LLM judge  -&gt; it accepts anything confident
-   a real check  -&gt; it refuses escape(ref) because that is still
-                    concatenation</pre><p><strong>Building a harness, in security engineering, is building everything around a
-model that turns generating text into getting work done: what it sees, what it
-may do, how you know whether it worked, and when it stops.</strong> A model on its own
-is a text generator — no memory, no actions, no notion of success. The wrapper
-is what makes it a control, and every part of that wrapper is a security
-decision: the tool surface is an authorisation problem, the verifier decides
-what your pipeline is allowed to believe, and the budget is the only thing
-still holding once the model is the component you cannot trust.</p>
-<p>You already run several, whether or not anyone calls them that:</p>
+   collapse any two and the post-incident question loses its answer</pre><p><strong>Mitigates: T9 Identity Spoofing · T3 Privilege Compromise · T1 Memory Poisoning.</strong></p>
+<p>Three identities are in play whenever an agent acts, and B1.6 and B1.7 were both
+caused by collapsing them into one.</p>
+<p><strong>The user.</strong> The human who asked. Carries the business authority and is the
+answer to "on whose behalf".</p>
+<p><strong>The workload.</strong> The process that runs — a container, a function, a pod. It has
+its own identity, derived from the platform, not from a secret someone pasted.</p>
+<p><strong>The agent instance.</strong> This particular run, of this particular agent, for this
+particular task. It is what you revoke when one agent misbehaves.</p>
+<p>The control is to keep all three, and to use them for different things:</p>
 <ul>
-<li><strong>The CI security scan.</strong> Sees the changed files, may only read, "worked"
-  means a zero exit and a finding that parses, stops on a timeout.</li>
-<li><strong>An autofix bot.</strong> Sees the finding and the file, may open a branch, and
-  "worked" should mean <em>the exploit no longer reproduces</em> — not <em>the scanner
-  went quiet</em>.</li>
-<li><strong>A SOC triage assistant.</strong> Sees the alert and its enrichment, may query the
-  SIEM read-only, and "worked" means its disposition matched an analyst's on a
-  held-out sample.</li>
+<li><strong>Authorize on the workload.</strong> What may this agent ever do? That is its
+  ceiling, and it does not change per request.</li>
+<li><strong>Attribute to the user.</strong> Who caused this? That is what the audit trail needs
+  and what B1.14 could not answer.</li>
+<li><strong>Scope memory and state to the instance or the user</strong>, never to the workload
+  alone — which is the write that made B1.4 spread across sessions.</li>
 </ul>
-<p>The third field is where harnesses fail, and they fail quietly. A harness whose
-verifier is the model agreeing with itself does not stop and report an error —
-it <strong>succeeds incorrectly</strong>, files a clean trace, and the bug is found later by
-whoever merged the patch.</p><div class="how"><h2>2 · The four moves</h2><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">move</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">who does it</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the security decision in it</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>plan</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the model</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">none — this is the part you did not write</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>act</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the harness</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the tool surface: what is even expressible</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>verify</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">something independent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>what the pipeline is allowed to believe</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>stop</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the harness</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the budget — the last control still standing</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Frameworks make plan and act easy and leave verify and stop as your problem, usually defaulting to “the model says it is done” and “loop forever”.</div><h2>3 · One loop, run twice</h2>
-<p>The simplest harness that shows the point: about twenty lines, one real model call, one SQL injection from CyberTravels' booking service. It runs with no verifier and then with one — same model, same prompt.</p>
-<p>Offline the model is a labelled replay; against a served open-weight endpoint it is the identical code.</p><h2>4 · The part worth keeping</h2>
-<p>Read the last block of that output again. The answer it rejects —
-<code>ref=" + escape(ref)</code> — is the one that matters: it reads like a fix, it would
-pass a human skim, and it is still concatenation. Without a verifier the loop
-accepts it, reports success and files a clean trace.</p>
-<p>That is the whole reason this chapter defines the word before it builds
-anything. Every stage after this one is a harness, and for each of them the
-question is the same: <strong>what, other than the model, decided that this worked?</strong></p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/agentic-harness-loop/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/agentic-harness-loop/SKILL.md</code></a></p><pre class="front"><code>name: agentic-harness-loop
+<p>The failure mode to watch for is a system that authenticates the agent and then
+forgets the human, because it produces logs that are complete and useless.</p><div class="how"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>Answers <strong>who is calling</strong>, so every later control has a subject. Without it, default-deny has nothing to deny and the audit trail has nobody to name.</p>
+</blockquote>
+<h2>2 · The control</h2><h2>2 · Separating the three, as a skill</h2>
+<p>Keeping the three identities apart is a review you will run against every agent CyberTravels ships, not a decision you make once. So it is written down as a procedure: which principal authorises, which one is attributed, which one scopes memory — and the two narrowing rules a delegated token has to satisfy before any of it means anything. This is the file in this repository, embedded verbatim:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/identity/agent-identity-review/SKILL.md" target="_blank" rel="noopener"><code>skills/identity/agent-identity-review/SKILL.md</code></a></p><pre class="front"><code>name: agent-identity-review
 description: &gt;-
-  Build and check the plan-act-verify loop that turns a model into a harness —
-  including the exit condition, the parser, and an independent verifier that
-  decides what the loop is allowed to accept. Use when writing an agentic
-  pipeline, or when a loop reports success on work nobody checked.
-allowed-tools: Read, Grep, Glob</code></pre><h1>The loop is yours; the model is a component in it</h1>
-<p>A harness is four moves — plan, act, verify, stop — and the security engineer
-owns three of them. What the loop <strong>accepts</strong> is decided by the verifier, not by
-the model, and a loop with no verifier accepts whatever came back and reports
-success.</p>
+  Review how an agent authenticates and how a user&#x27;s authority is delegated to
+  it, including token exchange, on-behalf-of chains, service accounts and
+  non-human identity. Use when asked who an agent is calling as, whether a
+  delegation is auditable, why a downstream system sees the wrong principal, or
+  how to scope an agent&#x27;s credentials.
+allowed-tools: Read, Grep, Glob</code></pre><h1>Agent identity and delegation review</h1>
+<p>Three identities are in play whenever an agent acts, and most incidents come
+from collapsing them:</p>
+<ul>
+<li>the <strong>user</strong> whose request started the work</li>
+<li>the <strong>agent</strong> doing the work — a workload identity, not a person</li>
+<li>the <strong>actor chain</strong> connecting them, which is what an auditor needs</li>
+</ul>
+<p>A service account shared by every agent answers "what ran" and destroys "for
+whom". That is the gap non-human identity exists to close.</p>
 <h2>When to use this</h2>
-<p>Whenever you are about to put a model in a for-loop: triage, remediation,
-detection authoring, anything that iterates until it is satisfied.</p>
+<p>Reviewing an agent's auth design, an OBO/token-exchange implementation, a
+gateway that fronts an agent, or any log where you cannot tell which user
+caused an action.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Write the exit condition before the prompt.</strong> A loop whose exit is easier
-than the work will take the exit. Do not offer the model a way to declare
-itself done; decide that from the outside, on the artefact.</p>
-<p><strong>2 — Parse defensively, because parsing is the harness's job.</strong> Asked for one
-line, a small model returns the whole function and a larger one returns a fenced
-block. Both are reasonable readings. Take what you need from what arrives rather
-than requiring the model to do you a favour.</p>
-<p><strong>3 — Write the verifier as an independent check.</strong> Independent means it does
-not ask the model whether the answer is good. It examines the artefact: does the
-line use a placeholder, does the test pass, does the exploit stop working.</p>
-<p><strong>4 — Test the verifier against a correct answer you did not expect.</strong> This is
-the step that gets skipped. A verifier that accepts only one spelling of correct
-rejects real work and burns the budget doing it — check <code>%s</code>, <code>:name</code> and <code>$1</code>
-before shipping a check for <code>?</code>.</p>
-<p><strong>5 — Test it against a plausible wrong answer.</strong> Something that reads like a
-fix and is not — an escape function wrapped around concatenation. If the
-verifier accepts it, the loop ships it, reports success, and the trace looks
-clean.</p>
+<p><strong>1 — Name the three identities.</strong> For the flow under review, write down the
+user principal, the workload identity, and where each is asserted. If the
+workload identity is a long-lived shared secret, that is finding one.</p>
+<p><strong>2 — Check the delegation narrows.</strong> In RFC 8693 token exchange the issued
+token must satisfy <strong>both</strong> rules:</p>
+<ul>
+<li><strong>subset of presented</strong> — never more scope than the incoming token carried</li>
+<li><strong>within the actor's ceiling</strong> — never more than the agent is itself allowed</li>
+</ul>
+<p>Either rule alone is insufficient. Subset-only lets a highly privileged user
+hand an agent authority the agent should never hold; ceiling-only lets an agent
+exceed the user who asked. Test both directions explicitly.</p>
+<p><strong>3 — Check the chain is preserved and not duplicated.</strong> The <code>act</code> chain should
+read <code>user → agent</code>, once. A chain that repeats the principal
+(<code>alice → alice → agent</code>) usually means the head was appended twice, and it
+breaks any audit query that counts hops.</p>
+<p><strong>4 — Find where OBO stops.</strong> Some downstream systems cannot consume a
+delegated token — legacy databases, vendor APIs, anything with a static
+credential. Identify each, and require a <strong>choke point</strong>: a gateway that holds
+the credential, enforces per-user authorisation <em>before</em> the call, and logs the
+original principal. The credential must not be reachable by the agent directly.</p>
+<p><strong>5 — Check expiry and revocation.</strong> How long is the delegated token valid, and
+what stops it being replayed after the user's session ends? Just-in-time
+authority that outlives the task is standing authority with extra steps.</p>
+<p><strong>6 — Check the log answers the audit question.</strong> Pick a real question — "which
+user caused this row to be deleted?" — and try to answer it from the logs alone.
+If you cannot, the delegation is not auditable regardless of how it is built.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agentic_harness_loop.py"><code>scripts/agentic_harness_loop.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_identity_review.py"><code>scripts/agent_identity_review.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>the loop, wired: ['plan', 'act', 'verify', 'stop']
-backend  : replay
-steps    : 1
-accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
-verified : None   &lt;- nothing checked it
+<pre><code>request                     authorized?  attributed to
+dana@corp -&gt; reports:read   True         dana@corp via reports-agent
+dana@corp -&gt; db:admin       False        dana@corp via reports-agent
 
-The loop stopped because the model produced something, which is not the
-same as producing something correct. Whatever came back was accepted.
+memory keys - the same workspace, two users:
+   dana  -&gt; acme:dana@corp
+   priya -&gt; acme:priya@corp
+   shared? False
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;loop&quot;: {&quot;moves&quot;: [&quot;plan&quot;, &quot;act&quot;, &quot;verify&quot;, &quot;stop&quot;], &quot;max_steps&quot;: 0, &quot;exit_owned_by&quot;: &quot;harness|model&quot;},
-  &quot;parse&quot;: {&quot;expected&quot;: &quot;str&quot;, &quot;shapes_seen&quot;: [&quot;str&quot;], &quot;strategy&quot;: &quot;str&quot;},
-  &quot;verifier&quot;: {&quot;independent&quot;: true, &quot;accepts&quot;: [&quot;str&quot;], &quot;rejects&quot;: [&quot;str&quot;]},
-  &quot;runs&quot;: [{&quot;verifier&quot;: &quot;none|present&quot;, &quot;steps&quot;: 0, &quot;accepted&quot;: &quot;str&quot;, &quot;verified&quot;: null}]
+  &quot;identities&quot;: {&quot;user&quot;: &quot;str&quot;, &quot;workload&quot;: &quot;str&quot;, &quot;assertion&quot;: &quot;str&quot;},
+  &quot;delegation&quot;: {&quot;mechanism&quot;: &quot;obo|impersonation|shared_service_account|none&quot;,
+                 &quot;subset_of_presented&quot;: true, &quot;within_actor_ceiling&quot;: true,
+                 &quot;chain&quot;: [&quot;principal&quot;, &quot;...&quot;], &quot;chain_wellformed&quot;: true,
+                 &quot;ttl_seconds&quot;: 0, &quot;revocable&quot;: true},
+  &quot;chokepoints&quot;: [{&quot;downstream&quot;: &quot;str&quot;, &quot;reason&quot;: &quot;str&quot;,
+                   &quot;enforced_at&quot;: &quot;gateway|service|none&quot;,
+                   &quot;credential_reachable_by_agent&quot;: false}],
+  &quot;audit&quot;: {&quot;question&quot;: &quot;str&quot;, &quot;answerable_from_logs&quot;: true},
+  &quot;findings&quot;: [{&quot;issue&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium|low&quot;, &quot;fix&quot;: &quot;str&quot;}]
 }
 </code></pre>
-<p>Report the unverified run too. The pair is the lesson: the same model and the
-same prompt, with and without something checking the answer.</p>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Offering the model a DONE exit.</strong> It will take it on the first turn.</li>
-<li><strong>A verifier that accepts one spelling.</strong> It rejects correct work, repeatedly,
-  and the budget goes on retries.</li>
-<li><strong>Asking a model to judge the answer.</strong> That is a second opinion, not a
-  verification.</li>
+<li><strong>Checking only one narrowing rule.</strong> Both, every time.</li>
+<li><strong>Accepting a shared service account because it is "internal".</strong> Internal is
+  a network property; it says nothing about attribution.</li>
+<li><strong>Treating the gateway as optional</strong> where the downstream cannot do OBO. It
+  is the only place authorisation can happen.</li>
+<li><strong>Measuring delegation by whether the call succeeded.</strong> A call that succeeds
+  with too much scope is the failure being looked for.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at B2.1 --out work/cybertravels
 python3 scripts/checkpoint.py --at B2.1 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "agentic harness loop"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The loop runs with a real model behind <code>ask()</code> — a labelled replay offline, a real open-weight call when one is served. With no verifier it accepts whatever came back and reports <code>verified: None</code>. With the verifier the same model and prompt produce an accepted, parameterised line; a narrow verifier that only accepts <code>?</code> is shown rejecting a correct psycopg fix, and a plausible answer wrapping the input in <code>escape()</code> is refused, because it is still concatenation.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Name your pipeline's verifier out loud. If the sentence contains "the model checks" or "it looks right", you have a judge, and a judge approves confident prose — including prose that contradicts the finding it is attached to.</p></div></section><div class="expect"><b>Expect</b>Without a verifier the loop accepts whatever the model returned and reports verified: None. With one, the same model and prompt produce an accepted parameterised line, a too-narrow verifier is shown rejecting a correct fix, and an answer that wraps the input in escape() is refused because it is still concatenation.</div><p class="sub" style="margin-top:10px">Skill source: <code>skills/appsec/agentic-harness-loop</code></p></div><div class="pager"><a href="B2.0.html"><span class="k">← Previous</span><span class="t">B2.0 · The AI SDLC — what runs before a deploy, and what runs after</span></a><a class="next" href="B2.2.html"><span class="k">Next →</span><span class="t">B2.2 · Threat modelling from what the estate already knows</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "agent identity review"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/identity/agent-identity-review/scripts/agent_identity_review.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its own shape: a routing description an agent reads to decide whether this review applies, the tools it is allowed to use, and a procedure long enough to separate user, workload and agent instance and to check both narrowing rules — scope is a subset of what was presented, and within the actor's own ceiling.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>For one agent, write down its three identities. If the workload and the user are the same value, you have inherited credentials; if the instance does not exist, you cannot revoke one run.</p></div></section><div class="expect"><b>Expect</b>Authorization resolves against the workload ceiling and refuses `db:admin` no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another&#x27;s.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>SPIFFE/SPIRE</span><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/identity/agent-identity-review</code></p></div><div class="pager"><a href="B1.19.html"><span class="k">← Previous</span><span class="t">B1.19 · The control index — every control CyberTravels needs, not only the new ones</span></a><a class="next" href="B2.2.html"><span class="k">Next →</span><span class="t">B2.2 · Bootstrapping the first credential</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

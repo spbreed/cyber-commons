@@ -41,7 +41,7 @@ DENY_SUFFIXES = {".evil.example"}          # the deny-list, for comparison
 
 DESTINATIONS = [
  ("api.corp.example",              "the one it actually needs"),
- ("archive.evil.example",          "A1.3's exfiltration target"),
+ ("archive.evil.example",          "B1.3's exfiltration target"),
  ("attacker-bucket.s3.amazonaws.com", "a bucket anyone can create"),
  ("169.254.169.254",               "cloud metadata - every credential"),
  ("pastebin.example",              "not on anyone's deny-list"),

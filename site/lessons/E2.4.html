@@ -1,84 +1,78 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.4 — Sector overlays | Cyber Commons</title><meta name="description" content="Find the regime you&#x27;re already in before inventing a new one."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.4</div><h1>Sector overlays</h1><div class="badges"><span class="badge t">E2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/11/" title="Technical documentation" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 11</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent is already a &quot;model&quot; under model-risk rules you already comply with.</p></div><div class="ctrl"><div class="lab">Control</div><p>Find the regime you&#x27;re already in before inventing a new one.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map one agent to existing model-risk obligations.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/regulatory/sector-overlay-assessment" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/regulatory/sector-overlay-assessment/scripts/sector_overlay_assessment.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Sector overlays add requirements rather than replacing them. Reconciling them against the common spine is what stops a financial-services obligation and a healthcare obligation becoming two separate control estates.</p><div class="ct"><b>At CyberTravels.</b> The cheapest control in the programme is one you are already operating under another name. An agent that decides is a **model** under model-risk rules your organisation has followed for years, with inventory, validation and change requirements nobody thought to apply here.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Finding the sector rules you are already complying with under another name, which is usually the cheapest control in the programme — an agent that decides is a model, and model rules already have inventory, validation and change requirements.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>The sector regime you are already in applies to agents without ever using the word AI.</p></div><div class="d1"><span>Day 1 — how</span><p>Find the clauses that catch agents: third-party risk, exit strategy, scope containment, minimum necessary.</p></div><div class="d2"><span>Day 2 — measure</span><p>Thresholds that move rather than indicators that are new — a much smaller job than inventing a measurement programme.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   overlays ADD, they do not replace
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.4 — Agent-assisted detection engineering — written by a loop, shipped by a human | Cyber Commons</title><meta name="description" content="Detection-as-code with agents inside the CI loop."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — The Agentic SOC › Detect — the Lake, and Rules Mapped to MITRE</div><div class="sid">E2.4</div><h1>Agent-assisted detection engineering — written by a loop, shipped by a human</h1><div class="badges"><span class="badge t">E2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Coverage gaps nobody mapped.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detection-as-code with agents inside the CI loop.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate and unit-test Sigma rules in CI; map coverage to ATT&amp;CK.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/detection/detection-rule-deployability" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/detection/detection-rule-deployability/scripts/detection_rule_deployability.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">An agent can write and tune a detection far faster than you can, which means it can also ship a confident, wrong rule into production far faster than you can. The validation discipline is the whole of the value.</p><div class="ct"><b>At CyberTravels.</b> `review()` calls D1.6&#x27;s `deployable()` rather than restating it. Your sequence rule ships at 1,000 events a day and needs eleven analysts at 100,000 — same rule, same precision. And a candidate with no technique mapped is refused, because a rule nobody mapped is a rule nobody can reason about for coverage.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>The gate between a model-written detection and a deployed one: a measured false-positive rate at the volume it will actually see, a technique mapping so coverage can be reasoned about, and a human who accepts it.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>An agent writes candidate rules faster than anyone can review them, and a rule at 5% precision is not 5% useful — it is negative.</p></div><div class="d1"><span>Day 1 — how</span><p>Let the loop generate, then score every candidate against real historical telemetry before anything ships.</p></div><div class="d2"><span>Day 2 — measure</span><p>Firing volume per true positive. A rule at 301 alerts to 1 is rejected with its number rather than with an opinion.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   agent writes rule --&gt; test corpus --&gt; tuned rule --&gt; production
+                              ^
+                       +------+-------+
+                       | true positives from history |
+                       | benign traffic that must    |
+                       |   NOT fire                  |
+                       +-----------------------------+
 
-   +---------------------------------------+
-   |          the common spine             |
-   +---------------------------------------+
-      + finance: model risk, records
-      + health: safety, clinical validation
-      + critical infra: resilience, reporting
-
-   reconcile at the spine, or you end up with three control estates</pre><p>Sector overlays usually bite first, and the reason is structural: they already
-applied before anyone deployed an agent, they already have a supervisor who
-knows your organisation, and several of their clauses cover autonomous action
-without ever using the word AI.</p>
-<p>Four clause types that catch agents without naming them:</p>
-<ul>
-<li><strong>ICT third-party risk</strong> (DORA) — your model provider is an ICT third party.</li>
-<li><strong>Exit strategy</strong> (DORA) — can you stop using this provider? Most AI contracts
-  have no answer.</li>
-<li><strong>Scope containment</strong> (PCI DSS) — an agent with access to the cardholder data
-  environment expands that environment.</li>
-<li><strong>Minimum necessary</strong> (HIPAA) — the agent's context window is a disclosure.</li>
-</ul>
-<p>Citing an existing clause is also far more effective internally than proposing a
-new AI policy: it needs no new governance, and somebody already owns it.</p><blockquote class="anchor">**Anchor → E1.1.** A sector overlay mostly re-targets indicators you already compute — the same containment number against a stricter threshold. The exception is exit strategy, which no horizontal regime asks for and which almost nobody can currently measure at all.</blockquote><div class="how"><h2>2 · Demo — map agent facts onto pre-existing clauses</h2><h2>3 · Where it breaks — the exit-strategy clause</h2><h2>4 · The control — cite the existing clause, not a new policy</h2><h2>2 · The procedure, as a skill</h2>
-<p>Seven clauses already bind the claims-triage agent and none of them mentions AI. The skill searches on function rather than on technology, and assesses whether the hosted frontier API could be exited at all.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/regulatory/sector-overlay-assessment/SKILL.md" target="_blank" rel="noopener"><code>skills/regulatory/sector-overlay-assessment/SKILL.md</code></a></p><pre class="front"><code>name: sector-overlay-assessment
+   the speed is real. so is the speed of shipping a wrong rule.</pre><p>Using an agent to write detections is genuinely effective: it produces candidate
+rules quickly, across more log sources than a human would attempt.</p>
+<p>What it cannot supply is the judgement that decides whether a rule ships, because
+that judgement depends on a cost the telemetry does not contain: <strong>analyst
+trust</strong>. A rule with 5% precision is not 5% useful — it is negatively useful,
+because it spends attention that the good rules need.</p>
+<p>So the workflow is: the agent generates candidates, and a scoring step against
+real historical telemetry decides which survive. The scoring step is the job, and
+it is the part teams skip.</p><blockquote class="anchor">**Anchor → E1.0.** This shortens the gap between *a rule is needed* and *a rule exists*, which is a real interval and not the one that matters most. What it cannot shorten is the decision to ship, because the cost that decides it — analyst trust — is not in the telemetry.</blockquote><div class="how"><h2>2 · Demo — five candidate rules for one concern</h2><h2>3 · Where it breaks — every rule 'works'</h2>
+<p>All five detect something. R1 has perfect recall on http traffic and would put 301 alerts a day in the queue. R4 has 100% precision on nothing useful. The deployable set is decided by a threshold nobody writes down.</p><h2>4 · The control — generate many, score against history, ship few</h2><h2>2 · The procedure, as a skill</h2>
+<p>Every candidate rule detects something. The skill replays each against real history and scores the third property nobody checks — firing volume — so a rule that produces 301 alerts for one true positive is rejected with its numbers rather than with an adjective.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/detection-rule-deployability/SKILL.md" target="_blank" rel="noopener"><code>skills/detection/detection-rule-deployability/SKILL.md</code></a></p><pre class="front"><code>name: detection-rule-deployability
 description: &gt;-
-  Find the pre-existing sector clauses that already apply to an AI system
-  without mentioning AI, and assess provider exit against them. Use when a team
-  believes no regulation applies yet because the AI rules are not in force.
-allowed-tools: Read, Grep, Glob</code></pre><h1>The clauses that already apply and never say "AI"</h1>
-<p>Sector regulation was written before this and applies anyway. Outsourcing,
-material change, operational resilience, exit strategy, data handling — none of
-them mention AI, all of them bind an agent that processes claims or moves money.
-The finding is usually that a system nobody thought was regulated attracts seven
-clauses today.</p>
+  Score candidate detection rules on precision, recall and firing volume, and
+  reject the ones no analyst could work regardless of how well they detect. Use
+  when authoring detections with or without a model, or when a rule is proposed
+  because it caught the incident.
+allowed-tools: Read, Grep, Glob</code></pre><h1>A rule that fires 301 times for one true positive is not a detection</h1>
+<p>Every candidate rule detects something. Deployability is a different property
+and it is arithmetic: precision, recall, and how many times the rule fires per
+day against real history. A rule failing on the third is rejected however good
+the first two look, because it will be muted within a week.</p>
 <h2>When to use this</h2>
-<p>Any AI system in a regulated sector, especially one whose team believes the
-obligations arrive later.</p>
+<p>Authoring detections, reviewing a model's proposed rules, and any time a rule is
+proposed on the strength of catching one incident.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Describe the system functionally.</strong> What it processes, what it decides,
-whose money or health or data it touches. Sector clauses trigger on function,
-not on technology.</p>
-<p><strong>2 — Search existing obligations for the functional triggers.</strong> Outsourcing and
-third-party dependency, material change notification, resilience and continuity,
-record keeping, exit. Do not search for "AI" — that is why nobody found them.</p>
-<p><strong>3 — Record each clause with what it requires,</strong> in operational terms. "Notify
-the regulator of material change to an outsourced arrangement" becomes a
-question about whether a hosted model version change is a material change.</p>
-<p><strong>4 — Assess provider exit specifically.</strong> Could you move off this provider,
-how long would it take, and is the alternative viable? A hosted frontier API
-with no equivalent substitute usually fails an exit test that a database would
-pass.</p>
-<p><strong>5 — Make the case for each clause explicitly.</strong> Clause, why it applies, what
-it requires here. That framing survives a challenge from a team that would
-rather it did not apply.</p>
+<p><strong>1 — Replay each candidate against real history.</strong> Not a sample chosen to
+contain the incident — the actual period, including the quiet parts.</p>
+<p><strong>2 — Compute precision, recall and volume.</strong> Volume is the one people omit and
+the one that decides whether the rule survives contact with an analyst.</p>
+<p><strong>3 — Set a deployability bar before you look at the results.</strong> Precision floor,
+recall floor, and a maximum firings per day. Setting it afterwards means setting
+it around the rule you like.</p>
+<p><strong>4 — Reject the broad rules explicitly, with their numbers.</strong> "Rejected: 301
+firings for 1 true positive" is a sentence the author can act on; "too noisy" is
+not.</p>
+<p><strong>5 — Look at what survived, and what it depends on.</strong> A high-precision rule
+usually depends on a specific field being populated. Record that dependency —
+it is the thing that will silently break the rule later.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/sector_overlay_assessment.py"><code>scripts/sector_overlay_assessment.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/detection_rule_deployability.py"><code>scripts/detection_rule_deployability.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>claims-triage-agent: autonomy L2.5, data ['customer', 'health'], external model True
-
-DORA (financial)
-   ICT third-party risk    your model provider is an ICT third party
-   exit strategy           can you stop using this provider and keep operating?
-   resilience testing      your stop mechanism is in scope for testing
-   incident reporting      clocks measured in hours
+<pre><code>history: 522 events, 2 true positives
+rule                                 alerts   prec  recall  alerts/TP
+----------------------------------------------------------------------
+R1 any http_get by an agent             301  0.003   0.500      301.0
+R2 http_get to a non-github host          1  1.000   0.500        1.0
+R3 link-local address                     1  1.000   0.500        1.0
+R4 any failed action                     20  0.000   0.000        inf
+R5 credential path OR link-local          2  1.000   1.000        1.0
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;system&quot;: {&quot;function&quot;: &quot;str&quot;, &quot;decides&quot;: &quot;str&quot;, &quot;data&quot;: [&quot;str&quot;]},
-  &quot;clauses&quot;: [{&quot;framework&quot;: &quot;str&quot;, &quot;clause&quot;: &quot;str&quot;, &quot;mentions_ai&quot;: false,
-               &quot;applies_because&quot;: &quot;str&quot;, &quot;requires&quot;: &quot;str&quot;}],
-  &quot;exit&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;substitutable&quot;: false, &quot;days_to_exit&quot;: 0, &quot;verdict&quot;: &quot;str&quot;}],
-  &quot;cases&quot;: [{&quot;clause&quot;: &quot;str&quot;, &quot;argument&quot;: &quot;str&quot;}]
+  &quot;history&quot;: {&quot;events&quot;: 0, &quot;period_days&quot;: 0, &quot;true_positives&quot;: 0},
+  &quot;candidates&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;fires&quot;: 0, &quot;tp&quot;: 0, &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0,
+                  &quot;per_day&quot;: 0.0, &quot;verdict&quot;: &quot;deploy|reject&quot;, &quot;why&quot;: &quot;str&quot;}],
+  &quot;bar&quot;: {&quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0, &quot;max_per_day&quot;: 0},
+  &quot;dependencies&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;requires_field&quot;: &quot;str&quot;}]
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Searching for AI.</strong> The binding clauses do not use the word.</li>
-<li><strong>Waiting for the horizontal regime.</strong> These apply now.</li>
-<li><strong>An exit assessment that assumes substitutability.</strong> Test it.</li>
+<li><strong>Replaying against a period chosen to contain the incident.</strong> Volume becomes
+  meaningless.</li>
+<li><strong>Setting the bar after seeing the results.</strong> That is choosing a winner.</li>
+<li><strong>Deploying a rule with an unrecorded field dependency.</strong> It fails silently
+  when the field stops being populated.</li>
 </ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at E2.4 --out work/cybertravels
 python3 scripts/checkpoint.py --at E2.4 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
-# then, in your agent: ask for "sector overlay assessment"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/regulatory/sector-overlay-assessment/scripts/sector_overlay_assessment.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Seven pre-existing clauses apply to the claims-triage agent across DORA, HIPAA and PCI DSS, none of which mentions AI. The exit-strategy assessment marks the hosted frontier API as not defensible on all three counts, the hosted open-weight API on one, and self-hosted weights as defensible. Three cases show how to route the requirement to an existing owner rather than a new policy.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Find the clause in your own sector overlay that already covers autonomous action without naming AI. Citing it is faster, cheaper and more persuasive than any new AI policy you could write.</p></div></section><div class="expect"><b>Expect</b>The agent is often already a &#x27;model&#x27; under rules you already comply with. Cheaper than inventing a new programme.</div><p class="sub" style="margin-top:10px">Skill source: <code>skills/regulatory/sector-overlay-assessment</code></p></div><div class="pager"><a href="E2.3.html"><span class="k">← Previous</span><span class="t">E2.3 · Voluntary frameworks as your spine</span></a><a class="next" href="E2.5.html"><span class="k">Next →</span><span class="t">E2.5 · Privacy and data protection</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+# then, in your agent: ask for "detection rule deployability"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/detection/detection-rule-deployability/scripts/detection_rule_deployability.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>All five rules detect something. R1 fires 301 times for 1 true positive; R5 fires twice for 2 true positives with perfect precision and recall. The deployability check rejects the broad rules and the failed-action rule, shipping only the precise ones with a small daily queue impact.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Set your own alerts-per-true-positive budget and apply it to the rules already in production. Most SOCs discover that several long-standing rules would not pass the bar they would set today.</p></div></section><div class="expect"><b>Expect</b>Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span><span>Wazuh</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/detection/detection-rule-deployability</code></p></div><div class="pager"><a href="E2.3.html"><span class="k">← Previous</span><span class="t">E2.3 · Detections whose subject is the agent platform</span></a><a class="next" href="E2.5.html"><span class="k">Next →</span><span class="t">E2.5 · Rules generated from an incident — and the benign corpus that decides them</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

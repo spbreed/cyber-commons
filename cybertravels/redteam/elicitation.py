@@ -1,4 +1,4 @@
-# step:file C1.3
+# step:file D1.3
 """A technique's reproduction rate, not its best run.
 
 The elicitation literature has a shape: a technique, a striking example, and a
@@ -9,7 +9,7 @@ one model version, and it moves by thirty points when any of those change.
 This file is the discipline that makes a technique reportable. It runs the
 same technique against the same target repeatedly and reports four things:
 
-* the **rate**, with C1.0's interval;
+* the **rate**, with D1.0's interval;
 * the **spread across seeds**, which is usually wider than the interval;
 * the **sensitivity** to the parts nobody varies — the system prompt, the
   ordering of the conversation, the temperature;

@@ -1,4 +1,4 @@
-# step:file C1.0
+# step:file D1.0
 """The red-team lifecycle — a campaign, not an anecdote.
 
 Function B reviewed CyberTravels' code. This package attacks the running
@@ -22,20 +22,20 @@ Three things turn a result into a finding, and every lesson here adds one:
   *harness* effect. Most published jailbreak rates are harness rates.
 
 And one thing turns a finding into something that outlives the engagement:
-a handoff that ends in a control, an eval case and a detection (C1.11).
+a handoff that ends in a control, an eval case and a detection (D1.11).
 
-    C1.0  campaign.py    cases, trials, ASR with an interval, the ablation
-    C1.1  ingestion.py   what CyberTravels ingests, and from whom
-    C1.2  ingestion.py   weaponising that path
-    C1.3  elicitation.py a technique's reproduction rate, not its best run
-    C1.4  actor.py       telling the agent from the person, in the trace
-    C1.5  swarm.py       many runs, and what is only visible across them
-    C1.6  swarm.py       detections that survive the volume
-    C1.7  swarm.py       triage with a floor
-    C1.8  deception.py   canaries whose alert cannot be a false positive
-    C1.9  containment.py the kill switch, and what it does not stop
-    C1.10 forensics.py   can the run be reconstructed from the record
-    C1.11 handoff.py     finding -> eval case + control + detection
+    D1.0  campaign.py    cases, trials, ASR with an interval, the ablation
+    D1.1  ingestion.py   what CyberTravels ingests, and from whom
+    D1.2  ingestion.py   weaponising that path
+    D1.3  elicitation.py a technique's reproduction rate, not its best run
+    D1.4  actor.py       telling the agent from the person, in the trace
+    D1.5  swarm.py       many runs, and what is only visible across them
+    D1.6  swarm.py       detections that survive the volume
+    D1.7  swarm.py       triage with a floor
+    D1.8  deception.py   canaries whose alert cannot be a false positive
+    D1.9  containment.py the kill switch, and what it does not stop
+    D1.10 forensics.py   can the run be reconstructed from the record
+    D1.11 handoff.py     finding -> eval case + control + detection
 
 Nothing here is a new attack. Every technique it runs is one Function A named
 and Function B found; what is new is that the result carries a denominator.
@@ -50,5 +50,5 @@ PRECONDITIONS = (
     ("trials", "how many, decided from the difference worth detecting"),
     ("benign_cases", "what must NOT trip it, or the rate is meaningless"),
     ("ablation", "what the harness contributes with the model held constant"),
-    ("scope", "B2.10's boundary — this package attacks a replica"),
+    ("scope", "C2.10's boundary — this package attacks a replica"),
 )

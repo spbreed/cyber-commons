@@ -1,17 +1,17 @@
 """Provenance — marking text with where it came from, at the door.
 
-# step:file A2.6
+# step:file B2.6
 
 Function G built a system that labels two of the three untrusted channels.
 Memory entries carry an origin (`memory.py`) and peer messages carry one
 (`a2a/protocol.py`). The third — **text arriving at ingress** — did not, and
-that is the channel A1.2 and A1.3 attack.
+that is the channel B1.2 and B1.3 attack.
 
 `ingress/chat.py` took a string and passed it to the orchestrator. By the time
 it reached the model it was indistinguishable from the operator's own
 instructions, because in a token stream there is nothing to distinguish. The
 system prompt asked the model not to follow instructions found in content; that
-is a request, and A1.2 measures how far a request gets.
+is a request, and B1.2 measures how far a request gets.
 
 ## What this module does
 
@@ -29,9 +29,9 @@ having their own idea of trust.
 
 **Marking is not filtering.** A marked injection is still an injection. The
 label does not stop the model reading the text — it makes the operator able to
-see, in the trace, that the instruction came from a hotel description. A3.1 is
+see, in the trace, that the instruction came from a hotel description. B3.1 is
 what actually refuses the resulting tool call. Treating the label as the
-control is the mistake A2.6 exists to prevent, so it is worth saying plainly:
+control is the mistake B2.6 exists to prevent, so it is worth saying plainly:
 **this closes nothing on its own.** It makes the rest closeable.
 """
 import html

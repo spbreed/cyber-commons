@@ -375,21 +375,21 @@ and a report counts in Function E.
   ("html", D.table(
     ["if your job is", "start at", "then", "what you have at the end"],
     [["<span>Designing or approving an agentic feature</span>",
-      "<b>A1.0</b>", "A1 → A2 → A3, in order",
+      "<b>B1.0</b>", "B1 → B2 → B3, in order",
       "A component map, and an index where every risk names the control that "
       "owns it"],
      ["<span>AppSec, code review, penetration testing</span>",
-      "<b>B2.0</b>", "B2 in order; A1.1 and A1.2 when a lesson asks",
+      "<b>C2.0</b>", "C2 in order; B1.1 and B1.2 when a lesson asks",
       "A pipeline with an AI pass in it, and a measured false-positive rate "
       "for that pass"],
      ["<span>Red teaming or AI security research</span>",
-      "<b>C1.0</b>", "C1 in order; A1.2 and A1.3 first for the attack classes",
+      "<b>D1.0</b>", "D1 in order; B1.2 and B1.3 first for the attack classes",
       "An evaluation that reproduces, and a report a defender can act on"],
      ["<span>Detection, alert triage, incident response</span>",
-      "<b>D1.0</b>", "D1 → D2 → D3 → D4 → D5; A1.1 for the component names",
+      "<b>E1.0</b>", "E1 → E2 → E3 → E4 → E5; B1.1 for the component names",
       "Five intervals with a number on each, and the rules that shortened them"],
      ["<span>Governance, risk, compliance, the CISO office</span>",
-      "<b>E1.0</b>", "E1.1 next, then E1 → E2 → E3",
+      "<b>F1.0</b>", "F1.1 next, then F1 → F2 → F3",
       "A control indicator computed from the estate rather than asserted "
       "about it"]],
     caption="Reading front to back is the right route only for the architect. "
@@ -406,7 +406,7 @@ and a report counts in Function E.
          "and what does it cost to keep it true. A team that has not can only "
          "compare feature lists, and a feature list is written by the seller.\\n\\n"
          "The second reason is that **the gaps are the finding**. Building the "
-         "open-source version tells you exactly where it stops. D1.0 names two "
+         "open-source version tells you exactly where it stops. E1.0 names two "
          "out loud: there is no open-source data-loss prevention with the "
          "maturity of the other sensors, and *no product in the list at all* "
          "can tell you which prompt caused a file write. Neither is visible "
@@ -421,7 +421,7 @@ and a report counts in Function E.
       "<b>Sigma</b>, mapped to <b>ATT&amp;CK</b> and <b>ATLAS</b>",
       "Almost never — the rules outlive the platform, which is the point"],
      ["Static analysis in the pipeline", "<b>Semgrep</b>, plus the reasoning "
-      "pass from B2.3",
+      "pass from C2.3",
       "Language coverage or triage volume is the constraint"],
      ["Dependency and image inspection", "<b>Trivy</b>, <b>Syft</b>, <b>Grype</b>",
       "You need attestation and provenance rather than a scan"],

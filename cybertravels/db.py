@@ -30,33 +30,33 @@ CREATE TABLE IF NOT EXISTS refunds (
 CREATE TABLE IF NOT EXISTS policies (
   id INTEGER PRIMARY KEY, title TEXT, body TEXT);
 -- Append-only: no UPDATE and no DELETE is ever issued against this table.
--- A log the workload can edit is a log that proves nothing, which is A2.8.
+-- A log the workload can edit is a log that proves nothing, which is B2.8.
 CREATE TABLE IF NOT EXISTS audit (
   id INTEGER PRIMARY KEY AUTOINCREMENT, at REAL, chain TEXT, tool TEXT,
   audience TEXT, scope TEXT, outcome TEXT, detail TEXT, trace_id TEXT
--- step:A2.7 add
-  -- A2.7: the fourth question. G2.2's rows said which human, which workload
+-- step:B2.7 add
+  -- B2.7: the fourth question. A2.2's rows said which human, which workload
   -- and which call, and could not say what made the agent act. These two
   -- columns are that answer: the origin of the text that motivated the call,
   -- and a digest of it rather than the text — a refund request quoted in full
-  -- puts traveller prose in a long-lived store, which is E2.5's problem.
+  -- puts traveller prose in a long-lived store, which is F2.5's problem.
   , motive_origin TEXT, motive_digest TEXT
--- step:A2.7 end
--- step:A2.8 add
-  -- A2.8: each row carries the hash of the one before it, so an edit anywhere
+-- step:B2.7 end
+-- step:B2.8 add
+  -- B2.8: each row carries the hash of the one before it, so an edit anywhere
   -- breaks every hash after it. Append-only was a convention until here; this
   -- makes it detectable.
   , prev_hash TEXT, row_hash TEXT
--- step:A2.8 end
+-- step:B2.8 end
   );
--- step:A3.8 add
--- A3.8: what each run touched. Every per-run check can pass while two runs
+-- step:B3.8 add
+-- B3.8: what each run touched. Every per-run check can pass while two runs
 -- share an artefact nobody scoped to either of them — the contamination is
 -- only visible across runs, which is why it needs its own record.
 CREATE TABLE IF NOT EXISTS run_artefacts (
   id INTEGER PRIMARY KEY AUTOINCREMENT, at REAL, trace_id TEXT,
   workload TEXT, kind TEXT, ref TEXT, mode TEXT);
--- step:A3.8 end
+-- step:B3.8 end
 CREATE TABLE IF NOT EXISTS memory (
   id INTEGER PRIMARY KEY AUTOINCREMENT, at REAL, owner_id TEXT, kind TEXT,
   content TEXT, origin TEXT, trusted INTEGER);
@@ -129,9 +129,9 @@ def rows(result):
 
 
 def audit(chain, tool, audience, scope, outcome, detail="", trace_id="",
-          # step:A2.7 add
+          # step:B2.7 add
           motive=None,
-          # step:A2.7 end
+          # step:B2.7 end
           ):
     """Write one row. Never updated, never deleted — only appended.
 
@@ -140,10 +140,10 @@ def audit(chain, tool, audience, scope, outcome, detail="", trace_id="",
     which is what was attempted.
 
     The statement is assembled from `cols` rather than written out twice,
-    because the row grows across the curriculum: A2.7 adds the motive columns
-    and A2.8 adds the hash chain. Two hard-coded variants meant a checkpoint
+    because the row grows across the curriculum: B2.7 adds the motive columns
+    and B2.8 adds the hash chain. Two hard-coded variants meant a checkpoint
     with one lesson applied and not the other bound the wrong number of values
-    — which is what happened, and it only showed up when the G2.4 checkpoint
+    — which is what happened, and it only showed up when the A2.4 checkpoint
     was run rather than merely parsed.
     """
     c = conn()
@@ -152,25 +152,25 @@ def audit(chain, tool, audience, scope, outcome, detail="", trace_id="",
     vals = [time.time(), chain, tool, audience, scope, outcome,
             detail if isinstance(detail, str) else json.dumps(detail), trace_id]
 
-    # step:A2.7 add
-    # `motive` is a provenance.Span — the thing A2.6 made it possible to have.
-    # Without A2.6 there was nothing to record here, which is why these two
+    # step:B2.7 add
+    # `motive` is a provenance.Span — the thing B2.6 made it possible to have.
+    # Without B2.6 there was nothing to record here, which is why these two
     # lessons are in this order. The digest rather than the text: a refund
     # request quoted in full puts traveller prose in a long-lived store, which
-    # is E2.5's problem.
+    # is F2.5's problem.
     cols += ["motive_origin", "motive_digest"]
     vals += [getattr(motive, "origin", "") if motive is not None else "",
              hashlib.sha256(motive.text.encode()).hexdigest()[:16]
              if motive is not None else ""]
-    # step:A2.7 end
+    # step:B2.7 end
 
-    # step:A2.8 add
+    # step:B2.8 add
     prev = c.execute("SELECT row_hash FROM audit ORDER BY id DESC "
                      "LIMIT 1").fetchone()
     prev_hash = (prev["row_hash"] if prev else GENESIS) or GENESIS
     cols += ["prev_hash", "row_hash"]
     vals += [prev_hash, _row_hash(prev_hash, vals)]
-    # step:A2.8 end
+    # step:B2.8 end
 
     # Column names come from the list above and never from a caller, so the
     # join is a literal by construction. Spelled out because this is a security
@@ -180,7 +180,7 @@ def audit(chain, tool, audience, scope, outcome, detail="", trace_id="",
     c.commit()
 
 
-# step:A2.8 add
+# step:B2.8 add
 GENESIS = "0" * 64
 
 
@@ -201,7 +201,7 @@ def verify_audit_chain():
     This is the property `append-only` was standing in for. It does not stop a
     write — nothing in the same trust domain can — but an edit, a deletion or
     an insertion anywhere in the log breaks every hash after it, and that is
-    visible in one pass. A3.8 is where the log moves somewhere the workload
+    visible in one pass. B3.8 is where the log moves somewhere the workload
     cannot reach at all; this is what you can do without that.
     """
     prev = GENESIS
@@ -216,10 +216,10 @@ def verify_audit_chain():
             return False, r["id"]
         prev = r["row_hash"]
     return True, None
-# step:A2.8 end
+# step:B2.8 end
 
 
-# step:A3.8 add
+# step:B3.8 add
 def touched(trace_id, workload, kind, ref, mode):
     """Record that one run read or wrote one artefact. `mode` is read/write."""
     c = conn()
@@ -232,7 +232,7 @@ def touched(trace_id, workload, kind, ref, mode):
 def shared_surfaces():
     """Artefacts one run wrote and a different run read.
 
-    The finding A3.8 exists for. Each run passed its own checks; the object
+    The finding B3.8 exists for. Each run passed its own checks; the object
     written by one and read by three unrelated others is a channel between
     them, and no per-run view can see it.
     """
@@ -251,7 +251,7 @@ def shared_surfaces():
                         "written_by": sorted(wrote),
                         "read_by_other_runs": sorted(crossed)})
     return sorted(out, key=lambda d: (d["kind"], d["ref"]))
-# step:A3.8 end
+# step:B3.8 end
 
 
 def recent_audit(limit=60):

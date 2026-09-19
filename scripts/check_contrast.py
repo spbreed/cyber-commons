@@ -150,8 +150,8 @@ def main() -> int:
         # A sample that covers every distinct page shape: the homepage, the
         # lesson index, a lesson that embeds a kernel, one that does not, and
         # one of each function's introduction.
-        keep = {"index.html", "A0.1.html", "A1.0.html", "A1.19.html",
-                "B2.0.html", "C1.0.html", "D1.0.html", "E1.0.html"}
+        keep = {"index.html", "A0.1.html", "B1.0.html", "B1.19.html",
+                "C2.0.html", "D1.0.html", "E1.0.html", "F1.0.html"}
         pages = [p for p in pages if p.name in keep]
 
     total = 0

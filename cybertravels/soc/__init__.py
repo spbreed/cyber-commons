@@ -1,8 +1,8 @@
-# step:file D1.0
+# step:file E1.0
 """The SOC that watches CyberTravels — and the hole every product leaves.
 
 Functions A and B made the system defensible and reviewable. Function C
-attacked it and, at C1.11, handed over three artefacts per finding: an eval
+attacked it and, at D1.11, handed over three artefacts per finding: an eval
 case, a control, and a **detection**. This package is where the third one
 lands, which is why it imports from `cybertravels.redteam` rather than
 reimplementing it — the handoff is literal or it is rhetoric.
@@ -15,11 +15,11 @@ designs are about a different animal.
 
 Five tracks, and they are the incident in order:
 
-    D1  discover   what the sensors see, and what falls between them
-    D2  detect     the lake, and rules whose subject is a non-human principal
-    D3  understand correlation, admission, attribution, the hunt
-    D4  respond    from a conclusion to the actor actually stopped
-    D5  recover    replay, root cause, and the change that closes it
+    E1  discover   what the sensors see, and what falls between them
+    E2  detect     the lake, and rules whose subject is a non-human principal
+    E3  understand correlation, admission, attribution, the hunt
+    E4  respond    from a conclusion to the actor actually stopped
+    E5  recover    replay, root cause, and the change that closes it
 
 **The clock is the spine.** Every lesson in D names where it sits on it, and
 the number that matters is not mean-time-to-detect — it is how much of the
@@ -31,18 +31,18 @@ question than for a person and is where the hours go.
 # a measurement: the point of writing them down is that a stage with no target
 # is a stage nobody has noticed is taking four hours.
 CLOCK = [
-    ("emit", 0, "the agent acts; a span and an audit row exist", "D1.3"),
+    ("emit", 0, "the agent acts; a span and an audit row exist", "E1.3"),
     ("ingest", 2, "telemetry reaches the lake, at the tier it was priced at",
-     "D2.1"),
-    ("detect", 5, "a rule whose subject is the agent fires", "D2.2"),
+     "E2.1"),
+    ("detect", 5, "a rule whose subject is the agent fires", "E2.2"),
     ("triage", 15, "an analyst, or a loop with a floor, reaches a verdict",
-     "D3.1"),
+     "E3.1"),
     ("attribute", 45, "which human, which workload, which delegation hop — "
-     "the stage that consumes the clock", "D3.4"),
-    ("scope", 70, "the delegation graph, across every run involved", "D3.7"),
+     "the stage that consumes the clock", "E3.4"),
+    ("scope", 70, "the delegation graph, across every run involved", "E3.7"),
     ("contain", 85, "throttle, scope-reduce, reroute, force HITL, revoke",
-     "D4.3"),
-    ("recover", 240, "replay, root cause, the control that changes", "D5.2"),
+     "E4.3"),
+    ("recover", 240, "replay, root cause, the control that changes", "E5.2"),
 ]
 
 

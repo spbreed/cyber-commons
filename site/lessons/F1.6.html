@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>F1.6 — Operating vs outcome guardrails | Cyber Commons</title><meta name="description" content="Constrain both, and know which evidence answers which question."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function F — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">F1.6</div><h1>Operating vs outcome guardrails</h1><div class="badges"><span class="badge t">F1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T7</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/F1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Frameworks specify how the system works; regulators care what it produced.</p></div><div class="ctrl"><div class="lab">Control</div><p>Constrain both, and know which evidence answers which question.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Classify your own guardrails into the two buckets.</p><div class="cta-row"><a class="btn k" href="https://github.com/spbreed/cyber-commons/tree/master/skills/grc/guardrail-specification" target="_blank" rel="noopener">↗ Open this skill in the repository</a></div><details class="runnote"><summary>What running a lesson needs</summary><div class="runbody"><p>Every skill here is carried out by a <b>model</b>; the script is the harness. Link the skills store into your agent with <code>python3 scripts/install_skills.py --all</code> and ask for the task in your own words, or run <code>python3 skills/grc/guardrail-specification/scripts/guardrail_specification.py</code> against the fixture committed with the skill.</p><p>A signed-in Claude Code CLI needs <b>no API key</b>; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets it up, and <a href="A0.1.html">A0.1</a> explains how a lesson is built.</p></div></details><section class="ls ls-amber"><h2 class="lsh"><span class="lsi">◉</span>Use case relevance</h2><div class="lsb"><p class="lead">Two different kinds of control get confused constantly. One bounds how the system runs — budgets, scopes, approvals. The other bounds what it produces. They are tested differently and they fail differently.</p><div class="ct"><b>At CyberTravels.</b> Three states, not two. `classify_guardrail()` calls a rule **operating** when something enforces it, **watched** when something measures it, and **aspirational** when neither — and says plainly that a rule nobody can enforce teaches its readers the policy is decorative. The honest move is to name the measurement, not to delete the rule.</div></div></section><section class="ls ls-violet"><h2 class="lsh"><span class="lsi">◴</span>What this lesson is — Day 0, Day 1, Day 2</h2><div class="lsb"><p>Separating guardrails that something enforces from outcomes that something measures, and refusing to file the third kind — enforced by nothing, measured by nothing — as a control.</p><div class="days"><div class="d0"><span>Day 0 — why</span><p>Shipping only operating guardrails and reporting them as coverage is how a programme passes audit while missing harm.</p></div><div class="d1"><span>Day 1 — how</span><p>Separate constraints on how the system runs from constraints on what results are acceptable.</p></div><div class="d2"><span>Day 2 — measure</span><p>Two different indicators. An operating one says the constraint was applied; an outcome one says it worked.</p></div></div></div></section><section class="ls ls-cyan"><h2 class="lsh"><span class="lsi">▦</span>The framework, and how it works</h2><div class="lsb"><pre class="dia">   operating guardrails            outcome guardrails
+   +----------------------+        +-----------------------+
+   | HOW it runs          |        | WHAT it produces      |
+   | budgets, scopes,     |        | content, decisions,   |
+   | approvals, sandbox   |        | actions taken         |
+   +----------------------+        +-----------------------+
+   tested by attempting    tested by sampling outputs
+   the forbidden action    against a rubric
+
+   different tests, different failure modes, constantly confused</pre><p>Guardrails come in two kinds, and confusing them is how a programme passes audit
+while missing harm.</p>
+<p><strong>Operating guardrails</strong> constrain <em>how the system runs</em>: all egress through the
+gateway, privileged tools gated below L3, every action logged. They are testable
+today, cheap to verify, and produce clean evidence.</p>
+<p><strong>Outcome guardrails</strong> constrain <em>what results are acceptable</em>: no unrecoverable
+customer data loss, no increase in customer-facing incidents, no disparate
+outcomes across segments. They matter more and most need a measurement you do
+not yet have.</p>
+<p>The failure is not choosing one. It is shipping only the first column, reporting
+it as coverage, and never labelling the second column as unmeasured.</p><blockquote class="anchor">**Anchor → F1.1.** Operating and outcome guardrails need different indicators, and confusing them is the most common way a control looks measured and is not. An operating indicator says the constraint was applied; an outcome indicator says it worked.</blockquote><div class="how"><h2>2 · Demo — classify a real guardrail set</h2><h2>3 · Where it breaks — the coverage number that lies</h2><h2>4 · The control — define the measurement, or label it unmeasured</h2><h2>2 · The procedure, as a skill</h2>
+<p>Four operating guardrails are enforceable today; three outcome guardrails are enforceable only where a measurement exists. The skill classifies each rule, specifies the missing measurements, and counts coverage twice — against what shipped and against what was agreed.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/grc/guardrail-specification/SKILL.md" target="_blank" rel="noopener"><code>skills/grc/guardrail-specification/SKILL.md</code></a></p><pre class="front"><code>name: guardrail-specification
+description: &gt;-
+  Separate operating guardrails, which are enforceable today, from outcome
+  guardrails, which need a measurement before they mean anything — and specify
+  that measurement. Use when a policy contains a rule nobody can enforce.
+allowed-tools: Read, Grep, Glob</code></pre><h1>An outcome guardrail with no measurement is a wish</h1>
+<p>Operating guardrails constrain what the system may do: which tools, which data,
+which actions need approval. They are enforceable today. Outcome guardrails
+constrain what the system may cause — no discriminatory decisions, no
+misleading advice — and they are enforceable only where somebody has specified
+the measurement.</p>
+<h2>When to use this</h2>
+<p>Writing an AI policy, reviewing one, or explaining why a coverage figure of 100%
+is counting only the rules that shipped.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Classify every rule.</strong> Does it constrain the system's behaviour, or the
+outcome of that behaviour? The test is whether it can be checked at the moment
+of action.</p>
+<p><strong>2 — For each operating guardrail, name the enforcement point.</strong> The gateway,
+the tool policy, the approval gate. If there is not one, it is aspirational and
+should be reported that way.</p>
+<p><strong>3 — For each outcome guardrail, specify the measurement.</strong> The metric, the
+population, the threshold, the cadence, and who reviews it. Four of those five
+being present is still not a guardrail.</p>
+<p><strong>4 — Count coverage both ways.</strong> Against the rules that shipped, and against
+all the rules that were agreed. The first is usually 100% and the second is
+usually about half, and the gap is the honest programme statement.</p>
+<p><strong>5 — Report the unmeasurable ones as open commitments</strong> with an owner and a
+date. Leaving them in the policy unmarked is how a policy stops being read.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/guardrail_specification.py"><code>scripts/guardrail_specification.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>rule                                                        kind        enforceable
+--------------------------------------------------------------------------------------
+all agent egress goes through the gateway                   operating          True
+privileged tools require approval below L3                  operating          True
+every action is logged with the acting identity             operating          True
+agent identities are separately revocable                   operating          True
+no agent action causes unrecoverable customer data loss     outcome           False
+automated remediation does not increase customer-facing incidentsoutcome            True
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;rules&quot;: [{&quot;text&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;operating|outcome&quot;,
+             &quot;enforcement_point&quot;: &quot;str|null&quot;,
+             &quot;measurement&quot;: {&quot;metric&quot;: &quot;str&quot;, &quot;population&quot;: &quot;str&quot;, &quot;threshold&quot;: 0.0,
+                             &quot;cadence&quot;: &quot;str&quot;, &quot;reviewer&quot;: &quot;str&quot;}}],
+  &quot;coverage&quot;: {&quot;of_shipped&quot;: 1.0, &quot;of_agreed&quot;: 0.0},
+  &quot;open_commitments&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str&quot;, &quot;due&quot;: &quot;str&quot;}]
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Counting only what shipped.</strong> The number is 100% by construction.</li>
+<li><strong>An outcome guardrail with a metric and no threshold.</strong> Nothing fails.</li>
+<li><strong>Leaving unmeasurable rules unmarked.</strong> The policy loses credibility as a
+  whole.</li>
+</ul></div><div class="runbox"><p><b>Get your copy of CyberTravels as it stood here.</b> Everything taught up to this lesson, and nothing taught after it — so the exercises ahead of you still work.</p><pre><code>python3 scripts/checkpoint.py --at F1.6 --out work/cybertravels
+python3 scripts/checkpoint.py --at F1.6 --diff   # what this lesson changed</code></pre><p><b>Run it in your agent.</b> Link the skills store into whichever CLI you use — Claude Code, Codex, Gemini and the rest read the same format — then ask for the task in your own words.</p><pre><code>python3 scripts/install_skills.py --all
+# then, in your agent: ask for "guardrail specification"</code></pre><p><b>Or run the harness directly</b>, against the fixture committed with the skill, so two runs are comparable:</p><pre><code>python3 skills/grc/guardrail-specification/scripts/guardrail_specification.py</code></pre><p class="runnote">Both need a model. A signed-in Claude Code CLI needs no API key; any OpenAI-compatible endpoint works too. With neither, the skill exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Four operating guardrails are all enforceable today; three outcome guardrails are enforceable only where a measurement exists. Counting only what shipped gives 100% coverage; counting all agreed guardrails gives 71%. One outcome guardrail is fully specified and enforceable; the other is labelled an aspiration and excluded from coverage.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pick one outcome guardrail your programme has agreed and specify its metric, threshold, source and cadence precisely enough that someone could dispute the result. If you cannot, say so in the coverage report rather than counting it.</p></div></section><div class="expect"><b>Expect</b>Frameworks specify how the system works; regulators ask what it produced. Most orgs are long on the first.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>NeMo Guardrails</span><span>LLM Guard</span><span>Llama Guard 4</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/grc/guardrail-specification</code></p></div><div class="pager"><a href="F1.5.html"><span class="k">← Previous</span><span class="t">F1.5 · Evaluation output as audit evidence</span></a><a class="next" href="F1.7.html"><span class="k">Next →</span><span class="t">F1.7 · Continuous control verification</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

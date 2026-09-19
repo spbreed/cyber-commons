@@ -1,4 +1,4 @@
-# step:file E2.1
+# step:file F2.1
 """One programme, mapped to many regimes — not one programme per regime.
 
 The default failure is organisational rather than legal: each regime arrives
@@ -6,7 +6,7 @@ through a different function, each function starts a programme, and four
 programmes produce four control sets that overlap by about eighty per cent and
 disagree at the edges. The work is quadrupled and none of it is joined up.
 
-The fix is the same shape as E1.4's: build the control set once, map it
+The fix is the same shape as F1.4's: build the control set once, map it
 outward, and let each regime be a **view** over it. Nine lessons here, and
 every one of them is a different view of the same evidence.
 """
@@ -18,18 +18,18 @@ import re
 # several obligations, which is the saving.
 OBLIGATIONS = {
     "EU AI Act Art. 12": ("record-keeping over the system's lifetime",
-                          ["A2.8", "A2.7", "D1.3"]),
+                          ["B2.8", "B2.7", "E1.3"]),
     "EU AI Act Art. 14": ("human oversight, effective and not nominal",
-                          ["A3.6", "D4.2"]),
+                          ["B3.6", "E4.2"]),
     "EU AI Act Art. 15": ("accuracy, robustness and cybersecurity",
-                          ["A3.1", "A3.3", "C1.0"]),
-    "GDPR Art. 5(1)(e)": ("storage limitation", ["D1.3"]),
-    "GDPR Art. 33": ("breach notification within 72 hours", ["D5.6"]),
-    "GDPR Art. 17": ("erasure", ["E2.5"]),
-    "NIS2 Art. 23": ("incident reporting, 24-hour early warning", ["D5.6"]),
-    "DORA Art. 17": ("ICT incident management", ["D4.3", "D5.2"]),
-    "SOC 2 CC7.2": ("monitoring for anomalies", ["D2.2", "D2.3"]),
-    "ISO 42001 8.3": ("AI system impact assessment", ["E1.3"]),
+                          ["B3.1", "B3.3", "D1.0"]),
+    "GDPR Art. 5(1)(e)": ("storage limitation", ["E1.3"]),
+    "GDPR Art. 33": ("breach notification within 72 hours", ["E5.6"]),
+    "GDPR Art. 17": ("erasure", ["F2.5"]),
+    "NIS2 Art. 23": ("incident reporting, 24-hour early warning", ["E5.6"]),
+    "DORA Art. 17": ("ICT incident management", ["E4.3", "E5.2"]),
+    "SOC 2 CC7.2": ("monitoring for anomalies", ["E2.2", "E2.3"]),
+    "ISO 42001 8.3": ("AI system impact assessment", ["F1.3"]),
 }
 
 
@@ -64,9 +64,9 @@ def _reuse():
             "most_reused": sorted(shared.items(), key=lambda kv: -kv[1])[:3]}
 
 
-# step:E2.2 add
+# step:F2.2 add
 # --------------------------------------------------------------------------- #
-# E2.2 — "we only deployed it, we didn't build it"
+# F2.2 — "we only deployed it, we didn't build it"
 # --------------------------------------------------------------------------- #
 # Sometimes true. Often not, and the tests are specific rather than a matter
 # of opinion: fine-tuning, putting your name on it, changing its intended
@@ -104,12 +104,12 @@ def requirement_to_control(requirement, *, evidence_artefact):
                        "or say plainly that this is not yet controlled"}
     return {"requirement": requirement, "control": evidence_artefact,
             "passes_show_me": True}
-# step:E2.2 end
+# step:F2.2 end
 
 
-# step:E2.3 add
+# step:F2.3 add
 # --------------------------------------------------------------------------- #
-# E2.3 — pick a spine, supply the remainder
+# F2.3 — pick a spine, supply the remainder
 # --------------------------------------------------------------------------- #
 # Choose the framework that covers the most of the controls you actually have,
 # use it as the structure, and take the remainder from the others. The
@@ -129,12 +129,12 @@ def choose_spine(frameworks, controls_in_place):
             "not_covered_by_the_spine": remainder,
             "why": "the remainder comes from the other frameworks as "
                    "supplements; it does not need a second programme"}
-# step:E2.3 end
+# step:F2.3 end
 
 
-# step:E2.4 add
+# step:F2.4 add
 # --------------------------------------------------------------------------- #
-# E2.4 — the overlay you already comply with
+# F2.4 — the overlay you already comply with
 # --------------------------------------------------------------------------- #
 # The useful discovery in most sectors is that the agent is already covered by
 # rules the organisation has followed for years under a different name. An
@@ -150,7 +150,7 @@ OVERLAYS = {
     "healthcare": [("clinical decision support", "an agent that recommends "
                                                  "may be a medical device")],
     "travel": [("PCI DSS", "the refund path touches cardholder data; "
-                           "A3.1's decision point is already in scope")],
+                           "B3.1's decision point is already in scope")],
 }
 
 
@@ -161,18 +161,18 @@ def overlays(sector):
             "already_complied_with": bool(rows),
             "why": "the cheapest control in the programme is one you are "
                    "already operating under another name"}
-# step:E2.4 end
+# step:F2.4 end
 
 
-# step:E2.5 add
+# step:F2.5 add
 # --------------------------------------------------------------------------- #
-# E2.5 — personal data, in places a database rights request does not reach
+# F2.5 — personal data, in places a database rights request does not reach
 # --------------------------------------------------------------------------- #
 # Deletion is straightforward while the data is in a table. It stops being
 # straightforward the moment the same text is in a trace, in a memory row, in
 # a prompt somebody logged, and — the one with no good answer — in weights.
 #
-# So audit where it actually is. D1.3 already decided retention per field;
+# So audit where it actually is. E1.3 already decided retention per field;
 # this is the same list read as a privacy question rather than a cost one.
 PII_SHAPES = [
     (re.compile(r"\b[\w.+-]+@[\w-]+\.[\w.]+\b"), "email address"),
@@ -185,7 +185,7 @@ PII_SHAPES = [
 SURFACES = {
     "bookings table": True,
     "audit.detail": True,
-    "audit.motive_digest": True,     # a digest, which is the point of A2.7
+    "audit.motive_digest": True,     # a digest, which is the point of B2.7
     "trace spans": True,
     "memory rows": True,
     "model provider's logs": False,
@@ -210,7 +210,7 @@ def erasure_reach():
 def audit_trace(rows, *, fields=("detail", "chain")):
     """Personal data sitting in a long-lived store.
 
-    A2.7 records a digest rather than the motivating text precisely so this
+    B2.7 records a digest rather than the motivating text precisely so this
     comes back empty for the motive. It does not protect `detail`, which is
     where a tool's arguments land.
     """
@@ -223,13 +223,13 @@ def audit_trace(rows, *, fields=("detail", "chain")):
     return {"rows_scanned": len(rows), "hits": found,
             "clean": not found,
             "why": "long-lived rows keep whatever was written into them; "
-                   "D1.3's per-field retention is the lever"}
-# step:E2.5 end
+                   "E1.3's per-field retention is the lever"}
+# step:F2.5 end
 
 
-# step:E2.7 add
+# step:F2.7 add
 # --------------------------------------------------------------------------- #
-# E2.7 — documentation a supervisor can use
+# F2.7 — documentation a supervisor can use
 # --------------------------------------------------------------------------- #
 # "Explainability" for a system with no deterministic reasoning is a demand
 # that cannot be met as stated, and answering it with a paragraph about
@@ -242,7 +242,7 @@ SUPERVISORY_SECTIONS = {
     "bounds": "budgets, scopes, the human gate and where each is enforced",
     "run record": "what happened on a specific date, reconstructable",
     "decisions": "who approved the autonomy level, and when",
-    "known limitations": "including the ones in E1.13's known_gaps",
+    "known limitations": "including the ones in F1.13's known_gaps",
 }
 
 
@@ -257,14 +257,14 @@ def score_documentation(present):
                            / len(SUPERVISORY_SECTIONS), 3),
             "why": "none of these is an explanation of the model's reasoning, "
                    "and all of them are things a supervisor can act on"}
-# step:E2.7 end
+# step:F2.7 end
 
 
-# step:E2.8 add
+# step:F2.8 add
 # --------------------------------------------------------------------------- #
-# E2.8 — under whose authority did it act
+# F2.8 — under whose authority did it act
 # --------------------------------------------------------------------------- #
-# Imports C1.10's checker rather than restating it. The governance question is
+# Imports D1.10's checker rather than restating it. The governance question is
 # the same question the investigation asks, arriving earlier and from a
 # different person, and it is worth exactly one call.
 def auditability(rows, spans, verify_chain):
@@ -274,15 +274,15 @@ def auditability(rows, spans, verify_chain):
             "blockers": r["blockers"],
             "regulator_asks": "under whose authority did the agent act, and "
                               "can you show me for a specific action",
-            "why": "this is C1.10's check, asked by a different person at a "
+            "why": "this is D1.10's check, asked by a different person at a "
                    "different time; a second implementation would give a "
                    "second answer"}
-# step:E2.8 end
+# step:F2.8 end
 
 
-# step:E2.9 add
+# step:F2.9 add
 # --------------------------------------------------------------------------- #
-# E2.9 — the conversation
+# F2.9 — the conversation
 # --------------------------------------------------------------------------- #
 # Two ways to lose it. Overclaim, and the first thing checked will be the
 # claim. Underclaim, and the conversation becomes about whether the system
@@ -318,4 +318,4 @@ def prepare(measurement, eval_result):
                "is the only version of this conversation where the answers "
                "to the three openings are already written down",
     }
-# step:E2.9 end
+# step:F2.9 end

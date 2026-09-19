@@ -1,4 +1,4 @@
-# step:file C1.8
+# step:file D1.8
 """Canaries — the only alert nobody has to triage.
 
 Every detection in Function D has a false-positive rate, because every

@@ -1,4 +1,4 @@
-# step:file E1.0
+# step:file F1.0
 """Governance that reads the code, rather than asserting about it.
 
 Every other function in this commons built something. This one answers the
@@ -33,7 +33,7 @@ PROPERTIES = [
     ("observable", "D", "cybertravels/soc/sensors.py — coverage per agent "
                         "action, and the uncovered ones named"),
     ("accountable", "E", "cybertravels/governance/ — this package, and the "
-                         "attestation A3.7 and B2.18 produce"),
+                         "attestation B3.7 and C2.18 produce"),
     ("private", "E", "soc/sensors.py FIELD_RETENTION, per field rather than "
                      "per record"),
 ]
@@ -47,7 +47,7 @@ def owners():
 def unowned(claimed):
     """Properties a statement claims that nothing in this system evidences.
 
-    E1.0's Day 2 number, and the uncomfortable one: a statement is usually
+    F1.0's Day 2 number, and the uncomfortable one: a statement is usually
     longer than the list of things anybody built.
     """
     have = {p for p, _f, _e in PROPERTIES}

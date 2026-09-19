@@ -1,28 +1,61 @@
-# Track A2 — Securing the Architecture — Identity and Ingress
+# Track A2 — Harness Engineering — Making a Demo Into a System
 
-**Function A · Securing AI Architectures**  
-*CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
+**Function A · Getting Started — Building Agentic AI**  
+*Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Everything the other four functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
-**Job titles:** IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer
+**Job titles:** The same audience, one chapter later. Particularly anyone who has to operate, review or sign off on something an agent does.
 
-**What changes:** The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 8 lessons.
+**What changes:** Five lessons on the machinery that turns a loop that worked once into a system somebody can run: spans, an audit trail that answers the four investigation questions, an evaluation suite with intervals, and the handover that re-reads everything you built as an attack surface. 5 lessons.
 
-**Autonomy focus:** Identity first: every later control is a predicate that takes a caller as its argument.
+**Autonomy focus:** Autonomy becomes reviewable here. Nothing is granted that cannot be observed, evidenced and stopped.
 
-**Deliverable:** A delegation chain for one agent that an auditor can follow from human to action.
+**Deliverable:** A traced, audited, evaluated agent — and its blast radius, measured.
 
 > Every session below ships a runnable agent skill that actually executes on your own machine — against open-weight models and open-source tooling. `python3 scripts/install_skills.py --all` links them into whichever agent CLI you use; see [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### A2.1 — Agent identity — user, workload, agent
+### A2.0 — Why a demo is not a system — the harness around the loop
 
-- **Risk** — A shared service account answers 'what ran' and destroys 'for whom' — so no later control can be conditioned on the caller.
-- **Control** — A distinct identity per workload, carrying the human principal alongside it, asserted on every call.
-- **Lab** — Separate the three identities and show a downstream service authorising on the agent while attributing to the human.
-- **Tools** — `SPIFFE/SPIRE`, `Keycloak`
+- **Risk** — A demo promoted to production carries none of the machinery an incident needs, and the first investigation discovers that at the worst moment.
+- **Control** — Spans, an audit trail, an evaluation, and a stop — built before they are needed.
+- **Lab** — List what your run currently cannot tell an operator.
+- **Tools** — `OpenTelemetry`
 
-**Run it** — Separate the three identities and show a downstream service authorising on the agent while attributing to the human.
+**Run it** — List what your run currently cannot tell an operator.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · your copy of CyberTravels as it stood at the END of A2.0:
+#         everything taught so far, nothing taught after it. Named
+#         cybertravels/ so it imports. ---
+mkdir -p work && python3 scripts/checkpoint.py --at A2.0 --out work/cybertravels
+python3 scripts/checkpoint.py --at A2.0 --diff      # what this lesson changed
+
+# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
+claude --version        # prints a version? nothing else to configure
+
+# --- 4 · run the skill against its committed fixture ---
+python3 skills/threats/audit-answerability-check/scripts/audit_answerability_check.py
+
+# --- or install it into your own agent and ask in your own words ---
+python3 scripts/install_skills.py --all
+```
+
+*Expect:* An investigation's questions put to what the run currently emits, and a named list of the ones it cannot answer. Expect most of them — that is why this runs first.
+
+---
+
+### A2.1 — Observability — the run as spans
+
+- **Risk** — A trace holding only successful calls hides exactly the events worth alerting on, and a token pasted into a span is a credential in the log pipeline.
+- **Control** — One trace id joining the reasoning to the audit row; refusals as first-class spans.
+- **Lab** — Emit a run's spans and join them to the audit log by trace id.
+- **Tools** — `OpenTelemetry`, `Grafana`
+
+**Run it** — Emit a run's spans and join them to the audit log by trace id.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -38,24 +71,24 @@ python3 scripts/checkpoint.py --at A2.1 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/identity/agent-identity-review/scripts/agent_identity_review.py
+python3 skills/response/run-replayability-audit/scripts/run_replayability_audit.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Authorization resolves against the workload ceiling and refuses `db:admin` no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another's.
+*Expect:* A run's spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it.
 
 ---
 
-### A2.2 — Bootstrapping the first credential
+### A2.2 — The audit trail, and the four questions it has to answer
 
-- **Risk** — A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.
-- **Control** — Platform attestation exchanged for a short-lived, workload-bound credential.
-- **Lab** — Exchange an attestation for a credential, then show a copied secret failing the same exchange.
-- **Tools** — `SPIFFE/SPIRE`
+- **Risk** — An append-only log the workload can still edit proves nothing, and one that records only successes cannot show what was attempted.
+- **Control** — Append-only storage, the delegation chain on every row, and refusals recorded alongside actions.
+- **Lab** — Put the four questions to your own audit rows and record which one fails.
+- **Tools** — `in-toto`, `Sigstore`
 
-**Run it** — Exchange an attestation for a credential, then show a copied secret failing the same exchange.
+**Run it** — Put the four questions to your own audit rows and record which one fails.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -71,24 +104,24 @@ python3 scripts/checkpoint.py --at A2.2 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/identity/workload-attestation-check/scripts/workload_attestation_check.py
+python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_check.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.
+*Expect:* Each of the four questions answered or explicitly not, from real audit rows — with the fourth likely failing, which is the finding to carry into Function D.
 
 ---
 
-### A2.3 — Delegation that narrows, and survives audit
+### A2.3 — Evaluating what you built, before anybody attacks it
 
-- **Risk** — Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked.
-- **Control** — Token exchange that intersects presented scope with the actor's ceiling, and records the chain.
-- **Lab** — Run both narrowing rules against a request that passes one and fails the other.
-- **Tools** — `SPIFFE/SPIRE`, `Keycloak`, `RFC 8693 token exchange`, `RFC 8705 mTLS binding`
+- **Risk** — A suite everything passes measures nothing, and a score with no interval is a number that will move next week and nobody will know why.
+- **Control** — Cases that fail on the old build and pass on the new one, scored with intervals.
+- **Lab** — Run the suite, then dilute it with easy cases and watch the score rise.
+- **Tools** — `promptfoo`, `Inspect`
 
-**Run it** — Run both narrowing rules against a request that passes one and fails the other.
+**Run it** — Run the suite, then dilute it with easy cases and watch the score rise.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -104,24 +137,24 @@ python3 scripts/checkpoint.py --at A2.3 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/attestation/identity-chain-verifier/scripts/identity_chain_verifier.py
+python3 skills/research/eval-suite-health-check/scripts/eval_suite_health_check.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A two-hop delegation narrows to `reports:read` and records the chain `dana → orchestrator → patch-agent`. A privileged user's request for `db:admin` passes subset-of-presented and still issues nothing, because the receiving agent's ceiling is empty of it.
+*Expect:* A score with a confidence interval, a control shown to move one surface and not the others, and the same suite scoring higher once easy cases are added.
 
 ---
 
-### A2.4 — Just-in-time authority
+### A2.4 — What you have built — and every way it can now go wrong
 
-- **Risk** — Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives.
-- **Control** — Short-lived, purpose-bound grants issued per task and expiring with it.
-- **Lab** — Issue a scoped grant, use it, then replay it after expiry and after the task closed.
-- **Tools** — `Keycloak`, `OPA`
+- **Risk** — Builders who never see their own system described adversarially ship the same defect in the next one.
+- **Control** — The same architecture map, annotated with what an attacker reaches for at each edge.
+- **Lab** — Compute the blast radius of the agent you just built.
+- **Tools** — `MITRE ATLAS`
 
-**Run it** — Issue a scoped grant, use it, then replay it after expiry and after the task closed.
+**Run it** — Compute the blast radius of the agent you just built.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -137,148 +170,12 @@ python3 scripts/checkpoint.py --at A2.4 --diff      # what this lesson changed
 claude --version        # prints a version? nothing else to configure
 
 # --- 4 · run the skill against its committed fixture ---
-python3 skills/attestation/entitlement-overprivilege-analyzer/scripts/entitlement_overprivilege_analyzer.py
+python3 skills/architecture/blast-radius-review/scripts/blast_radius_review.py
 
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires.
+*Expect:* Objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports.
 
 ---
-
-### A2.5 — The non-human identity lifecycle
-
-- **Risk** — Agents accumulate with no owner and no expiry, and an unregistered agent joins a topology as a peer.
-- **Control** — A registry with a named owner, an expiry, and admission bound to a registered identity.
-- **Lab** — Admit agents against a registry and show an unregistered one refused at the door.
-- **Tools** — `SCIM 2.0 (RFC 7643/7644)`, `Keycloak`, `SPIFFE/SPIRE`
-
-**Run it** — Admit agents against a registry and show an unregistered one refused at the door.
-
-```bash
-# --- 1 · the repository. master is the trunk. ---
-git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-
-# --- 2 · your copy of CyberTravels as it stood at the END of A2.5:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at A2.5 --out work/cybertravels
-python3 scripts/checkpoint.py --at A2.5 --diff      # what this lesson changed
-
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
-
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/identity/nhi-lifecycle-audit/scripts/nhi_lifecycle_audit.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
-```
-
-*Expect:* Four agents present identities and one is admitted: the unregistered one is refused, the lapsed registration is refused, and the orphaned entry with no owner is refused. Revoking a single agent then leaves the others running.
-
----
-
-### A2.6 — Ingress: marking untrusted content at the door
-
-- **Risk** — Concatenation destroys the one fact that separates an operator instruction from an attacker's: where it came from.
-- **Control** — Provenance tagging at every ingress point, and a rule that only trusted origins may select a tool.
-- **Lab** — Tag every span at ingress, then show the same payload refused through six different entry paths.
-- **Tools** — `LLM Guard`, `agentgateway`
-- **Open-weight models** — `Llama Guard 4`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Tag every span at ingress, then show the same payload refused through six different entry paths.
-
-```bash
-# --- 1 · the repository. master is the trunk. ---
-git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-
-# --- 2 · your copy of CyberTravels as it stood at the END of A2.6:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at A2.6 --out work/cybertravels
-python3 scripts/checkpoint.py --at A2.6 --diff      # what this lesson changed
-
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
-
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/attestation/input-injection-screening-verifier/scripts/input_injection_screening_verifier.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
-```
-
-*Expect:* The same payload is refused through all five untrusted ingress components and through two rewordings, the user's own request still reaches the tool, and a memory record written from an untrusted document is still refused a week later because the origin was stored with it.
-
----
-
-### A2.7 — Attribution: an audit trail that answers "who"
-
-- **Risk** — Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.
-- **Control** — Per-hop attribution written to an append-only store outside the agent's reach.
-- **Lab** — Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.
-- **Tools** — `OpenTelemetry`, `Sigstore`
-
-**Run it** — Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.
-
-```bash
-# --- 1 · the repository. master is the trunk. ---
-git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-
-# --- 2 · your copy of CyberTravels as it stood at the END of A2.7:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at A2.7 --out work/cybertravels
-python3 scripts/checkpoint.py --at A2.7 --diff      # what this lesson changed
-
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
-
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_check.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
-```
-
-*Expect:* One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused.
-
----
-
-### A2.8 — An audit trail the workload cannot forge
-
-- **Risk** — An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls.
-- **Control** — Out-of-band capture (B2.10), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
-- **Lab** — Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
-- **Tools** — `Falco`, `Tetragon`, `Sigstore`
-
-**Run it** — Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
-
-```bash
-# --- 1 · the repository. master is the trunk. ---
-git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
-
-# --- 2 · your copy of CyberTravels as it stood at the END of A2.8:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at A2.8 --out work/cybertravels
-python3 scripts/checkpoint.py --at A2.8 --diff      # what this lesson changed
-
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
-
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/identity/tamper-evident-log-check/scripts/tamper_evident_log_check.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
-```
-
-*Expect:* The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.
-
----
-
-**Adjacency requirement:** also complete A3.1–A3.2 — the failures happen in the seams.

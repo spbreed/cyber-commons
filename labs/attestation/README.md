@@ -5,7 +5,7 @@ document into a signed statement about a specific deployment — plus a working
 analyser for the part of it that can be done from source alone, and the results
 of running that analyser against ten widely-deployed open-source repositories.
 
-Taught in **[B2.18](https://cybercommons.ai/lessons/B2.18.html)**.
+Taught in **[C2.18](https://cybercommons.ai/lessons/C2.18.html)**.
 
 ## The distinction the whole thing rests on
 
@@ -74,7 +74,7 @@ most-used agent frameworks. Full output in
 [`oss-corpus-results.json`](oss-corpus-results.json).
 
 ```
-repository                          kind    files  tools sinks  C1   C2   C3   C4   C5
+repository                          kind    files  tools sinks  D1   C2   C3   C4   C5
 awslabs_mcp                         mcp      2616    140     5  INT PART  INT  INT PART
 crewAIInc_crewAI                    agent    2105     35     5  INT PART  INT  INT PART
 github_github-mcp-server            mcp       258     41     3  INT PART  INT  INT PART

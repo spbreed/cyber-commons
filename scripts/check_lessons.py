@@ -27,15 +27,15 @@ Rules, each one here because breaking it made a lesson worse:
 
 5. **An anchor on every Function D and Function E lesson.** Both are long
    arguments told in one unit — an interval between an agent acting and the
-   control being back at target (D1.0), and a key control indicator computed
-   from the estate (E1.1). Every other lesson in those functions says in a line
+   control being back at target (E1.0), and a key control indicator computed
+   from the estate (F1.1). Every other lesson in those functions says in a line
    which part of that unit it moves. Without the rule a lesson can be internally
    coherent, read fine on its own page, and belong to no argument at all.
 
 6. **Chapters cited by id, not by number.** The chapter number is an ordinal in
    `curriculum.json` and is rendered nowhere, so "Chapter 11" in prose is
    unresolvable by a reader and goes stale the moment a chapter is inserted.
-   Prose says "Chapter D3". The numbers themselves are checked for being
+   Prose says "Chapter E3". The numbers themselves are checked for being
    contiguous, and a bridge whose track no longer exists is a failure.
 
 7. **Realistic demos.** A lesson whose code only ever shows the happy path has
@@ -69,15 +69,15 @@ from exercises.framing import BRIDGES  # noqa: E402
 
 # Functions D and E are long arguments rather than collections, and each is told
 # in one unit: an interval between an agent acting and the control being back at
-# target (D1.0), and a key control indicator computed from the estate (E1.1).
+# target (E1.0), and a key control indicator computed from the estate (F1.1).
 # Every other lesson in those two functions says in a line under its concept
 # which part of that unit it moves. Enforced rather than reported because the
 # failure it prevents is silent — a lesson that belongs to no argument still
 # reads fine on its own page.
-ANCHOR_ORIGIN = {"D": "D1.0", "E": "E1.1"}
-# The origins themselves, plus E1.0: it introduces the function that E1.1's unit
+ANCHOR_ORIGIN = {"E": "E1.0", "F": "F1.1"}
+# The origins themselves, plus F1.0: it introduces the function that F1.1's unit
 # is told in, so an anchor there would restate the concept directly above it.
-ANCHOR_EXEMPT = {"D1.0", "E1.0", "E1.1"}
+ANCHOR_EXEMPT = {"E1.0", "F1.0", "F1.1"}
 
 HOOK_MIN_WORDS, HOOK_MAX_WORDS = 20, 90
 
@@ -217,7 +217,7 @@ def main() -> int:
         for i, line in enumerate(f.read_text().splitlines(), 1):
             if numbered.search(line):
                 problems.append(f"{f.name}:{i}: chapter cited by number — use "
-                                f"the track id, e.g. 'Chapter D3'")
+                                f"the track id, e.g. 'Chapter E3'")
 
     for p in problems:
         print(f"  FAIL  {p}")

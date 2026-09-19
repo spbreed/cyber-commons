@@ -1,4 +1,4 @@
-# step:file D2.2
+# step:file E2.2
 """Detections whose subject is a non-human principal.
 
 Every rule in the estate has a subject, and it is a user. "A user downloaded
@@ -51,8 +51,8 @@ AGENT_RULES = [
     Rule("delegated scope widened between hops", "agent",
          "T1078 Valid Accounts", "AML.T0053 Agent Privilege Escalation",
          "audit_rows",
-         "A2.3 makes a chain narrow; a widening one is either a bug or the "
-         "thing A2.3 exists to stop",
+         "B2.3 makes a chain narrow; a widening one is either a bug or the "
+         "thing B2.3 exists to stop",
          true_rate=0.0004, false_rate=0.0001),
     Rule("tool sequence never seen in the baseline", "agent",
          "T1059 Command and Scripting Interpreter", "AML.T0050 Tool Misuse",
@@ -69,7 +69,7 @@ AGENT_RULES = [
     Rule("approval granted faster than the content could be read", "agent",
          "T1204 User Execution", "AML.T0051 LLM Prompt Injection",
          "approvals",
-         "A3.6's saturation, as a detection rather than a report — the gate "
+         "B3.6's saturation, as a detection rather than a report — the gate "
          "is still 100% covered while nobody is reading",
          true_rate=0.0002, false_rate=0.0002),
 ]
@@ -94,9 +94,9 @@ def no_human_in_chain(rows):
             if not any(u in str(r.get("chain", "")) for u in config.USERS)]
 
 
-# step:D2.3 add
+# step:E2.3 add
 # --------------------------------------------------------------------------- #
-# D2.3 — when the subject is the platform, not the workload
+# E2.3 — when the subject is the platform, not the workload
 # --------------------------------------------------------------------------- #
 # A workload-layer detection watches what the agent does. It is looking in the
 # wrong place when the thing being attacked is the harness the agent runs in,
@@ -109,18 +109,18 @@ def no_human_in_chain(rows):
 PLATFORM_RULES = [
     Rule("process spawned under a profile that forbids it", "agent-platform",
          "T1611 Escape to Host", "AML.T0054 LLM Jailbreak", "edr",
-         "A3.2's Profile.may_spawn is False for the coding agent, and "
+         "B3.2's Profile.may_spawn is False for the coding agent, and "
          "nothing enforces it — so the detection is the enforcement",
          true_rate=0.0009, false_rate=0.0002),
     Rule("artefact cache entry differs from its manifest", "agent-platform",
          "T1195.002 Compromise Software Supply Chain",
          "AML.T0010 ML Supply Chain Compromise", "run_artefacts",
-         "A3.8's shared surface, diffed rather than trusted",
+         "B3.8's shared surface, diffed rather than trusted",
          true_rate=0.0007, false_rate=0.0003),
     Rule("exemption expired and the control did not come back",
          "agent-platform", "T1562 Impair Defenses",
          "AML.T0055 Unsafe ML Artifacts", "audit_rows",
-         "A3.9's Exemption has an expiry; nothing reconciles the register "
+         "B3.9's Exemption has an expiry; nothing reconciles the register "
          "against the running configuration, so an expiry is a date that "
          "passes",
          true_rate=0.0005, false_rate=0.0001),
@@ -138,7 +138,7 @@ def platform_catalogue():
 
 
 def exemption_reconciliation(register, live_controls, *, now):
-    """D2.3's most useful rule, because it finds a control that is off and
+    """E2.3's most useful rule, because it finds a control that is off and
     that everybody believes is on."""
     out = []
     for ex in register:
@@ -147,12 +147,12 @@ def exemption_reconciliation(register, live_controls, *, now):
                         "lifts": sorted(ex.lifts),
                         "state": "expired, and the control is still off"})
     return out
-# step:D2.3 end
+# step:E2.3 end
 
 
-# step:D2.4 add
+# step:E2.4 add
 # --------------------------------------------------------------------------- #
-# D2.4 — written by a loop, shipped by a human
+# E2.4 — written by a loop, shipped by a human
 # --------------------------------------------------------------------------- #
 # A model writes a plausible detection quickly. Plausible is the problem: the
 # rule reads well, maps to a technique, and has never been run against
@@ -160,7 +160,7 @@ def exemption_reconciliation(register, live_controls, *, now):
 # candidate and deployed is the one thing that cannot be automated away —
 # a measured false-positive rate, and a human who accepts it.
 def review(candidate, events_per_day, *, analysts=1):
-    """Reuses C1.6's arithmetic rather than restating it. A detection team and
+    """Reuses D1.6's arithmetic rather than restating it. A detection team and
     a red team asking the same question should get the same answer."""
     from ..redteam.swarm import deployable
     v = deployable({"name": candidate.name,
@@ -173,12 +173,12 @@ def review(candidate, events_per_day, *, analysts=1):
     if not v["mapped"]:
         v["verdict"] = "unmapped: nobody can say what this does not cover"
     return v
-# step:D2.4 end
+# step:E2.4 end
 
 
-# step:D2.5 add
+# step:E2.5 add
 # --------------------------------------------------------------------------- #
-# D2.5 — a rule generated from one incident
+# E2.5 — a rule generated from one incident
 # --------------------------------------------------------------------------- #
 # It will match that incident. That is not evidence of anything: a rule
 # generated from a trace and tested against that trace is a description of the
@@ -208,4 +208,4 @@ def measure(rule_fn, incident_traces, benign_traces):
                     else "matches the baseline" if noise / n_b > 0.05
                     else "generalises, and the noise is measured"),
     }
-# step:D2.5 end
+# step:E2.5 end

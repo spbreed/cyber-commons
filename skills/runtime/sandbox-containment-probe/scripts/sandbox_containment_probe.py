@@ -56,7 +56,7 @@ ATTEMPTS = [
  ("workflow-agent", "bookings-db.prod", 5432, "the one it needs"),
  ("workflow-agent", "kube-dns",           53, "resolution, explicitly granted"),
  ("workflow-agent", "169.254.169.254",    80, "cloud metadata - node credentials"),
- ("workflow-agent", "archive.evil.example", 443, "A1.3's exfiltration target"),
+ ("workflow-agent", "archive.evil.example", 443, "B1.3's exfiltration target"),
  ("coding-agent",   "archive.evil.example", 443, "a pod nobody wrote a policy for"),
 ]
 # ------------------------------------------------------------------------ run

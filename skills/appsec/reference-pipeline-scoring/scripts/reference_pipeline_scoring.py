@@ -61,7 +61,7 @@ MANTIS = {
  11: ("no",      "no sandbox — it is a review harness, not a DAST"),
  12: ("no",      "static review only"),
  13: ("no",      "no chaining"),
- 14: ("partial", "can propose fixes; validation is yours (B2.9)"),
+ 14: ("partial", "can propose fixes; validation is yours (C2.9)"),
  15: ("partial", "emits severity; calibration against confirmation is yours"),
 }
 

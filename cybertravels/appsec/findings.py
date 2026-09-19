@@ -1,4 +1,4 @@
-# step:file B2.1
+# step:file C2.1
 """The harness — a finding, an independent verifier, and a budget that stops.
 
 A harness is not "a script that calls a model in a loop". Three things make it
@@ -130,9 +130,9 @@ def counts(findings):
     return out
 
 
-# step:B2.4 add
+# step:C2.4 add
 # --------------------------------------------------------------------------- #
-# B2.4 — stages 8 and 9: one bug reported three times, and bugs that are not
+# C2.4 — stages 8 and 9: one bug reported three times, and bugs that are not
 # --------------------------------------------------------------------------- #
 # Parallel tracks are the point of the pipeline and the source of this problem.
 # The deterministic pass, the model pass and the dependency pass all reach
@@ -187,12 +187,12 @@ def cross_reference(findings, units_by_file):
             f.evidence.append("cross-reference: no such unit in that file")
             rejected.append(f)
     return kept, rejected
-# step:B2.4 end
+# step:C2.4 end
 
 
-# step:B2.9 add
+# step:C2.9 add
 # --------------------------------------------------------------------------- #
-# B2.9 — stage 13: three mediums that compose
+# C2.9 — stage 13: three mediums that compose
 # --------------------------------------------------------------------------- #
 # Triage scores findings one at a time because that is how a queue is shaped,
 # and a chain is invisible from inside a row. The chain in this tree is real
@@ -239,12 +239,12 @@ def chains(findings, recipes):
         if all(l is not None and l.verdict == "confirmed" for l in links):
             out.append(Chain(name, links, rationale))
     return out
-# step:B2.9 end
+# step:C2.9 end
 
 
-# step:B2.15 add
+# step:C2.15 add
 # --------------------------------------------------------------------------- #
-# B2.15 — stage 15: severity from evidence, not from the rule
+# C2.15 — stage 15: severity from evidence, not from the rule
 # --------------------------------------------------------------------------- #
 # A rule's severity is a property of the rule. It was chosen by whoever wrote
 # the pattern, against no particular application, and copying it into the queue
@@ -287,7 +287,7 @@ def calibrate(finding, *, reachable=None):
 
 
 def economics(findings, per_stage_seconds):
-    """B2.15's Day 2, and the number worth reporting instead of a count.
+    """C2.15's Day 2, and the number worth reporting instead of a count.
 
     What each stage cost and what it removed. A pipeline that reports "1,400
     findings" is reporting its own noise; one that reports "stage 10 dropped
@@ -302,4 +302,4 @@ def economics(findings, per_stage_seconds):
         "seconds_per_stage": dict(sorted(per_stage_seconds.items())),
         "seconds_total": round(sum(per_stage_seconds.values()), 3),
     }
-# step:B2.15 end
+# step:C2.15 end

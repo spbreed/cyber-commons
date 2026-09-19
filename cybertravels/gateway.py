@@ -1,7 +1,7 @@
-# step:file A3.7
+# step:file B3.7
 """The agent gateway — one choke point, once there is more than one agent.
 
-By A3.6 every control exists and each one lives where it was convenient to
+By B3.6 every control exists and each one lives where it was convenient to
 write it: policy in `policy.py`, called from the runtime; budgets on the loop;
 egress inside `egress.py`, invoked by whoever remembers; return validation in
 `returns.py`, likewise. That works for one agent and stops working at four,
@@ -68,7 +68,7 @@ class Gateway:
     def coverage(self):
         """What fraction of calls this gateway actually adjudicated.
 
-        A3.7's Day 2. Anything below 100% means an agent still has a direct
+        B3.7's Day 2. Anything below 100% means an agent still has a direct
         route, and the number is the only way to find out — the controls all
         pass their own tests either way.
         """

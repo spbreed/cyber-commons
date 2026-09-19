@@ -1,4 +1,4 @@
-# step:file B2.6
+# step:file C2.6
 """Stage 11 — a disposable replica, and the refusal that makes it one.
 
 Dynamic testing needs a running system. The path of least resistance is to
@@ -91,9 +91,9 @@ def isolated_db(replica):
     return db
 
 
-# step:B2.8 add
+# step:C2.8 add
 # --------------------------------------------------------------------------- #
-# B2.8 — stage 12: run the exploit, or drop the finding
+# C2.8 — stage 12: run the exploit, or drop the finding
 # --------------------------------------------------------------------------- #
 # A SAST finding is a hypothesis, and a queue of hypotheses gets argued about
 # rather than fixed — because arguing is cheaper than proving and everybody
@@ -185,4 +185,4 @@ def verdict_from(evidence):
     an exploit that did not fire tells you about the exploit as well as about
     the defect, and 'refuted' claims more than that."""
     return "confirmed" if evidence else "undetermined"
-# step:B2.8 end
+# step:C2.8 end

@@ -38,7 +38,7 @@ SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 # The format names its own tokens. An earlier version wrote the first field as
 # "VERDICT", and a served Qwen2.5-7B returned the literal string VERDICT — it
 # read the placeholder as the answer. The ask is the part you own, and that is
-# B2.1's whole point arriving here as a bug.
+# C2.1's whole point arriving here as a bug.
 QUESTION = ("Does this function verify that the caller is entitled to the rows "
             "it returns?\n"
             "Reply on ONE line, four fields separated by |:\n"

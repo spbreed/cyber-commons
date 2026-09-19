@@ -8,15 +8,15 @@ means a token minted for the booking system is useless here, and vice versa.
 **Everything this server returns is untrusted text.** A vendor document is
 somebody else's writing, arriving inside the agent's context window with the
 same typographic authority as the system prompt. The runtime labels it as such
-before the model sees it, and A1.2 is the lesson on why the label is the
+before the model sees it, and B1.2 is the lesson on why the label is the
 control rather than the instruction not to obey it.
 
 The tool descriptions themselves are part of that surface — an MCP server can
-rewrite a tool's description after you approved it, which is A1.9.
+rewrite a tool's description after you approved it, which is B1.9.
 
     python -m cybertravels.mcp.vendor_server
 """
-# step:file G1.2
+# step:file A1.2
 import json
 import sys
 from pathlib import Path
@@ -35,7 +35,7 @@ AUD = config.AUD_VENDOR_MCP
 mcp = FastMCP("cybertravels-vendor") if FastMCP else None
 
 # What the vendor sends back. One of these carries an instruction aimed at the
-# agent rather than at the reader — which is the fixture A1.2 and C1.3 use, and
+# agent rather than at the reader — which is the fixture B1.2 and D1.3 use, and
 # it is deliberately here in the corpus rather than injected by a test.
 VENDOR_DOCS = {
     "skyline-air": (

@@ -1,4 +1,4 @@
-# step:file B2.16
+# step:file C2.16
 """Stage 14 — a patch is not accepted because the scanner went quiet.
 
 This is the stage with the sharpest failure mode in the pipeline, because the

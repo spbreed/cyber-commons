@@ -1,4 +1,4 @@
-# step:file D3.1
+# step:file E3.1
 """Understanding what happened, when the actor is an agent.
 
 Ten lessons, and the first thing they change is the question. A human-actor
@@ -7,21 +7,21 @@ An agent investigation that opens with which user gets "the agent's service
 account" and stops, because that is true of every action the system has ever
 taken.
 
-The four questions that replace it are A2.7's, and D3.4 is where the estate
+The four questions that replace it are B2.7's, and E3.4 is where the estate
 finds out whether its telemetry can answer them. The rest of the track is what
 you do with the answers: admission rules so the investigation is not itself
 the breach, a timeline somebody can challenge, a plan that is allowed to change
 its mind, and a hunt for what no rule was written against.
 
 Where a mechanism already exists in `cybertravels.redteam`, this imports it.
-C1.11's handoff says a finding ends in a control the SOC runs; two copies of
+D1.11's handoff says a finding ends in a control the SOC runs; two copies of
 the same analysis is how that promise quietly becomes two different answers.
 """
-from ..redteam.swarm import floor_miss_rate, triage  # noqa: F401  (D3.1)
+from ..redteam.swarm import floor_miss_rate, triage  # noqa: F401  (E3.1)
 
 
 def supervise(alerts, capacity, *, rank, must_escalate):
-    """D3.1 — the loop works the queue; the human operates the loop.
+    """E3.1 — the loop works the queue; the human operates the loop.
 
     Supervising by re-reading everything the loop did is not supervision, it
     is doing the job twice. What a human owes the queue is two things: the
@@ -37,9 +37,9 @@ def supervise(alerts, capacity, *, rank, must_escalate):
     return out
 
 
-# step:D3.2 add
+# step:E3.2 add
 # --------------------------------------------------------------------------- #
-# D3.2 — what the investigating agent may touch
+# E3.2 — what the investigating agent may touch
 # --------------------------------------------------------------------------- #
 # The investigation agent is handed broad read access because it has to "find
 # the problem", and broad read across an estate mid-incident is a larger data
@@ -100,12 +100,12 @@ class Investigation:
                 "granted": sorted(self.allowed - set(ADMISSION[self.klass])),
                 "why": "the grant list is the part an assessor reads: it is "
                        "what this investigation saw beyond its scope"}
-# step:D3.2 end
+# step:E3.2 end
 
 
-# step:D3.4 add
+# step:E3.4 add
 # --------------------------------------------------------------------------- #
-# D3.4 — three instincts that misfire when the actor is an agent
+# E3.4 — three instincts that misfire when the actor is an agent
 # --------------------------------------------------------------------------- #
 # Each of these is correct for a human actor and produces a confidently wrong
 # answer for an agent. They are listed because they are instincts: nobody
@@ -119,8 +119,8 @@ INSTINCTS = [
                     "which workload identity acted for them"},
     {"instinct": "disable the account",
      "for_a_human": "stops them",
-     "for_an_agent": "stops nothing already issued. A2.5's revocation is at "
-                     "the workload, and C1.9 measured which paths it reaches",
+     "for_an_agent": "stops nothing already issued. B2.5's revocation is at "
+                     "the workload, and D1.9 measured which paths it reaches",
      "ask_instead": "revoke the workload, and check the act-paths that "
                     "revocation is not on"},
     {"instinct": "read what they did",
@@ -151,15 +151,15 @@ def attribute(row):
                         ("call", row.get("tool")),
                         ("motive", row.get("motive_origin"))) if not v],
     }
-# step:D3.4 end
+# step:E3.4 end
 
 
-# step:D3.7 add
+# step:E3.7 add
 # --------------------------------------------------------------------------- #
-# D3.7 — the initiating agent is not the acting one
+# E3.7 — the initiating agent is not the acting one
 # --------------------------------------------------------------------------- #
 # Scoping stops at the agent that made the call, and the call was made on
-# behalf of a chain. A2.3 made `act` nest for exactly this: the graph is in
+# behalf of a chain. B2.3 made `act` nest for exactly this: the graph is in
 # the token, and scoping means walking it rather than reading the last hop.
 def delegation_graph(rows):
     """Every hop that appears in any row, as edges."""
@@ -189,12 +189,12 @@ def blast_scope(rows, *, start):
             "tools": sorted({r.get("tool") for r in touched if r.get("tool")}),
             "why": "scoping to the acting agent alone would have returned "
                    "the last hop and missed the run that asked for it"}
-# step:D3.7 end
+# step:E3.7 end
 
 
-# step:D3.6 add
+# step:E3.6 add
 # --------------------------------------------------------------------------- #
-# D3.6 — an investigation that is allowed to change its mind
+# E3.6 — an investigation that is allowed to change its mind
 # --------------------------------------------------------------------------- #
 # An agent given an incident forms a hypothesis in its first turn and spends
 # the rest of the investigation gathering support for it. That is not a model
@@ -231,15 +231,15 @@ class Plan:
                 "replans": len(self.history),
                 "why": "an abandoned branch that is not in the trace looks "
                        "like a branch nobody considered"}
-# step:D3.6 end
+# step:E3.6 end
 
 
-# step:D3.9 add
+# step:E3.9 add
 # --------------------------------------------------------------------------- #
-# D3.9 — intelligence with a source, or not at all
+# E3.9 — intelligence with a source, or not at all
 # --------------------------------------------------------------------------- #
 # A synthesis loop over threat reporting produces fluent, confident, unsourced
-# claims, and they are formatted identically to the sourced ones. B2.12 made
+# claims, and they are formatted identically to the sourced ones. C2.12 made
 # the same argument about a pentest report; this is the intake side of it, and
 # the rule is the same: a claim with no source cannot carry a severity and
 # cannot become a rule.
@@ -252,12 +252,12 @@ def intake(claims):
             "may_become_rules": [c.get("claim") for c in sourced],
             "why": "an unsourced claim that becomes a detection is a rule "
                    "whose provenance is a model's fluency"}
-# step:D3.9 end
+# step:E3.9 end
 
 
-# step:D3.10 add
+# step:E3.10 add
 # --------------------------------------------------------------------------- #
-# D3.10 — the hunt, and what makes a finding graduate
+# E3.10 — the hunt, and what makes a finding graduate
 # --------------------------------------------------------------------------- #
 # Everything not covered by a rule is invisible, and the rules were written
 # against last quarter's agent. A hunt is the standing answer to that, and it
@@ -290,7 +290,7 @@ def graduates(finding, *, benign_rate, explained_by_existing_rule):
     if benign_rate > 0.01:
         return {"graduates": False,
                 "why": f"a false-positive rate of {benign_rate} would bury "
-                       f"the queue — D2.5's measurement, before shipping"}
+                       f"the queue — E2.5's measurement, before shipping"}
     return {"graduates": True,
             "why": "confirmed, novel, and measured against benign traffic"}
-# step:D3.10 end
+# step:E3.10 end

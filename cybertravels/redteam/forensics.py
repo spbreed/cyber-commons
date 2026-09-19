@@ -1,4 +1,4 @@
-# step:file C1.10
+# step:file D1.10
 """Can the run be reconstructed from the record — or only summarised?
 
 The test is blunt and it is the one that fails. Take a finished run, delete
@@ -9,7 +9,7 @@ the agent, and ask somebody who was not there to answer four questions:
     which call   was made, with what arguments
     what motivated it — what did the agent read that made it act
 
-A2.7 and A2.8 built the record that can answer all four, so this file is not
+B2.7 and B2.8 built the record that can answer all four, so this file is not
 building telemetry. It is the audit of the telemetry: a checker that takes the
 rows and the spans and reports which questions they actually answer, plus the
 two properties that decide whether the answer is worth anything.
@@ -22,7 +22,7 @@ instead of a digest of the document has thrown away the evidence and kept the
 opinion.
 
 **The agent must not be able to amend it.** A record the actor can edit is a
-record that describes what the actor wanted you to find. A2.8's hash chain is
+record that describes what the actor wanted you to find. B2.8's hash chain is
 what makes that checkable rather than assumed.
 """
 
@@ -53,11 +53,11 @@ QUESTIONS = {
 # Answerable from the record, and **not** on it. Stated rather than discovered,
 # because an investigation finds this out at the worst possible moment.
 NOT_RECORDED = {
-    "attestation": "A2.2 issues an SVID with an `attested` digest over the "
+    "attestation": "B2.2 issues an SVID with an `attested` digest over the "
                    "selectors, and no audit column carries it — so the row "
                    "names which workload acted and cannot show it was the "
                    "attested instance of that workload",
-    "call_arguments": "`detail` carries a summary, not the arguments. A2.4's "
+    "call_arguments": "`detail` carries a summary, not the arguments. B2.4's "
                       "call binding proves a token matched a call; the row "
                       "does not let you reconstruct the call itself",
 }
