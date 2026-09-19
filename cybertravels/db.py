@@ -49,6 +49,14 @@ CREATE TABLE IF NOT EXISTS audit (
   , prev_hash TEXT, row_hash TEXT
 -- step:A2.8 end
   );
+-- step:A3.8 add
+-- A3.8: what each run touched. Every per-run check can pass while two runs
+-- share an artefact nobody scoped to either of them — the contamination is
+-- only visible across runs, which is why it needs its own record.
+CREATE TABLE IF NOT EXISTS run_artefacts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, at REAL, trace_id TEXT,
+  workload TEXT, kind TEXT, ref TEXT, mode TEXT);
+-- step:A3.8 end
 CREATE TABLE IF NOT EXISTS memory (
   id INTEGER PRIMARY KEY AUTOINCREMENT, at REAL, owner_id TEXT, kind TEXT,
   content TEXT, origin TEXT, trusted INTEGER);
@@ -209,6 +217,41 @@ def verify_audit_chain():
         prev = r["row_hash"]
     return True, None
 # step:A2.8 end
+
+
+# step:A3.8 add
+def touched(trace_id, workload, kind, ref, mode):
+    """Record that one run read or wrote one artefact. `mode` is read/write."""
+    c = conn()
+    c.execute("INSERT INTO run_artefacts (at, trace_id, workload, kind, ref,"
+              " mode) VALUES (?,?,?,?,?,?)",
+              (time.time(), trace_id, workload, kind, ref, mode))
+    c.commit()
+
+
+def shared_surfaces():
+    """Artefacts one run wrote and a different run read.
+
+    The finding A3.8 exists for. Each run passed its own checks; the object
+    written by one and read by three unrelated others is a channel between
+    them, and no per-run view can see it.
+    """
+    rows = conn().execute(
+        "SELECT kind, ref, mode, trace_id, workload FROM run_artefacts")
+    writers, readers = {}, {}
+    for r in rows:
+        key = (r["kind"], r["ref"])
+        (writers if r["mode"] == "write" else readers).setdefault(
+            key, set()).add(r["trace_id"])
+    out = []
+    for key, wrote in writers.items():
+        crossed = readers.get(key, set()) - wrote
+        if crossed:
+            out.append({"kind": key[0], "ref": key[1],
+                        "written_by": sorted(wrote),
+                        "read_by_other_runs": sorted(crossed)})
+    return sorted(out, key=lambda d: (d["kind"], d["ref"]))
+# step:A3.8 end
 
 
 def recent_audit(limit=60):

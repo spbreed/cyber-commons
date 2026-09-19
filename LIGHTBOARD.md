@@ -2406,7 +2406,7 @@ Next up: A3.1, Default-deny on the tool call.
 
 ### A3.1 · Default-deny on the tool call
 
-Chapter A3 · lesson 1 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.1.html)
+Chapter A3 · lesson 1 of 11 · runs a skill · 281 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A3.1.html)
 
 **① Open**
 
@@ -2426,7 +2426,7 @@ Here is what that costs you.
 
 Allow-by-default authorization is defeated by any argument the model can be persuaded to produce.
 
-Same company, same four agents, new way of failing. The last place a decision about that refund rests on facts rather than on intent. Identity has already failed, an injected instruction is in the context, and the tool call is where CyberTravels can still say no. R1, R3.
+Same company, same four agents, new way of failing. config.TOOL_POLICY has answered yes or no since G1.4 and has never said why. You add cybertravels/policy.py: one decide() per call, returning a record with a reason and a list of obligations. The default branch is a denial, so delete everything — a tool nobody classified — is refused rather than falling through.
 
 **③ What we do about it**
 
@@ -2458,7 +2458,7 @@ Next up: A3.2, Sandboxed execution.
 
 ### A3.2 · Sandboxed execution
 
-Chapter A3 · lesson 2 of 11 · runs a skill · 261 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.2.html)
+Chapter A3 · lesson 2 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.2.html)
 
 **① Open**
 
@@ -2478,7 +2478,7 @@ Here is what that costs you.
 
 Model-authored code inherits the runtime's reach, including any credential mounted into the environment.
 
-Same company, same four agents, new way of failing. The Coding Agent runs generated code, and the File System Agent runs on Alex's laptop. “It runs in a sandbox” is not a control until somebody says whether that sandbox can see ~/.aws and the HR folder. R6.
+Same company, same four agents, new way of failing. cybertravels/sandbox.py, and the uncomfortable half: reachable now() reads what your actual process has. Run it and violations(CODING_AGENT) lists every credential in your own environment that the Coding Agent's profile does not grant — including the shell agents/coding agent.py::_open_branch reaches, which is row 6 of cybertravels/LABELS.md.
 
 **③ What we do about it**
 
@@ -2510,7 +2510,7 @@ Next up: A3.3, Egress control.
 
 ### A3.3 · Egress control
 
-Chapter A3 · lesson 3 of 11 · runs a skill · 207 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/A3.3.html)
+Chapter A3 · lesson 3 of 11 · runs a skill · 241 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A3.3.html)
 
 **① Open**
 
@@ -2530,7 +2530,7 @@ Here is what that costs you.
 
 An agent with unrestricted egress turns any successful injection into data loss.
 
-Same company, same four agents, new way of failing. Every way customer PII leaves CyberTravels — a prompt leak, an abused tool, an OCR'd invoice, a poisoned template — ends at the same network boundary. R9, R10.
+Same company, same four agents, new way of failing. Nothing in your tree constrains where the agent reaches — _stubs.HTTP takes any URL and the only reason nothing leaves is that the stub is inert. You add cybertravels/egress.py: an allow-list of hosts and a check on what is being sent, because the vendor API the agent is supposed to call is a perfectly good channel for a key to leave through.
 
 **③ What we do about it**
 
@@ -2562,7 +2562,7 @@ Next up: A3.4, Budgets and stop conditions.
 
 ### A3.4 · Budgets and stop conditions
 
-Chapter A3 · lesson 4 of 11 · runs a skill · 211 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/A3.4.html)
+Chapter A3 · lesson 4 of 11 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A3.4.html)
 
 **① Open**
 
@@ -2582,7 +2582,7 @@ Here is what that costs you.
 
 Without a ceiling the loop runs until an external system stops it, and the failure is denial of service to everything sharing the quota.
 
-Same company, same four agents, new way of failing. What makes “CyberTravels runs autonomously” a bounded sentence: a ceiling on tokens, wall clock, spend and, above all, on how many refunds one run may issue. R1.
+Same company, same four agents, new way of failing. G1.7 bound the loop to eight steps and twelve calls. You add Budget.target() and Budget.tokens() to cybertravels/runtime.py and two ceilings to config.py, because twelve calls all landing on Northwind Rail is, from Northwind's side, an attack. exhausted() names which ceiling bound — "the run stopped" and "the run stopped hammering one vendor" are different incidents.
 
 **③ What we do about it**
 
@@ -2614,7 +2614,7 @@ Next up: A3.5, Validating what comes back.
 
 ### A3.5 · Validating what comes back
 
-Chapter A3 · lesson 5 of 11 · runs a skill · 217 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A3.5.html)
+Chapter A3 · lesson 5 of 11 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A3.5.html)
 
 **① Open**
 
@@ -2634,7 +2634,7 @@ Here is what that costs you.
 
 An unverified claim becomes a shared premise, and a peer's message gets trusted more than a document it is no safer than.
 
-Same company, same four agents, new way of failing. The payments API returns {"status":"refunded"}. That is a valid shape and it is not evidence the money moved, and the advisor's hotel recommendation is the same problem in prose. R2.
+Same company, same four agents, new way of failing. Every control up to here guards the outbound half. You add cybertravels/returns.py, which is the return path: a schema per tool, and an independent verifier that catches a correctly shaped lie — get booking(2) answering with booking 9. Conformance is a statement about the serialiser; the empty result conforms perfectly.
 
 **③ What we do about it**
 
@@ -2666,7 +2666,7 @@ Next up: A3.6, Human approval that survives volume.
 
 ### A3.6 · Human approval that survives volume
 
-Chapter A3 · lesson 6 of 11 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A3.6.html)
+Chapter A3 · lesson 6 of 11 · runs a skill · 258 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A3.6.html)
 
 **① Open**
 
@@ -2686,7 +2686,7 @@ Here is what that costs you.
 
 An approval queue at volume approves everything, and the risk register still records it as a control.
 
-Same company, same four agents, new way of failing. Approval is right for a $5,000 refund and wrong for a hotel search. The design question for CyberTravels is not whether to have a human in the loop but how few decisions reach them, so each one gets read. R2.
+Same company, same four agents, new way of failing. The human gate you built in G1.7 is still there and, at volume, still 100 percent covered while nobody reads anything. You add approval load() to policy.py: approvals per reviewer per hour against what reading one actually takes. Sixty an hour reports saturated — and the coverage metric does not move.
 
 **③ What we do about it**
 
@@ -2718,7 +2718,7 @@ Next up: A3.7, The agent gateway — one choke point when you scale.
 
 ### A3.7 · The agent gateway — one choke point when you scale
 
-Chapter A3 · lesson 7 of 11 · runs a skill · 219 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/A3.7.html)
+Chapter A3 · lesson 7 of 11 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A3.7.html)
 
 **① Open**
 
@@ -2738,7 +2738,7 @@ Here is what that costs you.
 
 Per-agent controls diverge as the fleet grows, and legacy downstreams push a static credential back into agent code.
 
-Same company, same four agents, new way of failing. At four agents the controls live in the agents. When CyberTravels ships the eighth, nobody can answer “is default-deny on?” with anything better than “in some of them”. R9.
+Same company, same four agents, new way of failing. cybertravels/gateway.py. Policy, budget, egress and return validation each live where it was convenient to write them, which is four places a second agent's author can skip. They move behind one entry point, and coverage() is the number that finds the agent that still has a direct route — every control passes its own tests either way.
 
 **③ What we do about it**
 
@@ -2770,7 +2770,7 @@ Next up: A3.8, Shared infrastructure between agent runs.
 
 ### A3.8 · Shared infrastructure between agent runs
 
-Chapter A3 · lesson 8 of 11 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A3.8.html)
+Chapter A3 · lesson 8 of 11 · runs a skill · 265 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.8.html)
 
 **① Open**
 
@@ -2790,7 +2790,7 @@ Here is what that costs you.
 
 Any shared mutable surface is a channel between runs that are supposed to be independent.
 
-Same company, same four agents, new way of failing. The Coding Agent and the CI runner share a package cache and an artifact repository. Two runs that share a mutable surface are not isolated, whatever the deployment diagram says. R4, R7.
+Same company, same four agents, new way of failing. A run artefacts table in cybertravels/db.py, and shared surfaces(). Each run passes every per-run check; the wheel one run wrote and three unrelated runs read is only visible across runs. One chain, not three findings — the covert channel, the supply-chain target and the staging point are the same object.
 
 **③ What we do about it**
 
@@ -2822,7 +2822,7 @@ Next up: A3.9, Turning a control off without turning the system into an experime
 
 ### A3.9 · Turning a control off without turning the system into an experiment
 
-Chapter A3 · lesson 9 of 11 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A3.9.html)
+Chapter A3 · lesson 9 of 11 · runs a skill · 263 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.9.html)
 
 **① Open**
 
@@ -2842,7 +2842,7 @@ Here is what that costs you.
 
 Classifiers off, no compensating cap, and tens of thousands of agents launched under that configuration. One decision becomes a population-scale incident.
 
-Same company, same four agents, new way of failing. Alex turned the guardrails off for the demo. That was defensible. What was never decided is what CyberTravels' blast radius should have shrunk to while they were off. R2.
+Same company, same four agents, new way of failing. policy.Exemption, which refuses to exist without a reference, a reason, an approver and an expiry. decide() lets an active one lift an obligation and still names it in the decision; expired() counts the ones that ran out and are still in the file, which is a control set describing a system nobody is running.
 
 **③ What we do about it**
 
@@ -2874,7 +2874,7 @@ Next up: A3.10, The agent's escalation path.
 
 ### A3.10 · The agent's escalation path
 
-Chapter A3 · lesson 10 of 11 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A3.10.html)
+Chapter A3 · lesson 10 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A3.10.html)
 
 **① Open**
 
@@ -2894,7 +2894,7 @@ Here is what that costs you.
 
 An agent that finds a live breach, reasons about telling somebody, and has no tool for it, does nothing at all.
 
-Same company, same four agents, new way of failing. CyberTravels' tool list has book flight, issue refund and search hotels. It has no way to tell a human that an invoice it just read looks forged.
+Same company, same four agents, new way of failing. report to human() in cybertravels/runtime.py, plus one line in the system prompt. The three properties are the lesson: cheap, non-terminal, signposted. Get any of them wrong and the tool is present and never called, which looks exactly like an agent that never noticed anything.
 
 **③ What we do about it**
 
@@ -2926,7 +2926,7 @@ Next up: A3.11, Securing the developers' coding agents.
 
 ### A3.11 · Securing the developers' coding agents
 
-Chapter A3 · lesson 11 of 11 · runs a skill · 353 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/A3.11.html)
+Chapter A3 · lesson 11 of 11 · runs a skill · 380 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/A3.11.html)
 
 **① Open**
 
@@ -2946,7 +2946,7 @@ Here is what that costs you.
 
 The IDE agent holds git credentials, cloud credentials and a shell, in an environment nobody manages.
 
-Same company, same four agents, new way of failing. The Coding Agent on Alex's laptop holds repository write, a cloud credential and whatever MCP servers were convenient. It is the highest-privilege agent at CyberTravels and the least governed. R6, R7.
+Same company, same four agents, new way of failing. The agent that wrote all of the above has none of it. cybertravels/devagent.py is the containment for the one in Alex's IDE: a credential deny-list matched against resolved paths, workspace confinement that survives a symlink, and a redacted environment — ordered by the friction a developer feels, because the containment they notice is the one they switch off.
 
 **③ What we do about it**
 

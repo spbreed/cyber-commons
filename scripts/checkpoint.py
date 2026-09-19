@@ -247,9 +247,24 @@ def check(order: list[str]) -> list[str]:
                     problems.append(
                         f"{rel}:{open_at[0]}: empty `was` region — use `add`, "
                         f"which is what \"it did not exist before\" means")
-                if open_at and kind == "add":
-                    problems.append(f"{rel}:{i}: `add` inside an open region")
-                open_at, body = (i, kind), 0
+                # The only legal transition out of an open region without an
+                # `end` is `was` -> `now` on the same lesson. Anything else is
+                # a region somebody forgot to close, and it does not read as
+                # one: the next marker silently adopts everything between them.
+                # A missing `step:A3.10 end` once swallowed `class Budget:`
+                # itself, and every gate still passed — the file parsed,
+                # because what it swallowed was a whole class.
+                if open_at and not (kind == "now" and open_at[1] == "was"
+                                    and open_at[2] == sid):
+                    problems.append(
+                        f"{rel}:{i}: `{kind}` while step:{open_at[2]} "
+                        f"{open_at[1]} (line {open_at[0]}) is still open — the "
+                        f"earlier region has no `end`")
+                if kind == "now" and not (open_at and open_at[1] == "was"):
+                    problems.append(
+                        f"{rel}:{i}: `now` with no `was` open — the branch it "
+                        f"replaces does not exist")
+                open_at, body = (i, kind, sid), 0
         if open_at:
             problems.append(f"{rel}:{open_at[0]}: region never closed")
 

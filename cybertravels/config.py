@@ -88,6 +88,13 @@ TOOL_POLICY = {
 # A1.13 is the lesson; this is the ceiling it argues for.
 MAX_STEPS = 8
 MAX_TOOL_CALLS = 12
+# step:A3.4 add
+# Per target, because twelve calls all landing on one vendor is, from that
+# vendor's side, indistinguishable from an attack — and tokens, because a loop
+# that stays inside its step count can still spend without bound.
+MAX_CALLS_PER_TARGET = 4
+MAX_TOKENS = 200_000
+# step:A3.4 end
 
 # --- The model ---------------------------------------------------------------
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")

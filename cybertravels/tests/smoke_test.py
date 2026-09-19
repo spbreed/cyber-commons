@@ -12,6 +12,8 @@ everything through passes every happy-path test ever written.
 # step:file G2.3
 import json
 import sys
+import time
+from pathlib import Path
 
 from cybertravels import config, db, identity
 from cybertravels.a2a import protocol as a2a
@@ -311,6 +313,313 @@ def main():
     results.append(check("an audit row answers what motivated the action",
                          the_fourth_question_is_answerable))
     # step:A2.7 end
+
+    # step:A3.1 add
+    # --- the decision point ----------------------------------------------
+    from cybertravels import policy
+
+    traveller = identity.Session("dana", "traveller", agent="workflow")
+    finance = identity.Session("priya", "finance", agent="workflow")
+
+    def an_unclassified_tool_is_denied():
+        d = policy.decide("delete_everything", {}, finance)
+        assert not d.allowed, "a tool nobody classified was allowed"
+        assert d.rule == "default-deny", f"decided by {d.rule!r}, not default-deny"
+        assert "classifies" in d.reason, "the refusal does not say why"
+    results.append(check("a tool no policy classifies is denied, with a reason",
+                         an_unclassified_tool_is_denied))
+
+    def high_risk_carries_an_obligation():
+        d = policy.decide("issue_refund", {"booking_id": 1}, finance)
+        assert d.allowed, d.reason
+        assert "human-approval" in d.obligations, \
+            "a refund was allowed with no approval obligation"
+        assert not policy.decide("issue_refund", {}, traveller).allowed, \
+            "a traveller was allowed to cause a refund"
+    results.append(check("policy returns an obligation, not just a yes",
+                         high_risk_carries_an_obligation))
+
+    def the_runtime_actually_asks_it():
+        # The assertion that stops `policy.py` being a control that exists
+        # beside the loop rather than on it. No MCP server is needed: the
+        # refusal happens before anything is called, which is the point.
+        import asyncio
+
+        from cybertravels import observability
+        from cybertravels import runtime as rt
+
+        async def go():
+            trace = observability.Trace("dana", "workflow")
+            return await rt.execute_tool(
+                "delete_everything", {}, dana,
+                identity.mint_agent_token("workflow"), trace,
+                asyncio.Queue(), rt.Budget())
+        err = json.loads(asyncio.run(go()))["error"]
+        assert "classifies" in err, f"the runtime refused with {err!r}"
+    results.append(check("the loop refuses through the decision point, not a dict",
+                         the_runtime_actually_asks_it))
+    # step:A3.1 end
+
+    # step:A3.2 add
+    # --- sandbox profile vs the process we are actually in ----------------
+    from cybertravels import sandbox
+
+    def the_profile_is_compared_to_reality():
+        obs = {"credential_env_keys": ["AWS_SECRET_ACCESS_KEY"],
+               "cwd": "/tmp", "can_spawn": True}
+        v = sandbox.violations(sandbox.CODING_AGENT, obs)
+        kinds = {x["kind"] for x in v}
+        assert "ambient-credential" in kinds, \
+            "a credential the profile does not grant went unreported"
+        assert "process-spawn" in kinds, \
+            "a profile that forbids spawning did not notice it could"
+        assert sandbox.CODING_AGENT.env_keys == set(), \
+            "the coding agent's profile grants environment keys"
+    results.append(check("the sandbox profile is measured against the live process",
+                         the_profile_is_compared_to_reality))
+    # step:A3.2 end
+
+    # step:A3.3 add
+    # --- egress: the destination AND the payload --------------------------
+    from cybertravels import egress
+
+    def an_unlisted_destination_is_refused():
+        try:
+            egress.check("https://paste.example.net/x", "hello")
+        except egress.EgressDenied:
+            return
+        raise AssertionError("an agent reached a destination nobody allowed")
+    results.append(check("a run-time destination off the allow-list is refused",
+                         an_unlisted_destination_is_refused))
+
+    def an_allowed_destination_is_not_a_blank_cheque():
+        egress.check("https://api.northwind-rail.example/v1/bookings", "ref=CT-1")
+        try:
+            egress.check("https://api.northwind-rail.example/v1/bookings",
+                         "notes: sk-ABCDEFGHIJKLMNOPQRSTUV")
+        except egress.EgressDenied:
+            return
+        raise AssertionError("a credential left through an allowed destination")
+    results.append(check("an allowed host does not make the payload allowed",
+                         an_allowed_destination_is_not_a_blank_cheque))
+    # step:A3.3 end
+
+    # step:A3.4 add
+    # --- budgets that bound a target, not only a total --------------------
+    from cybertravels.runtime import Budget
+
+    def one_target_cannot_absorb_the_whole_budget():
+        b = Budget()
+        allowed = sum(1 for _ in range(config.MAX_CALLS_PER_TARGET + 2)
+                      if b.target("api.northwind-rail.example"))
+        assert allowed == config.MAX_CALLS_PER_TARGET, \
+            f"{allowed} calls landed on one target"
+        assert b.exhausted() == "target:api.northwind-rail.example", \
+            f"the run stopped for {b.exhausted()!r}, which names no target"
+    results.append(check("a per-target ceiling bounds what one vendor absorbs",
+                         one_target_cannot_absorb_the_whole_budget))
+
+    def spend_is_bounded_as_well_as_steps():
+        b = Budget()
+        assert b.tokens(config.MAX_TOKENS - 1), "a run under budget was stopped"
+        assert not b.tokens(2), "a run spent past its token ceiling"
+        assert b.exhausted() == "tokens", "the ceiling that bound is not named"
+    results.append(check("a loop inside its step count is still bounded on spend",
+                         spend_is_bounded_as_well_as_steps))
+    # step:A3.4 end
+
+    # step:A3.5 add
+    # --- what comes back, before it reaches the model ---------------------
+    from cybertravels import returns
+
+    def a_changed_shape_is_rejected():
+        try:
+            returns.guard("get_booking", '{"id": 2, "reference": "CT-2"}')
+        except returns.ReturnRejected:
+            return
+        raise AssertionError("a result missing half its fields was accepted")
+    results.append(check("a tool result that changed shape is rejected",
+                         a_changed_shape_is_rejected))
+
+    def a_correctly_shaped_lie_is_caught():
+        payload, contradictions = returns.guard(
+            "get_booking",
+            '{"id": 9, "reference": "CT-9", "owner_id": "eve",'
+            ' "status": "ok", "amount": 10.0}',
+            asked_for=2)
+        assert contradictions, \
+            "a perfectly conformant answer to a different question passed"
+        assert "asked for booking 2" in contradictions[0]
+    results.append(check("schema-valid and wrong is still caught, independently",
+                         a_correctly_shaped_lie_is_caught))
+    # step:A3.5 end
+
+    # step:A3.6 add
+    def approval_saturation_is_visible():
+        policy.reset_approvals()
+        for _ in range(60):
+            policy.record_approval("alex")
+        load = policy.approval_load(window=3600)
+        assert load["saturated"], \
+            "sixty approvals an hour was not reported as saturation"
+        assert load["per_reviewer"]["alex"] == 60
+        policy.reset_approvals()
+        policy.record_approval("alex")
+        assert not policy.approval_load()["saturated"], \
+            "one approval an hour was reported as saturation"
+    results.append(check("an approval queue past reading speed reports itself",
+                         approval_saturation_is_visible))
+    # step:A3.6 end
+
+    # step:A3.7 add
+    # --- one choke point ---------------------------------------------------
+    from cybertravels import gateway as gw
+
+    def the_gateway_refuses_and_records_why():
+        g = gw.Gateway(budget=Budget())
+        g.authorise("get_booking", {"booking_id": 1}, finance)
+        try:
+            g.authorise("delete_everything", {}, finance)
+            raise AssertionError("the gateway passed an unclassified tool")
+        except gw.Refused as e:
+            assert e.decision.rule == "default-deny"
+        cov = g.coverage()
+        assert cov["decisions"] == 2 and cov["denied"] == 1, cov
+        assert "default-deny" in cov["rules"], \
+            "the gateway cannot say which rules it applied"
+    results.append(check("every call through the gateway leaves a decision behind",
+                         the_gateway_refuses_and_records_why))
+
+    def the_runtime_stops_deciding_for_itself():
+        # A3.7's actual claim: with a gateway installed, the loop is a caller
+        # like any other. If this passes and `coverage()` still reports zero
+        # decisions, the gateway is a control nothing routes through.
+        import asyncio
+
+        from cybertravels import observability
+        from cybertravels import runtime as rt
+
+        g = gw.Gateway(budget=Budget())
+        rt.GATEWAY = g
+        try:
+            async def go():
+                trace = observability.Trace("dana", "workflow")
+                return await rt.execute_tool(
+                    "issue_refund", {"booking_id": 1}, dana,
+                    identity.mint_agent_token("workflow"), trace,
+                    asyncio.Queue(), rt.Budget())
+            err = json.loads(asyncio.run(go()))["error"]
+        finally:
+            rt.GATEWAY = None
+        assert "may not delegate" in err, err
+        assert g.coverage()["decisions"] == 1, \
+            f"the loop called the tool without asking: {g.coverage()}"
+    results.append(check("with a gateway installed the loop routes through it",
+                         the_runtime_stops_deciding_for_itself))
+    # step:A3.7 end
+
+    # step:A3.8 add
+    def a_surface_shared_between_runs_is_found():
+        db.touched("trace-a", "coding", "cache", "wheels/pkg-1.0", "write")
+        db.touched("trace-b", "coding", "cache", "wheels/pkg-1.0", "read")
+        db.touched("trace-a", "coding", "cache", "wheels/own-1.0", "write")
+        db.touched("trace-a", "coding", "cache", "wheels/own-1.0", "read")
+        shared = db.shared_surfaces()
+        refs = {s["ref"] for s in shared}
+        assert "wheels/pkg-1.0" in refs, \
+            "an artefact one run wrote and another read was not reported"
+        assert "wheels/own-1.0" not in refs, \
+            "a run reading back its own artefact was reported as a channel"
+    results.append(check("an artefact crossing between runs is visible as a channel",
+                         a_surface_shared_between_runs_is_found))
+    # step:A3.8 end
+
+    # step:A3.9 add
+    def an_exemption_must_expire():
+        try:
+            policy.Exemption("SEC-1", ["issue_refund"], ["human-approval"],
+                             "vendor outage", "priya", expires_at=0)
+            raise AssertionError("an exemption with no expiry was accepted")
+        except ValueError:
+            pass
+        try:
+            policy.Exemption("SEC-2", ["issue_refund"], ["human-approval"],
+                             "", "priya", expires_at=time.time() + 60)
+            raise AssertionError("an exemption with no reason was accepted")
+        except ValueError:
+            pass
+
+    def an_expired_exemption_is_reported_and_stops_lifting():
+        live = policy.Exemption("SEC-3", ["issue_refund"], ["human-approval"],
+                                "vendor outage", "priya",
+                                expires_at=time.time() + 600)
+        dead = policy.Exemption("SEC-4", ["cancel_booking"], ["human-approval"],
+                                "migration", "alex", expires_at=time.time() - 1)
+        d = policy.decide("issue_refund", {}, finance, exemptions=[live])
+        assert d.allowed and "human-approval" not in d.obligations, \
+            "an active exemption did not lift the obligation it names"
+        assert d.rule == "exemption" and "SEC-3" in d.reason, \
+            "the decision does not name the exemption that allowed it"
+        d2 = policy.decide("cancel_booking", {}, finance, exemptions=[dead])
+        assert "human-approval" in d2.obligations, \
+            "an expired exemption was still lifting a control"
+        stale = policy.expired([live, dead])
+        assert [e["ref"] for e in stale] == ["SEC-4"], stale
+    results.append(check("an exemption needs a reason, an approver and an expiry",
+                         an_exemption_must_expire))
+    results.append(check("an expired exemption stops lifting, and is countable",
+                         an_expired_exemption_is_reported_and_stops_lifting))
+    # step:A3.9 end
+
+    # step:A3.10 add
+    def escalating_does_not_end_the_run():
+        from cybertravels import observability, runtime
+        runtime.ESCALATIONS.clear()
+        trace = observability.Trace("dana", "workflow")
+        out = runtime.report_to_human(
+            trace, "instruction inside content",
+            "the Northwind notice addresses automated agents")
+        assert out["continue"] is True, \
+            "reporting ended the run, which is why nobody reports"
+        assert runtime.ESCALATIONS[-1]["terminal"] is False
+        assert any(s.get("kind") == "escalation" for s in trace.spans), \
+            "the escalation did not reach the trace"
+        assert "report tool" in runtime._system_prompt("dana"), \
+            "the tool exists and the prompt never mentions it"
+    results.append(check("an agent can report something without giving up",
+                         escalating_does_not_end_the_run))
+    # step:A3.10 end
+
+    # step:A3.11 add
+    # --- the agent that wrote all of this ---------------------------------
+    from cybertravels import devagent
+
+    def the_developers_agent_is_contained_too():
+        try:
+            devagent.check_access(str(Path.home() / ".aws" / "credentials"))
+            raise AssertionError("the coding agent could read AWS credentials")
+        except devagent.NotContained:
+            pass
+        env = devagent.redact_env({"PATH": "/usr/bin",
+                                   "AWS_SECRET_ACCESS_KEY": "x",
+                                   "GITHUB_TOKEN": "y"})
+        assert env == {"PATH": "/usr/bin"}, env
+        assert devagent.check_access(str(config.PROJECT_ROOT / "runtime.py")), \
+            "the agent cannot read the repository it is working in"
+
+    def containment_is_counted_per_machine():
+        wide_open = {"inherit_env": True, "auto_approve_commands": True}
+        score = devagent.containment_score(wide_open)
+        assert score["in_place"] == 0, score
+        tightened = {"deny_read": devagent.DENY_READ,
+                     "workspace_root": str(config.PROJECT_ROOT),
+                     "inherit_env": False, "auto_approve_commands": False}
+        assert devagent.containment_score(tightened)["score"] == 1.0
+    results.append(check("the IDE agent is denied credentials and confined",
+                         the_developers_agent_is_contained_too))
+    results.append(check("containment is a number per machine, not a policy page",
+                         containment_is_counted_per_machine))
+    # step:A3.11 end
 
     print(f"\n{sum(results)}/{len(results)} checks held")
     return 0 if all(results) else 1

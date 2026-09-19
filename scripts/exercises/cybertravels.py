@@ -793,3 +793,73 @@ GROUNDING.update({
          "its origin plus a digest — not the text, because a refund request "
          "quoted in full puts traveller prose in a long-lived store.",
 })
+
+
+# Chapter A3 — the controls, each one a file in the reader's own tree.
+# A3 is where CyberTravels stops being a system with identity and becomes a
+# system with a decision point. Every grounding line below names the file the
+# checkpoint contains and the assertion that proves it holds, because a control
+# nobody can run is a paragraph.
+GROUNDING.update({
+ "A3.1": "`config.TOOL_POLICY` has answered yes or no since G1.4 and has never "
+         "said why. You add `cybertravels/policy.py`: one `decide()` per call, "
+         "returning a record with a reason and a list of obligations. The "
+         "default branch is a denial, so `delete_everything` — a tool nobody "
+         "classified — is refused rather than falling through.",
+ "A3.2": "`cybertravels/sandbox.py`, and the uncomfortable half: "
+         "`reachable_now()` reads what your *actual* process has. Run it and "
+         "`violations(CODING_AGENT)` lists every credential in your own "
+         "environment that the Coding Agent's profile does not grant — "
+         "including the shell `agents/coding_agent.py::_open_branch` reaches, "
+         "which is row 6 of `cybertravels/LABELS.md`.",
+ "A3.3": "Nothing in your tree constrains where the agent reaches — "
+         "`_stubs.HTTP` takes any URL and the only reason nothing leaves is "
+         "that the stub is inert. You add `cybertravels/egress.py`: an "
+         "allow-list of hosts **and** a check on what is being sent, because "
+         "the vendor API the agent is supposed to call is a perfectly good "
+         "channel for a key to leave through.",
+ "A3.4": "G1.7 bound the loop to eight steps and twelve calls. You add "
+         "`Budget.target()` and `Budget.tokens()` to `cybertravels/runtime.py` "
+         "and two ceilings to `config.py`, because twelve calls all landing on "
+         "Northwind Rail is, from Northwind's side, an attack. `exhausted()` "
+         "names which ceiling bound — \"the run stopped\" and \"the run stopped "
+         "hammering one vendor\" are different incidents.",
+ "A3.5": "Every control up to here guards the outbound half. You add "
+         "`cybertravels/returns.py`, which is the return path: a schema per "
+         "tool, and an **independent** verifier that catches a correctly "
+         "shaped lie — `get_booking(2)` answering with booking 9. Conformance "
+         "is a statement about the serialiser; the empty result conforms "
+         "perfectly.",
+ "A3.6": "The human gate you built in G1.7 is still there and, at volume, "
+         "still 100% covered while nobody reads anything. You add "
+         "`approval_load()` to `policy.py`: approvals per reviewer per hour "
+         "against what reading one actually takes. Sixty an hour reports "
+         "`saturated` — and the coverage metric does not move.",
+ "A3.7": "`cybertravels/gateway.py`. Policy, budget, egress and return "
+         "validation each live where it was convenient to write them, which is "
+         "four places a second agent's author can skip. They move behind one "
+         "entry point, and `coverage()` is the number that finds the agent "
+         "that still has a direct route — every control passes its own tests "
+         "either way.",
+ "A3.8": "A `run_artefacts` table in `cybertravels/db.py`, and "
+         "`shared_surfaces()`. Each run passes every per-run check; the wheel "
+         "one run wrote and three unrelated runs read is only visible across "
+         "runs. One chain, not three findings — the covert channel, the "
+         "supply-chain target and the staging point are the same object.",
+ "A3.9": "`policy.Exemption`, which refuses to exist without a reference, a "
+         "reason, an approver and an expiry. `decide()` lets an active one "
+         "lift an obligation and still names it in the decision; `expired()` "
+         "counts the ones that ran out and are still in the file, which is a "
+         "control set describing a system nobody is running.",
+ "A3.10": "`report_to_human()` in `cybertravels/runtime.py`, plus one line in "
+          "the system prompt. The three properties are the lesson: cheap, "
+          "non-terminal, signposted. Get any of them wrong and the tool is "
+          "present and never called, which looks exactly like an agent that "
+          "never noticed anything.",
+ "A3.11": "The agent that wrote all of the above has none of it. "
+          "`cybertravels/devagent.py` is the containment for the one in Alex's "
+          "IDE: a credential deny-list matched against resolved paths, "
+          "workspace confinement that survives a symlink, and a redacted "
+          "environment — ordered by the friction a developer feels, because "
+          "the containment they notice is the one they switch off.",
+})

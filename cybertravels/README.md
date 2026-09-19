@@ -66,7 +66,19 @@ python3 -m cybertravels.tests.smoke_test    # 8 assertions, all about refusals
 | memory | `memory.py` | origin recorded with content, scoped per person, with delete and export |
 | observability | `observability.py` | the run as spans, with tokens summarised and refusals recorded |
 | storage | `db.py` | SQLite, seeded, append-only audit |
+| workload identity | `registry.py` | identities as records with an approver, attestation, rotation and revocation |
+| provenance | `provenance.py` | where a piece of text came from, marked at the boundary and carried |
+| the decision point | `policy.py` | one decision per call, with a reason, obligations and the exemption register |
+| containment | `sandbox.py` | what an execution may reach, and what the live process actually has |
+| egress | `egress.py` | the destination allow-list **and** what is being sent to it |
+| the return path | `returns.py` | schema, then an independent verifier — conformance is not correctness |
+| the choke point | `gateway.py` | the controls above, behind one entry point, with a coverage number |
+| the developer's agent | `devagent.py` | containment for the IDE agent that wrote all of the above |
 | the defects | `tools/`, `agents/` | the corpus the AppSec lessons scan |
+
+Those files arrive one lesson at a time. `python3 scripts/checkpoint.py --at <id>`
+writes the tree as it stood at the end of any lesson, so a reader joining at A3.5
+gets everything up to it and nothing after.
 
 ## Four things it does that most demos do not
 
@@ -110,7 +122,11 @@ Simplified, and each one is somebody's lesson rather than a thing to pretend is
 done: HS256 with a shared secret instead of RS256 + JWKS; a demo login with no
 password instead of OIDC; the delegated token passed as a tool argument instead
 of on the transport; SQLite and keyword search instead of Postgres and vector
-retrieval; a static workload identity instead of SVIDs from SPIRE.
+retrieval; attestation modelled as matching observed selectors instead of real
+SVIDs signed by SPIRE; containment and egress **decided in-process** rather
+than enforced by an isolate and a network boundary the agent cannot reach —
+which is the weaker placement, is said so in `sandbox.py` and `egress.py`, and
+is the reason A3.7 exists.
 
 Not simplified, because they are the point: per-action down-scoped delegation,
 an actor claim carried end to end, audience and scope **enforced at the

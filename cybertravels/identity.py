@@ -275,6 +275,26 @@ def actor_chain(claims: dict) -> str:
     # step:A2.3 end
 
 
+# step:A3.1 add
+def session_for(user_token: str) -> "Session":
+    """The human behind a run, as a Session, for the decision point.
+
+    A3.1's `policy.decide()` needs to know who is asking, and the runtime holds
+    a token rather than a session. Decoding it here rather than trusting a
+    username passed alongside is the point: the role that policy reads is the
+    one the IdP signed, not the one the caller says it has.
+    """
+    _require_jwt()
+    try:
+        claims = jwt.decode(user_token, config.IDP_SECRET,
+                            algorithms=[config.JWT_ALG],
+                            audience=config.AUD_BFF)
+    except InvalidTokenError as e:
+        raise IdentityError(f"invalid subject token: {e}")
+    return Session.from_claims(claims)
+# step:A3.1 end
+
+
 class Session:
     """What a tool sees: the human, their role, and the agent acting for them.
 

@@ -1153,3 +1153,62 @@ ABOUT.update({
          "fourth investigation question, answerable only once ingress marks "
          "where text came from, and recorded as a digest rather than the text.",
 })
+
+
+# Chapter A3, rewired onto the tree the reader built. Each entry names the
+# mechanism rather than restating the risk, because by A3 the reader has the
+# system in front of them and the question is what changes in it.
+ABOUT.update({
+ "A3.1": "Replacing a lookup table that answers yes or no with a decision that "
+         "answers why: one call per tool, evaluated on identity, tool and "
+         "arguments, returning a reason and any obligations. Including what "
+         "default-deny actually means — the default *branch* is a denial, not "
+         "merely that the list is an allow-list with a permissive fallback.",
+ "A3.2": "A sandbox profile as an allow-list in three dimensions — paths, "
+         "environment, hosts — and the half teams skip: measuring what the "
+         "running process actually has and reporting the gap. A profile "
+         "deployed without the isolation that enforces it keeps describing a "
+         "containment that was never applied.",
+ "A3.3": "Egress control for a destination chosen at run time by a model, "
+         "which is what makes it different from a firewall rule written "
+         "against a deployment. Both halves: the destination, and what is "
+         "being sent to it — because a vendor API the agent is supposed to "
+         "call is a perfectly good channel for data to leave through.",
+ "A3.4": "Ceilings that bound what the loop does to any one place, not only "
+         "how long it runs: per-target call limits and a token budget, with "
+         "the exhausted ceiling named so the incident is actionable rather "
+         "than just a stopped run.",
+ "A3.5": "The return path, which every outbound control leaves open: a schema "
+         "per tool for the shape, and an independent verifier for the content, "
+         "because a result that conforms perfectly can still answer a question "
+         "nobody asked. Conformance is a statement about the serialiser.",
+ "A3.6": "Measuring an approval gate rather than enabling one — approvals per "
+         "reviewer per hour against what reading one takes — and the trap that "
+         "makes it necessary: coverage stays at 100% while review collapses, "
+         "and the risk register records a control that has stopped being one.",
+ "A3.7": "Moving controls that each live where they were convenient to write "
+         "behind a single entry point, and the number that finds the agent "
+         "still holding a direct route. Plus the cost, stated rather than "
+         "hidden: one choke point is a single point of failure and a queue.",
+ "A3.8": "The channel no per-run check can see: an artefact one run writes and "
+         "an unrelated run reads. Per-run namespaces, a write-once cache, "
+         "provenance verified at consumption, and a query that reports the "
+         "surfaces actually crossing between runs.",
+ "A3.9": "Turning a control off as a recorded, scoped, expiring decision — a "
+         "reference, a reason, a named approver and an end date, none of them "
+         "optional — and counting the exemptions that have run out and are "
+         "still in the file, which is a control set describing a system nobody "
+         "is running.",
+ "A3.10": "Building the third option for an agent that notices something "
+          "outside its task, and the three properties that decide whether it "
+          "is ever used: cheap, non-terminal, signposted in the prompt. Get "
+          "one wrong and the tool is present and never called, which is "
+          "indistinguishable from an agent that noticed nothing.",
+ "A3.11": "Containment for the coding agent in the developer's own IDE, which "
+          "has none of the controls it helped build and holds git credentials, "
+          "cloud credentials and a shell. Ordered by the friction a developer "
+          "feels — credential deny-list, then workspace confinement, then "
+          "command review — because the guard they notice is the one that "
+          "gets switched off, and a configuration with everything disabled "
+          "still reports as compliant.",
+})
