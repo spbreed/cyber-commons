@@ -57,7 +57,12 @@ sam@corp-ide            0.533    0.0      0.5      0.1  human
 polite-agent            0.021   1.26      0.0     0.83  agent
  threshold  humans flagged   agents MISSED
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;actors&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;score&quot;: 0.0, &quot;truth&quot;: &quot;agent|human|unknown&quot;}],

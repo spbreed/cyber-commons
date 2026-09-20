@@ -55,7 +55,12 @@ harness tooling       [9]         single row
 peer channel          [7, 8]      linked
 public internet       [4]         single row
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;failures&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;what&quot;: &quot;str&quot;, &quot;precondition&quot;: &quot;str&quot;}],

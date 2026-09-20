@@ -66,7 +66,12 @@ six systems. Say which detector should run before the trace is stored.</p>
 4 items. Nobody put them there deliberately — the agent read
 a support ticket, which is exactly what it was asked to do.
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;trace&quot;: {&quot;steps&quot;: 0},
@@ -124,7 +129,12 @@ RLS enabled                 rows returned: 0
 
 signed in as dana@example, RLS enabled: 1 row
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;key&quot;: {&quot;kind&quot;: &quot;publishable&quot;, &quot;found_in&quot;: &quot;str&quot;},

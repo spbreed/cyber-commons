@@ -21,10 +21,19 @@ What it enforces, and why each one is a real failure mode:
   * **descriptions do not collide** — routing is by description alone, so two
     skills that score identically on a plausible task means the wrong one runs
     and the tiebreak is alphabetical.
+  * **skills/README.md's area table matches the tree** — it is the index a
+    reader browses from, and it had drifted on three rows and the total while
+    claiming a script count that was wrong for every skill in the store.
+
+It also prints the body-size distribution rather than asserting a ceiling in
+prose. The README said "every body here is under 1,300 tokens" while one was
+1,325; a number typed into a sentence is a number that goes stale.
 """
 from __future__ import annotations
 
 import argparse
+import collections
+import re
 import sys
 from pathlib import Path
 
@@ -95,8 +104,11 @@ def main() -> int:
         return 1
 
     problems, skills = [], {}
+    bodies: list[tuple[int, str]] = []
+    per_area: collections.Counter[str] = collections.Counter()
     for p in paths:
         ref = f"{p.parent.parent.name}/{p.parent.name}"
+        per_area[p.parent.parent.name] += 1
         try:
             meta, body = parse_skill(p.read_text())
         except Exception as e:                                  # noqa: BLE001
@@ -115,6 +127,7 @@ def main() -> int:
         # skills/README.md — these are the numbers that contract is written to.
         d_tokens = len(meta["description"].split()) * 4 // 3
         b_tokens = len(body.split()) * 4 // 3
+        bodies.append((b_tokens, ref))
         if d_tokens > DESCRIPTION_BUDGET:
             problems.append(f"{ref}: description is ~{d_tokens} tokens, over "
                             f"the {DESCRIPTION_BUDGET} startup budget — every "
@@ -140,6 +153,39 @@ def main() -> int:
         print(f"  ok  {meta['name']:26s} {len(meta['description'].split()):3d}w  "
               f"tools={len(meta.get('allowed-tools', [])):d}  "
               f"contract={'yes' if has_contract else 'NO'}")
+
+    # The body sizes, printed rather than asserted. skills/README.md used to
+    # claim "every body here is under 1,300 tokens" while one was 1,325 — a
+    # number typed into a sentence is a number that goes stale, and the fix is
+    # to print it from the tree instead of maintaining it.
+    if bodies:
+        bodies.sort()
+        mid = bodies[len(bodies) // 2][0]
+        print(f"\nbody size, tokens: min {bodies[0][0]} · median {mid} · "
+              f"max {bodies[-1][0]} ({bodies[-1][1]}) · budget {BODY_BUDGET}")
+
+    # skills/README.md's area table, against the tree it describes. It had
+    # drifted on three rows and the total — architecture 2 (3), detection 13
+    # (15), redteam 4 (8), total 132 (139) — and it also claimed "132 of them
+    # carry a script" when all 139 do.
+    readme = ROOT / "skills" / "README.md"
+    if readme.is_file():
+        text = readme.read_text()
+        for area, n in sorted(per_area.items()):
+            row = re.search(rf"\[`{re.escape(area)}/`\]\({re.escape(area)}\)\s*\|\s*(\d+)",
+                            text)
+            if not row:
+                problems.append(f"skills/README.md: no table row for {area}/ — "
+                                f"the area exists in the tree")
+            elif int(row.group(1)) != n:
+                problems.append(f"skills/README.md: {area}/ row says "
+                                f"{row.group(1)}, tree has {n}")
+        total = re.search(r"\|\s*\|\s*\*\*(\d+)\*\*\s*\|", text)
+        if not total:
+            problems.append("skills/README.md: the area table has no total row")
+        elif int(total.group(1)) != len(paths):
+            problems.append(f"skills/README.md: table total says "
+                            f"{total.group(1)}, tree has {len(paths)}")
 
     print(f"\nrouting {len(ROUTING_CASES)} plausible tasks across {len(skills)} skills")
     for task in ROUTING_CASES:

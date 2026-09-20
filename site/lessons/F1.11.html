@@ -67,7 +67,12 @@ All three survive contact with AI. The assumptions are what break.
 validation still covers what is deployed: False
    tool surface changed: ['db_update', 'read_ticket', 'write_ticket']
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;validated&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;autonomy&quot;: &quot;str&quot;, &quot;data&quot;: [&quot;str&quot;]},
@@ -126,7 +131,12 @@ local open weights, 8 GPUs                 5,529,600
 
 ratio: 192× more attempts, with no abuse signal reaching anyone.
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;capabilities&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;hosted&quot;: false, &quot;local&quot;: true}],

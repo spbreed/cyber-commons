@@ -2,27 +2,27 @@
 
 139 skills the curriculum teaches you to write, and then uses. Each one is a
 real `SKILL.md` — markdown with YAML frontmatter, the format a coding agent
-actually loads — not an illustration of one. 132 of them carry a script
-the lesson executes, and `test_skills.py` runs every one of those on every
+actually loads — not an illustration of one. Every one of the 139 carries a
+script the lesson executes, and `test_skills.py` runs all of them on every
 build.
 
 | area | skills |
 |---|---|
 | [`appsec/`](appsec) | 19 |
-| [`architecture/`](architecture) | 2 |
+| [`architecture/`](architecture) | 3 |
 | [`attestation/`](attestation) | 11 |
-| [`detection/`](detection) | 13 |
+| [`detection/`](detection) | 15 |
 | [`grc/`](grc) | 9 |
 | [`identity/`](identity) | 5 |
 | [`programme/`](programme) | 11 |
-| [`redteam/`](redteam) | 4 |
+| [`redteam/`](redteam) | 8 |
 | [`regulatory/`](regulatory) | 10 |
 | [`research/`](research) | 10 |
 | [`response/`](response) | 12 |
 | [`runtime/`](runtime) | 6 |
 | [`secops/`](secops) | 4 |
 | [`threats/`](threats) | 16 |
-| | **132** |
+| | **139** |
 
 ## How an agent loads these, and why the shape matters
 
@@ -46,9 +46,12 @@ reach for it*, in about a hundred tokens.
 across every description and fails on a tie, because two descriptions that
 score the same mean the winner is whichever sorted first.
 
-**The body stays small enough to be worth activating.** Every body here is
-under 1,300 tokens against a 5,000 budget, and the gate is enforced. Anything
-longer belongs in a resource.
+**The body stays small enough to be worth activating.** Every body here sits
+well inside the 5,000-token activation budget;
+[`check_skills.py`](../scripts/check_skills.py) enforces the ceiling and prints
+the distribution, so the figure never has to be typed into a sentence that can
+go stale. This one said "every body here is under 1,300 tokens" while one of
+them was 1,325. Anything genuinely longer belongs in a resource.
 
 **The bulk lives in `scripts/`, which is loaded only when it runs.** That is
 why the procedure is prose and the fixture is a file: the agent reads the
@@ -59,10 +62,18 @@ execute it.
 
 - **`## When to use this`** — the activation conditions, in prose.
 - **`## Procedure`** or **`## Step-by-step`** — numbered steps, each one an
-  instruction rather than a description.
-- **`## Example`** — a real input and the real opening lines of a real run.
-  Not written by hand: taken from the script's own output and re-checked on
-  every build, so it cannot drift from what the skill actually prints.
+  instruction rather than a description. The number goes in a **bold lead-in**
+  — `**3 — State the target beside it.**`, or `**Stage 8 — Deduplication.**`
+  where the skill is a stage of the AppSec pipeline and the pipeline's own
+  numbering is the useful one. A markdown `1.` list flattens that lead-in into
+  the paragraph, which is why none of the 139 use one.
+- **`## Example`** — a real input and the real opening lines of a real run,
+  taken from the script's own output rather than written by hand. It is a
+  **recording**, not a fixture: CI executes every script on every build with no
+  model configured, which proves the script runs and refuses legibly, and
+  nothing re-diffs these lines against a model. A model's answer is not
+  reproducible, and claiming a recorded one is checked when it is not is the
+  same mistake as a stand-in that is allowed to answer.
 - **`## Output contract`** — the JSON shape the skill promises, which is what
   makes it checkable rather than aspirational.
 - **`## Failure modes`** or **`## Common edge cases`** — the ways this
@@ -101,14 +112,19 @@ schema.
 
 ## Using them
 
-Copy a skill into your agent's skills directory:
+Link the store into every agent CLI you have. **Do not copy** — this file used
+to open with `cp -r skills/appsec/appsec-vuln-audit ~/.claude/skills/`, which
+contradicts both CLAUDE.md and the "Editing them" section thirty lines below
+it, where the same file explains that a copy is a fork with a friendly name.
 
 ```bash
-cp -r skills/appsec/appsec-vuln-audit ~/.claude/skills/
+python3 scripts/install_skills.py --all     # link into every CLI you have
+python3 scripts/install_skills.py --list    # what is linked where
 ```
 
-Nothing in them is specific to this repository, and none of them require a
-particular model or vendor.
+Then open your agent anywhere and ask for a skill by name. Nothing in them is
+specific to this repository, and none of them require a particular model or
+vendor.
 
 ## Checking them
 

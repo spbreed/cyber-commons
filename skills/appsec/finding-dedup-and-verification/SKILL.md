@@ -75,7 +75,12 @@ stage rejects it, and neither is supposed to: these two remove what is provably
 duplicated and provably absent. Judging a claim about code that exists is
 triage, and it is a later stage.
 
-The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+The run continues past this. `test_skills.py` executes the script on every
+build, **with no model configured** — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.
 
 ## Output contract
 

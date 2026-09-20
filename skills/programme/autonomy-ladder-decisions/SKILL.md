@@ -56,7 +56,12 @@ L3   board         budget  60  all of L2.5 + held-out eval per release + board s
                    Autonomous — model acts and self-verifies; humans see aggregates.
 ```
 
-The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+The run continues past this. `test_skills.py` executes the script on every
+build, **with no model configured** — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.
 
 ## Output contract
 

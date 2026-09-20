@@ -236,7 +236,7 @@ person.
 | # | gate | catches |
 |---|---|---|
 | 1 | `check_secrets.py` | a credential reaching the repo. Runs a self-test on shapes it must and must not match |
-| 2 | `check_skills.py --check` | a skill missing its activation condition, procedure, example, failure modes, or a parseable output contract |
+| 2 | `check_skills.py --check` | a skill missing its activation condition, procedure, example, failure modes, or a parseable output contract — and `skills/README.md`'s area table drifted from the tree it indexes, which it had on three rows and the total |
 | 3 | `test_skills.py --check` | a skill that answers **without a model**. Runs each script with the model variables stripped: exit 2 with the refusal on stdout passes, exit 0 with output fails, and exit 2 with no explanation fails because the reader sees a broken repository rather than an unconfigured machine |
 | 4 | `check_determinism.py --seeds 4` | non-determinism in **the harness** — ordering, formatting, seeding, and a no-model refusal that varies between runs. It does not and must not claim a model's findings reproduce |
 | 5 | `install_skills.py --tool claude --dry-run` | two areas claiming one skill name. The install is flat, so a collision would silently drop one of them |

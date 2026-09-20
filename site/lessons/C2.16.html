@@ -127,7 +127,12 @@ one rejected at gate two need different conversations with whoever wrote them.</
 exploit works: True — probe returned 3 rows
 scanner fires: False
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;baseline&quot;: {&quot;behaviour_pass&quot;: true, &quot;exploit_works&quot;: true},
@@ -228,7 +233,12 @@ first three are already answered on the page.</p>
    B  ok   blocked  CHANGED    0    rejected  &lt;- qa: behaviour changed
    C  ok   WORKS    same       0    rejected  &lt;- sandbox: exploit still works
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;candidates&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;ci_green&quot;: true, &quot;exploit_blocked&quot;: true,

@@ -62,7 +62,12 @@ advance is what stops it being abandoned in the second.</p>
     5  evaluation    [4]       accuracy you can defend; regression cases
     6  continuous    [4, 5]    freshness windows; drift alerts; live posture
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;steps&quot;: [{&quot;id&quot;: 0, &quot;name&quot;: &quot;str&quot;, &quot;requires&quot;: [0]}],

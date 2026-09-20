@@ -213,7 +213,12 @@ T-06  E get_booking     load_booking      10  the identity holds write, not just
 T-03  R get_booking     load_booking      10  no MFA on the assumable role, so the actor is not established
 T-04  I get_booking     load_booking       9  no open CSPM finding on the resource
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;inputs_present&quot;: [&quot;architecture&quot;, &quot;cspm&quot;, &quot;iam&quot;, &quot;network&quot;, &quot;entitlements&quot;],
@@ -281,7 +286,12 @@ posts       high       policy matches every row
 
 The application works. Every feature passes. `profiles` holds an api_key
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every
+build, <strong>with no model configured</strong> — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;statements&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;columns&quot;: [&quot;str&quot;], &quot;sensitive_columns&quot;: [&quot;str&quot;]}],

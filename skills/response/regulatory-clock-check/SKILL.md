@@ -56,7 +56,12 @@ attribution broken (E3.5)               6.0     92.0 False    -20.0
 The first row contained in ONE HOUR and still missed the deadline.
 ```
 
-The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+The run continues past this. `test_skills.py` executes the script on every
+build, **with no model configured** — so what CI proves is that it runs and
+refuses legibly, not that it prints these lines. The output above is a recorded
+run against a real model, and nothing re-diffs it: a model's answer is not
+reproducible, and this repository does not claim otherwise anywhere it can be
+checked.
 
 ## Output contract
 
