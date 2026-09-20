@@ -10,9 +10,11 @@ not do this job; this does, and the build refuses a lesson without one.
 ABOUT: dict[str, str] = {
 
 "A0.0": """
-**What it covers.** The developer AI tools, compared on the two things that actually decide the choice — the real context window and what the free tier gets you — then the install, the clone from master, and the three environment variables that let any skill in the commons call a model.
+**What it covers.** Setting a computer up from nothing: what a model, a terminal and a repository are, which AI tool to pick and why the free tiers differ, how to open a terminal on any operating system, how to copy this project onto your machine, and the three settings that let every later lesson call a model. Then you run one real skill and read back which model answered.
 
-**Why a security engineer needs it.** Every skill here is executed by a model, so a machine with no endpoint configured cannot run any of them, and the failure looks like a broken repository rather than an unconfigured host. The control it builds is: a preflight that names the runtime, causes the unconfigured failure on purpose so the message is recognised, then makes one real call and validates the reply against a contract.
+**Who it is for.** Anyone who can use a computer. It assumes no programming, no security background and no paid account, and it is written to be followed by a capable thirteen-year-old — which is a deliberate floor, not a simplification, because the thing being taught is hard enough without the setup being hard too.
+
+**Why it is first.** Nothing in the commons runs without a model. Skip this and a later lesson stops with a message instead of doing the work — correct behaviour, and easy to misread as a broken download. This lesson makes you meet that message once, on purpose, before it can confuse you.
 """,
 
 "A0.1": """

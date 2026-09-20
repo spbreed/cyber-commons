@@ -28,11 +28,12 @@ and the curriculum stay in step.
 HOOKS: dict[str, str] = {
 
 "A0.0":
- "Somebody clones the repository, opens the first lesson, runs the cell and "
- "gets an error. They read it as a broken repository and close the tab. The "
- "repository is fine — every skill here is executed by a model, and their "
- "machine has not been told which one. That failure is the first thing anyone "
- "hits, so it is the first thing this commons deals with.",
+ "You have probably typed a question into an AI and read the answer. This is "
+ "the other side of that: the same kind of AI, doing a job on your own "
+ "computer, following written instructions you can read and change. None of it "
+ "works until your computer knows which AI to ask. Setting that up is this "
+ "whole lesson, and it is the only thing standing between you and the other "
+ "147.",
 
 "A0.1":
  "Most people arrive here from a link, land in the middle of a lesson about "
@@ -721,26 +722,32 @@ HOOKS: dict[str, str] = {
 DIAGRAMS: dict[str, str] = {
 
 "A0.0": """
-   WHAT HAS TO BE TRUE BEFORE ANY SKILL MEANS ANYTHING
+   WHAT HAPPENS WHEN YOU RUN A LESSON
 
-   your machine                      the model
-   +-----------------------+         +---------------------------+
-   | 1  git + python3      |         |  local:  ollama / llama.cpp|
-   |    clone --branch     |         |  hosted: any OpenAI-       |
-   |    master             |         |          compatible /v1    |
-   +-----------------------+         +---------------------------+
-   | 2  skills/_runtime    |                    ^
-   |    on the import path |                    |
-   +-----------------------+                    | OPENAI_BASE_URL
-   | 3  the skill script   |  ---- prompt ----> | OPENAI_API_KEY
-   |    = the harness      |  <--- JSON ------- | MODEL
-   +-----------------------+                    |
-             |                                  |
-             v                                  |
-   +-----------------------+                    |
-   |  validate against the |   any one of the three missing
-   |  skill's own contract |   and the run prints nothing,
-   +-----------------------+   or a traceback. Never a wrong answer.
+   your computer                          the model
+   +--------------------------+       +--------------------+
+   | 1  you type one command  |       |  the AI itself.    |
+   +--------------------------+       |  It reads, it      |
+              |                       |  writes, and it    |
+              v                       |  is the part that  |
+   +--------------------------+       |  does the actual   |
+   | 2  a small program opens |       |  thinking.         |
+   |    the written steps and |       |                    |
+   |    sends them across  ---|-----> |  It can live on    |
+   |                          |       |  your computer or  |
+   |    ...and reads back  <--|-------|  on somebody       |
+   |    what came home        |       |  else's.           |
+   +--------------------------+       +--------------------+
+              |
+              v
+   +--------------------------+
+   | 3  the program checks    |   The program never answers
+   |    the answer is the     |   in the model's place. If your
+   |    right shape, then     |   computer has not been told
+   |    shows it to you       |   which model to ask, it stops
+   +--------------------------+   and tells you exactly that.
+
+   Step 2 is the only one that needs setting up. That is this lesson.
 """,
 
 "A0.1": """

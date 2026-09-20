@@ -15,12 +15,12 @@
 
 ---
 
-### A0.0 — Dev environment and IDE setup — the AI tools, and the model every lesson runs on
+### A0.0 — Set up your computer — the AI tools, and the model every lesson runs on
 
-- **Lab** — Configure a model endpoint, then run one skill and read back which model answered.
+- **Lab** — Set your computer up from nothing, then run one skill and read back which model answered.
 - **Tools** — `ollama`, `git`, `python3`
 
-**Run it** — Configure a model endpoint, then run one skill and read back which model answered.
+**Run it** — Set your computer up from nothing, then run one skill and read back which model answered.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---

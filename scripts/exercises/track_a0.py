@@ -18,14 +18,56 @@ EXERCISES: dict[str, dict] = {
 
 "A0.0": {
  "concept": """
-Every skill in this commons is **executed by a language model**. The Python
-script is not the procedure — it is the harness: it assembles the skill's
-documented steps, sends them to a model with the input, and validates the
-reply against the skill's output contract. So there is exactly one prerequisite,
-and it is not a Python package. It is a model endpoint.
+**Start here even if you have never written a line of code.** This lesson
+assumes you can use a computer and nothing else. It takes about half an hour,
+it costs nothing, and at the end you will have run a real piece of security
+work on your own machine.
 
-Get that wrong and nothing works, in a way that reads as a broken repository
-rather than an unconfigured machine. That is what this lesson prevents.
+### What you are about to build, in plain words
+
+An **AI model** is the thing behind a chatbot: you give it words, it gives you
+words back. You have almost certainly used one.
+
+This commons is 148 lessons, and every one of them hands a model a **written
+procedure** — a page of instructions, in ordinary English, that says how to do
+one job in security. Find the weak spot in this code. Work out what an attacker
+could reach. Decide whether this alert is real. The model reads those
+instructions and does the job.
+
+The written procedures are called **skills**, and they are the point of the
+whole thing. You can read every one of them. You can change them and watch the
+answer change. There is no hidden part.
+
+So there is exactly one thing you have to set up: **your computer needs to know
+which model to ask.** That is all this lesson does.
+
+### Nine words you will meet
+
+You do not need to memorise these. Come back to this table when one of them
+turns up and you are not sure.
+
+| word | what it means here |
+|---|---|
+| **model** | the AI. The thing that reads your words and writes an answer. |
+| **prompt** | the words you send it. |
+| **token** | roughly three-quarters of a word. Models are measured in these. |
+| **context window** | how much the model can hold in its head at once, in tokens. |
+| **terminal** | a window where you type commands instead of clicking. Every computer has one. |
+| **command** | one line you type into the terminal, then press Enter. |
+| **repository** | a folder of files that a whole project lives in. Often shortened to *repo*. |
+| **clone** | to copy a repository from the internet onto your computer, in one command. |
+| **environment variable** | a setting your terminal remembers, so you do not retype it. |
+
+Two more you will meet only if you choose Route B or C below: an **API key** is
+a password that lets your computer talk to somebody else's model, and an
+**endpoint** is the web address that model answers on.
+
+### Why this is the first lesson and not an appendix
+
+Nothing here runs without a model. If you skip this and open a later lesson,
+the command will stop and print a message instead of doing the work — which is
+correct behaviour, and is not your computer being broken. This lesson makes
+that message something you have already seen on purpose.
 
 ### What you need, and what it costs
 
@@ -60,7 +102,15 @@ Everything below works on a free tier. You do not need a paid plan to finish
 this commons, and if a lesson ever requires one, that is a defect in the lesson.
 """,
  "steps": [
-  ("md", "## 2 · Pick a tool, against its real numbers"),
+  ("md", "## 2 · Pick a tool, against its real numbers\n\n"
+         "**You can skim this table.** If you only want to get going, none "
+         "of it is required — Route B in the next step but one runs a model "
+         "on your own computer for nothing, with no account and no card. The "
+         "table is here so that when you *do* choose a paid tool, you choose "
+         "it on the two numbers that actually decide it rather than on the "
+         "advertising.\n\n"
+         "The prices are per month and the free tiers are what you get "
+         "without a card. Every name links to its own sign-up page."),
   ("html", D.table(
     ["tool", "free tier", "max context window", "paid, per month"],
     [["<b><a href='https://claude.ai'>Anthropic Claude</a></b> / "
@@ -83,8 +133,8 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
       "Pay-as-you-go once the free quota is breached"],
      ["<b><a href='https://build.nvidia.com'>NVIDIA Build</a></b> (NIM)",
       "Free account, no card. One key reaches the whole catalogue of "
-      "open-weight models, hosted on NVIDIA's own GPUs. <b>§4 Route C walks "
-      "through it.</b>",
+      "open-weight models, hosted on NVIDIA's own GPUs. <b>Route C below "
+      "walks through it.</b>",
       "Varies by model — the catalogue carries several with 128k and above",
       "Free for development; production via NVIDIA AI Enterprise"],
      ["<b><a href='https://chatgpt.com'>OpenAI ChatGPT</a></b> / "
@@ -116,21 +166,49 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
             "at the two rows that say so; they are the best value in the table "
             "by a wide margin.")),
 
-  ("md", "## 3 · Install what you actually need\n\n"
+  ("md", "## 3 · Open a terminal and get the files\n\n"
+         "**First, open a terminal.** It is already on your computer:\n\n"
+         "- **Windows** — press the Start button, type `powershell`, open "
+         "*Windows PowerShell*.\n"
+         "- **macOS** — press Command and the space bar together, type "
+         "`terminal`, press Enter.\n"
+         "- **Linux** — press Control, Alt and T together.\n\n"
+         "A window opens with a blinking cursor. It is waiting for you to type "
+         "a line and press Enter. Nothing you type below can damage anything.\n\n"
+         "**Second, check two programs are there.** Type each line, press "
+         "Enter, and read what comes back:\n\n"
          "```bash\n"
-         "# git and python3. Almost certainly already there.\n"
-         "git --version          # any 2.x\n"
+         "git --version          # any 2.x is fine\n"
          "python3 --version      # 3.10 or newer\n"
-         "\n"
-         "# the repository. master is the trunk; every link on the site\n"
-         "# points at it.\n"
+         "```\n\n"
+         "If either says *command not found*, install the missing one — "
+         "[git-scm.com/downloads](https://git-scm.com/downloads) and "
+         "[python.org/downloads](https://www.python.org/downloads/) — then "
+         "close the terminal, open a new one, and check again. A terminal only "
+         "notices a new program when it starts.\n\n"
+         "**Third, copy this project onto your machine.** The first line "
+         "downloads it; the second moves you inside the folder it made, the "
+         "way double-clicking a folder moves you inside it:\n\n"
+         "```bash\n"
          "git clone --branch master https://github.com/spbreed/cyber-commons.git\n"
          "cd cyber-commons\n"
          "```\n\n"
-         "There is nothing to `pip install`. Every script here is standard "
-         "library only — the one dependency is a model, and that is the next "
-         "step.\n\n"
-         "## 4 · Give it a model — three routes, all free\n\n"
+         "That is the clone. You now have every lesson, every skill and every "
+         "line of the example system on your own computer, and none of it "
+         "needs the internet again until you ask a hosted model a question.\n\n"
+         "There is nothing else to install. Every program here uses only what "
+         "comes with Python — the one thing it needs is a model, and that is "
+         "the next step.\n\n"
+         "## 4 · Tell it which model to ask — three routes, all free\n\n"
+         "This is the one step that matters. You are giving your computer the "
+         "equivalent of a phone number for a model, so that when a lesson has "
+         "a job to do it knows who to call.\n\n"
+         "**Read all three, then pick one.** Route A is the shortest and needs "
+         "no password at all. Route B keeps everything on your own machine and "
+         "never sends a word to anybody. Route C borrows a large model on "
+         "somebody else's hardware, free, and is the answer if your computer "
+         "is not a powerful one. You can change your mind later by rerunning "
+         "one command.\n\n"
          "### Route A — you already have Claude Code, Cursor or Copilot\n\n"
          "**Then you need no API key and no endpoint.** If the `claude` CLI is "
          "installed and signed in, the skill runtime finds it and uses that "
@@ -215,7 +293,16 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
          "editor's secret store, never in a file inside this repository and "
          "never in a commit. `check_secrets.py` will stop you, but the habit "
          "is the control and the gate is the backstop.\n\n"
-         "### The three variables, for Routes B and C\n\n"
+         "### The three settings, for Routes B and C\n\n"
+         "These are the environment variables from the word table — three "
+         "things your terminal remembers, so every lesson you run afterwards "
+         "already knows where to go.\n\n"
+         "Typed into a terminal, they last until you close that window. To "
+         "make them stick, put the same three lines at the bottom of your "
+         "**shell profile**, which is a file your terminal reads every time it "
+         "starts: `~/.zshrc` on macOS, `~/.bashrc` on most Linux, and "
+         "`$PROFILE` in PowerShell on Windows. Open a new terminal afterwards "
+         "to check they took.\n\n"
          "Setting `OPENAI_BASE_URL` **overrides** Route A, because somebody "
          "who set it meant it."),
 
@@ -253,32 +340,42 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
          "repository.** `scripts/check_secrets.py` runs as a pre-commit hook "
          "and in CI, and it blocks anything credential-shaped from being "
          "committed — but the habit is what protects you, not the gate.\n\n"
-         "## 5 · Prove it, by running one"),
+         "## 5 · Prove it works — run your first skill"),
 
   *skill_steps(
     "programme/dev-environment-preflight",
-    "The skill below is the proof. It reports the runtime, reports the "
-    "configuration without ever printing your key, **causes the unconfigured "
-    "failure on purpose in a child process** so you meet that message here "
-    "rather than on lesson forty, then makes one real model call and validates "
-    "the reply against its own output contract.\n\n"
-    "Read what it does before you run it — that order is the house rule, and "
-    "it is the one this commons is strictest about.\n\n"
+    "Here is your first skill. Everything below the heading is the written "
+    "procedure itself — not a description of one — and it is the same text the "
+    "model is handed when you run the command underneath it.\n\n"
+    "**Read it before you run it.** That order is the one rule this commons is "
+    "strictest about, and it is the habit the whole subject rests on: you do "
+    "not hand an instruction to something that acts on your behalf without "
+    "reading what the instruction says.\n\n"
+    "What this one does, in four moves. It says which route it found and which "
+    "model it is about to use. It shows your settings **without ever printing "
+    "your password**. Then it deliberately breaks itself in a separate process "
+    "with the settings removed, so you meet the no-model message here, on "
+    "purpose, rather than on lesson forty wondering what went wrong. Then it "
+    "asks the model one real question and checks the answer came back in the "
+    "shape the skill promised.\n\n"
     "### The skill"),
  ],
- "expect": "The runtime resolving from skills/_runtime, your endpoint and model "
-           "named, and the key reported as present rather than printed. Then "
-           "exit code 2 from the deliberate unconfigured run, with the refusal "
-           "as its first line. Then one real model call: the model that "
-           "answered, the number of contract violations in its reply, and the "
-           "filled-in contract as JSON. A different model will fill it in "
-           "differently — that is the subject of the whole commons, not a fault "
-           "in the setup.",
- "challenge": "Run it a second time with a different MODEL and diff the two "
-              "JSON blocks. Nothing about your machine changed, and the answer "
-              "did. Every finding in every later lesson carries that same "
-              "property, which is why each one names the model that produced "
-              "it.",
+ "expect": "Four things, in order. Which route it found and which model it "
+           "will use. Your settings, with the password shown as present rather "
+           "than printed. Then the deliberate failure: exit code 2, and a "
+           "message saying no model is configured — that is the one you were "
+           "meant to meet here. Then one real answer from the model, with a "
+           "count of how many ways it broke the shape the skill asked for. "
+           "Zero is what you want. A different model will answer differently, "
+           "and that is the subject of this whole commons rather than a fault "
+           "in your setup.",
+ "challenge": "Run it again with a different model — change `MODEL`, or pick "
+              "another one from the catalogue in Route C — and put the two "
+              "answers side by side. Nothing about your computer changed and "
+              "the answer did. That is worth sitting with for a moment: every "
+              "finding in every later lesson has the same property, which is "
+              "why each one names the model that produced it. A result you "
+              "cannot attribute to a model is a result you cannot check.",
 },
 
 "A0.1": {

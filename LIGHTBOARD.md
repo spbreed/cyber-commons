@@ -93,19 +93,19 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 ---
 
-### A0.0 · Dev environment and IDE setup — the AI tools, and the model every lesson runs on
+### A0.0 · Set up your computer — the AI tools, and the model every lesson runs on
 
-Chapter A0 · lesson 1 of 2 · runs a skill · 188 words, about 1.3 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+Chapter A0 · lesson 1 of 2 · runs a skill · 208 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
 
 **① Open**
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
 ```
-WHAT HAS TO BE TRUE BEFORE ANY SKILL MEANS ANYTHING
+WHAT HAPPENS WHEN YOU RUN A LESSON
 ```
 
-Somebody clones the repository, opens the first lesson, runs the cell and gets an error. They read it as a broken repository and close the tab. The repository is fine — every skill here is executed by a model, and their machine has not been told which one. That failure is the first thing anyone hits, so it is the first thing this commons deals with.
+You have probably typed a question into an AI and read the answer. This is the other side of that: the same kind of AI, doing a job on your own computer, following written instructions you can read and change. None of it works until your computer knows which AI to ask. Setting that up is this whole lesson, and it is the only thing standing between you and the other 147.
 
 **② Why it costs something**
 
@@ -131,11 +131,11 @@ So here is what you count instead: whether you can do the thing this lesson desc
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The runtime resolving from skills/_runtime, your endpoint and model named, and the key reported as present rather than printed. Then exit code 2 from the deliberate unconfigured run, with the refusal as its first line.
+> Four things, in order. Which route it found and which model it will use.
 
 **⑤ Hand it over**
 
-Run it a second time with a different MODEL and diff the two JSON blocks. Nothing about your machine changed, and the answer did.
+Run it again with a different model — change MODEL, or pick another one from the catalogue in Route C — and put the two answers side by side. Nothing about your computer changed and the answer did.
 
 Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
@@ -143,7 +143,7 @@ Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 2 of 2 · runs a skill · 506 words, about 3.6 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · runs a skill · 505 words, about 3.6 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -157,7 +157,7 @@ So, what this is. Five functions on top of the one you just built. It is free, t
 
 **① Open**
 
-Still inside chapter A0. Last one was Dev environment and IDE setup — the AI tools, and the model every lesson runs on.
+Still inside chapter A0. Last one was Set up your computer — the AI tools, and the model every lesson runs on.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 

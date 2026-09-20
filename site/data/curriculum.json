@@ -39,10 +39,10 @@
           "sessions": [
             {
               "id": "A0.0",
-              "title": "Dev environment and IDE setup — the AI tools, and the model every lesson runs on",
+              "title": "Set up your computer — the AI tools, and the model every lesson runs on",
               "kind": "setup",
-              "summary": "Every skill in this commons is executed by a large language model, so nothing here runs until one is configured. This lesson sets that up on a free tier: pick a developer AI tool against its real context window and price, install it, clone the repository, point the skill runtime at a model, and run one skill end to end to prove the model answered.",
-              "lab": "Configure a model endpoint, then run one skill and read back which model answered.",
+              "summary": "Start here even if you have never written code. What a model, a terminal and a repository are; which developer AI tool to pick and why the free tiers differ; how to open a terminal on Windows, macOS or Linux; how to copy this project onto your machine; and the three settings that let every later lesson call a model. It ends with one real skill run, and the name of the model that answered it.",
+              "lab": "Set your computer up from nothing, then run one skill and read back which model answered.",
               "tools": [
                 "ollama",
                 "git",
