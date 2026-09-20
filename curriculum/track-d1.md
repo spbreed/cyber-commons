@@ -41,8 +41,6 @@ claude --version        # prints a version? nothing else to configure
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The three attack surfaces of an agent print with what each covers, and the same claim scores as anecdote, measurement, result or evidence depending on whether it carries a rate, a control comparison and an independent reproduction.
-
 ---
 
 ### D1.1 — Platform ingestion and supply-chain risks
@@ -79,8 +77,6 @@ python3 skills/research/training-data-provenance-manifest/scripts/training_data_
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* No defence gives ASR 1.00. The keyword filter gives ASR 0.67 with false alarms on 2 of 4 benign security-writing cases. Provenance gives ASR 0.00 with no false alarms — until the payload is delivered through the principal channel, where ASR returns to 1.00. The same two numbers then score all three surfaces in one table.
-
 ---
 
 ### D1.3 — Cognitive vulnerability and elicitation scaling
@@ -110,8 +106,6 @@ python3 skills/research/technique-reproducibility-test/scripts/technique_reprodu
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* You reproduce an inflated score, then patch the harness so the same trick fails.
-
 ---
 
 ### D1.4 — Establishing telemetry and detecting the actor
@@ -140,8 +134,6 @@ python3 skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_s
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* A finding with a reproduction rate (e.g. 7/10), not a claim of determinism the system cannot offer.
 
 ---
 

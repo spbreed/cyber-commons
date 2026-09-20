@@ -17,8 +17,6 @@
 
 ### B1.0 — Start here — what securing an AI architecture means
 
-- **Risk** — Without a shared architecture, "secure the agent" has no referent, and every control argument is really an argument about two different systems.
-- **Control** — One picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
 - **Lab** — Place the six functions of the commons on one diagram and find where your own work sits.
 
 **Run it** — Place the six functions of the commons on one diagram and find where your own work sits.
@@ -40,8 +38,6 @@ claude --version        # prints a version? nothing else to configure
 #         that does, this links them all into your agent. ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function B's component map. Function B itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
 
 ---
 
@@ -72,8 +68,6 @@ python3 skills/architecture/agentic-architecture-map/scripts/agentic_architectur
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.
 
 ---
 
@@ -108,8 +102,6 @@ python3 skills/threats/instruction-channel-check/scripts/instruction_channel_che
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The same agent answers a normal question correctly and hands over its internal note when the user tells it to ignore its instructions — because both instructions arrived in one string with no channel separating them.
-
 ---
 
 ### B1.3 — Indirect prompt injection
@@ -142,8 +134,6 @@ python3 skills/threats/indirect-injection-path-trace/scripts/indirect_injection_
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The same payload steers the agent through all four untrusted entry components — retrieved knowledge, persisted memory, an MCP tool description and a tool result — and in every case the action runs with the requesting user's authority.
 
 ---
 
@@ -178,8 +168,6 @@ python3 skills/threats/memory-scope-and-origin-audit/scripts/memory_scope_and_or
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A poisoned note extracted from one user's ticket is written to workspace memory, and days later steers an unrelated request from a different user — because memory is keyed by workspace rather than by the identity that wrote it, and the origin was discarded on write.
-
 ---
 
 ### B1.5 — Tool misuse
@@ -213,8 +201,6 @@ python3 skills/threats/tool-scope-abuse-probe/scripts/tool_scope_abuse_probe.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A single database tool, scoped for the widest job it ever performs, reads a signing key and empties the secrets table for requests it was never meant to serve — with the right identity, a familiar tool and well-formed arguments on every call.
-
 ---
 
 ### B1.6 — Privilege compromise
@@ -246,8 +232,6 @@ python3 skills/threats/authorization-subject-check/scripts/authorization_subject
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A user holding only `reports:read` triggers a `db:admin` action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names `agent-svc` on every row, so the human who caused it cannot be recovered from it at all.
-
 ---
 
 ### B1.7 — Identity spoofing and impersonation
@@ -278,8 +262,6 @@ python3 skills/threats/shared-credential-attribution-check/scripts/shared_creden
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.
 
 ---
 
@@ -314,8 +296,6 @@ python3 skills/threats/generated-code-reach-enumerator/scripts/generated_code_re
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address.
-
 ---
 
 ### B1.9 — Injection through content the agent was asked to read
@@ -349,8 +329,6 @@ python3 skills/threats/content-derived-privilege-check/scripts/content_derived_p
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked.
-
 ---
 
 ### B1.10 — Agent communication poisoning
@@ -382,8 +360,6 @@ python3 skills/threats/peer-message-propagation-trace/scripts/peer_message_propa
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A single poisoned document read by one agent propagates through the topology as a peer message, and more than one agent acts on it — with the phrase identifying its source dropped on the first hop, because summarising is what the hand-off does.
-
 ---
 
 ### B1.11 — Rogue agents in a multi-agent system
@@ -414,8 +390,6 @@ python3 skills/threats/agent-registry-gap-check/scripts/agent_registry_gap_check
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Three agents are discovered, two are in the registry, and all three receive delegated work — including the narrowed user token. The unregistered agent can now act as the requesting user against any downstream that honours it.
 
 ---
 
@@ -450,8 +424,6 @@ python3 skills/threats/confidence-provenance-decay-check/scripts/confidence_prov
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears.
-
 ---
 
 ### B1.13 — Resource overload
@@ -482,8 +454,6 @@ python3 skills/threats/unbounded-loop-cost-probe/scripts/unbounded_loop_cost_pro
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* An agent given an impossible task loops until the skill's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.
 
 ---
 
@@ -516,8 +486,6 @@ python3 skills/threats/audit-answerability-check/scripts/audit_answerability_che
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A complete-looking tool-call log answers none of the three questions an investigation needs — which user, what motivated it, which hop originated it — because the principal, the motivating input and the delegation chain were never recorded.
-
 ---
 
 ### B1.15 — Overwhelming the human in the loop
@@ -547,8 +515,6 @@ python3 skills/threats/approval-queue-saturation-model/scripts/approval_queue_sa
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.
 
 ---
 
@@ -583,8 +549,6 @@ python3 skills/threats/objective-gaming-check/scripts/objective_gaming_check.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* An agent told to reduce open alerts closes all twenty for a quarter of its budget, meeting the objective exactly — while closing five real incidents unread, with each step defensible in isolation and no false statement anywhere in the transcript.
-
 ---
 
 ### B1.17 — Attacks that target the humans
@@ -614,8 +578,6 @@ python3 skills/threats/authority-composition-check/scripts/authority_composition
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does.
 
 ---
 
@@ -647,8 +609,6 @@ python3 skills/attestation/risk-registry-integrator/scripts/risk_registry_integr
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. Every risk has an owner, across more than fifteen lessons in four functions.
-
 ---
 
 ### B1.19 — The control index — every control CyberTravels needs, not only the new ones
@@ -678,8 +638,6 @@ python3 skills/architecture/control-baseline-index/scripts/control_baseline_inde
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Twenty-two controls indexed across two eras, each with a status and the lesson that owns it, then coverage scored per era: 50% on the twelve controls that predate agents and 10% on the ten that arrived with them.
 
 ---
 

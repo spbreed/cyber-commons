@@ -44,8 +44,6 @@ python3 skills/attestation/iam-least-privilege-verifier/scripts/iam_least_privil
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Five tool calls are evaluated twice. Under allow-by-default four succeed, each one a Chapter 1 risk walking through. Under default-deny only the intended call survives — including a refusal on the verb for an otherwise-permitted identity, tool and resource.
-
 ---
 
 ### B3.2 — Sandboxed execution
@@ -76,8 +74,6 @@ python3 skills/runtime/sandbox-containment-probe/scripts/sandbox_containment_pro
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it.
 
 ---
 
@@ -110,8 +106,6 @@ python3 skills/attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifi
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs.
-
 ---
 
 ### B3.4 — Budgets and stop conditions
@@ -142,8 +136,6 @@ python3 skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_c
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Four different stop reasons, all recorded in the trace. 'It finished' is never one of them.
 
 ---
 
@@ -176,8 +168,6 @@ python3 skills/runtime/tool-return-validation-check/scripts/tool_return_validati
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Four messages are checked twice. A schema-perfect, high-confidence claim is refuted by the oracle; a claim with no oracle stops with `unverifiable` rather than silently becoming true; a malformed message is caught by the schema; and only the verified claim propagates.
-
 ---
 
 ### B3.6 — Human approval that survives volume
@@ -207,8 +197,6 @@ python3 skills/architecture/blast-radius-review/scripts/blast_radius_review.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it.
 
 ---
 
@@ -241,8 +229,6 @@ python3 skills/attestation/llm-gateway-guardrail-verifier/scripts/llm_gateway_gu
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent.
-
 ---
 
 ### B3.8 — Shared infrastructure between agent runs
@@ -274,8 +260,6 @@ python3 skills/runtime/shared-surface-channel-audit/scripts/shared_surface_chann
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Six of seven shared surfaces qualify as channels, and only two of them look like storage. Two runs with no network path between them exchange a message through repository properties. Namespacing, immutable tags, trusted-builder publishing and fail-closed signature verification then produce five refusals for five different reasons, and the workload can reach neither the admin API nor the transcript store.
-
 ---
 
 ### B3.9 — Turning a control off without turning the system into an experiment
@@ -306,8 +290,6 @@ python3 skills/runtime/control-exemption-audit/scripts/control_exemption_audit.p
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25.
 
 ---
 
@@ -342,8 +324,6 @@ python3 skills/runtime/escalation-path-review/scripts/escalation_path_review.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.
-
 ---
 
 ### B3.11 — Securing the developers' coding agents
@@ -376,7 +356,5 @@ python3 skills/appsec/coding-agent-hardening/scripts/coding_agent_hardening.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.
 
 ---

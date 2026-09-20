@@ -106,9 +106,13 @@ CLAIMS = [
     # to have wrong. It also carried "at the time of writing, and the count
     # moves as the commons grows", which is how a number gets permission to be
     # wrong; the hedge is gone and the count is checked instead.
-    ("curriculum/labs.json", r"14 areas, (\d+) skills", "skills",
-     "A0.1's expected skill count"),
-    ("curriculum/labs.json", r"14 areas, \d+ skills, (\d+) with a script",
+    # These moved out of curriculum/labs.json with the Expect box. That box
+    # printed the same paragraph a second time at the foot of 133 pages — 35 of
+    # them word for word — so it was removed, and the counts it uniquely
+    # carried went into A0.1's own "What you just proved".
+    ("scripts/exercises/track_a0.py", r"14 areas, \"\s*\n\s*\"(\d+) skills",
+     "skills", "A0.1's expected skill count"),
+    ("scripts/exercises/track_a0.py", r"(\d+) of them with a script",
      "skills_with_script", "A0.1's expected script count"),
     ("LESSON_DESIGN.md", r"Every one of the (\d+) lessons has the same shape",
      "sessions", "the authoring contract's opening"),

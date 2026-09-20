@@ -44,8 +44,6 @@ python3 skills/response/remediation-policy-check/scripts/remediation_policy_chec
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Classify a set of remediation actions against the policy and see which tier each lands in, and why.
-
 ---
 
 ### E4.2 — Runbook tiers — fully automated, human in the loop, manual
@@ -76,8 +74,6 @@ python3 skills/response/runbook-tier-assignment/scripts/runbook_tier_assignment.
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Take one incident and run its response at all three tiers, comparing what each costs and what each risks.
 
 ---
 
@@ -110,8 +106,6 @@ python3 skills/response/machine-speed-containment/scripts/machine_speed_containm
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Each lever is timed; revocation hits one agent without collateral (the B2.4 deliverable, proven here).
-
 ---
 
 ### E4.4 — Stop authority — who halts a fleet, and how long it takes
@@ -143,8 +137,6 @@ python3 skills/response/stop-authority-readiness/scripts/stop_authority_readines
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A number in seconds, and a named holder. Untested stop authority is a diagram.
-
 ---
 
 ### E4.5 — The fleet kill switch
@@ -175,7 +167,5 @@ python3 skills/response/fleet-kill-switch-test/scripts/fleet_kill_switch_test.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed.
 
 ---

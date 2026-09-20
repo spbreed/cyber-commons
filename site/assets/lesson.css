@@ -132,10 +132,9 @@ code{font-family:"IBM Plex Mono",monospace;font-size:13.2px}
 pre code{color:var(--text);background:none;border:0;padding:0;line-height:1.7}
 :not(pre) > code{background:var(--surface);border:1px solid var(--line);border-radius:5px;
   padding:1px 6px;font-size:13px;color:var(--text)}
-.expect{margin-top:14px;border-left:2px solid var(--secure);padding:10px 0 10px 14px;
-  color:var(--text-dim);font-size:14.5px}
-.expect b{color:var(--secure);font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.12em;
-  text-transform:uppercase;margin-right:8px}
+/* .expect is gone with the box it styled — an "Expect" panel that rendered at
+   the foot of the page, below the chapter bridge, repeating "What you just
+   proved". See scripts/exercises/layout.py for what it was and why. */
 
 /* exercise cta */
 .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}

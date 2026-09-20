@@ -32,7 +32,11 @@ def lab_block(sid: str, goal: str = "") -> str:
     # The goal comes from the session, which is the only copy of it now.
     lines = [f"\n**Run it** — {goal}\n", "```bash"]
     lines += lab["run"]
-    lines += ["```", f"\n*Expect:* {lab['expect']}\n"]
+    # No "*Expect:*" line: labs.json no longer carries one. It rendered a
+    # second conclusion beside the lesson's own "What you just proved" — the
+    # same paragraph on 59 pages, another lesson's on four — and the chapter
+    # doc inherited it from the same field. See scripts/exercises/layout.py.
+    lines += ["```", ""]
     return "\n".join(lines)
 
 

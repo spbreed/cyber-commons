@@ -42,8 +42,6 @@ python3 skills/programme/dev-environment-preflight/scripts/dev_environment_prefl
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The runtime resolving from skills/_runtime, your endpoint and model named, and the key reported as present rather than printed. Then exit code 2 from a deliberate unconfigured run, so you meet that refusal here rather than on lesson forty. Then one real model call: which model answered, how many contract violations were in its reply, and the filled-in contract as JSON.
-
 ---
 
 ### A0.1 — Start here — what this is, who it is for, and how to run it
@@ -71,7 +69,5 @@ python3 skills/programme/dev-environment-preflight/scripts/dev_environment_prefl
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The tree inventoried from disk — 14 areas, 139 skills, 139 with a script — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file.
 
 ---

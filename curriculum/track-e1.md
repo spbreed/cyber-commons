@@ -43,8 +43,6 @@ python3 skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.
-
 ---
 
 ### E1.1 — The sensor estate — EDR, DLP, CSPM and CNAPP against an agent
@@ -87,8 +85,6 @@ python3 skills/detection/behavioural-drift-monitor/scripts/behavioural_drift_mon
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A rule that passed last month fails now. Nothing in your code changed.
-
 ---
 
 ### E1.3 — Bonus — finding the agents, and keeping what they emit
@@ -119,8 +115,6 @@ python3 skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_s
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* A working classifier — your earliest Shadow Autonomy signal.
 
 ---
 

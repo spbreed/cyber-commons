@@ -44,8 +44,6 @@ python3 skills/regulatory/obligation-mapping/scripts/obligation_mapping.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* One spine, several overlays. Orphans are your programme backlog.
-
 ---
 
 ### F2.2 — Horizontal AI regulation
@@ -75,8 +73,6 @@ python3 skills/regulatory/horizontal-requirement-to-control/scripts/horizontal_r
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Shows where 'we only deployed it' holds and where agentic deployment pulls you into provider obligations.
 
 ---
 
@@ -109,8 +105,6 @@ python3 skills/regulatory/framework-spine-selection/scripts/framework_spine_sele
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Valid OSCAL, one spine, two overlays — instead of two disconnected programmes.
-
 ---
 
 ### F2.4 — Sector overlays
@@ -140,8 +134,6 @@ python3 skills/regulatory/sector-overlay-assessment/scripts/sector_overlay_asses
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The agent is often already a 'model' under rules you already comply with. Cheaper than inventing a new programme.
 
 ---
 
@@ -174,8 +166,6 @@ python3 skills/regulatory/trace-personal-data-audit/scripts/trace_personal_data_
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* PII is removed before egress; the redaction decision is logged as evidence for F2.7.
-
 ---
 
 ### F2.6 — Incident and disclosure obligations
@@ -205,8 +195,6 @@ python3 skills/regulatory/disclosure-phase-breakdown/scripts/disclosure_phase_br
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* A draft that names the agent, the authority and the containment — the questions a supervisor asks first.
 
 ---
 
@@ -239,8 +227,6 @@ python3 skills/regulatory/supervisory-documentation-score/scripts/supervisory_do
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A pack with a self-audit attached, including an honest statement of what 'explainability' can mean here.
-
 ---
 
 ### F2.8 — Auditability of autonomous action
@@ -272,8 +258,6 @@ python3 skills/regulatory/autonomous-action-auditability/scripts/autonomous_acti
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Which agent, under whose authority, in what scope, verified by which control, reviewable by whom — all from the `act` chain.
-
 ---
 
 ### F2.9 — Regulator and auditor conversations
@@ -303,7 +287,5 @@ python3 skills/regulatory/assurance-conversation-prep/scripts/assurance_conversa
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* You get asked the real questions. Overclaiming control is scored as harshly as underclaiming.
 
 ---

@@ -43,8 +43,6 @@ python3 skills/programme/risk-translation-upward/scripts/risk_translation_upward
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* What can happen, how fast, who can stop it — with the engineering vocabulary stripped out.
-
 ---
 
 ### F3.2 — Governing autonomy rather than approving tools
@@ -74,8 +72,6 @@ python3 skills/programme/autonomy-ladder-decisions/scripts/autonomy_ladder_decis
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The linter rejects aspirational language and demands named authority.
 
 ---
 
@@ -107,8 +103,6 @@ python3 skills/programme/programme-sequencing/scripts/programme_sequencing.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Ordered by winnability × risk retired, with one explicit refusal. A programme without a 'no' has no policy.
-
 ---
 
 ### F3.4 — Org design and ownership
@@ -138,8 +132,6 @@ python3 skills/programme/ownership-seam-audit/scripts/ownership_seam_audit.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Every topic cluster with zero owners or two owners is a finding — usually harness engineering and research.
 
 ---
 
@@ -172,8 +164,6 @@ python3 skills/programme/programme-metrics-selection/scripts/programme_metrics_s
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.
-
 ---
 
 ### F3.6 — Saying no, and saying yes with conditions
@@ -203,8 +193,6 @@ python3 skills/programme/conditional-approval-design/scripts/conditional_approva
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Any condition that cannot be automatically verified is flagged. 'They'll be careful' does not compile.
 
 ---
 
@@ -236,8 +224,6 @@ python3 skills/programme/capability-build-order/scripts/capability_build_order.p
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Questions with artefacts attached. Handing a candidate a real eval report separates the two groups fast.
-
 ---
 
 ### F3.8 — Resilience over perfection
@@ -267,7 +253,5 @@ python3 skills/programme/resilience-readiness-check/scripts/resilience_readiness
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged.
 
 ---

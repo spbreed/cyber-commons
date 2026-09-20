@@ -44,8 +44,6 @@ python3 skills/identity/agent-identity-review/scripts/agent_identity_review.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Authorization resolves against the workload ceiling and refuses `db:admin` no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another's.
-
 ---
 
 ### B2.2 — Bootstrapping the first credential
@@ -76,8 +74,6 @@ python3 skills/identity/workload-attestation-check/scripts/workload_attestation_
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.
 
 ---
 
@@ -110,8 +106,6 @@ python3 skills/attestation/identity-chain-verifier/scripts/identity_chain_verifi
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A two-hop delegation narrows to `reports:read` and records the chain `dana → orchestrator → patch-agent`. A privileged user's request for `db:admin` passes subset-of-presented and still issues nothing, because the receiving agent's ceiling is empty of it.
-
 ---
 
 ### B2.4 — Just-in-time authority
@@ -143,8 +137,6 @@ python3 skills/attestation/entitlement-overprivilege-analyzer/scripts/entitlemen
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires.
-
 ---
 
 ### B2.5 — The non-human identity lifecycle
@@ -175,8 +167,6 @@ python3 skills/identity/nhi-lifecycle-audit/scripts/nhi_lifecycle_audit.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Four agents present identities and one is admitted: the unregistered one is refused, the lapsed registration is refused, and the orphaned entry with no owner is refused. Revoking a single agent then leaves the others running.
 
 ---
 
@@ -211,8 +201,6 @@ python3 skills/attestation/input-injection-screening-verifier/scripts/input_inje
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The same payload is refused through all five untrusted ingress components and through two rewordings, the user's own request still reaches the tool, and a memory record written from an untrusted document is still refused a week later because the origin was stored with it.
-
 ---
 
 ### B2.7 — Attribution: an audit trail that answers "who"
@@ -244,8 +232,6 @@ python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_chec
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused.
-
 ---
 
 ### B2.8 — An audit trail the workload cannot forge
@@ -276,8 +262,6 @@ python3 skills/identity/tamper-evident-log-check/scripts/tamper_evident_log_chec
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.
 
 ---
 

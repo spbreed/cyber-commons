@@ -566,8 +566,6 @@ def lesson_page(entry, prev, nxt) -> str:
 
     parts.append(lesson_body(entry))
 
-    if lab.get("expect"):
-        parts.append(f'<div class="expect"><b>Expect</b>{html.escape(lab["expect"])}</div>')
 
     # One list — packages and models together, in the order they appear in the
     # lesson. The reader wants to know what is in front of them, not which

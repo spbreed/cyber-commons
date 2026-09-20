@@ -53,8 +53,6 @@ python3 skills/detection/agent-aware-rule-review/scripts/agent_aware_rule_review
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* All five fire on synthetic-but-real agent telemetry from the B3/C2 labs.
-
 ---
 
 ### E2.3 — Detections whose subject is the agent platform
@@ -85,8 +83,6 @@ python3 skills/detection/agent-platform-detections/scripts/agent_platform_detect
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.
 
 ---
 
@@ -121,8 +117,6 @@ python3 skills/detection/detection-rule-deployability/scripts/detection_rule_dep
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.
-
 ---
 
 ### E2.5 — Rules generated from an incident — and the benign corpus that decides them
@@ -153,8 +147,6 @@ python3 skills/detection/detection-rule-synthesis/scripts/detection_rule_synthes
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
 
 ---
 
@@ -188,7 +180,5 @@ python3 skills/detection/canary-and-honeypot-design/scripts/canary_and_honeypot_
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.
 
 ---

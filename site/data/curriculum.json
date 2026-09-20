@@ -77,8 +77,6 @@
               "title": "What an agent is, and what you are about to build",
               "kind": "introduction",
               "summary": "An agent is software that plans, calls tools and acts on what it reads. This lesson draws the system you build across this chapter — CyberTravels' travel platform, with four agents, two MCP servers, memory and an audit trail — and names every component before any of them is written.",
-              "risk": "Security guidance aimed at people who have never built an agent lands as a list of rules with no mechanism attached, and gets applied as paperwork.",
-              "control": "Build it first. Every control in Function B attaches to a component drawn here.",
               "lab": "Map the architecture you are about to build, and mark where trust changes.",
               "tools": [
                 "MCP",
@@ -282,8 +280,6 @@
               "title": "Start here — what securing an AI architecture means",
               "kind": "introduction",
               "summary": "Function B is the Security of AI half of the commons, taken at the architecture layer: the components an agentic system is built from, the risks those components make possible, and the controls that close them. Everything downstream — the AppSec pipeline, the red-team campaign, the detections, the control register — names a component from here.",
-              "risk": "Without a shared architecture, \"secure the agent\" has no referent, and every control argument is really an argument about two different systems.",
-              "control": "One picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.",
               "lab": "Place the six functions of the commons on one diagram and find where your own work sits.",
               "tools": [],
               "models": []

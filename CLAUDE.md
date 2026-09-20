@@ -158,6 +158,11 @@ that are enforced or that get broken most.
   empty and prose cannot survive for a section that no longer renders. The
   dev-environment page carried a Risk reading *a reader clones the repository
   and leaves*; three sections on it were a form being filled in.
+- **One conclusion per page.** What a run produces is stated once, in "What you
+  just proved". A second *Expect* box used to render from `labs.json` below
+  the chapter bridge: on 59 of 133 pages it repeated the section above it, 35
+  of them word for word, and on four it described a different lesson. The
+  field is gone and `check_lessons.py` refuses it coming back.
 - **Day 0, Day 1, Day 2 on every lesson about the system** — 146 of the 148.
   Why it matters, what you build, the number that says it worked. Day 2 names a
   real number where the lesson produces one and says what you count instead

@@ -60,7 +60,7 @@ drift from its source.
 | Title, risk, control, tools, models | `site/data/curriculum.json` |
 | The sections — hook, Day 0/1/2, framework, skill, proof, your turn | `scripts/exercises/` |
 | Which sections a given lesson renders | `scripts/exercises/layout.py` |
-| The runnable command block + "Expect" | `curriculum/labs.json` |
+| The runnable command block | `curriculum/labs.json` |
 | The OWASP / ATLAS / NIST / EU AI Act labels | `curriculum/frameworks.json` |
 | The procedure the lesson runs | `skills/<area>/<name>/` |
 | Long-form notes (this folder) | `lessons/<ID>.md` |

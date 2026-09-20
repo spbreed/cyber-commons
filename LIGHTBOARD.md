@@ -191,7 +191,7 @@ So here is what you count instead: whether you can do the thing this lesson desc
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The tree, inventoried from disk rather than asserted — fourteen areas and every skill in them, counted from what was fetched.
+> The tree, inventoried from disk rather than asserted — 14 areas, 139 skills, 139 of them with a script, counted from what was fetched rather than claimed.
 
 **⑤ Hand it over**
 
@@ -2172,7 +2172,7 @@ Median grant lifetime, and the amount of standing scope removed.
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The skill loads and reports its shape.
+> A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires. The skill also reports its shape.
 
 **⑤ Hand it over**
 
@@ -2276,7 +2276,7 @@ Ingress points that tag, and tool selections traceable to a trusted origin.
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The skill loads and reports its shape.
+> The same payload is refused through all five untrusted ingress components and through two rewordings, the user's own request still reaches the tool, and a memory record written from an untrusted document is still refused a week later because the origin was stored with it. The skill also reports its shape.
 
 **⑤ Hand it over**
 
@@ -2440,7 +2440,7 @@ Calls denied by policy, and the share of tools reachable with no matching rule a
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The skill loads and reports its shape. Two of its failure modes are the ones this lesson is about: counting managed-policy names instead of effective actions, and reading a low excess count as a pass while a wildcard sits in the policy — a wildcard is not a large number of permissions, it is an unbounded one.
+> Five tool calls are evaluated twice. Under allow-by-default four succeed, each one a Chapter B1 risk walking through.
 
 **⑤ Hand it over**
 
@@ -2544,7 +2544,7 @@ Outbound destinations outside the allow-list, and the bytes that reached them.
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The skill loads and reports its shape. Its ceiling is PARTIAL and not negotiable: a configuration that looks right is not a PASS, and probing general HTTP while leaving DNS alone tests the path nobody uses.
+> Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs.
 
 **⑤ Hand it over**
 
@@ -2700,7 +2700,7 @@ Approvals per reviewer per hour, and the share of them that are genuinely irreve
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The skill loads and reports its shape. The failure mode to carry into your own estate is the last one: raising an agent's autonomy because it has been reliable.
+> Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it. The skill also reports its shape.
 
 **⑤ Hand it over**
 
@@ -2752,7 +2752,7 @@ Share of agent traffic that transits the gateway. Whatever does not is unenforce
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The skill loads and reports its shape. Its confidence is HIGH only where egress is enforced below the application — the gateway is a choke point because the network makes it one, not because the SDK was configured to point at it, and an application-level base URL is a default, not a control.
+> Five calls hit one gateway.
 
 **⑤ Hand it over**
 

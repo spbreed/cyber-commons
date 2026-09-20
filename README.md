@@ -353,7 +353,7 @@ script are all generated from it. Never hand-edit a `curriculum/*.md`, a
 | Day 0 / Day 1 / Day 2 | `scripts/exercises/days.py` |
 | The CyberTravels grounding line | `scripts/exercises/cybertravels.py` |
 | The skill a lesson teaches | `skills/<area>/<name>/SKILL.md` |
-| The goal and the "Expect" line | `curriculum/labs.json` |
+| The runnable command block | `curriculum/labs.json` |
 | The framework mapping | `curriculum/frameworks.json` |
 
 Dependencies run downhill — after changing a source, run from its row down:

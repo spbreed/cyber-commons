@@ -70,9 +70,41 @@ BY_KIND: dict[str | None, frozenset[str]] = {
 }
 DEFAULT = FULL
 
+# There is no `runoutput` part, and that is a decision rather than an omission.
+# An "Expect" box used to render from `curriculum/labs.json`, below the chapter
+# bridge, three screens under the command it described. Of the 133 pages that
+# carried one, 59 repeated the "What you just proved" section above it — 35 of
+# them word for word — 10 repeated the lab line, and four described a different
+# lesson: C2.16's claimed "precision 1.00 across sast, threat model" on a
+# patch-validation lesson, D1.2's an attack-success rate on a provenance
+# lesson, D1.4's a reproduction rate belonging to D1.3. That file's sibling
+# `lab` field had failed the same way and was fixed by reading the lab line
+# from the session instead; nothing went back for `expect`. Six lessons where
+# the box held the real result and "What you just proved" described the skill's
+# contract had the two merged, A0.1's counts moved into its own `proved`, and
+# the field is gone from labs.json. check_lessons.py refuses it coming back.
+
 # Deviations from the kind default. (parts, why) — and `why` is not decoration:
 # check_lessons.py prints it, so a reader of the failure sees the argument.
 EXCEPTIONS: dict[str, tuple[frozenset[str], str]] = {
+    # The two function introductions whose Control was the table of contents.
+    # A1.0's read "Build it first. Every control in Function B attaches to a
+    # component drawn here", and B1.0's "One picture, three chapters: the
+    # architecture and its risks, then identity and ingress, then runtime and
+    # the gateway" — a reading order, not a mechanism. Both also opened on the
+    # same Risk as the lesson immediately after them ("Without a shared
+    # architecture/picture, 'secure the agent' has no referent"), so the panel
+    # was saying it twice on consecutive pages. B1.1 states that risk and
+    # answers it with an artefact, which is where it belongs.
+    "A1.0": (FULL - {"riskcontrol"},
+             "An introduction to a chapter that builds. Its risk is that "
+             "security guidance lands as paperwork on somebody who has never "
+             "built an agent, which is a risk to the reader rather than to a "
+             "system, and its control was the reading order."),
+    "B1.0": (FULL - {"riskcontrol"},
+             "The function introduction. Its control was the chapter list, and "
+             "its risk is B1.1's risk one page early — B1.1 answers it with a "
+             "component map and five topologies, which is a control."),
     "D1.0": (FULL,
              "The function introduction, inside a track that otherwise drops "
              "the panel. Its risk is offensive work that produces anecdotes "

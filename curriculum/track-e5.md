@@ -44,8 +44,6 @@ python3 skills/response/run-replayability-audit/scripts/run_replayability_audit.
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The run reproduces, or the tool tells you exactly which field was never logged to make replay possible.
-
 ---
 
 ### E5.2 — The root cause record — naming a control, not a person
@@ -76,8 +74,6 @@ python3 skills/response/root-cause-record/scripts/root_cause_record.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Build a root cause record from a reconstructed incident and check it names a control rather than a person.
-
 ---
 
 ### E5.3 — Post-incident change surface — picking the layer the fix belongs in
@@ -107,8 +103,6 @@ python3 skills/response/post-incident-change-surface/scripts/post_incident_chang
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Most land on the control plane — identity, policy, sandbox — not the prompt.
 
 ---
 
@@ -141,8 +135,6 @@ python3 skills/response/kci-fix-validation/scripts/kci_fix_validation.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Re-run the KCI measurement against a fixed estate and show which indicators recovered and which did not.
-
 ---
 
 ### E5.5 — Proposing the policy change — the diff, and what it does not fix
@@ -174,8 +166,6 @@ python3 skills/grc/policy-change-proposal/scripts/policy_change_proposal.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Generate a policy diff from a root cause record and review what it would have prevented.
-
 ---
 
 ### E5.6 — The regulatory clock — awareness, not confirmation
@@ -205,7 +195,5 @@ python3 skills/response/regulatory-clock-check/scripts/regulatory_clock_check.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* A materiality call and a notification clock started in hour one, feeding Track F2.
 
 ---

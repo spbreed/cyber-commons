@@ -84,7 +84,8 @@ from exercises.anchors import ANCHORS  # noqa: E402
 from exercises.cybertravels import GROUNDING  # noqa: E402
 from exercises.days import DAYS, FUNCTION_DAYS  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
-from exercises.layout import PARTS, parts_for, runs_something, why_dropped  # noqa: E402
+from exercises.layout import (FULL, PARTS, parts_for, runs_something,  # noqa: E402
+                               why_dropped)
 
 # Functions D and E are long arguments rather than collections, and each is told
 # in one unit: an interval between an agent acting and the control being back at
@@ -122,6 +123,8 @@ PART_SOURCE = {
     "proved":      ("expect", "the lesson's track_*.py"),
     "turn":        ("challenge", "the lesson's track_*.py"),
 }
+
+LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
 
 
 # What each part looks like on the built page. Exact strings, and the Day
@@ -185,8 +188,14 @@ def main() -> int:
         parts = parts_for(sid, s.get("kind"), track,
                           runs=runs_something(sid),
                           last_in_track=last)
-        if dropped := sorted(set(PARTS) - parts - {"bridge"}):
-            curated[sid] = dropped
+        # Deviations from the standard template, in both directions. `bridge`
+        # is excluded because it belongs to the end of a chapter rather than to
+        # a lesson. Both directions are printed, so a lesson that gains a
+        # part shows up as clearly as one that drops it.
+        deviation = ([f"no {p}" for p in sorted(FULL - parts - {"bridge"})]
+                     + [f"+{p}" for p in sorted(parts - FULL - {"bridge"})])
+        if deviation:
+            curated[sid] = deviation
         for part, (what, where) in PART_SOURCE.items():
             has = bool(part_content(part, s, ex))
             if part in parts and not has:
@@ -245,6 +254,17 @@ def main() -> int:
                     f"{sid}: layout.py says {part} "
                     f"{'renders' if part in parts else 'does not render'} and "
                     f"the built page says the opposite — rebuild the site")
+
+        # 0d — labs.json carries a command block, not a second conclusion.
+        # Its `expect` field rendered an "Expect" box at the foot of the page
+        # that repeated "What you just proved" on 59 lessons and described a
+        # different lesson on four. Nothing renders it now, so a new one would
+        # be prose no reader ever sees.
+        if (LABS.get(sid) or {}).get("expect"):
+            problems.append(f"{sid}: curriculum/labs.json carries an `expect` "
+                            f"field. Nothing renders it — what the run produces "
+                            f"belongs in the lesson's own `expect`, which is "
+                            f"the \"What you just proved\" section")
 
         # 3 — a bridge out of every chapter
         if last and track not in BRIDGES:
@@ -339,7 +359,7 @@ def main() -> int:
           f"{', '.join(happy_path_only) or 'none'}")
     print(f"{len(curated)} lesson(s) off the full template:")
     for sid, dropped in sorted(curated.items()):
-        print(f"   {sid:<8}no {', '.join(dropped)}")
+        print(f"   {sid:<8}{', '.join(dropped)}")
 
     if a.check and problems:
         print(f"::error::{len(problems)} lesson(s) break the authoring contract "

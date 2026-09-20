@@ -342,7 +342,8 @@ standing authority to steal.
   ("skill", "attestation/entitlement-overprivilege-analyzer"),
   ("skill_script", "attestation/entitlement-overprivilege-analyzer/scripts/entitlement_overprivilege_analyzer.py"),
 ],
- "expect": "The skill loads and reports its shape. Note what its procedure "
+ "expect": "A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires. "
+           "The skill also reports its shape. Note what its procedure "
            "insists on: the denominator is the capability set the tools require, "
            "not another set of grants — comparing grants against grants is how a "
            "review concludes that an over-privileged agent is normal — and a "
@@ -518,7 +519,8 @@ the content at all, which is exactly why rephrasing does not defeat it.
   ("skill", "attestation/input-injection-screening-verifier"),
   ("skill_script", "attestation/input-injection-screening-verifier/scripts/input_injection_screening_verifier.py"),
 ],
- "expect": "The skill loads and reports its shape. Its ceiling is the lesson: a "
+ "expect": "The same payload is refused through all five untrusted ingress components and through two rewordings, the user's own request still reaches the tool, and a memory record written from an untrusted document is still refused a week later because the origin was stored with it. "
+           "The skill also reports its shape. Its ceiling is the lesson: a "
            "screening step is evidence of effort, not of protection, so the "
            "verdict is capped at PARTIAL however good the detector's benchmark "
            "looks — and the combination it flags, private data reachable plus "

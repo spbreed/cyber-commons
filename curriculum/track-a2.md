@@ -44,8 +44,6 @@ python3 skills/threats/audit-answerability-check/scripts/audit_answerability_che
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* An investigation's questions put to what the run currently emits, and a named list of the ones it cannot answer. Expect most of them — that is why this runs first.
-
 ---
 
 ### A2.1 — Observability — the run as spans
@@ -76,8 +74,6 @@ python3 skills/response/run-replayability-audit/scripts/run_replayability_audit.
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* A run's spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it.
 
 ---
 
@@ -110,8 +106,6 @@ python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_chec
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Each of the four questions answered or explicitly not, from real audit rows — with the fourth likely failing, which is the finding to carry into Function E.
-
 ---
 
 ### A2.3 — Evaluating what you built, before anybody attacks it
@@ -143,8 +137,6 @@ python3 skills/research/eval-suite-health-check/scripts/eval_suite_health_check.
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A score with a confidence interval, a control shown to move one surface and not the others, and the same suite scoring higher once easy cases are added.
-
 ---
 
 ### A2.4 — What you have built — and every way it can now go wrong
@@ -175,7 +167,5 @@ python3 skills/architecture/blast-radius-review/scripts/blast_radius_review.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Objects one run can reach, the subset it can change, the irreversible actions among those, and the autonomy level that radius supports.
 
 ---

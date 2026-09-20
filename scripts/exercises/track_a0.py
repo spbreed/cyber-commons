@@ -522,8 +522,13 @@ and a report counts in Function F.
                "is what decides whether the answer is usable.\\n\\n"
                "### The skill"),
  ],
- "expect": "The tree, inventoried from disk rather than asserted — fourteen "
-           "areas and every skill in them, counted from what was fetched. Then "
+ # The counts are the reader's checksum against their own run, and
+ # scripts/check_claims.py holds them against the tree. They used to live in
+ # curriculum/labs.json's Expect box, which printed this same paragraph a
+ # second time at the bottom of the page.
+ "expect": "The tree, inventoried from disk rather than asserted — 14 areas, "
+           "139 skills, 139 of them with a script, counted from what was "
+           "fetched rather than claimed. Then "
            "the same procedure failing twice and working once: exit 2 with "
            "`[Errno 2]` when nothing was fetched, exit 1 with "
            "`ModuleNotFoundError` when the runtime is off the path, and exit 0 "

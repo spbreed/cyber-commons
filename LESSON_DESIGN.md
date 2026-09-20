@@ -19,6 +19,14 @@ So the rules below say **which lessons** they bind, and `check_lessons.py`
 checks the declaration from both sides: a section that renders must have
 content, and content must not survive for a section that no longer renders.
 
+**One conclusion per page.** What a run produces is stated once, in "What you
+just proved", from the lesson's own `expect`. There used to be a second
+"Expect" box rendered from `curriculum/labs.json` at the foot of the page,
+below the chapter bridge — three screens under the command it described. Of
+the 133 pages that carried one, 59 repeated the section above it (35 word for
+word), 10 repeated the lab line, and four described a different lesson. It is
+gone, and `check_lessons.py` fails if the field comes back.
+
 `scripts/check_lessons.py` enforces what can be enforced and reports the rest.
 It runs in CI.
 

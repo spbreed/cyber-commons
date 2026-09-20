@@ -87,7 +87,11 @@ which is a better place to stand.
   ("skill", "attestation/iam-least-privilege-verifier"),
   ("skill_script", "attestation/iam-least-privilege-verifier/scripts/iam_least_privilege_verifier.py"),
 ],
- "expect": "The skill loads and reports its shape. Two of its failure modes are "
+ "expect": "Five tool calls are evaluated twice. Under allow-by-default four "
+           "succeed, each one a Chapter B1 risk walking through. Under "
+           "default-deny only the intended call survives — including a refusal "
+           "on the verb for an otherwise-permitted identity, tool and resource. "
+           "The skill also reports its shape. Two of its failure modes are "
            "the ones this lesson is about: counting managed-policy *names* "
            "instead of effective actions, and reading a low excess count as a "
            "pass while a wildcard sits in the policy — a wildcard is not a large "
@@ -362,7 +366,8 @@ default.
   ("skill", "attestation/sandbox-egress-verifier"),
   ("skill_script", "attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifier.py"),
 ],
- "expect": "The skill loads and reports its shape. Its ceiling is PARTIAL and "
+ "expect": "Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs. "
+           "The skill also reports its shape. Its ceiling is PARTIAL and "
            "not negotiable: a configuration that looks right is not a PASS, and "
            "probing general HTTP while leaving DNS alone tests the path nobody "
            "uses. The untested list is part of the output, not an omission from "
@@ -514,7 +519,8 @@ scepticism they would apply to a colleague.
   ("skill", "architecture/blast-radius-review"),
   ("skill_script", "architecture/blast-radius-review/scripts/blast_radius_review.py"),
 ],
- "expect": "The skill loads and reports its shape. The failure mode to carry "
+ "expect": "Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it. "
+           "The skill also reports its shape. The failure mode to carry "
            "into your own estate is the last one: raising an agent's autonomy "
            "because it has been reliable. Reliability is a measurement of the "
            "happy path; blast radius is a measurement of the worst one, and only "
@@ -571,7 +577,8 @@ attractive target. It has to be operated accordingly.
   ("skill", "attestation/llm-gateway-guardrail-verifier"),
   ("skill_script", "attestation/llm-gateway-guardrail-verifier/scripts/llm_gateway_guardrail_verifier.py"),
 ],
- "expect": "The skill loads and reports its shape. Its confidence is HIGH only "
+ "expect": "Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent. "
+           "The skill also reports its shape. Its confidence is HIGH only "
            "where egress is enforced below the application — the gateway is a "
            "choke point because the network makes it one, not because the SDK "
            "was configured to point at it, and an application-level base URL is "

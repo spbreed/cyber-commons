@@ -17,8 +17,6 @@
 
 ### A1.0 — What an agent is, and what you are about to build
 
-- **Risk** — Security guidance aimed at people who have never built an agent lands as a list of rules with no mechanism attached, and gets applied as paperwork.
-- **Control** — Build it first. Every control in Function B attaches to a component drawn here.
 - **Lab** — Map the architecture you are about to build, and mark where trust changes.
 - **Tools** — `MCP`, `FastAPI`
 
@@ -43,8 +41,6 @@ python3 skills/architecture/agentic-architecture-map/scripts/agentic_architectur
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Seven components, the edges between them, and the smaller subset where trust changes — which is the only part worth arguing about.
 
 ---
 
@@ -77,8 +73,6 @@ python3 skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The loop's three stages named, an exit condition that does not depend on the model agreeing, and the verifier identified as independent or flagged as not being so.
-
 ---
 
 ### A1.2 — Tools over MCP — a resource server, and why it is a separate process
@@ -109,8 +103,6 @@ python3 skills/attestation/agent-code-surface-analyzer/scripts/agent_code_surfac
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Both MCP servers' tools enumerated with the audience and scope each requires, and any tool whose declared surface is wider than its implementation.
 
 ---
 
@@ -143,8 +135,6 @@ python3 skills/identity/agent-identity-review/scripts/agent_identity_review.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Three principals named and separated, the agent's identity distinguished from any credential it holds, and the human's token shown to grant nothing downstream.
-
 ---
 
 ### A1.4 — Delegation — one token per action
@@ -175,8 +165,6 @@ python3 skills/attestation/identity-chain-verifier/scripts/identity_chain_verifi
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* A delegated token whose subject is the human and whose actor is the agent, addressed to one audience with one scope — and a refusal, with its reason, when a traveller's role is asked to delegate a refund.
 
 ---
 
@@ -209,8 +197,6 @@ python3 skills/threats/memory-scope-and-origin-audit/scripts/memory_scope_and_or
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Entries carrying an origin and a trust flag, recall refusing to cross an owner boundary, and untrusted entries still labelled when rendered for the model.
-
 ---
 
 ### A1.6 — Agent to agent — handing work over without laundering authority
@@ -242,8 +228,6 @@ python3 skills/threats/peer-message-propagation-trace/scripts/peer_message_propa
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A signed envelope naming its sender and the human it acts for, plus refusals on a tampered envelope and on one with no human in the chain.
-
 ---
 
 ### A1.7 — The human gate, and the budget that stops the loop
@@ -274,7 +258,5 @@ python3 skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_c
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* A high-risk action pausing and naming its scope, an approval and a refusal both recorded, and a budget ceiling returning an incomplete result rather than a summary.
 
 ---

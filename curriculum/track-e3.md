@@ -46,8 +46,6 @@ python3 skills/detection/triage-loop-with-floor/scripts/triage_loop_with_floor.p
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The loop clears the known-benign and escalates the rest with its reasoning attached.
-
 ---
 
 ### E3.2 — Admission rules — what the investigating agent may touch
@@ -78,8 +76,6 @@ python3 skills/secops/investigation-admission-rules/scripts/investigation_admiss
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded.
 
 ---
 
@@ -114,8 +110,6 @@ python3 skills/secops/detection-triage/scripts/detection_triage.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The generic loop underperforms your worst analyst; the loaded one does not. Same model both times.
-
 ---
 
 ### E3.4 — When the actor is an agent — three instincts that misfire
@@ -146,8 +140,6 @@ python3 skills/response/agent-actor-containment/scripts/agent_actor_containment.
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it.
 
 ---
 
@@ -182,8 +174,6 @@ python3 skills/response/incident-reconstruction-check/scripts/incident_reconstru
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered.
-
 ---
 
 ### E3.6 — Plan, then replan — an investigation that changes its mind
@@ -214,8 +204,6 @@ python3 skills/secops/investigation-replan-trace/scripts/investigation_replan_tr
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded.
 
 ---
 
@@ -250,8 +238,6 @@ python3 skills/secops/incident-scoping/scripts/incident_scoping.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The action-plane actor is a sub-agent two hops from the prompt that started it.
-
 ---
 
 ### E3.8 — Fleet-level correlation — seeing a swarm
@@ -282,8 +268,6 @@ python3 skills/detection/fleet-correlation-analysis/scripts/fleet_correlation_an
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.
 
 ---
 
@@ -318,8 +302,6 @@ python3 skills/detection/threat-intel-to-rules/scripts/threat_intel_to_rules.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
-
 ---
 
 ### E3.10 — Hunting in agent telemetry
@@ -350,7 +332,5 @@ python3 skills/detection/agent-telemetry-hunt/scripts/agent_telemetry_hunt.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
 
 ---

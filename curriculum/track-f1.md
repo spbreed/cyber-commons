@@ -41,8 +41,6 @@ claude --version        # prints a version? nothing else to configure
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Seven trustworthy-AI properties print with a typical owner each. Security owns exactly one outright and contributes evidence to the other six — which is the reason this function exists as more than a security document.
-
 ---
 
 ### F1.1 — From framework control to key control indicator
@@ -73,8 +71,6 @@ python3 skills/attestation/attestation-signer-lifecycle/scripts/attestation_sign
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* One prompt edit invalidated an annual assessment. That is why point-in-time testing fails for AI.
 
 ---
 
@@ -107,8 +103,6 @@ python3 skills/attestation/deployment-inventory-resolver/scripts/deployment_inve
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* A register built from telemetry rather than from a survey nobody answered.
-
 ---
 
 ### F1.3 — Risk tiering agentic use cases
@@ -138,8 +132,6 @@ python3 skills/grc/agentic-risk-tiering/scripts/agentic_risk_tiering.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Two workflows on the same model land in different tiers — which is the point.
 
 ---
 
@@ -172,8 +164,6 @@ python3 skills/grc/control-to-framework-mapping/scripts/control_to_framework_map
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.
-
 ---
 
 ### F1.5 — Evaluation output as audit evidence
@@ -204,8 +194,6 @@ python3 skills/grc/control-evidence/scripts/control_evidence.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* An OSCAL-shaped evidence pack, plus a written challenge: best-of-k reporting, conformance-as-accuracy, and judge dependence.
 
 ---
 
@@ -240,8 +228,6 @@ python3 skills/grc/guardrail-specification/scripts/guardrail_specification.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Frameworks specify how the system works; regulators ask what it produced. Most orgs are long on the first.
-
 ---
 
 ### F1.7 — Continuous control verification
@@ -275,8 +261,6 @@ python3 skills/attestation/aws-runtime-posture-collector/scripts/aws_runtime_pos
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Control drift surfaces as a diff; a human still decides what it means.
-
 ---
 
 ### F1.8 — Third-party and model supply chain risk
@@ -308,8 +292,6 @@ python3 skills/grc/third-party-ai-assessment/scripts/third_party_ai_assessment.p
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* An artefact inventory with provenance status per component — and an honest 'unsigned' where that is the truth.
-
 ---
 
 ### F1.9 — Model and agent lifecycle governance
@@ -339,8 +321,6 @@ python3 skills/grc/agent-lifecycle-governance/scripts/agent_lifecycle_governance
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Re-indexing is a change-management event with a gate, not maintenance.
 
 ---
 
@@ -373,8 +353,6 @@ python3 skills/programme/stakeholder-seam-map/scripts/stakeholder_seam_map.py
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Five stakeholder functions print with the question each is asking and the controls each operates — 22 controls in total. Four seam failures are shown as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned.
-
 ---
 
 ### F1.11 — Model risk management for AI systems
@@ -405,8 +383,6 @@ python3 skills/grc/model-risk-validation-scope/scripts/model_risk_validation_sco
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* The three SR 11-7 pillars print with the assumption each makes. A system validated with no tools at L1 is shown deployed with three tools at L3 — same model, same version — and the validation no longer covers it. Monitoring reports 200 clean runs of summarisation accuracy while four action-level metrics have no threshold at all, and four revalidation triggers classical MRM would miss are named.
 
 ---
 
@@ -439,8 +415,6 @@ python3 skills/programme/handoff-delivery-check/scripts/handoff_delivery_check.p
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero.
-
 ---
 
 ### F1.13 — Measuring the controls on CyberTravels — gaps and mitigations
@@ -470,8 +444,6 @@ python3 skills/grc/kci-control-measurement/scripts/kci_control_measurement.py
 # --- or install it into your own agent and ask in your own words ---
 python3 scripts/install_skills.py --all
 ```
-
-*Expect:* Measure six indicators against the CyberTravels tree and read the five gaps it reports.
 
 ---
 
