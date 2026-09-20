@@ -296,21 +296,25 @@ library only.
 ### Who it is for
 
 Five roles, and each one has a whole function written for it. You need one of
-them, not five.
+them, not five — and everybody starts in Function A, which builds the system
+the other five ask their questions of.
 
+- **Anyone who has never shipped an agent**, including all five roles below.
+  You build CyberTravels' platform end to end before a single control is
+  argued about. → Function A.
 - **A security architect or product engineer** asked whether an agentic feature
-  is safe to ship, who needs a component map before a control list. → Function A.
+  is safe to ship, who needs a component map before a control list. → Function B.
 - **An application security engineer or penetration tester** who already runs
   SAST, DAST and manual testing, and now has to review code an agent wrote and
-  test a system that answers differently each time. → Function B.
+  test a system that answers differently each time. → Function C.
 - **A red team operator or AI security researcher** attacking a system with no
   fixed response, who has to report a result that survives being run again.
-  → Function C.
+  → Function D.
 - **A SOC analyst, detection engineer or incident responder** whose thresholds
   were tuned against a person doing twelve things an hour, now watching an agent
-  do fourteen hundred. → Function D.
+  do fourteen hundred. → Function E.
 - **A GRC lead, risk owner or somebody in the CISO's office** who has to say in
-  writing whether the estate is under control, and be right. → Function E.
+  writing whether the estate is under control, and be right. → Function F.
 
 It assumes you can read a Python function. Not that you can write one, and not
 that you have a security background.
@@ -339,27 +343,42 @@ technique gives you nothing to take to the person holding the budget.
 
 ### What a lesson is made of
 
-Every page is the same seven sections in the same order, and the order is the
-argument:
+A page is built from a fixed set of sections in a fixed order, and the order is
+the argument. **A page shows only the sections it has something for**, so the
+set below is what is available rather than a checklist every page satisfies —
+this page, for one, has no Risk, no Day table and no CyberTravels scene,
+because it is about your machine rather than about a system anybody secures.
 
-1. **The hook** — a scene, before anything else. Deliberately *not* a summary:
-   it is the consequence of not knowing the lesson. The summary is section 2.
-2. **What this lesson is** — the plain description, and the Day table.
-3. **The framework** — the concept and its diagram, plus in Functions D and E
+1. **Risk and Control** — one sentence each, at the top: what goes wrong here,
+   and what closes it. On the lessons that are about a system, which is 146 of
+   the 148.
+2. **The hook** — a scene, before anything else. Deliberately *not* a summary:
+   it is the consequence of not knowing the lesson. The summary is section 3.
+3. **What this lesson is** — the plain description, and the Day table.
+4. **The framework** — the concept and its diagram, plus in Functions E and F
    an *anchor* line saying which part of that function's single argument the
    lesson moves. This always comes before any code: teaching the how before the
    why is the most common way a good lesson lands badly.
-4. **In CyberTravels** — the idea in the running case study.
-5. **The skill** — the `SKILL.md` as it exists in
+5. **In CyberTravels** — the idea in the running case study.
+6. **The skill** — the `SKILL.md` as it exists in
    [`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills).
    Frontmatter tells an agent when to load the procedure; the markdown reads as
    a checklist for a person.
-6. **Run it** — the two commands that execute the skill on your own machine.
+7. **Run it** — the two commands that execute the skill on your own machine.
    The page holds no procedure of its own: it runs the file in `skills/`, which
    is the only copy that exists. That is why a fix to a procedure is one edit
-   to one file rather than a change in 135 places.
-7. **Your turn** — one input to change so a number moves. The lesson is in the
+   to one file rather than a change in 148 places.
+8. **What you just proved** — on the lessons that ran something, and only
+   those. A reading lesson proves nothing and says nothing here.
+9. **Your turn** — one input to change so a number moves. The lesson is in the
    difference between the two numbers, not in either one.
+
+A section that is present on every page regardless of whether it has anything
+to say stops being a heading and becomes a form. The set a given lesson renders
+is declared in
+[`scripts/exercises/layout.py`](https://github.com/spbreed/cyber-commons/blob/master/scripts/exercises/layout.py),
+with the reason for each omission, and a check refuses both an empty section
+and prose left behind for a section that no longer renders.
 
 **The hook is always CyberTravels.** It sells corporate travel, and its product
 is an agentic platform of four agents — a workflow agent that books and refunds,
@@ -367,8 +386,8 @@ a retrieval advisor, a coding agent, and a file-system agent reading vendor
 documents. Alex is the product engineer who shipped it. One system, every
 lesson. That is a deliberate cost — a lesson could always find a sharper
 example of its own idea — and the payoff is cumulative: the refund limit an
-attacker walks past in Function A is the one a detection watches in Function D
-and a report counts in Function E.
+attacker walks past in Function B is the one a detection watches in Function E
+and a report counts in Function F.
 """,
  "steps": [
   ("md", "## 2 · Start where your work already is"),

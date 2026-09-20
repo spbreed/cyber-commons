@@ -227,15 +227,14 @@ FAMILIES = [
 # --------------------------------------------------------------------------
 GROUNDING: dict[str, str] = {
 
-# ---- A0 · the introduction -----------------------------------------------
-"A0.0": "Nothing in CyberTravels yet — you meet the company in B1.0. This "
-         "lesson is about the machine you will attack and defend it from, and "
-         "the model that will do the work when you do.",
-
-"A0.1": "The scene in every hook on every page is happening inside "
-        "CyberTravels — the same four agents, the same refund limit, the same "
-        "vendor documents. That is why the hooks accumulate into an argument "
-        "rather than reading as a hundred unrelated anecdotes.",
+# ---- A0 · setup ----------------------------------------------------------
+# A0.0 and A0.1 have no entry, and that is the point. Their subject is the
+# reader's own machine and how to read the commons, so neither renders a
+# "Use case relevance" section for this to sit under. A0.0's read "Nothing in
+# CyberTravels yet", which is an admission that the heading above it was
+# promising something the page did not have. scripts/exercises/layout.py holds
+# the decision, and check_lessons.py fails if an entry reappears here for a
+# lesson that does not render one.
 "B1.0": "CyberTravels is the system. Everything after this lesson names one of its "
         "boxes.",
 "B1.1": "The generic names on this map have CyberTravels names too: ingress is "

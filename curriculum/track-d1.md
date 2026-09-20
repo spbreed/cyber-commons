@@ -47,17 +47,17 @@ python3 scripts/install_skills.py --all
 
 ### D1.1 — Platform ingestion and supply-chain risks
 
-- **Lab** — Dependency-squatting and malicious uploads to model hubs, and the ingress filters that should catch them.
+- **Lab** — Score a deployment's packages, hosted models and datasets for supply-chain risk, weighted by the authority the agent that loads them runs with.
 - **Tools** — `Sigstore`, `OSV`
 
 ---
 
 ### D1.2 — Weaponizing the ingestion path
 
-- **Lab** — Data-layer payloads that exploit parsers to reach code execution during automated embedding generation.
+- **Lab** — Build a provenance manifest for the ingestion path, and find the record whose origin nothing can vouch for.
 - **Tools** — `OpenTelemetry`
 
-**Run it** — Data-layer payloads that exploit parsers to reach code execution during automated embedding generation.
+**Run it** — Build a provenance manifest for the ingestion path, and find the record whose origin nothing can vouch for.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -85,10 +85,10 @@ python3 scripts/install_skills.py --all
 
 ### D1.3 — Cognitive vulnerability and elicitation scaling
 
-- **Lab** — Cross-prompt attention degradation and jailbreaks that strip safety while retaining tool use, scored on reproduction.
+- **Lab** — Measure an elicitation technique's reproduction rate with its denominator, then attack the corpus it was scored against.
 - **Tools** — `Inspect`
 
-**Run it** — Cross-prompt attention degradation and jailbreaks that strip safety while retaining tool use, scored on reproduction.
+**Run it** — Measure an elicitation technique's reproduction rate with its denominator, then attack the corpus it was scored against.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -116,10 +116,10 @@ python3 scripts/install_skills.py --all
 
 ### D1.4 — Establishing telemetry and detecting the actor
 
-- **Lab** — JSON-wrapped model-gateway trace logging, and scoring actors to tell agent tool calls from human behaviour.
+- **Lab** — Score actors on behavioural signals to separate agents from people, and pick the threshold by expected cost rather than accuracy.
 - **Tools** — `OpenTelemetry`, `OpenSearch`
 
-**Run it** — JSON-wrapped model-gateway trace logging, and scoring actors to tell agent tool calls from human behaviour.
+**Run it** — Score actors on behavioural signals to separate agents from people, and pick the threshold by expected cost rather than accuracy.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -147,49 +147,49 @@ python3 scripts/install_skills.py --all
 
 ### D1.5 — Emergent swarms and multi-agent proliferation
 
-- **Lab** — Case studies where agents bridge sandboxes via shared mounts or spawn child nodes without attribution.
+- **Lab** — Resolve each behaviour in a swarm incident to a named control, and list the ones with nothing behind them.
 - **Tools** — `MITRE ATLAS`
 
 ---
 
 ### D1.6 — High-concurrency detection engineering
 
-- **Lab** — Semantic drift and runtime-objective anomalies, and choosing rules by the queue volume they add.
+- **Lab** — Score candidate detection rules on precision, recall and the queue volume each one would add.
 - **Tools** — `Sigma`
 
 ---
 
 ### D1.7 — Triaging the non-deterministic swarm
 
-- **Lab** — Multi-threaded delegation graphs and triage loops defended against deceptive self-correction.
+- **Lab** — Run a triage loop with a severity floor, and sample its auto-closures so the false-negative rate is measured rather than assumed.
 - **Tools** — `TheHive`
 
 ---
 
 ### D1.8 — Defensive deception and threshold failures
 
-- **Lab** — Canary files and weaponised tokens inside data indexes, catching harvesters with no threshold.
+- **Lab** — Place canaries outside every legitimate path, and flag the one sited close enough to real work to fire on it.
 - **Tools** — `Canarytokens`
 
 ---
 
 ### D1.9 — Machine-speed containment and fleet revocation
 
-- **Lab** — Zero-trust runtime gatekeepers and dynamic token revocation that isolate a fleet at machine speed.
+- **Lab** — Fire a fleet-wide kill switch and measure what survives it: tokens, processes, and the runs that should have been preserved.
 - **Tools** — `SPIFFE`
 
 ---
 
 ### D1.10 — Forensic replay and control architecture
 
-- **Lab** — Deterministic runtime constraints that reproduce, replay and document an agentic exploit path.
+- **Lab** — Audit a run for the four fields a replay needs, and find the one whose absence turns a demonstration into a description.
 - **Tools** — `Velociraptor`
 
 ---
 
 ### D1.11 — Institutional governance and compliance
 
-- **Lab** — Findings translated into engineering policies, change-surface patches and reporting timelines.
+- **Lab** — Hand a finding over as three artefacts: a named control, an owner, and an eval case that fails on the unfixed build.
 - **Tools** — `NIST AI RMF`
 
 ---

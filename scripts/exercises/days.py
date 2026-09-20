@@ -202,24 +202,11 @@ DAYS: dict[str, tuple[str, str, str]] = {}
 # ---- A · Securing AI Architectures ---------------------------------------
 DAYS.update({
 
-"A0.0": ("An unconfigured machine does not fail loudly and specifically. It "
-         "fails in a way a newcomer reads as \"this repository is broken\", "
-         "and they leave before lesson one.",
-         "Choose a developer AI tool against its real context window and cost, "
-         "clone master, and point the skill runtime at a model on a free tier.",
-         "One model call completed, with zero contract violations in the "
-         "reply — and the name of the model that produced it, printed in the "
-         "output."),
-
-"A0.1": ("Readers who land mid-curriculum read the hook as a summary, find it "
-         "vague, and leave — the material was never the problem, the shape "
-         "was.",
-         "Learn the five audiences and the seven sections every lesson page "
-         "is built from, and which of them answers the question you arrived "
-         "with.",
-         "Nothing is computed here. The check is that you can open any lesson "
-         "in any function and name all seven sections on it."),
-
+# A0.0 and A0.1 have no entry. Day 0/1/2 is why this matters, what you build
+# and the number that says it worked, and a setup lesson has none of the three
+# in the sense the other 146 do: A0.1's Day 2 read "Nothing is computed here",
+# which is a form filled in rather than an answer. Both pages carry the
+# description without the table; scripts/exercises/layout.py records it.
 "B1.0": ("\"Secure the agent\" has no referent until the system is drawn, so "
          "every control argument is really an argument about the picture.",
          "Read the three chapters in order: the architecture and its risks, "

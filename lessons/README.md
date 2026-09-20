@@ -9,9 +9,10 @@ lessons/E1.0.md   →  https://cybercommons.ai/lessons/E1.0.html
 ```
 
 Nothing here is required, and nothing here is currently written — the folder is
-empty on purpose. A lesson page already renders its seven sections straight from
+empty on purpose. A lesson page already renders its sections straight from
 `scripts/exercises/`: use case relevance, Day 0/1/2, the framework, the skill and
-its run, what you just proved, your turn, and where it leaves you. These notes
+its run, what you just proved, your turn, and where it leaves you — whichever of
+those the lesson has, per `scripts/exercises/layout.py`. These notes
 are for depth that does not belong in any of those — a gotcha you only hit on
 particular hardware, further reading, a longer worked example.
 
@@ -57,7 +58,8 @@ drift from its source.
 | Part of the page | Edit this |
 |---|---|
 | Title, risk, control, tools, models | `site/data/curriculum.json` |
-| The seven sections — hook, Day 0/1/2, framework, skill, proof, your turn | `scripts/exercises/` |
+| The sections — hook, Day 0/1/2, framework, skill, proof, your turn | `scripts/exercises/` |
+| Which sections a given lesson renders | `scripts/exercises/layout.py` |
 | The runnable command block + "Expect" | `curriculum/labs.json` |
 | The OWASP / ATLAS / NIST / EU AI Act labels | `curriculum/frameworks.json` |
 | The procedure the lesson runs | `skills/<area>/<name>/` |

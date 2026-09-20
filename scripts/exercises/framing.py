@@ -37,9 +37,9 @@ HOOKS: dict[str, str] = {
 "A0.1":
  "Most people arrive here from a link, land in the middle of a lesson about "
  "tool-call adjudication, and close it again. The material is not hard — the "
- "shape is unfamiliar. Every lesson is the same seven sections in the same "
- "order, and the first of them is deliberately not a summary. Ten minutes "
- "here and the rest reads itself.",
+ "shape is unfamiliar. A lesson is built from a fixed set of sections in a "
+ "fixed order, each carrying one kind of thing, and a page shows only the "
+ "ones it has. Ten minutes here and the rest reads itself.",
 
 "B1.0":
  "Two teams argue for an hour about whether an agent is safe, and discover at "
@@ -747,24 +747,32 @@ DIAGRAMS: dict[str, str] = {
    ONE LESSON PAGE, TOP TO BOTTOM
 
    +--------------------------------------------------------------+
+   | 0  risk / control    one sentence each. 146 of 148 pages.     |  opt
+   +--------------------------------------------------------------+
    | 1  the hook          a scene in CyberTravels. NOT a summary.  |
    +--------------------------------------------------------------+
-   | 2  what this is      the description  +  Day 0 / 1 / 2 table  |
+   | 2  what this is      the description  +  Day 0 / 1 / 2 table  |  opt
    +--------------------------------------------------------------+
    | 3  the framework     the concept, the diagram, (the anchor)   |  <- the lesson
    +--------------------------------------------------------------+
-   | 4  in CyberTravels   the same idea in the running system      |
+   | 4  in CyberTravels   the same idea in the running system      |  opt
    +--------------------------------------------------------------+
    | 5  the skill         SKILL.md, as it exists in skills/        |
    +--------------------------------------------------------------+
    | 6  run it  ->  Out   one cell, and its real recorded output   |  <- the proof
    +--------------------------------------------------------------+
-   | 7  your turn         one input to change so a number moves    |
+   | 7  what you proved   only where something ran                 |  opt
+   +--------------------------------------------------------------+
+   | 8  your turn         one input to change so a number moves    |
    +--------------------------------------------------------------+
 
    deciding whether to read it   ->  2 (the description and the Day table)
    reading it                    ->  3, 4, 6
    already know it               ->  6 alone
+
+   opt = shown only where the lesson has one. THIS page has no 0, 2 or 4:
+   its subject is your machine, so there is no risk to a system, no number
+   that says it worked, and no scene in CyberTravels.
 """,
 
 "B1.0": """
@@ -2421,10 +2429,14 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gap": "You have run a procedure and you cannot yet say what it is for. The "
         "preflight proved the machinery works; it proved nothing about "
         "agentic systems, which is the only reason any of this exists.",
- "next": "Chapter B1 draws the system everything else in the commons names — "
-         "CyberTravels, its components, and the fifteen risks that "
-         "architecture makes possible. Next → B1.0, what securing an AI "
-         "architecture means.",
+ # This said "Next → B1.0" for as long as A0 was followed by the old Function
+ # A. The renumber moved the build chapters in front of it and nothing moved
+ # this sentence, so the first chapter of the commons sent readers past the
+ # two chapters that build the system the rest of it is taught on.
+ "next": "Chapter A1 builds the system everything else in the commons names — "
+         "CyberTravels' agentic travel platform, one component at a time, on "
+         "your own machine. Next → A1.0, what an agent is and what you are "
+         "about to build.",
 },
 
 "B1": {

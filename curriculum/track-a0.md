@@ -17,8 +17,6 @@
 
 ### A0.0 — Dev environment and IDE setup — the AI tools, and the model every lesson runs on
 
-- **Risk** — A reader arrives, clones the repository, runs a lesson and gets an error they read as a broken repository rather than as an unconfigured machine — and leaves. Nothing in the commons executes without a model endpoint, and that is the first thing anybody hits.
-- **Control** — One setup lesson that ends in a verified model call: the tool chosen against its real context window and cost, the clone from master, the three environment variables, and a skill run whose output names the model that produced it.
 - **Lab** — Configure a model endpoint, then run one skill and read back which model answered.
 - **Tools** — `ollama`, `git`, `python3`
 
@@ -50,8 +48,6 @@ python3 scripts/install_skills.py --all
 
 ### A0.1 — Start here — what this is, who it is for, and how to run it
 
-- **Risk** — A reader lands mid-curriculum, reads the hook as a summary, finds it vague and leaves — or opens the first code cell, finds twenty lines of subprocess and no procedure, and concludes the lessons are stubs.
-- **Control** — One page that says what the commons is for, which track your job maps to, and what the code cell is doing — then a preflight that reproduces both ways the arrangement fails before reporting the host ready.
 - **Lab** — Run the preflight on both routes and compare the output checksum.
 
 **Run it** — Run the preflight on both routes and compare the output checksum.

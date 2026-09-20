@@ -3,10 +3,22 @@
 
 Rules, each one here because breaking it made a lesson worse:
 
-0. **Day 0, Day 1, Day 2.** Every lesson says why it is worth doing, how it is
-   done, and what number tells you it worked. Readers reported that they could
-   not tell what the commons was for until somebody explained it; this is that
-   explanation, on every page.
+0. **Day 0, Day 1, Day 2, on every lesson that has three days.** A lesson says
+   why it is worth doing, how it is done, and what number tells you it worked.
+   Readers reported that they could not tell what the commons was for until
+   somebody explained it; this is that explanation. It is required of every
+   lesson whose layout declares a `days` section — which is every lesson about
+   the system, and not the two setup pages, where the honest Day 2 was
+   "Nothing is computed here."
+
+0a. **A section renders if and only if there is something behind it.** Which
+   parts of the template a lesson carries is declared in
+   `scripts/exercises/layout.py`, and checked here from both sides. Rendering
+   a section with nothing in it teaches a reader the headings are decoration;
+   leaving the source for a section that no longer renders is worse, because
+   the prose is invisible on the page and nobody can find it to correct.
+   B1.0 carried a "What you just proved" paragraph for a lesson that runs
+   nothing, and had done for months.
 
 1. **One concept, three parts.** Every lesson carries a `hook`, a `diagram` and
    a `concept`. The hook is brief — a paragraph, not an essay — because a hook
@@ -16,14 +28,20 @@ Rules, each one here because breaking it made a lesson worse:
    the run block on every built page. Teaching the "how" before the
    "why" is the most common way a good lesson lands badly.
 
-3. **Grounded in CyberTravels.** Every lesson says what its idea looks like in
-   CyberTravels — the one system the whole commons is taught on — so a reader is
-   never asked to hold a fresh example per lesson.
+3. **Grounded in CyberTravels.** Every lesson about the system says what its
+   idea looks like in CyberTravels — the one system the whole commons is taught
+   on — so a reader is never asked to hold a fresh example per lesson. The two
+   setup pages are about the reader's own machine and carry no grounding;
+   A0.0's used to read "Nothing in CyberTravels yet", under a heading
+   promising the idea in the running system.
 
-4. **A bridge out of every chapter.** The last lesson of each chapter names the
-   skill just acquired, the flaw it still has, and the next chapter as the
-   answer. A chapter that ends without that reads as though the subject is
-   closed.
+4. **A bridge out of every chapter, pointing at the chapter that follows.**
+   The last lesson of each chapter names the skill just acquired, the flaw it
+   still has, and the next chapter as the answer. A chapter that ends without
+   that reads as though the subject is closed. The lesson it names is checked
+   against the curriculum's own order: A0's bridge went on saying "Next →
+   B1.0" after the renumber put two chapters in between, sending readers past
+   the chapters that build the system the rest of the commons is taught on.
 
 5. **An anchor on every Function D and Function E lesson.** Both are long
    arguments told in one unit — an interval between an agent acting and the
@@ -66,6 +84,7 @@ from exercises.anchors import ANCHORS  # noqa: E402
 from exercises.cybertravels import GROUNDING  # noqa: E402
 from exercises.days import DAYS, FUNCTION_DAYS  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
+from exercises.layout import PARTS, parts_for, runs_something, why_dropped  # noqa: E402
 
 # Functions D and E are long arguments rather than collections, and each is told
 # in one unit: an interval between an agent acting and the control being back at
@@ -90,7 +109,45 @@ FAILURE_WORDS = ("deny", "refus", "block", "fail", "breaks", "cannot",
                  "stale", "costs more", "not deployable", "no defence",
                  "wrong", "worse", "never saw", "no record", "0.00",
                  "refut", "unverifiable", "false")
-EXEMPT_KINDS = {"risk", "introduction", "architecture"}
+EXEMPT_KINDS = {"risk", "introduction", "architecture", "setup"}
+
+# What has to exist in the sources for a part of the template to have anything
+# to render, and where an author goes to add or delete it. `bridge` is absent
+# on purpose: a bridge belongs to a chapter rather than a lesson, so it is
+# legitimately defined while rendering on one page only.
+PART_SOURCE = {
+    "riskcontrol": ("risk / control", "site/data/curriculum.json"),
+    "relevance":   ("CyberTravels grounding", "scripts/exercises/cybertravels.py"),
+    "days":        ("Day 0/1/2", "scripts/exercises/days.py"),
+    "proved":      ("expect", "the lesson's track_*.py"),
+    "turn":        ("challenge", "the lesson's track_*.py"),
+}
+
+
+# What each part looks like on the built page. Exact strings, and the Day
+# heading is matched in full because "What this lesson is" is a prefix of it
+# and is also the heading the days-less pages carry.
+PAGE_MARK = {
+    "riskcontrol": '<div class="rc">',
+    "relevance":   ">Use case relevance<",
+    "days":        "What this lesson is — Day 0, Day 1, Day 2<",
+    "proved":      ">What you just proved<",
+    "turn":        ">Your turn<",
+    "bridge":      ">Where this leaves you<",
+}
+
+
+def part_content(part: str, s: dict, ex: dict) -> str:
+    """The source text behind one part, or "" when there is none."""
+    sid = s["id"]
+    if part == "riskcontrol":
+        return ((s.get("risk") or "") + (s.get("control") or "")).strip()
+    if part == "relevance":
+        return (GROUNDING.get(sid) or "").strip()
+    if part == "days":
+        d = DAYS.get(sid) or ()
+        return "".join(x or "" for x in d).strip()
+    return (ex.get({"proved": "expect", "turn": "challenge"}[part]) or "").strip()
 
 
 def sessions():
@@ -107,6 +164,11 @@ def main() -> int:
     a = ap.parse_args()
 
     problems, happy_path_only, total = [], [], 0
+    # Which lessons are off the full template, and which sections they drop.
+    # Printed rather than enforced: the point is that every deviation is
+    # visible in one place, so a section quietly disappearing from a hundred
+    # pages cannot pass as curation.
+    curated: dict[str, list[str]] = {}
 
     seen_anchors = set()
     for s, fn, track, last in sessions():
@@ -117,16 +179,37 @@ def main() -> int:
             problems.append(f"{sid}: no exercise")
             continue
 
-        # 0 — why, how, and the number that says it worked
-        day = DAYS.get(sid)
-        if not day or len(day) != 3 or not all(x and x.strip() for x in day):
-            problems.append(f"{sid}: no Day 0/1/2 — say why this is worth "
-                            f"doing, how it is done, and what number tells you "
-                            f"it worked; add one to scripts/exercises/days.py")
+        # 0a — the template, applied where it applies and nowhere else. Both
+        # directions: a heading with nothing under it, and prose under no
+        # heading at all.
+        parts = parts_for(sid, s.get("kind"), track,
+                          runs=runs_something(sid),
+                          last_in_track=last)
+        if dropped := sorted(set(PARTS) - parts - {"bridge"}):
+            curated[sid] = dropped
+        for part, (what, where) in PART_SOURCE.items():
+            has = bool(part_content(part, s, ex))
+            if part in parts and not has:
+                problems.append(f"{sid}: renders the {part} section with no "
+                                f"{what} behind it — write one in {where}, or "
+                                f"drop the section in exercises/layout.py")
+            elif part not in parts and has:
+                problems.append(
+                    f"{sid}: carries {what} in {where} for a {part} section "
+                    f"the page does not render — delete it, or put {part} "
+                    f"back in exercises/layout.py. It does not render because: "
+                    f"{why_dropped(sid, s.get('kind'), track) or 'the lesson runs nothing'}")
 
-        # 1 — one concept, three parts, grounded in the running system
-        if not GROUNDING.get(sid, "").strip():
-            problems.append(f"{sid}: no CyberTravels grounding")
+        # 0b — Day 0/1/2 is three days or it is nothing
+        if "days" in parts:
+            day = DAYS.get(sid)
+            if not day or len(day) != 3 or not all(x and x.strip() for x in day):
+                problems.append(f"{sid}: Day 0/1/2 is incomplete — say why this "
+                                f"is worth doing, how it is done, and what "
+                                f"number tells you it worked, in "
+                                f"scripts/exercises/days.py")
+
+        # 1 — one concept, three parts
         for field in ("hook", "diagram", "concept"):
             if not (ex.get(field) or "").strip():
                 problems.append(f"{sid}: no {field}")
@@ -151,6 +234,17 @@ def main() -> int:
             problems.append(f"{sid}: no framework section on the page")
         elif 0 <= execution < framework:
             problems.append(f"{sid}: the execution section precedes the framework")
+
+        # 0c — and the page agrees with the declaration. Checked against what
+        # the reader sees rather than against the same dict build_site.py read,
+        # because a gate that asserts a function equals itself protects nothing.
+        for part, mark in PAGE_MARK.items():
+            on_page = mark in page
+            if (part in parts) != on_page:
+                problems.append(
+                    f"{sid}: layout.py says {part} "
+                    f"{'renders' if part in parts else 'does not render'} and "
+                    f"the built page says the opposite — rebuild the site")
 
         # 3 — a bridge out of every chapter
         if last and track not in BRIDGES:
@@ -209,6 +303,22 @@ def main() -> int:
         problems.append(f"bridge {tid}: no such track — delete it rather than "
                         f"leaving it to describe a curriculum that changed")
 
+    # 6c — and a bridge names the chapter that actually comes next. A bridge
+    # whose track still exists can still send a reader to the wrong place:
+    # A0's went on saying "Next → B1.0" after the renumber put A1 and A2 in
+    # between, which skipped the two chapters that build the system.
+    order = [(tid, ses[0]["id"]) for fn in CUR["functions"] for tr in fn["tracks"]
+             for tid, ses in [(tr["id"], tr["sessions"])] if ses]
+    for i, (tid, _) in enumerate(order[:-1]):
+        b = BRIDGES.get(tid)
+        if not b:
+            continue
+        nxt_track, nxt_lesson = order[i + 1]
+        if nxt_track not in b["next"] and nxt_lesson not in b["next"]:
+            problems.append(f"bridge {tid}: names neither {nxt_track} nor "
+                            f"{nxt_lesson}, which is what actually follows it "
+                            f"— fix BRIDGES in scripts/exercises/framing.py")
+
     # 6b — chapters are cited by track id, never by number. The number is an
     # ordinal in curriculum.json and is rendered nowhere, so "Chapter 11" in
     # prose is unresolvable by a reader and silently stale for an author.
@@ -227,6 +337,9 @@ def main() -> int:
           f"({', '.join(f'{f}→{o}' for f, o in sorted(ANCHOR_ORIGIN.items()))})")
     print(f"{len(happy_path_only)} lesson(s) show only a happy path: "
           f"{', '.join(happy_path_only) or 'none'}")
+    print(f"{len(curated)} lesson(s) off the full template:")
+    for sid, dropped in sorted(curated.items()):
+        print(f"   {sid:<8}no {', '.join(dropped)}")
 
     if a.check and problems:
         print(f"::error::{len(problems)} lesson(s) break the authoring contract "

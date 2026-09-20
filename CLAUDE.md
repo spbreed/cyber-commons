@@ -101,7 +101,8 @@ runs it; there is never a second copy of the procedure to correct.
 | the "what it covers" paragraph | `scripts/exercises/about*.py` |
 | the CyberTravels grounding line | `scripts/exercises/cybertravels.py` |
 | Day 0 / 1 / 2 | `scripts/exercises/days.py` |
-| a Function D or E anchor line | `scripts/exercises/anchors.py` |
+| which sections a lesson renders | `scripts/exercises/layout.py` |
+| a Function E or F anchor line | `scripts/exercises/anchors.py` |
 | the procedure itself | `skills/<area>/<name>/` |
 | the colours and type of the site | `site/assets/lesson.css`, `site/index.html` |
 | the colours inside lesson diagrams | `scripts/exercises/diagrams.py` |
@@ -146,18 +147,32 @@ dropping one.
 The full contract is [LESSON_DESIGN.md](LESSON_DESIGN.md); these are the rules
 that are enforced or that get broken most.
 
-- **Seven sections, same order, every page.** Use case relevance (a scene, not a
-  summary) · What this lesson is + Day 0/1/2 · The framework and how it works ·
-  In CyberTravels · Real time execution as skill · What you just proved · Your
-  turn. Each has a fixed colour and icon so the shape of a page is learnable.
-- **Day 0, Day 1, Day 2 on every lesson.** Why it matters, what you build, the
-  number that says it worked. Day 2 names a real number where the lesson
-  produces one and says what you count instead where it does not. Never invent
-  one.
+- **Same sections, same order — and only the ones the lesson has.** Risk and
+  Control · Use case relevance (a scene, not a summary) · What this lesson is +
+  Day 0/1/2 · The framework and how it works · In CyberTravels · Real time
+  execution as skill · What you just proved · Your turn · Where this leaves
+  you. Each has a fixed colour and icon so the shape of a page is learnable.
+  **Which of them a lesson renders is declared in
+  `scripts/exercises/layout.py`, with the reason for every omission** — and
+  `check_lessons.py` checks it from both sides, so a section cannot render
+  empty and prose cannot survive for a section that no longer renders. The
+  dev-environment page carried a Risk reading *a reader clones the repository
+  and leaves*; three sections on it were a form being filled in.
+- **Day 0, Day 1, Day 2 on every lesson about the system** — 146 of the 148.
+  Why it matters, what you build, the number that says it worked. Day 2 names a
+  real number where the lesson produces one and says what you count instead
+  where it does not. Never invent one. The two setup lessons carry no Day
+  table; A0.1's Day 2 read "Nothing is computed here".
 - **The framework before any code.** Teaching the how before the why is the most
   common way a good lesson lands badly. `check_lessons.py` enforces the order.
-- **Grounded in CyberTravels.** One system, every lesson. A sharper example is
-  not worth the reader holding a second system.
+- **Grounded in CyberTravels.** One system, every lesson about the system. A
+  sharper example is not worth the reader holding a second system. The two
+  setup lessons are about the reader's own machine and carry no grounding.
+- **A chapter bridge names the chapter that actually follows it.** Checked
+  against the curriculum's order: A0's said "Next → B1.0" after the renumber
+  put A1 and A2 in between. Sixteen bridges were also written, checked for
+  existing, and rendered on no page at all, because nothing ever set the flag
+  that gates them.
 - **Chapters cited by id, never by number.** "Chapter E3", not "Chapter 11" —
   the number is an ordinal that is rendered nowhere and goes stale on insert.
 - **No weekday as a stand-in for "at any time"**, no culture-specific idiom.

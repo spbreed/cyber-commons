@@ -40,10 +40,8 @@
             {
               "id": "A0.0",
               "title": "Dev environment and IDE setup — the AI tools, and the model every lesson runs on",
-              "kind": "introduction",
+              "kind": "setup",
               "summary": "Every skill in this commons is executed by a large language model, so nothing here runs until one is configured. This lesson sets that up on a free tier: pick a developer AI tool against its real context window and price, install it, clone the repository, point the skill runtime at a model, and run one skill end to end to prove the model answered.",
-              "risk": "A reader arrives, clones the repository, runs a lesson and gets an error they read as a broken repository rather than as an unconfigured machine — and leaves. Nothing in the commons executes without a model endpoint, and that is the first thing anybody hits.",
-              "control": "One setup lesson that ends in a verified model call: the tool chosen against its real context window and cost, the clone from master, the three environment variables, and a skill run whose output names the model that produced it.",
               "lab": "Configure a model endpoint, then run one skill and read back which model answered.",
               "tools": [
                 "ollama",
@@ -57,10 +55,8 @@
             {
               "id": "A0.1",
               "title": "Start here — what this is, who it is for, and how to run it",
-              "kind": "introduction",
-              "summary": "The one subject of this commons, the five roles it is written for, and the seven sections every lesson page is built from. Then what Day 0, Day 1 and Day 2 mean, how to use a lab and the skill behind it, why every tool named here is open source, which of four frameworks answers which question, and how to run a lesson on either free route.",
-              "risk": "A reader lands mid-curriculum, reads the hook as a summary, finds it vague and leaves — or opens the first code cell, finds twenty lines of subprocess and no procedure, and concludes the lessons are stubs.",
-              "control": "One page that says what the commons is for, which track your job maps to, and what the code cell is doing — then a preflight that reproduces both ways the arrangement fails before reporting the host ready.",
+              "kind": "setup",
+              "summary": "The one subject of this commons, the six functions it is written for, and the sections a lesson page is built from — with the rule for which of them a given page shows. Then what Day 0, Day 1 and Day 2 mean, how to use a lab and the skill behind it, why every tool named here is open source, which of four frameworks answers which question, and how to run a lesson on either free route.",
               "lab": "Run the preflight on both routes and compare the output checksum.",
               "tools": [],
               "models": []
@@ -1286,9 +1282,7 @@
               "id": "D1.1",
               "title": "Platform ingestion and supply-chain risks",
               "summary": "Dependency-squatting and malicious uploads to model hubs, and the ingress filters that should catch them.",
-              "risk": "",
-              "control": "",
-              "lab": "Dependency-squatting and malicious uploads to model hubs, and the ingress filters that should catch them.",
+              "lab": "Score a deployment's packages, hosted models and datasets for supply-chain risk, weighted by the authority the agent that loads them runs with.",
               "tools": [
                 "Sigstore",
                 "OSV"
@@ -1300,9 +1294,7 @@
               "id": "D1.2",
               "title": "Weaponizing the ingestion path",
               "summary": "Data-layer payloads that exploit parsers to reach code execution during automated embedding generation.",
-              "risk": "",
-              "control": "",
-              "lab": "Data-layer payloads that exploit parsers to reach code execution during automated embedding generation.",
+              "lab": "Build a provenance manifest for the ingestion path, and find the record whose origin nothing can vouch for.",
               "tools": [
                 "OpenTelemetry"
               ],
@@ -1313,9 +1305,7 @@
               "id": "D1.3",
               "title": "Cognitive vulnerability and elicitation scaling",
               "summary": "Cross-prompt attention degradation and jailbreaks that strip safety while retaining tool use, scored on reproduction.",
-              "risk": "",
-              "control": "",
-              "lab": "Cross-prompt attention degradation and jailbreaks that strip safety while retaining tool use, scored on reproduction.",
+              "lab": "Measure an elicitation technique's reproduction rate with its denominator, then attack the corpus it was scored against.",
               "tools": [
                 "Inspect"
               ],
@@ -1326,9 +1316,7 @@
               "id": "D1.4",
               "title": "Establishing telemetry and detecting the actor",
               "summary": "JSON-wrapped model-gateway trace logging, and scoring actors to tell agent tool calls from human behaviour.",
-              "risk": "",
-              "control": "",
-              "lab": "JSON-wrapped model-gateway trace logging, and scoring actors to tell agent tool calls from human behaviour.",
+              "lab": "Score actors on behavioural signals to separate agents from people, and pick the threshold by expected cost rather than accuracy.",
               "tools": [
                 "OpenTelemetry",
                 "OpenSearch"
@@ -1340,9 +1328,7 @@
               "id": "D1.5",
               "title": "Emergent swarms and multi-agent proliferation",
               "summary": "Case studies where agents bridge sandboxes via shared mounts or spawn child nodes without attribution.",
-              "risk": "",
-              "control": "",
-              "lab": "Case studies where agents bridge sandboxes via shared mounts or spawn child nodes without attribution.",
+              "lab": "Resolve each behaviour in a swarm incident to a named control, and list the ones with nothing behind them.",
               "tools": [
                 "MITRE ATLAS"
               ],
@@ -1353,9 +1339,7 @@
               "id": "D1.6",
               "title": "High-concurrency detection engineering",
               "summary": "Semantic drift and runtime-objective anomalies, and choosing rules by the queue volume they add.",
-              "risk": "",
-              "control": "",
-              "lab": "Semantic drift and runtime-objective anomalies, and choosing rules by the queue volume they add.",
+              "lab": "Score candidate detection rules on precision, recall and the queue volume each one would add.",
               "tools": [
                 "Sigma"
               ],
@@ -1366,9 +1350,7 @@
               "id": "D1.7",
               "title": "Triaging the non-deterministic swarm",
               "summary": "Multi-threaded delegation graphs and triage loops defended against deceptive self-correction.",
-              "risk": "",
-              "control": "",
-              "lab": "Multi-threaded delegation graphs and triage loops defended against deceptive self-correction.",
+              "lab": "Run a triage loop with a severity floor, and sample its auto-closures so the false-negative rate is measured rather than assumed.",
               "tools": [
                 "TheHive"
               ],
@@ -1379,9 +1361,7 @@
               "id": "D1.8",
               "title": "Defensive deception and threshold failures",
               "summary": "Canary files and weaponised tokens inside data indexes, catching harvesters with no threshold.",
-              "risk": "",
-              "control": "",
-              "lab": "Canary files and weaponised tokens inside data indexes, catching harvesters with no threshold.",
+              "lab": "Place canaries outside every legitimate path, and flag the one sited close enough to real work to fire on it.",
               "tools": [
                 "Canarytokens"
               ],
@@ -1392,9 +1372,7 @@
               "id": "D1.9",
               "title": "Machine-speed containment and fleet revocation",
               "summary": "Zero-trust runtime gatekeepers and dynamic token revocation that isolate a fleet at machine speed.",
-              "risk": "",
-              "control": "",
-              "lab": "Zero-trust runtime gatekeepers and dynamic token revocation that isolate a fleet at machine speed.",
+              "lab": "Fire a fleet-wide kill switch and measure what survives it: tokens, processes, and the runs that should have been preserved.",
               "tools": [
                 "SPIFFE"
               ],
@@ -1405,9 +1383,7 @@
               "id": "D1.10",
               "title": "Forensic replay and control architecture",
               "summary": "Deterministic runtime constraints that reproduce, replay and document an agentic exploit path.",
-              "risk": "",
-              "control": "",
-              "lab": "Deterministic runtime constraints that reproduce, replay and document an agentic exploit path.",
+              "lab": "Audit a run for the four fields a replay needs, and find the one whose absence turns a demonstration into a description.",
               "tools": [
                 "Velociraptor"
               ],
@@ -1418,9 +1394,7 @@
               "id": "D1.11",
               "title": "Institutional governance and compliance",
               "summary": "Findings translated into engineering policies, change-surface patches and reporting timelines.",
-              "risk": "",
-              "control": "",
-              "lab": "Findings translated into engineering policies, change-surface patches and reporting timelines.",
+              "lab": "Hand a finding over as three artefacts: a named control, an owner, and an eval case that fails on the unfixed build.",
               "tools": [
                 "NIST AI RMF"
               ],

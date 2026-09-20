@@ -231,11 +231,11 @@ is not an agentic security problem; it is an ordinary one wearing a new hat.
             "the index: B1.18 for the twelve agentic risks, B1.19 for every "
             "control CyberTravels needs including the ones that predate it.")),
  ],
- "expect": "CyberTravels as built — four agents, two MCP servers, direct API calls "
-           "that skip MCP, agent-to-agent messaging and a local std-I/O path — "
-           "with what each agent can reach read as a permission set. Then the "
-           "question each of the five functions asks of that same system, and "
-           "what each borrows from this chapter's component map.",
+ # No "expect": B1.0 is a reading lesson and runs nothing, so it renders no
+ # "What you just proved" section for one to appear in. It had one — a
+ # paragraph describing CyberTravels as built — and the page has never shown
+ # it, because `expect` only renders where something executed. The diagrams
+ # above say the same thing, to a reader who can actually see them.
  "challenge": "Draw your own CyberTravels before the next lesson — the agents you "
               "run, the MCP servers and APIs they reach, and which of them can "
               "move money or ship code. B1.1 gives you the standard names for "

@@ -154,9 +154,17 @@ def flatten():
     seq = []
     for fn in CUR["functions"]:
         for tr in fn["tracks"]:
-            for s in tr["sessions"]:
+            for i, s in enumerate(tr["sessions"]):
                 seq.append({"s": s, "track_id": tr["id"], "track": tr["title"],
-                            "fn": f"Function {fn['id']} — {fn['title']}", "fn_id": fn["id"]})
+                            "fn": f"Function {fn['id']} — {fn['title']}",
+                            "fn_id": fn["id"],
+                            # Nothing set this, so `entry.get("last_in_track")`
+                            # was None on all 148 pages and the chapter bridge
+                            # has never rendered on any of them. Sixteen
+                            # bridges were written, checked for existing, and
+                            # shown to nobody; the gate only ever asked whether
+                            # BRIDGES had a key for the track.
+                            "last_in_track": i == len(tr["sessions"]) - 1})
     return seq
 
 
@@ -182,6 +190,7 @@ from exercises.anchors import ANCHORS                 # noqa: E402
 from exercises.cybertravels import GROUNDING          # noqa: E402
 from exercises.days import DAYS, FUNCTION_DAYS, FUNCTION_INTRO  # noqa: E402
 from exercises.framing import BRIDGES                 # noqa: E402
+from exercises.layout import parts_for, runs_something  # noqa: E402
 SKILLS_DIR = ROOT / "skills"
 
 # Every section gets one colour and one icon, and they are fixed across all 134
@@ -191,6 +200,7 @@ SECTIONS = {
  "relevance": ("amber",  "\u25c9", "Use case relevance"),
  "days":      ("violet", "\u25f4", "What this lesson is \u2014 Day 0, Day 1, Day 2"),
  "framework": ("cyan",   "\u25a6", "The framework, and how it works"),
+ "about":     ("violet", "\u25f4", "What this lesson is"),
  "skill":     ("green",  "\u25b6", "Real time execution as skill"),
  "proved":    ("blue",   "\u2713", "What you just proved"),
  "turn":      ("pink",   "\u270e", "Your turn"),
@@ -239,26 +249,46 @@ def steps_html(sid: str, ex: dict) -> tuple[str, str]:
 
 
 def lesson_body(entry: dict) -> str:
-    """The whole lesson, in its seven fixed sections, from source."""
+    """The whole lesson, from source, in whichever sections it has earned.
+
+    Which sections those are is declared in scripts/exercises/layout.py rather
+    than assumed here; see that module for why a page carrying a Risk panel
+    about the reader leaving is worse than a page carrying no Risk panel.
+    """
     sid = entry["s"]["id"]
     ex = EXERCISES.get(sid)
     if ex is None:
         raise SystemExit(f"build_site.py: no exercise for {sid}")
+    parts = page_parts(entry)
     out = []
 
     # 1 — why this matters, as a scene in the running system
-    out.append(sec_open("relevance"))
-    out.append(f"<p class=\"lead\">{html.escape(ex['hook'].strip())}</p>")
-    if ground := GROUNDING.get(sid):
-        out.append(f'<div class="ct"><b>At CyberTravels.</b> '
-                   f'{html.escape(ground.strip())}</div>')
-    out.append("</div></section>")
+    if "relevance" in parts:
+        out.append(sec_open("relevance"))
+        out.append(f"<p class=\"lead\">{html.escape(ex['hook'].strip())}</p>")
+        if ground := GROUNDING.get(sid):
+            out.append(f'<div class="ct"><b>At CyberTravels.</b> '
+                       f'{html.escape(ground.strip())}</div>')
+        out.append("</div></section>")
+    else:
+        # The hook is still the best paragraph on the page. It is just not a
+        # use case, and a setup lesson has no CyberTravels scene to tie it to,
+        # so it leads without a heading promising something it is not.
+        out.append(f'<p class="lead solo">{html.escape(ex["hook"].strip())}</p>')
 
     # 2 — what it is and what it is worth, in one block rather than two
-    day = DAYS.get(sid)
-    out.append(sec_open("days"))
-    if about := ABOUT.get(sid):
-        out.append(md_to_html(about.strip()))
+    # Without the Day table the description still answers the question a
+    # reader arrived with, so it keeps a section, under a heading that
+    # promises only what is underneath it rather than three days that were
+    # never there.
+    about = (ABOUT.get(sid) or "").strip()
+    if not ("days" in parts or about):
+        day = None
+    else:
+        out.append(sec_open("days" if "days" in parts else "about"))
+        if about:
+            out.append(md_to_html(about))
+        day = DAYS.get(sid) if "days" in parts else None
     if day:
         d0, d1, d2 = day
         out.append('<div class="days">')
@@ -268,11 +298,12 @@ def lesson_body(entry: dict) -> str:
             out.append(f'<div class="{cls}"><span>{lab}</span>'
                        f'<p>{html.escape(txt.strip())}</p></div>')
         out.append("</div>")
-    fn_id = entry["fn"].split()[1] if entry["fn"].startswith("Function ") else ""
-    if FUNCTION_INTRO.get(fn_id) == sid and (fd := FUNCTION_DAYS.get(fn_id)):
-        out.append(f'<div class="fnday"><b>Who this function is for.</b> '
-                   f'{html.escape(fd["who"].strip())}</div>')
-    out.append("</div></section>")
+    if "days" in parts or about:
+        fn_id = entry["fn"].split()[1] if entry["fn"].startswith("Function ") else ""
+        if FUNCTION_INTRO.get(fn_id) == sid and (fd := FUNCTION_DAYS.get(fn_id)):
+            out.append(f'<div class="fnday"><b>Who this function is for.</b> '
+                       f'{html.escape(fd["who"].strip())}</div>')
+        out.append("</div></section>")
 
     # 3 — the picture, the idea it names, and how the thing actually works
     prose, skill = steps_html(sid, ex)
@@ -293,7 +324,6 @@ def lesson_body(entry: dict) -> str:
     # on a reading lesson needs the tree as it stood there just as much. It
     # used to be gated on has_code(), which meant the introductions to three
     # functions offered no way to get the system those functions are about.
-    runs = has_code(sid)
     out.append(sec_open("skill"))
     if skill:
         out.append(f'<div class="skillmd">{skill}</div>')
@@ -301,11 +331,11 @@ def lesson_body(entry: dict) -> str:
     out.append("</div></section>")
 
     # 5, 6, 7 — the result, the exercise, and the gap into the next chapter
-    if runs and (expect := ex.get("expect")):
+    if "proved" in parts and (expect := ex.get("expect")):
         out.append(sec_open("proved") + md_to_html(expect.strip()) + "</div></section>")
-    if challenge := ex.get("challenge"):
+    if "turn" in parts and (challenge := ex.get("challenge")):
         out.append(sec_open("turn") + md_to_html(challenge.strip()) + "</div></section>")
-    if entry.get("last_in_track") and (b := BRIDGES.get(entry["track_id"])):
+    if "bridge" in parts and (b := BRIDGES.get(entry["track_id"])):
         out.append(sec_open("bridge")
                    + f"<p><b>What you can do now.</b> {html.escape(b['gained'])}</p>"
                    + f"<p><b>What you still cannot do.</b> {html.escape(b['gap'])}</p>"
@@ -343,12 +373,24 @@ def has_code(sid: str) -> bool:
     reader to something with nothing in it to execute, which teaches them the
     instruction is decorative everywhere else too.
 
-    Measured from the lesson's own steps, which is where the answer lives now
-    that there are no notebooks to inspect.
+    Defined in exercises/layout.py, because the same answer also decides
+    whether the page carries a "What you just proved" section, and the gate
+    that checks that has to read it from the same place.
     """
-    ex = EXERCISES.get(sid, {})
-    return any(k in ("py", "skill_script", "model")
-               for k, _ in ex.get("steps", []))
+    return runs_something(sid)
+
+
+def page_parts(entry: dict) -> frozenset[str]:
+    """Which parts of the template this lesson renders.
+
+    One call site for the whole build, and check_lessons.py calls the same
+    function on the same inputs, so the gate and the page cannot disagree
+    about what a lesson is supposed to carry.
+    """
+    s = entry["s"]
+    return parts_for(s["id"], s.get("kind"), entry["track_id"],
+                     runs=has_code(s["id"]),
+                     last_in_track=bool(entry.get("last_in_track")))
 
 
 def run_block(sid: str) -> str:
@@ -471,7 +513,11 @@ def lesson_page(entry, prev, nxt) -> str:
 
     parts.append(video_block(sid, f"{sid} — {s['title']}"))
 
-    if s.get("risk") or s.get("control"):
+    # The Risk and Control panel, only where the lesson has a risk to a system
+    # and a control that closes it. A setup lesson does not: its "risk" was
+    # that a reader might leave, which is a risk to the commons rather than to
+    # anything anybody secures. scripts/exercises/layout.py holds the decision.
+    if "riskcontrol" in page_parts(entry) and (s.get("risk") or s.get("control")):
         parts.append('<div class="rc">')
         if s.get("risk"):
             parts.append(f'<div class="risk"><div class="lab">Risk</div><p>{html.escape(s["risk"])}</p></div>')

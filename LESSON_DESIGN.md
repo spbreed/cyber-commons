@@ -4,6 +4,21 @@ Every one of the 148 lessons has the same shape. Not for tidiness — each rule
 below is here because breaking it made a lesson worse in a specific,
 reproducible way.
 
+**Same shape, not the same sections.** A page shows a section where the lesson
+has something to put in it and leaves it out where it does not, and which
+sections a given lesson carries is declared in
+[`scripts/exercises/layout.py`](scripts/exercises/layout.py) with the reason
+for every omission. The alternative is what this repository shipped for
+months: a "Risk" on the dev-environment setup page that read *a reader clones
+the repository and leaves*, a Day 2 that read *Nothing is computed here*, and a
+CyberTravels grounding that read *Nothing in CyberTravels yet*. Each of those
+is a heading promising something the page does not have, and a reader who
+meets three of them stops believing the headings anywhere.
+
+So the rules below say **which lessons** they bind, and `check_lessons.py`
+checks the declaration from both sides: a section that renders must have
+content, and content must not survive for a section that no longer renders.
+
 `scripts/check_lessons.py` enforces what can be enforced and reports the rest.
 It runs in CI.
 
@@ -31,11 +46,17 @@ Never open with "in this lesson we will". The reader can see the title.
 
 ## 1b · Grounded in CyberTravels
 
-Every lesson says, in one or two sentences under the hook, what its idea looks
-like in **CyberTravels** — the agentic travel platform the whole commons is taught
-on. It lives in `GROUNDING` in
+Every lesson **about the system** says, in one or two sentences under the hook,
+what its idea looks like in **CyberTravels** — the agentic travel platform the
+whole commons is taught on. It lives in `GROUNDING` in
 [`scripts/exercises/cybertravels.py`](scripts/exercises/cybertravels.py), and
 the build refuses a lesson without one.
+
+The exception is the two setup lessons, whose subject is the reader's machine
+rather than CyberTravels. They render no "Use case relevance" section, so they
+carry no grounding, and `check_lessons.py` fails if one reappears. A0.0's read
+"Nothing in CyberTravels yet", which is not a grounding — it is a heading
+being apologised to.
 
 This is not decoration. A curriculum with a fresh example per lesson asks the
 reader to hold 134 different systems, none of which is theirs. One system, named
@@ -171,7 +192,7 @@ that is not there, a sequencing rule the lesson argues against, table cells with
 the wrong values in them. Write the anchor, then read it against the concept it
 will sit under. That pass is the review; the gate is only the reminder to do it.
 
-## 7 · Every lesson answers Day 0, Day 1 and Day 2
+## 7 · Every lesson about the system answers Day 0, Day 1 and Day 2
 
 Readers kept reporting the same thing: *I could not tell what this was for
 until somebody explained it.* The material was right; the missing part was the
@@ -191,8 +212,11 @@ Day 2 is the one that is easy to fake and the only one a sceptical reader
 believes. Where a lesson produces a real number — a recall score, a
 false-positive rate, a coverage fraction, an interval in minutes — Day 2 names
 it. Where it does not, Day 2 says what you count instead and does not pretend.
-"Nothing yet, honestly" is an acceptable Day 2 for an introduction; a vague one
-is not.
+"Nothing yet, honestly" is an acceptable Day 2 for an introduction to a
+function, because it is an answer — the chapter produces the component map
+every later count is taken against. "Nothing is computed here" is not, because
+it is the question restated, and that is what A0.1's Day 2 said until the two
+setup lessons stopped carrying a Day table at all.
 
 `FUNCTION_DAYS` carries the same three at function scale, plus **who** the
 function is for in job titles. It renders twice: in the function's own
@@ -200,8 +224,9 @@ introduction lesson, and as the homepage's "How to use this" section, generated
 from the same data so the homepage cannot advertise a curriculum the lessons do
 not deliver.
 
-`check_lessons.py` requires all three on every lesson and all four keys on every
-function.
+`check_lessons.py` requires all three on every lesson whose layout declares a
+`days` section — 146 of the 148 — and all four keys on every function. The two
+without it are A0.0 and A0.1, whose subject is the reader's own machine.
 
 ## 8 · Prose a reader can resolve alone
 

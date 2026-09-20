@@ -95,7 +95,7 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 ### A0.0 · Dev environment and IDE setup — the AI tools, and the model every lesson runs on
 
-Chapter A0 · lesson 1 of 2 · runs a skill · 279 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+Chapter A0 · lesson 1 of 2 · runs a skill · 188 words, about 1.3 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
 
 **① Open**
 
@@ -111,15 +111,13 @@ Somebody clones the repository, opens the first lesson, runs the cell and gets a
 
 Here is what that costs you.
 
-An unconfigured machine does not fail loudly and specifically. It fails in a way a newcomer reads as "this repository is broken", and they leave before lesson one.
 
-Same company, same four agents, new way of failing. Nothing in CyberTravels yet — you meet the company in B1.0. This lesson is about the machine you will attack and defend it from, and the model that will do the work when you do.
 
 **③ What we do about it**
 
 So here is what we do in this lesson.
 
-Choose a developer AI tool against its real context window and cost, clone master, and point the skill runtime at a model on a free tier.
+
 
 *[Run the skill on camera now. Let it finish on screen.]*
 
@@ -127,9 +125,9 @@ That is not a screenshot. It just ran, and you can run the identical command on 
 
 **④ The number**
 
-And here is the number that tells you it worked.
+Now, this one does not hand you a number, and I would rather say that out loud than invent one.
 
-One model call completed, with zero contract violations in the reply — and the name of the model that produced it, printed in the output.
+So here is what you count instead: whether you can do the thing this lesson described, on a system you actually run.
 
 *[Point at the output on screen. Do not read it out.]*
 
@@ -145,7 +143,7 @@ Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 2 of 2 · runs a skill · 608 words, about 4.3 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · runs a skill · 506 words, about 3.6 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -167,21 +165,19 @@ Still inside chapter A0. Last one was Dev environment and IDE setup — the AI t
 ONE LESSON PAGE, TOP TO BOTTOM
 ```
 
-Most people arrive here from a link, land in the middle of a lesson about tool-call adjudication, and close it again. The material is not hard — the shape is unfamiliar. Every lesson is the same seven sections in the same order, and the first of them is deliberately not a summary. Ten minutes here and the rest reads itself.
+Most people arrive here from a link, land in the middle of a lesson about tool-call adjudication, and close it again. The material is not hard — the shape is unfamiliar. A lesson is built from a fixed set of sections in a fixed order, each carrying one kind of thing, and a page shows only the ones it has. Ten minutes here and the rest reads itself.
 
 **② Why it costs something**
 
 Here is what that costs you.
 
-Readers who land mid-curriculum read the hook as a summary, find it vague, and leave — the material was never the problem, the shape was.
 
-You have not met CyberTravels yet — that is the next video — but here is where they come in. The scene in every hook on every page is happening inside CyberTravels — the same four agents, the same refund limit, the same vendor documents. That is why the hooks accumulate into an argument rather than reading as a hundred unrelated anecdotes.
 
 **③ What we do about it**
 
 So here is what we do in this lesson.
 
-Learn the five audiences and the seven sections every lesson page is built from, and which of them answers the question you arrived with.
+
 
 *[Run the skill on camera now. Let it finish on screen.]*
 
@@ -191,7 +187,7 @@ That is not a screenshot. It just ran, and you can run the identical command on 
 
 Now, this one does not hand you a number, and I would rather say that out loud than invent one.
 
-Nothing is computed here. The check is that you can open any lesson in any function and name all seven sections on it.
+So here is what you count instead: whether you can do the thing this lesson described, on a system you actually run.
 
 *[Point at the output on screen. Do not read it out.]*
 
@@ -207,7 +203,7 @@ That closes chapter A0. You can run any lesson in the commons on either route, y
 
 And here is what it still cannot do. You have run a procedure and you cannot yet say what it is for. The preflight proved the machinery works; it proved nothing about agentic systems, which is the only reason any of this exists.
 
-Chapter B1 draws the system everything else in the commons names — CyberTravels, its components, and the fifteen risks that architecture makes possible.
+Chapter A1 builds the system everything else in the commons names — CyberTravels' agentic travel platform, one component at a time, on your own machine.
 
 Next up: A1.0, What an agent is, and what you are about to build.
 
@@ -973,10 +969,6 @@ Read the three chapters in order: the architecture and its risks, then identity 
 Now, this one does not hand you a number, and I would rather say that out loud than invent one.
 
 Nothing yet, honestly. This chapter produces the component map every later count in the commons is taken against.
-
-*[Point at the output on screen. Do not read it out.]*
-
-> CyberTravels as built — four agents, two MCP servers, direct API calls that skip MCP, agent-to-agent messaging and a local std-I/O path — with what each agent can reach read as a permission set.
 
 **⑤ Hand it over**
 

@@ -132,9 +132,12 @@ shipped an agent, and every lesson after them assumes you said it.
 
 ## What a lesson is
 
-Every page has the **same seven sections in the same order**, each with its own
+Every page draws from the **same sections in the same order**, each with its own
 colour and icon, so the shape of a page is learnable: read two and you know
-where the framework is on the third without reading a heading.
+where the framework is on the third without reading a heading. A page shows a
+section where the lesson has something to put in it and leaves it out where it
+does not — the dev-environment setup page has no Risk, no Day table and no
+CyberTravels scene, because its subject is your laptop.
 
 | | section | what it does |
 |---|---|---|
@@ -146,8 +149,9 @@ where the framework is on the third without reading a heading.
 | ✎ | **Your turn** | the variation you run yourself |
 | → | **Where this leaves you** | the gap this lesson leaves, and what answers it |
 
-**Day 0, Day 1, Day 2 on every lesson**, because training that stops at the
-technique leaves you with nothing to take to the person holding the budget.
+**Day 0, Day 1, Day 2 on every lesson about the system** — 146 of the 148 —
+because training that stops at the technique leaves you with nothing to take to
+the person holding the budget.
 Day 0 is why it is worth an afternoon. Day 1 is the concrete thing you stand
 up. Day 2 is the number that keeps saying it worked. Where a lesson produces no
 real number, it says so and names what you count instead — an invented figure

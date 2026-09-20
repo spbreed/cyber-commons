@@ -16,9 +16,9 @@ ABOUT: dict[str, str] = {
 """,
 
 "A0.1": """
-**What it covers.** Who this commons is written for — five roles, one function each — and the seven sections every lesson page is built from, in the order they appear.
+**What it covers.** Who this commons is written for — six functions, one per role, with everybody starting in the one that builds the system — and the sections a lesson page is built from, in the order they appear and with the rule for which of them a given page shows.
 
-**Why a security engineer needs it.** A reader who lands mid-curriculum reads the hook as an abstract, finds it vague, and leaves. The hook is a scene rather than a summary, and the description sits under it. The control it builds is: knowing which of the seven sections answers the question you actually arrived with.
+**Why a security engineer needs it.** A reader who lands mid-curriculum reads the hook as an abstract, finds it vague, and leaves. The hook is a scene rather than a summary, and the description sits under it. The control it builds is: knowing which section answers the question you actually arrived with, and that a section missing from a page is missing on purpose.
 
 This is the **first** lesson to read. It has no code and takes ten minutes.
 """,

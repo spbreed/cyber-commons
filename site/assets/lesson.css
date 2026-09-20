@@ -262,6 +262,11 @@ details.runnote>summary:focus-visible{outline:2px solid var(--accent,#4D9BFF);
 
 /* section internals */
 .ls .lead{font-size:18px;line-height:1.6;color:var(--text)}
+/* The hook on a lesson that renders no "Use case relevance" section — the two
+   setup pages, whose subject is the reader's own machine. Same paragraph, no
+   section chrome, because there is no use case for it to be the relevance of. */
+.lead.solo{font-size:18px;line-height:1.6;color:var(--text);
+  margin:18px 0 0;padding-left:14px;border-left:3px solid var(--line)}
 .ct{margin:14px 0 0;padding:12px 15px;border-radius:9px;
   background:var(--s-amber-bg);border:1px solid var(--s-amber-ln);
   font-size:15.5px;color:var(--text-dim)}
