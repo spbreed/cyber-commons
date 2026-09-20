@@ -31,7 +31,7 @@ default.</p><div class="how"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>The one control that does not need to know how the attack worked, because every exfiltration path ends here.</p>
 </blockquote>
-<h2>2 · The control</h2><h2>2 · Probing the sandbox, as a skill</h2>
+<h2>2 · The control</h2><h2>3 · Probing the sandbox, as a skill</h2>
 <p>An allow-list in a config file is a claim. CyberTravels' Coding Agent runs model-authored code, so the claim worth making is <em>this runtime has no egress</em>, and that one is settled by probing, in an environment you own. The procedure names the residual paths — DNS first, because it is the one that has actually been used — and requires you to record what you did <strong>not</strong> test, because a probe list is a statement about coverage. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/sandbox-egress-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/sandbox-egress-verifier/SKILL.md</code></a></p><pre class="front"><code>name: sandbox-egress-verifier
 description: &gt;-
   Verify AI-generated code executes only in an approved sandbox with no

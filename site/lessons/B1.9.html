@@ -30,7 +30,7 @@ depend on recognising the attack, which is why it survives wordings nobody
 thought of. B2.6 builds it as a control; this lesson is the risk it closes.</p>
 <p>Function C builds an entire security pipeline on agents that read untrusted
 code for a living. It inherits this risk in full, and being a security tool
-grants no exemption.</p><div class="how"><h2>2 · Demo — the pipeline's own tool surface</h2><h2>3 · Where it breaks — five carriers, none with blocklist vocabulary</h2><h2>4 · The control — provenance, and deriving what is privileged</h2><h2>2 · The check, as a skill</h2>
+grants no exemption.</p><div class="how"><h2>2 · Demo — the pipeline's own tool surface</h2><h2>3 · Where it breaks — five carriers, none with blocklist vocabulary</h2><h2>4 · The control — provenance, and deriving what is privileged</h2><h2>5 · The check, as a skill</h2>
 <p>An agent asked to read a pull request is asked to trust nothing, and the tools worth guarding are not the ones whose names sound dangerous. The skill drives five carriers and then re-derives the privileged set from what each tool's output causes.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/content-derived-privilege-check/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/content-derived-privilege-check/SKILL.md</code></a></p><pre class="front"><code>name: content-derived-privilege-check
 description: &gt;-
   Test whether instructions carried inside content an agent was asked to read

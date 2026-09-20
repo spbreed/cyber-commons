@@ -34,7 +34,7 @@ memory writes have to be scoped to the identity that made them.</p><div class="h
            identity + policy wrap every call · observability records it</code></p>
 </blockquote>
 <h2>2 · The risk, realised</h2>
-<p>One poisoned write, then an unrelated session for a different user.</p><h2>2 · The check, as a skill</h2>
+<p>One poisoned write, then an unrelated session for a different user.</p><h2>3 · The check, as a skill</h2>
 <p>The question is not whether CyberTravels' memory can be poisoned — it is what the write was keyed by and whether the origin survived it. The skill's script writes from one traveller's ticket and reads back days later as somebody else.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/memory-scope-and-origin-audit/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/memory-scope-and-origin-audit/SKILL.md</code></a></p><pre class="front"><code>name: memory-scope-and-origin-audit
 description: &gt;-
   Audit what an agent&#x27;s persisted memory is keyed by and whether the origin of

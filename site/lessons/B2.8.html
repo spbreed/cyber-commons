@@ -32,7 +32,7 @@ and localised to a segment.</p>
 <p><strong>Logging-plane isolation (C1.3).</strong> The check people skip: confirm the
 workload's role has no read, write or list permission on the log bucket, the
 collector, or their keys. A hash chain in a bucket the agent can delete from is
-a hash chain about nothing.</p><div class="how"><h2>2 · The in-band trail, and what it is worth</h2><h2>3 · Reconcile against a stream the workload cannot write (C1.1)</h2><h2>4 · Hash-chain the transcript, then tamper with it (C1.2)</h2><h2>5 · The check people skip (C1.3)</h2><h2>2 · The check, as a skill</h2>
+a hash chain about nothing.</p><div class="how"><h2>2 · The in-band trail, and what it is worth</h2><h2>3 · Reconcile against a stream the workload cannot write (C1.1)</h2><h2>4 · Hash-chain the transcript, then tamper with it (C1.2)</h2><h2>5 · The check people skip (C1.3)</h2><h2>6 · The check, as a skill</h2>
 <p>CyberTravels' Coding Agent writes its own transcript. The skill reconciles that transcript against an independent host stream, chains the segments, and rewrites one — so tampering is not just detected but localised to the segment it happened in.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/identity/tamper-evident-log-check/SKILL.md" target="_blank" rel="noopener"><code>skills/identity/tamper-evident-log-check/SKILL.md</code></a></p><pre class="front"><code>name: tamper-evident-log-check
 description: &gt;-
   Reconcile an agent&#x27;s own transcript against an independent host stream to find

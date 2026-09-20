@@ -177,7 +177,7 @@ implicit:</p>
     layer4Configs: [{ipProtocol: tcp, ports: [&quot;5432&quot;]}]
 </code></pre>
 <p>Three products, one structure: deny everything by construction, then name what
-is permitted, one destination at a time.</p><h2>4 · Evaluate the manifest, including the way it is usually broken</h2><h2>2 · The check, as a skill</h2>
+is permitted, one destination at a time.</p><h2>4 · Evaluate the manifest, including the way it is usually broken</h2><h2>5 · The check, as a skill</h2>
 <p>One probe, three environments, and the middle one is the configuration that actually ships: real isolation with production credentials mounted inside it. The skill then evaluates the NetworkPolicy objects connection by connection, because a namespace no policy selects is unrestricted rather than unconfigured.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/runtime/sandbox-containment-probe/SKILL.md" target="_blank" rel="noopener"><code>skills/runtime/sandbox-containment-probe/SKILL.md</code></a></p><pre class="front"><code>name: sandbox-containment-probe
 description: &gt;-
   Execute the same code against an unsandboxed environment, a sandbox with

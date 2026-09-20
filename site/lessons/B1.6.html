@@ -35,7 +35,7 @@ human who caused it is not in the record at all. The compromise is of privilege
            identity + policy wrap every call · observability records it</code></p>
 </blockquote>
 <h2>2 · The risk, realised</h2>
-<p>A read-only user asks for something, and the agent has more authority than they do.</p><h2>2 · The check, as a skill</h2>
+<p>A read-only user asks for something, and the agent has more authority than they do.</p><h2>3 · The check, as a skill</h2>
 <p>Everything turns on which principal the decision was evaluated against. The skill runs the asymmetric probe — a traveller holding <code>reports:read</code> asking for something that needs <code>db:admin</code> — and then reads one audit row to see whether a human can be recovered from it.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/authorization-subject-check/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/authorization-subject-check/SKILL.md</code></a></p><pre class="front"><code>name: authorization-subject-check
 description: &gt;-
   Establish which principal a tool call is actually authorised against — the

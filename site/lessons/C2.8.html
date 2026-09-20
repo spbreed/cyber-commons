@@ -32,7 +32,7 @@ equivalent of a shape check, and C2.0 already established what those are worth.<
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote><h2>2 · The replica application, running</h2><h2>3 · Stage 12 — probes that assert a concrete effect</h2><h2>4 · Where it breaks — the probe that asserts nothing</h2>
-<p>The most common DAST bug: treating "the request succeeded" as confirmation. Both probes below hit the app and return 200-equivalents; only one of them proves anything.</p><h2>2 · The stage, as a skill</h2>
+<p>The most common DAST bug: treating "the request succeeded" as confirmation. Both probes below hit the app and return 200-equivalents; only one of them proves anything.</p><h2>5 · The stage, as a skill</h2>
 <p>A dynamic probe proves nothing unless its assertion can fail. The skill runs the probes against a live build with a control probe alongside, then re-runs them under a weak assertion so you can watch it flag the control too.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/dynamic-exploitation-probe/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/dynamic-exploitation-probe/SKILL.md</code></a></p><pre class="front"><code>name: dynamic-exploitation-probe
 description: &gt;-
   Run probes against a live build to turn a static finding into a demonstrated

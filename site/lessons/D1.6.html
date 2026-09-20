@@ -12,7 +12,7 @@ worse than no rule, because it spends the attention the good rules need.</p>
 <p>High-concurrency detection means generating candidate rules, then scoring them
 against real history on the one property that decides deployability — the
 firing volume — so a rule that flags an unauthorised objective before compromise
-is kept and one that buries the queue is rejected with its numbers.</p><div class="how"><h2>2 · Demo — five candidate rules for one runtime anomaly</h2><h2>3 · Where it breaks — every rule detects something</h2><h2>4 · The control — score against history, ship few</h2><h2>2 · The procedure, as a skill</h2>
+is kept and one that buries the queue is rejected with its numbers.</p><div class="how"><h2>2 · Demo — five candidate rules for one runtime anomaly</h2><h2>3 · Where it breaks — every rule detects something</h2><h2>4 · The control — score against history, ship few</h2><h2>5 · The procedure, as a skill</h2>
 <p>Every candidate rule detects the anomaly. The skill replays each against CyberTravels' history and scores firing volume, so a rule that produces hundreds of alerts for one true positive is rejected with the number attached.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/detection-rule-deployability/SKILL.md" target="_blank" rel="noopener"><code>skills/detection/detection-rule-deployability/SKILL.md</code></a></p><pre class="front"><code>name: detection-rule-deployability
 description: &gt;-
   Score candidate detection rules on precision, recall and firing volume, and

@@ -13,7 +13,7 @@ on support will confirm its first theory and close the wrong case at machine
 speed.</p>
 <p>Triaging the swarm means running the triage as a loop with a floor: the loop may
 close, but not silently, and never above a severity it is not allowed to
-conclude on its own. The skill is knowing which signals the loop may believe.</p><div class="how"><h2>2 · Demo — a triage loop over a fleet of alerts</h2><h2>3 · Where it breaks — closing a true positive is silent</h2><h2>4 · The control — the loop may close, but not above the floor</h2><h2>2 · The procedure, as a skill</h2>
+conclude on its own. The skill is knowing which signals the loop may believe.</p><div class="how"><h2>2 · Demo — a triage loop over a fleet of alerts</h2><h2>3 · Where it breaks — closing a true positive is silent</h2><h2>4 · The control — the loop may close, but not above the floor</h2><h2>5 · The procedure, as a skill</h2>
 <p>The skill runs an agentic triage loop over CyberTravels' alerts, samples what it auto-closed with a stable seed, and enforces a severity floor no automatic closure may cross.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/secops/detection-triage/SKILL.md" target="_blank" rel="noopener"><code>skills/secops/detection-triage/SKILL.md</code></a></p><pre class="front"><code>name: detection-triage
 description: &gt;-
   Triage security alerts with the context needed to reach a defensible verdict,

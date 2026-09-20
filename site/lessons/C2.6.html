@@ -27,7 +27,7 @@ a database replica, and always someone's on-call rota.</p>
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote><h2>2 · Stage 11 — model the replica and its isolation</h2><h2>3 · Where it breaks — the same probes against staging</h2><h2>4 · The control — the four isolation properties, checked</h2><h2>2 · The stage, as a skill</h2>
+</blockquote><h2>2 · Stage 11 — model the replica and its isolation</h2><h2>3 · Where it breaks — the same probes against staging</h2><h2>4 · The control — the four isolation properties, checked</h2><h2>5 · The stage, as a skill</h2>
 <p>Before anything is executed against CyberTravels' environment, four checks decide whether it is a replica or staging with a different DNS name. The skill runs them — egress, credentials, data, and the destructive probes you would only run somewhere built to be destroyed.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/exploit-replica-isolation-check/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/exploit-replica-isolation-check/SKILL.md</code></a></p><pre class="front"><code>name: exploit-replica-isolation-check
 description: &gt;-
   Check that the environment a finding is proved in is a replica rather than

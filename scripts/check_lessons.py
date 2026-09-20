@@ -140,6 +140,25 @@ PAGE_MARK = {
 }
 
 
+# The parts of a built page the lesson's author wrote, as opposed to the ones
+# the build puts on every page identically (the run block, the prerequisite
+# note, the nav and footer) and the one that belongs to another artefact (the
+# embedded SKILL.md). Only the first kind is evidence about this lesson.
+NOT_THE_LESSON = (
+    re.compile(r'<div class="skillmd">.*?</div>\s*(?=<div class="runbox")', re.S),
+    re.compile(r'<div class="runbox">.*?</div></div>', re.S),
+    re.compile(r'<details class="runnote">.*?</details>', re.S),
+    re.compile(r"<nav.*?</nav>|<footer.*?</footer>", re.S),
+)
+
+
+def own_prose(page: str) -> str:
+    """The lesson's own words, lowercased, with the boilerplate removed."""
+    for pat in NOT_THE_LESSON:
+        page = pat.sub(" ", page)
+    return page.lower()
+
+
 def part_content(part: str, s: dict, ex: dict) -> str:
     """The source text behind one part, or "" when there is none."""
     sid = s["id"]
@@ -266,6 +285,18 @@ def main() -> int:
                             f"belongs in the lesson's own `expect`, which is "
                             f"the \"What you just proved\" section")
 
+        # 0e — the section numbers a reader sees run 2, 3, 4, … with no repeat
+        # and no gap. LESSON_DESIGN.md §3 tells an author to write `## 2 ·`,
+        # `## 3 ·` and stop thinking about it because the build renumbers; the
+        # build did not, so 111 of 148 pages showed a number twice or skipped
+        # one — every risk lesson in B1 read "2 · … 2 ·", and C2.5 ran
+        # 2, 3, 4, 6, 7, 8, 9, 10, 11. Authors did exactly as instructed.
+        nums = [int(n) for n in re.findall(r"<h2>(\d+)\s*·", page)]
+        if nums and nums != list(range(2, 2 + len(nums))):
+            problems.append(f"{sid}: section numbers on the page are {nums}, "
+                            f"wanted 2..{len(nums) + 1} — build_site.py's "
+                            f"renumber_sections() is what makes that true")
+
         # 3 — a bridge out of every chapter
         if last and track not in BRIDGES:
             problems.append(f"{sid}: last lesson of {track} with no chapter bridge")
@@ -286,11 +317,17 @@ def main() -> int:
                                     f"rebuild the site")
 
         # 7 — realistic demos (reported, not enforced)
-        body = page.lower()
-        # "Does this lesson run something" is read from the page's own run
-        # block now, not from a notebook's code cells.
+        #
+        # Read from the lesson's own prose, not the whole page. Every embedded
+        # SKILL.md carries a "Failure modes" heading because check_skills.py
+        # requires one, so "fail" appeared on 148 of 148 pages and this check
+        # — `any(w in body ...)` — could never fire. It reported "none" on
+        # every run, which reads as a clean bill of health and was no
+        # measurement at all. The skill's documentation is not the lesson's
+        # demonstration; the question is whether the lesson shows its own
+        # thing failing.
         if ("runbox" in page and s.get("kind") not in EXEMPT_KINDS
-                and not any(w in body for w in FAILURE_WORDS)):
+                and not any(w in own_prose(page) for w in FAILURE_WORDS)):
             happy_path_only.append(sid)
 
     # Every function says who it is for and what its three days are, because

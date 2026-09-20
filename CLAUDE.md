@@ -240,7 +240,7 @@ person.
 | 3 | `test_skills.py --check` | a skill that answers **without a model**. Runs each script with the model variables stripped: exit 2 with the refusal on stdout passes, exit 0 with output fails, and exit 2 with no explanation fails because the reader sees a broken repository rather than an unconfigured machine |
 | 4 | `check_determinism.py --seeds 4` | non-determinism in **the harness** — ordering, formatting, seeding, and a no-model refusal that varies between runs. It does not and must not claim a model's findings reproduce |
 | 5 | `install_skills.py --tool claude --dry-run` | two areas claiming one skill name. The install is flat, so a collision would silently drop one of them |
-| 6 | `check_lessons.py --check` | the authoring contract: Day 0/1/2, hook/diagram/concept, framework before code, chapter bridges, D/E anchors, chapter numbering |
+| 6 | `check_lessons.py --check` | the authoring contract: which sections a lesson renders and whether anything is behind them, Day 0/1/2, hook/diagram/concept, framework before code, chapter bridges and the chapter each one points at, E/F anchors, chapter numbering, and the `## N ·` section numbers a reader sees running 2, 3, 4 with no repeat and no gap |
 | 7 | `check_register.py --check` | the incident register's 40 controls — **its ids are `C1.1`–`C10.4`, syntactically identical to lesson ids**, and a blind lesson rename corrupts them |
 | 8 | `check_clarity.py --check` | weekday idioms and culture-specific phrasing, read from the rendered page |
 | 9 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |

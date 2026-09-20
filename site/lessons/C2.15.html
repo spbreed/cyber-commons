@@ -30,9 +30,9 @@ quarter's budget.</p><div class="how"><blockquote>
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote><h2>2 · Stage 15 — calibrate severity from what the pipeline learned</h2><h2>3 · Where it breaks — rule severity as the queue order</h2><h2>4 · The report — per-stage economics, not a finding count</h2><h2>6 · Stage 15 as a skill — severity you can argue with</h2>
+</blockquote><h2>2 · Stage 15 — calibrate severity from what the pipeline learned</h2><h2>3 · Where it breaks — rule severity as the queue order</h2><h2>4 · The report — per-stage economics, not a finding count</h2><h2>5 · Stage 15 as a skill — severity you can argue with</h2>
 <p>The reporting skill carries one rule that decides most of the credibility of a security report: <strong>a finding that did not reproduce may not be Critical.</strong> Cap it at Medium and say so in the same sentence, so the reader never has to cross-reference an appendix to learn that the headline finding is theoretical.</p>
-<p>The contract enforces the habit by requiring <code>severity_inputs</code> next to every severity. One overclaimed Critical costs more trust than ten honest Lows.</p><h2>7 · Where it breaks — the uncalibrated headline</h2>
+<p>The contract enforces the habit by requiring <code>severity_inputs</code> next to every severity. One overclaimed Critical costs more trust than ten honest Lows.</p><h2>6 · Where it breaks — the uncalibrated headline</h2>
 <p>Now report the same findings without the cap.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/appsec/appsec-triage-report/SKILL.md" target="_blank" rel="noopener"><code>skills/appsec/appsec-triage-report/SKILL.md</code></a></p><pre class="front"><code>name: appsec-triage-report
 description: &gt;-
   Calibrate severity and write the security report a team will actually act on.

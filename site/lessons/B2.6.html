@@ -33,7 +33,7 @@ the content at all, which is exactly why rephrasing does not defeat it.</p><div 
 <p><strong>What this control closes.</strong></p>
 <p>The largest control in the chapter. It never inspects content, so rewriting the payload does not help — the check is on <strong>origin</strong>, which the attacker cannot change.</p>
 </blockquote>
-<h2>2 · The control</h2><h2>2 · Checking the ingress paths, as a skill</h2>
+<h2>2 · The control</h2><h2>3 · Checking the ingress paths, as a skill</h2>
 <p>Tagging origin is the control; knowing which of CyberTravels' paths actually reaches the model without one is the audit. The procedure inventories every untrusted ingestion path — hotel descriptions, booking notes, uploaded vouchers, web fetches, and the one everybody forgets, <strong>tool results</strong> — and checks each for a screening step and for whether provenance survives into context. Note its confidence ceiling: PARTIAL, and not negotiable, because no detector is a boundary. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/input-injection-screening-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/input-injection-screening-verifier/SKILL.md</code></a></p><pre class="front"><code>name: input-injection-screening-verifier
 description: &gt;-
   Verify that untrusted ingestion paths pass through an injection detection

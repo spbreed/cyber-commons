@@ -67,6 +67,14 @@ def facts() -> dict[str, int]:
         "skills_with_script": sum(
             1 for d in (ROOT / "skills").rglob("SKILL.md")
             if list(d.parent.glob("scripts/*.py"))),
+        # LESSON_DESIGN.md says a lesson usually runs one skill and names the
+        # ones that run more. That is a list a reader can check against the
+        # tree, so the count is measured rather than typed.
+        "multi_skill_lessons": sum(
+            1 for sid, ex in EXERCISES.items()
+            if sid in {s["id"] for f in cur["functions"] for t in f["tracks"]
+                       for s in t["sessions"]}
+            and sum(1 for k, _ in ex.get("steps", []) if k == "skill") > 1),
         # How many check scripts CI actually invokes. The README counts them,
         # and CLAUDE.md's gate table groups a couple of them onto one row, so
         # the two numbers are allowed to differ — check_claude_md.py is what
@@ -116,6 +124,8 @@ CLAIMS = [
      "skills_with_script", "A0.1's expected script count"),
     ("LESSON_DESIGN.md", r"Every one of the (\d+) lessons has the same shape",
      "sessions", "the authoring contract's opening"),
+    ("LESSON_DESIGN.md", r"\*\*(\w+) lessons run two or three\*\*",
+     "multi_skill_lessons", "how many lessons run more than one skill"),
     ("skills/README.md", r"^(\d+) skills the curriculum teaches", "skills",
      "the skills index"),
     ("skills/README.md", r"that (\d+) plausible tasks", "routing_cases",
@@ -148,7 +158,8 @@ CLAIMS = [
      "the homepage share text"),
 ]
 
-WORDS = {"six": 6, "seven": 7, "eight": 8}
+WORDS = {"six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+         "eleven": 11, "twelve": 12}
 
 
 def main() -> int:
@@ -173,7 +184,9 @@ def main() -> int:
                             f"(pattern: {pattern})")
             continue
         checked += 1
-        claimed = WORDS.get(m.group(1), None)
+        # Lowercased: a number written as a word is usually at the start of a
+        # sentence, so "Ten" has to resolve the same as "ten".
+        claimed = WORDS.get(m.group(1).lower())
         if claimed is None:
             claimed = int(m.group(1))
         if claimed != f[key]:

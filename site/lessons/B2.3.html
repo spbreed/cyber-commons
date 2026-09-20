@@ -93,8 +93,8 @@ certificate — does not. So the token the agent actually carries downstream, th
 one issued for acting on alice's behalf, is a bearer token again, and the theft
 the binding was bought to prevent is back.</p>
 <p>Neither is a reason not to build this. Both are reasons to check your own
-deployment rather than assume the control is on because the feature exists.</p><h2>5 · What the audit trail can now answer</h2>
-<p>Every hop is on the token, so the chain reconstructs from the token alone rather than by correlating four services' logs on timestamp. This is the thing B1.14 could not do.</p><h2>6 · Verifying the chain, as a skill</h2>
+deployment rather than assume the control is on because the feature exists.</p><h2>6 · What the audit trail can now answer</h2>
+<p>Every hop is on the token, so the chain reconstructs from the token alone rather than by correlating four services' logs on timestamp. This is the thing B1.14 could not do.</p><h2>7 · Verifying the chain, as a skill</h2>
 <p>The two findings above are what you get from <em>checking</em> a deployment rather than reading its design document, and CyberTravels has four agents and a payments API to check. The procedure walks every hop — user, agent, MCP server, tool, downstream — looks for token passthrough, and refuses to accept a matching <code>sub</code> as proof of delegation, because impersonation produces one too. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/identity-chain-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/identity-chain-verifier/SKILL.md</code></a></p><pre class="front"><code>name: identity-chain-verifier
 description: &gt;-
   Verify workload identity and end-to-end on-behalf-of propagation across

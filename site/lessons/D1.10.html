@@ -14,7 +14,7 @@ rather than described from memory.</p>
 <p>The field teams miss most often is the model version, and it is the one that
 silently invalidates everything else: a provider-side upgrade changes the
 behaviour under every other constant, so a replay that does not pin it is
-reproducing a different system.</p><div class="how"><h2>2 · Demo — replay one run from its four constants</h2><h2>3 · Where it breaks — the unpinned model version</h2><h2>4 · The control — log at design time what replay will need</h2><h2>2 · The procedure, as a skill</h2>
+reproducing a different system.</p><div class="how"><h2>2 · Demo — replay one run from its four constants</h2><h2>3 · Where it breaks — the unpinned model version</h2><h2>4 · The control — log at design time what replay will need</h2><h2>5 · The procedure, as a skill</h2>
 <p>The skill audits a CyberTravels run for the four fields a replay needs, and reports which are missing — because a run you cannot reproduce is a story, not evidence.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/response/run-replayability-audit/SKILL.md" target="_blank" rel="noopener"><code>skills/response/run-replayability-audit/SKILL.md</code></a></p><pre class="front"><code>name: run-replayability-audit
 description: &gt;-
   Check whether an incident run can be replayed at all — model version, seed,

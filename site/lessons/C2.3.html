@@ -177,7 +177,7 @@ exists and why it was written before anything ran.</p>
 difference between a class you could not scan for at all and one you can scan
 for imperfectly — and at 57.5% precision it means roughly two in five reports
 are wrong. That is a hypothesis stream, not a finding stream, which is exactly
-how C2.4 and C2.5 are going to treat it.</p><h2>5 · Which of the two misses justifies a model</h2>
+how C2.4 and C2.5 are going to treat it.</p><h2>6 · Which of the two misses justifies a model</h2>
 <p>One of them does not. Line 22 is a hardcoded key — lexical, and <code>p/secrets</code> was
 enabled and did not fire only because the string matches no known provider's
 format. That is a rule somebody writes this afternoon, and reaching for a model
@@ -187,9 +187,9 @@ called <code>require_owner</code> and did not", and there is no width of ruleset
 reaches it — the defect only exists relative to the authority the caller holds,
 which is in a different file. That is the boundary, and it is narrow. Cross it
 deliberately and you have a reason to spend the model pass; cross it because
-the deterministic scan felt disappointing and you have bought noise.</p><h2>6 · IDOR on the CyberTravels tree, scored on recall</h2>
+the deterministic scan felt disappointing and you have bought noise.</p><h2>7 · IDOR on the CyberTravels tree, scored on recall</h2>
 <p>The same repository, the class that has no pattern. The skill builds the <strong>denominator</strong> first — every unit that takes an identifier and touches a record — because recall without a denominator is not a number. Then it runs two detectors over it: what a rule can express, and the ownership comparison it cannot see.</p>
-<p>Watch the row where two of the five were already in a scanner's output, for a different defect in the same function.</p><h2>7 · The finding count went down and the risk did not</h2>
+<p>Watch the row where two of the five were already in a scanner's output, for a different defect in the same function.</p><h2>8 · The finding count went down and the risk did not</h2>
 <p><code>search_bookings</code> concatenates its reference into SQL <strong>and</strong> returns every
 owner's bookings. Semgrep finds the first at the widest width. Nothing finds the
 second.</p>
@@ -200,9 +200,9 @@ zero and the risk did not move.</p>
 <p>That is the failure mode this section exists for, and it is not exotic — it is
 what happens by default whenever one function carries a defect a rule can see
 and a defect it cannot. The fix is not a better rule. It is running the second
-detector over a denominator, and reporting recall against a key.</p><h2>6 · The probabilistic half, as a skill</h2>
+detector over a denominator, and reporting recall against a key.</p><h2>9 · The probabilistic half, as a skill</h2>
 <p>The same adapter every model-facing skill in this commons uses: offline a labelled replay, and against a served open-weight model the identical code. It is asked one question with a checkable answer, over the smallest slice in which the defect is decidable — the function, its signature, and the authority its caller holds.</p>
-<p>The two functions it reviews are not retyped into the skill. They are cut out of <code>cybertravels/tools/bookings_api.py</code> with <code>ast</code>: <strong><code>get_booking</code></strong>, which the Semgrep run above missed at all three widths, and <strong><code>get_my_booking</code></strong> eleven lines below it, which does the same read and compares an owner. The second one is there because a review pass that is never wrong has not been tested.</p><h2>7 · Where it breaks — gating on the confidence number</h2>
+<p>The two functions it reviews are not retyped into the skill. They are cut out of <code>cybertravels/tools/bookings_api.py</code> with <code>ast</code>: <strong><code>get_booking</code></strong>, which the Semgrep run above missed at all three widths, and <strong><code>get_my_booking</code></strong> eleven lines below it, which does the same read and compares an owner. The second one is there because a review pass that is never wrong has not been tested.</p><h2>10 · Where it breaks — gating on the confidence number</h2>
 <p>In the offline run the replay returns 0.82 on the function with the defect and
 0.77 on the one without it. Five points of confidence separate a real finding
 from a correct all-clear. It is tempting to read a threshold into a gap that
@@ -225,7 +225,7 @@ Qwen2.5-7B it did not: it read the function correctly and declined. The
 assertion failed because the model behaved well, which is a bug in the
 assertion. A pipeline check has to hold whether or not the model misbehaves on
 the day you run it.</p>
-</blockquote><h2>8 · An agent drives both, because you cannot afford both everywhere</h2>
+</blockquote><h2>11 · An agent drives both, because you cannot afford both everywhere</h2>
 <p>Semgrep is cheap enough to run over the whole repository. The model pass is
 not — at four million lines it costs more than the finding is worth, and a
 model asked to review everything reviews nothing carefully.</p>

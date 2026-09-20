@@ -38,7 +38,7 @@ this risk rather than reducing it.</p><div class="how"><blockquote>
            identity + policy wrap every call · observability records it</code></p>
 </blockquote>
 <h2>2 · The risk, realised</h2>
-<p>A request that is denied directly, and permitted through the architecture.</p><h2>2 · The check, as a skill</h2>
+<p>A request that is denied directly, and permitted through the architecture.</p><h2>3 · The check, as a skill</h2>
 <p>A CyberTravels traveller denied <code>payments:write</code> reaches it through the orchestrator, with every hop legitimate. The skill records the direct refusal first, so the composed success reads as a finding rather than as intended behaviour.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/authority-composition-check/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/authority-composition-check/SKILL.md</code></a></p><pre class="front"><code>name: authority-composition-check
 description: &gt;-
   Check whether a scope a user is denied directly can be reached through a chain

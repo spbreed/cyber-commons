@@ -16,7 +16,7 @@ one.</p>
 <p>Weaponising the ingestion path means treating the embedding pipeline as an
 attack surface, and the research output is a provenance manifest: what was
 ingested, from where, parsed by what, so a payload that ran can be traced to the
-record that carried it.</p><div class="how"><h2>2 · Demo — a record that is data to the model and code to the parser</h2><h2>3 · Where it breaks — RCE on the indexing host, not the serving one</h2><h2>4 · The control — a provenance manifest for everything ingested</h2><h2>2 · The procedure, as a skill</h2>
+record that carried it.</p><div class="how"><h2>2 · Demo — a record that is data to the model and code to the parser</h2><h2>3 · Where it breaks — RCE on the indexing host, not the serving one</h2><h2>4 · The control — a provenance manifest for everything ingested</h2><h2>5 · The procedure, as a skill</h2>
 <p>The skill builds a manifest of what CyberTravels' RAG pipeline ingested — source, parser, and a digest per record — so an embedding run that executed something can be traced to the record that carried it.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/research/training-data-provenance-manifest/SKILL.md" target="_blank" rel="noopener"><code>skills/research/training-data-provenance-manifest/SKILL.md</code></a></p><pre class="front"><code>name: training-data-provenance-manifest
 description: &gt;-
   Compute what fraction of a corpus an attacker needs to poison it, and build a

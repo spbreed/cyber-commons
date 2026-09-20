@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import itertools
 import json
 import re
 import sys
@@ -341,7 +342,29 @@ def lesson_body(entry: dict) -> str:
                    + f"<p><b>What you still cannot do.</b> {html.escape(b['gap'])}</p>"
                    + f"<p class=\"nextch\">{html.escape(b['next'])}</p>"
                    + "</div></section>")
-    return "".join(out)
+    return renumber_sections("".join(out))
+
+
+# A step's heading is written `## 2 · Demo`, `## 3 · Where it breaks`, and
+# LESSON_DESIGN.md §3 tells an author to write those and stop thinking about
+# it because the build renumbers them. The build did not: the numbers went
+# through verbatim, and a lesson assembled from steps written at different
+# times showed them as they fell. 111 of the 148 pages carried a number a
+# reader could see twice ("2 · … 2 ·", on every risk lesson in B1) or a gap
+# where one was missing (C2.5 ran 2, 3, 4, 6, 7, 8, 9, 10, 11).
+#
+# Renumbered here, over the assembled body rather than per step, because a
+# lesson's numbered headings are split across two sections — the prose under
+# the framework and the skill's own intro — and only the finished page knows
+# what order the reader meets them in. Section 1 is the framework itself, so
+# the body starts at 2. Headings inside an embedded SKILL.md carry no number
+# and are left alone.
+NUMBERED_H2 = re.compile(r"<h2>\d+\s*·")
+
+
+def renumber_sections(body: str) -> str:
+    n = itertools.count(2)
+    return NUMBERED_H2.sub(lambda _: f"<h2>{next(n)} ·", body)
 
 
 DIAGRAM_MARK = re.compile(r"^\[diagram:(dot|puml):([a-z0-9-]+)\]$", re.M)

@@ -13,7 +13,7 @@ fleet in one action.</p>
 <p>The detail that decides whether containment worked is revocation versus
 termination. Terminating agents while their bearer tokens stay valid leaves the
 persistence in place and moves the incident rather than ending it — which is the
-Moltbook lesson, 770,000 agents behind one missing policy.</p><div class="how"><h2>2 · Demo — a fleet, and one revocation that reaches all of it</h2><h2>3 · Where it breaks — terminated agents, still-valid tokens</h2><h2>4 · The control — one policy, enforced at the gateway</h2><h2>2 · The procedure, as a skill</h2>
+Moltbook lesson, 770,000 agents behind one missing policy.</p><div class="how"><h2>2 · Demo — a fleet, and one revocation that reaches all of it</h2><h2>3 · Where it breaks — terminated agents, still-valid tokens</h2><h2>4 · The control — one policy, enforced at the gateway</h2><h2>5 · The procedure, as a skill</h2>
 <p>The skill exercises a fleet kill switch against CyberTravels' agents and checks the property that matters — that revoked credentials, not just terminated processes, are what ends the persistence.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/response/fleet-kill-switch-test/SKILL.md" target="_blank" rel="noopener"><code>skills/response/fleet-kill-switch-test/SKILL.md</code></a></p><pre class="front"><code>name: fleet-kill-switch-test
 description: &gt;-
   Test a fleet-wide stop for what it leaves behind — valid tokens, destroyed
