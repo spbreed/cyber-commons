@@ -89,7 +89,7 @@ HOOKS: dict[str, str] = {
    "not, and the decision it justified had already been made.",
  "A2.4":
    "Everything in this system works. That sentence is true and it is the "
-   "beginning of the next four functions rather than the end of this one — "
+   "beginning of the next five functions rather than the end of this one — "
    "because 'works' was measured against what you intended, and nobody has yet "
    "measured it against somebody who intends otherwise.",
 }
@@ -223,7 +223,7 @@ DIAGRAMS: dict[str, str] = {
 }
 
 # The chapter bridge — what the reader gained, what they still cannot do, and
-# which lesson answers it. A2's bridge is the handover into Function A and is
+# which lesson answers it. A2's bridge is the handover into Function B and is
 # the most load-bearing one in the commons: it is where the reader stops being
 # the builder.
 BRIDGES: dict[str, dict] = {

@@ -9,7 +9,7 @@ receives the control as paperwork.
 So the system comes first. Across thirteen lessons the reader builds
 CyberTravels — the reasoning loop, two MCP resource servers, workload identity,
 per-action delegation, scoped memory, signed agent-to-agent messages, a human
-gate, spans and an audit trail — and only then meets Function A, which re-reads
+gate, spans and an audit trail — and only then meets Function B, which re-reads
 every one of those components as an attack surface.
 
 **Every lesson here runs a skill that a later function reuses.** A1.3 runs
@@ -20,7 +20,7 @@ things to learn.
 
 The tree the lessons build against is `cybertravels/`, which is a real
 application: it starts, it serves, and it carries the eight labelled defects in
-`cybertravels/LABELS.md` that Function B later scans for.
+`cybertravels/LABELS.md` that Function C later scans for.
 """
 
 from .skills import skill_steps
@@ -51,7 +51,7 @@ Seven components, and every later lesson names one of them:
 
 | component | what it is | what it will be blamed for |
 |---|---|---|
-| ingress | where traveller text arrives | every injection in Function A |
+| ingress | where traveller text arrives | every injection in Function B |
 | orchestrator | routes a request, holds no authority | the place controls get added |
 | agent runtime | the loop that turns text into a call | the step everything hinges on |
 | tools, over MCP | the only things that change anything | the blast radius |
@@ -67,7 +67,7 @@ reader handed "apply least privilege to your agent" before they have written a
 token exchange will apply it as a sentence in a document.
 
 By the end of A2 you will have built every control the rest of the commons
-refers to. Function A then tells you, component by component, exactly how each
+refers to. Function B then tells you, component by component, exactly how each
 one is bypassed.
 """,
  "steps": [
@@ -75,7 +75,7 @@ one is bypassed.
          "The skill below is the same one B1.1 uses to audit an architecture. "
          "Here it is used the other way round — to *design* one. It takes a "
          "component list and marks the edges where trust changes, which is "
-         "where every control in Function A will end up going.\n\n"
+         "where every control in Function B will end up going.\n\n"
          "Read what it does before you run it."),
   *skill_steps("architecture/agentic-architecture-map",
                "### The skill"),
@@ -477,7 +477,7 @@ something to read. An investigation needs a record that can answer a question
 nobody asked in advance. A red-team finding needs a regression case to become a
 control rather than a memory.
 
-That is the argument for this chapter sitting before Function A rather than
+That is the argument for this chapter sitting before Function B rather than
 inside it: **the security work in the rest of the commons assumes these exist.**
 Build them while the system is small enough that adding them is an afternoon.
 
@@ -599,7 +599,7 @@ question an investigation actually asks first, which is what was *attempted*.
  ],
  "expect": "Each of the four questions answered or explicitly not, from real "
            "audit rows — and the fourth one probably failing, which is the "
-           "finding worth carrying into Function D.",
+           "finding worth carrying into Function E.",
  "challenge": "Add the motivating input and its origin to the audit row. Then "
               "re-run the check and notice that you have also just put "
               "traveller text into a long-lived store, which is F2.5's problem.",
@@ -661,7 +661,7 @@ something with a bypass.
 
 ### The same map, annotated differently
 
-| what you built | what it becomes in Function A |
+| what you built | what it becomes in Function B |
 |---|---|
 | ingress accepting traveller text | B1.2 — prompt injection |
 | the vendor MCP server | B1.3 — indirect injection, through a document you fetched |
@@ -681,13 +681,13 @@ own system described that way ships the same defect in the next one.
 Before you go on, measure one thing: what the agent you just built can reach and
 damage in a single run, if every instruction it followed were chosen by an
 attacker. That number decides how much autonomy it can be given, and it is the
-input to almost every decision in Function A.
+input to almost every decision in Function B.
 """,
  "steps": [
   ("md", "## 2 · Measure what you just built can reach\n\n"
          "The skill below computes reach and damage for a single run and maps "
          "that to an autonomy level. It is the last thing you do as the builder "
-         "and the first number Function A argues with."),
+         "and the first number Function B argues with."),
   *skill_steps("architecture/blast-radius-review", "### The skill"),
  ],
  "expect": "The set of objects one run can reach, the subset it can change, the "

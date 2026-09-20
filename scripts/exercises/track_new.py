@@ -1,4 +1,4 @@
-"""Lessons added with the five-phase Function D restructure, plus F1.13.
+"""Lessons added with the five-phase Function E restructure, plus F1.13.
 
 These live in one file rather than being scattered into the five `track_d*`
 modules because they were written together and read as a set: the discover →

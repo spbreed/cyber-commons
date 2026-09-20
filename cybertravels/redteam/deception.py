@@ -1,7 +1,7 @@
 # step:file D1.8
 """Canaries — the only alert nobody has to triage.
 
-Every detection in Function D has a false-positive rate, because every
+Every detection in Function E has a false-positive rate, because every
 detection is a guess about intent from behaviour. A canary is different in
 kind: it is an object with **no legitimate reader**. Nothing in CyberTravels
 reads it, no job touches it, no report includes it. So an access is not

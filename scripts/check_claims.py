@@ -50,7 +50,7 @@ def facts() -> dict[str, int]:
         # lessons whose single cell is a comment — counting cells would report
         # all 134 as running a skill, which is the claim this exists to check.
         # Restricted to ids the curriculum actually carries: EXERCISES still
-        # holds three orphans from the Function C trim, and they are not lessons.
+        # holds three orphans from the Function D trim, and they are not lessons.
         "run_a_skill": sum(
             1 for sid, ex in EXERCISES.items()
             if sid in {s["id"] for f in cur["functions"] for t in f["tracks"]

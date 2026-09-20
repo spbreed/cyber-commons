@@ -18,7 +18,7 @@
 ### A1.0 — What an agent is, and what you are about to build
 
 - **Risk** — Security guidance aimed at people who have never built an agent lands as a list of rules with no mechanism attached, and gets applied as paperwork.
-- **Control** — Build it first. Every control in Function A attaches to a component drawn here.
+- **Control** — Build it first. Every control in Function B attaches to a component drawn here.
 - **Lab** — Map the architecture you are about to build, and mark where trust changes.
 - **Tools** — `MCP`, `FastAPI`
 

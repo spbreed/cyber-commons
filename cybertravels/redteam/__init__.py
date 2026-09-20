@@ -1,7 +1,7 @@
 # step:file D1.0
 """The red-team lifecycle — a campaign, not an anecdote.
 
-Function B reviewed CyberTravels' code. This package attacks the running
+Function C reviewed CyberTravels' code. This package attacks the running
 system, and the thing it builds first is not an attack. It is the arithmetic
 that decides whether an attack result means anything.
 
@@ -37,8 +37,8 @@ a handoff that ends in a control, an eval case and a detection (D1.11).
     D1.10 forensics.py   can the run be reconstructed from the record
     D1.11 handoff.py     finding -> eval case + control + detection
 
-Nothing here is a new attack. Every technique it runs is one Function A named
-and Function B found; what is new is that the result carries a denominator.
+Nothing here is a new attack. Every technique it runs is one Function B named
+and Function C found; what is new is that the result carries a denominator.
 """
 
 # What a campaign has to state before it starts, in the order it has to state

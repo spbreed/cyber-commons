@@ -197,7 +197,7 @@ somewhere on the arrow."""),
 
    ("md", """## 3 \u00b7 Read the crossings, then read what is missing
 
-Five crossings, and two of them are the whole of Function A's injection
+Five crossings, and two of them are the whole of Function B's injection
 material: **ingress \u2192 orchestrator** carries traveller text and
 **knowledge \u2192 agent runtime** carries retrieved documents, both from trust
 0 into components that hold authority. B1.2 is the first of those edges and
@@ -232,7 +232,7 @@ fifteen lessons are about.
 There is no `egress/`, for the reason above. The absence is the point, and it
 is visible in the tree rather than only in a sentence.
 
-Nine lessons later in Function B scan this tree rather than a fixture \u2014
+Nine lessons later in Function C scan this tree rather than a fixture \u2014
 C2.3 runs Semgrep over it, C2.4 verifies findings against it, C2.5 walks its
 call graph \u2014 and
 [`cybertravels/LABELS.md`](https://github.com/spbreed/cyber-commons/blob/master/cybertravels/LABELS.md)
@@ -586,7 +586,7 @@ driven by the principal's request, never by content the agent read. It does not
 depend on recognising the attack, which is why it survives wordings nobody
 thought of. B2.6 builds it as a control; this lesson is the risk it closes.
 
-Function B builds an entire security pipeline on agents that read untrusted
+Function C builds an entire security pipeline on agents that read untrusted
 code for a living. It inherits this risk in full, and being a security tool
 grants no exemption.
 """,

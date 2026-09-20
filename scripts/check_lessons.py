@@ -43,7 +43,7 @@ Rules, each one here because breaking it made a lesson worse:
    B1.0" after the renumber put two chapters in between, sending readers past
    the chapters that build the system the rest of the commons is taught on.
 
-5. **An anchor on every Function D and Function E lesson.** Both are long
+5. **An anchor on every Function E and Function F lesson.** Both are long
    arguments told in one unit — an interval between an agent acting and the
    control being back at target (E1.0), and a key control indicator computed
    from the estate (F1.1). Every other lesson in those functions says in a line
@@ -288,7 +288,7 @@ def main() -> int:
                         f"an anchored function ({', '.join(sorted(ANCHOR_ORIGIN))})")
 
     # 6a — chapters are contiguous, and a bridge belongs to a real track.
-    # Both of these had drifted: Function D grew from two chapters to five and
+    # Both of these had drifted: Function E grew from two chapters to five and
     # nothing renumbered, and the bridges for B1 and for the two-track D outlived
     # their tracks — dead text that still described the curriculum's shape.
     chapters = [(tr["id"], tr.get("chapter"))

@@ -1,17 +1,17 @@
-"""Where each Function D and Function E lesson sits on its function's spine.
+"""Where each Function E and Function F lesson sits on its function's spine.
 
 Two functions are long arguments rather than collections, and each is told in
 one unit. A lesson that does not say which part of that unit it moves can be
 internally coherent, read perfectly well on its own page, and belong to no
 argument at all — which is a failure nothing else in the build can see.
 
-**Function E's unit is a measurement.** F1.1 defines a **key control
+**Function F's unit is a measurement.** F1.1 defines a **key control
 indicator**: computed from the estate, with a denominator, and a target written
 before it is measured. Every other lesson in E either produces one, supplies its
 denominator, sets its target, decides who owns it, or presents it as evidence to
 somebody outside the organisation.
 
-**Function D's unit is an interval.** E1.0 defines five of them — discover,
+**Function E's unit is an interval.** E1.0 defines five of them — discover,
 detect, understand, contain, recover — one per chapter, between an agent doing
 something it should not and the control that stopped it being back at target.
 Every other lesson in D shortens one of those intervals, or spends one
@@ -40,7 +40,7 @@ from __future__ import annotations
 ANCHORS: dict[str, str] = {
 
 # ==========================================================================
-# Function D · the five intervals defined in E1.0
+# Function E · the five intervals defined in E1.0
 # ==========================================================================
 
 # ---- E1 · discover — the interval before anything is visible --------------
@@ -230,7 +230,7 @@ ANCHORS: dict[str, str] = {
  "establish who acted, and containing in an hour buys none of it back.",
 
 # ==========================================================================
-# Function E · the key control indicator defined in F1.1
+# Function F · the key control indicator defined in F1.1
 # ==========================================================================
 
 # F1.0 and F1.1 carry no anchor. F1.1 defines the unit and F1.0 introduces the

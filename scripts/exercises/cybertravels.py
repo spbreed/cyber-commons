@@ -59,7 +59,7 @@ DOWNSTREAM = {
  "local filesystem": "Alex's laptop, when CyberTravels runs locally",
 }
 
-# The one picture. Every risk in Function A names a component from it.
+# The one picture. Every risk in Function B names a component from it.
 #
 # It is HTML rather than a line drawing on purpose. The reader has to hold
 # thirteen components at once here, and the *kind* of each one is what the rest
@@ -666,7 +666,7 @@ GROUNDING: dict[str, str] = {
 }
 
 
-# The lessons added with the five-phase Function D restructure — see
+# The lessons added with the five-phase Function E restructure — see
 # about_new.py, kept separate for the same reason framing_new.py is.
 from .about_new import CYBERTRAVELS as _NEW      # noqa: E402
 for _k, _v in _NEW.items():
@@ -675,7 +675,7 @@ for _k, _v in _NEW.items():
 
 
 
-# Function C rebuild.
+# Function D rebuild.
 from .framing_d import GROUNDING as _C_GROUND  # noqa: E402
 GROUNDING.update(_C_GROUND)
 
@@ -690,7 +690,7 @@ GROUNDING.update({
          "the picture you are about to make true on your own machine.",
  "A1.1": "The loop is `cybertravels/runtime.py`. `execute_tool` is the line "
          "where the model stops proposing and CyberTravels' own code starts "
-         "deciding — every control in Function A attaches to it.",
+         "deciding — every control in Function B attaches to it.",
  "A1.2": "CyberTravels has two resource servers: `mcp/internal_server.py` for "
          "bookings and payments, and `mcp/vendor_server.py`, which is a travel "
          "vendor's process running on CyberTravels' host.",
@@ -715,7 +715,7 @@ GROUNDING.update({
          "anybody adding a trace, and the first disputed cancellation is where "
          "that is discovered.",
  "A2.1": "`cybertravels/observability.py`. Every span carries the trace id that "
-         "joins it to the audit row, which is the join Function D's detections "
+         "joins it to the audit row, which is the join Function E's detections "
          "are written against.",
  "A2.2": "CyberTravels' audit table is append-only and every row carries the "
          "`human => agent` chain. The fourth question — what motivated the "
@@ -725,12 +725,12 @@ GROUNDING.update({
          "means a case that fails is a defect in your own work rather than in "
          "an example.",
  "A2.4": "The same CyberTravels architecture from A1.0, re-read by somebody who "
-         "wants it to fail. Every row in that table is a lesson in Function A, "
+         "wants it to fail. Every row in that table is a lesson in Function B, "
          "by id.",
 })
 
 
-# ------------------------------------------------- Function A, rewired to G
+# ------------------------------------------------- Function B, rewired to G
 # These lessons no longer describe a system — they change the one the reader
 # built. The grounding line names the file their checkpoint contains and the
 # lesson that put it there, so "add the control" is a diff rather than advice.
@@ -864,8 +864,8 @@ GROUNDING.update({
 })
 
 
-# ---------------------------------------- Function B, rewired onto the tree
-# Function A added controls to the product. Function B adds the pipeline that
+# ---------------------------------------- Function C, rewired onto the tree
+# Function B added controls to the product. Function C adds the pipeline that
 # reviews it — `cybertravels/appsec/`, one stage per lesson — and every lesson
 # runs against the real corpus in `tools/` and `agents/` rather than a fixture.
 # Which is why the grounding lines below can name a row of LABELS.md: these
@@ -996,7 +996,7 @@ GROUNDING.update({
 })
 
 
-# ----------------------------------------- Function C, rewired onto the tree
+# ----------------------------------------- Function D, rewired onto the tree
 # B built the pipeline that reviews CyberTravels. C attacks the running system
 # — and the first thing it builds is not an attack, it is the arithmetic that
 # decides whether an attack result means anything. `cybertravels/redteam/`.
@@ -1081,7 +1081,7 @@ GROUNDING.update({
 })
 
 
-# ----------------------------------------- Function D, rewired onto the tree
+# ----------------------------------------- Function E, rewired onto the tree
 # D1.11 said a finding ends in a control the SOC runs. `cybertravels/soc/` is
 # where that lands, and it imports from `cybertravels/redteam/` rather than
 # restating it — two teams computing the same number separately is how they
@@ -1247,8 +1247,8 @@ GROUNDING.update({
 })
 
 
-# ----------------------------------------- Function E, rewired onto the tree
-# `cybertravels/governance/` measures the controls Functions A to D actually
+# ----------------------------------------- Function F, rewired onto the tree
+# `cybertravels/governance/` measures the controls Functions A to E actually
 # built, by calling them. A register that asserts is a register; one that
 # imports the thing it is asserting about is evidence.
 GROUNDING.update({
@@ -1321,7 +1321,7 @@ GROUNDING.update({
           "holding. `delivered()` goes and looks. Both sides agreed every one "
           "of these in a meeting and neither had a deliverable, which is why "
           "the artefact column exists rather than a status column.",
- "F1.13": "The number. `measure()` walks the controls Functions A to D built "
+ "F1.13": "The number. `measure()` walks the controls Functions A to E built "
           "and calls each one — B2.1's approvers, B3.1's default-deny, B3.2's "
           "empty environment, B3.9's expiry, C2.3's five findings, D1.9's "
           "coverage, E1.1's matrix. Add a credential to "

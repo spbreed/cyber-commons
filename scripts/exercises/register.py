@@ -2,7 +2,7 @@
 
 Most lessons in the commons are grounded in CyberTravels — they name its components
 and use its scenes. These few take the whole system as their subject: the risk
-register that closes Function A's first chapter, and the per-function grounding
+register that closes Function B's first chapter, and the per-function grounding
 that opens B, C, D and E.
 
 See `cybertravels.py` for the canonical architecture and register.

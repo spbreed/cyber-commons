@@ -1,4 +1,4 @@
-"""Eight Function D lessons, from the two-track era of the Agentic SOC.
+"""Eight Function E lessons, from the two-track era of the Agentic SOC.
 
 Three things change when the actor is an agent, and each has a lesson here:
 

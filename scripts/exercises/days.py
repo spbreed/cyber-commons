@@ -42,7 +42,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
         "engineers, red teamers, SOC analysts and GRC leads who will be handed "
         "one. It assumes you can read a Python function. It assumes no security "
         "background at all, and no prior agent work.",
- "day0": "Every control in the other four functions attaches to a mechanism. "
+ "day0": "Every control in the other five functions attaches to a mechanism. "
          "Hand somebody a control before they have built the mechanism and they "
          "apply it as a sentence in a document — which is the single most "
          "common reason agentic security guidance is read, agreed with, and not "
@@ -59,7 +59,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
          "token (one), memory entries carrying an origin (all of them), audit "
          "rows answering all four investigation questions (usually three, and "
          "the fourth is the finding), and the blast radius you carry into "
-         "Function A. None of those is 'it worked once'.",
+         "Function B. None of those is 'it worked once'.",
 },
 
 "B": {
@@ -191,7 +191,7 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 
 # The lesson that opens each function, and therefore the one that carries the
 # function-level Day 0/1/2 block. A0.0 and A0.1 are deliberately not here: they set the machine up
-# and say how to use the commons, which is not Function A's argument.
+# and say how to use the commons, which is not Function B's argument.
 FUNCTION_INTRO: dict[str, str] = {
     "A": "A1.0", "B": "B1.0", "C": "C2.0", "D": "D1.0", "E": "E1.0",
     "F": "F1.0",
@@ -339,7 +339,7 @@ DAYS.update({
           "Four columns — scene, component, control, owning lesson — and a rule "
           "that no row ships without the fourth.",
           "Rows with an owning lesson. This is the register's own coverage, and "
-          "it is the number Function A is graded on."),
+          "it is the number Function B is graded on."),
 
 "B1.19": ("A control list written after shipping agents covers the new rows "
           "and reports a number about the wrong denominator \u2014 while the "
@@ -1281,5 +1281,5 @@ DAYS.update({
    "one run can reach and damage.",
    "Blast radius: objects reachable, the subset writable, and the irreversible "
    "actions among them. That number decides how much autonomy the agent can "
-   "carry into Function A."),
+   "carry into Function B."),
 })

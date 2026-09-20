@@ -74,10 +74,10 @@ python3 -m cybertravels.tests.smoke_test    # 8 assertions, all about refusals
 | the return path | `returns.py` | schema, then an independent verifier — conformance is not correctness |
 | the choke point | `gateway.py` | the controls above, behind one entry point, with a coverage number |
 | the developer's agent | `devagent.py` | containment for the IDE agent that wrote all of the above |
-| the AppSec pipeline | `appsec/` | **not part of the product** — the eleven stages Function B builds to review it, shipping in the same repository and scanned by its own rules |
-| the SOC | `soc/` | Function D's incident clock, sensor coverage, detection catalogue, admission rules and containment ladder — it imports from `redteam/` rather than recomputing, so the two functions cannot disagree mid-incident |
-| the red-team lifecycle | `redteam/` | also not the product — Function C's campaign arithmetic, ingestion inventory, swarm correlation, kill-switch coverage and the handoff a finding has to end in |
-| governance | `governance/` | Function E's register — it **calls** the controls A to D built rather than asserting about them, so deleting one moves the coverage number, and it ships its known gaps |
+| the AppSec pipeline | `appsec/` | **not part of the product** — the eleven stages Function C builds to review it, shipping in the same repository and scanned by its own rules |
+| the SOC | `soc/` | Function E's incident clock, sensor coverage, detection catalogue, admission rules and containment ladder — it imports from `redteam/` rather than recomputing, so the two functions cannot disagree mid-incident |
+| the red-team lifecycle | `redteam/` | also not the product — Function D's campaign arithmetic, ingestion inventory, swarm correlation, kill-switch coverage and the handoff a finding has to end in |
+| governance | `governance/` | Function F's register — it **calls** the controls A to E built rather than asserting about them, so deleting one moves the coverage number, and it ships its known gaps |
 | the defects | `tools/`, `agents/` | the corpus the AppSec lessons scan |
 
 Those files arrive one lesson at a time. `python3 scripts/checkpoint.py --at <id>`

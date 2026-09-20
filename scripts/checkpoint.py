@@ -45,7 +45,7 @@ in it. Leave them live and the naive assignment executes immediately before the
 real one, referencing names that do not exist yet — the application breaks, and
 it breaks in the file the whole commons is about.
 
-**`was` is not scaffolding.** The naive branch is what Function A attacks: a
+**`was` is not scaffolding.** The naive branch is what Function B attacks: a
 reader at B1.2 gets the ingress with no provenance, so the injection actually
 works, and B2.6 flips the region so it stops working. The vulnerability is real
 at that checkpoint rather than described, which is the whole reason for
@@ -70,7 +70,7 @@ building this instead of shipping one finished tree.
    them got it. All 134 lab blocks were correct, the whole site was silently
    without it, and every other gate passed. The blocks are also near-identical
    across lessons, so the other failure is a copy-paste leaving `--at B1.2` on
-   a Function D page: the reader gets a tree from forty lessons earlier and
+   a Function E page: the reader gets a tree from forty lessons earlier and
    nothing says why.
 """
 from __future__ import annotations

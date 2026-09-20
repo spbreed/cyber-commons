@@ -1,7 +1,7 @@
 # step:file C2.0
 """The AppSec pipeline — what reviews CyberTravels, shipping inside CyberTravels.
 
-Function G built the product. Function A put controls on it. This package is
+Function G built the product. Function B put controls on it. This package is
 the third thing, and it is not part of the product: it is the pipeline Alex's
 team runs **over** this repository, stage by stage, one stage per lesson.
 
@@ -14,7 +14,7 @@ built as if it were exempt from the risks it exists to find is the most
 expensive kind, because its failures are reported as clean runs.
 
 The stages are numbered as the lessons number them. Stages 1-4 are the estate
-work Function A did; this package starts where B does.
+work Function B did; this package starts where B does.
 
     before a deploy                        after a deploy
     ---------------                        --------------

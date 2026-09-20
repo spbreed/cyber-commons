@@ -1,4 +1,4 @@
-"""Function C is now one chapter (D1), built in track_d1.py.
+"""Function D is now one chapter (D1), built in track_d1.py.
 
 This file held the old C2 research track. Those lessons were folded into the
 single twelve-lesson D1 arc, so this module now exports nothing; it is kept only

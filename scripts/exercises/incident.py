@@ -14,10 +14,10 @@ The report's forty controls are split across the commons by what they *are*,
 which is the split the register in `labs/incident-register/register.json`
 records:
 
-    preventive / mitigating -> Function A   (securing the architecture)
-    detective               -> Function D   (SecOps)
-    deception               -> Function B   (the harness's own environment)
-    the analysis itself     -> Function C   (security research)
+    preventive / mitigating -> Function B   (securing the architecture)
+    detective               -> Function E   (SecOps)
+    deception               -> Function C   (the harness's own environment)
+    the analysis itself     -> Function D   (security research)
 
 Six of the forty land on lessons that already existed — parser sandboxing is
 B3.2, micro-segmentation is B3.3, short-lived credentials are B2.4 — and are
@@ -86,7 +86,7 @@ from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
 
-# ---------------------------------------------------------------- Function C
+# ---------------------------------------------------------------- Function D
 "C2.8": {
  "concept": """
 This is what the rest of chapter 7 is for. An investigation lands — somebody
@@ -160,9 +160,9 @@ you write assurance arguments:
   ("md", "## 5 · Give every control an owner\\n\\n"
          "The last move, and the one that makes the register a plan. Each "
          "control names the lesson in this commons that teaches, tests and "
-         "evidences it — preventive controls to Function A, detective and "
-         "deceptive controls to Function D, and the analysis itself here in "
-         "Function C."),
+         "evidences it — preventive controls to Function B, detective and "
+         "deceptive controls to Function E, and the analysis itself here in "
+         "Function D."),
 
   ("md", "## 6 · The same incident, at CyberTravels\\n\\n"
          "This happened to an AI lab running an evaluation, which is easy to "
@@ -231,13 +231,13 @@ you write assurance arguments:
               "write-up.",
 },
 
-# ---------------------------------------------------------------- Function A
+# ---------------------------------------------------------------- Function B
 "B2.8": {
  "concept": """
 B2.7 made the audit trail answer *who*. This lesson is about whether it answers
 honestly.
 
-Every detective control in Function D reads a record. If the subject of the
+Every detective control in Function E reads a record. If the subject of the
 record can write to it, the record is a claim by the subject, and every
 downstream conclusion inherits that. In the source incident this was not
 theoretical: agents escaped the container, replaced the layer that executed
@@ -478,7 +478,7 @@ as well as a failed attempt, or you have priced honesty out of the run.
               "transcript — if anyone reads it.",
 },
 
-# ---------------------------------------------------------------- Function B
+# ---------------------------------------------------------------- Function C
 "E2.6": {
  "concept": """
 Every detector in this chapter has needed a threshold, and every threshold is a
@@ -533,7 +533,7 @@ tells you the environment is clean when it is only well-mapped.
               "systems can even see it.",
 },
 
-# ---------------------------------------------------------------- Function D
+# ---------------------------------------------------------------- Function E
 "E2.3": {
  "concept": """
 E2.2 wrote detections for what an agent does to your estate. These are

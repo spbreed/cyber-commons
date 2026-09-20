@@ -1,4 +1,4 @@
-"""Function C — Agentic Evaluation and Red Teaming.
+"""Function D — Agentic Evaluation and Red Teaming.
 
 One arc of twelve lessons. It traces a single lifecycle: from the ingestion
 vulnerabilities an attacker reaches first, through elicitation and emergent

@@ -1,4 +1,7 @@
-"""The five function introductions — one per function, before its first chapter.
+"""The function introductions that follow a function's own build — one per
+function, before its first chapter. Function A's is A1.0 and lives in
+track_a.py, because it introduces a chapter that builds rather than one that
+asks a question of what was built.
 
 Each answers the same question for its own function: what is this part of the
 commons for, which of the two directions does it run in, and what will you be
@@ -25,17 +28,17 @@ hotels for other companies' staff, takes payments, issues refunds, and keeps
 customer profiles. Ordinary. Then it shipped an agentic platform, and became the
 one system this entire curriculum is taught on.
 
-Every lesson in all five functions is grounded in it. Not *illustrated with* —
-**grounded in**. When Function A names a component, it is a CyberTravels
-component. When Function C attacks something, it attacks CyberTravels. When
-Function D writes a detection, it writes it against CyberTravels' telemetry, and
-when Function E counts a control, it counts CyberTravels' controls.
+Every lesson in all six functions is grounded in it. Not *illustrated with* —
+**grounded in**. When Function B names a component, it is a CyberTravels
+component. When Function D attacks something, it attacks CyberTravels. When
+Function E writes a detection, it writes it against CyberTravels' telemetry, and
+when Function F counts a control, it counts CyberTravels' controls.
 
 That is a deliberate cost. Any given lesson could find a sharper example of its
 own idea somewhere else, and several would. What you get instead is
 **accumulation**: the refund limit an attacker walks past in B1.2 is the same
-refund limit a detection watches for in Function D and a report counts in
-Function E. By the fourth function you are not learning a fourth example — you
+refund limit a detection watches for in Function E and a report counts in
+Function F. By the fourth function you are not learning a fourth example — you
 are watching a system you already understand fail in a new way.
 
 The alternative is what most security material does: a fresh example per topic,
@@ -75,8 +78,8 @@ his laptop's filesystem over standard I/O.
 Every one of those sentences is a design decision, and every one of them is
 also an attack surface. **That is the whole subject of this commons, and
 CyberTravels is the one system it is taught on.** You will attack CyberTravels in
-Function C, build the pipeline that reviews its code in Function B, detect it
-misbehaving in Function D, and govern it in Function E. It starts here, because
+Function D, build the pipeline that reviews its code in Function C, detect it
+misbehaving in Function E, and govern it in Function F. It starts here, because
 none of the rest is possible until the system is drawn.
 
 ### Zero trust, when the thing you cannot trust is the agent
@@ -108,7 +111,7 @@ when the model does the wrong thing, because sooner or later it will.
 
 ### How this function is organised: risks, then controls
 
-Function A is built out of two kinds of lesson, and the split is deliberate.
+Function B is built out of two kinds of lesson, and the split is deliberate.
 
 A **risk lesson** shows a failure happening, before anything tries to stop it.
 It names the component of CyberTravels it attacks and produces the evidence —
@@ -190,19 +193,22 @@ is not an agentic security problem; it is an ordinary one wearing a new hat.
     caption="Read the third column as a permission set rather than a feature "
             "list. Two of these four can move money or ship code.")),
 
-  ("md", "## 5 · Where the five functions sit\\n\\n"
-         "Each one takes the same system and asks a different question of it."),
+  ("md", "## 5 · Where the six functions sit\\n\\n"
+         "Function A built the system. The five after it take that same system "
+         "and ask a different question of it."),
   ("html", D.table(
     ["function", "the question it asks of CyberTravels", "what it produces"],
-    [["A", "what can go wrong here, and what closes it", "an architecture and its controls"],
-     ["B", "how do we review its code, at its speed", "a pipeline, and a harness that scores it"],
-     ["C", "can we break it before somebody else does", "findings you generated yourself"],
-     ["D", "would we see it happening, and could we stop it",
+    [["A", "how is it built, and what did I just ship",
+      "a running agentic platform on your own machine"],
+     ["B", "what can go wrong here, and what closes it", "an architecture and its controls"],
+     ["C", "how do we review its code, at its speed", "a pipeline, and a harness that scores it"],
+     ["D", "can we break it before somebody else does", "findings you generated yourself"],
+     ["E", "would we see it happening, and could we stop it",
       "detections, runbooks and a root cause"],
-     ["E", "who signed off, and can they still evidence it",
+     ["F", "who signed off, and can they still evidence it",
       "indicators an auditor can re-compute"]],
-    caption="Nobody takes all five. Everyone takes the common spine first, then "
-            "the chapters for the chair they sit in, then one adjacent chapter.")),
+    caption="Nobody takes all six. Everyone builds in A, then takes the "
+            "chapters for the chair they sit in, then one adjacent chapter.")),
 
   ("md", "## 6 · What the other four borrow from this one\\n\\n"
          "Not a claim about tidiness. It is why the map has to come first: every "
@@ -210,17 +216,17 @@ is not an agentic security problem; it is an ordinary one wearing a new hat.
   ("html", D.svg(D.DEFS
     + D.box(240, 10, 220, 48, "chapter 1", sub="CyberTravels' component map",
             colour=D.SECURE)
-    + D.box(6, 124, 158, 66, "Function B", sub="reviews CyberTravels' code")
-    + D.box(180, 124, 158, 66, "Function C", sub="attacks these components")
-    + D.box(354, 124, 158, 66, "Function D", sub="watches them at run time")
-    + D.box(528, 124, 166, 66, "Function E", sub="governs and evidences them")
+    + D.box(6, 124, 158, 66, "Function C", sub="reviews CyberTravels' code")
+    + D.box(180, 124, 158, 66, "Function D", sub="attacks these components")
+    + D.box(354, 124, 158, 66, "Function E", sub="watches them at run time")
+    + D.box(528, 124, 166, 66, "Function F", sub="governs and evidences them")
     + D.arrow(320, 58, 96, 120) + D.arrow(335, 58, 250, 120)
     + D.arrow(365, 58, 424, 120) + D.arrow(380, 58, 600, 120),
     height=200,
     caption="Chapter B1 introduces no control at all, on purpose: you cannot "
             "choose a control for a risk you cannot yet name.")),
 
-  ("md", "## 7 · Function A, in order"),
+  ("md", "## 7 · Function B, in order"),
   ("html", D.table(
     ["chapter", "what it covers", "kind of lesson"],
     [["B1", "the architecture, every risk it carries, and the two indexes "
@@ -247,7 +253,7 @@ is not an agentic security problem; it is an ordinary one wearing a new hat.
  "concept": """
 CyberTravels ships faster than Alex can read. The Coding Agent opens pull
 requests that touch a hundred files, and the review that used to be a careful
-hour is now a scroll. Function B is what he builds instead of scrolling.
+hour is now a scroll. Function C is what he builds instead of scrolling.
 
 It is one pipeline, built in order, and the first thing to get straight is
 **where each piece of it can run at all** — because half of what is sold as AI
@@ -593,7 +599,7 @@ told you.
 
 "F1.0": {
  "concept": """
-Someone at CyberTravels signed off on the platform. Function E is about whether
+Someone at CyberTravels signed off on the platform. Function F is about whether
 that signature still means anything.
 
 It has to, because the sign-off happened when CyberTravels was a chatbot. It now
@@ -624,7 +630,7 @@ function exists as more than a security document.
 
 Contributing evidence to six properties you do not own only works if the
 evidence is in a form the other six owners can use, which is why the whole of
-Function E is written in one unit: a **key control indicator**. F1.1 defines it
+Function F is written in one unit: a **key control indicator**. F1.1 defines it
 — a number computed from the estate, with a denominator, and a target set before
 the measurement is taken — and the three chapters are that one unit built,
 evidenced and run:

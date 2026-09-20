@@ -249,7 +249,7 @@ that drown the findings you can act on.
 
 Prose says **Chapter E3**, not "Chapter 9". The number in `curriculum.json` is
 an ordinal, it is rendered on no page, and a reader who meets "Chapter 11" has
-no way to resolve it. It also goes stale silently: Function D grew from two
+no way to resolve it. It also goes stale silently: Function E grew from two
 chapters to five and every "Chapter 8 — detection" in the text stayed put.
 
 `check_lessons.py` enforces three things here — the numbers are contiguous from

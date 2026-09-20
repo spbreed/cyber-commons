@@ -1,6 +1,6 @@
-"""Hooks, diagrams, ABOUT and CyberTravels grounding for the rebuilt Function C.
+"""Hooks, diagrams, ABOUT and CyberTravels grounding for the rebuilt Function D.
 
-Function C was reduced to one twelve-lesson arc (D1.0-D1.11). The ids D1.1-D1.4
+Function D was reduced to one twelve-lesson arc (D1.0-D1.11). The ids D1.1-D1.4
 used to mean other lessons, so these entries OVERRIDE whatever the old modules
 still define for them — the merge at the foot of framing.py / about.py /
 cybertravels.py uses .update(), deliberately, so the new arc wins.
@@ -202,7 +202,7 @@ DIAGRAMS = {
 
 ABOUT = {
 "D1.0": """
-**What it covers.** The through-line of Function C: a single lifecycle from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, to the telemetry, containment and governance a finding ends in.
+**What it covers.** The through-line of Function D: a single lifecycle from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, to the telemetry, containment and governance a finding ends in.
 
 **Why a security engineer needs it.** Red teaming an agent is not red teaming a binary. The threat is non-deterministic, so a transcript is not a finding and a slide is not a control — and the researcher's real product is the defensive telemetry and policy the offensive work translates into.
 

@@ -464,7 +464,7 @@ Every line here cost a debugging session. Read it before you spend the same one.
 - **Measure "runs a skill" from the lesson sources, never from a generated
   artefact.** `check_claims.py` counts `EXERCISES` steps of kind `py`,
   `skill_script` or `model`, restricted to ids the curriculum carries — because
-  `EXERCISES` still holds three orphans from the Function C trim (C2.8–C2.10)
+  `EXERCISES` still holds three orphans from the Function D trim (C2.8–C2.10)
   that are not lessons, and counting them makes the "132 of 135" claim silently
   false.
 - **A `--check` flag a script does not define is silently ignored.**

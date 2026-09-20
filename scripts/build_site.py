@@ -654,7 +654,7 @@ def home_numbers() -> dict[str, int]:
     }
 
 
-# The homepage names the five functions in the language a reader arrives with,
+# The homepage names the six functions in the language a reader arrives with,
 # which is not the language the curriculum stores. curriculum.json's titles are
 # the id every lesson page's breadcrumb and every cross-reference is built
 # from, so renaming them there for a copy change would ripple through the whole
@@ -687,7 +687,7 @@ TRACKS = {
 def days_block() -> str:
     """The Day 0/1/2 legend, once — not repeated per track.
 
-    An earlier version printed all three days for all five functions on the
+    An earlier version printed all three days for all six functions on the
     homepage, which was the same 1,500 words the function introductions already
     carry. The homepage's job is to say what the three words mean; the detail
     belongs on the page that uses it.

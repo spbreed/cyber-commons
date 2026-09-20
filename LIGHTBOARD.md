@@ -23,12 +23,12 @@ built an agent:
 | order | lesson | opens |
 |---|---|---|
 | 1 | **A1.0** | the front door — what an agent is, and that you are about to build one |
-| 2 | **A0.1** | the commons itself: the five functions on top of what you built |
-| 3 | **B1.0** | Function A, and CyberTravels read adversarially. The one that has to land |
-| 4 | **C2.0** | Function B — the AI SDLC |
-| 5 | **D1.0** | Function C — red teaming agents, not models |
-| 6 | **E1.0** | Function D — the SOC |
-| 7 | **F1.0** | Function E — governance |
+| 2 | **A0.1** | the commons itself: the six functions, and which one is your chair |
+| 3 | **B1.0** | Function B, and CyberTravels read adversarially. The one that has to land |
+| 4 | **C2.0** | Function C — the AI SDLC |
+| 5 | **D1.0** | Function D — red teaming agents, not models |
+| 6 | **E1.0** | Function E — the SOC |
+| 7 | **F1.0** | Function F — governance |
 
 Say the ground rules once, in those 7, and never again. Every lesson after
 them assumes you said it.
@@ -87,7 +87,7 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 *[Who is watching: Engineers building an agentic feature, and equally the AppSec engineers, red teamers, SOC analysts and GRC leads who will be handed one. It assumes you can read a Python function. It assumes no security background at all, and no prior agent work.]*
 
-*[The pitch for the whole function, if you need it in one breath: Every control in the other four functions attaches to a mechanism. Hand somebody a control before they have built the mechanism and they apply it as a sentence in a document — which is the single most common reason agentic security guidance is read, agreed with, and not implemented.]*
+*[The pitch for the whole function, if you need it in one breath: Every control in the other five functions attaches to a mechanism. Hand somebody a control before they have built the mechanism and they apply it as a sentence in a document — which is the single most common reason agentic security guidance is read, agreed with, and not implemented.]*
 
 *[Record A1.0 first. It carries the ground-rules beat for this function, and every lesson after it assumes you said it.]*
 
@@ -221,7 +221,7 @@ Before anything else, thirty seconds on what an agent actually is, because if yo
 
 A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong.
 
-So here is how this works. You are going to build one. Not read about one — build it, on your own machine, over this chapter and the next. Then the four functions after that take the thing you built and attack it, review it, watch it and govern it. Everything is free and nothing needs an account.
+So here is how this works. You are going to build one. Not read about one — build it, on your own machine, over this chapter and the next. Then the five functions after that take the thing you built and attack it, review it, watch it and govern it. Everything is free and nothing needs an account.
 
 **① Open**
 
@@ -293,7 +293,7 @@ Here is what that costs you.
 
 A loop that accepts whatever the model says it did has no controls in it, because there is nowhere to put one.
 
-Same company, same four agents, new way of failing. The loop is cybertravels/runtime.py. execute tool is the line where the model stops proposing and CyberTravels' own code starts deciding — every control in Function A attaches to it.
+Same company, same four agents, new way of failing. The loop is cybertravels/runtime.py. execute tool is the line where the model stops proposing and CyberTravels' own code starts deciding — every control in Function B attaches to it.
 
 **③ What we do about it**
 
@@ -717,7 +717,7 @@ Here is what that costs you.
 
 A run that emits only its answer is unreviewable, and a trace of successes hides exactly the events worth alerting on.
 
-Same company, same four agents, new way of failing. cybertravels/observability.py. Every span carries the trace id that joins it to the audit row, which is the join Function D's detections are written against.
+Same company, same four agents, new way of failing. cybertravels/observability.py. Every span carries the trace id that joins it to the audit row, which is the join Function E's detections are written against.
 
 **③ What we do about it**
 
@@ -789,7 +789,7 @@ Of the four, how many your rows answer. Three is common and the missing one is a
 
 *[Point at the output on screen. Do not read it out.]*
 
-> Each of the four questions answered or explicitly not, from real audit rows — and the fourth one probably failing, which is the finding worth carrying into Function D.
+> Each of the four questions answered or explicitly not, from real audit rows — and the fourth one probably failing, which is the finding worth carrying into Function E.
 
 **⑤ Hand it over**
 
@@ -865,7 +865,7 @@ Still inside chapter A2. Last one was Evaluating what you built, before anybody 
 SAME MAP, READ BY SOMEBODY ELSE
 ```
 
-Everything in this system works. That sentence is true and it is the beginning of the next four functions rather than the end of this one — because 'works' was measured against what you intended, and nobody has yet measured it against somebody who intends otherwise.
+Everything in this system works. That sentence is true and it is the beginning of the next five functions rather than the end of this one — because 'works' was measured against what you intended, and nobody has yet measured it against somebody who intends otherwise.
 
 **② Why it costs something**
 
@@ -873,7 +873,7 @@ Here is what that costs you.
 
 A builder who has never seen their own system described adversarially ships the same defect in the next one.
 
-Same company, same four agents, new way of failing. The same CyberTravels architecture from A1.0, re-read by somebody who wants it to fail. Every row in that table is a lesson in Function A, by id.
+Same company, same four agents, new way of failing. The same CyberTravels architecture from A1.0, re-read by somebody who wants it to fail. Every row in that table is a lesson in Function B, by id.
 
 **③ What we do about it**
 
@@ -889,7 +889,7 @@ That is not a screenshot. It just ran, and you can run the identical command on 
 
 And here is the number that tells you it worked.
 
-Blast radius: objects reachable, the subset writable, and the irreversible actions among them. That number decides how much autonomy the agent can carry into Function A.
+Blast radius: objects reachable, the subset writable, and the irreversible actions among them. That number decides how much autonomy the agent can carry into Function B.
 
 *[Point at the output on screen. Do not read it out.]*
 
@@ -934,7 +934,7 @@ Let me introduce you to CyberTravels, because you are going to be seeing a lot o
 
 CyberTravels is a corporate travel company that does not exist. I made them up. They run four agents, and one of those agents can issue refunds. I invented them deliberately, and here is why.
 
-Every lesson, in all five functions, is grounded in this same company. So the refund limit an attacker walks straight past in one lesson is the same limit a detection is watching in another, and the same limit a compliance report is counting in a third. By the fourth function you are not learning a fourth example. You are watching a system you already understand fail in a new way.
+Every lesson, in all six functions, is grounded in this same company. So the refund limit an attacker walks straight past in one lesson is the same limit a detection is watching in another, and the same limit a compliance report is counting in a third. By the fourth function you are not learning a fourth example. You are watching a system you already understand fail in a new way.
 
 **① Open**
 
@@ -992,7 +992,7 @@ Still inside chapter B1. Last one was Start here — what securing an AI archite
 +-----------+
 ```
 
-"Secure the agent" is not an instruction. It becomes one the moment you can point at a component and a boundary — and every risk in this chapter, every control in the next two, and every detection in Function D names something on the picture you are about to draw.
+"Secure the agent" is not an instruction. It becomes one the moment you can point at a component and a boundary — and every risk in this chapter, every control in the next two, and every detection in Function E names something on the picture you are about to draw.
 
 **② Why it costs something**
 
@@ -1900,7 +1900,7 @@ That is not a screenshot. It just ran, and you can run the identical command on 
 
 And here is the number that tells you it worked.
 
-Rows with an owning lesson. This is the register's own coverage, and it is the number Function A is graded on.
+Rows with an owning lesson. This is the register's own coverage, and it is the number Function B is graded on.
 
 *[Point at the output on screen. Do not read it out.]*
 
@@ -2972,7 +2972,7 @@ That closes chapter B3. Layers now stand between a compromised agent and a conse
 
 And here is what it still cannot do. You have a secured architecture and nothing that builds on it. Every control here is stated as a rule; none of it is a pipeline anyone operates, and the first agentic system most organisations run is a security tool that reads untrusted code all day.
 
-Function B builds that system as an SDLC, and holds it to every rule in this chapter.
+Function C builds that system as an SDLC, and holds it to every rule in this chapter.
 
 Next up: C2.0, The AI SDLC — what runs before a deploy, and what runs after.
 
@@ -4041,7 +4041,7 @@ That closes chapter C2. A harness you can name the eight parts of, evaluate on a
 
 And here is what it still cannot do. Everything you have built so far is defensive and cooperative: it runs against systems that are not trying to defeat it. You have no evidence about how any of it behaves against someone who is — including the evaluation you have been trusting.
 
-Function C attacks it, starting with the loop pointed the other way round.
+Function D attacks it, starting with the loop pointed the other way round.
 
 Next up: D1.0, Start here — the evolution of non-deterministic threat simulation.
 
@@ -4694,7 +4694,7 @@ That closes chapter D1. You can carry an agentic finding the whole distance: rea
 
 And here is what it still cannot do. Every finding here is one you generated. Nothing tells you whether the estate as a whole is watched — how many agents exist, who owns them, and whether anyone would see the next one happening in production.
 
-Function D is the operational half — the SOC that detects an actor acting a thousand times an hour and stops it, in five phases.
+Function E is the operational half — the SOC that detects an actor acting a thousand times an hour and stops it, in five phases.
 
 Next up: E1.0, Start here — the agentic SOC, and the stack that runs it.
 
@@ -6367,7 +6367,7 @@ That closes chapter E5. You can close an incident properly: a run you can reprod
 
 And here is what it still cannot do. All five intervals are now yours to measure — and one is not. The regulatory clock started at awareness, and nothing here tells you which controls a supervisor will ask for, on what date, or what evidence they will accept.
 
-Function E is governance, and it is told in the unit E5.4 already used: the key control indicator. F1.1 defines it, and the rest of the function builds it, evidences it and runs it as a programme.
+Function F is governance, and it is told in the unit E5.4 already used: the key control indicator. F1.1 defines it, and the rest of the function builds it, evidences it and runs it as a programme.
 
 Next up: F1.0, Start here — what AI governance means.
 
@@ -7092,7 +7092,7 @@ Here is what that costs you.
 
 A control asserted in a register and never measured has no evidence behind it until an incident supplies some.
 
-Same company, same four agents, new way of failing. The number. measure() walks the controls Functions A to D built and calls each one — B2.1's approvers, B3.1's default-deny, B3.2's empty environment, B3.9's expiry, C2.3's five findings, D1.9's coverage, E1.1's matrix. Add a credential to sandbox.CODING_AGENT.env keys and coverage drops below 1.0, which is what makes it a measurement. known gaps() ships four absences with the file that admits each one.
+Same company, same four agents, new way of failing. The number. measure() walks the controls Functions A to E built and calls each one — B2.1's approvers, B3.1's default-deny, B3.2's empty environment, B3.9's expiry, C2.3's five findings, D1.9's coverage, E1.1's matrix. Add a credential to sandbox.CODING_AGENT.env keys and coverage drops below 1.0, which is what makes it a measurement. known gaps() ships four absences with the file that admits each one.
 
 **③ What we do about it**
 
@@ -7776,7 +7776,7 @@ Still inside chapter F3. Last one was Sequencing the programme.
 one name per thing, or the control has no owner
 ```
 
-Ask five people who owns agent identity and you will get five answers, all sincere. Org design is what converts that into one name per thing, which is the precondition for every control in Function E.
+Ask five people who owns agent identity and you will get five answers, all sincere. Org design is what converts that into one name per thing, which is the precondition for every control in Function F.
 
 **② Why it costs something**
 
@@ -8024,7 +8024,7 @@ That closes chapter F3. A programme sequenced on which indicators sit furthest f
 
 And here is what it still cannot do. Nothing here is finished, because none of it holds still. The models change, the patterns change, and the risks in B1 will not be the last fifteen.
 
-Go back to B1.1 and draw your own system again. It will be a different picture from the one you drew before Function B, and the components you left off the first time are the ones worth your next quarter.
+Go back to B1.1 and draw your own system again. It will be a different picture from the one you drew before Function C, and the components you left off the first time are the ones worth your next quarter.
 
 *[That is the last lesson in the commons. Thank them, and name one real thing you would go and do first thing tomorrow — a real thing, not “keep learning”.]*
 

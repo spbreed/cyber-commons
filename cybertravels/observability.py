@@ -7,7 +7,7 @@ came back. That is a trace, and it is the same idea OpenTelemetry formalises —
 this is a small in-process version of it so the tree stays dependency-light and
 a reader can see what a span *is* before meeting a collector.
 
-Three rules the emitting code follows, and each one is a lesson in Function D:
+Three rules the emitting code follows, and each one is a lesson in Function E:
 
 * **Every span carries the trace id**, so the audit row and the agent step can
   be joined. An audit log that cannot be joined to the reasoning that caused

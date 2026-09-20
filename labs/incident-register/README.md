@@ -28,10 +28,10 @@ anchored to NIST SP 800-53r5. The split follows the type:
 
 | Control type | Goes to | Because |
 |---|---|---|
-| preventive / mitigating | **Function A** — securing AI architectures | they are properties of the architecture, not of the monitoring |
-| detective | **Function D** — the agentic SOC | they are detections with an owner, a data source and a false-positive rate |
-| deception | **Function D** — the agentic SOC | a canary is a detector, and D2.6 is the lesson about the detector with no threshold |
-| red-teaming the evaluation itself | **Function C** — agentic evaluation and red teaming | the cheat surface is something you attack, not something you monitor |
+| preventive / mitigating | **Function B** — securing AI architectures | they are properties of the architecture, not of the monitoring |
+| detective | **Function E** — the agentic SOC | they are detections with an owner, a data source and a false-positive rate |
+| deception | **Function E** — the agentic SOC | a canary is a detector, and D2.6 is the lesson about the detector with no threshold |
+| red-teaming the evaluation itself | **Function D** — agentic evaluation and red teaming | the cheat surface is something you attack, not something you monitor |
 
 ```
  function   controls   lessons that own them

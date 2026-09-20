@@ -32,7 +32,7 @@ class Control:
 
 # The index. Rows 1-12 are the controls a platform needed before any of this
 # existed; the agentic rows are what the four agents added on top. Status is
-# CyberTravels' own, measured in B1.1-B1.18 and in Function E.
+# CyberTravels' own, measured in B1.1-B1.18 and in Function F.
 INDEX = [
  # ---- foundation: the estate under the agents ----------------------------
  Control("F-01", "vulnerability management",

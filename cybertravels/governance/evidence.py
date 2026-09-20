@@ -2,7 +2,7 @@
 """Evidence, measured off the tree — including the controls that are absent.
 
 This is the file that makes the rest of the function something other than
-assertion. `measure()` walks the controls Functions A to D actually built,
+assertion. `measure()` walks the controls Functions A to E actually built,
 asks each one whether it is present and functioning, and returns a number that
 moves when somebody deletes one.
 
@@ -175,7 +175,7 @@ def lifecycle_gaps():
 #
 # The gaps are deliberately left in. A register that reports 100% on a system
 # with known absences is a register nobody should believe, and this system has
-# absences that Functions A to D named in their own files.
+# absences that Functions A to E named in their own files.
 def _probe(fn):
     """Run one check, and treat an exception as a failed control rather than
     as a broken script — an assurance run that dies on the first missing
@@ -187,7 +187,7 @@ def _probe(fn):
 
 
 def measure():
-    """Every control Functions A to D built, asked of the running tree."""
+    """Every control Functions A to E built, asked of the running tree."""
     from .. import config, policy, registry, sandbox
     from ..appsec import sast
     from ..redteam import containment

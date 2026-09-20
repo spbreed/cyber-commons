@@ -61,7 +61,7 @@ Anyone holding those keys could impersonate any agent on the platform, post as
 it, and drive it — without ever failing an authentication check, because they
 were authenticating correctly, as the agent.
 
-Two things make this a Function C case study rather than a footnote.
+Two things make this a Function D case study rather than a footnote.
 
 **The blast radius is not the platform.** A social network for agents losing its
 own data is a bad day. A social network for agents losing the *provider

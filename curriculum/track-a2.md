@@ -110,7 +110,7 @@ python3 skills/identity/attribution-ledger-check/scripts/attribution_ledger_chec
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* Each of the four questions answered or explicitly not, from real audit rows — with the fourth likely failing, which is the finding to carry into Function D.
+*Expect:* Each of the four questions answered or explicitly not, from real audit rows — with the fourth likely failing, which is the finding to carry into Function E.
 
 ---
 

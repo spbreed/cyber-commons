@@ -67,7 +67,7 @@
         "#         that does, this links them all into your agent. ---",
         "python3 scripts/install_skills.py --all"
       ],
-      "expect": "The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function A's component map. Function A itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway."
+      "expect": "The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function B's component map. Function B itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway."
     },
     "B1.1": {
       "run": [
@@ -2901,7 +2901,7 @@
         "# --- or install it into your own agent and ask in your own words ---",
         "python3 scripts/install_skills.py --all"
       ],
-      "expect": "Each of the four questions answered or explicitly not, from real audit rows — with the fourth likely failing, which is the finding to carry into Function D."
+      "expect": "Each of the four questions answered or explicitly not, from real audit rows — with the fourth likely failing, which is the finding to carry into Function E."
     },
     "A2.3": {
       "run": [

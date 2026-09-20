@@ -24,7 +24,7 @@ This is the **first** lesson to read. It has no code and takes ten minutes.
 """,
 
 "B1.0": """
-**What it covers.** Place the five functions of the commons on one diagram and find where your own work sits.
+**What it covers.** Place the six functions of the commons on one diagram and find where your own work sits.
 
 **Why a security engineer needs it.** Without a shared architecture, "secure the agent" has no referent, and every control argument is really an argument about two different systems. The control it builds is: one picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
 
@@ -1052,7 +1052,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 }
 
 
-# The lessons added with the five-phase Function D restructure — see
+# The lessons added with the five-phase Function E restructure — see
 # about_new.py, kept separate for the same reason framing_new.py is.
 from .about_new import ABOUT as _NEW      # noqa: E402
 for _k, _v in _NEW.items():
@@ -1061,7 +1061,7 @@ for _k, _v in _NEW.items():
 
 
 
-# Function C rebuild.
+# Function D rebuild.
 from .framing_d import ABOUT as _C_ABOUT  # noqa: E402
 ABOUT.update(_C_ABOUT)
 
@@ -1108,7 +1108,7 @@ ABOUT.update({
  "A2.3": "An evaluation suite over the agent you built: cases that fail on the "
          "old build, scores with intervals, and a test for the dilution that "
          "lifts a number without changing a system.",
- "A2.4": "The handover into Function A. Every component built in this function "
+ "A2.4": "The handover into Function B. Every component built in this function "
          "re-read as an attack surface, every control re-read as something with "
          "a bypass, and the agent's blast radius measured as the number the "
          "next function argues with.",
@@ -1214,7 +1214,7 @@ ABOUT.update({
 })
 
 
-# Function B, rewired onto the pipeline the reader builds in cybertravels/appsec/.
+# Function C, rewired onto the pipeline the reader builds in cybertravels/appsec/.
 # Each entry names the stage's mechanism and what that stage is allowed to
 # claim, because by B the reader has a pipeline and the question is what its
 # output means.
@@ -1308,7 +1308,7 @@ ABOUT.update({
 })
 
 
-# Function C, rewired onto cybertravels/redteam/. Each entry names what the
+# Function D, rewired onto cybertravels/redteam/. Each entry names what the
 # lesson builds and the claim it is allowed to make, because by C the reader
 # has a running system and the question is what an attack result means.
 ABOUT.update({
@@ -1366,7 +1366,7 @@ ABOUT.update({
 })
 
 
-# Function D, rewired onto cybertravels/soc/. Each entry names the mechanism
+# Function E, rewired onto cybertravels/soc/. Each entry names the mechanism
 # and the stage of the incident clock it sits on.
 ABOUT.update({
  "E1.0": "The SOC as one system with a clock, and the observation the whole "
@@ -1480,7 +1480,7 @@ ABOUT.update({
 })
 
 
-# Function E, rewired onto cybertravels/governance/ — the package that
+# Function F, rewired onto cybertravels/governance/ — the package that
 # measures the controls the other functions built, by calling them.
 ABOUT.update({
  "F1.0": "Governance stated as a table rather than a value: each property a "

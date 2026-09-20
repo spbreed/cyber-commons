@@ -2,7 +2,7 @@
 """Telling the agent from the person, from the trace CyberTravels already emits.
 
 A2.1 built `observability.Trace`, so every run leaves spans. This reads them
-and answers a question the SOC will be asked in Function D and cannot currently
+and answers a question the SOC will be asked in Function E and cannot currently
 answer: **was that a person or an agent?**
 
 It matters because every volume rule in the estate was tuned on human tempo. A

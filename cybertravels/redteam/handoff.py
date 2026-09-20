@@ -10,10 +10,10 @@ So a finding is not done when it is written up. It is done when it has become
 three artefacts, each owned by a different function, and each of which fails
 loudly if the fix regresses:
 
-    an eval case    Function C keeps it — it must FAIL on the old build and
+    an eval case    Function D keeps it — it must FAIL on the old build and
                     PASS on the new one, or it is testing something else
-    a control       Function A owns it — the thing that actually closes it
-    a detection     Function D owns it — because the control will have a gap,
+    a control       Function B owns it — the thing that actually closes it
+    a detection     Function E owns it — because the control will have a gap,
                     and the gap is where the next one comes through
 
 The eval case is the load-bearing one and it is the one that gets skipped,

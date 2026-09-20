@@ -23,7 +23,7 @@ and the curriculum stay in step.
 """
 
 # --------------------------------------------------------------------------
-# Function A — securing AI architectures
+# Function B — securing AI architectures
 # --------------------------------------------------------------------------
 HOOKS: dict[str, str] = {
 
@@ -50,7 +50,7 @@ HOOKS: dict[str, str] = {
 "B1.1":
  "\"Secure the agent\" is not an instruction. It becomes one the moment you can "
  "point at a component and a boundary — and every risk in this chapter, every "
- "control in the next two, and every detection in Function D names something on "
+ "control in the next two, and every detection in Function E names something on "
  "the picture you are about to draw.",
 
 "B1.2":
@@ -216,7 +216,7 @@ HOOKS: dict[str, str] = {
  "to \"is default-deny on?\" is \"in some of them\".",
 
 # ----------------------------------------------------------------------
-# Function B — application security with an AI SDLC
+# Function C — application security with an AI SDLC
 # ----------------------------------------------------------------------
 "C2.0":
  "Half of what is sold as AI security tooling cannot run before a deploy, and "
@@ -383,7 +383,7 @@ HOOKS: dict[str, str] = {
  "smaller list, and a much more useful one.",
 
 # ----------------------------------------------------------------------
-# Function D — AI for SecOps
+# Function E — AI for SecOps
 # ----------------------------------------------------------------------
 "E1.0":
  "An hour of an agent is 1,400 actions across 260 resources in 96 sessions. An "
@@ -482,7 +482,7 @@ HOOKS: dict[str, str] = {
  "does not pause the clock.",
 
 # ----------------------------------------------------------------------
-# Function E — AI for GRC
+# Function F — AI for GRC
 # ----------------------------------------------------------------------
 "F1.0":
  "A list of approved products works at forty products. It does not survive a "
@@ -615,7 +615,7 @@ HOOKS: dict[str, str] = {
 "F3.4":
  "Ask five people who owns agent identity and you will get five answers, all "
  "sincere. Org design is what converts that into one name per thing, which is "
- "the precondition for every control in Function E.",
+ "the precondition for every control in Function F.",
 
 "F3.5":
  "Metrics that count activity — agents reviewed, policies written — demonstrate "
@@ -781,7 +781,7 @@ DIAGRAMS: dict[str, str] = {
         you ---> agent ---> the                the ---> agent <--- attacker
                             business
 
-   the same system, two directions of concern - and Function A works at
+   the same system, two directions of concern - and Function B works at
    the architecture layer, where both of them land on one component map:
 
         [ chapter 1 ]        [ chapter 2 ]        [ chapter 3 ]
@@ -1180,7 +1180,7 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 # ----------------------------------------------------------------------
-# Function B — product and application security with AI
+# Function C — product and application security with AI
 # ----------------------------------------------------------------------
 "C2.0": """
    ONE LINE, AND EVERY TOOL SITS ON ONE SIDE OF IT
@@ -1199,7 +1199,7 @@ DIAGRAMS: dict[str, str] = {
                                       |
    blind to: the identity it gets     |   blind to: the commit, until after
                                       |
-      C2.2 - C2.7                     |      C2.8 - C2.18, and Function D
+      C2.2 - C2.7                     |      C2.8 - C2.18, and Function E
 
    the gap is not a tool you are missing. it is the line itself:
    nothing on the left can see a runtime fact, and nothing on the
@@ -1615,7 +1615,7 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 # ----------------------------------------------------------------------
-# Function D — AI for SecOps
+# Function E — AI for SecOps
 # ----------------------------------------------------------------------
 "E1.0": """
    one hour                person        agent
@@ -1844,7 +1844,7 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 # ----------------------------------------------------------------------
-# Function E — AI for GRC
+# Function F — AI for GRC
 # ----------------------------------------------------------------------
 "F1.0": """
    approving tools                governing autonomy
@@ -2478,7 +2478,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "control here is stated as a rule; none of it is a pipeline anyone "
         "operates, and the first agentic system most organisations run is a "
         "security tool that reads untrusted code all day.",
- "next": "Function B builds that system as an SDLC, and holds it to every rule "
+ "next": "Function C builds that system as an SDLC, and holds it to every rule "
          "in this chapter. Next → C2.0, what an AI SDLC means.",
 },
 
@@ -2494,7 +2494,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "against systems that are not trying to defeat it. You have no evidence "
         "about how any of it behaves against someone who is — including the "
         "evaluation you have been trusting.",
- "next": "Function C attacks it, starting with the loop pointed the other way "
+ "next": "Function D attacks it, starting with the loop pointed the other way "
          "round. Next → D1.0, what red teaming and research with AI means.",
 },
 
@@ -2508,14 +2508,14 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gap": "Every finding here is one you generated. Nothing tells you whether the "
         "estate as a whole is watched — how many agents exist, who owns them, "
         "and whether anyone would see the next one happening in production.",
- "next": "Function D is the operational half — the SOC that detects an actor "
+ "next": "Function E is the operational half — the SOC that detects an actor "
          "acting a thousand times an hour and stops it, in five phases. "
          "Next \u2192 E1.0, what an agentic SOC means.",
 },
 
 
-# Function D's five chapter bridges live in framing_new.py. The two that used to
-# sit here described a two-chapter Function D and were already dead —
+# Function E's five chapter bridges live in framing_new.py. The two that used to
+# sit here described a two-chapter Function E and were already dead —
 # BRIDGES.update() overrode both — so they are gone rather than stale.
 
 "F1": {
@@ -2557,7 +2557,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "fifteen. What you have is a method for the next set, not a solution to "
         "this one.",
  "next": "Go back to B1.1 and draw your own system again. It will be a different "
-         "picture from the one you drew before Function B, and the components "
+         "picture from the one you drew before Function C, and the components "
          "you left off the first time are the ones worth your next quarter.",
 },
 
@@ -2565,7 +2565,7 @@ BRIDGES: dict[str, dict[str, str]] = {
 
 
 # --------------------------------------------------------------------------
-# The lessons added with the five-phase Function D restructure live in
+# The lessons added with the five-phase Function E restructure live in
 # framing_new.py — this file was already long, and those eleven arrived as one
 # set. Merged here so the build still sees a single HOOKS / DIAGRAMS / BRIDGES.
 from .framing_new import HOOKS as _NEW_HOOKS          # noqa: E402
@@ -2583,7 +2583,7 @@ for _k, _v in {**_NEW_DIAGRAMS, **_PEN_DIAGRAMS}.items():
 BRIDGES.update(_NEW_BRIDGES)
 
 
-# Function C rebuild — override the ids the old C track used.
+# Function D rebuild — override the ids the old C track used.
 from .framing_a import HOOKS as _G_HOOKS          # noqa: E402
 from .framing_a import DIAGRAMS as _G_DIAGRAMS    # noqa: E402
 from .framing_a import BRIDGES as _G_BRIDGES      # noqa: E402

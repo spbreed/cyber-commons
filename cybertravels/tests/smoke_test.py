@@ -622,9 +622,9 @@ def main():
     # step:B3.11 end
 
     # ===================================================================== #
-    # Function B — the pipeline that reviews all of the above
+    # Function C — the pipeline that reviews all of the above
     # ===================================================================== #
-    # Function A's assertions are about controls holding. These are about a
+    # Function B's assertions are about controls holding. These are about a
     # pipeline finding things, and they are written against the real corpus in
     # `tools/` and `agents/` rather than against a fixture — so a defect that
     # is renamed, fixed or lost breaks them, which is the point.
@@ -1209,7 +1209,7 @@ def main():
     # step:C2.18 end
 
     # ===================================================================== #
-    # Function C — the red-team lifecycle
+    # Function D — the red-team lifecycle
     # ===================================================================== #
     # step:D1.0 add
     from cybertravels.redteam import campaign as cmp
@@ -1637,7 +1637,7 @@ def main():
     # step:D1.11 end
 
     # ===================================================================== #
-    # Function D — the SOC that watches all of it
+    # Function E — the SOC that watches all of it
     # ===================================================================== #
     # step:E1.0 add
     from cybertravels import soc
@@ -2147,7 +2147,7 @@ def main():
     # step:E5.6 end
 
     # ===================================================================== #
-    # Function E — governance that reads the code
+    # Function F — governance that reads the code
     # ===================================================================== #
     # step:F1.0 add
     from cybertravels import governance as gov

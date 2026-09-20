@@ -318,7 +318,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "regulatory clock started at awareness, and nothing here tells you "
         "which controls a supervisor will ask for, on what date, or what "
         "evidence they will accept.",
- "next": "Function E is governance, and it is told in the unit E5.4 already "
+ "next": "Function F is governance, and it is told in the unit E5.4 already "
          "used: the key control indicator. F1.1 defines it, and the rest of the "
          "function builds it, evidences it and runs it as a programme. "
          "Next → F1.0, what AI governance means.",

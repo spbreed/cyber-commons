@@ -1,7 +1,7 @@
 # step:file E1.0
 """The SOC that watches CyberTravels — and the hole every product leaves.
 
-Functions A and B made the system defensible and reviewable. Function C
+Functions A and B made the system defensible and reviewable. Function D
 attacked it and, at D1.11, handed over three artefacts per finding: an eval
 case, a control, and a **detection**. This package is where the third one
 lands, which is why it imports from `cybertravels.redteam` rather than

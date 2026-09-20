@@ -2,7 +2,7 @@
 
 Everything an auditor would want to reason about lives here rather than
 scattered through the code. That is not tidiness: a control you cannot read in
-one place is a control nobody can evidence, which is the whole of Function E.
+one place is a control nobody can evidence, which is the whole of Function F.
 
 Read this file alongside `identity.py`. This one says what the rules are; that
 one enforces them.

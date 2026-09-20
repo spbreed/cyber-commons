@@ -228,7 +228,7 @@ curriculum together.
 
 That is a deliberate constraint, not a shortage of examples. The refund limit
 an attacker walks past in B1.2 is the same one a detection watches in Function
-D and a report counts in Function E. By the fourth function you are not
+D and a report counts in Function F. By the fourth function you are not
 learning a fourth example — you are watching a system you already understand
 fail in a new way.
 

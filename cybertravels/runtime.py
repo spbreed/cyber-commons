@@ -1,7 +1,7 @@
 """The agent runtime — the loop that turns text into consequence.
 
 This is the file the whole commons is about. Everything else is a component;
-this is where they meet, and every control in Function A is either enforced
+this is where they meet, and every control in Function B is either enforced
 here or bypassed here.
 
 One tool call, in order:

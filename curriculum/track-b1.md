@@ -19,9 +19,9 @@
 
 - **Risk** — Without a shared architecture, "secure the agent" has no referent, and every control argument is really an argument about two different systems.
 - **Control** — One picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
-- **Lab** — Place the five functions of the commons on one diagram and find where your own work sits.
+- **Lab** — Place the six functions of the commons on one diagram and find where your own work sits.
 
-**Run it** — Place the five functions of the commons on one diagram and find where your own work sits.
+**Run it** — Place the six functions of the commons on one diagram and find where your own work sits.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
@@ -41,7 +41,7 @@ claude --version        # prints a version? nothing else to configure
 python3 scripts/install_skills.py --all
 ```
 
-*Expect:* The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function A's component map. Function A itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
+*Expect:* The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function B's component map. Function B itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
 
 ---
 

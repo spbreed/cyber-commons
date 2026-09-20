@@ -1,4 +1,4 @@
-"""Eight Function D lessons, from the two-track era of the Agentic SOC.
+"""Eight Function E lessons, from the two-track era of the Agentic SOC.
 
     E1.3  agent telemetry as a log source
     E1.3  distinguishing agent from human
@@ -9,7 +9,7 @@
     E3.1  from alert queue to loop operator
     E3.3  the context that makes agent triage work
 
-The file name is historical: Function D was two tracks when these were written
+The file name is historical: Function E was two tracks when these were written
 and is now five, so the lessons here span three chapters. Nothing depends on
 which module a lesson lives in — `exercises/__init__.py` merges them and
 `site/data/curriculum.json` is what decides order and chapter. Splitting these

@@ -92,7 +92,7 @@ ORIENT = {
   "something wrong. An agent that is wrong does something wrong.",
   "So here is how this works. You are going to build one. Not read about one — "
   "build it, on your own machine, over this chapter and the next. Then the "
-  "four functions after that take the thing you built and attack it, review "
+  "five functions after that take the thing you built and attack it, review "
   "it, watch it and govern it. Everything is free and nothing needs an account.",
  ],
  "A0.1": [
@@ -116,7 +116,7 @@ ORIENT = {
   "CyberTravels is a corporate travel company that does not exist. I made them "
   "up. They run four agents, and one of those agents can issue refunds. I "
   "invented them deliberately, and here is why.",
-  "Every lesson, in all five functions, is grounded in this same company. So "
+  "Every lesson, in all six functions, is grounded in this same company. So "
   "the refund limit an attacker walks straight past in one lesson is the same "
   "limit a detection is watching in another, and the same limit a compliance "
   "report is counting in a third. By the fourth function you are not learning a "
@@ -475,12 +475,12 @@ built an agent:
 | order | lesson | opens |
 |---|---|---|
 | 1 | **A1.0** | the front door — what an agent is, and that you are about to build one |
-| 2 | **A0.1** | the commons itself: the five functions on top of what you built |
-| 3 | **B1.0** | Function A, and CyberTravels read adversarially. The one that has to land |
-| 4 | **C2.0** | Function B — the AI SDLC |
-| 5 | **D1.0** | Function C — red teaming agents, not models |
-| 6 | **E1.0** | Function D — the SOC |
-| 7 | **F1.0** | Function E — governance |
+| 2 | **A0.1** | the commons itself: the six functions, and which one is your chair |
+| 3 | **B1.0** | Function B, and CyberTravels read adversarially. The one that has to land |
+| 4 | **C2.0** | Function C — the AI SDLC |
+| 5 | **D1.0** | Function D — red teaming agents, not models |
+| 6 | **E1.0** | Function E — the SOC |
+| 7 | **F1.0** | Function F — governance |
 
 Say the ground rules once, in those {n_orient}, and never again. Every lesson after
 them assumes you said it.

@@ -9,7 +9,7 @@ expect — each one found by hand, which is the argument for this file existing:
 - **`lessons/README.md`** pointed every example at `spbreed.github.io`, which is
   not where the site lives, and used `M0.2` from an id scheme retired long ago.
 - **`labs/incident-register/README.md`** linked three times to
-  `../notebooks/C2.8.ipynb`, a lesson removed in the Function C trim.
+  `../notebooks/C2.8.ipynb`, a lesson removed in the Function D trim.
 - **`labs/b2.10-eval-harness/README.md`** linked to `../../docs/…` from inside
   the lab, which resolves to a `docs/` at the repository root that has never
   existed, and to `curriculum/track-c2.md` for a chapter that is now D1.

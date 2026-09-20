@@ -1,7 +1,7 @@
 """The agentic penetration-testing lessons, C2.10-C2.14.
 
 C2.10 is the offensive loop and its containment (it began life as D1.1, when
-Function C still mixed pentesting with model red teaming). C2.11-C2.13 are the
+Function D still mixed pentesting with model red teaming). C2.11-C2.13 are the
 same loop under white-, black- and grey-box access, and C2.14 is the safety
 preflight every offensive engagement runs inside. Kept in one file because they
 are one arc; `exercises/__init__.py` merges it like any other track.

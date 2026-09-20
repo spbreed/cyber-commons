@@ -1,6 +1,6 @@
 """Ingress — where traveller text enters. Trust 0: unauthenticated until it is not.
 
-Every injection risk in Function A begins on the edge out of this file.
+Every injection risk in Function B begins on the edge out of this file.
 """
 from .._stubs import route
 from ..orchestrator.router import dispatch

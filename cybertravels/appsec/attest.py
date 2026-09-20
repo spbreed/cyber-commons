@@ -1,7 +1,7 @@
 # step:file C2.18
 """Stage 16 — bind the control claim to a deployment, or it is a spreadsheet.
 
-Every control in Function A is real and running. What nobody can currently do
+Every control in Function B is real and running. What nobody can currently do
 is answer the question an assessor actually asks: **which deployment was that
 claim about?** "Sandbox egress is restricted" is true of something. Which
 image, which role, which gateway, which guardrail configuration — and when any
