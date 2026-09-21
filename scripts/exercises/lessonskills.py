@@ -62,8 +62,19 @@ def slug(title: str) -> str:
     four questions it has to answer"), which cuts the same way.
     """
     head = re.split(r"\s+[—–-]\s+|,\s+", title, maxsplit=1)[0]
-    s = re.sub(r"[^a-z0-9]+", "-", head.lower()).strip("-")
-    return s[:40].rstrip("-") or "lesson"
+    # Apostrophes go before anything else: "agent's" is one word, and turning
+    # the apostrophe into a hyphen made "agent-s" in a name.
+    head = re.sub(r"['\u2019]", "", head.lower())
+    words = [w for w in re.sub(r"[^a-z0-9]+", "-", head).strip("-").split("-") if w]
+    # Cut at a word boundary. A name that ends "…for-agentic-a" reads as a typo
+    # in every agent's skill list.
+    name = ""
+    for w in words:
+        nxt = f"{name}-{w}" if name else w
+        if len(nxt) > 40:
+            break
+        name = nxt
+    return name or "lesson"
 
 
 def skill_name(sid: str, title: str) -> str:

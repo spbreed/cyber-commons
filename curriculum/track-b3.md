@@ -256,9 +256,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.9
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-9-turning-a-control-off-without-turning-th
-#         (Claude Code and Copilot: /b3-9-turning-a-control-off-without-turning-th · Cursor: type / and
-#         search · Codex: $b3-9-turning-a-control-off-without-turning-th). It ends with a readback. ---
+#         b3-9-turning-a-control-off-without-turning
+#         (Claude Code and Copilot: /b3-9-turning-a-control-off-without-turning · Cursor: type / and
+#         search · Codex: $b3-9-turning-a-control-off-without-turning). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.9
@@ -286,9 +286,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.10
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-10-the-agent-s-escalation-path
-#         (Claude Code and Copilot: /b3-10-the-agent-s-escalation-path · Cursor: type / and
-#         search · Codex: $b3-10-the-agent-s-escalation-path). It ends with a readback. ---
+#         b3-10-the-agents-escalation-path
+#         (Claude Code and Copilot: /b3-10-the-agents-escalation-path · Cursor: type / and
+#         search · Codex: $b3-10-the-agents-escalation-path). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.10

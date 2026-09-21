@@ -57,9 +57,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B1.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b1-1-the-reference-architecture-for-agentic-a
-#         (Claude Code and Copilot: /b1-1-the-reference-architecture-for-agentic-a · Cursor: type / and
-#         search · Codex: $b1-1-the-reference-architecture-for-agentic-a). It ends with a readback. ---
+#         b1-1-the-reference-architecture-for-agentic
+#         (Claude Code and Copilot: /b1-1-the-reference-architecture-for-agentic · Cursor: type / and
+#         search · Codex: $b1-1-the-reference-architecture-for-agentic). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B1.1
