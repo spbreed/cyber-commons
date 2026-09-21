@@ -33,22 +33,21 @@ context window, and what the free tier gets you), then installs, clones, and
 points the skill runtime at a model. It ends by running one skill end to end
 and printing which model answered.
 
-**If you already use Claude Code, you need no API key and no endpoint.** The
-runtime finds the signed-in `claude` CLI and runs every skill on that session —
-the same authentication your editor uses.
+**The easiest way is a commercial code-generation assistant** — Claude Code,
+Codex, GitHub Copilot or Cursor, each with a free way to start. You need no API
+key, no endpoint and no settings: the assistant is the model, and it answers the
+lessons' checks itself. Clone the repository, open your assistant in the folder,
+and follow A0.0:
 
 ```bash
 git clone --branch master https://github.com/spbreed/cyber-commons.git
 cd cyber-commons
-
-claude --version        # prints a version? then there is nothing to configure
-
-PYTHONPATH=skills/_runtime python3 \
-  skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
 ```
 
-**Or bring your own model** — a local one, or any hosted free tier. Setting
-`OPENAI_BASE_URL` overrides the CLI, because somebody who set it meant it:
+**The complicated way is to bring your own model**, a local one or any hosted
+free tier, for when you cannot or would rather not use a commercial assistant.
+A0.0 folds it away until you open it. Setting `OPENAI_BASE_URL` makes the
+skills' own runner use it, because somebody who set it meant it:
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
@@ -58,7 +57,7 @@ export OPENAI_API_KEY=ollama
 export MODEL=qwen2.5:1.5b-instruct
 ```
 
-**With neither, every skill exits 2 and says so.** Nothing here substitutes a
+**With no assistant and no model, a skill run by hand exits 2 and says so.** Nothing here substitutes a
 canned answer for a model's: an answer of that kind has the right shape, passes
 the contract, and is not a model result.
 
@@ -70,22 +69,34 @@ first, and what Day 0/1/2 mean. Then
 **[B1.0](https://cybercommons.ai/lessons/B1.0.html)**, which introduces
 CyberTravels — the one system every lesson is grounded in.
 
-Every lesson page carries the exact command. Run it against the skill's
-committed fixture:
+**Every lesson is one skill you pick in your own AI assistant** — Claude Code,
+GitHub Copilot, Cursor or Codex. It teaches the idea, gets the code that lesson
+adds to CyberTravels, runs it, and ends with a readback of what happened:
+*What I did, What changed, The number, Read this next*. Link a lesson's skill,
+open your assistant in this folder, and pick it by name:
+
+```bash
+python3 scripts/install_skills.py --all --lessons A0.0    # one lesson; or A, A1, all
+```
+
+| assistant | how to start `a0-0-set-up-your-computer` |
+|---|---|
+| Claude Code | type `/a0-0-set-up-your-computer` |
+| GitHub Copilot (VS Code) | type `/a0-0-set-up-your-computer` in Chat |
+| Cursor | type `/` in Agent chat and search for it |
+| Codex | type `$a0-0-set-up-your-computer`, or run `/skills` |
+
+No assistant? The same lesson runs by hand, and prints the same readback:
+
+```bash
+python3 scripts/lesson.py A0.0
+```
+
+Behind each lesson skill is an **audit skill**, the written procedure it runs,
+and you can run that against its committed fixture too:
 
 ```bash
 python3 skills/threats/instruction-channel-check/scripts/instruction_channel_check.py   # B1.2, prompt injection
-```
-
-**Some lessons you do by picking one skill in your own agent.** A0.0 is the
-first, and the others are being converted the same way. Link its skill, open
-your agent in this folder, and pick `a0-0-set-up-your-computer`. It teaches the
-idea, gets the code that lesson adds, runs it, and ends with a readback of what
-happened:
-
-```bash
-python3 scripts/install_skills.py --all --lessons A0.0
-python3 scripts/lesson.py A0.0     # no agent? the same lesson, run by hand
 ```
 
 **Or install the skills into your own agent and ask in your own words.** Each
@@ -316,10 +327,8 @@ What is still checked, and still worth checking:
   that a different model answers differently.
 
 Where a lesson names a tool you would really deploy — SPIRE, OPA, Falco,
-Keycloak, garak — the skill models the *decision* that tool makes, and
-[`curriculum/labs.json`](curriculum/labs.json) keeps the real invocation
-underneath as the full-infrastructure variant. Those variants are **not**
-executed in CI and are labelled as such.
+Keycloak, garak — the skill models the *decision* that tool makes. The lesson
+does not install or run the tool itself, and nothing in CI does.
 
 **Two backends, no paid path.** A signed-in Claude Code CLI answers with no key
 and no endpoint — which is also how the [agentskills.io](https://agentskills.io)
@@ -364,7 +373,7 @@ script are all generated from it. Never hand-edit a `curriculum/*.md`, a
 | Day 0 / Day 1 / Day 2 | `scripts/exercises/days.py` |
 | The CyberTravels grounding line | `scripts/exercises/cybertravels.py` |
 | The skill a lesson teaches | `skills/<area>/<name>/SKILL.md` |
-| The runnable command block | `curriculum/labs.json` |
+| The run block (pick the lesson's skill) | derived: `scripts/exercises/lessonskills.py` |
 | The framework mapping | `curriculum/frameworks.json` |
 
 Dependencies run downhill — after changing a source, run from its row down:

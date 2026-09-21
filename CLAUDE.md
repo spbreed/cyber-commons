@@ -84,7 +84,7 @@ happened, and calls the audit skill rather than repeating it (§3).
 | `scripts/exercises/` — lesson bodies, framing, grounding, days, anchors | the lesson pages |
 | `scripts/exercises/repo.py` — owner, repo and the **published branch** | every link a lesson renders into this repository |
 | `skills/<area>/<name>/` — `SKILL.md` and its script | the procedure a lesson runs |
-| `curriculum/labs.json` — the runnable command block per lesson | the lab block on a page |
+| `scripts/exercises/lessonskills.py` — which lessons are taught as a skill a learner picks | the run block on a page (`build_site.lesson_skill_block`) and in a chapter doc (`build_curriculum.lesson_run`), so `curriculum/labs.json` carries no per-lesson entries |
 | `curriculum/frameworks.json` — OWASP / ATLAS / NIST / EU AI Act mapping | the labels on a page |
 | | `site/lessons/*.html`, `site/lessons/index.html` |
 | | `curriculum/track-*.md`, `curriculum/README.md` |
@@ -108,7 +108,7 @@ happened, and calls the audit skill rather than repeating it (§3).
 | which sections a lesson renders | `scripts/exercises/layout.py` |
 | a Function E or F anchor line | `scripts/exercises/anchors.py` |
 | the procedure itself | `skills/<area>/<name>/` |
-| which lessons are taught as a skill a learner picks, and its name | `scripts/exercises/lessonskills.py` |
+| a lesson's skill name, or which functions are taught as skills | `scripts/exercises/lessonskills.py` |
 | the colours and type of the site | `site/assets/lesson.css`, `site/index.html` |
 | the colours inside lesson diagrams | `scripts/exercises/diagrams.py` |
 

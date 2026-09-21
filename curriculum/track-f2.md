@@ -28,20 +28,17 @@
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.1:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.1 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.1 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.1
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-1-the-regulatory-map
+#         (Claude Code and Copilot: /f2-1-the-regulatory-map · Cursor: type / and
+#         search · Codex: $f2-1-the-regulatory-map). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/obligation-mapping/scripts/obligation_mapping.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.1
 ```
 
 ---
@@ -58,20 +55,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.2:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.2 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.2 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.2
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-2-horizontal-ai-regulation
+#         (Claude Code and Copilot: /f2-2-horizontal-ai-regulation · Cursor: type / and
+#         search · Codex: $f2-2-horizontal-ai-regulation). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/horizontal-requirement-to-control/scripts/horizontal_requirement_to_control.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.2
 ```
 
 ---
@@ -89,20 +83,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.3:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.3 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.3 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.3
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-3-voluntary-frameworks-as-your-spine
+#         (Claude Code and Copilot: /f2-3-voluntary-frameworks-as-your-spine · Cursor: type / and
+#         search · Codex: $f2-3-voluntary-frameworks-as-your-spine). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/framework-spine-selection/scripts/framework_spine_selection.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.3
 ```
 
 ---
@@ -119,20 +110,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.4:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.4 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.4 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.4
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-4-sector-overlays
+#         (Claude Code and Copilot: /f2-4-sector-overlays · Cursor: type / and
+#         search · Codex: $f2-4-sector-overlays). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/sector-overlay-assessment/scripts/sector_overlay_assessment.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.4
 ```
 
 ---
@@ -150,20 +138,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.5:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.5 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.5 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.5
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-5-privacy-and-data-protection
+#         (Claude Code and Copilot: /f2-5-privacy-and-data-protection · Cursor: type / and
+#         search · Codex: $f2-5-privacy-and-data-protection). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/trace-personal-data-audit/scripts/trace_personal_data_audit.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.5
 ```
 
 ---
@@ -180,20 +165,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.6:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.6 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.6 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.6
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-6-incident-and-disclosure-obligations
+#         (Claude Code and Copilot: /f2-6-incident-and-disclosure-obligations · Cursor: type / and
+#         search · Codex: $f2-6-incident-and-disclosure-obligations). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/disclosure-phase-breakdown/scripts/disclosure_phase_breakdown.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.6
 ```
 
 ---
@@ -211,20 +193,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.7:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.7 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.7 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.7
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-7-documentation-that-survives-supervision
+#         (Claude Code and Copilot: /f2-7-documentation-that-survives-supervision · Cursor: type / and
+#         search · Codex: $f2-7-documentation-that-survives-supervision). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/supervisory-documentation-score/scripts/supervisory_documentation_score.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.7
 ```
 
 ---
@@ -242,20 +221,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.8:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.8 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.8 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.8
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-8-auditability-of-autonomous-action
+#         (Claude Code and Copilot: /f2-8-auditability-of-autonomous-action · Cursor: type / and
+#         search · Codex: $f2-8-auditability-of-autonomous-action). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/autonomous-action-auditability/scripts/autonomous_action_auditability.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.8
 ```
 
 ---
@@ -272,20 +248,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of F2.9:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at F2.9 --out work/cybertravels
-python3 scripts/checkpoint.py --at F2.9 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons F2.9
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         f2-9-regulator-and-auditor-conversations
+#         (Claude Code and Copilot: /f2-9-regulator-and-auditor-conversations · Cursor: type / and
+#         search · Codex: $f2-9-regulator-and-auditor-conversations). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/regulatory/assurance-conversation-prep/scripts/assurance_conversation_prep.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py F2.9
 ```
 
 ---
