@@ -86,7 +86,13 @@ def check(rel: str) -> list[str]:
     here = (ROOT / rel).parent
     problems = []
 
-    for m in LINK.finditer(text):
+    # Links are found in prose only. `AGENTS[intent](message, session)` is
+    # Python inside backticks, and reading it as a link failed a generated
+    # lesson reference over code that is correct.
+    prose = re.sub(r"```.*?```", "", text, flags=re.S)
+    prose = re.sub(r"`[^`\n]*`", "", prose)
+
+    for m in LINK.finditer(prose):
         target = m.group(1).strip()
         # A bare fragment, an absolute URL, or an HTML-ish target is not ours.
         if target.startswith(("http", "mailto", "#", "<", "data:")):
