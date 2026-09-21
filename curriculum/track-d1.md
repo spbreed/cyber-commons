@@ -27,18 +27,17 @@
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of D1.0:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at D1.0 --out work/cybertravels
-python3 scripts/checkpoint.py --at D1.0 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.0
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-0-start-here
+#         (Claude Code and Copilot: /d1-0-start-here · Cursor: type / and
+#         search · Codex: $d1-0-start-here). It ends with a readback. ---
 
-# --- 4 · a reading lesson: no skill to run. When you reach one
-#         that does, this links them all into your agent. ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.0
 ```
 
 ---
@@ -47,6 +46,25 @@ python3 scripts/install_skills.py --all
 
 - **Lab** — Score a deployment's packages, hosted models and datasets for supply-chain risk, weighted by the authority the agent that loads them runs with.
 - **Tools** — `Sigstore`, `OSV`
+
+**Run it** — Score a deployment's packages, hosted models and datasets for supply-chain risk, weighted by the authority the agent that loads them runs with.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.1
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-1-platform-ingestion-and-supply-chain
+#         (Claude Code and Copilot: /d1-1-platform-ingestion-and-supply-chain · Cursor: type / and
+#         search · Codex: $d1-1-platform-ingestion-and-supply-chain). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.1
+```
 
 ---
 
@@ -61,20 +79,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of D1.2:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at D1.2 --out work/cybertravels
-python3 scripts/checkpoint.py --at D1.2 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.2
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-2-weaponizing-the-ingestion-path
+#         (Claude Code and Copilot: /d1-2-weaponizing-the-ingestion-path · Cursor: type / and
+#         search · Codex: $d1-2-weaponizing-the-ingestion-path). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/research/training-data-provenance-manifest/scripts/training_data_provenance_manifest.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.2
 ```
 
 ---
@@ -90,20 +105,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of D1.3:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at D1.3 --out work/cybertravels
-python3 scripts/checkpoint.py --at D1.3 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.3
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-3-cognitive-vulnerability-and-elicitation
+#         (Claude Code and Copilot: /d1-3-cognitive-vulnerability-and-elicitation · Cursor: type / and
+#         search · Codex: $d1-3-cognitive-vulnerability-and-elicitation). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/research/technique-reproducibility-test/scripts/technique_reproducibility_test.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.3
 ```
 
 ---
@@ -119,20 +131,17 @@ python3 scripts/install_skills.py --all
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of D1.4:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at D1.4 --out work/cybertravels
-python3 scripts/checkpoint.py --at D1.4 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.4
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-4-establishing-telemetry-and-detecting-the
+#         (Claude Code and Copilot: /d1-4-establishing-telemetry-and-detecting-the · Cursor: type / and
+#         search · Codex: $d1-4-establishing-telemetry-and-detecting-the). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_scoring.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.4
 ```
 
 ---
@@ -142,12 +151,50 @@ python3 scripts/install_skills.py --all
 - **Lab** — Resolve each behaviour in a swarm incident to a named control, and list the ones with nothing behind them.
 - **Tools** — `MITRE ATLAS`
 
+**Run it** — Resolve each behaviour in a swarm incident to a named control, and list the ones with nothing behind them.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.5
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-5-emergent-swarms-and-multi-agent
+#         (Claude Code and Copilot: /d1-5-emergent-swarms-and-multi-agent · Cursor: type / and
+#         search · Codex: $d1-5-emergent-swarms-and-multi-agent). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.5
+```
+
 ---
 
 ### D1.6 — High-concurrency detection engineering
 
 - **Lab** — Score candidate detection rules on precision, recall and the queue volume each one would add.
 - **Tools** — `Sigma`
+
+**Run it** — Score candidate detection rules on precision, recall and the queue volume each one would add.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.6
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-6-high-concurrency-detection-engineering
+#         (Claude Code and Copilot: /d1-6-high-concurrency-detection-engineering · Cursor: type / and
+#         search · Codex: $d1-6-high-concurrency-detection-engineering). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.6
+```
 
 ---
 
@@ -156,12 +203,50 @@ python3 scripts/install_skills.py --all
 - **Lab** — Run a triage loop with a severity floor, and sample its auto-closures so the false-negative rate is measured rather than assumed.
 - **Tools** — `TheHive`
 
+**Run it** — Run a triage loop with a severity floor, and sample its auto-closures so the false-negative rate is measured rather than assumed.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.7
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-7-triaging-the-non-deterministic-swarm
+#         (Claude Code and Copilot: /d1-7-triaging-the-non-deterministic-swarm · Cursor: type / and
+#         search · Codex: $d1-7-triaging-the-non-deterministic-swarm). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.7
+```
+
 ---
 
 ### D1.8 — Defensive deception and threshold failures
 
 - **Lab** — Place canaries outside every legitimate path, and flag the one sited close enough to real work to fire on it.
 - **Tools** — `Canarytokens`
+
+**Run it** — Place canaries outside every legitimate path, and flag the one sited close enough to real work to fire on it.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.8
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-8-defensive-deception-and-threshold
+#         (Claude Code and Copilot: /d1-8-defensive-deception-and-threshold · Cursor: type / and
+#         search · Codex: $d1-8-defensive-deception-and-threshold). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.8
+```
 
 ---
 
@@ -170,6 +255,25 @@ python3 scripts/install_skills.py --all
 - **Lab** — Fire a fleet-wide kill switch and measure what survives it: tokens, processes, and the runs that should have been preserved.
 - **Tools** — `SPIFFE`
 
+**Run it** — Fire a fleet-wide kill switch and measure what survives it: tokens, processes, and the runs that should have been preserved.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.9
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-9-machine-speed-containment-and-fleet
+#         (Claude Code and Copilot: /d1-9-machine-speed-containment-and-fleet · Cursor: type / and
+#         search · Codex: $d1-9-machine-speed-containment-and-fleet). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.9
+```
+
 ---
 
 ### D1.10 — Forensic replay and control architecture
@@ -177,11 +281,49 @@ python3 scripts/install_skills.py --all
 - **Lab** — Audit a run for the four fields a replay needs, and find the one whose absence turns a demonstration into a description.
 - **Tools** — `Velociraptor`
 
+**Run it** — Audit a run for the four fields a replay needs, and find the one whose absence turns a demonstration into a description.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.10
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-10-forensic-replay-and-control-architecture
+#         (Claude Code and Copilot: /d1-10-forensic-replay-and-control-architecture · Cursor: type / and
+#         search · Codex: $d1-10-forensic-replay-and-control-architecture). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.10
+```
+
 ---
 
 ### D1.11 — Institutional governance and compliance
 
 - **Lab** — Hand a finding over as three artefacts: a named control, an owner, and an eval case that fails on the unfixed build.
 - **Tools** — `NIST AI RMF`
+
+**Run it** — Hand a finding over as three artefacts: a named control, an owner, and an eval case that fails on the unfixed build.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons D1.11
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         d1-11-institutional-governance-and-compliance
+#         (Claude Code and Copilot: /d1-11-institutional-governance-and-compliance · Cursor: type / and
+#         search · Codex: $d1-11-institutional-governance-and-compliance). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py D1.11
+```
 
 ---
