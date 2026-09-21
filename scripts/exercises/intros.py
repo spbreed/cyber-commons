@@ -12,7 +12,6 @@ the risks start in the chapter that follows.
 
 from . import cybertravels as CT
 from . import diagrams as D
-from .models import MODEL_RUNTIME
 
 from .skills import skill_steps
 

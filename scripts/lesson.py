@@ -56,11 +56,10 @@ sys.path.insert(0, str(ROOT / "skills" / "_runtime"))
 
 import checkpoint                                             # noqa: E402
 from exercises import EXERCISES                               # noqa: E402
-from exercises.lessonskills import (ROLLED_OUT, RUNTIME_LESSONS,  # noqa: E402
+from exercises.lessonskills import (RUNTIME_LESSONS,  # noqa: E402
                                     audit_kind, audits_of)
 
 MARKER = ".lesson"           # what wrote this folder, and what it held when it did
-SITE = "https://cybercommons.ai/lessons"
 
 
 # ---------------------------------------------------------------- 1 · the code
@@ -348,8 +347,7 @@ def readback(sid: str, title: str, code: dict, diff: dict | None, test: dict | N
                    f"--audit {which + 1}")
     if 0 <= i < len(order) - 1:
         n = order[i + 1]
-        how = "pick its skill in your agent" if n in ROLLED_OUT else \
-              f"read it at {SITE}/{n}.html"
+        how = "pick its skill in your agent"
         nxt.append(f"Next lesson: {n} — {how}.")
 
     def block(head, items):

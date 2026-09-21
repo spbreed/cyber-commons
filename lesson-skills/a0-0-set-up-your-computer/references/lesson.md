@@ -162,10 +162,10 @@ This is also how these skills are *meant* to be used: the [agentskills.io](https
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
 ollama serve &                 # not automatic on every platform
-ollama pull qwen2.5:1.5b-instruct
+ollama pull <a model from ollama.com/library>
 ```
 
-The cost is your hardware. A 1.5B model answers in seconds on a laptop and will fill a contract with plausible values it did not derive; 7B is the size the acceptance criteria in this commons were established at. If your machine cannot hold that, Route C is the answer.
+The name you pull is the name you give to `MODEL` below. The cost is your hardware. A 1.5B model answers in seconds on a laptop and will fill a contract with plausible values it did not derive; 7B is the size the acceptance criteria in this commons were established at. If your machine cannot hold that, Route C is the answer.
 
 ### Route C — NVIDIA's hosted catalogue, on somebody else's GPUs
 
@@ -219,7 +219,7 @@ Setting `OPENAI_BASE_URL` **overrides** Route A, because somebody who set it mea
 # Local, free, offline after the pull, nothing leaves the machine:
 export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
 export OPENAI_API_KEY=ollama
-export MODEL=qwen2.5:7b-instruct
+export MODEL=<the name you pulled>
 
 # Or a hosted free tier — Google AI Studio gives a key with no card:
 export OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai

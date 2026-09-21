@@ -25,7 +25,7 @@ just proved", from the lesson's own `expect`. There used to be a second
 below the chapter bridge — three screens under the command it described. Of
 the 133 pages that carried one, 59 repeated the section above it (35 word for
 word), 10 repeated the lab line, and four described a different lesson. It is
-gone, and `check_lessons.py` fails if the field comes back.
+gone, along with the file that held it.
 
 `scripts/check_lessons.py` enforces what can be enforced and reports the rest.
 It runs in CI.

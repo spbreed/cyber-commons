@@ -63,15 +63,11 @@ building this instead of shipping one finished tree.
 4. **A `was` region is never empty, and every line in one is `#~`-commented.**
    Empty means "this did not exist before", which is what `add` says. An
    uncommented line means the committed tree is running code it should not be.
-5. **Every lab block, and every built page, asks for its own lesson's
-   checkpoint.** Two renderings of the same idea live in different files —
-   `curriculum/labs.json` feeds the chapter docs and `build_site.py::run_block`
-   feeds the pages — and the first time the checkpoint was added, only one of
-   them got it. All 134 lab blocks were correct, the whole site was silently
-   without it, and every other gate passed. The blocks are also near-identical
-   across lessons, so the other failure is a copy-paste leaving `--at B1.2` on
-   a Function E page: the reader gets a tree from forty lessons earlier and
-   nothing says why.
+5. **Every built page asks for its own lesson's checkpoint.** The first time
+   the checkpoint was added, the chapter docs got it and the pages did not, and
+   every other gate passed. The blocks are near-identical across lessons, so
+   the other failure is a copy-paste leaving `--at B1.2` on a Function E page:
+   the reader gets a tree from forty lessons earlier and nothing says why.
 """
 from __future__ import annotations
 
@@ -304,19 +300,8 @@ def check(order: list[str]) -> list[str]:
             problems.append(f"{rel}: the final checkpoint is not the committed "
                             f"tree:\n      " + "\n      ".join(d))
 
-    # 5 — a lab block asks for its own checkpoint
-    labs = json.loads((ROOT / "curriculum/labs.json").read_text())["labs"]
+    # 5 — the built page carries the checkpoint, and carries its own
     asked = re.compile(r"checkpoint\.py --at (\S+)")
-    for sid, lab in sorted(labs.items()):
-        for line in lab.get("run", []):
-            m = asked.search(line)
-            if m and m.group(1) != sid:
-                problems.append(
-                    f"curriculum/labs.json: {sid}'s lab block asks for "
-                    f"checkpoint {m.group(1)} — a reader would get the tree "
-                    f"from the wrong lesson")
-
-    # 5b — the built page carries it too, and carries its own
     pages = ROOT / "site" / "lessons"
     if pages.is_dir():
         for sid in order:

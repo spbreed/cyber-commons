@@ -1,7 +1,7 @@
 # vulnbench — evaluating a security harness
 
-**The lessons that drive it**, taken from `curriculum/labs.json` rather than
-remembered: [D1.3](../../curriculum/track-d1.md) (run the comparison and see the
+**The lessons it relates to**, listed by hand (no lesson source names this
+directory, so nothing measures the list): [D1.3](../../curriculum/track-d1.md) (run the comparison and see the
 inflated number) · [F1.5](../../curriculum/track-f1.md) (read the output as
 audit evidence) · [F3.5](../../curriculum/track-f3.md) and
 [F3.7](../../curriculum/track-f3.md) (the metrics, and building the capability).

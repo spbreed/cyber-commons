@@ -461,7 +461,7 @@ where it becomes a stage.
 > in the slice — rather than by waiting for the model to fabricate one. That is
 > not fastidiousness. An earlier version asserted that the model *would* invent
 > a defect in the already-authorised control function, and against a served
-> Qwen2.5-7B it did not: it read the function correctly and declined. The
+> 7B open-weight model it did not: it read the function correctly and declined. The
 > assertion failed because the model behaved well, which is a bug in the
 > assertion. A pipeline check has to hold whether or not the model misbehaves on
 > the day you run it."""),

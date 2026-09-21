@@ -248,9 +248,10 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
          "```bash\n"
          "curl -fsSL https://ollama.com/install.sh | sh\n"
          "ollama serve &                 # not automatic on every platform\n"
-         "ollama pull qwen2.5:1.5b-instruct\n"
+         "ollama pull <a model from ollama.com/library>\n"
          "```\n\n"
-         "The cost is your hardware. A 1.5B model answers in seconds on a "
+         "The name you pull is the name you give to `MODEL` below. The cost is "
+         "your hardware. A 1.5B model answers in seconds on a "
          "laptop and will fill a contract with plausible values it did not "
          "derive; 7B is the size the acceptance criteria in this commons were "
          "established at. If your machine cannot hold that, Route C is the "
@@ -339,7 +340,7 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
       "<code>ollama</code>"],
      ["<code>MODEL</code>",
       "Which model to ask for. Must match a name the server actually serves.",
-      "<code>qwen2.5:7b-instruct</code>"]],
+      "<code>the name you pulled</code>"]],
     caption="One protocol — OpenAI-compatible chat completions — so the same "
             "three variables point at Ollama, llama.cpp, vLLM or a hosted free "
             "tier without a line of code changing.")),
@@ -349,7 +350,7 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
          "# Local, free, offline after the pull, nothing leaves the machine:\n"
          "export OPENAI_BASE_URL=http://127.0.0.1:11434/v1\n"
          "export OPENAI_API_KEY=ollama\n"
-         "export MODEL=qwen2.5:7b-instruct\n"
+         "export MODEL=<the name you pulled>\n"
          "\n"
          "# Or a hosted free tier — Google AI Studio gives a key with no card:\n"
          "export OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai\n"

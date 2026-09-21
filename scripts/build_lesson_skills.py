@@ -23,7 +23,7 @@ What `--check` refuses, and why each is a real failure:
 
   * a lesson skill that is stale against its sources — somebody changed a
     lesson and the skill still teaches the old one;
-  * a directory in `lesson-skills/` that no rolled-out lesson owns — a skill
+  * a directory in `lesson-skills/` that no lesson owns — a skill
     for a lesson that was renamed or removed still loads and still answers;
   * a skill whose name does not match its directory, or whose description does
     not open with its lesson id — the id is how a learner finds it;
@@ -42,7 +42,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from exercises import EXERCISES                                # noqa: E402
-from exercises.lessonskills import (ROLLED_OUT, RUNTIME_LESSONS,  # noqa: E402
+from exercises.lessonskills import (LESSON_IDS, RUNTIME_LESSONS,  # noqa: E402
                                     audit_kind, audits_of, skill_name)
 
 OUT = ROOT / "lesson-skills"
@@ -241,9 +241,9 @@ def expected() -> dict[Path, str]:
     """Every generated file, as {path: text}, written by nobody."""
     have = sessions()
     files: dict[Path, str] = {}
-    for sid in sorted(ROLLED_OUT):
+    for sid in sorted(LESSON_IDS):
         if sid not in have:
-            raise SystemExit(f"lessonskills.ROLLED_OUT names {sid}, which the "
+            raise SystemExit(f"lessonskills.LESSON_IDS names {sid}, which the "
                              f"curriculum does not carry")
         s = have[sid]
         d = OUT / skill_name(sid, s["title"])
@@ -295,7 +295,7 @@ def main() -> int:
                                 f"python3 scripts/build_lesson_skills.py")
         for p in sorted(on_disk - set(files)):
             problems.append(f"{p.relative_to(ROOT)}: not owned by any "
-                            f"rolled-out lesson — a skill for a lesson that "
+                            f"lesson — a skill for a lesson that "
                             f"was removed still loads and still answers")
         for p in problems:
             print(f"  FAIL  {p}")
@@ -303,8 +303,8 @@ def main() -> int:
             print(f"::error::{len(problems)} lesson-skill problem(s)",
                   file=sys.stderr)
             return 1
-        print(f"ok: {len(ROLLED_OUT)} lesson skill(s) up to date "
-              f"({', '.join(sorted(ROLLED_OUT))})")
+        print(f"ok: {len(LESSON_IDS)} lesson skill(s) up to date "
+              f"({', '.join(sorted(LESSON_IDS))})")
         return 0
 
     if problems:
@@ -319,7 +319,7 @@ def main() -> int:
         # Windows machine must not write CRLF into them.
         with open(p, "w", encoding="utf8", newline="\n") as fh:
             fh.write(text)
-    print(f"wrote {len(files)} file(s) for {len(ROLLED_OUT)} lesson skill(s)")
+    print(f"wrote {len(files)} file(s) for {len(LESSON_IDS)} lesson skill(s)")
     return 0
 
 

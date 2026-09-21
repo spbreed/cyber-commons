@@ -82,7 +82,7 @@ DEFAULT = FULL
 # from the session instead; nothing went back for `expect`. Six lessons where
 # the box held the real result and "What you just proved" described the skill's
 # contract had the two merged, A0.1's counts moved into its own `proved`, and
-# the field is gone from labs.json. check_lessons.py refuses it coming back.
+# the field is gone, and so is the file (curriculum/labs.json) that held it.
 
 # Deviations from the kind default. (parts, why) — and `why` is not decoration:
 # check_lessons.py prints it, so a reader of the failure sees the argument.

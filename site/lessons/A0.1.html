@@ -222,10 +222,10 @@ before the success, so the messages are recognised rather than debugged.</p>
    produced it cannot be reproduced or compared.</li>
 </ol>
 <h2>Example</h2>
-<p>On a machine with Ollama serving <code>qwen2.5-7b-instruct</code>:</p>
+<p>On a machine with Ollama serving <code>my-local-model</code>:</p>
 <pre><code>runtime       : cyber_commons_skill_runtime (skills/_runtime)
 endpoint      : http://127.0.0.1:11434/v1
-model         : qwen2.5-7b-instruct
+model         : my-local-model
 api key set   : yes
 
 [1] unconfigured  -&gt; exit 2, &quot;No model endpoint is configured&quot;
@@ -265,7 +265,7 @@ ready: this machine can run any skill in the commons
 </code></pre>
 <p><code>endpoint</code> and <code>model</code> are strings when the machine reaches a model through an
 HTTP endpoint (the example above: <code>http://127.0.0.1:11434/v1</code> and
-<code>qwen2.5-7b-instruct</code>) and <strong>null</strong> when it does not. A signed-in Claude Code
+<code>my-local-model</code>) and <strong>null</strong> when it does not. A signed-in Claude Code
 CLI has no endpoint at all, so <code>null</code> is the true answer there and inventing a
 URL to fill the field would be worse. Never write a value the input did not
 give you.</p>

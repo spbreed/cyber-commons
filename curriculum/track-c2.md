@@ -20,7 +20,7 @@
 - **Risk** — A security pipeline built as if it were exempt from the risks it exists to find.
 - **Control** — Build the pipeline and the harness as one system, and hold both to the same evidence standard.
 - **Lab** — Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.
-- **Tools** — `Claude Haiku 4.5`, `Qwen2.5-7B`
+- **Tools** — `Claude Haiku 4.5`
 
 **Run it** — Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.
 

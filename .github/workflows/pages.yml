@@ -19,7 +19,6 @@ on:
       - 'skills/**'
       - 'lesson-skills/**'
       - 'labs/cybercommons/**'
-      - 'curriculum/labs.json'
       - 'scripts/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:

@@ -15,7 +15,7 @@ re-run — every number in the output is derived from it.
 
     export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
     export OPENAI_API_KEY=ollama
-    export MODEL=qwen2.5:1.5b-instruct
+    export MODEL=<the model name your endpoint serves>
     python3 skills/appsec/fix-promotion-gate/scripts/fix_promotion_gate.py
 
 With no endpoint configured this exits 2 and says so. Nothing is substituted

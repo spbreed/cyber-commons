@@ -1,8 +1,0 @@
-{
-  "_note": "No per-lesson entries. Every lesson is done by picking its skill in an agent, so the run block on a page and in a chapter doc is derived (build_site.lesson_skill_block, build_curriculum.lesson_run) from scripts/exercises/lessonskills.py rather than typed here, where it would be a second copy to drift. It was the same template on all 134 lessons that had one. The per-session goal lives in site/data/curriculum.json as the session's `lab` field.",
-  "_conventions": {
-    "model_endpoint": "All model calls go through an OpenAI-compatible base URL so no lab hard-codes a provider. Default is local Ollama at http://localhost:11434/v1 (see MODELS.md).",
-    "env": "export OPENAI_BASE_URL=http://localhost:11434/v1; export OPENAI_API_KEY=ollama; export MODEL=glm-4.6"
-  },
-  "labs": {}
-}

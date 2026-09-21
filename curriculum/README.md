@@ -1,6 +1,6 @@
 # Curriculum
 
-Generated from [`site/data/curriculum.json`](../site/data/curriculum.json) — the same source the website renders. Edit the JSON (and [`labs.json`](labs.json)), then run `python3 scripts/build_curriculum.py`.
+Generated from [`site/data/curriculum.json`](../site/data/curriculum.json) — the same source the website renders. Edit the JSON , then run `python3 scripts/build_curriculum.py`.
 
 You take the track for the chair you sit in, plus two sessions from a neighbouring track.
 

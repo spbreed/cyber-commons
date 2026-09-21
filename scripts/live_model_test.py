@@ -8,7 +8,7 @@ evidenced statement rather than a design intention.
 
     # an open-weight model from Kaggle, served OpenAI-compatibly
     export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 OPENAI_API_KEY=local
-    python3 scripts/live_model_test.py --model qwen2.5-7b-instruct --save
+    python3 scripts/live_model_test.py --model <the model name your endpoint serves> --save
 
 There is one backend on purpose. The frontier path was removed: the commons is
 free to run, and every model result in this repository was established against

@@ -51,10 +51,10 @@ skills' own runner use it, because somebody who set it meant it:
 
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
-ollama serve & ollama pull qwen2.5:1.5b-instruct
+ollama serve & ollama pull <a model from ollama.com/library>
 export OPENAI_BASE_URL=http://127.0.0.1:11434/v1   # the /v1 is not optional
 export OPENAI_API_KEY=ollama
-export MODEL=qwen2.5:1.5b-instruct
+export MODEL=<the name you pulled>
 ```
 
 **With no assistant and no model, a skill run by hand exits 2 and says so.** Nothing here substitutes a
@@ -337,7 +337,7 @@ procedure. For everything else, one protocol:
 
 ```bash
 # llama.cpp, Ollama, vLLM, or a hosted free tier — pick one
-export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 OPENAI_API_KEY=ollama MODEL=qwen2.5:1.5b-instruct
+export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 OPENAI_API_KEY=ollama MODEL=<the name you pulled>
 ```
 
 **There is no paid backend, and no silent substitute.** A curriculum that is
@@ -409,13 +409,13 @@ file inside the tree. Install the guard once:
 
 ```
 site/data/curriculum.json   source of truth: 148 sessions, 14 chapters
-curriculum/                 generated chapter docs + labs.json + frameworks.json
+curriculum/                 generated chapter docs + frameworks.json
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: B1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
 skills/                     139 agent skills, plus _runtime/ — the one shared library
 lesson-skills/              one skill per converted lesson, generated — what a learner picks in their agent
-labs/                       attestation · incident-register · b2.10-eval-harness · b2-delegation
+labs/                       attestation · incident-register · b2.10-eval-harness
 labs/evidence/              the recorded offline run of every skill script
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · check_* · install_skills.py

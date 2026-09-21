@@ -48,9 +48,7 @@
                 "git",
                 "python3"
               ],
-              "models": [
-                "qwen2.5-7b-instruct"
-              ]
+              "models": []
             },
             {
               "id": "A0.1",
@@ -928,8 +926,7 @@
               "control": "Build the pipeline and the harness as one system, and hold both to the same evidence standard.",
               "lab": "Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.",
               "tools": [
-                "Claude Haiku 4.5",
-                "Qwen2.5-7B"
+                "Claude Haiku 4.5"
               ],
               "models": []
             },

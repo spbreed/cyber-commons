@@ -199,9 +199,6 @@ def run_skill(md):
 # notebook stays self-contained.
 import json, os, urllib.error, urllib.request
 
-# Qwen2.5-7B-Instruct is the floor established in MODELS.md: below it two of
-# the lessons' acceptance properties stop holding.
-OPEN_WEIGHT_DEFAULT = "qwen2.5-7b-instruct"
 TIMEOUT = 60
 # The CLI starts a whole agent session, so it is slower to first
 # token than a raw completions call. 300s is generous on purpose:
@@ -262,7 +259,19 @@ def backend():
     Raises NoModelConfigured when there is nothing to call.
     """
     if os.environ.get("OPENAI_BASE_URL"):
-        return "open-weight", os.environ.get("MODEL", OPEN_WEIGHT_DEFAULT)
+        # No default model name. One used to be filled in here, and a reader who
+        # set only the URL got a "model not found" from their own server naming
+        # a model they had never heard of. Say what is missing instead.
+        model = os.environ.get("MODEL")
+        if not model:
+            raise NoModelConfigured(
+                "OPENAI_BASE_URL is set but MODEL is not. MODEL is the name of\n"
+                "the model your server serves, exactly as the server lists it:\n"
+                "\n"
+                "    export MODEL=<the model name your endpoint serves>\n"
+                "\n"
+                "Lesson A0.0 explains the three settings.")
+        return "open-weight", model
     if claude_cli():
         return "claude-cli", os.environ.get("MODEL", "claude (Claude Code CLI)")
     raise NoModelConfigured(
@@ -275,7 +284,7 @@ def backend():
         "  2. Any OpenAI-compatible endpoint, local or hosted:\n"
         "       export OPENAI_BASE_URL=http://127.0.0.1:11434/v1\n"
         "       export OPENAI_API_KEY=ollama      # any non-empty value locally\n"
-        "       export MODEL=qwen2.5:1.5b-instruct\n"
+        "       export MODEL=<the model name your endpoint serves>\n"
         "\n"
         "Lesson A0.0 sets both up end to end. MODELS.md lists which model suits\n"
         "which lab.")

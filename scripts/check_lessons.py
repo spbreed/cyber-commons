@@ -86,7 +86,7 @@ from exercises.days import DAYS, FUNCTION_DAYS  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 from exercises.layout import (FULL, PARTS, parts_for, runs_something,  # noqa: E402
                                why_dropped)
-from exercises.lessonskills import ROLLED_OUT, skill_name  # noqa: E402
+from exercises.lessonskills import skill_name  # noqa: E402
 
 # Functions D and E are long arguments rather than collections, and each is told
 # in one unit: an interval between an agent acting and the control being back at
@@ -124,8 +124,6 @@ PART_SOURCE = {
     "proved":      ("expect", "the lesson's track_*.py"),
     "turn":        ("challenge", "the lesson's track_*.py"),
 }
-
-LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
 
 
 # What each part looks like on the built page. Exact strings, and the Day
@@ -258,23 +256,22 @@ def main() -> int:
             continue
         page = page_f.read_text()
 
-        # 0c — a converted lesson is done by picking its skill. The page must
+        # 0c — a lesson is done by picking its skill. The page must
         # offer that skill by name and the harness that backs it, the skill
         # must exist, and the page must not carry a sample of the readback: the
         # run prints it, and "What you just proved" owns the conclusion. A
         # pasted sample is the second conclusion 59 pages once carried.
-        if sid in ROLLED_OUT:
-            name = skill_name(sid, s["title"])
-            if not (ROOT / "lesson-skills" / name / "SKILL.md").is_file():
-                problems.append(f"{sid}: converted, but lesson-skills/{name}/ "
-                                f"does not exist — run build_lesson_skills.py")
-            if name not in page or f"scripts/lesson.py {sid}" not in page:
-                problems.append(f"{sid}: converted, but the page does not offer "
-                                f"{name} and `scripts/lesson.py {sid}`")
-            if "readback —" in own_prose(page):
-                problems.append(f"{sid}: the page carries a sample of the "
-                                f"readback. The run prints it; the page states "
-                                f"the conclusion once, in \"What you just proved\"")
+        name = skill_name(sid, s["title"])
+        if not (ROOT / "lesson-skills" / name / "SKILL.md").is_file():
+            problems.append(f"{sid}: no skill: lesson-skills/{name}/ "
+                            f"does not exist — run build_lesson_skills.py")
+        if name not in page or f"scripts/lesson.py {sid}" not in page:
+            problems.append(f"{sid}: no skill: the page does not offer "
+                            f"{name} and `scripts/lesson.py {sid}`")
+        if "readback —" in own_prose(page):
+            problems.append(f"{sid}: the page carries a sample of the "
+                            f"readback. The run prints it; the page states "
+                            f"the conclusion once, in \"What you just proved\"")
         framework = page.find("The framework, and how it works")
         execution = page.find("Real time execution as skill")
         if framework < 0:
@@ -292,17 +289,6 @@ def main() -> int:
                     f"{sid}: layout.py says {part} "
                     f"{'renders' if part in parts else 'does not render'} and "
                     f"the built page says the opposite — rebuild the site")
-
-        # 0d — labs.json carries a command block, not a second conclusion.
-        # Its `expect` field rendered an "Expect" box at the foot of the page
-        # that repeated "What you just proved" on 59 lessons and described a
-        # different lesson on four. Nothing renders it now, so a new one would
-        # be prose no reader ever sees.
-        if (LABS.get(sid) or {}).get("expect"):
-            problems.append(f"{sid}: curriculum/labs.json carries an `expect` "
-                            f"field. Nothing renders it — what the run produces "
-                            f"belongs in the lesson's own `expect`, which is "
-                            f"the \"What you just proved\" section")
 
         # 0e — the section numbers a reader sees run 2, 3, 4, … with no repeat
         # and no gap. LESSON_DESIGN.md §3 tells an author to write `## 2 ·`,

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate curriculum/*.md (one file per track + Module 0) from the single
-source of truth: site/data/curriculum.json + curriculum/labs.json.
+source of truth: site/data/curriculum.json.
 
 The website renders from the same JSON, so a page and its chapter doc always
 say the same thing *once this has been run*. It had not been, and that is why
@@ -20,10 +20,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-from exercises.lessonskills import ROLLED_OUT, skill_name  # noqa: E402
+from exercises.lessonskills import skill_name  # noqa: E402
 
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text(encoding="utf8"))
-LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text(encoding="utf8"))["labs"]
 OUT = ROOT / "curriculum"
 TITLES = {s["id"]: s["title"] for f in CUR["functions"] for t in f["tracks"]
           for s in t["sessions"]}
@@ -32,10 +31,11 @@ TITLES = {s["id"]: s["title"] for f in CUR["functions"] for t in f["tracks"]
 def lesson_run(sid: str) -> list[str]:
     """The run block of a converted lesson, derived rather than typed.
 
-    A converted lesson is done by picking its skill in an agent, and the page
-    prints the same thing (`build_site.lesson_skill_block`). Typing it into
-    labs.json as well would be a second copy to drift, so labs.json carries no
-    entry for a converted lesson and this is what the chapter doc shows.
+    Every lesson is done by picking its skill in an agent, and the page prints
+    the same thing (`build_site.lesson_skill_block`). It is derived rather than
+    typed, because a hand-kept copy is a second one to drift: the old
+    `curriculum/labs.json` held the same template on all 134 lessons that had
+    an entry, and fourteen had none.
     """
     name = skill_name(sid, TITLES[sid])
     return [
@@ -58,16 +58,12 @@ def lesson_run(sid: str) -> list[str]:
 
 
 def lab_block(sid: str, goal: str = "") -> str:
-    lab = {"run": lesson_run(sid)} if sid in ROLLED_OUT else LABS.get(sid)
-    if not lab:
-        return ""
+    lab = {"run": lesson_run(sid)}
     # The goal comes from the session, which is the only copy of it now.
     lines = [f"\n**Run it** — {goal}\n", "```bash"]
     lines += lab["run"]
-    # No "*Expect:*" line: labs.json no longer carries one. It rendered a
-    # second conclusion beside the lesson's own "What you just proved" — the
-    # same paragraph on 59 pages, another lesson's on four — and the chapter
-    # doc inherited it from the same field. See scripts/exercises/layout.py.
+    # No "*Expect:*" line: it rendered a second conclusion beside the
+    # lesson's own "What you just proved". See scripts/exercises/layout.py.
     lines += ["```", ""]
     return "\n".join(lines)
 
@@ -108,7 +104,7 @@ def render() -> dict[Path, str]:
     out: dict[Path, str] = {}
     n = 0
     index = ["# Curriculum", "",
-             "Generated from [`site/data/curriculum.json`](../site/data/curriculum.json) — the same source the website renders. Edit the JSON (and [`labs.json`](labs.json)), then run `python3 scripts/build_curriculum.py`.", "",
+             "Generated from [`site/data/curriculum.json`](../site/data/curriculum.json) — the same source the website renders. Edit the JSON , then run `python3 scripts/build_curriculum.py`.", "",
              "You take the track for the chair you sit in, plus two sessions from a neighbouring track.", "",
              "| Track | Role | Sessions | Function |", "|---|---|---|---|"]
     for fn in CUR["functions"]:
@@ -151,8 +147,7 @@ def main() -> int:
     files = render()
     total = sum(len(t["sessions"]) for f in CUR["functions"] for t in f["tracks"])
     with_labs = sum(1 for f in CUR["functions"] for t in f["tracks"]
-                    for s in t["sessions"]
-                    if s["id"] in LABS or s["id"] in ROLLED_OUT)
+                    for s in t["sessions"])
 
     if a.check:
         stale = [p.name for p, text in files.items()

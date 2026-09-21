@@ -25,16 +25,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 
-# Functions converted so far, by letter. A function is added here in the same
-# commit as its regenerated skills and pages, and never before: a page that
-# tells a learner to pick a skill that is not in `lesson-skills/` is a broken
-# first step, which is worse than the old run block. Lessons inside a converted
-# function need no entry of their own — a new lesson takes the skill treatment
-# from the moment it is in the curriculum, and `build_lesson_skills.py --check`
-# fails until its skill is generated.
-FUNCTIONS: frozenset[str] = frozenset({"A", "B", "C", "D", "E", "F"})
-
-
 def _lesson_ids() -> list[str]:
     cur = json.loads((ROOT / "site" / "data" / "curriculum.json")
                      .read_text(encoding="utf8"))
@@ -42,8 +32,12 @@ def _lesson_ids() -> list[str]:
             for s in t["sessions"]]
 
 
-ROLLED_OUT: frozenset[str] = frozenset(
-    sid for sid in _lesson_ids() if sid[0] in FUNCTIONS)
+# Every lesson is taught as a skill, so there is no list of which ones are. A
+# lesson in the curriculum has a skill in `lesson-skills/` or
+# `build_lesson_skills.py --check` fails until it does. (There used to be a
+# phased list, so a function could be converted on its own commit; that ended
+# when the last function was.)
+LESSON_IDS: frozenset[str] = frozenset(_lesson_ids())
 
 # Lessons whose audit *is* a test of the runtime reaching a model. The harness
 # tries the runtime first for these, because showing whether this machine's

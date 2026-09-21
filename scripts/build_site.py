@@ -3,7 +3,6 @@
 
 Inputs (edit these — never edit the generated HTML):
   site/data/curriculum.json   structure: functions -> tracks -> sessions
-  curriculum/labs.json        the runnable command block per session
   site/data/videos.json       published recordings (written by link_video.py)
   lessons/<ID>.md             OPTIONAL long-form notes for a lesson (markdown)
 
@@ -31,7 +30,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
-LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
 VIDEOS = json.loads((ROOT / "site" / "data" / "videos.json").read_text()).get("videos", {})
 NOTES_DIR = ROOT / "lessons"
 OUT = ROOT / "site" / "lessons"
@@ -39,7 +37,7 @@ OUT = ROOT / "site" / "lessons"
 # module. Links built against a branch that has no such path are the bug that
 # constant exists to prevent, and scripts/check_repo_links.py enforces it.
 from exercises.repo import BRANCH, RAW, REPO  # noqa: E402
-from exercises.lessonskills import ROLLED_OUT, skill_name  # noqa: E402
+from exercises.lessonskills import skill_name  # noqa: E402
 
 # Execution evidence still gates CI — scripts/test_skills.py and
 # scripts/check_determinism.py must both pass — but it is no longer printed on
@@ -390,11 +388,8 @@ def renumber_sections(body: str) -> str:
     return NUMBERED_H2.sub(lambda _: f"<h2>{next(n)} ·", body)
 
 
-DIAGRAM_MARK = re.compile(r"^\[diagram:(dot|puml):([a-z0-9-]+)\]$", re.M)
-DIAGRAMS_DIR = ROOT / "site" / "assets" / "diagrams"
 
 
-FALLBACK_SCRIPT = "the skill\u2019s script"
 
 
 def script_of(sid: str) -> str | None:
@@ -507,53 +502,8 @@ def lesson_skill_block(sid: str) -> str:
 
 
 def run_block(sid: str) -> str:
-    """How to run this lesson's skill, on the reader's own machine.
-
-    Two routes, because they are genuinely different things. Installing the
-    skill into an agent is what the agentskills.io format is *for* — the agent
-    reads the SKILL.md and carries out the procedure itself. Running the script
-    is for when you want the same committed fixture every time, so two runs are
-    comparable. Both appear, in that order, because the first is the one a
-    reader will actually use and the second is the one a reviewer needs.
-    """
-    if sid in ROLLED_OUT:
-        return lesson_skill_block(sid)
-    script = script_of(sid)
-    # The checkpoint comes first and is offered on every lesson, including the
-    # three that run no skill. A reader who lands here needs CyberTravels as it
-    # stood at this lesson before anything else makes sense — the finished tree
-    # contains every control the lessons after this one exist to build, and
-    # handing it over spoils all of them.
-    checkpoint = (
-        '<p><b>Get your copy of CyberTravels as it stood here.</b> Everything '
-        'taught up to this lesson, and nothing taught after it — so the '
-        'exercises ahead of you still work.</p>'
-        f'<pre><code>python3 scripts/checkpoint.py --at {html.escape(sid)} '
-        f'--out work/cybertravels\n'
-        f'python3 scripts/checkpoint.py --at {html.escape(sid)} --diff'
-        f'   # what this lesson changed</code></pre>')
-    if not script:
-        return ('<div class="runbox">' + checkpoint +
-                '<p class="runnote">This is a reading lesson — there is no '
-                'skill to run. The checkpoint is still worth taking, because '
-                'the next lesson that does run one starts from it.</p></div>')
-    name = script.split("/")[1]
-    return (
-        '<div class="runbox">' + checkpoint +
-        '<p><b>Run it in your agent.</b> Link the skills store into whichever '
-        'CLI you use — Claude Code, Codex, Gemini and the rest read the same '
-        'format — then ask for the task in your own words.</p>'
-        '<pre><code>python3 scripts/install_skills.py --all\n'
-        f'# then, in your agent: ask for "{html.escape(name.replace("-", " "))}"'
-        '</code></pre>'
-        '<p><b>Or run the harness directly</b>, against the fixture committed '
-        'with the skill, so two runs are comparable:</p>'
-        f'<pre><code>python3 skills/{html.escape(script)}</code></pre>'
-        '<p class="runnote">Both need a model. A signed-in Claude Code CLI '
-        'needs no API key; any OpenAI-compatible endpoint works too. With '
-        'neither, the skill exits 2 and says so rather than inventing an '
-        'answer. <a href="A0.0.html">A0.0</a> sets this up.</p>'
-        '</div>')
+    """How to do this lesson, on the reader's own machine: pick its skill."""
+    return lesson_skill_block(sid)
 
 
 def video_block(sid: str, title: str) -> str:
@@ -608,7 +558,6 @@ FOOT = ('<footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singul
 
 def lesson_page(entry, prev, nxt) -> str:
     s, sid = entry["s"], entry["s"]["id"]
-    lab = LABS.get(sid, {})
     ex_url, ex_label = exercise_link(sid)
     title = f"{sid} — {s['title']} | Cyber Commons"
 
@@ -641,47 +590,20 @@ def lesson_page(entry, prev, nxt) -> str:
         parts.append('</div>')
 
     parts.append('<div class="sec"><h2>The lab</h2>')
-    # From the session, never from labs.json: the two used to hold separate
-    # copies of the same sentence and six of them had drifted onto other
-    # lessons entirely.
+    # From the session: the goal has one copy, in curriculum.json.
     if s.get("lab"):
         parts.append(f'<p class="sub">{html.escape(s["lab"])}</p>')
 
     # One button, and only on a lesson that has something to run — a reading
     # lesson gets none, because there is nothing on the other end of it.
     if has_code(sid):
-        if sid in ROLLED_OUT:
-            # The skill a learner picks. The audit it calls is embedded further
-            # down the page, so this is the one worth linking to.
-            target = f"lesson-skills/{skill_name(sid, s['title'])}"
-        else:
-            target = "skills/" + (script_of(sid) or "").rsplit("/scripts/", 1)[0]
+        # The skill a learner picks. The audit it calls sits behind it.
+        target = f"lesson-skills/{skill_name(sid, s['title'])}"
         parts.append('<div class="cta-row">'
                      f'<a class="btn k" href="{REPO}/tree/{BRANCH}/'
                      f'{html.escape(target)}" target="_blank" rel="noopener">'
                      f'↗ Open this skill in the repository</a>'
                      '</div>')
-        # Collapsed by default. It is prerequisite detail — the same few
-        # sentences on every page — and a reader who has run one lesson never
-        # needs it again, so it should not sit above the lesson every time.
-        # <details> needs no JavaScript and stays keyboard-accessible.
-        # A converted lesson says all of this in its run block instead.
-        if sid not in ROLLED_OUT:
-            parts.append('<details class="runnote"><summary>What running a lesson '
-                         'needs</summary>'
-                         '<div class="runbody"><p>Every skill here is carried out by '
-                         'a <b>model</b>; the script is the harness. Link the skills '
-                         'store into your agent with '
-                         '<code>python3 scripts/install_skills.py --all</code> and ask '
-                         'for the task in your own words, or run '
-                         f'<code>python3 skills/{html.escape(script_of(sid) or FALLBACK_SCRIPT)}</code> '
-                         'against the fixture committed with the skill.</p>'
-                         '<p>A signed-in Claude Code CLI needs <b>no API key</b>; any '
-                         'OpenAI-compatible endpoint works too. With neither, the '
-                         'skill exits 2 and says so rather than inventing an answer. '
-                         '<a href="A0.0.html">A0.0</a> sets it up, and '
-                         '<a href="A0.1.html">A0.1</a> explains how a lesson is '
-                         'built.</p></div></details>')
     else:
         parts.append('<p class="sub runnote">This lesson is a reading lesson — '
                      'diagrams and prose, no code to run.</p>')

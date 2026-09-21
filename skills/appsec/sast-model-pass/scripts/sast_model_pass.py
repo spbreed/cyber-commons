@@ -15,7 +15,7 @@ re-run — every number in the output is derived from it.
 
     export OPENAI_BASE_URL=http://127.0.0.1:11434/v1
     export OPENAI_API_KEY=ollama
-    export MODEL=qwen2.5:1.5b-instruct
+    export MODEL=<the model name your endpoint serves>
     python3 skills/appsec/sast-model-pass/scripts/sast_model_pass.py
 
 With no endpoint configured this exits 2 and says so. Nothing is substituted
@@ -36,7 +36,7 @@ SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
 # The format names its own tokens. An earlier version wrote the first field as
-# "VERDICT", and a served Qwen2.5-7B returned the literal string VERDICT — it
+# "VERDICT", and a served 7B open-weight model returned the literal string VERDICT — it
 # read the placeholder as the answer. The ask is the part you own, and that is
 # C2.1's whole point arriving here as a bug.
 QUESTION = ("Does this function verify that the caller is entitled to the rows "

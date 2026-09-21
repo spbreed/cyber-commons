@@ -64,12 +64,12 @@ before the success, so the messages are recognised rather than debugged.
 
 ## Example
 
-On a machine with Ollama serving `qwen2.5-7b-instruct`:
+On a machine with Ollama serving `my-local-model`:
 
 ```
 runtime       : cyber_commons_skill_runtime (skills/_runtime)
 endpoint      : http://127.0.0.1:11434/v1
-model         : qwen2.5-7b-instruct
+model         : my-local-model
 api key set   : yes
 
 [1] unconfigured  -> exit 2, "No model endpoint is configured"
@@ -113,7 +113,7 @@ ready: this machine can run any skill in the commons
 
 `endpoint` and `model` are strings when the machine reaches a model through an
 HTTP endpoint (the example above: `http://127.0.0.1:11434/v1` and
-`qwen2.5-7b-instruct`) and **null** when it does not. A signed-in Claude Code
+`my-local-model`) and **null** when it does not. A signed-in Claude Code
 CLI has no endpoint at all, so `null` is the true answer there and inventing a
 URL to fill the field would be worse. Never write a value the input did not
 give you.
