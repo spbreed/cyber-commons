@@ -17,6 +17,7 @@ on:
       - 'site/**'
       - 'lessons/**'
       - 'skills/**'
+      - 'lesson-skills/**'
       - 'labs/cybercommons/**'
       - 'curriculum/labs.json'
       - 'scripts/**'
@@ -183,6 +184,14 @@ jobs:
       # for a lesson that no longer says that.
       - name: Check the lightboard scripts are in step with the lessons
         run: python3 scripts/build_lightboard.py --check
+
+      # A learner does a lesson by picking one skill in their own agent, and
+      # that skill is generated from the lesson's sources. Change a lesson and
+      # forget to regenerate, and the skill teaches the old one; delete a lesson
+      # and its skill still loads and still answers. This compares the two and
+      # refuses a directory in lesson-skills/ that no converted lesson owns.
+      - name: Check the lesson skills are in step with the lessons
+        run: python3 scripts/build_lesson_skills.py --check
 
       - name: Every lesson's framework labels must resolve, and be real
         run: python3 scripts/check_frameworks.py

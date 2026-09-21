@@ -29,20 +29,46 @@ script checks before it writes.
     python3 scripts/install_skills.py --all --dry-run
     python3 scripts/install_skills.py --tool claude --uninstall
 
-Windows: symlinks need Developer Mode or an elevated shell. Where they are
-unavailable this says so and suggests `--copy`, which is honest about being a
-snapshot rather than pretending it is a link.
+**Two stores.** `skills/<area>/<name>/` holds the audit skills, the procedures.
+`lesson-skills/<name>/` holds one skill per lesson, named `a1-1-the-loop`, which
+is what a learner picks in their agent to do a lesson. Both are linked, never
+copied. Without `--lessons` this links the audits, as it always has; with it,
+only the lesson skills unless `--audits` is added:
+
+    python3 scripts/install_skills.py --all --lessons A     # every A lesson
+    python3 scripts/install_skills.py --all --lessons A0.0  # one lesson
+    python3 scripts/install_skills.py --tool copilot --lessons A
+
+**Windows.** A symlink needs Developer Mode or an elevated shell, but a
+directory *junction* does not, and for a directory it is the same thing to
+everything that reads it: one folder, no copy, edits visible at once. So a
+failed symlink falls back to a junction, and only if that fails too does this
+say so and suggest `--copy`, which is honest about being a snapshot.
+
+**GitHub Copilot** reads project skills from `.github/skills/` inside the
+repository, so `--tool copilot` links there rather than into your home
+directory. **Codex** reads `.agents/skills/` (Cursor and Copilot read it too),
+which is `--tool agents`. Those links are machine-specific, so both folders are
+gitignored.
 """
 from __future__ import annotations
 
 import argparse
 import os
+import re
 import shutil
+import stat
+import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from exercises.lessonskills import matches  # noqa: E402
+
 STORE = ROOT / "skills"
+LESSONS = ROOT / "lesson-skills"
+STORES = (STORE, LESSONS)
 
 # Where each agent looks for skills. All of them follow the same convention —
 # a directory per skill, named for the skill — because they implement the same
@@ -54,37 +80,110 @@ TOOLS = {
     "cursor": Path.home() / ".cursor" / "skills",
     "opencode": Path.home() / ".opencode" / "skills",
     "goose": Path.home() / ".config" / "goose" / "skills",
+    # Copilot loads project skills from the repository itself, not from $HOME.
+    "copilot": ROOT / ".github" / "skills",
+    # The shared project location: Codex reads `.agents/skills` (its docs list
+    # no `~/.codex/skills`, which is what the `codex` row above still points
+    # at), and Cursor and Copilot read it as well.
+    "agents": ROOT / ".agents" / "skills",
 }
 
 
 def skills() -> list[Path]:
-    """Every skill directory in the store. `_runtime` is a library, not a skill."""
+    """Every audit skill directory in the store. `_runtime` is a library, not a skill."""
     return sorted(p.parent for p in STORE.glob("*/*/SKILL.md")
                   if not p.parent.parent.name.startswith("_"))
 
 
+def lesson_skills(selector: str | None = None) -> list[Path]:
+    """The per-lesson skills, optionally only those a selector names.
+
+    The lesson id is read from each skill's own `commons-lesson:` line rather
+    than from its directory name, so the selection cannot disagree with the
+    skill about which lesson it is.
+    """
+    out = []
+    for p in sorted(LESSONS.glob("*/SKILL.md")):
+        m = re.search(r"commons-lesson:\s*(\S+)", p.read_text(encoding="utf8"))
+        if selector is None or (m and matches(m.group(1), selector)):
+            out.append(p.parent)
+    return out
+
+
 def collisions() -> dict[str, list[str]]:
-    """Skill names claimed by more than one area.
+    """Skill names claimed by more than one place.
 
     Flattening is only safe while these are empty. Checked rather than assumed,
     because the day somebody adds `detection/triage-report` next to
     `appsec/triage-report` the install would silently link one and drop the
-    other.
+    other. The lesson skills are in the same flat namespace as the audits, so
+    they are checked against them too.
     """
     seen: dict[str, list[str]] = {}
     for d in skills():
         seen.setdefault(d.name, []).append(f"{d.parent.name}/{d.name}")
+    for d in lesson_skills():
+        seen.setdefault(d.name, []).append(f"lesson-skills/{d.name}")
     return {k: v for k, v in seen.items() if len(v) > 1}
+
+
+def is_link(p: Path) -> bool:
+    """A symlink, or on Windows a directory junction.
+
+    `Path.is_symlink()` is False for a junction, so a junction this script made
+    on an earlier run would look like somebody's own directory and be skipped
+    rather than recognised. Junctions and symlinks are both reparse points.
+    """
+    if p.is_symlink():
+        return True
+    if os.name == "nt":
+        try:
+            return bool(os.lstat(p).st_file_attributes
+                        & stat.FILE_ATTRIBUTE_REPARSE_POINT)
+        except (OSError, AttributeError):
+            return False
+    return False
+
+
+def points_into_stores(p: Path) -> bool:
+    try:
+        target = p.resolve()
+    except OSError:
+        return False
+    return any(s in target.parents for s in STORES)
+
+
+def unlink_link(p: Path) -> None:
+    """Remove a link without touching what it points at.
+
+    `unlink()` on a junction raises; `rmdir()` removes the junction itself and
+    leaves the target alone, which is what is wanted.
+    """
+    if p.is_symlink():
+        p.unlink()
+    else:
+        os.rmdir(p)
+
+
+def make_junction(src: Path, dst: Path) -> None:
+    try:
+        import _winapi
+        _winapi.CreateJunction(str(src), str(dst))
+    except (ImportError, AttributeError, OSError):
+        r = subprocess.run(["cmd", "/c", "mklink", "/J", str(dst), str(src)],
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            raise OSError(r.stdout.strip() or r.stderr.strip() or "mklink failed")
 
 
 def link_one(src: Path, dst: Path, *, copy: bool, dry: bool) -> str:
     """Return what happened: linked, relinked, copied, kept, or an error."""
-    if dst.is_symlink():
+    if is_link(dst):
         if dst.resolve() == src.resolve():
             return "already linked"
         if dry:
-            return f"would relink (points at {os.readlink(dst)})"
-        dst.unlink()
+            return "would relink (points somewhere else)"
+        unlink_link(dst)
     elif dst.exists():
         # A real directory here is somebody's own skill, or an older copy.
         # Never delete it silently — say so and let them decide.
@@ -100,8 +199,14 @@ def link_one(src: Path, dst: Path, *, copy: bool, dry: bool) -> str:
         dst.symlink_to(src, target_is_directory=True)
         return "linked"
     except OSError as e:
-        return (f"FAILED — {e}. On Windows, enable Developer Mode or use "
-                f"--copy.")
+        if os.name == "nt":
+            try:
+                make_junction(src, dst)
+                return "linked (junction — needs no Developer Mode)"
+            except OSError as e2:
+                return (f"FAILED — no symlink ({e}) and no junction ({e2}). "
+                        f"Enable Developer Mode, or use --copy.")
+        return f"FAILED — {e}. Use --copy for a snapshot."
 
 
 def main() -> int:
@@ -111,6 +216,12 @@ def main() -> int:
                     help="install for this tool; repeatable")
     ap.add_argument("--all", action="store_true",
                     help="every tool whose directory already exists")
+    ap.add_argument("--lessons", metavar="SEL",
+                    help="link the per-lesson skills for SEL: a function (A), a "
+                         "chapter (A1), a lesson (A1.1) or all. Audits are not "
+                         "linked unless --audits is also given")
+    ap.add_argument("--audits", action="store_true",
+                    help="with --lessons: also link the audit skills")
     ap.add_argument("--list", action="store_true", help="show what is installed")
     ap.add_argument("--uninstall", action="store_true",
                     help="remove links this script made; never touches a real directory")
@@ -121,22 +232,31 @@ def main() -> int:
 
     all_skills = skills()
     if dup := collisions():
-        print("REFUSING: these skill names appear in more than one area, so a "
+        print("REFUSING: these skill names appear in more than one place, so a "
               "flat install would drop one of each:", file=sys.stderr)
         for name, where in sorted(dup.items()):
             print(f"   {name}: {', '.join(where)}", file=sys.stderr)
         return 1
 
     if a.list:
-        print(f"{len(all_skills)} skill(s) in {STORE.relative_to(ROOT)}\n")
+        every_lesson = lesson_skills()
+        print(f"{len(all_skills)} audit skill(s) in {STORE.relative_to(ROOT)}, "
+              f"{len(every_lesson)} lesson skill(s) in "
+              f"{LESSONS.relative_to(ROOT)}\n")
         for tool, path in sorted(TOOLS.items()):
             if not path.exists():
                 print(f"  {tool:<10} {path}  (not present)")
                 continue
-            linked = sum(1 for d in path.iterdir()
-                         if d.is_symlink() and STORE in d.resolve().parents)
-            other = sum(1 for d in path.iterdir() if d.is_dir() and not d.is_symlink())
-            print(f"  {tool:<10} {path}  —  {linked} linked here, {other} of its own")
+            entries = [d for d in path.iterdir() if d.is_dir()]
+            mine = [d for d in entries if is_link(d) and points_into_stores(d)]
+            audits = sum(1 for d in mine if STORE in d.resolve().parents)
+            lessons = sorted(d.name for d in mine if LESSONS in d.resolve().parents)
+            other = len(entries) - len(mine)
+            print(f"  {tool:<10} {path}  —  {audits} audit(s) and "
+                  f"{len(lessons)} of {len(every_lesson)} lesson skill(s) "
+                  f"linked, {other} of its own")
+            for name in lessons:
+                print(f"               {name}")
         return 0
 
     targets = list(a.tool or [])
@@ -151,18 +271,33 @@ def main() -> int:
     if not targets:
         ap.error("choose --tool, --all, or --list")
 
+    # What to link. Bare, this is the audits, as before. With --lessons it is
+    # the lesson skills a learner picks, and only those: linking 139 audits
+    # next to them would bury the lesson names in a list nobody asked for.
+    chosen: list[Path] = []
+    if a.lessons:
+        chosen += lesson_skills(a.lessons)
+        if not chosen:
+            print(f"No lesson skill matches {a.lessons!r}. Lessons are converted "
+                  f"a few at a time; `--list` shows which exist.", file=sys.stderr)
+            return 1
+        if a.audits:
+            chosen += all_skills
+    else:
+        chosen = all_skills
+
     rc = 0
     for tool in targets:
         dest = TOOLS[tool]
         print(f"\n{tool} — {dest}")
         counts: dict[str, int] = {}
-        for src in all_skills:
+        for src in chosen:
             if a.uninstall:
                 dst = dest / src.name
-                if dst.is_symlink() and dst.resolve() == src.resolve():
+                if is_link(dst) and dst.resolve() == src.resolve():
                     what = "would unlink" if a.dry_run else "unlinked"
                     if not a.dry_run:
-                        dst.unlink()
+                        unlink_link(dst)
                 elif dst.exists():
                     what = "left alone — not a link to this store"
                 else:
@@ -176,9 +311,12 @@ def main() -> int:
         for what, n in sorted(counts.items(), key=lambda x: -x[1]):
             print(f"   {n:4d}  {what}")
 
-    if not a.uninstall and not a.dry_run:
+    if not a.uninstall and not a.dry_run and rc == 0:
         print("\nEdit a SKILL.md in this repository and every linked tool sees "
               "the change immediately. There is no sync step.")
+        if a.lessons:
+            print("Restart your agent (or reload its skills), open it in this "
+                  "folder, and pick a lesson skill by name.")
     return rc
 
 

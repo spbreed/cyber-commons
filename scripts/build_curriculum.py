@@ -19,14 +19,46 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
-LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
+sys.path.insert(0, str(ROOT / "scripts"))
+from exercises.lessonskills import ROLLED_OUT, skill_name  # noqa: E402
+
+CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text(encoding="utf8"))
+LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text(encoding="utf8"))["labs"]
 OUT = ROOT / "curriculum"
+TITLES = {s["id"]: s["title"] for f in CUR["functions"] for t in f["tracks"]
+          for s in t["sessions"]}
+
+
+def lesson_run(sid: str) -> list[str]:
+    """The run block of a converted lesson, derived rather than typed.
+
+    A converted lesson is done by picking its skill in an agent, and the page
+    prints the same thing (`build_site.lesson_skill_block`). Typing it into
+    labs.json as well would be a second copy to drift, so labs.json carries no
+    entry for a converted lesson and this is what the chapter doc shows.
+    """
+    name = skill_name(sid, TITLES[sid])
+    return [
+        "# --- 1 · the repository. master is the trunk. ---",
+        "git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons",
+        "",
+        "# --- 2 · link this lesson's skill into your agent, once. On Windows,",
+        "#         use `python` where this says `python3`. ---",
+        f"python3 scripts/install_skills.py --all --lessons {sid}",
+        "",
+        "# --- 3 · in your agent, open this folder and pick the skill:",
+        f"#         {name}",
+        f"#         (Claude Code and Copilot: /{name} · Cursor: type / and",
+        f"#         search · Codex: ${name}). It ends with a readback. ---",
+        "",
+        "# --- or, with no agent, run the same lesson yourself ---",
+        f"python3 scripts/lesson.py {sid}",
+    ]
 
 
 
 def lab_block(sid: str, goal: str = "") -> str:
-    lab = LABS.get(sid)
+    lab = {"run": lesson_run(sid)} if sid in ROLLED_OUT else LABS.get(sid)
     if not lab:
         return ""
     # The goal comes from the session, which is the only copy of it now.
@@ -119,7 +151,8 @@ def main() -> int:
     files = render()
     total = sum(len(t["sessions"]) for f in CUR["functions"] for t in f["tracks"])
     with_labs = sum(1 for f in CUR["functions"] for t in f["tracks"]
-                    for s in t["sessions"] if s["id"] in LABS)
+                    for s in t["sessions"]
+                    if s["id"] in LABS or s["id"] in ROLLED_OUT)
 
     if a.check:
         stale = [p.name for p, text in files.items()

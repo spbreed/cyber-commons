@@ -30,3 +30,8 @@ kaggle.json
 
 # tool labs download and run real products; nothing there is source
 labs/tools/*/work/
+
+# Per-machine links made by scripts/install_skills.py --tool copilot; a link
+# to somebody else's clone is meaningless, so it is never committed.
+.github/skills/
+.agents/skills/

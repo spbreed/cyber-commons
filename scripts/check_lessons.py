@@ -86,6 +86,7 @@ from exercises.days import DAYS, FUNCTION_DAYS  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 from exercises.layout import (FULL, PARTS, parts_for, runs_something,  # noqa: E402
                                why_dropped)
+from exercises.lessonskills import ROLLED_OUT, skill_name  # noqa: E402
 
 # Functions D and E are long arguments rather than collections, and each is told
 # in one unit: an interval between an agent acting and the control being back at
@@ -256,6 +257,24 @@ def main() -> int:
             problems.append(f"{sid}: lesson page not built — run build_site.py")
             continue
         page = page_f.read_text()
+
+        # 0c — a converted lesson is done by picking its skill. The page must
+        # offer that skill by name and the harness that backs it, the skill
+        # must exist, and the page must not carry a sample of the readback: the
+        # run prints it, and "What you just proved" owns the conclusion. A
+        # pasted sample is the second conclusion 59 pages once carried.
+        if sid in ROLLED_OUT:
+            name = skill_name(sid, s["title"])
+            if not (ROOT / "lesson-skills" / name / "SKILL.md").is_file():
+                problems.append(f"{sid}: converted, but lesson-skills/{name}/ "
+                                f"does not exist — run build_lesson_skills.py")
+            if name not in page or f"scripts/lesson.py {sid}" not in page:
+                problems.append(f"{sid}: converted, but the page does not offer "
+                                f"{name} and `scripts/lesson.py {sid}`")
+            if "readback —" in own_prose(page):
+                problems.append(f"{sid}: the page carries a sample of the "
+                                f"readback. The run prints it; the page states "
+                                f"the conclusion once, in \"What you just proved\"")
         framework = page.find("The framework, and how it works")
         execution = page.find("Real time execution as skill")
         if framework < 0:

@@ -156,7 +156,7 @@ def materialise(text: str, have: set[str]) -> str:
 
 
 def strip_file_marker(text: str) -> str:
-    """Remove the marker line entirely, newline included.
+    r"""Remove the marker line entirely, newline included.
 
     `[ \t]*` rather than `\s*`: `\s` matches newlines, so a leading `\s*`
     greedily ate the blank line *above* the marker as well. That only shows up

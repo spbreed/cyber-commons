@@ -26,48 +26,42 @@
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of A0.0:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at A0.0 --out work/cybertravels
-python3 scripts/checkpoint.py --at A0.0 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons A0.0
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         a0-0-set-up-your-computer
+#         (Claude Code and Copilot: /a0-0-set-up-your-computer · Cursor: type / and
+#         search · Codex: $a0-0-set-up-your-computer). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py A0.0
 ```
 
 ---
 
 ### A0.1 — Start here — what this is, who it is for, and how to run it
 
-- **Lab** — Run the preflight on both routes and compare the output checksum.
+- **Lab** — Do this lesson by picking its skill in your agent, then run it by hand and compare the two readbacks.
 
-**Run it** — Run the preflight on both routes and compare the output checksum.
+**Run it** — Do this lesson by picking its skill in your agent, then run it by hand and compare the two readbacks.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---
 git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
 
-# --- 2 · your copy of CyberTravels as it stood at the END of A0.1:
-#         everything taught so far, nothing taught after it. Named
-#         cybertravels/ so it imports. ---
-mkdir -p work && python3 scripts/checkpoint.py --at A0.1 --out work/cybertravels
-python3 scripts/checkpoint.py --at A0.1 --diff      # what this lesson changed
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons A0.1
 
-# --- 3 · a model. A signed-in Claude Code CLI needs no API key: ---
-claude --version        # prints a version? nothing else to configure
+# --- 3 · in your agent, open this folder and pick the skill:
+#         a0-1-start-here
+#         (Claude Code and Copilot: /a0-1-start-here · Cursor: type / and
+#         search · Codex: $a0-1-start-here). It ends with a readback. ---
 
-# --- 4 · run the skill against its committed fixture ---
-python3 skills/programme/dev-environment-preflight/scripts/dev_environment_preflight.py
-
-# --- or install it into your own agent and ask in your own words ---
-python3 scripts/install_skills.py --all
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py A0.1
 ```
 
 ---

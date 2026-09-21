@@ -490,8 +490,23 @@ def run_with_model(skill_md, task, *, max_tokens=1500, temperature=0.0):
     the contract is a finding a lesson should print, not an error that hides
     what the model actually said.
     """
+    system, prompt = build_prompt(skill_md, task)
+    answer, kind, model = ask(prompt, system=system, max_tokens=max_tokens,
+                              temperature=temperature)
+    instance, problems = validate_answer(skill_md, answer)
+    return instance, problems, kind, model
+
+
+def build_prompt(skill_md, task):
+    """(system, prompt) for one skill run — the whole of what a model is given.
+
+    Public because the model is not always ours to call. An agent that is
+    already running (Copilot, Cursor, Codex) can be handed exactly this and
+    answer it itself, and `validate_answer` then holds that answer to the same
+    contract. `run_with_model` builds its prompt here too, so there is one
+    prompt and it cannot differ between the two routes.
+    """
     meta, body = parse_skill(skill_md)
-    contract = contract_of(body)
     system = ("You are executing a documented procedure exactly as written. "
               "Follow the skill below. Reply with one JSON object matching the "
               "output contract and nothing else — no prose, no explanation.")
@@ -499,10 +514,17 @@ def run_with_model(skill_md, task, *, max_tokens=1500, temperature=0.0):
               f"---\n\n## The input to apply the procedure to\n\n{task}\n\n"
               f"---\n\nReturn one JSON object matching the output contract "
               f"above. Use the contract's exact keys.")
-    answer, kind, model = ask(prompt, system=system, max_tokens=max_tokens,
-                              temperature=temperature)
+    return system, prompt
+
+
+def validate_answer(skill_md, answer):
+    """(instance, problems) — an answer's first JSON object, held to the contract.
+
+    Conformance only: an answer that fits the shape is not thereby correct.
+    """
+    meta, body = parse_skill(skill_md)
     instance = _first_json(answer)
-    return instance, check(instance, contract), kind, model
+    return instance, check(instance, contract_of(body))
 
 
 # ---------------------------------------------------------------- diagrams

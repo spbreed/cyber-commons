@@ -131,7 +131,7 @@ So here is what you count instead: whether you can do the thing this lesson desc
 
 *[Point at the output on screen. Do not read it out.]*
 
-> Four things, in order. Which route it found and which model it will use.
+> You picked one skill and it did a whole lesson: it set up the example system, ran a check against a model, and told you what happened. Three things are now true.
 
 **⑤ Hand it over**
 
@@ -143,7 +143,7 @@ Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 2 of 2 · runs a skill · 505 words, about 3.6 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · runs a skill · 496 words, about 3.5 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -191,11 +191,11 @@ So here is what you count instead: whether you can do the thing this lesson desc
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The tree, inventoried from disk rather than asserted — 14 areas, 139 skills, 139 of them with a script, counted from what was fetched rather than claimed.
+> You did a lesson the way every lesson is done — one skill, picked in your assistant — and read back what happened.
 
 **⑤ Hand it over**
 
-Run it on the other route. If you ran the script by path, now run python3 scripts/install skills.py --all, open your agent anywhere on the machine and ask it for dev-environment-preflight by name; if you started with the agent, run the script directly.
+Do the same lesson the other way. If you picked the skill in your assistant, now run python3 scripts/lesson.py A0.1 yourself, or the other way round, and put the two readbacks side by side.
 
 That closes chapter A0. You can run any lesson in the commons on either route, you know what the one code cell in it is doing, and you can tell a fetch failure from a procedure failure by reading one line of the error.
 

@@ -405,6 +405,16 @@ between two procedures, not by having more to cover.
    by name in whichever agent CLI you use. Both execute the same file; neither
    is a copy of the procedure.
 
+   **A converted lesson replaces that block.** Its run block is "pick this
+   lesson's skill in your agent": install once, pick `a0-0-…`, read what
+   happened, with the direct `scripts/lesson.py` command last for a reader with
+   no agent. The skill is generated (`scripts/build_lesson_skills.py`) and
+   `scripts/lesson.py` ends every run with the same four-heading readback —
+   *What I did, What changed, The number, Read this next* — so the page does not
+   print a sample of it. That would be a second conclusion, and "What you just
+   proved" already owns the conclusion. Which lessons are converted is
+   `scripts/exercises/lessonskills.py`.
+
 The skills are **symlinked** into each agent's skills directory rather than
 copied, so a reader who edits a `SKILL.md` here sees the change in every tool at
 once. `install_skills.py` refuses to install if two areas ever claim one skill

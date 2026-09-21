@@ -39,6 +39,7 @@ OUT = ROOT / "site" / "lessons"
 # module. Links built against a branch that has no such path are the bug that
 # constant exists to prevent, and scripts/check_repo_links.py enforces it.
 from exercises.repo import BRANCH, RAW, REPO  # noqa: E402
+from exercises.lessonskills import ROLLED_OUT, skill_name  # noqa: E402
 
 # Execution evidence still gates CI — scripts/test_skills.py and
 # scripts/check_determinism.py must both pass — but it is no longer printed on
@@ -231,6 +232,25 @@ def skill_html(ref: str) -> str:
             + md_to_html(body.strip()))
 
 
+def fold_html(summary: str, inner: list) -> str:
+    """A step the reader may open but is not made to read.
+
+    `<details>` needs no JavaScript and stays keyboard-accessible, so a blocked
+    script cannot leave the content unreachable. Used where a lesson has an
+    easy way and a complicated one (A0.0's routes to a model): the complicated
+    one is still on the page and still findable, and it stops standing between
+    a beginner and the step they came for.
+    """
+    body = []
+    for kind, source in inner:
+        if kind == "md" and isinstance(source, str):
+            body.append(md_to_html(source.replace("\\n", "\n")))
+        elif kind == "html":
+            body.append(source)
+    return (f'<details class="fold"><summary>{html.escape(summary)}</summary>'
+            f'<div class="foldbody">{"".join(body)}</div></details>')
+
+
 def steps_html(sid: str, ex: dict) -> tuple[str, str]:
     """(the prose steps, the skill procedure) — the code steps are not rendered.
 
@@ -246,6 +266,8 @@ def steps_html(sid: str, ex: dict) -> tuple[str, str]:
             prose.append(md_to_html(source.replace("\\n", "\n")))
         elif kind == "html":
             prose.append(source)
+        elif kind == "fold":
+            prose.append(fold_html(*source))
     return "".join(prose), "".join(skill)
 
 
@@ -416,6 +438,73 @@ def page_parts(entry: dict) -> frozenset[str]:
                      last_in_track=bool(entry.get("last_in_track")))
 
 
+# How each agent starts a lesson skill, and which installer target puts it where
+# that agent looks. Each row was read from the agent's own documentation rather
+# than assumed from another agent's: Copilot and Cursor both list `.agents/skills`
+# among their project locations, but only Copilot documents `.github/skills`,
+# and Codex documents `.agents/skills` and `$name` where the others use `/name`.
+AGENT_ROWS = (
+    ("Claude Code", "claude", "type <code>/{name}</code>"),
+    ("GitHub Copilot (VS Code)", "copilot", "type <code>/{name}</code> in Chat"),
+    ("Cursor", "cursor", "type <code>/</code> in Agent chat and search for it"),
+    ("Codex", "agents", "type <code>${name}</code>, or run <code>/skills</code>"),
+)
+
+
+def lesson_skill_block(sid: str) -> str:
+    """Do a converted lesson by picking its skill, not by running a script.
+
+    Three steps a learner can hold in their head: install once, pick the skill,
+    read what happened. The direct command stays, last, for somebody with no
+    agent, because `scripts/lesson.py` is what the skill runs either way.
+    """
+    title = next(s["title"] for f in CUR["functions"] for t in f["tracks"]
+                 for s in t["sessions"] if s["id"] == sid)
+    name = skill_name(sid, title)
+    rows = "".join(
+        f'<tr><td>{html.escape(agent)}</td>'
+        f'<td><code>python3 scripts/install_skills.py --tool {tool} '
+        f'--lessons {html.escape(sid)}</code></td>'
+        f'<td>{how.format(name=html.escape(name))}</td></tr>'
+        for agent, tool, how in AGENT_ROWS)
+    return (
+        '<div class="runbox">'
+        '<p><b>Do this lesson in your agent.</b> Three steps, and you type '
+        'no commands after the first.</p>'
+        '<p><b>1 · Install it, once.</b> From the folder you cloned, link this '
+        'lesson’s skill into your agent. <code>--all</code> does every '
+        'agent it finds on your machine:</p>'
+        f'<pre><code>python3 scripts/install_skills.py --all --lessons {html.escape(sid)}'
+        '</code></pre>'
+        '<p class="runnote">Then restart your agent and open it in that folder. '
+        'On Windows, if <code>python3</code> says <em>Python was not found</em>, '
+        'use <code>python</code> instead.</p>'
+        f'<p><b>2 · Pick <code>{html.escape(name)}</code>.</b> Where you find it '
+        'depends on the agent:</p>'
+        '<table class="agents"><thead><tr><th>agent</th><th>install just for '
+        'this agent</th><th>start it</th></tr></thead><tbody>'
+        + rows + '</tbody></table>'
+        '<p><b>3 · Read what happened.</b> The skill teaches the idea first, '
+        'gets the CyberTravels code as it stood at the end of this lesson, runs '
+        'it, and ends with a readback under four headings: <em>What I did</em>, '
+        '<em>What changed</em>, <em>The number</em> and <em>Read this next</em>. '
+        'It reports a skipped or refused step as exactly that, never as a pass.</p>'
+        '<p><b>No agent?</b> The skill runs one script, and you can run it '
+        'yourself. It prints the same readback:</p>'
+        f'<pre><code>python3 scripts/lesson.py {html.escape(sid)}</code></pre>'
+        '<p><b>Want just the code?</b> The skill gets it with the checkpoint '
+        'tool, which you can run yourself: CyberTravels as it stood at the '
+        'end of this lesson, and what this lesson changed.</p>'
+        f'<pre><code>python3 scripts/checkpoint.py --at {html.escape(sid)} '
+        '--out work/cybertravels\n'
+        f'python3 scripts/checkpoint.py --at {html.escape(sid)} --diff</code></pre>'
+        '<p class="runnote">Every skill here is carried out by a <b>model</b>. A '
+        'signed-in Claude Code CLI needs no API key; any OpenAI-compatible '
+        'endpoint works too. With neither, the audit exits 2 and says so rather '
+        'than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p>'
+        '</div>')
+
+
 def run_block(sid: str) -> str:
     """How to run this lesson's skill, on the reader's own machine.
 
@@ -426,6 +515,8 @@ def run_block(sid: str) -> str:
     comparable. Both appear, in that order, because the first is the one a
     reader will actually use and the second is the one a reviewer needs.
     """
+    if sid in ROLLED_OUT:
+        return lesson_skill_block(sid)
     script = script_of(sid)
     # The checkpoint comes first and is offered on every lesson, including the
     # three that run no skill. A reader who lands here needs CyberTravels as it
@@ -558,31 +649,38 @@ def lesson_page(entry, prev, nxt) -> str:
     # One button, and only on a lesson that has something to run — a reading
     # lesson gets none, because there is nothing on the other end of it.
     if has_code(sid):
-        skill_dir = (script_of(sid) or "").rsplit("/scripts/", 1)[0]
+        if sid in ROLLED_OUT:
+            # The skill a learner picks. The audit it calls is embedded further
+            # down the page, so this is the one worth linking to.
+            target = f"lesson-skills/{skill_name(sid, s['title'])}"
+        else:
+            target = "skills/" + (script_of(sid) or "").rsplit("/scripts/", 1)[0]
         parts.append('<div class="cta-row">'
-                     f'<a class="btn k" href="{REPO}/tree/{BRANCH}/skills/'
-                     f'{html.escape(skill_dir)}" target="_blank" rel="noopener">'
+                     f'<a class="btn k" href="{REPO}/tree/{BRANCH}/'
+                     f'{html.escape(target)}" target="_blank" rel="noopener">'
                      f'↗ Open this skill in the repository</a>'
                      '</div>')
         # Collapsed by default. It is prerequisite detail — the same few
         # sentences on every page — and a reader who has run one lesson never
         # needs it again, so it should not sit above the lesson every time.
         # <details> needs no JavaScript and stays keyboard-accessible.
-        parts.append('<details class="runnote"><summary>What running a lesson '
-                     'needs</summary>'
-                     '<div class="runbody"><p>Every skill here is carried out by '
-                     'a <b>model</b>; the script is the harness. Link the skills '
-                     'store into your agent with '
-                     '<code>python3 scripts/install_skills.py --all</code> and ask '
-                     'for the task in your own words, or run '
-                     f'<code>python3 skills/{html.escape(script_of(sid) or FALLBACK_SCRIPT)}</code> '
-                     'against the fixture committed with the skill.</p>'
-                     '<p>A signed-in Claude Code CLI needs <b>no API key</b>; any '
-                     'OpenAI-compatible endpoint works too. With neither, the '
-                     'skill exits 2 and says so rather than inventing an answer. '
-                     '<a href="A0.0.html">A0.0</a> sets it up, and '
-                     '<a href="A0.1.html">A0.1</a> explains how a lesson is '
-                     'built.</p></div></details>')
+        # A converted lesson says all of this in its run block instead.
+        if sid not in ROLLED_OUT:
+            parts.append('<details class="runnote"><summary>What running a lesson '
+                         'needs</summary>'
+                         '<div class="runbody"><p>Every skill here is carried out by '
+                         'a <b>model</b>; the script is the harness. Link the skills '
+                         'store into your agent with '
+                         '<code>python3 scripts/install_skills.py --all</code> and ask '
+                         'for the task in your own words, or run '
+                         f'<code>python3 skills/{html.escape(script_of(sid) or FALLBACK_SCRIPT)}</code> '
+                         'against the fixture committed with the skill.</p>'
+                         '<p>A signed-in Claude Code CLI needs <b>no API key</b>; any '
+                         'OpenAI-compatible endpoint works too. With neither, the '
+                         'skill exits 2 and says so rather than inventing an answer. '
+                         '<a href="A0.0.html">A0.0</a> sets it up, and '
+                         '<a href="A0.1.html">A0.1</a> explains how a lesson is '
+                         'built.</p></div></details>')
     else:
         parts.append('<p class="sub runnote">This lesson is a reading lesson — '
                      'diagrams and prose, no code to run.</p>')

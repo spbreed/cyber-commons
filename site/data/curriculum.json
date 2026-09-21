@@ -57,7 +57,7 @@
               "title": "Start here — what this is, who it is for, and how to run it",
               "kind": "setup",
               "summary": "The one subject of this commons, the six functions it is written for, and the sections a lesson page is built from — with the rule for which of them a given page shows. Then what Day 0, Day 1 and Day 2 mean, how to use a lab and the skill behind it, why every tool named here is open source, which of four frameworks answers which question, and how to run a lesson on either free route.",
-              "lab": "Run the preflight on both routes and compare the output checksum.",
+              "lab": "Do this lesson by picking its skill in your agent, then run it by hand and compare the two readbacks.",
               "tools": [],
               "models": []
             }

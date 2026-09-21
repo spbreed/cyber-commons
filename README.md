@@ -77,6 +77,17 @@ committed fixture:
 python3 skills/threats/instruction-channel-check/scripts/instruction_channel_check.py   # B1.2, prompt injection
 ```
 
+**Some lessons you do by picking one skill in your own agent.** A0.0 is the
+first, and the others are being converted the same way. Link its skill, open
+your agent in this folder, and pick `a0-0-set-up-your-computer`. It teaches the
+idea, gets the code that lesson adds, runs it, and ends with a readback of what
+happened:
+
+```bash
+python3 scripts/install_skills.py --all --lessons A0.0
+python3 scripts/lesson.py A0.0     # no agent? the same lesson, run by hand
+```
+
 **Or install the skills into your own agent and ask in your own words.** Each
 is a real agent skill in the [agentskills.io](https://agentskills.io) format,
 which any skills-compatible agent loads. One command links all of them into
@@ -365,7 +376,7 @@ python3 scripts/build_site.py          # everything      -> site/lessons/
 python3 scripts/build_lightboard.py    # lessons         -> LIGHTBOARD.md
 ```
 
-CI re-runs all of it with `--check`. It runs 21 scripts, each of which
+CI re-runs all of it with `--check`. It runs 22 scripts, each of which
 exists because of a specific failure: the secret scan, the determinism gate
 across four hash seeds, skill contracts and a
 real offline run of every skill script, every diagram rendered by actual
@@ -394,6 +405,7 @@ scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: B1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
 skills/                     139 agent skills, plus _runtime/ — the one shared library
+lesson-skills/              one skill per converted lesson, generated — what a learner picks in their agent
 labs/                       attestation · incident-register · b2.10-eval-harness · b2-delegation
 labs/evidence/              the recorded offline run of every skill script
 site/                       the website (index + generated lesson pages)

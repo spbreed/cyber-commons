@@ -101,8 +101,8 @@ ready: this machine can run any skill in the commons
 {
   "runtime_importable": true,
   "endpoint_configured": true,
-  "endpoint": "http://127.0.0.1:11434/v1",
-  "model": "qwen2.5-7b-instruct",
+  "endpoint": "str|null",
+  "model": "str|null",
   "api_key_present": true,
   "unconfigured_exit_code": 2,
   "model_calls": 1,
@@ -110,6 +110,13 @@ ready: this machine can run any skill in the commons
   "ready": true
 }
 ```
+
+`endpoint` and `model` are strings when the machine reaches a model through an
+HTTP endpoint (the example above: `http://127.0.0.1:11434/v1` and
+`qwen2.5-7b-instruct`) and **null** when it does not. A signed-in Claude Code
+CLI has no endpoint at all, so `null` is the true answer there and inventing a
+URL to fill the field would be worse. Never write a value the input did not
+give you.
 
 `ready` is true only when all three conditions held **and** the model answered
 in contract. Anything else is false with the failing condition named — a
