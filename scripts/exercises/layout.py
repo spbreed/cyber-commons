@@ -126,6 +126,26 @@ BY_TRACK: dict[str, tuple[frozenset[str], str]] = {
 }
 
 
+# Lessons whose page does not print the audit skill's SKILL.md. Every other
+# page embeds it, because the procedure is the lesson and a copy on the page can
+# never drift from the file it came from. A0.0 is the exception: it is the first
+# page a reader who has never written code sees, and it sets up a computer. A
+# preflight's output contract, its HTTP status codes and its failure modes in
+# the middle of that told a beginner the page was not written for them. The
+# skill is still run and still linked ("Open this skill in the repository"); it
+# is only not pasted in. Deleting the step instead would also have deleted the
+# audit, because the lesson's audit is read from its `skill` step.
+PROCEDURE_NOT_SHOWN: dict[str, str] = {
+    "A0.0": "setup page for a reader who has never written code; the "
+            "preflight's contract and failure modes are noise there",
+}
+
+
+def shows_procedure(sid: str) -> bool:
+    """Does this lesson's page print its audit skill's SKILL.md?"""
+    return sid not in PROCEDURE_NOT_SHOWN
+
+
 def parts_for(sid: str, kind: str | None, track: str, *,
               runs: bool, last_in_track: bool) -> frozenset[str]:
     """The parts this lesson renders.

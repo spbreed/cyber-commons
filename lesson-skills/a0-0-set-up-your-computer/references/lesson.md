@@ -245,7 +245,7 @@ On Windows, if that says *Python was not found*, type `python` in place of `pyth
 
 ### Pick it
 
-Restart your assistant and open it in the `cyber-commons` folder. The skill is called `a0-0-set-up-your-computer`. The table under the skill, further down this page, shows how to start it in Claude Code, GitHub Copilot, Cursor and Codex.
+Restart your assistant and open it in the `cyber-commons` folder. The skill is called `a0-0-set-up-your-computer`. The table further down this page shows how to start it in Claude Code, GitHub Copilot, Cursor and Codex.
 
 ### Read what happened
 
@@ -256,16 +256,6 @@ The skill ends with a **readback** under four headings: *What I did*, *What chan
 ```bash
 python3 scripts/lesson.py A0.0
 ```
-
-## 6 · The check this lesson runs
-
-The check this lesson runs is itself a skill: a written procedure. Everything below the heading is that procedure itself — not a description of one — and it is the same text the model is handed when the lesson runs it.
-
-**Read it before you run it.** That order is the one rule this commons is strictest about, and it is the habit the whole subject rests on: you do not hand an instruction to something that acts on your behalf without reading what the instruction says.
-
-What it does, in four moves. It says which route it found and which model it is about to use. It gives the model a short description of a computer and asks whether that computer is ready. It counts how many ways the answer broke the shape the skill asked for. Then it prints the answer. If no model is configured it stops before any of that, says so, and exits with code 2 — so you meet that message here, on purpose, rather than on lesson forty wondering what went wrong.
-
-### The skill
 
 ## Your turn
 

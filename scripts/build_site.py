@@ -192,7 +192,7 @@ from exercises.anchors import ANCHORS                 # noqa: E402
 from exercises.cybertravels import GROUNDING          # noqa: E402
 from exercises.days import DAYS, FUNCTION_DAYS, FUNCTION_INTRO  # noqa: E402
 from exercises.framing import BRIDGES                 # noqa: E402
-from exercises.layout import parts_for, runs_something  # noqa: E402
+from exercises.layout import parts_for, runs_something, shows_procedure  # noqa: E402
 SKILLS_DIR = ROOT / "skills"
 
 # Every section gets one colour and one icon, and they are fixed across all 134
@@ -261,7 +261,8 @@ def steps_html(sid: str, ex: dict) -> tuple[str, str]:
     prose, skill = [], []
     for kind, source in ex.get("steps", []):
         if kind == "skill":
-            skill.append(skill_html(source))
+            if shows_procedure(sid):
+                skill.append(skill_html(source))
         elif kind == "md" and isinstance(source, str):
             prose.append(md_to_html(source.replace("\\n", "\n")))
         elif kind == "html":

@@ -378,9 +378,9 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
          "ever one copy of it to fix.\n\n"
          "### Pick it\n\n"
          "Restart your assistant and open it in the `cyber-commons` folder. "
-         "The skill is called `a0-0-set-up-your-computer`. The table under "
-         "the skill, further down this page, shows how to start it in Claude "
-         "Code, GitHub Copilot, Cursor and Codex.\n\n"
+         "The skill is called `a0-0-set-up-your-computer`. The table further "
+         "down this page shows how to start it in Claude Code, GitHub "
+         "Copilot, Cursor and Codex.\n\n"
          "### Read what happened\n\n"
          "The skill ends with a **readback** under four headings: *What I "
          "did*, *What changed*, *The number* and *Read this next*. Every "
@@ -393,26 +393,13 @@ this commons, and if a lesson ever requires one, that is a defect in the lesson.
          "```bash\n"
          "python3 scripts/lesson.py A0.0\n"
          "```\n\n"
-         "## 6 · The check this lesson runs"),
+         ""),
 
-  *skill_steps(
-    "programme/dev-environment-preflight",
-    "The check this lesson runs is itself a skill: a written procedure. "
-    "Everything below the heading is that procedure itself — not a "
-    "description of one — and it is the same text the model is handed when "
-    "the lesson runs it.\n\n"
-    "**Read it before you run it.** That order is the one rule this commons is "
-    "strictest about, and it is the habit the whole subject rests on: you do "
-    "not hand an instruction to something that acts on your behalf without "
-    "reading what the instruction says.\n\n"
-    "What it does, in four moves. It says which route it found and which "
-    "model it is about to use. It gives the model a short description of a "
-    "computer and asks whether that computer is ready. It counts how many "
-    "ways the answer broke the shape the skill asked for. Then it prints the "
-    "answer. If no model is configured it stops before any of that, says so, "
-    "and exits with code 2 — so you meet that message here, on purpose, "
-    "rather than on lesson forty wondering what went wrong.\n\n"
-    "### The skill"),
+  # The audit still runs (lesson.py reads it from these two steps); its
+  # SKILL.md is not printed on this page. See layout.PROCEDURE_NOT_SHOWN.
+  ("skill", "programme/dev-environment-preflight"),
+  ("skill_script", "programme/dev-environment-preflight/scripts/"
+                   "dev_environment_preflight.py"),
  ],
  "expect": "You picked one skill and it did a whole lesson: it set up the "
            "example system, ran a check against a model, and told you what "

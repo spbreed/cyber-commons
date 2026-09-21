@@ -66,7 +66,9 @@ count in the docs drifts from the tree, this line included:
 
 **A lesson is two artefacts, not one.** The page (prose, rendered from source)
 and the skill (`skills/<area>/<name>/SKILL.md` plus its script — the procedure).
-The page embeds the skill verbatim at build time and prints the command that
+The page embeds the skill verbatim at build time (except where
+`PROCEDURE_NOT_SHOWN` in `scripts/exercises/layout.py` says otherwise, with its
+reason: A0.0) and prints the command that
 runs it; there is never a second copy of the procedure to correct. A converted
 lesson adds a third, thin one: the skill a learner *picks* in their own agent
 (`lesson-skills/`), which teaches, runs `scripts/lesson.py` and reads back what
