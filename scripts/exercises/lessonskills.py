@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 # function need no entry of their own — a new lesson takes the skill treatment
 # from the moment it is in the curriculum, and `build_lesson_skills.py --check`
 # fails until its skill is generated.
-FUNCTIONS: frozenset[str] = frozenset({"A", "B", "C", "D"})
+FUNCTIONS: frozenset[str] = frozenset({"A", "B", "C", "D", "E"})
 
 
 def _lesson_ids() -> list[str]:
