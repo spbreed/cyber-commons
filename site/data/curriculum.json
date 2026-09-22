@@ -244,6 +244,20 @@
             },
             {
               "id": "A2.4",
+              "kind": "build",
+              "title": "Evaluating the agent's behaviour — tool calls, outputs, and the model as judge",
+              "summary": "Three scoreable surfaces on one agentic run, and only one of them needs a model. Tool-call accuracy against the approved trajectory, output accuracy against recorded truth, and a judge for the answers neither can reach — validated against the labelled subset before any verdict it gives is read.",
+              "risk": "\"The agent is 90% accurate\" with no denominator, no matcher named and no judge validation. Three different numbers can be quoted from one run, the most flattering is the easiest to compute, and an unvalidated judge is a second unmeasured model grading the first.",
+              "control": "Exact-match tool-call accuracy reported with its n and beside the two weaker matchers, output accuracy with unscoreable runs in their own column, and a judge whose agreement with ground truth is published before its verdicts are.",
+              "lab": "Score six agent runs three ways, then check the judge against the runs whose answer you already know.",
+              "tools": [
+                "pytest"
+              ],
+              "open_weight": [],
+              "frontier": []
+            },
+            {
+              "id": "A2.5",
               "title": "What you have built — and every way it can now go wrong",
               "kind": "build",
               "summary": "The handover into Function B. Every component you wrote is re-read as an attack surface, and every control you added is re-read as something with a bypass.",

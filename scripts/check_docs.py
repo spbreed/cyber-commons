@@ -82,6 +82,14 @@ def markdown_files() -> list[str]:
 
 
 def check(rel: str) -> list[str]:
+    # `git ls-files` lists what the index holds, which is not always what is on
+    # disk: a generated file deleted by its builder but not yet staged is still
+    # listed. This used to crash with a bare FileNotFoundError naming the path,
+    # which reads as a broken repository rather than as an unstaged deletion —
+    # the same failure mode the skill runtime exists to avoid.
+    if not (ROOT / rel).is_file():
+        return [f"listed by git but not on disk — stage the deletion, or "
+                f"restore the file"]
     text = (ROOT / rel).read_text(errors="ignore")
     here = (ROOT / rel).parent
     problems = []

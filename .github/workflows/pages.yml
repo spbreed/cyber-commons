@@ -130,7 +130,7 @@ jobs:
       # works, which is the claim a reader depends on. It caught two `was`
       # branches in db.audit binding the wrong number of values at any
       # checkpoint with one of the two lessons applied and not the other —
-      # every checkpoint parsed, and A2.4 raised at the first INSERT.
+      # every checkpoint parsed, and A2.5 raised at the first INSERT.
       #
       # PyJWT only. The app's other dependencies are not needed: the smoke
       # test runs no server and calls no model, which is why it is the thing

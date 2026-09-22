@@ -33,7 +33,7 @@ HOOKS: dict[str, str] = {
  "computer, following written instructions you can read and change. None of it "
  "works until your computer knows which AI to ask. Setting that up is this "
  "whole lesson, and it is the only thing standing between you and the other "
- "147.",
+ "148.",
 
 "A0.1":
  "Most people arrive here from a link, land in the middle of a lesson about "

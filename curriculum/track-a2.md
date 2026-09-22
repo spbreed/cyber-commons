@@ -127,7 +127,35 @@ python3 scripts/lesson.py A2.3
 
 ---
 
-### A2.4 — What you have built — and every way it can now go wrong
+### A2.4 — Evaluating the agent's behaviour — tool calls, outputs, and the model as judge
+
+- **Risk** — "The agent is 90% accurate" with no denominator, no matcher named and no judge validation. Three different numbers can be quoted from one run, the most flattering is the easiest to compute, and an unvalidated judge is a second unmeasured model grading the first.
+- **Control** — Exact-match tool-call accuracy reported with its n and beside the two weaker matchers, output accuracy with unscoreable runs in their own column, and a judge whose agreement with ground truth is published before its verdicts are.
+- **Lab** — Score six agent runs three ways, then check the judge against the runs whose answer you already know.
+- **Tools** — `pytest`
+
+**Run it** — Score six agent runs three ways, then check the judge against the runs whose answer you already know.
+
+```bash
+# --- 1 · the repository. master is the trunk. ---
+git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyber-commons
+
+# --- 2 · link this lesson's skill into your agent, once. On Windows,
+#         use `python` where this says `python3`. ---
+python3 scripts/install_skills.py --all --lessons A2.4
+
+# --- 3 · in your agent, open this folder and pick the skill:
+#         a2-4-evaluating-the-agents-behaviour
+#         (Claude Code and Copilot: /a2-4-evaluating-the-agents-behaviour · Cursor: type / and
+#         search · Codex: $a2-4-evaluating-the-agents-behaviour). It ends with a readback. ---
+
+# --- or, with no agent, run the same lesson yourself ---
+python3 scripts/lesson.py A2.4
+```
+
+---
+
+### A2.5 — What you have built — and every way it can now go wrong
 
 - **Risk** — Builders who never see their own system described adversarially ship the same defect in the next one.
 - **Control** — The same architecture map, annotated with what an attacker reaches for at each edge.
@@ -142,15 +170,15 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 
 # --- 2 · link this lesson's skill into your agent, once. On Windows,
 #         use `python` where this says `python3`. ---
-python3 scripts/install_skills.py --all --lessons A2.4
+python3 scripts/install_skills.py --all --lessons A2.5
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a2-4-what-you-have-built
-#         (Claude Code and Copilot: /a2-4-what-you-have-built · Cursor: type / and
-#         search · Codex: $a2-4-what-you-have-built). It ends with a readback. ---
+#         a2-5-what-you-have-built
+#         (Claude Code and Copilot: /a2-5-what-you-have-built · Cursor: type / and
+#         search · Codex: $a2-5-what-you-have-built). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
-python3 scripts/lesson.py A2.4
+python3 scripts/lesson.py A2.5
 ```
 
 ---

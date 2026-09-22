@@ -5,9 +5,9 @@
 A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.
 
-**148 lessons across 16 chapters.** Every lesson is the idea, the diagram, the
+**149 lessons across 16 chapters.** Every lesson is the idea, the diagram, the
 control, and what it looks like in one running system — and then it **runs a
-skill**. 147 of the 148 do, and the skill is the deliverable: the page shows the
+skill**. 148 of the 149 do, and the skill is the deliverable: the page shows the
 `SKILL.md` as prose and you run that skill's own script out of
 [`skills/`](skills/), on your own machine, in whichever agent CLI you already
 use. Every skill is executed in CI before it ships. **Every skill is executed
@@ -122,7 +122,7 @@ the model, not a package tree.
 
 ## 3 · Then take the spine, then your chapter
 
-Nobody takes all 148. Everyone takes the **common spine** first — twenty-four
+Nobody takes all 149. Everyone takes the **common spine** first — twenty-four
 lessons, in order, that carry the vocabulary the rest runs on. It opens by
 setting your machine up and building the agent, because every control in the
 five functions after it attaches to a mechanism you will have written. Then the
@@ -130,7 +130,7 @@ chapters for the chair you sit in, then one adjacent chapter, because the
 failures happen in the seams.
 
 > **Spine:** **A0.0** → A0.1 → **A1.0** → A1.1 → A1.3 → A1.4 → A2.0 →
-> **A2.4** → B1.0 → B1.1 → B1.2 → **B1.10** → **B1.12** → B2.1 → B2.3 →
+> **A2.5** → B1.0 → B1.1 → B1.2 → **B1.10** → **B1.12** → B2.1 → B2.3 →
 > B2.4 → B3.1 → B3.2 → B3.5 → **C2.0** → C2.3 → **E1.0** → **F1.0** → F1.10
 
 | If you are… | after the spine, open |
@@ -199,7 +199,7 @@ Every procedure is packaged as a real agent skill in [`skills/`](skills), in
 the [agentskills.io](https://agentskills.io) format — `SKILL.md` with
 frontmatter, which any skills-compatible agent loads. Each declares an **output
 contract**, which is what makes a skill checkable rather than aspirational, and
-every one of the 139 carries a script the lesson runs.
+every one of the 140 carries a script the lesson runs.
 
 **The script is the harness, not the procedure.** It assembles the fixture,
 hands the model that skill's own `SKILL.md` and contract, and validates the
@@ -408,12 +408,12 @@ file inside the tree. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 148 sessions, 14 chapters
+site/data/curriculum.json   source of truth: 149 sessions, 14 chapters
 curriculum/                 generated chapter docs + frameworks.json
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: B1.1's architecture as source,
                             with cybertravels/LABELS.md as the ground truth
-skills/                     139 agent skills, plus _runtime/ — the one shared library
+skills/                     140 agent skills, plus _runtime/ — the one shared library
 lesson-skills/              one skill per converted lesson, generated — what a learner picks in their agent
 labs/                       attestation · incident-register · b2.10-eval-harness
 labs/evidence/              the recorded offline run of every skill script

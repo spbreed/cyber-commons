@@ -88,6 +88,12 @@ HOOKS: dict[str, str] = {
    "corpus and every one of them passed. The number moved, the capability did "
    "not, and the decision it justified had already been made.",
  "A2.4":
+   "Two teams report their agent at ninety per cent. One counted whether the "
+   "right tool was named; the other counted whether the right tool was called "
+   "with the right arguments, in the right order. Same runs, same agent, and "
+   "one of those numbers is hiding a refund of 1400 where 140 was owed.",
+
+ "A2.5":
    "Everything in this system works. That sentence is true and it is the "
    "beginning of the next five functions rather than the end of this one — "
    "because 'works' was measured against what you intended, and nobody has yet "
@@ -211,6 +217,32 @@ DIAGRAMS: dict[str, str] = {
                                            not the system
 """,
  "A2.4": """
+   ONE RUN, THREE THINGS YOU CAN SCORE
+
+   the run                        what scores it        needs a model?
+   +------------------------+
+   | tools it called,       |     exact match on           no
+   |   with arguments,      | --> name + args + order,
+   |   in order             |     and n beside it
+   +------------------------+
+   | the answer it gave,    |     compare with the         no
+   |   where truth was      | --> recorded truth.
+   |   recorded             |     unscoreable is its
+   +------------------------+     own column, not a pass
+   | the answer it gave,    |
+   |   where nobody         | --> a model, as judge        YES
+   |   recorded a truth     |     + a rubric that
+   +------------------------+         allows "undetermined"
+
+                                          |
+                                          v
+                        validate the judge on the rows that
+                        DO have a truth. agreement, false
+                        passes, false fails. an unvalidated
+                        judge is a second unmeasured model.
+""",
+
+ "A2.5": """
         SAME MAP, READ BY SOMEBODY ELSE
 
    ingress          ─►  prompt injection            B1.2

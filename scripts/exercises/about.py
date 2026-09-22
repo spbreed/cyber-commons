@@ -1110,7 +1110,13 @@ ABOUT.update({
  "A2.3": "An evaluation suite over the agent you built: cases that fail on the "
          "old build, scores with intervals, and a test for the dilution that "
          "lifts a number without changing a system.",
- "A2.4": "The handover into Function B. Every component built in this function "
+ "A2.4": """
+**What it covers.** The three surfaces of one agentic run that can be scored separately — the tool-call trajectory, the answer, and the answers no recorded truth reaches — and which of the three actually needs a model. Exact-match tool-call accuracy against the two weaker matchers that score higher on the same runs, output accuracy with unscoreable runs kept out of the denominator, and a model used as judge with a rubric, an `undetermined` verdict and a validation pass against the labelled subset.
+
+**Why a security engineer needs it.** Every later function quotes an agent number at somebody: a recall figure in Function C, an attack success rate in D, a detection rate in E, a control indicator in F. All of them are this lesson's problem in a different costume — a rate is not a measurement until the matcher, the denominator and, where a model graded it, the judge's agreement with ground truth are stated beside it. The control it builds is the habit of publishing those three before the number they qualify.
+""",
+
+ "A2.5": "The handover into Function B. Every component built in this function "
          "re-read as an attack surface, every control re-read as something with "
          "a bypass, and the agent's blast radius measured as the number the "
          "next function argues with.",

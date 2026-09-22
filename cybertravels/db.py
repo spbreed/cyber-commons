@@ -143,7 +143,7 @@ def audit(chain, tool, audience, scope, outcome, detail="", trace_id="",
     because the row grows across the curriculum: B2.7 adds the motive columns
     and B2.8 adds the hash chain. Two hard-coded variants meant a checkpoint
     with one lesson applied and not the other bound the wrong number of values
-    — which is what happened, and it only showed up when the A2.4 checkpoint
+    — which is what happened, and it only showed up when the A2.5 checkpoint
     was run rather than merely parsed.
     """
     c = conn()

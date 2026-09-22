@@ -724,7 +724,12 @@ GROUNDING.update({
  "A2.3": "The suite runs against the CyberTravels agent you just built, which "
          "means a case that fails is a defect in your own work rather than in "
          "an example.",
- "A2.4": "The same CyberTravels architecture from A1.0, re-read by somebody who "
+ "A2.4": "Six recorded runs of CyberTravels' Workflow Agent, including the "
+          "one that refunded 1400 EUR where 140 was owed and the one that "
+          "booked the replacement Berlin seat before releasing the original, "
+          "leaving the traveller holding two.",
+
+ "A2.5": "The same CyberTravels architecture from A1.0, re-read by somebody who "
          "wants it to fail. Every row in that table is a lesson in Function B, "
          "by id.",
 })

@@ -651,6 +651,133 @@ first as the second is the single most misleading thing you can produce.
 
 "A2.4": {
  "concept": """
+A2.3 built a suite and showed a score rising because the suite got easier. This
+lesson is the other half: **what, exactly, is being scored on one run.**
+
+An agentic run is not one thing that is right or wrong. It is a trajectory of
+tool calls and an answer, and those fail independently. An agent can take the
+approved path and answer wrongly. It can answer correctly having taken a path
+no reviewer would have signed off. And the whole thing can be graded by a model
+that agrees with itself rather than with the truth.
+
+So there are three surfaces, and **only the third needs a model**:
+
+### 1 · Tool-call accuracy — and the two matchers that flatter it
+
+The strict question is: did it call the right tools, with the right arguments,
+in the right order. Three matchers answer three different questions, and the
+gap between them is the whole point:
+
+| matcher | what it accepts | what it hides |
+|---|---|---|
+| **exact** — name, arguments, order | nothing else | this is the one to quote |
+| **name only** | right tool, wrong arguments | `refund(1400)` where 140 was owed |
+| **order ignored** | right calls, wrong sequence | rebooking before releasing the seat, so the traveller holds two |
+
+All three are correct arithmetic. Only one is an answer to "is the agent doing
+the job". A number with no matcher named beside it is not comparable to
+anything, including itself next quarter — and **`n` is part of the metric**,
+because 90% of six runs and 90% of six hundred are different claims.
+
+### 2 · Output accuracy — and the column that inflates it
+
+Where a correct answer was recorded, compare against it. The trap is the runs
+where nobody recorded one. They are not passes and they are not failures; they
+are **unscoreable**, and they get their own column. Folding them into the
+denominator as passes is the most common way an accuracy figure is inflated,
+and it is invisible in the result — the number simply looks better.
+
+### 3 · The model as judge — for what the first two cannot reach
+
+Some answers have no recorded truth and are still judgeable by a competent
+person: was this invoice explanation right, was that refusal appropriate. That
+is what a judge is for, and it is a real technique — but it is a model grading
+a model, so three rules make it worth reading.
+
+**Give it a rubric, not a vibe.** The criteria in words, with examples of each
+verdict.
+
+**Let it say `undetermined`.** A judge offered only pass and fail will answer
+confidently on cases it cannot decide. The third option is what converts a
+guess into a datum you can act on.
+
+**Validate it against the labelled subset — and publish that first.** Run the
+judge over the runs where you *do* know the answer, and report agreement, false
+passes and false fails. This is the step that is almost always skipped, and it
+is the one that decides whether any of the judge's other verdicts mean
+anything. An unvalidated judge is a second unmeasured model, and you now have
+two problems.
+
+Two more things a judge does that you have to control for: it prefers longer,
+more confident answers, and it prefers output from its own model family. Name
+the judging model in the report, always, for the same reason every finding in
+this commons names the model that produced it.
+
+### What none of the three measure
+
+Cost per run, latency, and whether the task should have been attempted at all.
+Those are real and they are not accuracy; F3.1 and F3.5 pick that up as
+indicators. Saying so in the output is part of the procedure here.
+""",
+ "steps": [
+  ("md", "## 2 · Where the numbers diverge\n\n"
+         "Six recorded runs of CyberTravels' Workflow Agent, scored three "
+         "ways. The runs are committed at the top of the skill's script, so "
+         "you can change one and watch which matcher stops noticing.\n\n"
+         "Two of the six are the interesting ones. **R2** refunds 1400 where "
+         "140 was owed — the right tool, the wrong argument, which name-only "
+         "matching scores as a pass. **R4** books the new Berlin seat before "
+         "releasing the old one, so the traveller holds two — the right calls "
+         "in the wrong order, which order-ignored matching scores as a pass. "
+         "Each weaker matcher forgives a different real failure, which is why "
+         "reporting one of them alone is worse than reporting neither.\n\n"
+         "**R5** is the run with no recorded truth: whether an invoice "
+         "explanation is right for German VAT is a judgement, and it is the "
+         "only one of the six that needs a model at all."),
+
+  ("md", "## 3 · Run it with no model configured, first\n\n"
+         "This skill prints its deterministic half **before** it asks for a "
+         "model, which no other skill in the commons does. That is "
+         "deliberate: two of the three metrics are arithmetic over recorded "
+         "runs, and a reader who meets the no-model refusal with no numbers "
+         "above it learns the wrong lesson — that measuring an agent needs an "
+         "AI. It does not. Only judging the unscoreable run does.\n\n"
+         "```bash\n"
+         "python3 skills/research/agent-eval-scoring/scripts/agent_eval_scoring.py\n"
+         "```\n\n"
+         "With no endpoint you get the tool-call table, the output-accuracy "
+         "line, and then exit code 2 saying what to set. With one, the same "
+         "numbers and then the judge."),
+
+  *skill_steps("research/agent-eval-scoring",
+               "## 4 · The procedure, as a skill\n\n"
+               "The skill below is the whole method: score the trajectory, "
+               "score the outputs, judge only the remainder, then check the "
+               "judge against the rows whose answer you already knew. Its "
+               "output contract is what makes the last step checkable rather "
+               "than asserted — `judge_validation` is a required key, so a "
+               "report that skips it breaks the contract.\n\n"
+               "### The skill"),
+ ],
+ "expect": "Tool-call accuracy 0.500 on exact match over six runs, against "
+           "0.667 for both weaker matchers — and the two extra passes are "
+           "different runs, so neither weak matcher is merely a looser version "
+           "of the other. Output accuracy 0.600, from three correct and two "
+           "incorrect, with the sixth run in its own unscoreable column rather "
+           "than in the denominator. Then the judge's verdicts, and before you "
+           "read any of them, its agreement with the five runs whose answer "
+           "was already recorded. A judge that disagrees with those is not "
+           "telling you anything about the sixth.",
+ "challenge": "Change R2's expected amount in the fixture from 140 to 1400 so "
+              "the agent is now right, and re-run. Exact match rises and the "
+              "two weak matchers do not move, because they were already "
+              "scoring it as a pass. That asymmetry is the argument: the weak "
+              "matchers cannot go up when you fix something, because they were "
+              "never measuring it.",
+},
+
+"A2.5": {
+ "concept": """
 This is the handover, and it is a deliberate change of stance.
 
 For thirteen lessons you have been the builder. Everything you added was a

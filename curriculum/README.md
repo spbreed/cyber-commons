@@ -8,7 +8,7 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 |---|---|---|---|
 | [A0](track-a0.md) | Set Up — Your Development Environment, and How to Use This | 2 | A — Getting Started — Building Agentic AI |
 | [A1](track-a1.md) | Build the Agent — From a Loop to a Running Platform | 8 | A — Getting Started — Building Agentic AI |
-| [A2](track-a2.md) | Harness Engineering — Making a Demo Into a System | 5 | A — Getting Started — Building Agentic AI |
+| [A2](track-a2.md) | Harness Engineering — Making a Demo Into a System | 6 | A — Getting Started — Building Agentic AI |
 | [B1](track-b1.md) | CyberTravels' Architecture, and Every Risk It Carries | 20 | B — Securing AI Architectures |
 | [B2](track-b2.md) | Securing the Architecture — Identity and Ingress | 8 | B — Securing AI Architectures |
 | [B3](track-b3.md) | Securing the Architecture — Runtime and the Gateway | 11 | B — Securing AI Architectures |

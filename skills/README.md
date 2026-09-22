@@ -1,8 +1,8 @@
 # Agent skills
 
-139 skills the curriculum teaches you to write, and then uses. Each one is a
+140 skills the curriculum teaches you to write, and then uses. Each one is a
 real `SKILL.md` — markdown with YAML frontmatter, the format a coding agent
-actually loads — not an illustration of one. Every one of the 139 carries a
+actually loads — not an illustration of one. Every one of the 140 carries a
 script the lesson executes, and `test_skills.py` runs all of them on every
 build.
 
@@ -17,12 +17,12 @@ build.
 | [`programme/`](programme) | 11 |
 | [`redteam/`](redteam) | 8 |
 | [`regulatory/`](regulatory) | 10 |
-| [`research/`](research) | 10 |
+| [`research/`](research) | 11 |
 | [`response/`](response) | 12 |
 | [`runtime/`](runtime) | 6 |
 | [`secops/`](secops) | 4 |
 | [`threats/`](threats) | 16 |
-| | **139** |
+| | **140** |
 
 ## How an agent loads these, and why the shape matters
 
@@ -66,7 +66,7 @@ execute it.
   — `**3 — State the target beside it.**`, or `**Stage 8 — Deduplication.**`
   where the skill is a stage of the AppSec pipeline and the pipeline's own
   numbering is the useful one. A markdown `1.` list flattens that lead-in into
-  the paragraph, which is why none of the 139 use one.
+  the paragraph, which is why none of the 140 use one.
 - **`## Example`** — a real input and the real opening lines of a real run,
   taken from the script's own output rather than written by hand. It is a
   **recording**, not a fixture: CI executes every script on every build with no

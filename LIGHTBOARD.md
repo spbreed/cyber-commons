@@ -1,6 +1,6 @@
 # LIGHTBOARD.md — the word-for-word script, lesson by lesson
 
-A recording script for all 148 lessons, written to be **read aloud exactly as
+A recording script for all 149 lessons, written to be **read aloud exactly as
 written**. Open the lesson, talk. No translating notes into sentences while the
 camera is running.
 
@@ -105,7 +105,7 @@ Chapter A0 · lesson 1 of 2 · runs a skill · 208 words, about 1.5 min spoken �
 WHAT HAPPENS WHEN YOU RUN A LESSON
 ```
 
-You have probably typed a question into an AI and read the answer. This is the other side of that: the same kind of AI, doing a job on your own computer, following written instructions you can read and change. None of it works until your computer knows which AI to ask. Setting that up is this whole lesson, and it is the only thing standing between you and the other 147.
+You have probably typed a question into an AI and read the answer. This is the other side of that: the same kind of AI, doing a job on your own computer, following written instructions you can read and change. None of it works until your computer knows which AI to ask. Setting that up is this whole lesson, and it is the only thing standing between you and the other 148.
 
 **② Why it costs something**
 
@@ -645,7 +645,7 @@ Next up: A2.0, Why a demo is not a system — the harness around the loop.
 
 ### A2.0 · Why a demo is not a system — the harness around the loop
 
-Chapter A2 · lesson 1 of 5 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A2.0.html)
+Chapter A2 · lesson 1 of 6 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A2.0.html)
 
 **① Open**
 
@@ -697,7 +697,7 @@ Next up: A2.1, Observability — the run as spans.
 
 ### A2.1 · Observability — the run as spans
 
-Chapter A2 · lesson 2 of 5 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.1.html)
+Chapter A2 · lesson 2 of 6 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.1.html)
 
 **① Open**
 
@@ -749,7 +749,7 @@ Next up: A2.2, The audit trail, and the four questions it has to answer.
 
 ### A2.2 · The audit trail, and the four questions it has to answer
 
-Chapter A2 · lesson 3 of 5 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.2.html)
+Chapter A2 · lesson 3 of 6 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.2.html)
 
 **① Open**
 
@@ -801,7 +801,7 @@ Next up: A2.3, Evaluating what you built, before anybody attacks it.
 
 ### A2.3 · Evaluating what you built, before anybody attacks it
 
-Chapter A2 · lesson 4 of 5 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.3.html)
+Chapter A2 · lesson 4 of 6 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.3.html)
 
 **① Open**
 
@@ -847,17 +847,69 @@ The score, with its interval — and the change in that score when thirty easy c
 
 Write one case for a behaviour you have not implemented yet. It should fail.
 
-Next up: A2.4, What you have built — and every way it can now go wrong.
+Next up: A2.4, Evaluating the agent's behaviour — tool calls, outputs, and the model as judge.
 
 ---
 
-### A2.4 · What you have built — and every way it can now go wrong
+### A2.4 · Evaluating the agent's behaviour — tool calls, outputs, and the model as judge
 
-Chapter A2 · lesson 5 of 5 · runs a skill · 362 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
+Chapter A2 · lesson 5 of 6 · runs a skill · 323 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
 
 **① Open**
 
 Still inside chapter A2. Last one was Evaluating what you built, before anybody attacks it.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+ONE RUN, THREE THINGS YOU CAN SCORE
+```
+
+Two teams report their agent at ninety per cent. One counted whether the right tool was named; the other counted whether the right tool was called with the right arguments, in the right order. Same runs, same agent, and one of those numbers is hiding a refund of 1400 where 140 was owed.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+"The agent is 90 percent accurate" survives every meeting it is said in, because nobody in the room can ask accurate at what, over how many runs, matched how, and graded by whom.
+
+Same company, same four agents, new way of failing. Six recorded runs of CyberTravels' Workflow Agent, including the one that refunded 1400 EUR where 140 was owed and the one that booked the replacement Berlin seat before releasing the original, leaving the traveller holding two.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Score six recorded runs on tool-call accuracy and output accuracy without a model, then use one as judge for the run neither reaches, and validate it against the runs whose answer you already know.
+
+*[Run the skill on camera now. Let it finish on screen.]*
+
+That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Exact-match tool-call accuracy with its n beside it, and the gap to the two weaker matchers. Output accuracy with unscoreable runs counted separately rather than as passes. And the judge's agreement with ground truth, published before any verdict it gave.
+
+*[Point at the output on screen. Do not read it out.]*
+
+> Tool-call accuracy 0.500 on exact match over six runs, against 0.667 for both weaker matchers — and the two extra passes are different runs, so neither weak matcher is merely a looser version of the other.
+
+**⑤ Hand it over**
+
+Change R2's expected amount in the fixture from 140 to 1400 so the agent is now right, and re-run. Exact match rises and the two weak matchers do not move, because they were already scoring it as a pass.
+
+Next up: A2.5, What you have built — and every way it can now go wrong.
+
+---
+
+### A2.5 · What you have built — and every way it can now go wrong
+
+Chapter A2 · lesson 6 of 6 · runs a skill · 367 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/A2.5.html)
+
+**① Open**
+
+Still inside chapter A2. Last one was Evaluating the agent's behaviour — tool calls, outputs, and the model as judge.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 

@@ -344,7 +344,7 @@ def run_each(order: list[str]) -> int:
     It caught the failure that motivated it: two `was` branches in `db.audit`,
     one for the motive columns and one for the hash chain, bound the wrong
     number of values at any checkpoint with one lesson applied and not the
-    other. Every checkpoint parsed. A2.4 raised at the first INSERT.
+    other. Every checkpoint parsed. A2.5 raised at the first INSERT.
     """
     import subprocess
     import tempfile

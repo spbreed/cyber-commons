@@ -12,7 +12,7 @@ work on your own machine.
 An **AI model** is the thing behind a chatbot: you give it words, it gives you
 words back. You have almost certainly used one.
 
-This commons is 148 lessons, and every one of them hands a model a **written
+This commons is 149 lessons, and every one of them hands a model a **written
 procedure** — a page of instructions, in ordinary English, that says how to do
 one job in security. Find the weak spot in this code. Work out what an attacker
 could reach. Decide whether this alert is real. The model reads those

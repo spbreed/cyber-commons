@@ -28,7 +28,7 @@ work on your own machine.
 An **AI model** is the thing behind a chatbot: you give it words, it gives you
 words back. You have almost certainly used one.
 
-This commons is 148 lessons, and every one of them hands a model a **written
+This commons is 149 lessons, and every one of them hands a model a **written
 procedure** — a page of instructions, in ordinary English, that says how to do
 one job in security. Find the weak spot in this code. Work out what an attacker
 could reach. Decide whether this alert is real. The model reads those
@@ -704,7 +704,7 @@ and a report counts in Function F.
  "expect": "You did a lesson the way every lesson is done — one skill, "
            "picked in your assistant — and read back what happened. What you "
            "now hold is 14 areas, "
-           "139 skills, 139 of them with a script, and the lesson skills are "
+           "140 skills, 140 of them with a script, and the lesson skills are "
            "the front door to them: one to pick per lesson, each calling the "
            "audit skill behind it rather than copying it. The run's own "
            "numbers are the readback's: files written, checks passed, and how "

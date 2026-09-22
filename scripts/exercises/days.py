@@ -1275,6 +1275,17 @@ DAYS.update({
    "The score, with its interval — and the change in that score when thirty "
    "easy cases are added, which should worry you."),
  "A2.4": (
+   "\"The agent is 90% accurate\" survives every meeting it is said in, "
+   "because nobody in the room can ask accurate at what, over how many runs, "
+   "matched how, and graded by whom.",
+   "Score six recorded runs on tool-call accuracy and output accuracy without "
+   "a model, then use one as judge for the run neither reaches, and validate "
+   "it against the runs whose answer you already know.",
+   "Exact-match tool-call accuracy with its n beside it, and the gap to the "
+   "two weaker matchers. Output accuracy with unscoreable runs counted "
+   "separately rather than as passes. And the judge's agreement with ground "
+   "truth, published before any verdict it gave."),
+ "A2.5": (
    "A builder who has never seen their own system described adversarially "
    "ships the same defect in the next one.",
    "Re-read every component you built as an attack surface, and measure what "

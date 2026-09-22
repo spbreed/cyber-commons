@@ -237,6 +237,20 @@ def render_reference(sid: str, s: dict) -> str:
     return "\n".join(out) + "\n"
 
 
+def _orphan_dirs(files: dict) -> set:
+    """Directories under lesson-skills/ that no expected file lives in.
+
+    Deepest first when removed, so `<skill>/references/` goes before
+    `<skill>/`. Returns only the topmost orphan for reporting, because naming
+    both a skill folder and its `references/` child is one fact twice.
+    """
+    if not OUT.is_dir():
+        return set()
+    keep = {q for p in files for q in p.parents}
+    return {d for d in OUT.iterdir()
+            if d.is_dir() and d not in keep}
+
+
 def expected() -> dict[Path, str]:
     """Every generated file, as {path: text}, written by nobody."""
     have = sessions()
@@ -297,6 +311,16 @@ def main() -> int:
             problems.append(f"{p.relative_to(ROOT)}: not owned by any "
                             f"lesson — a skill for a lesson that "
                             f"was removed still loads and still answers")
+        # Directories too, not only files. The build unlinks an orphaned
+        # skill's files and left the directory standing, so `--check` — which
+        # walked files — reported clean while `lesson-skills/` still carried a
+        # folder named for a lesson that had been renumbered away. An empty
+        # skill directory does not answer anything, but it is what a reader
+        # sees when they list the store, and this gate's whole promise is that
+        # nothing in there is unowned.
+        for d in sorted(_orphan_dirs(files)):
+            problems.append(f"{d.relative_to(ROOT)}/: a directory no lesson "
+                            f"owns — its files are gone and the folder is not")
         for p in problems:
             print(f"  FAIL  {p}")
         if problems:
@@ -313,6 +337,11 @@ def main() -> int:
         return 1
     for p in sorted(on_disk - set(files)):
         p.unlink()
+    # Then the directories the unlinking emptied, deepest first.
+    for d in sorted(_orphan_dirs(files), key=lambda x: -len(x.parts)):
+        for sub in sorted(d.rglob("*"), key=lambda x: -len(x.parts)):
+            sub.rmdir() if sub.is_dir() else sub.unlink()
+        d.rmdir()
     for p, text in files.items():
         p.parent.mkdir(parents=True, exist_ok=True)
         # newline="\n": the generated files are compared byte for byte, so a
