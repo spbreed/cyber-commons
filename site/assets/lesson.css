@@ -192,6 +192,41 @@ footer a{color:var(--text-dim);text-decoration:none}
 .btn.k:hover{color:#04101f;filter:brightness(1.08)}
 .runnote{margin-top:10px;font-size:13.5px;line-height:1.55}
 .runnote b{color:var(--text)}
+
+/* The three ways to do a lesson. They were three paragraphs, and the second
+   and third read as consolation prizes because they were headed "No agent?"
+   and "Want just the code?". Numbered and boxed alike so a reader sees three
+   choices rather than one instruction and two apologies. */
+.waysintro{margin:0 0 14px}
+.way{margin:0 0 14px;padding:12px 14px;border:1px solid var(--line);
+  border-radius:10px;background:var(--ink-2)}
+.way:last-of-type{margin-bottom:0}
+.way h4{margin:0 0 8px;font-size:16px;display:flex;align-items:baseline;gap:9px}
+.way h4 em{font-style:normal;font-weight:400;font-size:13.5px;
+  color:var(--text-dim)}
+.way .wn{flex:none;width:21px;height:21px;border-radius:50%;
+  background:var(--defend);color:#fff;font-family:"IBM Plex Mono",monospace;
+  font-size:12px;font-weight:600;display:inline-flex;align-items:center;
+  justify-content:center;align-self:center}
+.way p{margin:0 0 8px;font-size:14.5px;line-height:1.6}
+.way pre{margin:0}
+.way .runnote{margin-top:8px}
+/* The agent table was never styled — it rendered as four bare rows of text. */
+table.agents{width:100%;border-collapse:collapse;margin:4px 0 0;font-size:13.5px}
+table.agents th{text-align:left;font-family:"IBM Plex Mono",monospace;
+  font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text-faint);font-weight:600;padding:0 10px 6px 0;
+  border-bottom:1px solid var(--line)}
+table.agents td{padding:7px 10px 7px 0;border-bottom:1px solid var(--line);
+  vertical-align:top}
+table.agents tr:last-child td{border-bottom:0}
+@media(max-width:640px){
+  table.agents,table.agents tbody,table.agents tr,table.agents td{display:block;
+    width:100%}
+  table.agents thead{display:none}
+  table.agents tr{padding:8px 0;border-bottom:1px solid var(--line)}
+  table.agents td{border-bottom:0;padding:2px 0}
+}
 /* Collapsed by default: the same four sentences appear on every lesson page,
    and a reader who has run one never needs them again. */
 details.runnote{margin-top:10px}

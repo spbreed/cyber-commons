@@ -448,11 +448,15 @@ AGENT_ROWS = (
 
 
 def lesson_skill_block(sid: str) -> str:
-    """Do a converted lesson by picking its skill, not by running a script.
+    """The three ways to do a lesson, as three choices rather than one and two
+    afterthoughts.
 
-    Three steps a learner can hold in their head: install once, pick the skill,
-    read what happened. The direct command stays, last, for somebody with no
-    agent, because `scripts/lesson.py` is what the skill runs either way.
+    All three run the same procedure; they differ in who drives it. The agent
+    route teaches, the script route just executes, and the checkpoint route
+    shows the diff without running anything. They used to be headed "Do this
+    lesson in your agent", "No agent?" and "Want just the code?", which read as
+    one real way and two consolation prizes — and the second and third are what
+    somebody reviewing the lesson, or working offline, actually wants.
     """
     title = next(s["title"] for f in CUR["functions"] for t in f["tracks"]
                  for s in t["sessions"] if s["id"] == sid)
@@ -463,41 +467,54 @@ def lesson_skill_block(sid: str) -> str:
         f'--lessons {html.escape(sid)}</code></td>'
         f'<td>{how.format(name=html.escape(name))}</td></tr>'
         for agent, tool, how in AGENT_ROWS)
+    esc = html.escape(sid)
     return (
         '<div class="runbox">'
-        '<p><b>Do this lesson in your agent.</b> Three steps, and you type '
-        'no commands after the first.</p>'
-        '<p><b>1 · Install it, once.</b> From the folder you cloned, link this '
-        'lesson’s skill into your agent. <code>--all</code> does every '
-        'agent it finds on your machine:</p>'
-        f'<pre><code>python3 scripts/install_skills.py --all --lessons {html.escape(sid)}'
-        '</code></pre>'
+        '<p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> '
+        'They run the same procedure against the same code — what changes is '
+        'who drives it, and how much you see.</p>'
+
+        '<div class="way"><h4><span class="wn">1</span>In your AI agent '
+        '<em>— you are taught</em></h4>'
+        '<p>The agent reads the lesson, explains the idea, fetches the code, '
+        'runs the check and answers your questions as you go. This is the one '
+        'to take if you are here to learn.</p>'
+        '<p><b>Install it, once.</b> From the folder you cloned. '
+        '<code>--all</code> does every agent it finds on your machine:</p>'
+        f'<pre><code>python3 scripts/install_skills.py --all --lessons {esc}</code></pre>'
         '<p class="runnote">Then restart your agent and open it in that folder. '
         'On Windows, if <code>python3</code> says <em>Python was not found</em>, '
         'use <code>python</code> instead.</p>'
-        f'<p><b>2 · Pick <code>{html.escape(name)}</code>.</b> Where you find it '
-        'depends on the agent:</p>'
+        f'<p><b>Then pick <code>{html.escape(name)}</code>:</b></p>'
         '<table class="agents"><thead><tr><th>agent</th><th>install just for '
         'this agent</th><th>start it</th></tr></thead><tbody>'
-        + rows + '</tbody></table>'
-        '<p><b>3 · Read what happened.</b> The skill teaches the idea first, '
-        'gets the CyberTravels code as it stood at the end of this lesson, runs '
-        'it, and ends with a readback under four headings: <em>What I did</em>, '
-        '<em>What changed</em>, <em>The number</em> and <em>Read this next</em>. '
-        'It reports a skipped or refused step as exactly that, never as a pass.</p>'
-        '<p><b>No agent?</b> The skill runs one script, and you can run it '
-        'yourself. It prints the same readback:</p>'
-        f'<pre><code>python3 scripts/lesson.py {html.escape(sid)}</code></pre>'
-        '<p><b>Want just the code?</b> The skill gets it with the checkpoint '
-        'tool, which you can run yourself: CyberTravels as it stood at the '
-        'end of this lesson, and what this lesson changed.</p>'
-        f'<pre><code>python3 scripts/checkpoint.py --at {html.escape(sid)} '
-        '--out work/cybertravels\n'
-        f'python3 scripts/checkpoint.py --at {html.escape(sid)} --diff</code></pre>'
-        '<p class="runnote">Every skill here is carried out by a <b>model</b>. A '
-        'signed-in Claude Code CLI needs no API key; any OpenAI-compatible '
+        + rows + '</tbody></table></div>'
+
+        '<div class="way"><h4><span class="wn">2</span>As one Python command '
+        '<em>— you just run it</em></h4>'
+        '<p>No agent, no conversation. The same lesson executes and prints the '
+        'same readback. Take this one if you have no assistant, if you are '
+        'reviewing rather than learning, or if you want the result without the '
+        'teaching around it.</p>'
+        f'<pre><code>python3 scripts/lesson.py {esc}</code></pre></div>'
+
+        '<div class="way"><h4><span class="wn">3</span>Read the code, and the '
+        'difference <em>— nothing runs</em></h4>'
+        '<p>Neither of the above, and no model needed. The first command writes '
+        'CyberTravels exactly as it stood at the end of this lesson; the second '
+        'prints the <b>diff</b> — the lines this lesson added or changed, and '
+        'nothing from any later one.</p>'
+        f'<pre><code>python3 scripts/checkpoint.py --at {esc} --out work/cybertravels\n'
+        f'python3 scripts/checkpoint.py --at {esc} --diff</code></pre></div>'
+
+        '<p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A '
+        'signed-in Claude Code CLI needs no API key, and any OpenAI-compatible '
         'endpoint works too. With neither, the audit exits 2 and says so rather '
         'than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p>'
+        '<p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: '
+        '<em>What I did</em>, <em>What changed</em>, <em>The number</em> and '
+        '<em>Read this next</em>. A step that was skipped or refused is reported '
+        'as exactly that, never as a pass.</p>'
         '</div>')
 
 

@@ -22,17 +22,77 @@ The written procedures are called **skills**, and they are the point of the
 whole thing. You can read every one of them. You can change them and watch the
 answer change. There is no hidden part.
 
-### How every lesson works
+### How every lesson works — three ways, and you pick
 
-Every lesson is **one skill that you pick in your AI assistant** — Claude Code,
-GitHub Copilot, Cursor or Codex. You do not run scripts and you do not copy
-code. The skill teaches you the idea first, sets up the example system, runs a
-check, and finishes by telling you what happened, under the same four headings
-every time.
+Every lesson can be done three ways. They run the same procedure against the
+same code, and they differ in who drives it:
 
-So there are two things to set up, and this lesson does both: **your computer
-needs to know which model to ask**, and **your assistant needs to be able to
-find the lesson.**
+1. **In your AI assistant** — Claude Code, GitHub Copilot, Cursor or Codex. The
+   assistant reads the lesson, explains the idea, fetches the code, runs the
+   check and answers your questions while you work. Take this one if you are
+   here to learn.
+2. **As one Python command** — `python3 scripts/lesson.py A0.0`. The same
+   lesson runs and prints the same summary, with no conversation. Take this one
+   if you have no assistant, or if you are checking the lesson rather than
+   learning from it.
+3. **Read the code and the difference** — nothing runs and no model is needed.
+   One command writes the example system exactly as it stood at the end of a
+   lesson; another prints just the lines that lesson changed.
+
+Every lesson page carries all three, in that order, in the grey box near the
+bottom. **None of them is the "real" one.** Way 1 is the one this commons is
+built around, and ways 2 and 3 exist because reviewing code and reading a diff
+are things practitioners do constantly and should not have to give up to use a
+teaching tool.
+
+Ways 1 and 2 need a model. Way 3 does not.
+
+### Why a lesson is a skill, and why that matters after this commons
+
+This is worth ten minutes even if you only want to get started, because it is
+the part that outlives the curriculum.
+
+An **agent skill** is a written procedure in a plain file: what this job is,
+when to use it, the steps, and the shape the answer has to come back in. You
+can read it. You can change a step and watch the answer change. Your assistant
+loads it and carries it out.
+
+That is a real shift in how technical work is learned and shipped. For most of
+computing, knowledge lived in two places that could not talk to each other: in
+documentation people read, and in code that ran. Documentation drifted from the
+code because nothing forced them to agree. A skill collapses the two — **the
+document and the instruction are the same bytes**, so the thing you read is
+literally the thing that executes. That is why this commons prints each skill
+on its own lesson page rather than describing it.
+
+For a security practitioner or an agent engineer, three things follow, and all
+three are about the next few years rather than this afternoon.
+
+- **Procedures become portable and reviewable.** A threat model, a triage
+  runbook, an evidence check — written as a skill, it works in whichever
+  assistant your team already uses, and a colleague can review it in a pull
+  request like any other change. Knowledge that used to live in one person's
+  head becomes something a team owns and versions.
+- **You learn the review skill, not just the topic.** The job in front of the
+  profession is not *can an AI do this* but *can I tell when its answer is
+  wrong*. Every lesson here hands you a procedure and a result and asks you to
+  judge it, which is the muscle that matters when an agent is doing the work at
+  a speed no human reviews line by line.
+- **It is how you will ship, not only how you will learn.** The same skill you
+  run in a lesson can be pointed at your own estate the same day. There is no
+  translation step between the teaching version and the working version,
+  because there is only one version.
+
+The honest limit, which the rest of the commons keeps coming back to: **a skill
+does not make a model correct.** It makes the procedure explicit and the output
+checkable, which is a different and smaller claim. A model can follow every step
+and still be wrong, and the whole subject of this curriculum is how you would
+know.
+
+### What this lesson sets up
+
+Two things: **your computer needs to know which model to ask**, and **your
+assistant needs to be able to find the lesson.**
 
 ### Nine words you will meet
 
@@ -228,34 +288,6 @@ export MODEL=gemini-2.5-flash
 ```
 
 **Put the key in your shell profile, never in a file inside the repository.** `scripts/check_secrets.py` runs as a pre-commit hook and in CI, and it blocks anything credential-shaped from being committed — but the habit is what protects you, not the gate.
-
-## 5 · Do your first lesson — pick one skill
-
-From here on every lesson works the same way, and this is the first one. **A lesson is one skill you pick in your assistant.** You do not run scripts or copy code.
-
-### Install it, once
-
-Back in the terminal, inside the `cyber-commons` folder, type this and press Enter:
-
-```bash
-python3 scripts/install_skills.py --all --lessons A0.0
-```
-
-On Windows, if that says *Python was not found*, type `python` in place of `python3`. Nothing is copied: it links this lesson's skill into each assistant it finds on your computer, so there is only ever one copy of it to fix.
-
-### Pick it
-
-Restart your assistant and open it in the `cyber-commons` folder. The skill is called `a0-0-set-up-your-computer`. The table further down this page shows how to start it in Claude Code, GitHub Copilot, Cursor and Codex.
-
-### Read what happened
-
-The skill ends with a **readback** under four headings: *What I did*, *What changed*, *The number* and *Read this next*. Every lesson ends the same way, so you always know where to look. When a step was skipped or refused it says exactly that, and never reports it as a pass.
-
-**No assistant?** Take Route A first; it is the easy way. If you would rather work without one, open Routes B and C in step 4, then run the same lesson yourself. It prints the same readback:
-
-```bash
-python3 scripts/lesson.py A0.0
-```
 
 ## Your turn
 

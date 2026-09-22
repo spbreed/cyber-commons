@@ -129,11 +129,13 @@ Every lesson page carries framework labels. Four frameworks are in use across th
 
 A control usually needs one of each: a threat it addresses, a tactic it frustrates, a function it belongs to, and an obligation it discharges. The mapping lives in `curriculum/frameworks.json` and every label on every lesson page is generated from it — these are indicative mappings, not a certification.
 
-## 5 · How you do any lesson
+## 5 · What sits behind a lesson skill
 
-A lesson is **one skill you pick in your AI assistant** — Claude Code, GitHub Copilot, Cursor or Codex. It teaches the idea, gets the CyberTravels code as it stood at that lesson, runs it, and ends with a readback under four headings: *What I did*, *What changed*, *The number* and *Read this next*. A0.0 walks you through it once.
+The run block further down this page gives you the three ways to do any lesson, and they are the same three on all 148 pages. This is the part that block does not explain: what you installed, and what it runs.
 
-Behind each lesson skill is an **audit skill**: the written procedure the lesson runs, in `skills/`. There is exactly one copy of each, everything runs on your own machine, and there is no hosted kernel and nothing to sign up for.
+Behind each lesson skill is an **audit skill** — the written procedure the lesson runs, in `skills/`. There is exactly one copy of each, everything runs on your own machine, and there is no hosted kernel and nothing to sign up for. Eighteen audits are shared by two or three lessons, which is why a lesson skill calls one rather than carrying its own copy.
+
+You can install a whole function at once rather than a lesson at a time, and ask what is currently linked:
 
 ```bash
 python3 scripts/install_skills.py --all --lessons A   # this function's lesson skills
@@ -141,8 +143,6 @@ python3 scripts/install_skills.py --list              # what is linked where
 ```
 
 Those are **links into your clone**, not copies — symlinks, or junctions on Windows — so `git pull` updates every tool at once and an edit you make here is live in all of them. A copy would be a fork with a friendly name: you would fix a skill once and the other copies would keep the bug while still loading and still answering.
-
-**No assistant?** Run the same lesson yourself with `python3 scripts/lesson.py A0.1`. It prints the same readback, and it needs a model set up by Route B or C in A0.0.
 
 Some audits ask a **model** a question, and the assistant you are using is that model; others are worked examples with no model in them. When a model answers, what you get is one model's answer, validated against that audit's own output contract. Run it twice and it will differ — that is the subject of the whole commons, not a defect. What does not differ is the harness: `check_determinism.py` runs every skill across several hash seeds and fails if the deterministic half varies.
 

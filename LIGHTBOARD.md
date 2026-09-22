@@ -131,7 +131,7 @@ So here is what you count instead: whether you can do the thing this lesson desc
 
 *[Point at the output on screen. Do not read it out.]*
 
-> You picked one skill and it did a whole lesson: it set up the example system, ran a check against a model, and told you what happened. Three things are now true.
+> One skill did a whole lesson, whichever way you started it: it set up the example system, ran a check against a model, and told you what happened. Three things are now true.
 
 **⑤ Hand it over**
 
