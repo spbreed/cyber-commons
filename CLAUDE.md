@@ -107,6 +107,7 @@ happened, and calls the audit skill rather than repeating it (§3).
 | the "what it covers" paragraph | `scripts/exercises/about*.py` |
 | the CyberTravels grounding line | `scripts/exercises/cybertravels.py` |
 | Day 0 / 1 / 2 | `scripts/exercises/days.py` |
+| the metrics a lesson says to measure | `scripts/exercises/metrics.py` |
 | which sections a lesson renders | `scripts/exercises/layout.py` |
 | a Function E or F anchor line | `scripts/exercises/anchors.py` |
 | the procedure itself | `skills/<area>/<name>/` |
@@ -188,7 +189,13 @@ that are enforced or that get broken most.
   the chapter bridge: on 59 of 133 pages it repeated the section above it, 35
   of them word for word, and on four it described a different lesson. The
   field is gone, and so is the file that held it.
-- **Day 0, Day 1, Day 2 on every lesson about the system** — 146 of the 148.
+- **Day 2 in prose, and again as metrics somebody can take.** Each lesson
+  with a Day table declares its measures in `scripts/exercises/metrics.py` as
+  `(what to measure, denominator or target)`, rendered under the table. The
+  second half is required: a count with no denominator is the failure this
+  curriculum spends six functions on, and a Day 2 sentence cannot be lifted
+  into a dashboard or compared with last quarter.
+- **Day 0, Day 1, Day 2 on every lesson about the system** — 147 of the 149.
   Why it matters, what you build, the number that says it worked. Day 2 names a
   real number where the lesson produces one and says what you count instead
   where it does not. Never invent one. The two setup lessons carry no Day

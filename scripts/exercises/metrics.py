@@ -1,0 +1,248 @@
+"""What each lesson tells you to measure, as named metrics with denominators.
+
+Day 2 says, in prose, what number tells you the lesson worked. That is the
+right thing for a reader deciding whether to spend an afternoon, and the wrong
+thing for somebody who has to go and take the measurement: a sentence cannot be
+lifted into a dashboard, compared against last quarter, or handed to the person
+who owns the system. "Share of tool calls whose selecting text came from a
+trusted origin" is a metric wearing a paragraph.
+
+So each lesson also declares its metrics here, as `(what to measure, the
+denominator or target)`. The pair is the whole point — a count with no
+denominator is the failure mode half this curriculum is about, and it is why
+the second element is required rather than optional.
+
+Rules for adding one:
+
+  * **Name the thing counted, not the conclusion.** "Runs the verifier
+    rejected", not "verifier quality".
+  * **The second element carries the denominator, the target, or both.**
+    "share of all rows; target 100%" is usable; "high" is not.
+  * **Where a lesson genuinely computes nothing** — the function
+    introductions, and the two lessons whose output is an ordering — say what
+    it produces instead. Do not invent a number to fill the row. That is the
+    same rule Day 2 already follows, and LESSON_DESIGN.md §7 is the argument
+    for it.
+
+`check_lessons.py` requires an entry for every lesson that renders a Day table
+(147 of the 149; the two setup lessons render neither), that every metric
+carries both halves, and that nothing is declared for a lesson that has no Day
+table.
+"""
+from __future__ import annotations
+
+# lesson id -> [(what to measure, denominator or target), ...]
+METRICS: dict[str, list[tuple[str, str]]] = {
+
+# ---------------------------------------------------------------- Function A
+"A1.0": [("edges marked as a trust boundary", "count, against total edges on the map")],
+"A1.1": [("runs the verifier rejected", "count per batch; zero means the verifier is not independent, not that the loop is perfect")],
+"A1.2": [("tools reachable with a token minted for the other resource server", "count; target zero")],
+"A1.3": [("audit rows naming both the human and the specific agent", "share of all rows; target 1.00")],
+"A1.4": [("scopes carried by one delegated token", "count; target one"),
+         ("refusals for scopes the human's role may not delegate", "count per run batch")],
+"A1.5": [("memory entries carrying an origin", "share of all entries; target 1.00"),
+         ("cross-owner recalls", "count; target zero")],
+"A1.6": [("tampered envelopes rejected", "share of tampered envelopes; target 1.00"),
+         ("hop at which a cycle stops", "hop number; a ceiling you choose, not one you discover")],
+"A1.7": [("approvals per reviewer per hour", "rate against what one reviewer can actually consider"),
+         ("runs that hit a ceiling", "share of runs")],
+"A2.0": [("investigation questions the current record cannot answer", "count out of four; expect most of them before you build")],
+"A2.1": [("spans per run carrying the trace id", "share of spans; target 1.00"),
+         ("credentials appearing in a span", "count; target zero, and grep for it rather than believe it")],
+"A2.2": [("investigation questions the audit rows answer", "count out of four; three is common and the fourth is the finding")],
+"A2.3": [("suite score", "rate with a 95% interval, never a point estimate"),
+         ("score change when thirty easy cases are added", "delta; a rise measures the suite, not the system")],
+"A2.4": [("tool-call accuracy, exact match on name, arguments and order", "rate, with n stated beside it"),
+         ("gap from exact match to name-only and to order-ignored", "delta per matcher; each forgives a different real failure"),
+         ("output accuracy", "correct / (correct + incorrect); unscoreable runs counted in their own column"),
+         ("judge agreement with ground truth", "rate over the labelled subset, with false passes and false fails")],
+"A2.5": [("blast radius", "objects reachable, the subset writable, and the irreversible actions among them")],
+
+# ---------------------------------------------------------------- Function B
+"B1.0": [("nothing is computed here", "the chapter produces the component map every later count is taken against")],
+"B1.1": [("trust-boundary crossings", "count, computed from the levels so it moves when the architecture does")],
+"B1.2": [("tool calls whose selecting text came from a trusted origin", "share of tool calls")],
+"B1.3": [("retrieved spans carrying an origin tag", "share of spans"),
+         ("untagged spans that reached a tool selector anyway", "count; target zero")],
+"B1.4": [("memory entries with a recorded origin and writer", "share of all entries")],
+"B1.5": [("tool calls adjudicated by a policy decision", "share of calls; the rest were allowed because no rule objected")],
+"B1.6": [("actions whose effective scope sits inside the requesting human's ceiling", "share of actions")],
+"B1.7": [("agents with an attested, individually revocable identity", "share of the fleet")],
+"B1.8": [("code-executing runs inside an isolate", "share of such runs"),
+         ("credentials visible from inside an isolate", "count; target zero")],
+"B1.9": [("state-changing calls whose selecting input came from read content", "count; target zero, and the count is the finding")],
+"B1.10": [("peer messages carrying a verified sender identity", "share of messages acted on")],
+"B1.11": [("agents observed in the topology that appear in the registry", "count against observed; the gap is the finding, not the percentage")],
+"B1.12": [("propagated claims carrying a verification result", "share of claims that reached a second agent")],
+"B1.13": [("runs stopped by their own ceiling", "share, against runs stopped by a downstream system"),
+          ("cost per run", "currency at the 95th percentile")],
+"B1.14": [("actions whose full chain — human, agent, scope — can be reconstructed", "share; anything below 1.00 is what you cannot audit")],
+"B1.15": [("queue depth per reviewer", "count"),
+          ("median decision time per reviewer", "minutes, measured against volume")],
+"B1.16": [("claims independently verified", "share of claims acted on")],
+"B1.17": [("outbound machine-generated messages carrying a label", "share of those sent")],
+"B1.18": [("register rows with an owning lesson", "share of rows; the register's own coverage")],
+"B1.19": [("control coverage per era", "share per era, never blended — CyberTravels scores 50% on the foundation and 10% on the agentic layer across 22 controls")],
+"B2.1": [("workloads holding a distinct identity", "share of the fleet")],
+"B2.2": [("credentials issued against attestation rather than pre-shared", "share of credentials"),
+         ("credential lifetime", "median, in minutes")],
+"B2.3": [("delegations whose result sits inside both the request and the ceiling", "share of delegations"),
+         ("delegation chain depth", "recorded per chain")],
+"B2.4": [("grant lifetime", "median, in minutes"),
+         ("standing scope removed", "count of scopes, against the baseline")],
+"B2.5": [("agents with an owner and a future expiry", "share of those actually observed running")],
+"B2.6": [("ingress points that tag", "share of ingress points"),
+         ("tool selections traceable to a trusted origin", "share of selections")],
+"B2.7": [("actions with a complete delegation chain", "share; the shortfall below 1.00 is the part of the estate you cannot audit")],
+"B2.8": [("transcript segments whose hash chain verifies", "share of segments"),
+         ("gaps the chain detects", "count")],
+"B3.1": [("calls denied by policy", "share of calls"),
+         ("tools reachable with no matching rule at all", "share of tools")],
+"B3.2": [("executions inside an isolate", "share of executions"),
+         ("credentials reachable from within an isolate", "count; target zero")],
+"B3.3": [("outbound destinations outside the allow-list", "count"),
+         ("bytes that reached them", "bytes")],
+"B3.4": [("runs terminated by their own ceiling", "share of runs"),
+         ("spend per run", "currency at the 95th percentile")],
+"B3.5": [("results that passed both checks", "share of results acted on")],
+"B3.6": [("approvals per reviewer per hour", "rate"),
+         ("approvals that are genuinely irreversible actions", "share of approvals")],
+"B3.7": [("agent traffic that transits the gateway", "share; whatever does not is unenforced whatever the policy says")],
+"B3.8": [("runs sharing a mutable surface with another run", "count; target zero, and the count is the finding")],
+"B3.9": [("live exemptions", "count"),
+         ("age of each exemption, and the cap in force while it is open", "days, and the cap")],
+"B3.10": [("escalations raised", "rate per thousand runs; zero means the tool is missing, not that nothing was found")],
+"B3.11": [("developer agents with confinement applied", "share of developer agents"),
+          ("credentials still reachable from inside the workspace", "count; target zero")],
+
+# ---------------------------------------------------------------- Function C
+"C2.0": [("nothing is computed here", "the output is the order the stages run in, which is what makes their numbers comparable")],
+"C2.1": [("agreement between the verifier and held-out ground truth", "rate"),
+         ("loops stopped by budget rather than by success", "count")],
+"C2.2": [("diff between two threat-model runs", "count of changed rows; no diff when the estate changed means it is not being derived")],
+"C2.3": [("SAST precision and recall, deterministic pass", "precision 1.00, recall about 1 in 7 on the sample"),
+         ("recall of the reasoning pass on the same code", "about 6 in 10 — four times the recall, and the extra false positives are the next four stages' work")],
+"C2.4": [("findings before and after consolidation", "two counts, both reported"),
+         ("findings that survived verification", "count")],
+"C2.5": [("findings with a reachable path from a real entry point", "share of findings"),
+         ("triage hours the unreachable findings would have cost", "hours")],
+"C2.6": [("probes executed in the sandbox", "count"),
+         ("connections from the sandbox to anything production", "count; must be zero")],
+"C2.7": [("artefacts on disk that appear in the SBOM", "share; the gap is the finding and is usually not zero")],
+"C2.8": [("findings confirmed by execution, against those refuted", "two counts; only one of them is a ticket")],
+"C2.9": [("chains discovered", "count"),
+         ("chain severity against the highest severity of its links", "delta; the difference is what individual triage missed")],
+"C2.10": [("findings ranked against a severity-sorted baseline", "rank correlation"),
+          ("out-of-scope requests the enforcement refused", "count")],
+"C2.11": [("sinks reachable from an entry point", "count — three of five on CyberTravels"),
+          ("reachable sinks carrying only an authentication check", "count")],
+"C2.12": [("findings against open questions", "two counts — five and seven on the sample run"),
+          ("what each open question would need to resolve it", "named, per question")],
+"C2.13": [("authorisation cell coverage, not endpoint coverage", "12 of 30 cells on the sample"),
+          ("mismatches, and untested cells ranked by blast radius", "count, and the two highest-cost cells")],
+"C2.14": [("blocking controls present", "count out of six"),
+          ("whether the SOC was briefed", "yes/no; the refusal is the deliverable when it is no")],
+"C2.15": [("cost per confirmed finding, per stage", "currency per finding; it is what says which stage to invest in next")],
+"C2.16": [("patches where the exploit no longer succeeds", "share of patches"),
+          ("regression tests that fail pre-fix", "share; anything else is a silenced scanner")],
+"C2.17": [("false positives before and after slicing", "two counts"),
+          ("tokens spent", "count; both should improve together")],
+"C2.18": [("deployments with a verifiable attestation", "share of deployments"),
+          ("claims with no attestation behind them", "count")],
+"C2.19": [("a harness's accuracy on your key", "rate — not its accuracy on its own key, which does not transfer")],
+
+# ---------------------------------------------------------------- Function D
+"D1.0": [("nothing is computed here", "every lesson after it reports a rate with a denominator and ends in a deployable control")],
+"D1.1": [("components with a pinned digest", "share of what the pipeline pulls at train or deploy time")],
+"D1.2": [("ingested records with a verifiable origin", "share of records; the rest are the route a payload rides in on")],
+"D1.3": [("reproduction rate of the technique", "rate with its denominator; a screenshot has no denominator")],
+"D1.4": [("threshold chosen by expected cost rather than accuracy", "the threshold, with the cost model behind it"),
+         ("unregistered actors surfaced", "count")],
+"D1.5": [("behaviours with a named control behind them", "share of behaviours in the incident")],
+"D1.6": [("alerts added to the queue per true positive", "ratio — 301 to 1 is rejected with the number attached")],
+"D1.7": [("closures sampled to a human", "share of closures"),
+         ("agreement on that sample", "rate; it is the only measure of the loop's false-negative rate you get")],
+"D1.8": [("false-positive rate of the canaries", "zero by construction"),
+         ("canaries legitimate work reaches", "count; each one breaks that property")],
+"D1.9": [("what the credentials can still do after the agents stop", "count of actions still authorised; termination without revocation moves the incident")],
+"D1.10": [("runs that reproduce identically", "share of runs; one you cannot reproduce is a story")],
+"D1.11": [("findings leaving with all three artefacts — control, owner, eval case", "share of findings; any missing one is a promise")],
+
+# ---------------------------------------------------------------- Function E
+"E1.0": [("the five intervals themselves", "discover, detect, understand, contain, recover — in minutes; every later lesson moves one")],
+"E1.1": [("ordinary agent actions seen by no sensor class at all", "four of nine on the sample; an architecture finding, not a tuning backlog")],
+"E1.2": [("time between a behaviour change and its detection", "minutes"),
+         ("controls outside their freshness window", "share of controls")],
+"E1.3": [("unregistered actors surfaced", "count"),
+         ("threshold chosen by expected cost", "the threshold — a flagged human costs half an analyst-hour, a missed agent forty")],
+"E2.1": [("telemetry cost under tiering", "29% cheaper on the sample estate"),
+         ("prompts retained rather than deleted", "23% of volume, at 1% of the hot price")],
+"E2.2": [("rules carrying a technique id", "share of rules"),
+         ("techniques with no honest mapping", "count — indirect prompt injection has none, and inventing one is how a programme lies to itself")],
+"E2.3": [("platform events caught by named primitives, against a generic anomaly score", "two counts on the same events")],
+"E2.4": [("firing volume per true positive", "ratio; 301 to 1 is rejected with its number")],
+"E2.5": [("false-positive rate on benign traffic", "21% buries the queue, 0% with generalisation ships, 0% matching only this incident is useless")],
+"E2.6": [("false-positive rate of the deception layer", "zero by construction"),
+         ("canaries legitimate work reaches", "count; each destroys that property")],
+"E3.1": [("alerts escalated against those closed, versus ground truth", "two rates"),
+         ("severity floor no automatic closure may cross", "the floor itself")],
+"E3.2": [("refusals logged with their query", "count; the evidence you stayed on the right side of the line"),
+         ("interval spent on purpose", "minutes added to the clock, stated rather than hidden")],
+"E3.3": [("analyst decisions matching ground truth, with and without context", "two accuracies on the same alert")],
+"E3.4": [("time lost to each misfire", "minutes"),
+         ("whether the bearer token was still valid after the account was disabled", "yes/no")],
+"E3.5": [("claims with a log line behind them", "share of claims in the timeline")],
+"E3.6": [("branches considered and dropped, visible to a reviewer", "count; a trace with one branch is not an investigation")],
+"E3.7": [("resources found by walking the delegation graph, against scoping the acting agent alone", "two counts; the undercount grows with delegation depth")],
+"E3.8": [("coordinated runs detected across the population", "count, against zero detected within any single run")],
+"E3.9": [("detections produced per intelligence report", "ratio; the only measure of an intel function that survives scrutiny")],
+"E3.10": [("hunt precision", "true positives against runs matched — fourteen matched to find two, where twelve are the nightly batch, has bought nothing")],
+"E4.1": [("actions with a tier derived from policy rather than chosen by an author", "share of actions"),
+         ("reversibility outranking blast radius in the tiering", "yes/no; that ordering is the policy")],
+"E4.2": [("time to contain, per human-in-the-loop tier", "14 seconds at 8 errors per hundred, 2,072 seconds at 0.2, against a measured breakout of 1,740")],
+"E4.3": [("actions taken during containment", "roughly 2,400 with a human in the path, about 60 without")],
+"E4.4": [("time-to-stop, end to end", "seconds, measured in a real exercise; an untimed stop authority is an intention")],
+"E4.5": [("what the credentials can still do after the processes stop", "count of actions still authorised")],
+"E5.1": [("runs that reproduce identically", "share of runs; the model version is the field most often missing")],
+"E5.2": [("root causes that name a control", "share; \"the engineer missed the alert\" is true and fails the test")],
+"E5.3": [("post-incident changes that went through a process leaving a record", "share of changes")],
+"E5.4": [("indicators restored to target, against merely improved", "two counts — detection went 194 minutes to 118 against a 15-minute target")],
+"E5.5": [("policy clauses changed", "count"),
+         ("indicators no policy change can fix", "count, named as engineering items")],
+"E5.6": [("hours from awareness to a disclosure decision", "hours, against the deadline; containing in an hour buys none of it back")],
+
+# ---------------------------------------------------------------- Function F
+"F1.0": [("trustworthy-AI properties with a named owner", "count out of seven; security owns one outright")],
+"F1.1": [("the unit itself — a key control indicator", "a computation, a denominator and a target; everything else in this function produces, feeds or reports one")],
+"F1.2": [("the inventory", "the denominator for every other indicator; a share whose denominator is unknown is a count wearing a percentage sign")],
+"F1.3": [("the target each indicator carries", "per risk tier; the same measurement means different things on a tier-1 and a tier-3 agent")],
+"F1.4": [("mapped controls with an indicator behind them", "share of mapped controls; those without are unevidenced and most tooling renders them green")],
+"F1.5": [("an eval result read as an indicator", "sample size is the denominator, the pass bar is the target, the expiry stops it ageing into a claim")],
+"F1.6": [("operating indicators against outcome indicators", "two counts; one says the constraint was applied, the other says it worked")],
+"F1.7": [("controls currently evidenced — passing and in window", "share of controls; it drops against \"controls that once passed\", and that is the first honest number")],
+"F1.8": [("third-party controls carrying an unexpired attestation", "share; a weaker instrument than a measurement, and scored as one")],
+"F1.9": [("indicators marked stale by a lifecycle event", "count; the difference between continuous assurance and a dashboard showing last quarter")],
+"F1.10": [("one reading, read by five readers", "count of distinct questions asked of it; the one nobody asked is the one no indicator was built for")],
+"F1.11": [("ongoing monitoring coverage", "share of the model estate; a key control indicator programme in older vocabulary")],
+"F1.12": [("seams with an owned artefact", "share of seams; an indicator with two consumers and no owner gets computed twice, differently")],
+"F1.13": [("indicators measured against CyberTravels", "six — five gaps and one pass; the pass proves the instrument discriminates")],
+"F2.1": [("regimes an indicator can be quoted to", "count; they overlap on evidence, not on wording")],
+"F2.2": [("horizontal themes with a control and an artefact behind them", "share of themes; oversight is the hardest because the action completes before a human sees it")],
+"F2.3": [("indicators the spine already computes that an overlay can reuse", "count"),
+         ("gaps the spine does not reach", "count, stated plainly")],
+"F2.4": [("thresholds that move, against indicators that are new", "two counts; the first is a much smaller job")],
+"F2.5": [("paths rather than outcomes", "where inference ran, what retrieval touched, how long a trace was kept — all three computable")],
+"F2.6": [("whether the pre-incident reading existed at all", "yes/no; during an incident you are either quoting a measurement or guessing")],
+"F2.7": [("indicator readings carrying a date", "share of readings; a narrative describing a control is not evidence it operated")],
+"F2.8": [("autonomous actions whose full chain can be reconstructed", "share; anything below 1.00 is the part you cannot audit")],
+"F2.9": [("coverage stated with stale and unevidenced controls included", "share, with the distinction volunteered")],
+"F3.1": [("indicators the board sees", "three, chosen from the set that already exists so anyone can re-compute them")],
+"F3.2": [("what an agent may do without asking", "the autonomy rung, as a function of measured containment rather than of vendor")],
+"F3.3": [("nothing is computed here", "the order itself is the deliverable — evaluation before identity produces a well-measured system nobody can switch off")],
+"F3.4": [("seams with a name against them", "share of seams; an unowned measurement exists on a slide and nowhere else")],
+"F3.5": [("programme metrics that are computed rather than assessed", "share; a metric that does not degrade when ignored is measuring activity")],
+"F3.6": [("conditions met, each evidenced by an indicator crossing a threshold", "count; without one, \"yes with conditions\" becomes \"yes\" at the next review")],
+"F3.7": [("what the team can evidence, quarter by quarter", "per quarter; quarter one produces an inventory and no dashboard, which is the right shape")],
+"F3.8": [("containment, detection and recovery indicators", "the same three E5.4 re-reads after a fix; prevention has no honest indicator here")],
+}

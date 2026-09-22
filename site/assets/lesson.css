@@ -306,6 +306,32 @@ details.runnote>summary:focus-visible{outline:2px solid var(--accent,#4D9BFF);
   font-size:15.5px;color:var(--text-dim)}
 .ct b{color:var(--s-amber)}
 
+/* Day 2 as metrics somebody can take, under the Day table. Two columns
+   because the denominator is half the metric: a count with no denominator is
+   the failure mode a third of this curriculum is about. */
+.metrics{margin:14px 0 0;padding:12px 14px;border:1px solid var(--line);
+  border-radius:10px;background:var(--ink-2)}
+.metrics .lab{margin:0 0 8px;font-family:"IBM Plex Mono",monospace;
+  font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--s-violet,var(--text-faint));font-weight:600}
+.metrics table{width:100%;border-collapse:collapse;font-size:14px}
+.metrics th{text-align:left;font-family:"IBM Plex Mono",monospace;
+  font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-faint);font-weight:600;padding:0 12px 6px 0;
+  border-bottom:1px solid var(--line)}
+.metrics td{padding:7px 12px 7px 0;border-bottom:1px solid var(--line);
+  vertical-align:top;line-height:1.5}
+.metrics td:first-child{color:var(--text);font-weight:500}
+.metrics td:last-child{color:var(--text-dim)}
+.metrics tr:last-child td{border-bottom:0}
+@media(max-width:640px){
+  .metrics table,.metrics tbody,.metrics tr,.metrics td{display:block;width:100%}
+  .metrics thead{display:none}
+  .metrics tr{padding:7px 0;border-bottom:1px solid var(--line)}
+  .metrics tr:last-child{border-bottom:0}
+  .metrics td{border-bottom:0;padding:1px 0}
+}
+
 .days{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0 0}
 @media(max-width:760px){.days{grid-template-columns:1fr}}
 .days>div{border:1px solid var(--line);border-radius:10px;padding:13px 14px;

@@ -191,6 +191,7 @@ from exercises.cybertravels import GROUNDING          # noqa: E402
 from exercises.days import DAYS, FUNCTION_DAYS, FUNCTION_INTRO  # noqa: E402
 from exercises.framing import BRIDGES                 # noqa: E402
 from exercises.layout import parts_for, runs_something, shows_procedure  # noqa: E402
+from exercises.metrics import METRICS                          # noqa: E402
 SKILLS_DIR = ROOT / "skills"
 
 # Every section gets one colour and one icon, and they are fixed across all 134
@@ -320,6 +321,21 @@ def lesson_body(entry: dict) -> str:
             out.append(f'<div class="{cls}"><span>{lab}</span>'
                        f'<p>{html.escape(txt.strip())}</p></div>')
         out.append("</div>")
+        # Day 2 in prose, then the same thing as metrics somebody can actually
+        # take. A sentence cannot be lifted into a dashboard or compared with
+        # last quarter; "share of tool calls whose selecting text came from a
+        # trusted origin" is a metric wearing a paragraph. The denominator or
+        # target is the second column, because a count without one is the
+        # failure mode half this curriculum is about.
+        if ms := METRICS.get(sid):
+            rows = "".join(
+                f'<tr><td>{html.escape(what)}</td>'
+                f'<td>{html.escape(unit)}</td></tr>' for what, unit in ms)
+            out.append(
+                '<div class="metrics"><p class="lab">Measure this</p>'
+                '<table><thead><tr><th>what to measure</th>'
+                '<th>denominator or target</th></tr></thead>'
+                f'<tbody>{rows}</tbody></table></div>')
     if "days" in parts or about:
         fn_id = entry["fn"].split()[1] if entry["fn"].startswith("Function ") else ""
         if FUNCTION_INTRO.get(fn_id) == sid and (fd := FUNCTION_DAYS.get(fn_id)):

@@ -261,6 +261,17 @@ introduction lesson, and as the homepage's "How to use this" section, generated
 from the same data so the homepage cannot advertise a curriculum the lessons do
 not deliver.
 
+Each of those lessons also declares its **metrics** in
+[`scripts/exercises/metrics.py`](scripts/exercises/metrics.py), as
+`(what to measure, denominator or target)`, rendered as a table under Day 2.
+Day 2 is the argument for taking the measurement; the metrics row is the
+measurement itself, in a form that can go on a dashboard. Both halves of the
+pair are required, because "share of tool calls whose selecting text came
+from a trusted origin" is usable and "high" is not. Where a lesson genuinely
+computes nothing — the function introductions, and the two whose output is an
+ordering — the row says what it produces instead rather than inventing a
+number to fill it.
+
 `check_lessons.py` requires all three on every lesson whose layout declares a
 `days` section — 146 of the 148 — and all four keys on every function. The two
 without it are A0.0 and A0.1, whose subject is the reader's own machine.

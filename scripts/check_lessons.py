@@ -86,6 +86,7 @@ from exercises.days import DAYS, FUNCTION_DAYS  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 from exercises.layout import (FULL, PARTS, parts_for, runs_something,  # noqa: E402
                                why_dropped)
+from exercises.metrics import METRICS  # noqa: E402
 from exercises.lessonskills import skill_name  # noqa: E402
 
 # Functions D and E are long arguments rather than collections, and each is told
@@ -226,6 +227,24 @@ def main() -> int:
                     f"the page does not render — delete it, or put {part} "
                     f"back in exercises/layout.py. It does not render because: "
                     f"{why_dropped(sid, s.get('kind'), track) or 'the lesson runs nothing'}")
+
+        # 0b2 — and the metrics that Day 2 states in prose, as something a
+        # reader can take. A sentence cannot be lifted into a dashboard or
+        # compared with last quarter; the pair (what to measure, denominator
+        # or target) can. The denominator is required because a count without
+        # one is the failure this curriculum spends six functions on.
+        ms = METRICS.get(sid)
+        if "days" in parts and not ms:
+            problems.append(f"{sid}: renders a Day table and declares no "
+                            f"metrics — add them to scripts/exercises/metrics.py")
+        if ms and "days" not in parts:
+            problems.append(f"{sid}: declares metrics but renders no Day "
+                            f"table, so nothing shows them — delete them from "
+                            f"scripts/exercises/metrics.py")
+        for what, unit in ms or []:
+            if not what.strip() or not unit.strip():
+                problems.append(f"{sid}: a metric is missing its name or its "
+                                f"denominator — both halves are the metric")
 
         # 0b — Day 0/1/2 is three days or it is nothing
         if "days" in parts:
