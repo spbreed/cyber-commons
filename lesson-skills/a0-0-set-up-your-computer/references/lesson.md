@@ -7,18 +7,6 @@ assumes you can use a computer and nothing else. It takes about half an hour,
 it costs nothing, and at the end you will have run a real piece of security
 work on your own machine.
 
-### What this lesson covers
-
-Six things, kept to exactly this:
-
-1. **Setting up your computer** — a terminal, and a copy of this repository.
-2. **Installing Git** — the tool that gets the repository onto your machine.
-3. **Installing Python** — the one thing every skill's script needs to run.
-4. **What a skill is** — a written procedure a model reads and carries out.
-5. **How to execute a skill** — pick one in your AI assistant, or run one command.
-6. **Why this matters** — for a cybersecurity practitioner, this is a shift in
-   how the work itself gets done.
-
 ### What a skill is
 
 This commons is 149 lessons, and every one hands a model a **written

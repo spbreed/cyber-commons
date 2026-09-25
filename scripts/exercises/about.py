@@ -10,7 +10,7 @@ not do this job; this does, and the build refuses a lesson without one.
 ABOUT: dict[str, str] = {
 
 "A0.0": """
-**What it covers.** Setting a computer up from nothing: what a model, a terminal and a repository are, which AI tool to pick and why the free tiers differ, how to open a terminal on any operating system, how to copy this project onto your machine, and the three settings that let every later lesson call a model. Then you run one real skill and read back which model answered.
+**What it covers.** Six things, in order: setting up your computer, installing Git, installing Python, what a skill is, how to execute one, and why this is a new way of working. Then you run one real skill and read back which model answered.
 
 **Who it is for.** Anyone who can use a computer. It assumes no programming, no security background and no paid account, and it is written to be followed by a capable thirteen-year-old — which is a deliberate floor, not a simplification, because the thing being taught is hard enough without the setup being hard too.
 
