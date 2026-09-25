@@ -29,79 +29,47 @@
 assumes you can use a computer and nothing else. It takes about half an hour,
 it costs nothing, and at the end you will have run a real piece of security
 work on your own machine.</p>
-<h3>What you are about to build, in plain words</h3>
-<p>An <strong>AI model</strong> is the thing behind a chatbot: you give it words, it gives you
-words back. You have almost certainly used one.</p>
-<p>This commons is 149 lessons, and every one of them hands a model a <strong>written
-procedure</strong> — a page of instructions, in ordinary English, that says how to do
-one job in security. Find the weak spot in this code. Work out what an attacker
-could reach. Decide whether this alert is real. The model reads those
-instructions and does the job.</p>
-<p>The written procedures are called <strong>skills</strong>, and they are the point of the
-whole thing. You can read every one of them. You can change them and watch the
-answer change. There is no hidden part.</p>
-<h3>How every lesson works — three ways, and you pick</h3>
-<p>Every lesson can be done three ways. They run the same procedure against the
-same code, and they differ in who drives it:</p>
+<h3>What this lesson covers</h3>
+<p>Six things, kept to exactly this:</p>
 <ol>
-<li><strong>In your AI assistant</strong> — Claude Code, GitHub Copilot, Cursor or Codex. The
-   assistant reads the lesson, explains the idea, fetches the code, runs the
-   check and answers your questions while you work. Take this one if you are
-   here to learn.</li>
-<li><strong>As one Python command</strong> — <code>python3 scripts/lesson.py A0.0</code>. The same
-   lesson runs and prints the same summary, with no conversation. Take this one
-   if you have no assistant, or if you are checking the lesson rather than
-   learning from it.</li>
-<li><strong>Read the code and the difference</strong> — nothing runs and no model is needed.
-   One command writes the example system exactly as it stood at the end of a
-   lesson; another prints just the lines that lesson changed.</li>
+<li><strong>Setting up your computer</strong> — a terminal, and a copy of this repository.</li>
+<li><strong>Installing Git</strong> — the tool that gets the repository onto your machine.</li>
+<li><strong>Installing Python</strong> — the one thing every skill's script needs to run.</li>
+<li><strong>What a skill is</strong> — a written procedure a model reads and carries out.</li>
+<li><strong>How to execute a skill</strong> — pick one in your AI assistant, or run one command.</li>
+<li><strong>Why this matters</strong> — for a cybersecurity practitioner, this is a shift in
+   how the work itself gets done.</li>
 </ol>
-<p>Every lesson page carries all three, in that order, in the grey box near the
-bottom. <strong>None of them is the "real" one.</strong> Way 1 is the one this commons is
-built around, and ways 2 and 3 exist because reviewing code and reading a diff
-are things practitioners do constantly and should not have to give up to use a
-teaching tool.</p>
-<p>Ways 1 and 2 need a model. Way 3 does not.</p>
-<h3>Why a lesson is a skill, and why that matters after this commons</h3>
-<p>This is worth ten minutes even if you only want to get started, because it is
-the part that outlives the curriculum.</p>
-<p>An <strong>agent skill</strong> is a written procedure in a plain file: what this job is,
-when to use it, the steps, and the shape the answer has to come back in. You
-can read it. You can change a step and watch the answer change. Your assistant
-loads it and carries it out.</p>
-<p>That is a real shift in how technical work is learned and shipped. For most of
-computing, knowledge lived in two places that could not talk to each other: in
-documentation people read, and in code that ran. Documentation drifted from the
-code because nothing forced them to agree. A skill collapses the two — <strong>the
-document and the instruction are the same bytes</strong>, so the thing you read is
-literally the thing that executes. That is why this commons prints each skill
-on its own lesson page rather than describing it.</p>
-<p>For a security practitioner or an agent engineer, three things follow, and all
-three are about the next few years rather than this afternoon.</p>
-<ul>
-<li><strong>Procedures become portable and reviewable.</strong> A threat model, a triage
-  runbook, an evidence check — written as a skill, it works in whichever
-  assistant your team already uses, and a colleague can review it in a pull
-  request like any other change. Knowledge that used to live in one person's
-  head becomes something a team owns and versions.</li>
-<li><strong>You learn the review skill, not just the topic.</strong> The job in front of the
-  profession is not <em>can an AI do this</em> but <em>can I tell when its answer is
-  wrong</em>. Every lesson here hands you a procedure and a result and asks you to
-  judge it, which is the muscle that matters when an agent is doing the work at
-  a speed no human reviews line by line.</li>
-<li><strong>It is how you will ship, not only how you will learn.</strong> The same skill you
-  run in a lesson can be pointed at your own estate the same day. There is no
-  translation step between the teaching version and the working version,
-  because there is only one version.</li>
-</ul>
-<p>The honest limit, which the rest of the commons keeps coming back to: <strong>a skill
-does not make a model correct.</strong> It makes the procedure explicit and the output
-checkable, which is a different and smaller claim. A model can follow every step
-and still be wrong, and the whole subject of this curriculum is how you would
-know.</p>
-<h3>What this lesson sets up</h3>
-<p>Two things: <strong>your computer needs to know which model to ask</strong>, and <strong>your
-assistant needs to be able to find the lesson.</strong></p>
+<h3>What a skill is</h3>
+<p>This commons is 149 lessons, and every one hands a model a <strong>written
+procedure</strong> — plain English that says how to do one job in security: find the
+weak spot in this code, work out what an attacker could reach, decide whether
+this alert is real. The model reads the instructions and does the job. Those
+instructions are called <strong>skills</strong>. You can read every one, change them, and
+watch the answer change. There is no hidden part.</p>
+<h3>How to execute a skill</h3>
+<p>Every lesson runs three ways, against the same code:</p>
+<ol>
+<li><strong>In your AI assistant</strong> — Claude Code, GitHub Copilot, Cursor or Codex. It
+   reads the lesson, explains the idea, fetches the code, and runs the check.
+   Take this one if you are here to learn.</li>
+<li><strong>As one Python command</strong> — <code>python3 scripts/lesson.py A0.0</code>. Same lesson,
+   same result, no conversation. Take this one if you have no assistant.</li>
+<li><strong>Read the code and the difference</strong> — nothing runs and no model is needed.</li>
+</ol>
+<p>Every lesson page carries all three, in that order, near the bottom of the
+page. None of them is the "real" one.</p>
+<h3>Why this is a new way of working</h3>
+<p>For most of computing, the instructions a person read and the code a computer
+ran were two different things, kept in step by nobody. A skill collapses that:
+<strong>the document and the instruction are the same bytes</strong>, so what you read is
+what executes. For a cybersecurity practitioner, that is the shift worth
+understanding before anything else here — development is moving from writing
+code to writing skill files, and the job in front of you becomes judging what
+a model produced from one, not only producing it yourself.</p>
+<p>A skill does not make a model correct. It makes the procedure explicit and the
+output checkable — a smaller claim, and the one this whole curriculum is
+about.</p>
 <h3>Nine words you will meet</h3>
 <p>You do not need to memorise these. Come back to this table when one of them
 turns up and you are not sure.</p>
@@ -154,35 +122,10 @@ turns up and you are not sure.</p>
 <p>Two more you will meet only if you choose Route B or C below: an <strong>API key</strong> is
 a password that lets your computer talk to somebody else's model, and an
 <strong>endpoint</strong> is the web address that model answers on.</p>
-<h3>Why this is the first lesson and not an appendix</h3>
-<p>Nothing here runs without a model. If you skip this and open a later lesson,
-the command will stop and print a message instead of doing the work — which is
-correct behaviour, and is not your computer being broken. This lesson makes
-that message something you have already seen on purpose.</p>
-<h3>What you need, and what it costs</h3>
-<p>Three things: a place to write code, a copy of this repository, and a model that
-answers. Only the third one has any real decision in it.</p>
-<p>The table below is the honest version of the developer-AI-tool market as it
-stands. Two columns matter more than the price. <strong>The context window</strong> is how
-much the tool can hold at once — and it is not all yours, because the working
-file, the project instructions, the terminal output and the dependencies are all
-spending from the same budget. <strong>The free tier</strong> is what you can actually do
-without a card.</p>
-<h3>A caution about the number in the middle column</h3>
-<p>A context window is a ceiling, not an allowance. A tool advertising a million
-tokens will still lose the thread at a fraction of that, because the window is
-shared between your file, the project-root instructions, background command
-output and every dependency the agent pulled in. Both Cursor and Claude Code
-ship explicit compaction commands for exactly this reason. Treat the figure as
-"how much this could hold before it refuses", not "how much it will reason over
-well".</p>
-<p>The other thing worth knowing before you pick: <strong>flat-rate pricing is mostly
-gone.</strong> GitHub Copilot's $10 tier is not unlimited use — it is a baseline of AI
-credits that drains faster when you run an agent workflow than when you accept
-an autocomplete. Budget by what you run, not by the headline.</p>
-<h3>The rule for this lesson</h3>
-<p>Everything below works on a free tier. You do not need a paid plan to finish
-this commons, and if a lesson ever requires one, that is a defect in the lesson.</p><div class="how"><h2>2 · Pick a tool, against its real numbers</h2>
+<h3>What you need</h3>
+<p>Three things: a place to write code, a copy of this repository, and a model
+that answers. Everything below works on a free tier — you do not need a paid
+plan to finish this commons.</p><div class="how"><h2>2 · Pick a tool, against its real numbers</h2>
 <p><strong>You can skim this table.</strong> If you only want to get going, none of it is required — Route B in the next step but one runs a model on your own computer for nothing, with no account and no card. The table is here so that when you <em>do</em> choose a paid tool, you choose it on the two numbers that actually decide it rather than on the advertising.</p>
 <p>The prices are per month and the free tiers are what you get without a card. Every name links to its own sign-up page.</p><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">tool</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">free tier</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">max context window</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">paid, per month</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b><a href='https://claude.ai'>Anthropic Claude</a></b> / <a href='https://console.anthropic.com'>Claude Code</a></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Rolling message caps on the web app, resetting every 5 hours. $5 API trial credit on phone verification.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>1M tokens</b> on paid plans with frontier models; 200k on the free web plan</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">$20 Pro · $25 Max · usage-based API</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b><a href='https://antigravity.google'>Google Antigravity</a></b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Perpetual public preview, free. Local orchestration across editor, terminal and browser.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>1M–2M tokens</b> depending on the underlying Gemini model, with built-in state compression</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">$0 preview · enterprise seats via Google Cloud</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b><a href='https://aistudio.google.com/apikey'>Google AI Studio</a></b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Free API keys, 60 requests/minute on Gemini Flash, no billing details required</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>2M tokens</b> on Gemini Pro models</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Pay-as-you-go once the free quota is breached</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b><a href='https://build.nvidia.com'>NVIDIA Build</a></b> (NIM)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Free account, no card. One key reaches the whole catalogue of open-weight models, hosted on NVIDIA's own GPUs. <b>Route C below walks through it.</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Varies by model — the catalogue carries several with 128k and above</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Free for development; production via NVIDIA AI Enterprise</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b><a href='https://chatgpt.com'>OpenAI ChatGPT</a></b> / <a href='https://platform.openai.com'>Codex</a></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">GPT-4o mini, code execution and data analysis. The legacy $5 API credit is largely phased out.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">128k tokens on standard frontier models; larger on API-only reasoning tasks</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">$20 Plus · $200 Pro</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b><a href='https://github.com/features/copilot'>GitHub Copilot</a></b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2,000 completions + 50 chat messages a month. <b>Students get the premium tier free</b> via the <a href='https://education.github.com/pack'>Student Developer Pack</a>.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">32k–128k, scaled dynamically by which model serves the request</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">$10 Pro (bundles $15 of AI credits) · $39 Pro+</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b><a href='https://cursor.com'>Cursor</a></b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Hobby: 2,000 completions + 50 slow requests a month. <b>Students get up to a year of Pro</b> — <a href='https://cursor.com/students'>cursor.com/students</a>.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">128k–200k mapped codebase context; up to 1M with your own API key</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">$20 Pro · $40 Business</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b><a href='https://aws.amazon.com/q/developer/'>Amazon Q Developer</a></b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">50 agentic requests a month + 1,000 lines of code translation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">100k+ tokens of indexed codebase, mapped into the IDE panel</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">$19 per user (Q Pro)</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Every tool name links to its own sign-up page. Free tiers and context windows as at the time of writing — they move, so check the terms before you depend on one. If you are a student, start at the two rows that say so; they are the best value in the table by a wide margin.</div><h2>3 · Open a terminal and get the files</h2>
 <p><strong>First, open a terminal.</strong> It is already on your computer:</p>

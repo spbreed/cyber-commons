@@ -7,92 +7,54 @@ assumes you can use a computer and nothing else. It takes about half an hour,
 it costs nothing, and at the end you will have run a real piece of security
 work on your own machine.
 
-### What you are about to build, in plain words
+### What this lesson covers
 
-An **AI model** is the thing behind a chatbot: you give it words, it gives you
-words back. You have almost certainly used one.
+Six things, kept to exactly this:
 
-This commons is 149 lessons, and every one of them hands a model a **written
-procedure** — a page of instructions, in ordinary English, that says how to do
-one job in security. Find the weak spot in this code. Work out what an attacker
-could reach. Decide whether this alert is real. The model reads those
-instructions and does the job.
+1. **Setting up your computer** — a terminal, and a copy of this repository.
+2. **Installing Git** — the tool that gets the repository onto your machine.
+3. **Installing Python** — the one thing every skill's script needs to run.
+4. **What a skill is** — a written procedure a model reads and carries out.
+5. **How to execute a skill** — pick one in your AI assistant, or run one command.
+6. **Why this matters** — for a cybersecurity practitioner, this is a shift in
+   how the work itself gets done.
 
-The written procedures are called **skills**, and they are the point of the
-whole thing. You can read every one of them. You can change them and watch the
-answer change. There is no hidden part.
+### What a skill is
 
-### How every lesson works — three ways, and you pick
+This commons is 149 lessons, and every one hands a model a **written
+procedure** — plain English that says how to do one job in security: find the
+weak spot in this code, work out what an attacker could reach, decide whether
+this alert is real. The model reads the instructions and does the job. Those
+instructions are called **skills**. You can read every one, change them, and
+watch the answer change. There is no hidden part.
 
-Every lesson can be done three ways. They run the same procedure against the
-same code, and they differ in who drives it:
+### How to execute a skill
 
-1. **In your AI assistant** — Claude Code, GitHub Copilot, Cursor or Codex. The
-   assistant reads the lesson, explains the idea, fetches the code, runs the
-   check and answers your questions while you work. Take this one if you are
-   here to learn.
-2. **As one Python command** — `python3 scripts/lesson.py A0.0`. The same
-   lesson runs and prints the same summary, with no conversation. Take this one
-   if you have no assistant, or if you are checking the lesson rather than
-   learning from it.
+Every lesson runs three ways, against the same code:
+
+1. **In your AI assistant** — Claude Code, GitHub Copilot, Cursor or Codex. It
+   reads the lesson, explains the idea, fetches the code, and runs the check.
+   Take this one if you are here to learn.
+2. **As one Python command** — `python3 scripts/lesson.py A0.0`. Same lesson,
+   same result, no conversation. Take this one if you have no assistant.
 3. **Read the code and the difference** — nothing runs and no model is needed.
-   One command writes the example system exactly as it stood at the end of a
-   lesson; another prints just the lines that lesson changed.
 
-Every lesson page carries all three, in that order, in the grey box near the
-bottom. **None of them is the "real" one.** Way 1 is the one this commons is
-built around, and ways 2 and 3 exist because reviewing code and reading a diff
-are things practitioners do constantly and should not have to give up to use a
-teaching tool.
+Every lesson page carries all three, in that order, near the bottom of the
+page. None of them is the "real" one.
 
-Ways 1 and 2 need a model. Way 3 does not.
+### Why this is a new way of working
 
-### Why a lesson is a skill, and why that matters after this commons
+For most of computing, the instructions a person read and the code a computer
+ran were two different things, kept in step by nobody. A skill collapses that:
+**the document and the instruction are the same bytes**, so what you read is
+what executes. For a cybersecurity practitioner, that is the shift worth
+understanding before anything else here — development is moving from writing
+code to writing skill files, and the job in front of you becomes judging what
+a model produced from one, not only producing it yourself.
 
-This is worth ten minutes even if you only want to get started, because it is
-the part that outlives the curriculum.
-
-An **agent skill** is a written procedure in a plain file: what this job is,
-when to use it, the steps, and the shape the answer has to come back in. You
-can read it. You can change a step and watch the answer change. Your assistant
-loads it and carries it out.
-
-That is a real shift in how technical work is learned and shipped. For most of
-computing, knowledge lived in two places that could not talk to each other: in
-documentation people read, and in code that ran. Documentation drifted from the
-code because nothing forced them to agree. A skill collapses the two — **the
-document and the instruction are the same bytes**, so the thing you read is
-literally the thing that executes. That is why this commons prints each skill
-on its own lesson page rather than describing it.
-
-For a security practitioner or an agent engineer, three things follow, and all
-three are about the next few years rather than this afternoon.
-
-- **Procedures become portable and reviewable.** A threat model, a triage
-  runbook, an evidence check — written as a skill, it works in whichever
-  assistant your team already uses, and a colleague can review it in a pull
-  request like any other change. Knowledge that used to live in one person's
-  head becomes something a team owns and versions.
-- **You learn the review skill, not just the topic.** The job in front of the
-  profession is not *can an AI do this* but *can I tell when its answer is
-  wrong*. Every lesson here hands you a procedure and a result and asks you to
-  judge it, which is the muscle that matters when an agent is doing the work at
-  a speed no human reviews line by line.
-- **It is how you will ship, not only how you will learn.** The same skill you
-  run in a lesson can be pointed at your own estate the same day. There is no
-  translation step between the teaching version and the working version,
-  because there is only one version.
-
-The honest limit, which the rest of the commons keeps coming back to: **a skill
-does not make a model correct.** It makes the procedure explicit and the output
-checkable, which is a different and smaller claim. A model can follow every step
-and still be wrong, and the whole subject of this curriculum is how you would
-know.
-
-### What this lesson sets up
-
-Two things: **your computer needs to know which model to ask**, and **your
-assistant needs to be able to find the lesson.**
+A skill does not make a model correct. It makes the procedure explicit and the
+output checkable — a smaller claim, and the one this whole curriculum is
+about.
 
 ### Nine words you will meet
 
@@ -115,44 +77,11 @@ Two more you will meet only if you choose Route B or C below: an **API key** is
 a password that lets your computer talk to somebody else's model, and an
 **endpoint** is the web address that model answers on.
 
-### Why this is the first lesson and not an appendix
+### What you need
 
-Nothing here runs without a model. If you skip this and open a later lesson,
-the command will stop and print a message instead of doing the work — which is
-correct behaviour, and is not your computer being broken. This lesson makes
-that message something you have already seen on purpose.
-
-### What you need, and what it costs
-
-Three things: a place to write code, a copy of this repository, and a model that
-answers. Only the third one has any real decision in it.
-
-The table below is the honest version of the developer-AI-tool market as it
-stands. Two columns matter more than the price. **The context window** is how
-much the tool can hold at once — and it is not all yours, because the working
-file, the project instructions, the terminal output and the dependencies are all
-spending from the same budget. **The free tier** is what you can actually do
-without a card.
-
-### A caution about the number in the middle column
-
-A context window is a ceiling, not an allowance. A tool advertising a million
-tokens will still lose the thread at a fraction of that, because the window is
-shared between your file, the project-root instructions, background command
-output and every dependency the agent pulled in. Both Cursor and Claude Code
-ship explicit compaction commands for exactly this reason. Treat the figure as
-"how much this could hold before it refuses", not "how much it will reason over
-well".
-
-The other thing worth knowing before you pick: **flat-rate pricing is mostly
-gone.** GitHub Copilot's $10 tier is not unlimited use — it is a baseline of AI
-credits that drains faster when you run an agent workflow than when you accept
-an autocomplete. Budget by what you run, not by the headline.
-
-### The rule for this lesson
-
-Everything below works on a free tier. You do not need a paid plan to finish
-this commons, and if a lesson ever requires one, that is a defect in the lesson.
+Three things: a place to write code, a copy of this repository, and a model
+that answers. Everything below works on a free tier — you do not need a paid
+plan to finish this commons.
 
 ## 2 · Pick a tool, against its real numbers
 

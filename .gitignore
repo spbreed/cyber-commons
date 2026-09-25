@@ -35,3 +35,4 @@ labs/tools/*/work/
 # to somebody else's clone is meaningless, so it is never committed.
 .github/skills/
 .agents/skills/
+work/
