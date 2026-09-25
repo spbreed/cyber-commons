@@ -55,9 +55,10 @@ many."""),
 # ---------------------------------------------------------------- E2.5
 "E2.5": {
  "concept": """
-The fastest source of a good detection is an incident you have just had. The
-trap is that **every candidate rule catches the incident** — that is how it was
-generated — so catching it cannot be the property you select on.
+The fastest source of a good detection is an incident you have just had, and
+the trap is trusting it for that reason: **a rule tests clean against the case
+it was built from**, so catching that one case is not the property you can
+select on.
 
 What separates a rule worth deploying is what it does to traffic that is not the
 incident. That means a benign corpus containing the hard cases: for a refund

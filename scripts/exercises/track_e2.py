@@ -116,7 +116,8 @@ operational rather than architectural.
 "E3.7": {
  "concept": """
 Scoping answers "what was touched?" For a host-based incident you enumerate
-hosts. For an agentic incident, **scope follows the delegation graph**.
+hosts. For an agentic incident, the host list is not the boundary — the chain
+that delegated the work is.
 
 The agent that touched the resource is usually the *last* actor in a chain. If
 you scope only that actor, you miss everything the earlier actors reached — and

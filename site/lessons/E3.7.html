@@ -6,7 +6,8 @@
                                         +--&gt; credentials used
 
    the question &quot;what did it touch&quot; is not answerable from memory</pre><p>Scoping answers "what was touched?" For a host-based incident you enumerate
-hosts. For an agentic incident, <strong>scope follows the delegation graph</strong>.</p>
+hosts. For an agentic incident, the host list is not the boundary — the chain
+that delegated the work is.</p>
 <p>The agent that touched the resource is usually the <em>last</em> actor in a chain. If
 you scope only that actor, you miss everything the earlier actors reached — and
 because authority narrows down the chain, the earlier actors typically had

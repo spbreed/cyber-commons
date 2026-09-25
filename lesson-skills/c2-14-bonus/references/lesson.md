@@ -6,7 +6,7 @@ An offensive agent is the most capable and least supervised thing in the estate.
 It scans, reasons and exploits at machine speed, on credentials you issued,
 against systems you care about — and its traffic is, by design,
 indistinguishable from an attack. That combination is why the controls go on
-*before* it starts, and why this is a gate rather than a checklist.
+*before* it starts.
 
 Seven controls, and six of them are **blocking** — the engagement does not begin
 without them, because each one's absence is invisible until it has already cost

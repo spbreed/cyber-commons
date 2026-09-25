@@ -395,10 +395,10 @@ move them.
 
 "E1.2": {
  "concept": """
-Drift monitoring exists because an agent's behaviour changes **without a code
-change**. A new model version, an edited prompt, an added tool — none of these
-pass through the change management process built for code, and all of them
-invalidate the testing your controls were signed off against.
+**Drift monitoring** answers what changes an agent's behaviour without going
+through the change management process built for code: a new model version, an
+edited prompt, an added tool. All of them invalidate the testing your controls
+were signed off against.
 
 That is the precise claim: the control was tested against a behaviour that no
 longer exists. It has not failed; it is *unevidenced*, which is a different and

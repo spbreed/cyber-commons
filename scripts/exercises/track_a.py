@@ -31,9 +31,9 @@ EXERCISES: dict[str, dict] = {
 
 "A1.0": {
  "concept": """
-An **agent** is software that plans, calls tools, and acts on what it reads.
-Three verbs, and every one of them is both the reason it is useful and the
-reason it is dangerous.
+Three verbs — plans, calls tools, acts on what it reads — and every one of
+them is both the reason an **agent** is useful and the reason it is
+dangerous.
 
 Compare it to the thing it is not. A chatbot that is wrong says something
 wrong. An agent that is wrong *does* something wrong — it cancels a booking,
@@ -199,7 +199,7 @@ lesson on what that enables. For now: notice that you are trusting them.
 
 "A1.3": {
  "concept": """
-There are **three principals** in every agent action, and systems that model one
+A system that models only one of the **three principals** in an agent action
 cannot answer any question an incident asks.
 
 | principal | what it is | what it answers |
@@ -560,8 +560,8 @@ never have existed reached a boundary.
 "A2.2": {
  "concept": """
 An audit trail exists to answer questions asked after the fact by somebody who
-was not there. There are four, and a record that cannot answer all of them names
-an event without naming an actor.
+was not there, and a record that cannot answer all of them names an event
+without naming an actor.
 
 | | the question | what the row needs |
 |---|---|---|
