@@ -224,11 +224,21 @@ def skill_html(ref: str) -> str:
         raise SystemExit(f"build_site.py: no such skill: skills/{ref}/SKILL.md")
     _, front, body = path.read_text().split("---", 2)
     link = f"{REPO}/blob/{BRANCH}/skills/{ref}/SKILL.md"
+    # A SKILL.md links its own script relatively (`scripts/x.py`), which is
+    # right in the repository and in an agent's skills directory. Embedded on
+    # a lesson page the same href resolved against `/lessons/` and 404'd — 147
+    # links across the site, on the one line that says where the fixture is.
+    # The source stays verbatim; only the rendered href is anchored.
+    base = f"{REPO}/blob/{BRANCH}/skills/{ref}/"
+    body_html = re.sub(
+        r'href="(?![a-zA-Z][a-zA-Z0-9+.-]*:|//|#|/)([^"]+)"',
+        lambda m: f'href="{base}{m.group(1)}" target="_blank" rel="noopener"',
+        md_to_html(body.strip()))
     return (f'<p class="skillref">The skill — '
             f'<a href="{link}" target="_blank" rel="noopener">'
             f'<code>skills/{html.escape(ref)}/SKILL.md</code></a></p>'
             f'<pre class="front"><code>{html.escape(front.strip())}</code></pre>'
-            + md_to_html(body.strip()))
+            + body_html)
 
 
 def fold_html(summary: str, inner: list) -> str:
