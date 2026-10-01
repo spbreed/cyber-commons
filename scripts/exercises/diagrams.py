@@ -219,7 +219,7 @@ def flow(columns: list[str], *, caption: str = "", legend: str = "") -> str:
 
 # --------------------------------------------------------------- term grid
 # A glossary drawn rather than listed: one card per term, each with a small
-# picture of the mechanism. A0.2 uses it for the nine words for an agent. A
+# picture of the mechanism. A0.1 uses it for the nine words for an agent. A
 # definitions table would say the same words, but "the loop that lets a model
 # act" is a sentence a reader nods at and cannot use, and the four boxes with
 # an arrow back to the start are the thing they will recognise in runtime.py.

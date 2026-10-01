@@ -9,19 +9,21 @@ one, and the frameworks — and they repeated each other badly: three of the fiv
 explained Day 0/1/2, two explained the personas, and a reader had to open four
 pages to learn things that fit on one.
 
-Each lesson now owns one thing and the others point at it. A0.0 owns the
-machine: what a skill is, the tools, the model, and the one preflight run.
-A0.1 owns the commons: who it is for, how a page is built, where to start. A0.2
-owns the vocabulary of the thing being built. A0.1 used to re-run A0.0's
-preflight and re-explain skills, the three ways to run a lesson and why two
-models answer differently, so a reader met the same run and the same four
-paragraphs twice in two pages.
+It is two now. A0.0 is the whole front door: what the commons is, who it is
+for, the machine, the model, the one preflight run, and how to read a lesson
+page. A0.1 owns the vocabulary of the thing being built.
+
+The front door was two pages for a while — the machine, then the commons — and
+the second kept re-explaining the first: it re-ran the preflight, then, once
+that was removed, opened by pointing back at the page before it for what a
+skill is. A reader had to finish two pages before opening a lesson, and the
+split was asked to go more than once before it went. One page, read once.
 """
 
 from . import diagrams as D
 from .skills import skill_steps
 
-# A0.2's figure: the nine words for an agent, one card each. The colours rotate
+# A0.1's figure: the nine words for an agent, one card each. The colours rotate
 # through the defensive hues only. Amber means the adversary on every page of
 # the commons, and none of these nine is an attack; red appears once, on the
 # guardrail's refused path, because that is what red means everywhere else.
@@ -158,7 +160,43 @@ EXERCISES: dict[str, dict] = {
 **Start here even if you have never written a line of code.** This lesson
 assumes you can use a computer and nothing else. It takes about half an hour,
 it costs nothing, and at the end you will have run a real piece of security
-work on your own machine.
+work on your own machine and know which lesson to open next.
+
+### What this is
+
+This commons has one subject: **security engineering when the thing you are
+securing — or the thing doing the securing — is an agent.** Not prompt
+engineering, not model training, not a vendor comparison. An agent is software
+that plans, calls tools and acts on what it reads, and every part of that
+sentence is both an attack surface and a control point. It is free, open, and
+not a product.
+
+### Who it is for
+
+Five roles, and each one has a whole function written for it. You need one of
+them, not five — and everybody starts in Function A, which builds the system
+the other five ask their questions of.
+
+- **Anyone who has never shipped an agent**, including all five roles below.
+  You build CyberTravels' platform end to end before a single control is
+  argued about. → Function A.
+- **A security architect or product engineer** asked whether an agentic feature
+  is safe to ship, who needs a component map before a control list. → Function B.
+- **An application security engineer or penetration tester** who already runs
+  SAST, DAST and manual testing, and now has to review code an agent wrote and
+  test a system that answers differently each time. → Function C.
+- **A red team operator or AI security researcher** attacking a system with no
+  fixed response, who has to report a result that survives being run again.
+  → Function D.
+- **A SOC analyst, detection engineer or incident responder** whose thresholds
+  were tuned against a person doing twelve things an hour, now watching an agent
+  do fourteen hundred. → Function E.
+- **A GRC lead, risk owner or somebody in the CISO's office** who has to say in
+  writing whether the estate is under control, and be right. → Function F.
+
+This page asks for nothing but a computer. From A1.0 on, a lesson assumes you
+can read a Python function — not that you can write one, and not that you have
+a security background.
 
 ### What a skill is
 
@@ -193,7 +231,7 @@ about.
 
 You do not need to memorise these. Come back to this table when one of them
 turns up and you are not sure. These are the words for your computer; the
-nine for agents themselves — harness, MCP, A2A and the rest — are A0.2.
+nine for agents themselves — harness, MCP, A2A and the rest — are A0.1.
 
 | word | what it means here |
 |---|---|
@@ -332,7 +370,8 @@ plan to finish this commons.
          "1. **Get one.** Any of the four. If you already use one, use that.\n"
          "2. **Sign in once**, the way the assistant tells you to.\n"
          "3. **Open it in the `cyber-commons` folder** you cloned in step 3.\n\n"
-         "That is the whole route. Step 5 picks your first lesson. If you chose "
+         "That is the whole route. The run block at the foot of this page "
+         "does your first lesson. If you chose "
          "Claude Code you can check it from the terminal:\n\n"
          "```bash\n"
          "claude --version      # if this prints a version, you are done\n"
@@ -470,9 +509,195 @@ plan to finish this commons.
          "committed — but the habit is what protects you, not the gate."),
   ])),
 
-  # No "## 5 · Do your first lesson" here. It walked through install, pick
+  # Sections 5 to 9 were a page of their own, A0.1, and are the half of the
+  # front door that is about the commons rather than the machine. They sit
+  # after the setup on purpose: a reader who has a model answering reads how
+  # the pages are laid out with somewhere to go next, and one who only wants
+  # the setup has finished it by here.
+  ("md", "## 5 · How to read a lesson page\n\n"
+         "Every page is built from a fixed set of sections in a fixed order, "
+         "and the order is the argument. **A page shows only the sections it "
+         "has something for**, so the set below is what is available rather "
+         "than a checklist every page satisfies — this page, for one, has no "
+         "Risk, no Day table and no CyberTravels scene, because it is about "
+         "your machine rather than about a system anybody secures.\n\n"
+         "1. **Risk and Control** — one sentence each, at the top: what goes "
+         "wrong here, and what closes it. On the lessons that are about a "
+         "system.\n"
+         "2. **The hook** — a scene, before anything else. Deliberately *not* "
+         "a summary: it is the consequence of not knowing the lesson. The "
+         "summary is section 3.\n"
+         "3. **What this lesson is** — the plain description, and the Day "
+         "table.\n"
+         "4. **The framework** — the concept and its diagram, plus in "
+         "Functions E and F an *anchor* line saying which part of that "
+         "function's single argument the lesson moves. This always comes "
+         "before any code: teaching the how before the why is the most common "
+         "way a good lesson lands badly.\n"
+         "5. **In CyberTravels** — the idea in the running case study.\n"
+         "6. **The skill** — the `SKILL.md` as it exists in "
+         "[`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills), "
+         "pasted in rather than copied out, so a fix is one edit to one file.\n"
+         "7. **Run it** — the run block, the same on every page.\n"
+         "8. **What you just proved** — on the lessons that ran something, and "
+         "only those. A reading lesson proves nothing and says nothing here.\n"
+         "9. **Your turn** — one input to change so a number moves. The lesson "
+         "is in the difference between the two numbers, not in either one.\n\n"
+         "Deciding whether to read a lesson takes section 3 alone. If you "
+         "already know the idea, section 7 alone.\n\n"
+         "A section that is present on every page regardless of whether it has "
+         "anything to say stops being a heading and becomes a form. The set a "
+         "given lesson renders is declared in "
+         "[`scripts/exercises/layout.py`](https://github.com/spbreed/cyber-commons/blob/master/scripts/exercises/layout.py), "
+         "with the reason for each omission, and a check refuses both an empty "
+         "section and prose left behind for a section that no longer renders.\n\n"
+         "**The hook is always CyberTravels.** It sells corporate travel, and "
+         "its product is an agentic platform of four agents — a workflow agent "
+         "that books and refunds, a retrieval advisor, a coding agent, and a "
+         "file-system agent reading vendor documents. Alex is the product "
+         "engineer who shipped it. One system, every lesson. That is a "
+         "deliberate cost — a lesson could always find a sharper example of "
+         "its own idea — and the payoff is cumulative: the refund limit an "
+         "attacker walks past in Function B is the one a detection watches in "
+         "Function E and a report counts in Function F.\n\n"
+         "### The three questions every page answers\n\n"
+         "Day 0, Day 1 and Day 2 appear in a table on every lesson about the "
+         "system. They are **not** a maturity model and not a timeline — Day "
+         "0 is not \"first week\". They are the three questions a practitioner "
+         "asks before reading anything:\n\n"
+         "| | the question | what a good answer looks like |\n"
+         "|---|---|---|\n"
+         "| **Day 0 — why** | What goes wrong if you do nothing? | A "
+         "consequence in this lesson's own terms, not a general appeal to "
+         "risk |\n"
+         "| **Day 1 — how** | What do you actually build or run? | The "
+         "concrete thing: a rule, a map, a gate, a score |\n"
+         "| **Day 2 — measure** | What number says it worked? | A number the "
+         "lesson produces — a recall figure, a false-positive rate, an "
+         "interval in minutes |\n\n"
+         "Day 2 is easy to fake and the only one a sceptical reader believes. "
+         "Where a lesson produces a real number, Day 2 names it; where it does "
+         "not, Day 2 says what you count instead and does not pretend. Use "
+         "them like this: **Day 0 decides whether to read the lesson, Day 1 is "
+         "what you do, Day 2 is what you put in the update to whoever "
+         "asked.**\n\n"
+         "Getting this funded is the part most material leaves out, and it is "
+         "hardest in organisations that cannot buy the capability. A lesson "
+         "that stops at the technique gives you nothing to take to the person "
+         "holding the budget.\n\n"
+         "## 6 · Start where your work already is\n\n"
+         "Everybody builds the system first — A0.1, then A1 and A2. After "
+         "that, find your row. Open the lesson in its \"start at\" column and "
+         "read only its Day table: those three lines are enough to decide "
+         "whether it is worth an afternoon."),
+  ("html", D.table(
+    ["if your job is", "start at", "then", "what you have at the end"],
+    [["<span>Designing or approving an agentic feature</span>",
+      "<b>B1.0</b>", "B1 → B2 → B3, in order",
+      "A component map, and an index where every risk names the control that "
+      "owns it"],
+     ["<span>AppSec, code review, penetration testing</span>",
+      "<b>C2.0</b>", "C2 in order; B1.1 and B1.2 when a lesson asks",
+      "A pipeline with an AI pass in it, and a measured false-positive rate "
+      "for that pass"],
+     ["<span>Red teaming or AI security research</span>",
+      "<b>D1.0</b>", "D1 in order; B1.2 and B1.3 first for the attack classes",
+      "An evaluation that reproduces, and a report a defender can act on"],
+     ["<span>Detection, alert triage, incident response</span>",
+      "<b>E1.0</b>", "E1 → E2 → E3 → E4 → E5; B1.1 for the component names",
+      "Five intervals with a number on each, and the rules that shortened them"],
+     ["<span>Governance, risk, compliance, the CISO office</span>",
+      "<b>F1.0</b>", "F1.1 next, then F1 → F2 → F3",
+      "A control indicator computed from the estate rather than asserted "
+      "about it"]],
+    caption="Reading front to back is the right route only for the architect. "
+            "Every other row skips what it does not need and nothing it does.")),
+
+  ("md", "## 7 · Open source first, and then buy something\n\n"
+         "Every tool named in this commons is one you can install today without "
+         "a purchase order. That is a teaching decision before it is a budget "
+         "one.\n\n"
+         "**You cannot specify a product you have not built a bad version of.** "
+         "A team that has stood up Wazuh and OpenSearch, written twenty Sigma "
+         "rules and watched them fire on their own traffic can ask a vendor the "
+         "two questions that matter: what does this do that my rules do not, "
+         "and what does it cost to keep it true. A team that has not can only "
+         "compare feature lists, and a feature list is written by the seller.\n\n"
+         "The second reason is that **the gaps are the finding**. Building the "
+         "open-source version tells you exactly where it stops. E1.0 names two "
+         "out loud: there is no open-source data-loss prevention with the "
+         "maturity of the other sensors, and *no product in the list at all* "
+         "can tell you which prompt caused a file write. Neither is visible "
+         "from a datasheet, and both are the reason to buy — or to build."),
+  ("html", D.table(
+    ["what you need", "learn it on", "buy when"],
+    [["Endpoint and workload sensing", "<b>Wazuh</b>",
+      "Estate size or support obligations outgrow what you can operate"],
+     ["Somewhere for telemetry to land", "<b>OpenSearch</b>",
+      "Retention and query cost stop being a tuning problem"],
+     ["Portable, reviewable detections",
+      "<b>Sigma</b>, mapped to <b>ATT&amp;CK</b> and <b>ATLAS</b>",
+      "Almost never — the rules outlive the platform, which is the point"],
+     ["Static analysis in the pipeline", "<b>Semgrep</b>, plus the reasoning "
+      "pass from C2.3",
+      "Language coverage or triage volume is the constraint"],
+     ["Dependency and image inspection", "<b>Trivy</b>, <b>Syft</b>, <b>Grype</b>",
+      "You need attestation and provenance rather than a scan"],
+     ["Threat intelligence and cases",
+      "<b>MISP</b>, <b>OpenCTI</b>, <b>TheHive</b>",
+      "Intelligence you cannot source yourself is the gap"],
+     ["Orchestration and forensics", "<b>Shuffle</b>, <b>Velociraptor</b>",
+      "Response time is bounded by people rather than by tooling"]],
+    caption="The right-hand column is the one to argue about. A control you "
+            "have never operated has no 'buy when' — it has a demo.")),
+
+  ("md", "## 8 · The four vocabularies, and which question each answers\n\n"
+         "Every lesson page carries framework labels. Four frameworks are in "
+         "use across this field and they answer different questions; a finding "
+         "filed under the wrong one reaches nobody.\n\n"
+         "- **[OWASP's two Top 10s](https://genai.owasp.org/llm-top-10/)** — "
+         "*what can go wrong.* The LLM list is application-level; the "
+         "[Agentic list](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/) "
+         "is for systems that plan and call tools. Reach for these reviewing a "
+         "feature.\n"
+         "- **[MITRE ATLAS](https://atlas.mitre.org/)** — *what an attacker "
+         "did.* ATT&CK's grammar applied to AI. The right lens in an incident "
+         "write-up.\n"
+         "- **[NIST AI RMF](https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF)** "
+         "— *how you organise to find out.* GOVERN, MAP, MEASURE, MANAGE. A "
+         "NIST function in a vulnerability report is a category error.\n"
+         "- **[The EU AI Act](https://artificialintelligenceact.eu/)** — *what "
+         "you must be able to show*, by article. Article 15 is accuracy, "
+         "robustness and cybersecurity; Article 14 is human oversight. The only "
+         "one of the four that can fine you.\n\n"
+         "A control usually needs one of each: a threat it addresses, a tactic "
+         "it frustrates, a function it belongs to, and an obligation it "
+         "discharges. The mapping lives in `curriculum/frameworks.json` and "
+         "every label on every lesson page is generated from it — these are "
+         "indicative mappings, not a certification."),
+
+  # scripts/check_claims.py holds the counts below against the tree.
+  ("md", "## 9 · What sits behind a lesson skill\n\n"
+         "Behind each lesson skill is an **audit skill** — the written "
+         "procedure the lesson runs, in `skills/`. There are 14 areas, "
+         "140 skills, 140 of them with a script, and exactly one copy of "
+         "each. Eighteen audits are shared by two or three lessons, which is "
+         "why a lesson skill calls one rather than carrying its own copy.\n\n"
+         "You can install a whole function at once rather than a lesson at a "
+         "time, and ask what is currently linked:\n\n"
+         "```bash\n"
+         "python3 scripts/install_skills.py --all --lessons A   # this function's lesson skills\n"
+         "python3 scripts/install_skills.py --list              # what is linked where\n"
+         "```\n\n"
+         "Those are **links into your clone**, not copies — symlinks, or "
+         "junctions on Windows — so `git pull` updates every tool at once and "
+         "an edit you make here is live in all of them. A copy would be a fork "
+         "with a friendly name: you would fix a skill once and the other copies "
+         "would keep the bug while still loading and still answering."),
+
+  # No "Do your first lesson" section here. It walked through install, pick
   # and read-the-readback — which is exactly what the run block below this
-  # prose prints, generated, for all 148 lessons. Two copies of the same
+  # prose prints, generated, for every lesson. Two copies of the same
   # three steps on one page, and the hand-written one was the copy that
   # could go stale. The run block is the only one now.
 
@@ -505,232 +730,6 @@ plan to finish this commons.
 },
 
 "A0.1": {
- "concept": """
-This commons has one subject: **security engineering when the thing you are
-securing — or the thing doing the securing — is an agent.** Not prompt
-engineering, not model training, not a vendor comparison. An agent is software
-that plans, calls tools and acts on what it reads, and every part of that
-sentence is both an attack surface and a control point.
-
-It is free, open, and not a product. What a skill is and how your machine runs
-one were A0.0; this page is how the commons is laid out around them.
-
-### Who it is for
-
-Five roles, and each one has a whole function written for it. You need one of
-them, not five — and everybody starts in Function A, which builds the system
-the other five ask their questions of.
-
-- **Anyone who has never shipped an agent**, including all five roles below.
-  You build CyberTravels' platform end to end before a single control is
-  argued about. → Function A.
-- **A security architect or product engineer** asked whether an agentic feature
-  is safe to ship, who needs a component map before a control list. → Function B.
-- **An application security engineer or penetration tester** who already runs
-  SAST, DAST and manual testing, and now has to review code an agent wrote and
-  test a system that answers differently each time. → Function C.
-- **A red team operator or AI security researcher** attacking a system with no
-  fixed response, who has to report a result that survives being run again.
-  → Function D.
-- **A SOC analyst, detection engineer or incident responder** whose thresholds
-  were tuned against a person doing twelve things an hour, now watching an agent
-  do fourteen hundred. → Function E.
-- **A GRC lead, risk owner or somebody in the CISO's office** who has to say in
-  writing whether the estate is under control, and be right. → Function F.
-
-It assumes you can read a Python function. Not that you can write one, and not
-that you have a security background.
-
-### The three questions every page answers
-
-Day 0, Day 1 and Day 2 appear in a table on every lesson. They are **not** a
-maturity model and not a timeline — Day 0 is not "first week". They are the
-three questions a practitioner asks before reading anything:
-
-| | the question | what a good answer looks like |
-|---|---|---|
-| **Day 0 — why** | What goes wrong if you do nothing? | A consequence in this lesson's own terms, not a general appeal to risk |
-| **Day 1 — how** | What do you actually build or run? | The concrete thing: a rule, a map, a gate, a score |
-| **Day 2 — measure** | What number says it worked? | A number the lesson produces — a recall figure, a false-positive rate, an interval in minutes |
-
-Day 2 is easy to fake and the only one a sceptical reader believes. Where a
-lesson produces a real number, Day 2 names it; where it does not, Day 2 says
-what you count instead and does not pretend. Use them like this: **Day 0
-decides whether to read the lesson, Day 1 is what you do, Day 2 is what you put
-in the update to whoever asked.**
-
-Getting this funded is the part most material leaves out, and it is hardest in
-organisations that cannot buy the capability. A lesson that stops at the
-technique gives you nothing to take to the person holding the budget.
-
-### What a lesson is made of
-
-A page is built from a fixed set of sections in a fixed order, and the order is
-the argument. **A page shows only the sections it has something for**, so the
-set below is what is available rather than a checklist every page satisfies —
-this page, for one, has no Risk, no Day table and no CyberTravels scene,
-because it is about your machine rather than about a system anybody secures.
-
-1. **Risk and Control** — one sentence each, at the top: what goes wrong here,
-   and what closes it. On the lessons that are about a system.
-2. **The hook** — a scene, before anything else. Deliberately *not* a summary:
-   it is the consequence of not knowing the lesson. The summary is section 3.
-3. **What this lesson is** — the plain description, and the Day table.
-4. **The framework** — the concept and its diagram, plus in Functions E and F
-   an *anchor* line saying which part of that function's single argument the
-   lesson moves. This always comes before any code: teaching the how before the
-   why is the most common way a good lesson lands badly.
-5. **In CyberTravels** — the idea in the running case study.
-6. **The skill** — the `SKILL.md` as it exists in
-   [`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills),
-   pasted in rather than copied out, so a fix is one edit to one file.
-7. **Run it** — the run block A0.0 introduced, the same on every page.
-8. **What you just proved** — on the lessons that ran something, and only
-   those. A reading lesson proves nothing and says nothing here.
-9. **Your turn** — one input to change so a number moves. The lesson is in the
-   difference between the two numbers, not in either one.
-
-A section that is present on every page regardless of whether it has anything
-to say stops being a heading and becomes a form. The set a given lesson renders
-is declared in
-[`scripts/exercises/layout.py`](https://github.com/spbreed/cyber-commons/blob/master/scripts/exercises/layout.py),
-with the reason for each omission, and a check refuses both an empty section
-and prose left behind for a section that no longer renders.
-
-**The hook is always CyberTravels.** It sells corporate travel, and its product
-is an agentic platform of four agents — a workflow agent that books and refunds,
-a retrieval advisor, a coding agent, and a file-system agent reading vendor
-documents. Alex is the product engineer who shipped it. One system, every
-lesson. That is a deliberate cost — a lesson could always find a sharper
-example of its own idea — and the payoff is cumulative: the refund limit an
-attacker walks past in Function B is the one a detection watches in Function E
-and a report counts in Function F.
-""",
- "steps": [
-  ("md", "## 2 · Start where your work already is"),
-  ("html", D.table(
-    ["if your job is", "start at", "then", "what you have at the end"],
-    [["<span>Designing or approving an agentic feature</span>",
-      "<b>B1.0</b>", "B1 → B2 → B3, in order",
-      "A component map, and an index where every risk names the control that "
-      "owns it"],
-     ["<span>AppSec, code review, penetration testing</span>",
-      "<b>C2.0</b>", "C2 in order; B1.1 and B1.2 when a lesson asks",
-      "A pipeline with an AI pass in it, and a measured false-positive rate "
-      "for that pass"],
-     ["<span>Red teaming or AI security research</span>",
-      "<b>D1.0</b>", "D1 in order; B1.2 and B1.3 first for the attack classes",
-      "An evaluation that reproduces, and a report a defender can act on"],
-     ["<span>Detection, alert triage, incident response</span>",
-      "<b>E1.0</b>", "E1 → E2 → E3 → E4 → E5; B1.1 for the component names",
-      "Five intervals with a number on each, and the rules that shortened them"],
-     ["<span>Governance, risk, compliance, the CISO office</span>",
-      "<b>F1.0</b>", "F1.1 next, then F1 → F2 → F3",
-      "A control indicator computed from the estate rather than asserted "
-      "about it"]],
-    caption="Reading front to back is the right route only for the architect. "
-            "Every other row skips what it does not need and nothing it does.")),
-
-  ("md", "## 3 · Open source first, and then buy something\\n\\n"
-         "Every tool named in this commons is one you can install today without "
-         "a purchase order. That is a teaching decision before it is a budget "
-         "one.\\n\\n"
-         "**You cannot specify a product you have not built a bad version of.** "
-         "A team that has stood up Wazuh and OpenSearch, written twenty Sigma "
-         "rules and watched them fire on their own traffic can ask a vendor the "
-         "two questions that matter: what does this do that my rules do not, "
-         "and what does it cost to keep it true. A team that has not can only "
-         "compare feature lists, and a feature list is written by the seller.\\n\\n"
-         "The second reason is that **the gaps are the finding**. Building the "
-         "open-source version tells you exactly where it stops. E1.0 names two "
-         "out loud: there is no open-source data-loss prevention with the "
-         "maturity of the other sensors, and *no product in the list at all* "
-         "can tell you which prompt caused a file write. Neither is visible "
-         "from a datasheet, and both are the reason to buy — or to build."),
-  ("html", D.table(
-    ["what you need", "learn it on", "buy when"],
-    [["Endpoint and workload sensing", "<b>Wazuh</b>",
-      "Estate size or support obligations outgrow what you can operate"],
-     ["Somewhere for telemetry to land", "<b>OpenSearch</b>",
-      "Retention and query cost stop being a tuning problem"],
-     ["Portable, reviewable detections",
-      "<b>Sigma</b>, mapped to <b>ATT&amp;CK</b> and <b>ATLAS</b>",
-      "Almost never — the rules outlive the platform, which is the point"],
-     ["Static analysis in the pipeline", "<b>Semgrep</b>, plus the reasoning "
-      "pass from C2.3",
-      "Language coverage or triage volume is the constraint"],
-     ["Dependency and image inspection", "<b>Trivy</b>, <b>Syft</b>, <b>Grype</b>",
-      "You need attestation and provenance rather than a scan"],
-     ["Threat intelligence and cases",
-      "<b>MISP</b>, <b>OpenCTI</b>, <b>TheHive</b>",
-      "Intelligence you cannot source yourself is the gap"],
-     ["Orchestration and forensics", "<b>Shuffle</b>, <b>Velociraptor</b>",
-      "Response time is bounded by people rather than by tooling"]],
-    caption="The right-hand column is the one to argue about. A control you "
-            "have never operated has no 'buy when' — it has a demo.")),
-
-  ("md", "## 4 · The four vocabularies, and which question each answers\\n\\n"
-         "Every lesson page carries framework labels. Four frameworks are in "
-         "use across this field and they answer different questions; a finding "
-         "filed under the wrong one reaches nobody.\\n\\n"
-         "- **[OWASP's two Top 10s](https://genai.owasp.org/llm-top-10/)** — "
-         "*what can go wrong.* The LLM list is application-level; the "
-         "[Agentic list](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/) "
-         "is for systems that plan and call tools. Reach for these reviewing a "
-         "feature.\\n"
-         "- **[MITRE ATLAS](https://atlas.mitre.org/)** — *what an attacker "
-         "did.* ATT&CK's grammar applied to AI. The right lens in an incident "
-         "write-up.\\n"
-         "- **[NIST AI RMF](https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF)** "
-         "— *how you organise to find out.* GOVERN, MAP, MEASURE, MANAGE. A "
-         "NIST function in a vulnerability report is a category error.\\n"
-         "- **[The EU AI Act](https://artificialintelligenceact.eu/)** — *what "
-         "you must be able to show*, by article. Article 15 is accuracy, "
-         "robustness and cybersecurity; Article 14 is human oversight. The only "
-         "one of the four that can fine you.\\n\\n"
-         "A control usually needs one of each: a threat it addresses, a tactic "
-         "it frustrates, a function it belongs to, and an obligation it "
-         "discharges. The mapping lives in `curriculum/frameworks.json` and "
-         "every label on every lesson page is generated from it — these are "
-         "indicative mappings, not a certification."),
-
-  ("md", "## 5 · What sits behind a lesson skill\\n\\n"
-         "A0.0 covered what a skill is and how to run one. This is the part "
-         "it did not: what you installed, and what it runs.\\n\\n"
-         "Behind each lesson skill is an **audit skill** — the written "
-         "procedure the lesson runs, in `skills/`. There are 14 areas, "
-         "140 skills, 140 of them with a script, and exactly one copy of "
-         "each. Eighteen audits are shared by two or three lessons, which is "
-         "why a lesson skill calls one rather than carrying its own copy.\\n\\n"
-         "You can install a whole function at once rather than a lesson at a "
-         "time, and ask what is currently linked:\\n\\n"
-         "```bash\\n"
-         "python3 scripts/install_skills.py --all --lessons A   # this function's lesson skills\\n"
-         "python3 scripts/install_skills.py --list              # what is linked where\\n"
-         "```\\n\\n"
-         "Those are **links into your clone**, not copies — symlinks, or "
-         "junctions on Windows — so `git pull` updates every tool at once and "
-         "an edit you make here is live in all of them. A copy would be a fork "
-         "with a friendly name: you would fix a skill once and the other copies "
-         "would keep the bug while still loading and still answering."),
-
-  # There was a "## 6 · The whole mechanism, demonstrated on itself" here
-  # that ran programme/dev-environment-preflight — the audit A0.0 had run one
-  # page earlier — with a "What you just proved" and a "Your turn" that
-  # restated A0.0's (the model's answer varies, the harness does not). A
-  # reader met the same run twice in two pages. A0.0 owns it now, and this is
-  # a reading lesson, like B1.0. scripts/check_claims.py holds the counts in
-  # section 5 against the tree; they moved there from the proved paragraph.
- ],
- "challenge": "Find your row in the table in section 2 and open the lesson in "
-              "its \"start at\" column. Read only its Day table, and decide "
-              "from those three lines whether you would spend an afternoon on "
-              "it. Then do the same for a row that is not yours. If the second "
-              "one also looks worth the afternoon, you have found the lesson "
-              "to take to a colleague in that role.",
-},
-
-"A0.2": {
  "concept": """
 Nine words carry most conversations about agents, and most arguments about
 agent security are two people using one of them for different things. This

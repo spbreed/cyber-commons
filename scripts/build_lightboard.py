@@ -78,7 +78,7 @@ WPM = 140          # unhurried delivery to camera, measured against a read-throu
 # cannot be hooked by a scene about one, and thirty seconds spent on the
 # definition is what makes every later cold open land.
 #
-# Keyed by lesson id: A0.1 is the front door of the whole commons, and the
+# Keyed by lesson id: A0.0 is the front door of the whole commons, and the
 # other five are FUNCTION_INTRO — where somebody arriving from a search result
 # actually lands. Written as words to say, in the first person, out loud.
 ORIENT = {
@@ -95,7 +95,7 @@ ORIENT = {
   "five functions after that take the thing you built and attack it, review "
   "it, watch it and govern it. Everything is free and nothing needs an account.",
  ],
- "A0.1": [
+ "A0.0": [
   "Before anything else, thirty seconds on what an agent actually is, because "
   "if you have never shipped one, none of the rest of this will land properly.",
   "A model that only answers questions is a chatbot. Give it tools — let it "
@@ -289,7 +289,7 @@ def grounding_line(sid: str, item: dict) -> list[tuple[str, str]]:
     g = GROUNDING.get(sid)
     if not g:
         return []
-    if sid == "A0.2":
+    if sid == "A0.1":
         # Before A1.0, so "same company again" would be a lie on this one too.
         lead = ("You meet CyberTravels properly in A1.0, the next chapter — "
                 "but here is where they come in.")
@@ -476,7 +476,7 @@ built an agent:
 | order | lesson | opens |
 |---|---|---|
 | 1 | **A1.0** | the front door — what an agent is, and that you are about to build one |
-| 2 | **A0.1** | the commons itself: the six functions, and which one is your chair |
+| 2 | **A0.0** | the commons itself: the six functions, which one is your chair, and your machine |
 | 3 | **B1.0** | Function B, and CyberTravels read adversarially. The one that has to land |
 | 4 | **C2.0** | Function C — the AI SDLC |
 | 5 | **D1.0** | Function D — red teaming agents, not models |

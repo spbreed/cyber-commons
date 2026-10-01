@@ -12,8 +12,8 @@ becomes a form an author fills in, and the filling-in is visible:
     already reached the honest conclusion for the same pages — chapter A0's
     entry reads "Setup only — how to run a lesson. No control maps to it" —
     and the page went on printing a Control anyway.
-  * A0.1 explains how to read the commons. Its Day 2, the number that says it
-    worked, was "Nothing is computed here."
+  * The page on how to read the commons (A0.1 then, part of A0.0 now) had a
+    Day 2, the number that says it worked, of "Nothing is computed here."
   * A0.0's CyberTravels grounding, under a heading promising the idea in the
     running system, was "Nothing in CyberTravels yet."
   * D1.1-D1.11 are the stages of one red-team lifecycle. Each carried `risk`
@@ -81,13 +81,13 @@ DEFAULT = FULL
 # `lab` field had failed the same way and was fixed by reading the lab line
 # from the session instead; nothing went back for `expect`. Six lessons where
 # the box held the real result and "What you just proved" described the skill's
-# contract had the two merged, A0.1's counts moved into its own `proved`, and
+# contract had the two merged, the skill counts moved into A0.0's own section 9, and
 # the field is gone, and so is the file (curriculum/labs.json) that held it.
 
 # Deviations from the kind default. (parts, why) — and `why` is not decoration:
 # check_lessons.py prints it, so a reader of the failure sees the argument.
 EXCEPTIONS: dict[str, tuple[frozenset[str], str]] = {
-    "A0.2": (FULL - {"riskcontrol"},
+    "A0.1": (FULL - {"riskcontrol"},
              "A vocabulary lesson. Each of its nine words has a risk and a "
              "control of its own, in the Function B lesson its table names; "
              "one Risk and one Control for all nine would be a summary of "

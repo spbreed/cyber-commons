@@ -10,7 +10,7 @@ not do this job; this does, and the build refuses a lesson without one.
 ABOUT: dict[str, str] = {
 
 "A0.0": """
-**What it covers.** Six things, in order: setting up your computer, installing Git, installing Python, what a skill is, how to execute one, and why this is a new way of working. Then you run one real skill and read back which model answered.
+**What it covers.** The whole front door, in order: what this commons is and who it is for, what a skill is and why it is a new way of working, then your computer — a terminal, Git, Python, and a model that answers. You run one real skill and read back which model answered. After that, how a lesson page is built, where to start for your role, and what Day 0, Day 1 and Day 2 mean.
 
 **Who it is for.** Anyone who can use a computer. It assumes no programming, no security background and no paid account, and it is written to be followed by a capable thirteen-year-old — which is a deliberate floor, not a simplification, because the thing being taught is hard enough without the setup being hard too.
 
@@ -18,14 +18,6 @@ ABOUT: dict[str, str] = {
 """,
 
 "A0.1": """
-**What it covers.** Who this commons is written for — six functions, one per role, with everybody starting in the one that builds the system — and the sections a lesson page is built from, in the order they appear and with the rule for which of them a given page shows.
-
-**Why a security engineer needs it.** A reader who lands mid-curriculum reads the hook as an abstract, finds it vague, and leaves. The hook is a scene rather than a summary, and the description sits under it. The control it builds is: knowing which section answers the question you actually arrived with, and that a section missing from a page is missing on purpose.
-
-This is a **reading** lesson. It has no code and takes ten minutes.
-""",
-
-"A0.2": """
 **What it covers.** The nine words most talk about agents turns on — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — drawn on one page, placed in the CyberTravels file where Function A builds each, and paired with the lesson that attacks it.
 
 **Why a security engineer needs it.** Each of the nine is a component to one person and an attack surface to another, and a review where two people mean different things by "harness" argues about two different files. The control it builds is: a shared vocabulary tied to real code, so a finding names a component rather than a word.

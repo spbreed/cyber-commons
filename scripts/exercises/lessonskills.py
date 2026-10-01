@@ -45,7 +45,6 @@ LESSON_IDS: frozenset[str] = frozenset(_lesson_ids())
 # answers the audit itself, like every other lesson, so a learner whose only
 # model is their assistant is not stopped by a check that concerns a route they
 # are not using.
-# A0.1 was here too while it re-ran A0.0's preflight; it is a reading lesson now.
 RUNTIME_LESSONS: frozenset[str] = frozenset({"A0.0"})
 
 

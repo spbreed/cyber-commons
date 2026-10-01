@@ -6,7 +6,7 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 
 | Track | Role | Sessions | Function |
 |---|---|---|---|
-| [A0](track-a0.md) | Set Up — Your Development Environment, How to Use This, and the Words for an Agent | 3 | A — Getting Started — Building Agentic AI |
+| [A0](track-a0.md) | Set Up — Your Machine, How to Use This, and the Words for an Agent | 2 | A — Getting Started — Building Agentic AI |
 | [A1](track-a1.md) | Build the Agent — From a Loop to a Running Platform | 8 | A — Getting Started — Building Agentic AI |
 | [A2](track-a2.md) | Harness Engineering — Making a Demo Into a System | 6 | A — Getting Started — Building Agentic AI |
 | [B1](track-b1.md) | CyberTravels' Architecture, and Every Risk It Carries | 20 | B — Securing AI Architectures |

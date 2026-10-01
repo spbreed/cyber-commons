@@ -5,9 +5,9 @@
 A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.
 
-**150 lessons across 16 chapters.** Every lesson is the idea, the diagram, the
+**149 lessons across 16 chapters.** Every lesson is the idea, the diagram, the
 control, and what it looks like in one running system — and then it **runs a
-skill**. 147 of the 150 do, and the skill is the deliverable: the page shows the
+skill**. 147 of the 149 do, and the skill is the deliverable: the page shows the
 `SKILL.md` as prose and you run that skill's own script out of
 [`skills/`](skills/), on your own machine, in whichever agent CLI you already
 use. Every skill is executed in CI before it ships. **Every skill is executed
@@ -63,10 +63,10 @@ the contract, and is not a model result.
 
 ## 2 · Read one page, then run a lesson
 
-**[A0.1](https://cybercommons.ai/lessons/A0.1.html)** is the whole introduction
-on one page: who this is for, what a lesson is made of, which track to open
-first, and what Day 0/1/2 mean.
-**[A0.2](https://cybercommons.ai/lessons/A0.2.html)** is the nine words for an
+**[A0.0](https://cybercommons.ai/lessons/A0.0.html)** is the whole introduction
+on one page: who this is for, the setup, what a lesson is made of, which track
+to open first, and what Day 0/1/2 mean.
+**[A0.1](https://cybercommons.ai/lessons/A0.1.html)** is the nine words for an
 agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and
 multi-agent — drawn on one page and placed in the code. Then
 **[B1.0](https://cybercommons.ai/lessons/B1.0.html)**, which introduces
@@ -125,14 +125,14 @@ the model, not a package tree.
 
 ## 3 · Then take the spine, then your chapter
 
-Nobody takes all 150. Everyone takes the **common spine** first — twenty-five
+Nobody takes all 149. Everyone takes the **common spine** first — twenty-four
 lessons, in order, that carry the vocabulary the rest runs on. It opens by
 setting your machine up and building the agent, because every control in the
 five functions after it attaches to a mechanism you will have written. Then the
 chapters for the chair you sit in, then one adjacent chapter, because the
 failures happen in the seams.
 
-> **Spine:** **A0.0** → A0.1 → A0.2 → **A1.0** → A1.1 → A1.3 → A1.4 → A2.0 →
+> **Spine:** **A0.0** → A0.1 → **A1.0** → A1.1 → A1.3 → A1.4 → A2.0 →
 > **A2.5** → B1.0 → B1.1 → B1.2 → **B1.10** → **B1.12** → B2.1 → B2.3 →
 > B2.4 → B3.1 → B3.2 → B3.5 → **C2.0** → C2.3 → **E1.0** → **F1.0** → F1.10
 
@@ -174,7 +174,7 @@ CyberTravels scene, because its subject is your laptop.
 | ✎ | **Your turn** | the variation you run yourself |
 | → | **Where this leaves you** | the gap this lesson leaves, and what answers it |
 
-**Day 0, Day 1, Day 2 on every lesson about the system** — 146 of the 148 —
+**Day 0, Day 1, Day 2 on every lesson about the system** — 148 of the 149 —
 because training that stops at the technique leaves you with nothing to take to
 the person holding the budget.
 Day 0 is why it is worth an afternoon. Day 1 is the concrete thing you stand
@@ -411,7 +411,7 @@ file inside the tree. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 150 sessions, 14 chapters
+site/data/curriculum.json   source of truth: 149 sessions, 14 chapters
 curriculum/                 generated chapter docs + frameworks.json
 scripts/exercises/          the lessons themselves, one module per track
 cybertravels/               the sample repository: B1.1's architecture as source,

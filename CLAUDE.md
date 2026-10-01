@@ -21,7 +21,7 @@ real work; knowing which you are in is the first thing to establish.
 
 | | what it is | lives in |
 |---|---|---|
-| **Cyber Commons** | a 150-lesson curriculum on securing agentic AI, plus the static site at [cybercommons.ai](https://cybercommons.ai) | `scripts/`, `skills/`, `site/`, `curriculum/`, `cybertravels/` |
+| **Cyber Commons** | a 149-lesson curriculum on securing agentic AI, plus the static site at [cybercommons.ai](https://cybercommons.ai) | `scripts/`, `skills/`, `site/`, `curriculum/`, `cybertravels/` |
 | **vulnbench** | a benchmark that scores an AI security harness's findings against ground truth | `labs/b2.10-eval-harness/` |
 
 Most of this file is about the first. §8 is the second, and its rules are not
@@ -49,7 +49,7 @@ thing the reader now owns:
 | F | AI Governance for Agentic Systems | who signed off, and can they still evidence it |
 
 The letters run in reading order and there is no gap: `A0.0` is the dev
-environment and IDE setup, `A0.1` is how to use the commons, `A0.2` is the
+environment and IDE setup and how to use the commons, on one page, `A0.1` is the
 nine words for an agent (harness to multi-agent), and `A1.0` starts building. The function that was lettered `G` while it was bolted on the front
 is simply `A` now, and every other function moved one letter down.
 
@@ -62,7 +62,7 @@ gates that keep that true.
 Current shape, measured rather than typed — `check_claims.py` fails CI when any
 count in the docs drifts from the tree, this line included:
 
-    150 lessons · 16 chapters · 6 functions · 140 skills
+    149 lessons · 16 chapters · 6 functions · 140 skills
 
 **A lesson is two artefacts, not one.** The page (prose, rendered from source)
 and the skill (`skills/<area>/<name>/SKILL.md` plus its script — the procedure).
@@ -195,16 +195,16 @@ that are enforced or that get broken most.
   second half is required: a count with no denominator is the failure this
   curriculum spends six functions on, and a Day 2 sentence cannot be lifted
   into a dashboard or compared with last quarter.
-- **Day 0, Day 1, Day 2 on every lesson about the system** — 148 of the 150.
+- **Day 0, Day 1, Day 2 on every lesson about the system** — 148 of the 149.
   Why it matters, what you build, the number that says it worked. Day 2 names a
   real number where the lesson produces one and says what you count instead
-  where it does not. Never invent one. The two setup lessons carry no Day
-  table; A0.1's Day 2 read "Nothing is computed here".
+  where it does not. Never invent one. The setup lesson carries no Day
+  table; its Day 2 once read "Nothing is computed here".
 - **The framework before any code.** Teaching the how before the why is the most
   common way a good lesson lands badly. `check_lessons.py` enforces the order.
 - **Grounded in CyberTravels.** One system, every lesson about the system. A
-  sharper example is not worth the reader holding a second system. The two
-  setup lessons are about the reader's own machine and carry no grounding.
+  sharper example is not worth the reader holding a second system. The
+  setup lesson is about the reader's own machine and carries no grounding.
 - **A chapter bridge names the chapter that actually follows it.** Checked
   against the curriculum's order: A0's said "Next → B1.0" after the renumber
   put A1 and A2 in between. Sixteen bridges were also written, checked for

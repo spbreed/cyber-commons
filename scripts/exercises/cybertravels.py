@@ -228,14 +228,14 @@ FAMILIES = [
 GROUNDING: dict[str, str] = {
 
 # ---- A0 · setup ----------------------------------------------------------
-# A0.0 and A0.1 have no entry, and that is the point. Their subject is the
-# reader's own machine and how to read the commons, so neither renders a
+# A0.0 has no entry, and that is the point. Its subject is the
+# reader's own machine and how to read the commons, so it renders no
 # "Use case relevance" section for this to sit under. A0.0's read "Nothing in
 # CyberTravels yet", which is an admission that the heading above it was
 # promising something the page did not have. scripts/exercises/layout.py holds
 # the decision, and check_lessons.py fails if an entry reappears here for a
 # lesson that does not render one.
-"A0.2": "All nine words are CyberTravels files: the loop in `runtime.py`, memory "
+"A0.1": "All nine words are CyberTravels files: the loop in `runtime.py`, memory "
         "in `memory.py`, retrieval in `knowledge/retriever.py`, two MCP servers, "
         "A2A in `a2a/protocol.py`, and an orchestrator routing between four "
         "agents. Function A is where you write each of them.",

@@ -190,8 +190,8 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 # --------------------------------------------------------------------------
 
 # The lesson that opens each function, and therefore the one that carries the
-# function-level Day 0/1/2 block. A0.0 and A0.1 are deliberately not here: they set the machine up
-# and say how to use the commons, which is not Function B's argument.
+# function-level Day 0/1/2 block. A0.0 is deliberately not here: it sets the machine up
+# and says how to use the commons, which is not Function A's argument.
 FUNCTION_INTRO: dict[str, str] = {
     "A": "A1.0", "B": "B1.0", "C": "C2.0", "D": "D1.0", "E": "E1.0",
     "F": "F1.0",
@@ -202,13 +202,13 @@ DAYS: dict[str, tuple[str, str, str]] = {}
 # ---- A · Securing AI Architectures ---------------------------------------
 DAYS.update({
 
-# A0.0 and A0.1 have no entry. Day 0/1/2 is why this matters, what you build
-# and the number that says it worked, and a setup lesson has none of the three
-# in the sense the others do: A0.1's Day 2 read "Nothing is computed here",
-# which is a form filled in rather than an answer. Both pages carry the
+# A0.0 has no entry. Day 0/1/2 is why this matters, what you build and the
+# number that says it worked, and a setup lesson has none of the three in
+# the sense the others do: its Day 2 once read "Nothing is computed here",
+# which is a form filled in rather than an answer. The page carries the
 # description without the table; scripts/exercises/layout.py records it.
-# A0.2 does have one: its subject is the system, not the reader's machine.
-"A0.2": ("A review where \"harness\" means the loop to one person and the eval "
+# A0.1 does have one: its subject is the system, not the reader's machine.
+"A0.1": ("A review where \"harness\" means the loop to one person and the eval "
          "suite to another argues for an hour about two different files.",
          "Learn the nine words, and for each one find the CyberTravels file "
          "where it lives and the lesson that attacks it.",

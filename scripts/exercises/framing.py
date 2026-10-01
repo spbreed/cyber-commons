@@ -36,13 +36,6 @@ HOOKS: dict[str, str] = {
  "lesson here.",
 
 "A0.1":
- "Most people arrive here from a link, land in the middle of a lesson about "
- "tool-call adjudication, and close it again. The material is not hard — the "
- "shape is unfamiliar. A lesson is built from a fixed set of sections in a "
- "fixed order, each carrying one kind of thing, and a page shows only the "
- "ones it has. Ten minutes here and the rest reads itself.",
-
-"A0.2":
  "Alex's first design review for CyberTravels ran forty minutes before anyone "
  "noticed that \"the harness\" meant the agent loop to Alex and the eval suite "
  "to the security lead. Both had been right the whole time, about different "
@@ -758,38 +751,6 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "A0.1": """
-   ONE LESSON PAGE, TOP TO BOTTOM
-
-   +--------------------------------------------------------------+
-   | 0  risk / control    one sentence each, on system pages.      |  opt
-   +--------------------------------------------------------------+
-   | 1  the hook          a scene in CyberTravels. NOT a summary.  |
-   +--------------------------------------------------------------+
-   | 2  what this is      the description  +  Day 0 / 1 / 2 table  |  opt
-   +--------------------------------------------------------------+
-   | 3  the framework     the concept, the diagram, (the anchor)   |  <- the lesson
-   +--------------------------------------------------------------+
-   | 4  in CyberTravels   the same idea in the running system      |  opt
-   +--------------------------------------------------------------+
-   | 5  the skill         SKILL.md, as it exists in skills/        |
-   +--------------------------------------------------------------+
-   | 6  run it  ->  Out   one cell, and its real recorded output   |  <- the proof
-   +--------------------------------------------------------------+
-   | 7  what you proved   only where something ran                 |  opt
-   +--------------------------------------------------------------+
-   | 8  your turn         one input to change so a number moves    |
-   +--------------------------------------------------------------+
-
-   deciding whether to read it   ->  2 (the description and the Day table)
-   reading it                    ->  3, 4, 6
-   already know it               ->  6 alone
-
-   opt = shown only where the lesson has one. THIS page has no 0, 2 or 4:
-   its subject is your machine, so there is no risk to a system, no number
-   that says it worked, and no scene in CyberTravels.
-""",
-
-"A0.2": """
    NINE WORDS, ONE AGENT - WHERE EACH SITS AROUND THE LOOP
 
      memory & state    RAG          MCP           skills

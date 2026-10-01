@@ -117,11 +117,11 @@ CLAIMS = [
     # These moved out of curriculum/labs.json with the Expect box. That box
     # printed the same paragraph a second time at the foot of 133 pages — 35 of
     # them word for word — so it was removed, and the counts it uniquely
-    # carried went into A0.1's own "What you just proved".
+    # carried went into the front-door lesson, now A0.0's section 9.
     ("scripts/exercises/track_a0.py", r"14 areas, \"\s*\n\s*\"(\d+) skills",
-     "skills", "A0.1's expected skill count"),
+     "skills", "A0.0's expected skill count"),
     ("scripts/exercises/track_a0.py", r"(\d+) of them with a script",
-     "skills_with_script", "A0.1's expected script count"),
+     "skills_with_script", "A0.0's expected script count"),
     ("LESSON_DESIGN.md", r"Every one of the (\d+) lessons has the same shape",
      "sessions", "the authoring contract's opening"),
     ("LESSON_DESIGN.md", r"\*\*(\w+) lessons run two or three\*\*",

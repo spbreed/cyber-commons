@@ -11,14 +11,14 @@ git add recordings/B2.5.mp4 && git commit -m "record B2.5" && git push
 ```
 
 Valid names are exactly the session ids in
-[`site/data/curriculum.json`](../site/data/curriculum.json) — `A0.1.mp4`,
+[`site/data/curriculum.json`](../site/data/curriculum.json) — `A0.0.mp4`,
 `B2.5.mp4`, `C2.2.mp4`, `F1.5.mp4` … Run `python3 scripts/link_video.py --list`
 to see every id and which ones still need recording. All 134 do: nothing is
 recorded yet.
 
 **What to say is already written.** [LIGHTBOARD.md](../LIGHTBOARD.md) carries a
 word-for-word script for every lesson — read the plain lines, skip anything in
-square brackets. It tells you to record the six entry points first (A0.1, then
+square brackets. It tells you to record the six entry points first (A0.0, then
 B1.0, C2.0, D1.0, E1.0, F1.0), because those carry the ground-rules beat that
 every later lesson assumes you have said.
 

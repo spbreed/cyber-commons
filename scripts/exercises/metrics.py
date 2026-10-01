@@ -25,7 +25,7 @@ Rules for adding one:
     for it.
 
 `check_lessons.py` requires an entry for every lesson that renders a Day table
-(148 of the 150; the two setup lessons render neither), that every metric
+(148 of the 149; the setup lesson renders neither), that every metric
 carries both halves, and that nothing is declared for a lesson that has no Day
 table.
 """
@@ -35,7 +35,7 @@ from __future__ import annotations
 METRICS: dict[str, list[tuple[str, str]]] = {
 
 # ---------------------------------------------------------------- Function A
-"A0.2": [("the nine words you can point at in cybertravels/ — a file, not a definition", "count, out of 9; target 9")],
+"A0.1": [("the nine words you can point at in cybertravels/ — a file, not a definition", "count, out of 9; target 9")],
 "A1.0": [("edges marked as a trust boundary", "count, against total edges on the map")],
 "A1.1": [("runs the verifier rejected", "count per batch; zero means the verifier is not independent, not that the loop is perfect")],
 "A1.2": [("tools reachable with a token minted for the other resource server", "count; target zero")],

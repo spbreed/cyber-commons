@@ -1,6 +1,6 @@
 # LIGHTBOARD.md — the word-for-word script, lesson by lesson
 
-A recording script for all 150 lessons, written to be **read aloud exactly as
+A recording script for all 149 lessons, written to be **read aloud exactly as
 written**. Open the lesson, talk. No translating notes into sentences while the
 camera is running.
 
@@ -23,7 +23,7 @@ built an agent:
 | order | lesson | opens |
 |---|---|---|
 | 1 | **A1.0** | the front door — what an agent is, and that you are about to build one |
-| 2 | **A0.1** | the commons itself: the six functions, and which one is your chair |
+| 2 | **A0.0** | the commons itself: the six functions, which one is your chair, and your machine |
 | 3 | **B1.0** | Function B, and CyberTravels read adversarially. The one that has to land |
 | 4 | **C2.0** | Function C — the AI SDLC |
 | 5 | **D1.0** | Function D — red teaming agents, not models |
@@ -93,9 +93,19 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 ---
 
-### A0.0 · Set up your computer — the AI tools, and the model every lesson runs on
+### A0.0 · Set up your computer — what this is, who it is for, and the model every lesson runs on
 
-Chapter A0 · lesson 1 of 3 · runs a skill · 209 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+Chapter A0 · lesson 1 of 2 · runs a skill · 374 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+
+**⓪ Ground rules — only on this lesson**
+
+*[Draw nothing yet. Talk to camera.]*
+
+Before anything else, thirty seconds on what an agent actually is, because if you have never shipped one, none of the rest of this will land properly.
+
+A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong. Everything here follows from that one sentence.
+
+So, what this is. Five functions on top of the one you just built. It is free, there is no vendor, there is no paid account, and every lesson runs with one command on your own machine, in whichever coding assistant you already use. I am going to use one made-up company for all of it, and you have already met them.
 
 **① Open**
 
@@ -137,69 +147,17 @@ So here is what you count instead: whether you can do the thing this lesson desc
 
 Run it again with a different model — change MODEL, or pick another one from the catalogue in Route C — and put the two answers side by side. Nothing about your computer changed and the answer did.
 
-Next up: A0.1, Start here — what this is, who it is for, and how to run it.
+Next up: A0.1, Nine words for an agent — harness to multi-agent, and where each is built.
 
 ---
 
-### A0.1 · Start here — what this is, who it is for, and how to run it
+### A0.1 · Nine words for an agent — harness to multi-agent, and where each is built
 
-Chapter A0 · lesson 2 of 3 · reading lesson · 367 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
-
-**⓪ Ground rules — only on this lesson**
-
-*[Draw nothing yet. Talk to camera.]*
-
-Before anything else, thirty seconds on what an agent actually is, because if you have never shipped one, none of the rest of this will land properly.
-
-A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong. Everything here follows from that one sentence.
-
-So, what this is. Five functions on top of the one you just built. It is free, there is no vendor, there is no paid account, and every lesson runs with one command on your own machine, in whichever coding assistant you already use. I am going to use one made-up company for all of it, and you have already met them.
+Chapter A0 · lesson 2 of 2 · reading lesson · 390 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **① Open**
 
-Still inside chapter A0. Last one was Set up your computer — the AI tools, and the model every lesson runs on.
-
-*[Draw this as you talk. Do not draw it first and then explain it.]*
-
-```
-ONE LESSON PAGE, TOP TO BOTTOM
-```
-
-Most people arrive here from a link, land in the middle of a lesson about tool-call adjudication, and close it again. The material is not hard — the shape is unfamiliar. A lesson is built from a fixed set of sections in a fixed order, each carrying one kind of thing, and a page shows only the ones it has. Ten minutes here and the rest reads itself.
-
-**② Why it costs something**
-
-Here is what that costs you.
-
-
-
-**③ What we do about it**
-
-So here is what we do in this lesson.
-
-
-
-**④ The number**
-
-Now, this one does not hand you a number, and I would rather say that out loud than invent one.
-
-So here is what you count instead: whether you can do the thing this lesson described, on a system you actually run.
-
-**⑤ Hand it over**
-
-Find your row in the table in section 2 and open the lesson in its "start at" column. Read only its Day table, and decide from those three lines whether you would spend an afternoon on it.
-
-Next up: A0.2, Nine words for an agent — harness to multi-agent, and where each is built.
-
----
-
-### A0.2 · Nine words for an agent — harness to multi-agent, and where each is built
-
-Chapter A0 · lesson 3 of 3 · reading lesson · 386 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A0.2.html)
-
-**① Open**
-
-Still inside chapter A0. Last one was Start here — what this is, who it is for, and how to run it.
+Still inside chapter A0. Last one was Set up your computer — what this is, who it is for, and the model every lesson runs on.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 
