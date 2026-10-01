@@ -1,6 +1,6 @@
 # LIGHTBOARD.md — the word-for-word script, lesson by lesson
 
-A recording script for all 149 lessons, written to be **read aloud exactly as
+A recording script for all 150 lessons, written to be **read aloud exactly as
 written**. Open the lesson, talk. No translating notes into sentences while the
 camera is running.
 
@@ -95,7 +95,7 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 ### A0.0 · Set up your computer — the AI tools, and the model every lesson runs on
 
-Chapter A0 · lesson 1 of 2 · runs a skill · 208 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+Chapter A0 · lesson 1 of 3 · runs a skill · 209 words, about 1.5 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
 
 **① Open**
 
@@ -105,7 +105,7 @@ Chapter A0 · lesson 1 of 2 · runs a skill · 208 words, about 1.5 min spoken �
 WHAT HAPPENS WHEN YOU RUN A LESSON
 ```
 
-You have probably typed a question into an AI and read the answer. This is the other side of that: the same kind of AI, doing a job on your own computer, following written instructions you can read and change. None of it works until your computer knows which AI to ask. Setting that up is this whole lesson, and it is the only thing standing between you and the other 148.
+You have probably typed a question into an AI and read the answer. This is the other side of that: the same kind of AI, doing a job on your own computer, following written instructions you can read and change. None of it works until your computer knows which AI to ask. Setting that up is this whole lesson, and it is the only thing standing between you and every other lesson here.
 
 **② Why it costs something**
 
@@ -143,7 +143,7 @@ Next up: A0.1, Start here — what this is, who it is for, and how to run it.
 
 ### A0.1 · Start here — what this is, who it is for, and how to run it
 
-Chapter A0 · lesson 2 of 2 · runs a skill · 496 words, about 3.5 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 3 · reading lesson · 367 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -179,29 +179,65 @@ So here is what we do in this lesson.
 
 
 
-*[Run the skill on camera now. Let it finish on screen.]*
-
-That is not a screenshot. It just ran, and you can run the identical command on your own machine in about a minute.
-
 **④ The number**
 
 Now, this one does not hand you a number, and I would rather say that out loud than invent one.
 
 So here is what you count instead: whether you can do the thing this lesson described, on a system you actually run.
 
-*[Point at the output on screen. Do not read it out.]*
+**⑤ Hand it over**
 
-> You did a lesson the way every lesson is done — one skill, picked in your assistant — and read back what happened.
+Find your row in the table in section 2 and open the lesson in its "start at" column. Read only its Day table, and decide from those three lines whether you would spend an afternoon on it.
+
+Next up: A0.2, Nine words for an agent — harness to multi-agent, and where each is built.
+
+---
+
+### A0.2 · Nine words for an agent — harness to multi-agent, and where each is built
+
+Chapter A0 · lesson 3 of 3 · reading lesson · 386 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A0.2.html)
+
+**① Open**
+
+Still inside chapter A0. Last one was Start here — what this is, who it is for, and how to run it.
+
+*[Draw this as you talk. Do not draw it first and then explain it.]*
+
+```
+NINE WORDS, ONE AGENT - WHERE EACH SITS AROUND THE LOOP
+```
+
+Alex's first design review for CyberTravels ran forty minutes before anyone noticed that "the harness" meant the agent loop to Alex and the eval suite to the security lead. Both had been right the whole time, about different files. Nine words carry most of what gets said about agents, and each of them is somebody's component and somebody else's attack surface.
+
+**② Why it costs something**
+
+Here is what that costs you.
+
+A review where "harness" means the loop to one person and the eval suite to another argues for an hour about two different files.
+
+You meet CyberTravels properly in A1.0, the next chapter — but here is where they come in. All nine words are CyberTravels files: the loop in runtime.py, memory in memory.py, retrieval in knowledge/retriever.py, two MCP servers, A2A in a2a/protocol.py, and an orchestrator routing between four agents. Function A is where you write each of them.
+
+**③ What we do about it**
+
+So here is what we do in this lesson.
+
+Learn the nine words, and for each one find the CyberTravels file where it lives and the lesson that attacks it.
+
+**④ The number**
+
+And here is the number that tells you it worked.
+
+Of the nine, how many you can point at in the tree — a file, not a definition. Nine is the target; a word you cannot place is the Function A lesson to read first.
 
 **⑤ Hand it over**
 
-Do the same lesson the other way. If you picked the skill in your assistant, now run python3 scripts/lesson.py A0.1 yourself, or the other way round, and put the two readbacks side by side.
+Open cybertravels/ and find all nine without this table: a file, and ideally the line, for each word. Count how many you placed.
 
-That closes chapter A0. You can run any lesson in the commons on either route, you know what the one code cell in it is doing, and you can tell a fetch failure from a procedure failure by reading one line of the error.
+That closes chapter A0. You can run any lesson in the commons on either route, you know which function to open first, and you have the nine words — harness to multi-agent — that everything after this is built from.
 
 *[Slow down here. This is the reason anybody clicks the next chapter.]*
 
-And here is what it still cannot do. You have run a procedure and you cannot yet say what it is for. The preflight proved the machinery works; it proved nothing about agentic systems, which is the only reason any of this exists.
+And here is what it still cannot do. You can name all nine and you have built none of them. The preflight proved the machinery works; it proved nothing about agentic systems, which is the only reason any of this exists.
 
 Chapter A1 builds the system everything else in the commons names — CyberTravels' agentic travel platform, one component at a time, on your own machine.
 
@@ -211,7 +247,7 @@ Next up: A1.0, What an agent is, and what you are about to build.
 
 ### A1.0 · What an agent is, and what you are about to build
 
-Chapter A1 · lesson 1 of 8 · runs a skill · 461 words, about 3.3 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
+Chapter A1 · lesson 1 of 8 · runs a skill · 459 words, about 3.3 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -225,7 +261,7 @@ So here is how this works. You are going to build one. Not read about one — bu
 
 **① Open**
 
-Chapter A0 left us here. You have run a procedure and you cannot yet say what it is for. That is what this chapter picks up.
+Chapter A0 left us here. You can name all nine and you have built none of them. That is what this chapter picks up.
 
 *[Draw this as you talk. Do not draw it first and then explain it.]*
 

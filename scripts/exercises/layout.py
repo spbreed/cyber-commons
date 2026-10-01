@@ -87,6 +87,11 @@ DEFAULT = FULL
 # Deviations from the kind default. (parts, why) — and `why` is not decoration:
 # check_lessons.py prints it, so a reader of the failure sees the argument.
 EXCEPTIONS: dict[str, tuple[frozenset[str], str]] = {
+    "A0.2": (FULL - {"riskcontrol"},
+             "A vocabulary lesson. Each of its nine words has a risk and a "
+             "control of its own, in the Function B lesson its table names; "
+             "one Risk and one Control for all nine would be a summary of "
+             "those, not a mechanism."),
     # The two function introductions whose Control was the table of contents.
     # A1.0's read "Build it first. Every control in Function B attaches to a
     # component drawn here", and B1.0's "One picture, three chapters: the

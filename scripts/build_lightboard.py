@@ -289,8 +289,9 @@ def grounding_line(sid: str, item: dict) -> list[tuple[str, str]]:
     g = GROUNDING.get(sid)
     if not g:
         return []
-    if sid == "A0.1":
-        lead = ("You have not met CyberTravels yet — that is the next video — "
+    if sid == "A0.2":
+        # Before A1.0, so "same company again" would be a lie on this one too.
+        lead = ("You meet CyberTravels properly in A1.0, the next chapter — "
                 "but here is where they come in.")
     elif sid == FUNCTION_INTRO.get(item["fn"]["id"]):
         lead = ("And this is CyberTravels again — the same company, because a lot "

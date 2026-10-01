@@ -22,7 +22,15 @@ ABOUT: dict[str, str] = {
 
 **Why a security engineer needs it.** A reader who lands mid-curriculum reads the hook as an abstract, finds it vague, and leaves. The hook is a scene rather than a summary, and the description sits under it. The control it builds is: knowing which section answers the question you actually arrived with, and that a section missing from a page is missing on purpose.
 
-This is the **first** lesson to read. It has no code and takes ten minutes.
+This is a **reading** lesson. It has no code and takes ten minutes.
+""",
+
+"A0.2": """
+**What it covers.** The nine words most talk about agents turns on — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — drawn on one page, placed in the CyberTravels file where Function A builds each, and paired with the lesson that attacks it.
+
+**Why a security engineer needs it.** Each of the nine is a component to one person and an attack surface to another, and a review where two people mean different things by "harness" argues about two different files. The control it builds is: a shared vocabulary tied to real code, so a finding names a component rather than a word.
+
+This is a **reading** lesson. It has no code and takes fifteen minutes.
 """,
 
 "B1.0": """

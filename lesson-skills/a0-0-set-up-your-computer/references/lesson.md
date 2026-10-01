@@ -9,8 +9,7 @@ work on your own machine.
 
 ### What a skill is
 
-This commons is 149 lessons, and every one hands a model a **written
-procedure** — plain English that says how to do one job in security: find the
+Every lesson in this commons hands a model a **written procedure** — plain English that says how to do one job in security: find the
 weak spot in this code, work out what an attacker could reach, decide whether
 this alert is real. The model reads the instructions and does the job. Those
 instructions are called **skills**. You can read every one, change them, and
@@ -18,17 +17,10 @@ watch the answer change. There is no hidden part.
 
 ### How to execute a skill
 
-Every lesson runs three ways, against the same code:
-
-1. **In your AI assistant** — Claude Code, GitHub Copilot, Cursor or Codex. It
-   reads the lesson, explains the idea, fetches the code, and runs the check.
-   Take this one if you are here to learn.
-2. **As one Python command** — `python3 scripts/lesson.py A0.0`. Same lesson,
-   same result, no conversation. Take this one if you have no assistant.
-3. **Read the code and the difference** — nothing runs and no model is needed.
-
-Every lesson page carries all three, in that order, near the bottom of the
-page. None of them is the "real" one.
+Near the bottom of every lesson page is a run block with the ways to do that
+lesson — in your AI assistant, as one Python command, or by reading the code.
+This page has one too. The rest of this lesson gets your computer ready for
+it.
 
 ### Why this is a new way of working
 
@@ -44,10 +36,11 @@ A skill does not make a model correct. It makes the procedure explicit and the
 output checkable — a smaller claim, and the one this whole curriculum is
 about.
 
-### Nine words you will meet
+### Words you will meet
 
 You do not need to memorise these. Come back to this table when one of them
-turns up and you are not sure.
+turns up and you are not sure. These are the words for your computer; the
+nine for agents themselves — harness, MCP, A2A and the rest — are A0.2.
 
 | word | what it means here |
 |---|---|

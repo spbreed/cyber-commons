@@ -8,9 +8,8 @@ engineering, not model training, not a vendor comparison. An agent is software
 that plans, calls tools and acts on what it reads, and every part of that
 sentence is both an attack surface and a control point.
 
-It is free, open, and not a product. No account, no paid tier, no GPU and no
-API key on the default path through any lesson. Every script is standard
-library only.
+It is free, open, and not a product. What a skill is and how your machine runs
+one were A0.0; this page is how the commons is laid out around them.
 
 ### Who it is for
 
@@ -69,8 +68,7 @@ this page, for one, has no Risk, no Day table and no CyberTravels scene,
 because it is about your machine rather than about a system anybody secures.
 
 1. **Risk and Control** — one sentence each, at the top: what goes wrong here,
-   and what closes it. On the lessons that are about a system, which is 146 of
-   the 148.
+   and what closes it. On the lessons that are about a system.
 2. **The hook** — a scene, before anything else. Deliberately *not* a summary:
    it is the consequence of not knowing the lesson. The summary is section 3.
 3. **What this lesson is** — the plain description, and the Day table.
@@ -80,13 +78,9 @@ because it is about your machine rather than about a system anybody secures.
    why is the most common way a good lesson lands badly.
 5. **In CyberTravels** — the idea in the running case study.
 6. **The skill** — the `SKILL.md` as it exists in
-   [`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills).
-   Frontmatter tells an agent when to load the procedure; the markdown reads as
-   a checklist for a person.
-7. **Run it** — the two commands that execute the skill on your own machine.
-   The page holds no procedure of its own: it runs the file in `skills/`, which
-   is the only copy that exists. That is why a fix to a procedure is one edit
-   to one file rather than a change in 148 places.
+   [`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills),
+   pasted in rather than copied out, so a fix is one edit to one file.
+7. **Run it** — the run block A0.0 introduced, the same on every page.
 8. **What you just proved** — on the lessons that ran something, and only
    those. A reading lesson proves nothing and says nothing here.
 9. **Your turn** — one input to change so a number moves. The lesson is in the
@@ -131,9 +125,9 @@ A control usually needs one of each: a threat it addresses, a tactic it frustrat
 
 ## 5 · What sits behind a lesson skill
 
-The run block further down this page gives you the three ways to do any lesson, and they are the same three on all 148 pages. This is the part that block does not explain: what you installed, and what it runs.
+A0.0 covered what a skill is and how to run one. This is the part it did not: what you installed, and what it runs.
 
-Behind each lesson skill is an **audit skill** — the written procedure the lesson runs, in `skills/`. There is exactly one copy of each, everything runs on your own machine, and there is no hosted kernel and nothing to sign up for. Eighteen audits are shared by two or three lessons, which is why a lesson skill calls one rather than carrying its own copy.
+Behind each lesson skill is an **audit skill** — the written procedure the lesson runs, in `skills/`. There are 14 areas, 140 skills, 140 of them with a script, and exactly one copy of each. Eighteen audits are shared by two or three lessons, which is why a lesson skill calls one rather than carrying its own copy.
 
 You can install a whole function at once rather than a lesson at a time, and ask what is currently linked:
 
@@ -144,16 +138,6 @@ python3 scripts/install_skills.py --list              # what is linked where
 
 Those are **links into your clone**, not copies — symlinks, or junctions on Windows — so `git pull` updates every tool at once and an edit you make here is live in all of them. A copy would be a fork with a friendly name: you would fix a skill once and the other copies would keep the bug while still loading and still answering.
 
-Some audits ask a **model** a question, and the assistant you are using is that model; others are worked examples with no model in them. When a model answers, what you get is one model's answer, validated against that audit's own output contract. Run it twice and it will differ — that is the subject of the whole commons, not a defect. What does not differ is the harness: `check_determinism.py` runs every skill across several hash seeds and fails if the deterministic half varies.
-
-## 6 · The whole mechanism, demonstrated on itself
-
-The rest of this lesson is the mechanism running. The skill below is a preflight: it reports which model is about to answer, gives that model a short description of a computer and asks whether it is ready to run skills, and counts how many ways the reply broke the shape the skill's own output contract asks for.
-
-That is the shape of every lesson in the commons. The skill is the procedure, the model carries it out, and the contract is what decides whether the answer is usable.
-
-### The skill
-
 ## Your turn
 
-Do the same lesson the other way. If you picked the skill in your assistant, now run `python3 scripts/lesson.py A0.1` yourself, or the other way round, and put the two readbacks side by side. The files written and the tests are identical, because both routes run the same harness on the same code; the audit's answer is the part that can differ, because a different model answered it. If the files differ, something went wrong at install time.
+Find your row in the table in section 2 and open the lesson in its "start at" column. Read only its Day table, and decide from those three lines whether you would spend an afternoon on it. Then do the same for a row that is not yours. If the second one also looks worth the afternoon, you have found the lesson to take to a colleague in that role.

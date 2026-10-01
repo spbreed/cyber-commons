@@ -1,7 +1,7 @@
 # Track A2 — Harness Engineering — Making a Demo Into a System
 
 **Function A · Getting Started — Building Agentic AI**  
-*Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Everything the other four functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
+*Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Each of the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — is a component built here. Everything the other five functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
 **Job titles:** The same audience, one chapter later. Particularly anyone who has to operate, review or sign off on something an agent does.
 

@@ -15,7 +15,7 @@ metadata:
 
 # A0.0 — Set up your computer — the AI tools, and the model every lesson runs on
 
-You have probably typed a question into an AI and read the answer. This is the other side of that: the same kind of AI, doing a job on your own computer, following written instructions you can read and change. None of it works until your computer knows which AI to ask. Setting that up is this whole lesson, and it is the only thing standing between you and the other 148.
+You have probably typed a question into an AI and read the answer. This is the other side of that: the same kind of AI, doing a job on your own computer, following written instructions you can read and change. None of it works until your computer knows which AI to ask. Setting that up is this whole lesson, and it is the only thing standing between you and every other lesson here.
 
 ## When to use this
 

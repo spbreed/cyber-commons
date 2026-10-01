@@ -1,18 +1,155 @@
-"""A0 — the introduction. One lesson, and it is about the commons itself.
+"""A0 — set up, how to use the commons, and the words for an agent.
 
 It exists because of one repeated piece of reader feedback: *nobody could tell
-what this was for until somebody explained it.* This lesson is that explanation,
-written down, so it does not need a person attached.
+what this was for until somebody explained it.* These lessons are that
+explanation, written down, so it does not need a person attached.
 
 It was five lessons for a while — audience, routing, conventions, how to run
 one, and the frameworks — and they repeated each other badly: three of the five
 explained Day 0/1/2, two explained the personas, and a reader had to open four
-pages to learn things that fit on one. They are one page now, and the chapter is
-one lesson.
+pages to learn things that fit on one.
+
+Each lesson now owns one thing and the others point at it. A0.0 owns the
+machine: what a skill is, the tools, the model, and the one preflight run.
+A0.1 owns the commons: who it is for, how a page is built, where to start. A0.2
+owns the vocabulary of the thing being built. A0.1 used to re-run A0.0's
+preflight and re-explain skills, the three ways to run a lesson and why two
+models answer differently, so a reader met the same run and the same four
+paragraphs twice in two pages.
 """
 
 from . import diagrams as D
 from .skills import skill_steps
+
+# A0.2's figure: the nine words for an agent, one card each. The colours rotate
+# through the defensive hues only. Amber means the adversary on every page of
+# the commons, and none of these nine is an attack; red appears once, on the
+# guardrail's refused path, because that is what red means everywhere else.
+_C, _B, _G, _V = D.DEFEND, "#1d4ed8", D.GOOD, "#6d28d9"
+
+_NINE = D.grid([
+ D.term(1, "Harness", "The loop that lets a model act. Context in, tool call "
+        "out, result back, repeat.", D.mini(
+   D.box(2, 16, 54, 26, "context", colour=_C)
+   + D.arrow(56, 29, 64) + D.box(64, 16, 46, 26, "model", colour=_C)
+   + D.arrow(110, 29, 118) + D.box(118, 16, 58, 26, "tool call", colour=_C)
+   + D.arrow(176, 29, 184) + D.box(184, 16, 54, 26, "result", colour=_C)
+   + f'<path d="M211 42 V64 H29 V44" fill="none" stroke="{D.LINE}" '
+     f'stroke-width="1.4" marker-end="url(#a)"/>'
+   + D.label(120, 78, "repeat until done", anchor="middle")
+   + D.label(4, 102, "in:  skills · memory · prompts")
+   + D.label(4, 118, "out: shell · APIs · browser"), "t1"),
+        "Built in A1.1, and wrapped in A2.0", colour=_C),
+
+ D.term(2, "Memory & state", "What it remembers between runs, and where it "
+        "is in the task right now.", D.mini(
+   D.box(2, 8, 80, 38, "short-term", sub="context window", colour=_B)
+   + D.box(94, 14, 52, 26, "agent", colour=_B)
+   + D.arrow(94, 27, 84) + D.arrow(146, 27, 156)
+   + D.box(158, 8, 80, 38, "long-term", sub="saved to disk", colour=_B)
+   + D.arrow(120, 40, 120, 62)
+   + D.box(40, 64, 160, 40, "state", sub="current step · open tasks",
+           colour=_B), "t2"),
+        "Built in A1.5", colour=_B),
+
+ D.term(3, "RAG", "Retrieval-augmented generation: pull the right documents "
+        "into the prompt, so answers come with sources.", D.mini(
+   D.box(2, 6, 64, 26, "question", colour=_G)
+   + D.arrow(66, 19, 80) + D.box(80, 6, 74, 26, "search docs", colour=_G)
+   + D.arrow(154, 19, 166) + D.box(166, 6, 72, 26, "top chunks", colour=_G)
+   + D.arrow(200, 32, 170, 52)
+   + D.box(60, 52, 120, 26, "model + context", colour=_G)
+   + D.arrow(120, 78, 120, 92)
+   + D.box(50, 92, 140, 26, "answer + sources", colour=_G), "t3"),
+        "In CyberTravels from the start", colour=_G),
+
+ D.term(4, "MCP", "Model Context Protocol. One standard plug for tools and "
+        "data, so a tool is written once and any agent can call it.", D.mini(
+   D.box(2, 50, 44, 26, "agent", colour=_V)
+   + D.arrow(46, 63, 56) + D.box(56, 50, 54, 26, "client", colour=_V)
+   + D.arrow(110, 63, 120) + D.box(120, 50, 56, 26, "server", colour=_V)
+   + D.arrow(176, 63, 190, 29) + D.arrow(176, 63, 190)
+   + D.arrow(176, 63, 190, 97)
+   + D.box(190, 16, 48, 26, "tools", colour=_V)
+   + D.box(190, 50, 48, 26, "data", colour=_V)
+   + D.box(190, 84, 48, 26, "prompts", colour=_V), "t4"),
+        "Built in A1.2", colour=_V),
+
+ D.term(5, "Skills", "Reusable know-how in a SKILL.md file. Only the name "
+        "and description load until a task needs the rest.", D.mini(
+   f'<rect x="4" y="4" width="150" height="112" rx="6" fill="none" '
+   f'stroke="{_C}" stroke-width="1.4"/>'
+   + D.label(14, 24, "SKILL.md", colour=_C, size=12, weight="bold")
+   + f'<rect x="12" y="34" width="134" height="22" rx="4" '
+     f'fill="{_C}" fill-opacity=".12" stroke="{_C}"/>'
+   + D.label(20, 49, "name + description", colour=_C)
+   + f'<rect x="12" y="62" width="134" height="46" rx="4" fill="none" '
+     f'stroke="{D.LINE}" stroke-dasharray="4 3"/>'
+   + D.label(20, 80, "instructions") + D.label(20, 98, "scripts & files")
+   + D.label(162, 49, "always loaded", colour=_C)
+   + D.label(162, 80, "loaded when") + D.label(162, 94, "a task needs it"),
+   "t5"),
+        "Every lesson here is one — A0.0", colour=_C),
+
+ D.term(6, "Guardrails", "Permissions, a sandbox, and a human sign-off "
+        "before anything risky.", D.mini(
+   D.box(2, 30, 46, 26, "action", colour=_G)
+   + D.arrow(48, 43, 56) + D.box(56, 30, 72, 26, "permissions", colour=_G)
+   + D.arrow(128, 43, 136)
+   + f'<path d="M164 21 L192 43 L164 65 L136 43 Z" fill="none" '
+     f'stroke="{D.BAD}" stroke-width="1.4"/>'
+   + D.label(164, 47, "risky?", colour=D.BAD, anchor="middle")
+   + D.arrow(192, 43, 200) + D.box(200, 30, 38, 26, "run", colour=_G)
+   + D.label(196, 26, "no", anchor="middle")
+   + D.arrow(164, 65, 164, 80) + D.label(170, 76, "yes")
+   + D.box(106, 80, 120, 26, "human sign-off", colour=_G)
+   + D.label(120, 124, "least access · every action logged",
+             anchor="middle"), "t6"),
+        "Built in A1.4 and A1.7", colour=_G),
+
+ D.term(7, "Evals", "Score outputs against what you expected, before your "
+        "users find the gap for you.", D.mini(
+   D.box(10, 8, 64, 26, "agent", colour=_B)
+   + D.arrow(74, 21, 150) + D.box(150, 8, 84, 26, "output", colour=_B)
+   + D.arrow(192, 34, 192, 66)
+   + D.box(150, 66, 84, 26, "expected", colour=_B)
+   + D.arrow(150, 79, 74) + D.box(10, 66, 64, 26, "score", colour=_B)
+   + D.arrow(42, 66, 42, 34)
+   + D.label(112, 58, "compared", anchor="middle")
+   + D.label(120, 116, "test sets before launch · traces after",
+             anchor="middle"), "t7"),
+        "Built in A2.3 and A2.4", colour=_B),
+
+ D.term(8, "A2A", "Agent2Agent. How agents from different vendors find each "
+        "other and hand work over.", D.mini(
+   D.box(2, 30, 54, 28, "agent A", colour=_V)
+   + D.arrow(56, 44, 80)
+   + D.box(80, 18, 80, 52, "agent card", sub="skills · endpoint",
+           colour=_V)
+   + D.arrow(184, 44, 160)
+   + D.box(184, 30, 54, 28, "agent B", colour=_V)
+   + f'<path d="M29 58 V90 H211 V60" fill="none" stroke="{D.LINE}" '
+     f'stroke-width="1.4" stroke-dasharray="4 4" marker-end="url(#a)"/>'
+   + D.label(120, 108, "tasks · messages · artifacts", anchor="middle"),
+   "t8"),
+        "Built in A1.6", colour=_V),
+
+ D.term(9, "Multi-agent", "An orchestrator splits the job. Specialist "
+        "agents run in parallel.", D.mini(
+   D.box(66, 4, 108, 26, "orchestrator", colour=_C)
+   + D.arrow(120, 30, 38, 50) + D.arrow(120, 30, 120, 50)
+   + D.arrow(120, 30, 202, 50)
+   + D.box(2, 50, 72, 26, "retrieval", colour=_C)
+   + D.box(84, 50, 72, 26, "workflow", colour=_C)
+   + D.box(166, 50, 72, 26, "coding", colour=_C)
+   + D.arrow(38, 76, 96, 96) + D.arrow(120, 76, 120, 96)
+   + D.arrow(202, 76, 144, 96)
+   + D.box(66, 96, 108, 26, "final result", colour=_C), "t9"),
+        "Drawn in A1.0 — four agents", colour=_C),
+], caption="The nine words for an agent. Each card's footer names the lesson "
+           "in Function A where you build it; section 3 names the file it "
+           "ends up in and the lesson that attacks it.")
+
 
 EXERCISES: dict[str, dict] = {
 
@@ -25,8 +162,7 @@ work on your own machine.
 
 ### What a skill is
 
-This commons is 149 lessons, and every one hands a model a **written
-procedure** — plain English that says how to do one job in security: find the
+Every lesson in this commons hands a model a **written procedure** — plain English that says how to do one job in security: find the
 weak spot in this code, work out what an attacker could reach, decide whether
 this alert is real. The model reads the instructions and does the job. Those
 instructions are called **skills**. You can read every one, change them, and
@@ -34,17 +170,10 @@ watch the answer change. There is no hidden part.
 
 ### How to execute a skill
 
-Every lesson runs three ways, against the same code:
-
-1. **In your AI assistant** — Claude Code, GitHub Copilot, Cursor or Codex. It
-   reads the lesson, explains the idea, fetches the code, and runs the check.
-   Take this one if you are here to learn.
-2. **As one Python command** — `python3 scripts/lesson.py A0.0`. Same lesson,
-   same result, no conversation. Take this one if you have no assistant.
-3. **Read the code and the difference** — nothing runs and no model is needed.
-
-Every lesson page carries all three, in that order, near the bottom of the
-page. None of them is the "real" one.
+Near the bottom of every lesson page is a run block with the ways to do that
+lesson — in your AI assistant, as one Python command, or by reading the code.
+This page has one too. The rest of this lesson gets your computer ready for
+it.
 
 ### Why this is a new way of working
 
@@ -60,10 +189,11 @@ A skill does not make a model correct. It makes the procedure explicit and the
 output checkable — a smaller claim, and the one this whole curriculum is
 about.
 
-### Nine words you will meet
+### Words you will meet
 
 You do not need to memorise these. Come back to this table when one of them
-turns up and you are not sure.
+turns up and you are not sure. These are the words for your computer; the
+nine for agents themselves — harness, MCP, A2A and the rest — are A0.2.
 
 | word | what it means here |
 |---|---|
@@ -382,9 +512,8 @@ engineering, not model training, not a vendor comparison. An agent is software
 that plans, calls tools and acts on what it reads, and every part of that
 sentence is both an attack surface and a control point.
 
-It is free, open, and not a product. No account, no paid tier, no GPU and no
-API key on the default path through any lesson. Every script is standard
-library only.
+It is free, open, and not a product. What a skill is and how your machine runs
+one were A0.0; this page is how the commons is laid out around them.
 
 ### Who it is for
 
@@ -443,8 +572,7 @@ this page, for one, has no Risk, no Day table and no CyberTravels scene,
 because it is about your machine rather than about a system anybody secures.
 
 1. **Risk and Control** — one sentence each, at the top: what goes wrong here,
-   and what closes it. On the lessons that are about a system, which is 146 of
-   the 148.
+   and what closes it. On the lessons that are about a system.
 2. **The hook** — a scene, before anything else. Deliberately *not* a summary:
    it is the consequence of not knowing the lesson. The summary is section 3.
 3. **What this lesson is** — the plain description, and the Day table.
@@ -454,13 +582,9 @@ because it is about your machine rather than about a system anybody secures.
    why is the most common way a good lesson lands badly.
 5. **In CyberTravels** — the idea in the running case study.
 6. **The skill** — the `SKILL.md` as it exists in
-   [`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills).
-   Frontmatter tells an agent when to load the procedure; the markdown reads as
-   a checklist for a person.
-7. **Run it** — the two commands that execute the skill on your own machine.
-   The page holds no procedure of its own: it runs the file in `skills/`, which
-   is the only copy that exists. That is why a fix to a procedure is one edit
-   to one file rather than a change in 148 places.
+   [`skills/`](https://github.com/spbreed/cyber-commons/tree/master/skills),
+   pasted in rather than copied out, so a fix is one edit to one file.
+7. **Run it** — the run block A0.0 introduced, the same on every page.
 8. **What you just proved** — on the lessons that ran something, and only
    those. A reading lesson proves nothing and says nothing here.
 9. **Your turn** — one input to change so a number moves. The lesson is in the
@@ -571,16 +695,13 @@ and a report counts in Function F.
          "indicative mappings, not a certification."),
 
   ("md", "## 5 · What sits behind a lesson skill\\n\\n"
-         "The run block further down this page gives you the three ways to do "
-         "any lesson, and they are the same three on all 148 pages. This is "
-         "the part that block does not explain: what you installed, and what "
-         "it runs.\\n\\n"
+         "A0.0 covered what a skill is and how to run one. This is the part "
+         "it did not: what you installed, and what it runs.\\n\\n"
          "Behind each lesson skill is an **audit skill** — the written "
-         "procedure the lesson runs, in `skills/`. There is exactly one copy "
-         "of each, everything runs on your own machine, and there is no hosted "
-         "kernel and nothing to sign up for. Eighteen audits are shared by two "
-         "or three lessons, which is why a lesson skill calls one rather than "
-         "carrying its own copy.\\n\\n"
+         "procedure the lesson runs, in `skills/`. There are 14 areas, "
+         "140 skills, 140 of them with a script, and exactly one copy of "
+         "each. Eighteen audits are shared by two or three lessons, which is "
+         "why a lesson skill calls one rather than carrying its own copy.\\n\\n"
          "You can install a whole function at once rather than a lesson at a "
          "time, and ask what is currently linked:\\n\\n"
          "```bash\\n"
@@ -591,51 +712,109 @@ and a report counts in Function F.
          "junctions on Windows — so `git pull` updates every tool at once and "
          "an edit you make here is live in all of them. A copy would be a fork "
          "with a friendly name: you would fix a skill once and the other copies "
-         "would keep the bug while still loading and still answering.\\n\\n"
-         "Some audits ask a **model** a question, and the assistant you are "
-         "using is that model; others are worked examples with no model in "
-         "them. When a model answers, what you get is one model's answer, "
-         "validated against that audit's own output contract. Run it twice and "
-         "it will differ — that is the subject of the whole commons, not a "
-         "defect. What does not differ is the harness: `check_determinism.py` "
-         "runs every skill across several hash seeds and fails if the "
-         "deterministic half varies."),
+         "would keep the bug while still loading and still answering."),
 
-  *skill_steps("programme/dev-environment-preflight",
-               "## 6 · The whole mechanism, demonstrated on itself\\n\\n"
-               "The rest of this lesson is the mechanism running. The skill "
-               "below is a preflight: it reports which model is about to "
-               "answer, gives that model a short description of a computer "
-               "and asks whether it is ready to run skills, and counts how "
-               "many ways the reply broke the shape the skill's own output "
-               "contract asks for.\\n\\n"
-               "That is the shape of every lesson in the commons. The skill "
-               "is the procedure, the model carries it out, and the contract "
-               "is what decides whether the answer is usable.\\n\\n"
-               "### The skill"),
+  # There was a "## 6 · The whole mechanism, demonstrated on itself" here
+  # that ran programme/dev-environment-preflight — the audit A0.0 had run one
+  # page earlier — with a "What you just proved" and a "Your turn" that
+  # restated A0.0's (the model's answer varies, the harness does not). A
+  # reader met the same run twice in two pages. A0.0 owns it now, and this is
+  # a reading lesson, like B1.0. scripts/check_claims.py holds the counts in
+  # section 5 against the tree; they moved there from the proved paragraph.
  ],
- # The counts are the reader's checksum against their own run, and
- # scripts/check_claims.py holds them against the tree. They used to live in
- # curriculum/labs.json's Expect box, which printed this same paragraph a
- # second time at the bottom of the page.
- "expect": "You did a lesson the way every lesson is done — one skill, "
-           "picked in your assistant — and read back what happened. What you "
-           "now hold is 14 areas, "
-           "140 skills, 140 of them with a script, and the lesson skills are "
-           "the front door to them: one to pick per lesson, each calling the "
-           "audit skill behind it rather than copying it. The run's own "
-           "numbers are the readback's: files written, checks passed, and how "
-           "many ways the audit's answer broke its contract, counted by the "
-           "harness and not by the model. A different model will answer "
-           "differently; the harness does not.",
- "challenge": "Do the same lesson the other way. If you picked the skill in "
-              "your assistant, now run `python3 scripts/lesson.py A0.1` "
-              "yourself, or the other way round, and put the two readbacks "
-              "side by side. The files written and the tests are identical, "
-              "because both routes run the same harness on the same code; the "
-              "audit's answer is the part that can differ, because a "
-              "different model answered it. If the files differ, something "
-              "went wrong at install time.",
+ "challenge": "Find your row in the table in section 2 and open the lesson in "
+              "its \"start at\" column. Read only its Day table, and decide "
+              "from those three lines whether you would spend an afternoon on "
+              "it. Then do the same for a row that is not yours. If the second "
+              "one also looks worth the afternoon, you have found the lesson "
+              "to take to a colleague in that role.",
+},
+
+"A0.2": {
+ "concept": """
+Nine words carry most conversations about agents, and most arguments about
+agent security are two people using one of them for different things. This
+lesson fixes the nine before Function A builds them, so that when A1.2 says
+*MCP server* or A1.6 says *A2A* you already know what the box is.
+
+They are not nine separate ideas. They stack:
+
+- **The harness is the agent.** Everything else is something the harness
+  reads from, calls, or is checked by. A model with no harness writes text; a
+  model in a harness changes things.
+- **Memory, RAG, MCP and skills are how things get into the context** the
+  harness hands the model: what it remembered, what it retrieved, what tools
+  it can reach, and what procedures it can follow. Every one of them is
+  therefore also a way for text you did not write to reach the model.
+- **Guardrails sit on the way out**, between the model proposing a tool call
+  and the call happening. They are the only one of the nine that says *no*.
+- **Evals sit beside the whole thing** and score what it did against what you
+  meant.
+- **A2A and multi-agent are several harnesses at once** — one handing work to
+  another, or an orchestrator splitting a job between specialists. Each
+  hand-over is a place where one agent's authority can quietly become
+  another's.
+
+That last point is the reason for the list. Each of the nine is a component
+you build in Function A and a surface an attacker reaches for in Function B, so
+learning them once, here, is learning the map both functions are drawn on.
+
+Three of them are also **open standards** — MCP, A2A and the Agent Skills
+format. What you build on them is not tied to one vendor: a skill written for
+Claude Code loads in Codex, Cursor and Copilot, and an MCP server written for
+one agent serves any other. It also means a flaw in how you use one is
+portable in the same way.
+""",
+ "steps": [
+  ("md", "## 2 · The nine, on one page\n\n"
+         "One card per word: what it is in a line, and a picture of the "
+         "mechanism, which is the part worth recognising later."),
+  ("html", _NINE),
+  ("md", "## 3 · Where each one lives, and where it goes wrong\n\n"
+         "Every one of the nine is a real file in CyberTravels by the end of "
+         "Function A, and every one has a lesson in Function B or D about "
+         "breaking it. The right-hand column is the reason the commons "
+         "teaches the words at all."),
+  ("html", D.table(
+    ["word", "in CyberTravels", "where it goes wrong"],
+    [["<b>Harness</b>", "<code>runtime.py</code> — the loop, and "
+      "<code>execute_tool</code>, the line where the model stops proposing",
+      "B1.13 — a loop with no budget runs until something else stops it"],
+     ["<b>Memory &amp; state</b>", "<code>memory.py</code>",
+      "B1.4 — an instruction written into memory is read back as fact"],
+     ["<b>RAG</b>", "<code>agents/rag_advisor.py</code> and "
+      "<code>knowledge/retriever.py</code>",
+      "B1.3 — a retrieved document steers the agent with the user's "
+      "authority"],
+     ["<b>MCP</b>", "<code>mcp/internal_server.py</code> and "
+      "<code>mcp/vendor_server.py</code>",
+      "B1.5 — a tool used within its grant for something nobody meant"],
+     ["<b>Skills</b>", "<code>skills/</code> and <code>lesson-skills/</code> "
+      "in this repository — the commons is built from them",
+      "D1.1 — whatever an agent ingests as a procedure is supply chain"],
+     ["<b>Guardrails</b>", "<code>identity.py</code> for delegation, the "
+      "human gate and budget in <code>runtime.py</code>, and later "
+      "<code>policy.py</code> and <code>sandbox.py</code>",
+      "B1.15 — a human gate that approves everything because it sees too "
+      "much"],
+     ["<b>Evals</b>", "<code>tests/smoke_test.py</code>, growing with every "
+      "lesson that adds a control",
+      "D1.0 — an eval with an adversary is a red team"],
+     ["<b>A2A</b>", "<code>a2a/protocol.py</code>",
+      "B1.10 — a message from a peer agent treated as trusted"],
+     ["<b>Multi-agent</b>", "<code>orchestrator/router.py</code> and the four "
+      "agents in <code>agents/</code>",
+      "B1.11 — one compromised agent among several that trust each other"]],
+    caption="Paths are under <code>cybertravels/</code> except for skills. "
+            "A file that appears later than Function A is named for where "
+            "the guardrail ends up, not where it starts.")),
+ ],
+ "challenge": "Open `cybertravels/` and find all nine without this table: a "
+              "file, and ideally the line, for each word. Count how many you "
+              "placed. The ones you could not place are the lessons in "
+              "Function A to read most carefully, and the count is worth "
+              "taking again at the end of A2.5, when every one of them should "
+              "be something you wrote.",
 },
 
 }

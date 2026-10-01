@@ -21,7 +21,7 @@ real work; knowing which you are in is the first thing to establish.
 
 | | what it is | lives in |
 |---|---|---|
-| **Cyber Commons** | a 149-lesson curriculum on securing agentic AI, plus the static site at [cybercommons.ai](https://cybercommons.ai) | `scripts/`, `skills/`, `site/`, `curriculum/`, `cybertravels/` |
+| **Cyber Commons** | a 150-lesson curriculum on securing agentic AI, plus the static site at [cybercommons.ai](https://cybercommons.ai) | `scripts/`, `skills/`, `site/`, `curriculum/`, `cybertravels/` |
 | **vulnbench** | a benchmark that scores an AI security harness's findings against ground truth | `labs/b2.10-eval-harness/` |
 
 Most of this file is about the first. §8 is the second, and its rules are not
@@ -49,8 +49,8 @@ thing the reader now owns:
 | F | AI Governance for Agentic Systems | who signed off, and can they still evidence it |
 
 The letters run in reading order and there is no gap: `A0.0` is the dev
-environment and IDE setup, `A0.1` is how to use the commons, and `A1.0` starts
-building. The function that was lettered `G` while it was bolted on the front
+environment and IDE setup, `A0.1` is how to use the commons, `A0.2` is the
+nine words for an agent (harness to multi-agent), and `A1.0` starts building. The function that was lettered `G` while it was bolted on the front
 is simply `A` now, and every other function moved one letter down.
 
 `cybertravels/` is the running application those lessons build, one increment
@@ -62,7 +62,7 @@ gates that keep that true.
 Current shape, measured rather than typed — `check_claims.py` fails CI when any
 count in the docs drifts from the tree, this line included:
 
-    149 lessons · 16 chapters · 6 functions · 140 skills
+    150 lessons · 16 chapters · 6 functions · 140 skills
 
 **A lesson is two artefacts, not one.** The page (prose, rendered from source)
 and the skill (`skills/<area>/<name>/SKILL.md` plus its script — the procedure).
@@ -195,7 +195,7 @@ that are enforced or that get broken most.
   second half is required: a count with no denominator is the failure this
   curriculum spends six functions on, and a Day 2 sentence cannot be lifted
   into a dashboard or compared with last quarter.
-- **Day 0, Day 1, Day 2 on every lesson about the system** — 147 of the 149.
+- **Day 0, Day 1, Day 2 on every lesson about the system** — 148 of the 150.
   Why it matters, what you build, the number that says it worked. Day 2 names a
   real number where the lesson produces one and says what you count instead
   where it does not. Never invent one. The two setup lessons carry no Day

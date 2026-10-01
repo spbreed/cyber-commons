@@ -130,13 +130,19 @@ PART_SOURCE = {
 # What each part looks like on the built page. Exact strings, and the Day
 # heading is matched in full because "What this lesson is" is a prefix of it
 # and is also the heading the days-less pages carry.
+#
+# The others are matched as the section heading build_site.sec_open writes —
+# after the icon span, before </h2> — not as any tag around the words. A0.1
+# lists the template's sections in bold ("<strong>What you just proved</strong>")
+# and, once it stopped rendering that section, `>What you just proved<` found
+# the list item and reported the page as carrying a section it does not.
 PAGE_MARK = {
     "riskcontrol": '<div class="rc">',
-    "relevance":   ">Use case relevance<",
+    "relevance":   "</span>Use case relevance</h2>",
     "days":        "What this lesson is — Day 0, Day 1, Day 2<",
-    "proved":      ">What you just proved<",
-    "turn":        ">Your turn<",
-    "bridge":      ">Where this leaves you<",
+    "proved":      "</span>What you just proved</h2>",
+    "turn":        "</span>Your turn</h2>",
+    "bridge":      "</span>Where this leaves you</h2>",
 }
 
 

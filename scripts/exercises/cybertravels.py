@@ -235,6 +235,10 @@ GROUNDING: dict[str, str] = {
 # promising something the page did not have. scripts/exercises/layout.py holds
 # the decision, and check_lessons.py fails if an entry reappears here for a
 # lesson that does not render one.
+"A0.2": "All nine words are CyberTravels files: the loop in `runtime.py`, memory "
+        "in `memory.py`, retrieval in `knowledge/retriever.py`, two MCP servers, "
+        "A2A in `a2a/protocol.py`, and an orchestrator routing between four "
+        "agents. Function A is where you write each of them.",
 "B1.0": "CyberTravels is the system. Everything after this lesson names one of its "
         "boxes.",
 "B1.1": "The generic names on this map have CyberTravels names too: ingress is "

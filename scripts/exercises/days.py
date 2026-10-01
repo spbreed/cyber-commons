@@ -204,9 +204,17 @@ DAYS.update({
 
 # A0.0 and A0.1 have no entry. Day 0/1/2 is why this matters, what you build
 # and the number that says it worked, and a setup lesson has none of the three
-# in the sense the other 146 do: A0.1's Day 2 read "Nothing is computed here",
+# in the sense the others do: A0.1's Day 2 read "Nothing is computed here",
 # which is a form filled in rather than an answer. Both pages carry the
 # description without the table; scripts/exercises/layout.py records it.
+# A0.2 does have one: its subject is the system, not the reader's machine.
+"A0.2": ("A review where \"harness\" means the loop to one person and the eval "
+         "suite to another argues for an hour about two different files.",
+         "Learn the nine words, and for each one find the CyberTravels file "
+         "where it lives and the lesson that attacks it.",
+         "Of the nine, how many you can point at in the tree — a file, not a "
+         "definition. Nine is the target; a word you cannot place is the "
+         "Function A lesson to read first."),
 "B1.0": ("\"Secure the agent\" has no referent until the system is drawn, so "
          "every control argument is really an argument about the picture.",
          "Read the three chapters in order: the architecture and its risks, "

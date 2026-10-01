@@ -215,3 +215,52 @@ def flow(columns: list[str], *, caption: str = "", legend: str = "") -> str:
             f'flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,'
             f'Segoe UI,Roboto,sans-serif;margin:6px 0 2px">{inner}</div>'
             f"{leg}{cap}")
+
+
+# --------------------------------------------------------------- term grid
+# A glossary drawn rather than listed: one card per term, each with a small
+# picture of the mechanism. A0.2 uses it for the nine words for an agent. A
+# definitions table would say the same words, but "the loop that lets a model
+# act" is a sentence a reader nods at and cannot use, and the four boxes with
+# an arrow back to the start are the thing they will recognise in runtime.py.
+# The grid wraps to one column on a phone, and everything is inline styles for
+# the same reason `card` is.
+
+def mini(body: str, key: str, *, height: int = 128) -> str:
+    """A small SVG for one card. `key` makes the arrowhead id unique on the
+    page — nine copies of DEFS would otherwise declare nine `id="a"`s, and a
+    browser resolves `url(#a)` to whichever it finds first."""
+    defs = DEFS.replace('id="a"', f'id="{key}"')
+    body = body.replace("url(#a)", f"url(#{key})")
+    return (f'<svg viewBox="0 0 240 {height}" width="100%" role="img" '
+            f'style="max-width:320px;height:auto;display:block;margin:2px auto;'
+            f'font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,'
+            f'Roboto,sans-serif;font-size:10.5px">{defs}{body}</svg>')
+
+
+def term(n: int, name: str, gist: str, picture: str, foot: str, *,
+         colour: str = DEFEND) -> str:
+    """One term: its number, its name, one line, the picture, and a footer."""
+    return (f'<div style="border:1px solid {_tint(colour, ".45")};'
+            f'border-top:3px solid {colour};border-radius:10px;'
+            f'background:{_tint(colour, ".05")};padding:10px 12px 9px">'
+            f'<div style="display:flex;gap:8px;align-items:center">'
+            f'<span style="flex:0 0 auto;width:24px;height:24px;border-radius:50%;'
+            f'background:{colour};color:#fff;font-weight:700;font-size:13px;'
+            f'line-height:24px;text-align:center">{n}</span>'
+            f'<span style="font-size:16px;font-weight:700">{_html.escape(name)}'
+            f'</span></div>'
+            f'<div style="font-size:12.5px;color:{DIM};margin:5px 0 4px;'
+            f'line-height:1.4">{_html.escape(gist)}</div>{picture}'
+            f'<div style="font-size:11px;color:{colour};font-weight:600;'
+            f'margin-top:4px">{_html.escape(foot)}</div></div>')
+
+
+def grid(cells: list[str], *, caption: str = "") -> str:
+    """Cards in as many columns as fit — three on a lesson page, one on a phone."""
+    cap = (f'<div style="font-size:12px;color:{DIM};margin-top:8px;'
+           f'line-height:1.5">{caption}</div>' if caption else "")
+    return (f'<div style="display:grid;grid-template-columns:repeat(auto-fit,'
+            f'minmax(220px,1fr));gap:10px;margin:6px 0 2px;font-family:'
+            f'ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif">'
+            + "".join(cells) + f"</div>{cap}")

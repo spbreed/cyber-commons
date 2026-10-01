@@ -1,7 +1,7 @@
 # Track A1 — Build the Agent — From a Loop to a Running Platform
 
 **Function A · Getting Started — Building Agentic AI**  
-*Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Everything the other four functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
+*Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Each of the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — is a component built here. Everything the other five functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
 **Job titles:** Anyone who will work on or around agentic systems: engineers, AppSec, red teamers, SOC and GRC. It assumes you can read a Python function and have finished A0.0's setup. It assumes no security background at all.
 

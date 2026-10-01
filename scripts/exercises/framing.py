@@ -32,8 +32,8 @@ HOOKS: dict[str, str] = {
  "the other side of that: the same kind of AI, doing a job on your own "
  "computer, following written instructions you can read and change. None of it "
  "works until your computer knows which AI to ask. Setting that up is this "
- "whole lesson, and it is the only thing standing between you and the other "
- "148.",
+ "whole lesson, and it is the only thing standing between you and every other "
+ "lesson here.",
 
 "A0.1":
  "Most people arrive here from a link, land in the middle of a lesson about "
@@ -41,6 +41,13 @@ HOOKS: dict[str, str] = {
  "shape is unfamiliar. A lesson is built from a fixed set of sections in a "
  "fixed order, each carrying one kind of thing, and a page shows only the "
  "ones it has. Ten minutes here and the rest reads itself.",
+
+"A0.2":
+ "Alex's first design review for CyberTravels ran forty minutes before anyone "
+ "noticed that \"the harness\" meant the agent loop to Alex and the eval suite "
+ "to the security lead. Both had been right the whole time, about different "
+ "files. Nine words carry most of what gets said about agents, and each of them "
+ "is somebody's component and somebody else's attack surface.",
 
 "B1.0":
  "Two teams argue for an hour about whether an agent is safe, and discover at "
@@ -754,7 +761,7 @@ DIAGRAMS: dict[str, str] = {
    ONE LESSON PAGE, TOP TO BOTTOM
 
    +--------------------------------------------------------------+
-   | 0  risk / control    one sentence each. 146 of 148 pages.     |  opt
+   | 0  risk / control    one sentence each, on system pages.      |  opt
    +--------------------------------------------------------------+
    | 1  the hook          a scene in CyberTravels. NOT a summary.  |
    +--------------------------------------------------------------+
@@ -780,6 +787,34 @@ DIAGRAMS: dict[str, str] = {
    opt = shown only where the lesson has one. THIS page has no 0, 2 or 4:
    its subject is your machine, so there is no risk to a system, no number
    that says it worked, and no scene in CyberTravels.
+""",
+
+"A0.2": """
+   NINE WORDS, ONE AGENT - WHERE EACH SITS AROUND THE LOOP
+
+     memory & state    RAG          MCP           skills
+     what it recalls   what it      what it can   what it knows
+          |            retrieves    reach         how to do
+          +--------------+-------------+-------------+
+                                |
+                                v   everything here is context
+   +---------------------------------------------------------+
+   |  HARNESS   context -> model -> tool call -> result ->   |
+   |            (and round again until the task is done)     |
+   +---------------------------------------------------------+
+                 |                               |
+                 v the way out                   v beside it
+          GUARDRAILS                           EVALS
+          permissions, sandbox,                score what it did
+          human sign-off. The only             against what you
+          one of the nine that says no.        meant
+
+   several harnesses at once:
+     A2A           one agent hands work to another, across vendors
+     MULTI-AGENT   an orchestrator splits a job between specialists
+
+   every arrow into the harness is a way for text you did not write to
+   reach the model - which is why Function B has a lesson on each one
 """,
 
 "B1.0": """
@@ -2431,9 +2466,9 @@ BRIDGES: dict[str, dict[str, str]] = {
 
 "A0": {
  "gained": "You can run any lesson in the commons on either route, you know "
-           "what the one code cell in it is doing, and you can tell a fetch "
-           "failure from a procedure failure by reading one line of the error.",
- "gap": "You have run a procedure and you cannot yet say what it is for. The "
+           "which function to open first, and you have the nine words — "
+           "harness to multi-agent — that everything after this is built from.",
+ "gap": "You can name all nine and you have built none of them. The "
         "preflight proved the machinery works; it proved nothing about "
         "agentic systems, which is the only reason any of this exists.",
  # This said "Next → B1.0" for as long as A0 was followed by the old Function

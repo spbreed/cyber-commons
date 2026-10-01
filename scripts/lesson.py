@@ -32,8 +32,8 @@ step that needs a model; with none configured it exits 2 and says so.
     `OPENAI_BASE_URL`), which is what CI and anyone with no agent uses;
   * a **demo** audit is a deterministic worked example with no model and no
     contract, so the harness just runs it and its output is the result;
-  * the lessons that test the runtime itself (A0.0, A0.1) try the runtime first
-    and fall back to the agent, so a learner whose only model is their
+  * the lesson that tests the runtime itself (A0.0) tries the runtime first
+    and falls back to the agent, so a learner whose only model is their
     assistant is not stopped by a check about a route they are not using.
 
 A lesson that runs several audits takes `--audit 2`, `--audit 3`.
