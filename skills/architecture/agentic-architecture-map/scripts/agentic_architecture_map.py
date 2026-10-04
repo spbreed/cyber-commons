@@ -64,7 +64,11 @@ EDGES = [
     ("messaging",     "agent runtime", ["peer messages"]),
 ]
 
-KIND = {}
+# There was a `KIND = {}` here, serialised into the prompt as an empty object.
+# Nothing produced it and the contract does not ask for it: `boundary_crossing`
+# is derived from the trust levels in COMPONENTS, which is the point of giving
+# components a trust level at all. An empty name in a fixture is either missing
+# data or noise, and this one was noise.
 # ------------------------------------------------------------------------ run
 
 def task() -> str:
@@ -75,7 +79,7 @@ def task() -> str:
         for name, value in FIXTURE.items())
 
 
-FIXTURE = {"COMPONENTS": COMPONENTS, "EDGES": EDGES, "KIND": KIND}
+FIXTURE = {"COMPONENTS": COMPONENTS, "EDGES": EDGES}
 
 
 def main() -> int:

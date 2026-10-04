@@ -59,7 +59,38 @@ REPLAY = {
     "get_my_booking": "PRESENT|CWE-639|0.77|    require_owner(session, row[\"owner_id\"] if row else None)",
 }
 
-VERDICTS = {}
+# The two slices the replays above are answers to, copied from
+# cybertravels/tools/bookings_api.py. They are here because the contract asks
+# for `quote_verified`, and a quote cannot be verified against a file the model
+# was never shown — without these, `quote_verified: true` is the model agreeing
+# with itself.
+SLICES = {
+ "get_booking": (
+  'def get_booking(session, booking_id):\n'
+  '    """IDOR: the id comes from the caller and nothing compares it to the session."""\n'
+  '    cur = DB.cursor()\n'
+  '    cur.execute("SELECT * FROM bookings WHERE id = ?", (booking_id,))\n'
+  '    return cur.fetchone()\n'),
+ "get_my_booking": (
+  'def get_my_booking(session, booking_id):\n'
+  '    """The same read, authorised. This is the shape the others should have."""\n'
+  '    row = DB.cursor().execute(\n'
+  '        "SELECT * FROM bookings WHERE id = ?", (booking_id,)).fetchone()\n'
+  '    require_owner(session, row["owner_id"] if row else None)\n'
+  '    return row\n'),
+}
+
+# Ground truth, from cybertravels/LABELS.md rather than from a scanner — a key
+# derived from a scanner is a description of the scanner. `get_booking` is
+# labelled defect 1; `get_my_booking` is the authorised twin and must produce no
+# finding, which is the half of a SAST measurement everybody skips.
+#
+# This dict was empty for one release, so the replays above were scored against
+# nothing and the skill could not be wrong.
+VERDICTS = {
+ "get_booking":    {"truth": "MISSING", "cwe": "CWE-639", "labelled_as": "defect 1"},
+ "get_my_booking": {"truth": "PRESENT", "cwe": "CWE-639", "labelled_as": "control"},
+}
 
 # Step 3, as a check of the check. The rejection must be demonstrated on every
 # run, and it cannot be demonstrated by *waiting for the model to be wrong*: a
@@ -80,7 +111,8 @@ def task() -> str:
         for name, value in FIXTURE.items())
 
 
-FIXTURE = {"QUESTION": QUESTION, "REPLAY": REPLAY, "VERDICTS": VERDICTS, "FABRICATED": FABRICATED}
+FIXTURE = {"QUESTION": QUESTION, "SLICES": SLICES, "REPLAY": REPLAY,
+           "VERDICTS": VERDICTS, "FABRICATED": FABRICATED}
 
 
 def main() -> int:

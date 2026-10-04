@@ -40,7 +40,24 @@ REGISTRY = {"pricing-agent":  {"owner": "payments-team", "approved": True},
 
 DISCOVERED = ["pricing-agent", "billing-agent", "reporting-agent-v2"]
 
-DELEGATED = []
+# What the token service actually issued, against the registry above. Row 3 is
+# the gap: `reporting-agent-v2` is in DISCOVERED and not in REGISTRY, and it is
+# nonetheless holding a delegated token carrying Dana's `reports:write` — so an
+# unapproved, unowned agent is acting with a real person's authority.
+#
+# Row 4 is the second finding: the scope is wider than the user token that
+# produced it, which no exchange should ever mint. This list was empty for one
+# release, so the check compared the registry against nothing.
+DELEGATED = [
+ {"to": "pricing-agent", "sub": "dana@corp", "scope": ["reports:read"],
+  "exp": 1120, "registered": True},
+ {"to": "billing-agent", "sub": "dana@corp", "scope": ["reports:read"],
+  "exp": 1120, "registered": True},
+ {"to": "reporting-agent-v2", "sub": "dana@corp", "scope": ["reports:write"],
+  "exp": 1120, "registered": False},
+ {"to": "billing-agent", "sub": "dana@corp", "scope": ["reports:write", "db:admin"],
+  "exp": 9999, "registered": True},
+]
 
 USER_TOKEN = "obo:dana@corp:reports:read,reports:write"
 # ------------------------------------------------------------------------ run

@@ -41,7 +41,25 @@ USERS = {"dana":  {"scopes": {"reports:read"}},
 # the agent authenticates as itself, and needs the union of what any user needs
 AGENT_SVC = {"name": "agent-svc", "scopes": {"reports:read", "reports:write", "db:admin"}}
 
-AUDIT = []
+# What the resource server actually recorded. Every row's subject is the agent,
+# not the person who asked — so Dana's request and Priya's are the same row to
+# anyone reading this later, and `db:admin` was available to both because the
+# agent holds the union.
+#
+# Row 3 is the finding: Dana holds only reports:read, and a DROP ran under her
+# request. Nothing in the log says so, because nothing in the log says Dana.
+# This list was empty for one release and the check had no rows to check.
+AUDIT = [
+ {"ts": "09:12:01", "subject": "agent-svc", "on_behalf_of": None,
+  "scope_used": "reports:read", "action": "SELECT * FROM reports WHERE owner='dana'",
+  "asked_by": "dana"},
+ {"ts": "09:13:44", "subject": "agent-svc", "on_behalf_of": None,
+  "scope_used": "reports:write", "action": "UPDATE reports SET title=... WHERE id=14",
+  "asked_by": "priya"},
+ {"ts": "09:14:11", "subject": "agent-svc", "on_behalf_of": None,
+  "scope_used": "db:admin", "action": "DROP TABLE reports_archive",
+  "asked_by": "dana"},
+]
 # ------------------------------------------------------------------------ run
 
 def task() -> str:

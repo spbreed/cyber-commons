@@ -37,7 +37,33 @@ SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 # ---------------------------------------------------------------- the fixture
 SHARED_KEY = "svc-agent-7f3a1c"
 
-CALLS = []
+# Four of CyberTravels' agents, one key between them. Note what the resource
+# server can see: `key` and `src_ip` are identical on every row, so the only
+# thing distinguishing the refund from the searches is a `user_agent` string the
+# caller sets itself — which is a claim, not attribution.
+#
+# Row 4 is the question an incident asks: which agent issued the 5200 refund.
+# The honest answer from this data is "one of four", and that is the finding.
+# This list was empty for one release, so there was nothing to fail to attribute.
+CALLS = [
+ {"ts": "09:11:02", "key": SHARED_KEY, "src_ip": "10.0.4.7",
+  "user_agent": "cybertravels-agent/1.4", "tool": "knowledge.search",
+  "args": {"q": "refund policy"}},
+ {"ts": "09:12:40", "key": SHARED_KEY, "src_ip": "10.0.4.7",
+  "user_agent": "cybertravels-agent/1.4", "tool": "bookings.read",
+  "args": {"id": "BK-3120"}},
+ {"ts": "09:13:05", "key": SHARED_KEY, "src_ip": "10.0.4.7",
+  "user_agent": "cybertravels-agent/1.4", "tool": "vendor_docs.fetch",
+  "args": {"id": "settlement-terms.pdf"}},
+ {"ts": "09:14:19", "key": SHARED_KEY, "src_ip": "10.0.4.7",
+  "user_agent": "cybertravels-agent/1.4", "tool": "payments.refund",
+  "args": {"id": "BK-3120", "amount": 5200}},
+]
+
+# The four processes that hold the key. Any of them could have made any row
+# above, which is what makes the attribution question unanswerable rather than
+# merely slow.
+HOLDERS = ["agent/workflow", "agent/rag-advisor", "agent/coding", "agent/file"]
 # ------------------------------------------------------------------------ run
 
 def task() -> str:
@@ -48,7 +74,7 @@ def task() -> str:
         for name, value in FIXTURE.items())
 
 
-FIXTURE = {"SHARED_KEY": SHARED_KEY, "CALLS": CALLS}
+FIXTURE = {"SHARED_KEY": SHARED_KEY, "CALLS": CALLS, "HOLDERS": HOLDERS}
 
 
 def main() -> int:

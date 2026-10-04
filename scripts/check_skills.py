@@ -92,6 +92,41 @@ REQUIRED_SECTIONS = [
 ]
 
 
+# Fifteen skills shipped a fixture name bound to `[]` or `{}` and handed it to
+# the model as the thing to audit. `attribution-ledger-check` asked the four
+# investigation questions of an empty ledger; `agent-telemetry-hunt` hunted
+# through no runs; `detection-rule-synthesis` measured false positives against no
+# benign traffic, so every candidate rule scored 0.0 and shipped. Every one of
+# them ran, answered, and held its output contract — the model wrote a
+# well-shaped report about nothing, which is the same undetectable failure as a
+# canned answer standing in for a model's.
+#
+# Reported by students, not by any of the twenty-four gates, because shape was
+# checked and substance was not. The check is deliberately shallow: it reads the
+# literal bound to each FIXTURE name in the source rather than importing the
+# module, because importing a skill script runs its backend announcement.
+def empty_fixture_names(skill_dir: pathlib.Path) -> list[str]:
+    """FIXTURE names bound to an empty collection, which audit nothing."""
+    out = []
+    for script in sorted(skill_dir.glob("scripts/*.py")):
+        src = script.read_text(encoding="utf8", errors="replace")
+        m = re.search(r"^FIXTURE\s*(?::[^=]*)?=\s*\{(.*?)\}", src, re.S | re.M)
+        if not m:
+            continue
+        # Only the names actually serialised into the prompt. A module-level
+        # empty dict that never reaches FIXTURE is a scratch variable, not a
+        # fixture, and failing it would teach people to delete the gate.
+        shown = set(re.findall(r'"([^"]+)"\s*:\s*([A-Za-z_][A-Za-z0-9_]*)', m.group(1)))
+        for _, var in shown:
+            # `re.M` and a literal on one line: a fixture is committed input, so
+            # it is a literal in the source by construction.
+            lit = re.search(rf"^{re.escape(var)}\s*(?::[^=]*)?=\s*(\[\s*\]|\{{\s*\}}|\(\s*\))\s*(?:#.*)?$",
+                            src, re.M)
+            if lit:
+                out.append(f"{var} (in {script.name})")
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -149,6 +184,10 @@ def main() -> int:
         except Exception as e:                                  # noqa: BLE001
             problems.append(f"{ref}: output contract — {e}")
             has_contract = False
+        for bad in empty_fixture_names(p.parent):
+            problems.append(f"{ref}: {bad} is in FIXTURE and is empty — the "
+                            f"model is handed it as the thing to audit")
+
         skills[meta["name"]] = meta
         print(f"  ok  {meta['name']:26s} {len(meta['description'].split()):3d}w  "
               f"tools={len(meta.get('allowed-tools', [])):d}  "

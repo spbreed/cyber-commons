@@ -35,7 +35,48 @@ from cyber_commons_skill_runtime import (  # noqa: E402
 SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
-GRANTS = {}
+# The authorisation graph for CyberTravels' four agents. `required` is the
+# denominator from the code-surface analyzer — what the declared tools genuinely
+# need — and `granted` is what the deployment actually handed out. The gap
+# between the two columns is the whole report.
+#
+# `expires: None` is standing privilege: a grant that is permanent rather than
+# issued per task. It is the row step 5 exists to flag, and three of these have
+# it. This dict was empty for one release, so the analyzer diffed nothing
+# against nothing and said so in the right shape.
+GRANTS = {
+ "spiffe://cybertravels.local/agent/workflow": {
+   "granted":  ["bookings:read", "bookings:write", "payments:refund",
+                "payments:write", "invoices:write", "db:admin"],
+   "required": ["bookings:read", "bookings:write", "payments:refund"],
+   "expires":  None},
+
+ "spiffe://cybertravels.local/agent/rag-advisor": {
+   # Reads documents. Was given booking writes because it shares a role with the
+   # workflow agent — the commonest shape of this finding in a real estate.
+   "granted":  ["knowledge:search", "bookings:read", "bookings:write"],
+   "required": ["knowledge:search"],
+   "expires":  None},
+
+ "spiffe://cybertravels.local/agent/coding": {
+   "granted":  ["repo:read", "repo:write"],
+   "required": ["repo:read", "repo:write"],
+   "expires":  1400},
+
+ "spiffe://cybertravels.local/agent/file": {
+   "granted":  ["vendor-docs:read"],
+   "required": ["vendor-docs:read"],
+   "expires":  None},
+}
+
+# Step 3 — stored provider scopes, which are wider than the tool needs because
+# the consent screen offered a bundle and somebody clicked it.
+OAUTH = [
+ {"provider": "stripe", "granted_scope": "charges:write,refunds:write,payouts:write",
+  "used_by": "agent/workflow"},
+ {"provider": "google-drive", "granted_scope": "drive.readonly,drive.file",
+  "used_by": "agent/file"},
+]
 
 CLOCK = {"now": 1000}
 # ------------------------------------------------------------------------ run
@@ -48,7 +89,7 @@ def task() -> str:
         for name, value in FIXTURE.items())
 
 
-FIXTURE = {"GRANTS": GRANTS, "CLOCK": CLOCK}
+FIXTURE = {"GRANTS": GRANTS, "OAUTH": OAUTH, "CLOCK": CLOCK}
 
 
 def main() -> int:

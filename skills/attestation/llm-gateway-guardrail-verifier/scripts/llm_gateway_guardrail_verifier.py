@@ -43,7 +43,33 @@ POLICY = {("reports-agent", "run_query", "table:reports"): {"SELECT"}}
 
 EGRESS_ALLOW = {"reports-db.corp.example"}
 
-AUDIT = []
+# What the gateway recorded for the calls it has already handled. The verifier's
+# job is to check that each decision was made at the gateway and not merely
+# noted by it, so every row carries the component that decided — and row 4 is the
+# finding: `decided_by: "agent"` means the agent screened itself.
+#
+# Row 5 is the second one: an allowed egress to a destination not in
+# EGRESS_ALLOW, logged as permitted. A gateway that records a decision it did not
+# make is a description, not a control.
+#
+# This list was empty for one release, so there were no decisions to verify.
+AUDIT = [
+ {"seq": 1, "principal": "dana@corp", "tool": "run_query", "verb": "SELECT",
+  "resource": "table:reports", "destination": "reports-db.corp.example",
+  "decision": "allow", "decided_by": "gateway", "policy_hit": "reports:SELECT"},
+ {"seq": 2, "principal": "dana@corp", "tool": "run_query", "verb": "DELETE",
+  "resource": "table:reports", "destination": "reports-db.corp.example",
+  "decision": "deny", "decided_by": "gateway", "policy_hit": "no rule for DELETE"},
+ {"seq": 3, "principal": "dana@corp", "tool": "run_query", "verb": "SELECT",
+  "resource": "table:payroll", "destination": "reports-db.corp.example",
+  "decision": "deny", "decided_by": "gateway", "policy_hit": "resource not in policy"},
+ {"seq": 4, "principal": "dana@corp", "tool": "run_query", "verb": "SELECT",
+  "resource": "table:reports", "destination": "reports-db.corp.example",
+  "decision": "allow", "decided_by": "agent", "policy_hit": None},
+ {"seq": 5, "principal": "dana@corp", "tool": "send_email", "verb": "POST",
+  "resource": "mail", "destination": "archive@evil.example",
+  "decision": "allow", "decided_by": "gateway", "policy_hit": None},
+]
 
 BASE = {"identity": "spiffe://corp/reports-agent", "agent": "reports-agent",
         "principal": "dana@corp", "tool": "run_query", "resource": "table:reports",

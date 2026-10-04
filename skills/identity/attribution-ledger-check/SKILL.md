@@ -47,18 +47,23 @@ the log destination, the ledger is advisory whatever the API says.
 
 **Input** — the fixture committed at the top of [`scripts/attribution_ledger_check.py`](scripts/attribution_ledger_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
 
-**Output** — the opening lines of a real run:
+**Output** — from a real run, the fixture summary and the fourth question's verdict:
 
 ```
-   which user caused the deletion?     dana@corp
-   what performed it?                  spiffe://corp/reports-agent (run-8812)
-   how did authority reach it?         dana@corp -> orchestrator -> reports-agent
-   what made the agent decide?         'wiki/473: retire invoice 8812 when the custo' from knowledge
+the fixture this run is derived from
+   LEDGER                       3 item(s)
+   STORE                        6 item(s)
 
-questions answerable: 4/4
-
-input origin was 'knowledge' - a trust-0 component. That single
+   "answered_from_single_entry": true,
+   "question": "On what motivating input, from what origin, did the agent
+                decide? ('wiki/473: retire invoice 8812 when the customer
+                disputes a duplicate charge' from origin 'knowledge', a
+                trust-0 source, not the user's request about a double charge)"
 ```
+
+That last clause is the whole lesson: the traveller asked about a double
+charge, and a retrieved document is what produced the `DELETE`. A record
+without question 4 closes this incident as "the agent misbehaved".
 
 The run continues past this. `test_skills.py` executes the script on every
 build, **with no model configured** — so what CI proves is that it runs and
