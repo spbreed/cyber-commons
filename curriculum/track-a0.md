@@ -43,10 +43,10 @@ python3 scripts/lesson.py A0.0
 
 ### A0.1 — Nine words for an agent — harness to multi-agent, and where each is built
 
-- **Lab** — Find all nine in the CyberTravels tree — a file for each — and count how many you placed.
+- **Lab** — Find all nine in the finished CyberTravels tree (checkpoint A2.5) — a file for each — and count how many you placed.
 - **Tools** — `MCP`, `A2A`, `Agent Skills`
 
-**Run it** — Find all nine in the CyberTravels tree — a file for each — and count how many you placed.
+**Run it** — Find all nine in the finished CyberTravels tree (checkpoint A2.5) — a file for each — and count how many you placed.
 
 ```bash
 # --- 1 · the repository. master is the trunk. ---

@@ -648,8 +648,16 @@ def lesson_page(entry, prev, nxt) -> str:
                      f'↗ Open this skill in the repository</a>'
                      '</div>')
     else:
-        parts.append('<p class="sub runnote">This lesson is a reading lesson — '
-                     'diagrams and prose, no code to run.</p>')
+        # It said "no code to run" and the run block three screens down then
+        # offered three ways to run it, including `python3 scripts/lesson.py`.
+        # A reader who notices that trusts the rest of the page less. What is
+        # actually true is narrower: this lesson adds no skill of its own, and
+        # the ways below still work on the tree it points at.
+        parts.append('<p class="sub runnote">This is a reading lesson — '
+                     'diagrams and prose, and no skill of its own to run. '
+                     'The ways to do it at the foot of the page still apply: '
+                     'they fetch the code as it stands here and show what '
+                     'changed, which needs no model.</p>')
 
     parts.append(lesson_body(entry))
 

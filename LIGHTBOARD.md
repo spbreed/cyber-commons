@@ -153,7 +153,7 @@ Next up: A0.1, Nine words for an agent — harness to multi-agent, and where eac
 
 ### A0.1 · Nine words for an agent — harness to multi-agent, and where each is built
 
-Chapter A0 · lesson 2 of 2 · reading lesson · 390 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · reading lesson · 421 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **① Open**
 
@@ -189,7 +189,7 @@ Of the nine, how many you can point at in the tree — a file, not a definition.
 
 **⑤ Hand it over**
 
-Open cybertravels/ and find all nine without this table: a file, and ideally the line, for each word. Count how many you placed.
+Find all nine in the tree without looking at the table above: a file, and ideally the line, for each word. Get the finished application first — not the copy this lesson's run block writes: ``bash python3 scripts/checkpoint.py --at A2.5 --out work/finished ` That matters, and it is the reason this is spelled out.
 
 That closes chapter A0. You can run any lesson in the commons on either route, you know which function to open first, and you have the nine words — harness to multi-agent — that everything after this is built from.
 

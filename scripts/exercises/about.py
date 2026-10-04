@@ -22,7 +22,11 @@ ABOUT: dict[str, str] = {
 
 **Why a security engineer needs it.** Each of the nine is a component to one person and an attack surface to another, and a review where two people mean different things by "harness" argues about two different files. The control it builds is: a shared vocabulary tied to real code, so a finding names a component rather than a word.
 
-This is a **reading** lesson. It has no code and takes fifteen minutes.
+**Nothing here gets built.** Fifteen minutes of reading, and then the exercise
+is to find the nine words in the running application rather than to write
+anything. It said "no code" for a while and then printed three ways to run
+code at the foot of the page, which is the kind of contradiction a reader
+trusts the page less for.
 """,
 
 "B1.0": """

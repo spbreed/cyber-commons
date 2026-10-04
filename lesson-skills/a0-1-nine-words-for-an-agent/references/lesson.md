@@ -45,4 +45,12 @@ Every one of the nine is a real file in CyberTravels by the end of Function A, a
 
 ## Your turn
 
-Open `cybertravels/` and find all nine without this table: a file, and ideally the line, for each word. Count how many you placed. The ones you could not place are the lessons in Function A to read most carefully, and the count is worth taking again at the end of A2.5, when every one of them should be something you wrote.
+Find all nine in the tree without looking at the table above: a file, and ideally the line, for each word. Get the finished application first — **not** the copy this lesson's run block writes:
+
+```bash
+python3 scripts/checkpoint.py --at A2.5 --out work/finished
+```
+
+That matters, and it is the reason this is spelled out. The tree as it stands at A0.1 does not contain `runtime.py`, `memory.py`, `identity.py`, `observability.py`, `mcp/internal_server.py` or `a2a/protocol.py` — six of the nine words have no file yet, because you have not built them. Asking for them there is asking for something that is not wrong so much as absent, and the first version of this exercise did exactly that.
+
+Count how many you placed. The ones you could not are the Function A lessons to read most carefully, and the count is worth taking again at the end of A2.5 — by then every one of them is something you wrote.

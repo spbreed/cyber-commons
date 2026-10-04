@@ -55,7 +55,7 @@
               "title": "Nine words for an agent — harness to multi-agent, and where each is built",
               "kind": "introduction",
               "summary": "The nine terms most conversations about agents turn on — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — drawn on one page, placed in the CyberTravels file where Function A builds each one, and paired with the lesson that attacks it. MCP, A2A and Agent Skills are open standards, so what you build on them is not tied to one vendor.",
-              "lab": "Find all nine in the CyberTravels tree — a file for each — and count how many you placed.",
+              "lab": "Find all nine in the finished CyberTravels tree (checkpoint A2.5) — a file for each — and count how many you placed.",
               "tools": [
                 "MCP",
                 "A2A",
