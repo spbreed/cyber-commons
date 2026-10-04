@@ -48,7 +48,7 @@ METRICS: dict[str, list[tuple[str, str]]] = {
          ("hop at which a cycle stops", "hop number; a ceiling you choose, not one you discover")],
 "A1.7": [("approvals per reviewer per hour", "rate against what one reviewer can actually consider"),
          ("runs that hit a ceiling", "share of runs")],
-"A2.0": [("investigation questions the current record cannot answer", "count out of four; expect most of them before you build")],
+"A2.0": [("investigation questions the current record cannot answer", "count out of three — which human, what motivated it, which hop; expect all three before you build")],
 "A2.1": [("spans per run carrying the trace id", "share of spans; target 1.00"),
          ("credentials appearing in a span", "count; target zero, and grep for it rather than believe it")],
 "A2.2": [("investigation questions the audit rows answer", "count out of four; three is common and the fourth is the finding")],

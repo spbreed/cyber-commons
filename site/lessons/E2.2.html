@@ -6,125 +6,33 @@
    +-------------------+         +----------------------+
 
    detect on SHAPE, not volume: new resource classes, new tool
-   sequences, a spike in distinct destinations</pre><p>This is the new work, and it starts by discarding baselines that have served the
-SOC well for twenty years.</p>
-<p>Human behavioural detection assumes irregularity, working hours, and a rate
-ceiling set by typing speed. An agent violates all three <em>while behaving
-correctly</em>:</p>
-<table>
-<thead>
-<tr>
-<th>Classic signal</th>
-<th>For a human</th>
-<th>For an agent</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>two countries in an hour</td>
-<td>incident</td>
-<td>routine (multi-region)</td>
-</tr>
-<tr>
-<td>300 file reads a minute</td>
-<td>incident</td>
-<td>idle</td>
-</tr>
-<tr>
-<td>activity at 03:00</td>
-<td>suspicious</td>
-<td>meaningless</td>
-</tr>
-<tr>
-<td>the same action 500 times</td>
-<td>suspicious</td>
-<td>a stuck loop — but not malicious</td>
-</tr>
-</tbody>
-</table>
-<p>Applying human baselines to agents produces an alert on every session, so the
-rule gets tuned down, and then it never fires again — including when something
-is genuinely wrong.</p>
-<p>The signals that <em>do</em> work for agents are about <strong>change</strong>: a tool it has never
-used, a mix that has shifted, a scope exercised that was never needed before.</p>
+   sequences, a spike in distinct destinations</pre><p>This is the new work, and it starts by discarding baselines that have served the SOC well for twenty years.</p>
+<p>Human behavioural detection assumes irregularity, working hours, and a rate ceiling set by typing speed. An agent violates all three <em>while behaving correctly</em>:</p>
+<p>| Classic signal | For a human | For an agent | |---|---|---| | two countries in an hour | incident | routine (multi-region) | | 300 file reads a minute | incident | idle | | activity at 03:00 | suspicious | meaningless | | the same action 500 times | suspicious | a stuck loop — but not malicious |</p>
+<p>Applying human baselines to agents produces an alert on every session, so the rule gets tuned down, and then it never fires again — including when something is genuinely wrong.</p>
+<p>The signals that <em>do</em> work for agents are about <strong>change</strong>: a tool it has never used, a mix that has shifted, a scope exercised that was never needed before.</p>
 <h3>Where each one sits in MITRE</h3>
-<p>A rule with no technique against it cannot be gap-analysed, cannot be handed to
-another team, and cannot be argued about with an auditor. Two matrices are
-needed and they are not interchangeable: <strong>ATT&amp;CK</strong> describes what the actor did
-to your estate, <strong>ATLAS</strong> describes what was done to the model.</p>
-<table>
-<thead>
-<tr>
-<th>agent signal</th>
-<th>ATT&amp;CK</th>
-<th>ATLAS tactic</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>a tool it has never used, on inherited credentials</td>
-<td>T1078 Valid Accounts</td>
-<td>ML Attack Staging</td>
-</tr>
-<tr>
-<td>bulk reads across a repository it has no task in</td>
-<td>T1213 Data from Information Repositories</td>
-<td>Exfiltration</td>
-</tr>
-<tr>
-<td>output posted to an allowed SaaS domain</td>
-<td>T1567 Exfiltration Over Web Service</td>
-<td>Exfiltration</td>
-</tr>
-<tr>
-<td>shell spawned from a model-produced string</td>
-<td>T1059 Command and Scripting Interpreter</td>
-<td>ML Attack Staging</td>
-</tr>
-<tr>
-<td>instruction arriving in retrieved content</td>
-<td>—</td>
-<td>Initial Access · AML.T0051</td>
-</tr>
-</tbody>
-</table>
-<p>Read the last row twice. Indirect prompt injection has <strong>no ATT&amp;CK technique</strong>,
-because ATT&amp;CK has no notion of an instruction channel that is also a data
-channel. Mapping it to something adjacent to make the coverage chart look
-complete is the single most common way an agent detection programme lies to
-itself.</p>
-<p>ATLAS technique identifiers move faster than ATT&amp;CK's, so re-check any specific
-<code>AML.T####</code> against the live matrix before you put it in a report.</p><blockquote class="anchor">**Anchor → E1.0.** This is the detect interval for the agent itself, and the classic baselines leave it at infinity. Two countries in an hour is an incident for a person and multi-region routine for an agent; three hundred file reads a minute is an incident for a person and idle for an agent; 03:00 is suspicious for a person and meaningless for an agent.</blockquote><div class="how"><h2>2 · Demo — classic baselines against agent traffic</h2><h2>3 · The control — detect change, not activity</h2><h2>4 · Verify — the alert text an analyst can act on</h2>
-<p>"Anomaly detected" fails both tests: it does not say what changed, and it does not say what to do.</p><h2>5 · The procedure, as a skill</h2>
-<p>All three classic rules fire on CyberTravels' patch agent doing exactly its job, and only the rate rule fires on the human. The skill runs both, then measures drift from a signed-off baseline week by week — naming the new tool rather than reporting a distance.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/agent-aware-rule-review/SKILL.md" target="_blank" rel="noopener"><code>skills/detection/agent-aware-rule-review/SKILL.md</code></a></p><pre class="front"><code>name: agent-aware-rule-review
+<p>A rule with no technique against it cannot be gap-analysed, cannot be handed to another team, and cannot be argued about with an auditor. Two matrices are needed and they are not interchangeable: <strong>ATT&amp;CK</strong> describes what the actor did to your estate, <strong>ATLAS</strong> describes what was done to the model.</p>
+<p>| agent signal | ATT&amp;CK | ATLAS tactic | |---|---|---| | a tool it has never used, on inherited credentials | T1078 Valid Accounts | ML Attack Staging | | bulk reads across a repository it has no task in | T1213 Data from Information Repositories | Exfiltration | | output posted to an allowed SaaS domain | T1567 Exfiltration Over Web Service | Exfiltration | | shell spawned from a model-produced string | T1059 Command and Scripting Interpreter | ML Attack Staging | | instruction arriving in retrieved content | — | Initial Access · AML.T0051 |</p>
+<p>Read the last row twice. Indirect prompt injection has <strong>no ATT&amp;CK technique</strong>, because ATT&amp;CK has no notion of an instruction channel that is also a data channel. Mapping it to something adjacent to make the coverage chart look complete is the single most common way an agent detection programme lies to itself.</p>
+<p>ATLAS technique identifiers move faster than ATT&amp;CK&#x27;s, so re-check any specific <code>AML.T####</code> against the live matrix before you put it in a report.</p><blockquote class="anchor">**Anchor → E1.0.** This is the detect interval for the agent itself, and the classic baselines leave it at infinity. Two countries in an hour is an incident for a person and multi-region routine for an agent; three hundred file reads a minute is an incident for a person and idle for an agent; 03:00 is suspicious for a person and meaningless for an agent.</blockquote><div class="how"><h2>2 · Demo — classic baselines against agent traffic</h2><h2>3 · The control — detect change, not activity</h2><h2>4 · Verify — the alert text an analyst can act on</h2>
+<p>&quot;Anomaly detected&quot; fails both tests: it does not say what changed, and it does not say what to do.</p><h2>5 · The procedure, as a skill</h2>
+<p>All three classic rules fire on CyberTravels&#x27; patch agent doing exactly its job, and only the rate rule fires on the human. The skill runs both, then measures drift from a signed-off baseline week by week — naming the new tool rather than reporting a distance.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/agent-aware-rule-review/SKILL.md" target="_blank" rel="noopener"><code>skills/detection/agent-aware-rule-review/SKILL.md</code></a></p><pre class="front"><code>name: agent-aware-rule-review
 description: &gt;-
   Run existing detection rules against an agent doing its job to find which fire
   on legitimate work, and measure behavioural drift from a signed-off baseline
   week by week. Use when agents enter an estate whose detection content predates
   them.
 allowed-tools: Read, Grep, Glob</code></pre><h1>Every classic rule fires on an agent working normally</h1>
-<p>Detection content written for humans classifies agent behaviour as an incident:
-the volume rule, the off-hours rule, the breadth-of-access rule. Turning them
-off loses coverage; leaving them on trains the analyst to ignore them. The
-answer is a per-population baseline and a drift measure against it.</p>
+<p>Detection content written for humans classifies agent behaviour as an incident: the volume rule, the off-hours rule, the breadth-of-access rule. Turning them off loses coverage; leaving them on trains the analyst to ignore them. The answer is a per-population baseline and a drift measure against it.</p>
 <h2>When to use this</h2>
-<p>Whenever agents are introduced into an estate with existing detection content,
-and at each model or manifest upgrade afterwards.</p>
+<p>Whenever agents are introduced into an estate with existing detection content, and at each model or manifest upgrade afterwards.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Run each classic rule against a clean agent run</strong> and against a human's
-day. Record which fire on which. Rules that fire on the agent and not the human
-are the ones needing a population.</p>
-<p><strong>2 — Sign off a baseline for each agent.</strong> Tools used, resources touched, rate,
-hours. Signed off means somebody agreed it — a baseline nobody approved is a
-measurement, not a control.</p>
-<p><strong>3 — Compare each subsequent week against the baseline.</strong> Report a drift figure
-and, more usefully, the <em>new</em> items: a tool that was not in the baseline is the
-signal, and it is legible in a way a distance number is not.</p>
-<p><strong>4 — Set a tolerance and say what crossing it does.</strong> Drift within tolerance is
-noise; beyond it is a review, and the review is of the change that caused it —
-usually a model upgrade or a manifest edit.</p>
-<p><strong>5 — Write the alert text for a human.</strong> "patch-agent drift 0.35, new tools:
-run_shell" is actionable. A distance metric on its own gets closed.</p>
+<p><strong>1 — Run each classic rule against a clean agent run</strong> and against a human&#x27;s day. Record which fire on which. Rules that fire on the agent and not the human are the ones needing a population.</p>
+<p><strong>2 — Sign off a baseline for each agent.</strong> Tools used, resources touched, rate, hours. Signed off means somebody agreed it — a baseline nobody approved is a measurement, not a control.</p>
+<p><strong>3 — Compare each subsequent week against the baseline.</strong> Report a drift figure and, more usefully, the <em>new</em> items: a tool that was not in the baseline is the signal, and it is legible in a way a distance number is not.</p>
+<p><strong>4 — Set a tolerance and say what crossing it does.</strong> Drift within tolerance is noise; beyond it is a review, and the review is of the change that caused it — usually a model upgrade or a manifest edit.</p>
+<p><strong>5 — Write the alert text for a human.</strong> &quot;patch-agent drift 0.35, new tools: run_shell&quot; is actionable. A distance metric on its own gets closed.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/agent-aware-rule-review/scripts/agent_aware_rule_review.py" target="_blank" rel="noopener"><code>scripts/agent_aware_rule_review.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
@@ -135,27 +43,16 @@ activity outside 09:00-18:00      True            True
 same action &gt; 100 times           True            False
 
 All three fire on an agent doing exactly its job. Deployed as-is, they
-produce continuous noise and are disabled within a week.
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+produce continuous noise and are disabled within a week.</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;classic_rules&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;fires_on_agent&quot;: true, &quot;fires_on_human&quot;: false}],
   &quot;baseline&quot;: {&quot;agent&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;resources&quot;: [&quot;str&quot;], &quot;signed_off&quot;: true},
   &quot;weeks&quot;: [{&quot;week&quot;: 0, &quot;drift&quot;: 0.0, &quot;new_tools&quot;: [&quot;str&quot;], &quot;within_tolerance&quot;: true}],
   &quot;tolerance&quot;: 0.0,
   &quot;alert_text&quot;: &quot;str&quot;
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Muting the classic rules.</strong> You lose them for humans too.</li>
-<li><strong>A baseline nobody signed off.</strong> Nothing to appeal to when it drifts.</li>
-<li><strong>Alerting on the distance only.</strong> Name the new tool.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons E2.2</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>e2-2-detections-whose-subject-is-the-agent</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons E2.2</code></td><td>type <code>/e2-2-detections-whose-subject-is-the-agent</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons E2.2</code></td><td>type <code>/e2-2-detections-whose-subject-is-the-agent</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons E2.2</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons E2.2</code></td><td>type <code>$e2-2-detections-whose-subject-is-the-agent</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py E2.2</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at E2.2 --out work/cybertravels
+<ul><li><strong>Muting the classic rules.</strong> You lose them for humans too.</li><li><strong>A baseline nobody signed off.</strong> Nothing to appeal to when it drifts.</li><li><strong>Alerting on the distance only.</strong> Name the new tool.</li></ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons E2.2</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>e2-2-detections-whose-subject-is-the-agent</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons E2.2</code></td><td>type <code>/e2-2-detections-whose-subject-is-the-agent</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons E2.2</code></td><td>type <code>/e2-2-detections-whose-subject-is-the-agent</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons E2.2</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons E2.2</code></td><td>type <code>$e2-2-detections-whose-subject-is-the-agent</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py E2.2</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at E2.2 --out work/cybertravels
 python3 scripts/checkpoint.py --at E2.2 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>All three classic rules fire on an agent doing its job and only the rate rule fires on the human. Drift is within tolerance at week 1, significant at week 4 with <code>write_file</code> and <code>repo:write</code> new, and larger at week 8 with <code>run_shell</code> and an <code>exec</code> scope. The alert text names what changed, why it matters and what to do.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take one human-baseline rule in your SIEM and check how it behaves against a service account. If it fires nightly, it is already tuned off for that actor — which means you have no detection there at all.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Falco</span><span>Sigma</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/detection/agent-aware-rule-review</code></p></div><div class="pager"><a href="E2.1.html"><span class="k">← Previous</span><span class="t">E2.1 · The detection data lake — where agent telemetry lands</span></a><a class="next" href="E2.3.html"><span class="k">Next →</span><span class="t">E2.3 · Detections whose subject is the agent platform</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -5,33 +5,21 @@
    approval is    control  friction  a log
 
    the control does not fail loudly. it degrades into a click.</pre><p><strong>OWASP T10 — Overwhelming Human-in-the-Loop.</strong></p>
-<p>Human approval is the control everyone reaches for first. It is placed at the
-tool call — the right place — and it is genuinely strong for rare, consequential
-decisions.</p>
+<p>Human approval is the control everyone reaches for first. It is placed at the tool call — the right place — and it is genuinely strong for rare, consequential decisions.</p>
 <p>Then the system scales, and the arithmetic turns on it.</p>
-<p>An agent generates approval requests at machine speed. A human reads them at
-human speed. When the queue exceeds what a person can actually consider, the
-behaviour does not degrade gracefully into "slower but careful". It degrades
-into <strong>approving without reading</strong>, because the alternative is being the reason
-nothing shipped.</p>
-<p>The failure is invisible from inside the system. Every approval is recorded. The
-audit trail shows a human decision on every action. The control appears to be
-operating at 100%, and the thing being measured — that a human clicked — is not
-the thing anyone cared about.</p>
-<p>There is a second-order effect worth naming: an attacker who wants one approval
-can <em>manufacture the volume that makes it likely</em>. Generate two hundred benign
-requests, put the one that matters at position 173, and the control has been
-defeated by arithmetic rather than by cleverness.</p>
-<p>Approval is a control for irreversible actions. Used as a general-purpose gate
-it becomes a click, and the risk register still counts it.</p><div class="how"><blockquote>
-<p><strong>Where this lands on the reference architecture.</strong></p>
-<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
-                               |              |
-                         messaging        tools / mcp
-                               |              |
-                      knowledge / memory   egress
-           identity + policy wrap every call · observability records it</code></p>
-</blockquote>
+<p>An agent generates approval requests at machine speed. A human reads them at human speed. When the queue exceeds what a person can actually consider, the behaviour does not degrade gracefully into &quot;slower but careful&quot;. It degrades into <strong>approving without reading</strong>, because the alternative is being the reason nothing shipped.</p>
+<p>The failure is invisible from inside the system. Every approval is recorded. The audit trail shows a human decision on every action. The control appears to be operating at 100%, and the thing being measured — that a human clicked — is not the thing anyone cared about.</p>
+<p>There is a second-order effect worth naming: an attacker who wants one approval can <em>manufacture the volume that makes it likely</em>. Generate two hundred benign requests, put the one that matters at position 173, and the control has been defeated by arithmetic rather than by cleverness.</p>
+<p>Approval is a control for irreversible actions. Used as a general-purpose gate it becomes a click, and the risk register still counts it.</p><div class="how"><blockquote><strong>Where this lands on the reference architecture.</strong></blockquote>
+<blockquote></blockquote>
+<blockquote>```</blockquote>
+<blockquote>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model</blockquote>
+<blockquote>|              |</blockquote>
+<blockquote>messaging        tools / mcp</blockquote>
+<blockquote>|              |</blockquote>
+<blockquote>knowledge / memory   egress</blockquote>
+<blockquote>identity + policy wrap every call · observability records it</blockquote>
+<blockquote>```</blockquote>
 <h2>2 · The risk, realised</h2>
 <p>Approval quality against volume, and the position an attacker chooses.</p><h2>3 · The check, as a skill</h2>
 <p>Approval coverage at CyberTravels reads 100% at every volume, because coverage measures whether a human was asked. The skill models what reading does instead, and finds the volume at which the gate stops being one.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/approval-queue-saturation-model/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/approval-queue-saturation-model/SKILL.md</code></a></p><pre class="front"><code>name: approval-queue-saturation-model
@@ -41,27 +29,15 @@ description: &gt;-
   stops working. Use when reviewing human-in-the-loop design, approval fatigue,
   or a gate that has never been measured.
 allowed-tools: Read, Grep, Glob</code></pre><h1>Coverage stays at 100%; reading does not</h1>
-<p>An approval gate reports the same number at every volume, because coverage
-measures whether a human was <em>asked</em>. What degrades is whether they read it,
-and an attacker who can choose position only has to generate enough requests to
-sit behind.</p>
+<p>An approval gate reports the same number at every volume, because coverage measures whether a human was <em>asked</em>. What degrades is whether they read it, and an attacker who can choose position only has to generate enough requests to sit behind.</p>
 <h2>When to use this</h2>
-<p>Any control whose enforcement is a person: approvals, exception reviews, alert
-triage sign-off, change advisory.</p>
+<p>Any control whose enforcement is a person: approvals, exception reviews, alert triage sign-off, change advisory.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Measure current volume,</strong> per reviewer per day. Not the design volume —
-the observed one, at peak rather than mean.</p>
-<p><strong>2 — Establish the reading budget.</strong> How many items can one reviewer consider
-properly in a shift? Ask them; the number is usually between 20 and 30 and it
-is always far below the queue.</p>
-<p><strong>3 — Model detection against position.</strong> Place a malicious item at various
-depths and compute the probability it is actually read. The curve falls off a
-cliff at the reading budget, not gradually.</p>
-<p><strong>4 — Note who controls position.</strong> If a requester can generate the items in
-front of theirs, depth is attacker-chosen and the average case is irrelevant.</p>
-<p><strong>5 — Report the two numbers that change the design.</strong> Items per reviewer per
-day, and the reading budget. The gap between them is the finding, and it points
-at routing by reversibility rather than at hiring.</p>
+<p><strong>1 — Measure current volume,</strong> per reviewer per day. Not the design volume — the observed one, at peak rather than mean.</p>
+<p><strong>2 — Establish the reading budget.</strong> How many items can one reviewer consider properly in a shift? Ask them; the number is usually between 20 and 30 and it is always far below the queue.</p>
+<p><strong>3 — Model detection against position.</strong> Place a malicious item at various depths and compute the probability it is actually read. The curve falls off a cliff at the reading budget, not gradually.</p>
+<p><strong>4 — Note who controls position.</strong> If a requester can generate the items in front of theirs, depth is attacker-chosen and the average case is irrelevant.</p>
+<p><strong>5 — Report the two numbers that change the design.</strong> Items per reviewer per day, and the reading budget. The gap between them is the finding, and it points at routing by reversibility rather than at hiring.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/approval-queue-saturation-model/scripts/approval_queue_saturation_model.py" target="_blank" rel="noopener"><code>scripts/approval_queue_saturation_model.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
@@ -72,29 +48,18 @@ at routing by reversibility rather than at hiring.</p>
           500          25      475       0       1
 
 At every volume the audit trail shows a human approval on 100% of
-actions. The control reports full coverage in all four rows.
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+actions. The control reports full coverage in all four rows.</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;volume&quot;: {&quot;per_reviewer_per_day&quot;: 0, &quot;measured_at&quot;: &quot;peak|mean&quot;},
   &quot;reading_budget&quot;: 0,
   &quot;coverage_reported&quot;: 1.0,
   &quot;detection_by_depth&quot;: [{&quot;depth&quot;: 0, &quot;read_probability&quot;: 0.0}],
   &quot;position_attacker_controlled&quot;: true,
   &quot;gap&quot;: 0
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Reporting coverage.</strong> It is 100% by construction and means nothing.</li>
-<li><strong>Using mean volume.</strong> The gate fails at peak.</li>
-<li><strong>Recommending more reviewers.</strong> The fix is fewer items, chosen by
-  reversibility.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B1.15</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b1-15-overwhelming-the-human-in-the-loop</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B1.15</code></td><td>type <code>/b1-15-overwhelming-the-human-in-the-loop</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B1.15</code></td><td>type <code>/b1-15-overwhelming-the-human-in-the-loop</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B1.15</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B1.15</code></td><td>type <code>$b1-15-overwhelming-the-human-in-the-loop</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B1.15</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B1.15 --out work/cybertravels
-python3 scripts/checkpoint.py --at B1.15 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Count how many approval requests one of your agents generates per day and ask the person approving them how many they read in full. The gap between those two numbers is the control's real coverage.</p></div></section><p class="sub" style="margin-top:10px">Skill source: <code>skills/threats/approval-queue-saturation-model</code></p></div><div class="pager"><a href="B1.14.html"><span class="k">← Previous</span><span class="t">B1.14 · Repudiation and untraceability</span></a><a class="next" href="B1.16.html"><span class="k">Next →</span><span class="t">B1.16 · Misaligned and deceptive behaviour</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<ul><li><strong>Reporting coverage.</strong> It is 100% by construction and means nothing.</li><li><strong>Using mean volume.</strong> The gate fails at peak.</li><li><strong>Recommending more reviewers.</strong> The fix is fewer items, chosen by</li></ul>
+<p>  reversibility.</p></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B1.15</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b1-15-overwhelming-the-human-in-the-loop</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B1.15</code></td><td>type <code>/b1-15-overwhelming-the-human-in-the-loop</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B1.15</code></td><td>type <code>/b1-15-overwhelming-the-human-in-the-loop</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B1.15</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B1.15</code></td><td>type <code>$b1-15-overwhelming-the-human-in-the-loop</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B1.15</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B1.15 --out work/cybertravels
+python3 scripts/checkpoint.py --at B1.15 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Count how many approval requests one of your agents generates per day and ask the person approving them how many they read in full. The gap between those two numbers is the control&#x27;s real coverage.</p></div></section><p class="sub" style="margin-top:10px">Skill source: <code>skills/threats/approval-queue-saturation-model</code></p></div><div class="pager"><a href="B1.14.html"><span class="k">← Previous</span><span class="t">B1.14 · Repudiation and untraceability</span></a><a class="next" href="B1.16.html"><span class="k">Next →</span><span class="t">B1.16 · Misaligned and deceptive behaviour</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

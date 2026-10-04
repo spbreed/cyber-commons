@@ -6,15 +6,9 @@
                        |   NOT fire                  |
                        +-----------------------------+
 
-   the speed is real. so is the speed of shipping a wrong rule.</pre><p>Using an agent to write detections is genuinely effective: it produces candidate
-rules quickly, across more log sources than a human would attempt.</p>
-<p>What it cannot supply is the judgement that decides whether a rule ships, because
-that judgement depends on a cost the telemetry does not contain: <strong>analyst
-trust</strong>. A rule with 5% precision is not 5% useful — it is negatively useful,
-because it spends attention that the good rules need.</p>
-<p>So the workflow is: the agent generates candidates, and a scoring step against
-real historical telemetry decides which survive. The scoring step is the job, and
-it is the part teams skip.</p><blockquote class="anchor">**Anchor → E1.0.** This shortens the gap between *a rule is needed* and *a rule exists*, which is a real interval and not the one that matters most. What it cannot shorten is the decision to ship, because the cost that decides it — analyst trust — is not in the telemetry.</blockquote><div class="how"><h2>2 · Demo — five candidate rules for one concern</h2><h2>3 · Where it breaks — every rule 'works'</h2>
+   the speed is real. so is the speed of shipping a wrong rule.</pre><p>Using an agent to write detections is genuinely effective: it produces candidate rules quickly, across more log sources than a human would attempt.</p>
+<p>What it cannot supply is the judgement that decides whether a rule ships, because that judgement depends on a cost the telemetry does not contain: <strong>analyst trust</strong>. A rule with 5% precision is not 5% useful — it is negatively useful, because it spends attention that the good rules need.</p>
+<p>So the workflow is: the agent generates candidates, and a scoring step against real historical telemetry decides which survive. The scoring step is the job, and it is the part teams skip.</p><blockquote class="anchor">**Anchor → E1.0.** This shortens the gap between *a rule is needed* and *a rule exists*, which is a real interval and not the one that matters most. What it cannot shorten is the decision to ship, because the cost that decides it — analyst trust — is not in the telemetry.</blockquote><div class="how"><h2>2 · Demo — five candidate rules for one concern</h2><h2>3 · Where it breaks — every rule &#x27;works&#x27;</h2>
 <p>All five detect something. R1 has perfect recall on http traffic and would put 301 alerts a day in the queue. R4 has 100% precision on nothing useful. The deployable set is decided by a threshold nobody writes down.</p><h2>4 · The control — generate many, score against history, ship few</h2><h2>5 · The procedure, as a skill</h2>
 <p>Every candidate rule detects something. The skill replays each against real history and scores the third property nobody checks — firing volume — so a rule that produces 301 alerts for one true positive is rejected with its numbers rather than with an adjective.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/detection-rule-deployability/SKILL.md" target="_blank" rel="noopener"><code>skills/detection/detection-rule-deployability/SKILL.md</code></a></p><pre class="front"><code>name: detection-rule-deployability
 description: &gt;-
@@ -23,27 +17,15 @@ description: &gt;-
   when authoring detections with or without a model, or when a rule is proposed
   because it caught the incident.
 allowed-tools: Read, Grep, Glob</code></pre><h1>A rule that fires 301 times for one true positive is not a detection</h1>
-<p>Every candidate rule detects something. Deployability is a different property
-and it is arithmetic: precision, recall, and how many times the rule fires per
-day against real history. A rule failing on the third is rejected however good
-the first two look, because it will be muted within a week.</p>
+<p>Every candidate rule detects something. Deployability is a different property and it is arithmetic: precision, recall, and how many times the rule fires per day against real history. A rule failing on the third is rejected however good the first two look, because it will be muted within a week.</p>
 <h2>When to use this</h2>
-<p>Authoring detections, reviewing a model's proposed rules, and any time a rule is
-proposed on the strength of catching one incident.</p>
+<p>Authoring detections, reviewing a model&#x27;s proposed rules, and any time a rule is proposed on the strength of catching one incident.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Replay each candidate against real history.</strong> Not a sample chosen to
-contain the incident — the actual period, including the quiet parts.</p>
-<p><strong>2 — Compute precision, recall and volume.</strong> Volume is the one people omit and
-the one that decides whether the rule survives contact with an analyst.</p>
-<p><strong>3 — Set a deployability bar before you look at the results.</strong> Precision floor,
-recall floor, and a maximum firings per day. Setting it afterwards means setting
-it around the rule you like.</p>
-<p><strong>4 — Reject the broad rules explicitly, with their numbers.</strong> "Rejected: 301
-firings for 1 true positive" is a sentence the author can act on; "too noisy" is
-not.</p>
-<p><strong>5 — Look at what survived, and what it depends on.</strong> A high-precision rule
-usually depends on a specific field being populated. Record that dependency —
-it is the thing that will silently break the rule later.</p>
+<p><strong>1 — Replay each candidate against real history.</strong> Not a sample chosen to contain the incident — the actual period, including the quiet parts.</p>
+<p><strong>2 — Compute precision, recall and volume.</strong> Volume is the one people omit and the one that decides whether the rule survives contact with an analyst.</p>
+<p><strong>3 — Set a deployability bar before you look at the results.</strong> Precision floor, recall floor, and a maximum firings per day. Setting it afterwards means setting it around the rule you like.</p>
+<p><strong>4 — Reject the broad rules explicitly, with their numbers.</strong> &quot;Rejected: 301 firings for 1 true positive&quot; is a sentence the author can act on; &quot;too noisy&quot; is not.</p>
+<p><strong>5 — Look at what survived, and what it depends on.</strong> A high-precision rule usually depends on a specific field being populated. Record that dependency — it is the thing that will silently break the rule later.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/detection/detection-rule-deployability/scripts/detection_rule_deployability.py" target="_blank" rel="noopener"><code>scripts/detection_rule_deployability.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
@@ -54,29 +36,19 @@ R1 any http_get by an agent             301  0.003   0.500      301.0
 R2 http_get to a non-github host          1  1.000   0.500        1.0
 R3 link-local address                     1  1.000   0.500        1.0
 R4 any failed action                     20  0.000   0.000        inf
-R5 credential path OR link-local          2  1.000   1.000        1.0
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+R5 credential path OR link-local          2  1.000   1.000        1.0</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;history&quot;: {&quot;events&quot;: 0, &quot;period_days&quot;: 0, &quot;true_positives&quot;: 0},
   &quot;candidates&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;fires&quot;: 0, &quot;tp&quot;: 0, &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0,
                   &quot;per_day&quot;: 0.0, &quot;verdict&quot;: &quot;deploy|reject&quot;, &quot;why&quot;: &quot;str&quot;}],
   &quot;bar&quot;: {&quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0, &quot;max_per_day&quot;: 0},
   &quot;dependencies&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;requires_field&quot;: &quot;str&quot;}]
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Replaying against a period chosen to contain the incident.</strong> Volume becomes
-  meaningless.</li>
-<li><strong>Setting the bar after seeing the results.</strong> That is choosing a winner.</li>
-<li><strong>Deploying a rule with an unrecorded field dependency.</strong> It fails silently
-  when the field stops being populated.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons E2.4</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>e2-4-agent-assisted-detection-engineering</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons E2.4</code></td><td>type <code>/e2-4-agent-assisted-detection-engineering</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons E2.4</code></td><td>type <code>/e2-4-agent-assisted-detection-engineering</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons E2.4</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons E2.4</code></td><td>type <code>$e2-4-agent-assisted-detection-engineering</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py E2.4</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at E2.4 --out work/cybertravels
+<ul><li><strong>Replaying against a period chosen to contain the incident.</strong> Volume becomes</li></ul>
+<p>  meaningless.</p>
+<ul><li><strong>Setting the bar after seeing the results.</strong> That is choosing a winner.</li><li><strong>Deploying a rule with an unrecorded field dependency.</strong> It fails silently</li></ul>
+<p>  when the field stops being populated.</p></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons E2.4</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>e2-4-agent-assisted-detection-engineering</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons E2.4</code></td><td>type <code>/e2-4-agent-assisted-detection-engineering</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons E2.4</code></td><td>type <code>/e2-4-agent-assisted-detection-engineering</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons E2.4</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons E2.4</code></td><td>type <code>$e2-4-agent-assisted-detection-engineering</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py E2.4</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at E2.4 --out work/cybertravels
 python3 scripts/checkpoint.py --at E2.4 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>All five rules detect something. R1 fires 301 times for 1 true positive; R5 fires twice for 2 true positives with perfect precision and recall. The deployability check rejects the broad rules and the failed-action rule, shipping only the precise ones with a small daily queue impact.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Set your own alerts-per-true-positive budget and apply it to the rules already in production. Most SOCs discover that several long-standing rules would not pass the bar they would set today.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span><span>Wazuh</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/detection/detection-rule-deployability</code></p></div><div class="pager"><a href="E2.3.html"><span class="k">← Previous</span><span class="t">E2.3 · Detections whose subject is the agent platform</span></a><a class="next" href="E2.5.html"><span class="k">Next →</span><span class="t">E2.5 · Rules generated from an incident — and the benign corpus that decides them</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

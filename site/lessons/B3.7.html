@@ -13,32 +13,17 @@
 
    one place to enforce, one place to audit, one place to turn off</pre><p><strong>Mitigates: every threat in this chapter, at one enforcement point.</strong></p>
 <p>Everything in Chapters B2 and B3 works. The problem is where it lives.</p>
-<p>At one agent, the controls sit in the agent, and that is fine. At fifty, it
-stops being fine for reasons that have nothing to do with security engineering:</p>
-<ul>
-<li>Each team implements provenance, budgets and egress slightly differently.</li>
-<li>Nobody can answer "is this control on, everywhere" without reading fifty
-  repositories.</li>
-<li>A new agent starts at zero and re-earns every control by hand.</li>
-<li>Fixing a control means fifty pull requests and a migration.</li>
-</ul>
-<p>The <strong>gateway</strong> is the same controls, moved to a point every call must pass
-through. It holds identity (B2.1–B2.3), policy (B3.1), egress (B3.3), budgets
-(B3.4) and audit (B2.7). An agent that implements none of them still gets all of
-them, because the enforcement is no longer the agent's responsibility.</p>
-<p>It also solves a problem nothing else does: <strong>downstream systems that cannot
-consume a delegated identity.</strong> A legacy database or a vendor API that only
-understands a static credential forces that credential back into agent code —
-undoing B2.3 completely. The gateway holds it instead, authorises the <em>user</em>
-before the call, and presents the static credential onward. The agent never sees
-it.</p>
-<p>The honest cost: the gateway is now a single point of failure and a very
-attractive target. It has to be operated accordingly.</p><div class="how"><blockquote>
-<p><strong>What this control closes.</strong></p>
-<p>Not a new control. The same controls, at a point every call passes through — and the only answer to a downstream that cannot consume delegated identity.</p>
-</blockquote>
+<p>At one agent, the controls sit in the agent, and that is fine. At fifty, it stops being fine for reasons that have nothing to do with security engineering:</p>
+<ul><li>Each team implements provenance, budgets and egress slightly differently.</li><li>Nobody can answer &quot;is this control on, everywhere&quot; without reading fifty</li></ul>
+<p>  repositories.</p>
+<ul><li>A new agent starts at zero and re-earns every control by hand.</li><li>Fixing a control means fifty pull requests and a migration.</li></ul>
+<p>The <strong>gateway</strong> is the same controls, moved to a point every call must pass through. It holds identity (B2.1–B2.3), policy (B3.1), egress (B3.3), budgets (B3.4) and audit (B2.7). An agent that implements none of them still gets all of them, because the enforcement is no longer the agent&#x27;s responsibility.</p>
+<p>It also solves a problem nothing else does: <strong>downstream systems that cannot consume a delegated identity.</strong> A legacy database or a vendor API that only understands a static credential forces that credential back into agent code — undoing B2.3 completely. The gateway holds it instead, authorises the <em>user</em> before the call, and presents the static credential onward. The agent never sees it.</p>
+<p>The honest cost: the gateway is now a single point of failure and a very attractive target. It has to be operated accordingly.</p><div class="how"><blockquote><strong>What this control closes.</strong></blockquote>
+<blockquote></blockquote>
+<blockquote>Not a new control. The same controls, at a point every call passes through — and the only answer to a downstream that cannot consume delegated identity.</blockquote>
 <h2>2 · The control</h2><h2>3 · Proving every call goes through it, as a skill</h2>
-<p>A gateway is only a choke point if nothing routes around it, and "nothing routes around it" is not a fact you can read off a route table. The procedure tests reachability from inside the deployment, covers the paths people forget — tool-initiated calls, background jobs, retries — and records each guardrail's <strong>action</strong>, because a filter set to observe is a filter that is switched on and stopping nothing. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/llm-gateway-guardrail-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/llm-gateway-guardrail-verifier/SKILL.md</code></a></p><pre class="front"><code>name: llm-gateway-guardrail-verifier
+<p>A gateway is only a choke point if nothing routes around it, and &quot;nothing routes around it&quot; is not a fact you can read off a route table. The procedure tests reachability from inside the deployment, covers the paths people forget — tool-initiated calls, background jobs, retries — and records each guardrail&#x27;s <strong>action</strong>, because a filter set to observe is a filter that is switched on and stopping nothing. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/llm-gateway-guardrail-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/llm-gateway-guardrail-verifier/SKILL.md</code></a></p><pre class="front"><code>name: llm-gateway-guardrail-verifier
 description: &gt;-
   Prove all model traffic leaves through the sanctioned gateway, including
   tool-initiated and background calls, and that guardrail policies are
@@ -48,43 +33,20 @@ description: &gt;-
 allowed-tools: Bash, Read</code></pre><h1>Llm Gateway Guardrail Verifier</h1>
 <p><strong>Controls:</strong> Control 4 — gateway routing and guardrails</p>
 <h2>Confidence: HIGH <strong>only if</strong> egress is enforced below the application</h2>
-<p>An application-layer gateway configuration is a routing preference. An agent
-that can open a socket can bypass it by calling the provider directly. If the
-allowlist is not enforced at the network layer, <strong>downgrade this control to
-PARTIAL</strong> and say why.</p>
+<p>An application-layer gateway configuration is a routing preference. An agent that can open a socket can bypass it by calling the provider directly. If the allowlist is not enforced at the network layer, <strong>downgrade this control to PARTIAL</strong> and say why.</p>
 <h2>When to use this</h2>
-<p>When a deployment routes model traffic through a gateway and the attestation
-wants to say so. Check first whether egress is enforced below the application:
-if it is not, an agent opens a socket and the gateway is advisory, and this
-control's confidence drops with it.</p>
+<p>When a deployment routes model traffic through a gateway and the attestation wants to say so. Check first whether egress is enforced below the application: if it is not, an agent opens a socket and the gateway is advisory, and this control&#x27;s confidence drops with it.</p>
 <h2>Procedure</h2>
-<ol>
-<li>
-<p><strong>Test reachability, do not read configuration.</strong> From the deployment's
-   network position, attempt to reach provider endpoints directly. Anything
-   reachable that is not the gateway is a finding, regardless of what the
-   configuration says.</p>
-</li>
-<li>
-<p><strong>Cover the paths people forget.</strong> Tool-initiated calls, background jobs,
-   scheduled tasks, retry paths and sub-agents. A gateway that fronts the main
-   request path and not the batch job is a gateway with a hole in it.</p>
-</li>
-<li>
-<p><strong>Confirm guardrail attachment and version.</strong> Record the guardrail ID and
-   version actually attached to the route, not the one in the template.</p>
-</li>
-<li>
-<p><strong>Enumerate enabled policies.</strong> Content filters, prompt-attack filtering,
-   denied topics, sensitive-information filters, contextual grounding. Record
-   whether each is applied on <strong>input, output, or both</strong> — input-only filtering
-   is a common and quiet gap.</p>
-</li>
-<li>
-<p><strong>Confirm the action.</strong> A filter set to observe rather than block is
-   telemetry, not a control. Record the configured action per policy.</p>
-</li>
-</ol>
+<ol><li><strong>Test reachability, do not read configuration.</strong> From the deployment&#x27;s</li></ol>
+<p>   network position, attempt to reach provider endpoints directly. Anything    reachable that is not the gateway is a finding, regardless of what the    configuration says.</p>
+<ol><li><strong>Cover the paths people forget.</strong> Tool-initiated calls, background jobs,</li></ol>
+<p>   scheduled tasks, retry paths and sub-agents. A gateway that fronts the main    request path and not the batch job is a gateway with a hole in it.</p>
+<ol><li><strong>Confirm guardrail attachment and version.</strong> Record the guardrail ID and</li></ol>
+<p>   version actually attached to the route, not the one in the template.</p>
+<ol><li><strong>Enumerate enabled policies.</strong> Content filters, prompt-attack filtering,</li></ol>
+<p>   denied topics, sensitive-information filters, contextual grounding. Record    whether each is applied on <strong>input, output, or both</strong> — input-only filtering    is a common and quiet gap.</p>
+<ol><li><strong>Confirm the action.</strong> A filter set to observe rather than block is</li></ol>
+<p>   telemetry, not a control. Record the configured action per policy.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/llm-gateway-guardrail-verifier/scripts/llm_gateway_guardrail_verifier.py" target="_blank" rel="noopener"><code>scripts/llm_gateway_guardrail_verifier.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
@@ -95,16 +57,10 @@ control's confidence drops with it.</p>
    over the per-target ceiling denied at budget
 
 audit entries written: 1
-credential held by the agent: never - attached at the gateway
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+credential held by the agent: never - attached at the gateway</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;gateway_enforced&quot;: true,
   &quot;enforcement_layer&quot;: &quot;network|application&quot;,
@@ -113,13 +69,9 @@ checked.</p>
                 &quot;policies&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;applied_to&quot;: &quot;input|output|both&quot;,
                               &quot;action&quot;: &quot;block|anonymize|observe&quot;}]},
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Reading the route table instead of testing reachability.</strong></li>
-<li><strong>Missing the background path.</strong> Scheduled and tool-initiated calls are the
-  ones that bypass the gateway in practice.</li>
-<li><strong>Recording a guardrail as enforced when its action is observe.</strong></li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B3.7</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b3-7-the-agent-gateway</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B3.7</code></td><td>type <code>/b3-7-the-agent-gateway</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B3.7</code></td><td>type <code>/b3-7-the-agent-gateway</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B3.7</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B3.7</code></td><td>type <code>$b3-7-the-agent-gateway</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B3.7</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B3.7 --out work/cybertravels
-python3 scripts/checkpoint.py --at B3.7 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent. The skill also reports its shape. Its confidence is HIGH only where egress is enforced below the application — the gateway is a choke point because the network makes it one, not because the SDK was configured to point at it, and an application-level base URL is a default, not a control.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Count your agents. If it is more than five, work out how you would currently answer 'is egress control on for all of them' — and how long that would take.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>agentgateway</span><span>OPA</span><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/llm-gateway-guardrail-verifier</code></p></div><div class="pager"><a href="B3.6.html"><span class="k">← Previous</span><span class="t">B3.6 · Human approval that survives volume</span></a><a class="next" href="B3.8.html"><span class="k">Next →</span><span class="t">B3.8 · Shared infrastructure between agent runs</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<ul><li><strong>Reading the route table instead of testing reachability.</strong></li><li><strong>Missing the background path.</strong> Scheduled and tool-initiated calls are the</li></ul>
+<p>  ones that bypass the gateway in practice.</p>
+<ul><li><strong>Recording a guardrail as enforced when its action is observe.</strong></li></ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B3.7</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b3-7-the-agent-gateway</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B3.7</code></td><td>type <code>/b3-7-the-agent-gateway</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B3.7</code></td><td>type <code>/b3-7-the-agent-gateway</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B3.7</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B3.7</code></td><td>type <code>$b3-7-the-agent-gateway</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B3.7</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B3.7 --out work/cybertravels
+python3 scripts/checkpoint.py --at B3.7 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent. The skill also reports its shape. Its confidence is HIGH only where egress is enforced below the application — the gateway is a choke point because the network makes it one, not because the SDK was configured to point at it, and an application-level base URL is a default, not a control.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Count your agents. If it is more than five, work out how you would currently answer &#x27;is egress control on for all of them&#x27; — and how long that would take.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>agentgateway</span><span>OPA</span><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/llm-gateway-guardrail-verifier</code></p></div><div class="pager"><a href="B3.6.html"><span class="k">← Previous</span><span class="t">B3.6 · Human approval that survives volume</span></a><a class="next" href="B3.8.html"><span class="k">Next →</span><span class="t">B3.8 · Shared infrastructure between agent runs</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -18,17 +18,25 @@ whose product is agentic. Not a diagram of one — the actual thing, running on
 your machine, which you will then spend the rest of the commons attacking,
 defending, detecting and governing.
 
-Seven components, and every later lesson names one of them:
+Nine components — the same nine the skill below maps, named the same way, so
+the page and the run agree. Eight of them exist in CyberTravels and the ninth
+does not, which is information rather than an omission:
 
 | component | what it is | what it will be blamed for |
 |---|---|---|
 | ingress | where traveller text arrives | every injection in Function B |
 | orchestrator | routes a request, holds no authority | the place controls get added |
 | agent runtime | the loop that turns text into a call | the step everything hinges on |
-| tools, over MCP | the only things that change anything | the blast radius |
-| knowledge and memory | text nobody on staff wrote | persistence |
-| agent-to-agent | four agents, talking | one injection becoming four |
-| identity and audit | who acted, and the record of it | every question an incident asks |
+| model | proposes; holds no credential, opens no socket | being trusted as a decision |
+| tools | the only things that change anything | the blast radius |
+| mcp servers | a third party's process, in your context | descriptions you approved once |
+| knowledge | retrieved text nobody on staff wrote | persistence |
+| messaging | four agents, talking | one injection becoming four |
+| egress | **absent here** — nothing checks what leaves | B3.7, which is about building it |
+
+Identity and audit are not on that list because they are not boxes on this
+map — they are properties every edge carries, which is why A1.3 and A2.2 are
+their own lessons rather than components here.
 
 ### Why the build comes first
 
@@ -51,4 +59,4 @@ Read what it does before you run it.
 
 ## Your turn
 
-Add an eighth component: an egress gateway. CyberTravels does not have one, which is why B3.7 exists. Mark which trust boundaries it would move and which it would not.
+Mark `egress` present in the fixture — change its third field from False to True — and re-run. The component count does not change, because the box was always on the map; what changes is which edges cross a boundary. Name the ones that move and the ones that do not, then read B3.7, which is the lesson about actually building it.

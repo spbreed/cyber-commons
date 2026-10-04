@@ -8,32 +8,21 @@
    +-------------------+                +------------------+
      awake 8 hours/day                    awake 24 hours/day
      asked before acting                  acts on retrieved text</pre><p><strong>OWASP T3 — Privilege Compromise. LLM06 — Excessive Agency.</strong></p>
-<p>Tool misuse is about what a tool can do. Privilege compromise is about <strong>whose
-authority it does it with</strong> — the <strong>identity</strong> component rather than the tools
-component.</p>
+<p>Tool misuse is about what a tool can do. Privilege compromise is about <strong>whose authority it does it with</strong> — the <strong>identity</strong> component rather than the tools component.</p>
 <p>Three patterns produce it, and all three are things teams do for good reasons.</p>
-<p><strong>Inherited human credentials.</strong> The agent runs with the token of the user who
-started it. Convenient, and it means the agent holds every permission that user
-holds — including the ones irrelevant to the task, and including the ones they
-hold because of a role they were given three years ago.</p>
-<p><strong>Shared service accounts.</strong> Every agent authenticates as <code>agent-svc</code>. That
-account needs the union of everything any agent ever needs, so each agent holds
-the maximum of the set.</p>
-<p><strong>Standing scope.</strong> The grant is permanent because renewing it was operationally
-awkward. The authority is therefore present at the moment any injection lands.</p>
-<p>What makes this distinct from ordinary over-permissioning is the <strong>direction of
-the audit trail</strong>. When a human has too much access and misuses it, the log
-names them. When an agent does it, the log names the service account — and the
-human who caused it is not in the record at all. The compromise is of privilege
-<em>and</em> of attribution, at the same time.</p><div class="how"><blockquote>
-<p><strong>Where this lands on the reference architecture.</strong></p>
-<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
-                               |              |
-                         messaging        tools / mcp
-                               |              |
-                      knowledge / memory   egress
-           identity + policy wrap every call · observability records it</code></p>
-</blockquote>
+<p><strong>Inherited human credentials.</strong> The agent runs with the token of the user who started it. Convenient, and it means the agent holds every permission that user holds — including the ones irrelevant to the task, and including the ones they hold because of a role they were given three years ago.</p>
+<p><strong>Shared service accounts.</strong> Every agent authenticates as <code>agent-svc</code>. That account needs the union of everything any agent ever needs, so each agent holds the maximum of the set.</p>
+<p><strong>Standing scope.</strong> The grant is permanent because renewing it was operationally awkward. The authority is therefore present at the moment any injection lands.</p>
+<p>What makes this distinct from ordinary over-permissioning is the <strong>direction of the audit trail</strong>. When a human has too much access and misuses it, the log names them. When an agent does it, the log names the service account — and the human who caused it is not in the record at all. The compromise is of privilege <em>and</em> of attribution, at the same time.</p><div class="how"><blockquote><strong>Where this lands on the reference architecture.</strong></blockquote>
+<blockquote></blockquote>
+<blockquote>```</blockquote>
+<blockquote>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model</blockquote>
+<blockquote>|              |</blockquote>
+<blockquote>messaging        tools / mcp</blockquote>
+<blockquote>|              |</blockquote>
+<blockquote>knowledge / memory   egress</blockquote>
+<blockquote>identity + policy wrap every call · observability records it</blockquote>
+<blockquote>```</blockquote>
 <h2>2 · The risk, realised</h2>
 <p>A read-only user asks for something, and the agent has more authority than they do.</p><h2>3 · The check, as a skill</h2>
 <p>Everything turns on which principal the decision was evaluated against. The skill runs the asymmetric probe — a traveller holding <code>reports:read</code> asking for something that needs <code>db:admin</code> — and then reads one audit row to see whether a human can be recovered from it.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/authorization-subject-check/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/authorization-subject-check/SKILL.md</code></a></p><pre class="front"><code>name: authorization-subject-check
@@ -43,62 +32,38 @@ description: &gt;-
   audit row can name. Use when a user reaches a scope they do not hold, or when
   every log line shows the same caller.
 allowed-tools: Read, Grep, Glob</code></pre><h1>Authorised as whom?</h1>
-<p>Privilege compromise in an agentic system is rarely a stolen credential. It is
-authorisation evaluated against the <strong>agent's</strong> identity while the request came
-from a user who does not hold the scope — and an audit trail that then names
-the agent on every row, so the human cannot be recovered at all.</p>
+<p>Privilege compromise in an agentic system is rarely a stolen credential. It is authorisation evaluated against the <strong>agent&#x27;s</strong> identity while the request came from a user who does not hold the scope — and an audit trail that then names the agent on every row, so the human cannot be recovered at all.</p>
 <h2>When to use this</h2>
-<p>Any time an agent calls something on a user's behalf. Run it before designing
-delegation, because the answer decides whether delegation is missing or merely
-unenforced.</p>
+<p>Any time an agent calls something on a user&#x27;s behalf. Run it before designing delegation, because the answer decides whether delegation is missing or merely unenforced.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Find the authorisation decision point.</strong> The single place where a scope
-is compared against a holder. If there are several, list them all; they will
-disagree.</p>
-<p><strong>2 — Name the subject at that point.</strong> Is the compared identity the requesting
-user, or the process's own account? A service account with a union of every
-scope any user might need is the shape to look for.</p>
-<p><strong>3 — Run the asymmetric probe.</strong> Have a user holding a narrow scope request an
-action requiring a wider one. If it succeeds, authorisation is on the workload,
-not the requester.</p>
-<p><strong>4 — Read one audit row.</strong> Does it name a human? A row naming <code>agent-svc</code> is
-complete, well-formed and useless: it answers "what ran", never "who caused
-it".</p>
-<p><strong>5 — Separate the two fixes.</strong> Authorising on the requester and <em>recording</em>
-the requester are different changes with different owners; a report that merges
-them gets half-implemented.</p>
+<p><strong>1 — Find the authorisation decision point.</strong> The single place where a scope is compared against a holder. If there are several, list them all; they will disagree.</p>
+<p><strong>2 — Name the subject at that point.</strong> Is the compared identity the requesting user, or the process&#x27;s own account? A service account with a union of every scope any user might need is the shape to look for.</p>
+<p><strong>3 — Run the asymmetric probe.</strong> Have a user holding a narrow scope request an action requiring a wider one. If it succeeds, authorisation is on the workload, not the requester.</p>
+<p><strong>4 — Read one audit row.</strong> Does it name a human? A row naming <code>agent-svc</code> is complete, well-formed and useless: it answers &quot;what ran&quot;, never &quot;who caused it&quot;.</p>
+<p><strong>5 — Separate the two fixes.</strong> Authorising on the requester and <em>recording</em> the requester are different changes with different owners; a report that merges them gets half-implemented.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/authorization-subject-check/scripts/authorization_subject_check.py" target="_blank" rel="noopener"><code>scripts/authorization_subject_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
 <pre><code>requestertheir scopes                                asked for       allowed?
-dana    ['reports:read']                            db:admin        True
-priya   ['db:admin', 'reports:read', 'reports:write']db:admin        True
+dana    [&#x27;reports:read&#x27;]                            db:admin        True
+priya   [&#x27;db:admin&#x27;, &#x27;reports:read&#x27;, &#x27;reports:write&#x27;]db:admin        True
 
 AUDIT TRAIL
    actor=agent-svc  tool=drop_table   allowed=True
-   actor=agent-svc  tool=drop_table   allowed=True
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+   actor=agent-svc  tool=drop_table   allowed=True</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;decision_points&quot;: [{&quot;site&quot;: &quot;str&quot;, &quot;subject&quot;: &quot;requester|workload|both&quot;}],
   &quot;probe&quot;: {&quot;user_scopes&quot;: [&quot;str&quot;], &quot;required&quot;: &quot;str&quot;, &quot;succeeded&quot;: true},
   &quot;audit_row&quot;: {&quot;names_human&quot;: false, &quot;fields&quot;: [&quot;str&quot;]},
   &quot;fixes&quot;: {&quot;authorize_on_requester&quot;: true, &quot;record_requester&quot;: true}
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Accepting that the user is "in the request".</strong> Present in the payload is
-  not the same as compared at the decision point.</li>
-<li><strong>Testing with an admin.</strong> The probe needs a user who genuinely lacks the
-  scope.</li>
-<li><strong>Reporting the audit gap as a logging bug.</strong> It is the reason the incident
-  cannot be scoped later.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B1.6</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b1-6-privilege-compromise</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B1.6</code></td><td>type <code>/b1-6-privilege-compromise</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B1.6</code></td><td>type <code>/b1-6-privilege-compromise</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B1.6</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B1.6</code></td><td>type <code>$b1-6-privilege-compromise</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B1.6</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B1.6 --out work/cybertravels
+<ul><li><strong>Accepting that the user is &quot;in the request&quot;.</strong> Present in the payload is</li></ul>
+<p>  not the same as compared at the decision point.</p>
+<ul><li><strong>Testing with an admin.</strong> The probe needs a user who genuinely lacks the</li></ul>
+<p>  scope.</p>
+<ul><li><strong>Reporting the audit gap as a logging bug.</strong> It is the reason the incident</li></ul>
+<p>  cannot be scoped later.</p></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B1.6</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b1-6-privilege-compromise</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B1.6</code></td><td>type <code>/b1-6-privilege-compromise</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B1.6</code></td><td>type <code>/b1-6-privilege-compromise</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B1.6</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B1.6</code></td><td>type <code>$b1-6-privilege-compromise</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B1.6</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B1.6 --out work/cybertravels
 python3 scripts/checkpoint.py --at B1.6 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A user holding only <code>reports:read</code> triggers a <code>db:admin</code> action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names <code>agent-svc</code> on every row, so the human who caused it cannot be recovered from it at all.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Pick one agent and answer two questions: what identity does it authenticate as, and can you name the human behind any single action it took last week. If the second answer is no, you have this risk regardless of how the scopes are set.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Keycloak</span><span>SPIFFE/SPIRE</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/threats/authorization-subject-check</code></p></div><div class="pager"><a href="B1.5.html"><span class="k">← Previous</span><span class="t">B1.5 · Tool misuse</span></a><a class="next" href="B1.7.html"><span class="k">Next →</span><span class="t">B1.7 · Identity spoofing and impersonation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

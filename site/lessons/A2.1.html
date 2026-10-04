@@ -5,65 +5,44 @@
                     denied      claims only,
                   at=policy     never the token
                   at=human
-                  at=resource   ◄── WHERE it was refused is the useful part</pre><p>A run that emits only its final answer is unreviewable. What an operator needs
-is the <em>shape</em> of the run, and that is a trace.</p>
+                  at=resource   ◄── WHERE it was refused is the useful part</pre><p>A run that emits only its final answer is unreviewable. What an operator needs is the <em>shape</em> of the run, and that is a trace.</p>
 <h3>One span per thing worth alerting on</h3>
-<p>CyberTravels emits nine kinds, and the vocabulary is the design:</p>
-<pre><code>  thought       what the model said between calls
+<p>CyberTravels emits eleven kinds by the end of this lesson, and the vocabulary is the design. Count them in <code>cybertravels/observability.py</code> — the list below is all of them, not a selection:</p>
+<pre><code>  start         the run opened, with the trace id everything else carries
+  thought       what the model said between calls
   plan          the tool it chose, and the scope that implies
   approval      a human granted or refused
   token_issued  the delegated claims — summarised, never the token
   denied        and WHERE: policy, human, or resource server
   tool_result   what came back
   budget        a ceiling was reached
+  error         something raised, and the run says so
   final         the answer
-</code></pre>
-<p><code>denied</code> carrying <em>where</em> it was refused is the one that repays itself. "The
-policy refused" and "the resource server refused" are different incidents: the
-first is a control working as designed, the second means a token that should
-never have existed reached a boundary.</p>
+  done          the run closed, so a truncated trace is detectable</code></pre>
+<p>The four at the edges — <code>start</code>, <code>error</code>, <code>final</code>, <code>done</code> — are the ones that get left out of a hand-rolled tracer, and they are what make a <em>missing</em> span visible. A trace with no <code>done</code> is either a run still going or a run that died, and without the pair you cannot tell which.</p>
+<p><code>denied</code> carrying <em>where</em> it was refused is the one that repays itself. &quot;The policy refused&quot; and &quot;the resource server refused&quot; are different incidents: the first is a control working as designed, the second means a token that should never have existed reached a boundary.</p>
 <h3>Three rules the emitting code follows</h3>
-<ul>
-<li><strong>Every span carries the trace id</strong>, so the reasoning and the audit row can
-  be joined. A log that cannot be joined to what caused it tells you what
-  happened and never why.</li>
-<li><strong>Nothing secret goes in a span.</strong> Tokens are summarised to their claims. A
-  credential pasted into a trace is a credential in your log pipeline, your
-  backups and your vendor's index.</li>
-<li><strong>Refusals are spans too.</strong> A trace holding only successful calls hides
-  exactly the events E2 will want to write rules against.</li>
-</ul><div class="how"><h2>2 · Emit a run, then join it to the audit log</h2>
-<p><code>cybertravels/observability.py</code> is the file. The skill below checks whether a recorded run can actually be replayed and reasoned about — which is a stronger property than "we have logs".</p><h3>The skill</h3></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/response/run-replayability-audit/SKILL.md" target="_blank" rel="noopener"><code>skills/response/run-replayability-audit/SKILL.md</code></a></p><pre class="front"><code>name: run-replayability-audit
+<ul><li><strong>Every span carries the trace id</strong>, so the reasoning and the audit row can</li></ul>
+<p>  be joined. A log that cannot be joined to what caused it tells you what   happened and never why.</p>
+<ul><li><strong>Nothing secret goes in a span.</strong> Tokens are summarised to their claims. A</li></ul>
+<p>  credential pasted into a trace is a credential in your log pipeline, your   backups and your vendor&#x27;s index.</p>
+<ul><li><strong>Refusals are spans too.</strong> A trace holding only successful calls hides</li></ul>
+<p>  exactly the events E2 will want to write rules against.</p><div class="how"><h2>2 · Emit a run, then join it to the audit log</h2>
+<p><code>cybertravels/observability.py</code> is the file. The skill below checks whether a recorded run can actually be replayed and reasoned about — which is a stronger property than &quot;we have logs&quot;.</p><h3>The skill</h3></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/response/run-replayability-audit/SKILL.md" target="_blank" rel="noopener"><code>skills/response/run-replayability-audit/SKILL.md</code></a></p><pre class="front"><code>name: run-replayability-audit
 description: &gt;-
   Check whether an incident run can be replayed at all — model version, seed,
   prompt, tool results, retrieved context — and what a later model version does
   to the replay. Use when forensics needs to know why the agent did what it did.
 allowed-tools: Read, Grep, Glob</code></pre><h1>Replay needs five things and production records three</h1>
-<p>"Why did the agent do that" is answerable only if the run can be re-run under the
-conditions it ran in. That needs the model version, the sampling parameters and
-seed, the exact prompt, every tool result and the retrieved context. A typical
-production run records enough to see what happened and not enough to reproduce
-it.</p>
+<p>&quot;Why did the agent do that&quot; is answerable only if the run can be re-run under the conditions it ran in. That needs the model version, the sampling parameters and seed, the exact prompt, every tool result and the retrieved context. A typical production run records enough to see what happened and not enough to reproduce it.</p>
 <h2>When to use this</h2>
-<p>Before an incident, as a readiness check, and during one, to establish honestly
-whether the reconstruction is possible.</p>
+<p>Before an incident, as a readiness check, and during one, to establish honestly whether the reconstruction is possible.</p>
 <h2>Procedure</h2>
-<p><strong>1 — List the five inputs and check each against a real run record.</strong> Model
-version and seed are the two usually missing, and their absence is decisive
-rather than inconvenient.</p>
-<p><strong>2 — Attempt the replay.</strong> If any input is missing, say what the replay can and
-cannot establish. A partial replay is still useful for the tool path and useless
-for the reasoning.</p>
-<p><strong>3 — Replay under later model versions.</strong> The provider has probably upgraded.
-Record whether the action changes: if it does, the original decision cannot be
-reproduced at all, and that is a finding about the estate rather than about the
-incident.</p>
-<p><strong>4 — Cost full instrumentation.</strong> Storage and latency for recording everything,
-against the incidents where you needed it. Present both; the answer is usually to
-instrument the high-tier agents only, and that is a defensible decision when the
-numbers are attached.</p>
-<p><strong>5 — Record what the estate has chosen.</strong> Which agents are replayable and which
-are not, so nobody assumes during an incident.</p>
+<p><strong>1 — List the five inputs and check each against a real run record.</strong> Model version and seed are the two usually missing, and their absence is decisive rather than inconvenient.</p>
+<p><strong>2 — Attempt the replay.</strong> If any input is missing, say what the replay can and cannot establish. A partial replay is still useful for the tool path and useless for the reasoning.</p>
+<p><strong>3 — Replay under later model versions.</strong> The provider has probably upgraded. Record whether the action changes: if it does, the original decision cannot be reproduced at all, and that is a finding about the estate rather than about the incident.</p>
+<p><strong>4 — Cost full instrumentation.</strong> Storage and latency for recording everything, against the incidents where you needed it. Present both; the answer is usually to instrument the high-tier agents only, and that is a defensible decision when the numbers are attached.</p>
+<p><strong>5 — Record what the estate has chosen.</strong> Which agents are replayable and which are not, so nobody assumes during an incident.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/response/run-replayability-audit/scripts/run_replayability_audit.py" target="_blank" rel="noopener"><code>scripts/run_replayability_audit.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
@@ -74,27 +53,16 @@ typical production     replayable=False
 prompts only           replayable=False
       ✗ tool results — the agent saw a world you cannot rebuild
       ✗ model version — a silent upgrade changes the output
-      ✗ seed — sampling makes the run unrepeatable
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+      ✗ seed — sampling makes the run unrepeatable</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;inputs&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;recorded&quot;: false}],
   &quot;replay&quot;: {&quot;possible&quot;: false, &quot;establishes&quot;: [&quot;str&quot;], &quot;cannot_establish&quot;: [&quot;str&quot;]},
   &quot;version_drift&quot;: [{&quot;version&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;, &quot;same_as_original&quot;: false}],
   &quot;cost&quot;: {&quot;storage_per_run&quot;: &quot;str&quot;, &quot;latency_ms&quot;: 0},
   &quot;policy&quot;: [{&quot;tier&quot;: &quot;str&quot;, &quot;fully_instrumented&quot;: true}]
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Assuming replay is possible.</strong> Check the record before promising it.</li>
-<li><strong>Replaying on the current model.</strong> It is not the one that acted.</li>
-<li><strong>Instrumenting everything or nothing.</strong> Tier it and write the choice down.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons A2.1</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>a2-1-observability</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons A2.1</code></td><td>type <code>/a2-1-observability</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons A2.1</code></td><td>type <code>/a2-1-observability</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons A2.1</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons A2.1</code></td><td>type <code>$a2-1-observability</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py A2.1</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at A2.1 --out work/cybertravels
-python3 scripts/checkpoint.py --at A2.1 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A run's spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Put the whole delegated token in a span instead of its claims. Nothing breaks, the trace is more useful, and you have just put a credential in your log pipeline. That trade is made by accident constantly.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Grafana</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/response/run-replayability-audit</code></p></div><div class="pager"><a href="A2.0.html"><span class="k">← Previous</span><span class="t">A2.0 · Why a demo is not a system — the harness around the loop</span></a><a class="next" href="A2.2.html"><span class="k">Next →</span><span class="t">A2.2 · The audit trail, and the four questions it has to answer</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<ul><li><strong>Assuming replay is possible.</strong> Check the record before promising it.</li><li><strong>Replaying on the current model.</strong> It is not the one that acted.</li><li><strong>Instrumenting everything or nothing.</strong> Tier it and write the choice down.</li></ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons A2.1</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>a2-1-observability</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons A2.1</code></td><td>type <code>/a2-1-observability</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons A2.1</code></td><td>type <code>/a2-1-observability</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons A2.1</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons A2.1</code></td><td>type <code>$a2-1-observability</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py A2.1</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at A2.1 --out work/cybertravels
+python3 scripts/checkpoint.py --at A2.1 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A run&#x27;s spans in order, each carrying the trace id, tokens present only as summarised claims, and every refusal appearing with the boundary that produced it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Put the whole delegated token in a span instead of its claims. Nothing breaks, the trace is more useful, and you have just put a credential in your log pipeline. That trade is made by accident constantly.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Grafana</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/response/run-replayability-audit</code></p></div><div class="pager"><a href="A2.0.html"><span class="k">← Previous</span><span class="t">A2.0 · Why a demo is not a system — the harness around the loop</span></a><a class="next" href="A2.2.html"><span class="k">Next →</span><span class="t">A2.2 · The audit trail, and the four questions it has to answer</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

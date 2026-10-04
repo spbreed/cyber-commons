@@ -13,22 +13,11 @@
         v                                              v
    gap  -&gt; the lesson that closes it        one PASSING indicator,
            (B2.4, C2.7, B3.4, B3.7)         so the set can be seen
-                                            to discriminate</pre><p>A control indicator is only an indicator if something measures it. Otherwise it
-is a sentence in a policy, and the first evidence that a control was missing is
-the incident.</p>
-<p>The test is mechanical: can you compute this number from the estate, today,
-without asking anyone? "Object handlers that compare an owner" passes.
-"Is authorisation adequate" does not.</p>
-<p>So these are computed from <code>cybertravels/</code> — the same tree C2.3 scans and B1.1
-draws — and the output is a <strong>gap list</strong>, not a maturity score. A governance
-report whose only artefact is a percentage changes nothing, because nobody can
-action 72%.</p><blockquote class="anchor">**Anchor → F1.1.** This is F1.1 executed. Six indicators, computed from the CyberTravels tree at run time, reported as gaps with named mitigations rather than as a score.</blockquote><div class="how"><h2>2 · Every gap names where the fix is taught</h2>
-<p>A gap with no next step is a complaint. Each one here carries the lesson that
-closes it — the ownership check, the rule that names your own HTTP wrapper,
-default-deny on the tool call, the gateway.</p>
-<p>One indicator in the set is deliberately one CyberTravels passes. A set that
-always reports GAP cannot be shown to discriminate, and a reader has no way to
-tell the instrument works.</p><h2>3 · Six indicators, measured now</h2>
+                                            to discriminate</pre><p>A control indicator is only an indicator if something measures it. Otherwise it is a sentence in a policy, and the first evidence that a control was missing is the incident.</p>
+<p>The test is mechanical: can you compute this number from the estate, today, without asking anyone? &quot;Object handlers that compare an owner&quot; passes. &quot;Is authorisation adequate&quot; does not.</p>
+<p>So these are computed from <code>cybertravels/</code> — the same tree C2.3 scans and B1.1 draws — and the output is a <strong>gap list</strong>, not a maturity score. A governance report whose only artefact is a percentage changes nothing, because nobody can action 72%.</p><blockquote class="anchor">**Anchor → F1.1.** This is F1.1 executed. Six indicators, computed from the CyberTravels tree at run time, reported as gaps with named mitigations rather than as a score.</blockquote><div class="how"><h2>2 · Every gap names where the fix is taught</h2>
+<p>A gap with no next step is a complaint. Each one here carries the lesson that closes it — the ownership check, the rule that names your own HTTP wrapper, default-deny on the tool call, the gateway.</p>
+<p>One indicator in the set is deliberately one CyberTravels passes. A set that always reports GAP cannot be shown to discriminate, and a reader has no way to tell the instrument works.</p><h2>3 · Six indicators, measured now</h2>
 <p>KCI-05 is the one worth arguing about: it measures a component that does not exist, so it reads zero and always will until somebody builds a gateway.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/grc/kci-control-measurement/SKILL.md" target="_blank" rel="noopener"><code>skills/grc/kci-control-measurement/SKILL.md</code></a></p><pre class="front"><code>name: kci-control-measurement
 description: &gt;-
   Measure key control indicators against a real repository and report each gap
@@ -36,58 +25,38 @@ description: &gt;-
   something measurable, when a control is asserted but never verified, or when a
   governance report needs an artefact other than a score.
 allowed-tools: Read, Grep, Glob</code></pre><h1>A control indicator is only an indicator if something measures it</h1>
-<p>Otherwise it is a sentence in a policy. The test is mechanical: can you compute
-this number from the estate, today, without asking anyone?</p>
-<p>So these are computed from <code>cybertravels/</code> — the same tree C2.3 scans and B1.1
-draws — and the output is a list of gaps each naming the lesson that closes it,
-not a maturity score. A governance report whose only artefact is a number
-changes nothing.</p>
+<p>Otherwise it is a sentence in a policy. The test is mechanical: can you compute this number from the estate, today, without asking anyone?</p>
+<p>So these are computed from <code>cybertravels/</code> — the same tree C2.3 scans and B1.1 draws — and the output is a list of gaps each naming the lesson that closes it, not a maturity score. A governance report whose only artefact is a number changes nothing.</p>
 <h2>When to use this</h2>
-<p>After control mapping (F1.4) and before any assurance claim. Re-run it after
-every change to the estate: an indicator measured once is a snapshot, and the
-whole argument for KCIs is that point-in-time testing fails for systems that
-change weekly.</p>
+<p>After control mapping (F1.4) and before any assurance claim. Re-run it after every change to the estate: an indicator measured once is a snapshot, and the whole argument for KCIs is that point-in-time testing fails for systems that change weekly.</p>
 <h2>Step-by-step</h2>
-<p><strong>1 — Write the indicator as a computation, not a question.</strong> "Object handlers
-that compare an owner" is measurable; "is authorisation adequate" is not.</p>
-<p><strong>2 — State the target beside it.</strong> An indicator with no target cannot be met
-or missed.</p>
-<p><strong>3 — Compute it from source, not from a register.</strong> A register records what
-somebody believed at the time.</p>
-<p><strong>4 — Include at least one indicator the estate passes.</strong> A set that always
-reports GAP cannot be shown to discriminate.</p>
-<p><strong>5 — Attach a mitigation to every gap, naming where the fix is taught.</strong> A gap
-with no next step is a complaint.</p>
+<p><strong>1 — Write the indicator as a computation, not a question.</strong> &quot;Object handlers that compare an owner&quot; is measurable; &quot;is authorisation adequate&quot; is not.</p>
+<p><strong>2 — State the target beside it.</strong> An indicator with no target cannot be met or missed.</p>
+<p><strong>3 — Compute it from source, not from a register.</strong> A register records what somebody believed at the time.</p>
+<p><strong>4 — Include at least one indicator the estate passes.</strong> A set that always reports GAP cannot be shown to discriminate.</p>
+<p><strong>5 — Attach a mitigation to every gap, naming where the fix is taught.</strong> A gap with no next step is a complaint.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the <code>cybertravels/</code> tree, read at run time.</p>
 <p><strong>Output</strong> — a real run:</p>
 <pre><code>KCI-01  object handlers that compare an owner       == 1.00      0.29  GAP
 KCI-05  egress control present                         == 1      0.00  GAP
-KCI-06  no credential literal in the source            == 0      0.00  ok
-</code></pre>
-<p>KCI-05 measures a component that does not exist. That is the backlog, stated in
-the same units as everything else.</p>
+KCI-06  no credential literal in the source            == 0      0.00  ok</code></pre>
+<p>KCI-05 measures a component that does not exist. That is the backlog, stated in the same units as everything else.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;kcis&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;indicator&quot;: &quot;str&quot;, &quot;target&quot;: &quot;str&quot;,
             &quot;measured&quot;: 0.0, &quot;met&quot;: true}],
   &quot;gaps&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;gap&quot;: &quot;str&quot;, &quot;mitigation&quot;: &quot;str&quot;}]
-}
-</code></pre>
+}</code></pre>
 <h2>Common edge cases</h2>
-<ul>
-<li><strong>The indicator measures a control you have not built.</strong> It reads zero and
-  always will. That is a backlog item, not an estate failure.</li>
-<li><strong>A denominator of zero.</strong> No object handlers means the indicator is
-  undefined, not perfect.</li>
-<li><strong>The measurement is gameable.</strong> If renaming a function moves the number, it
-  measures naming.</li>
-</ul>
+<ul><li><strong>The indicator measures a control you have not built.</strong> It reads zero and</li></ul>
+<p>  always will. That is a backlog item, not an estate failure.</p>
+<ul><li><strong>A denominator of zero.</strong> No object handlers means the indicator is</li></ul>
+<p>  undefined, not perfect.</p>
+<ul><li><strong>The measurement is gameable.</strong> If renaming a function moves the number, it</li></ul>
+<p>  measures naming.</p>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Scoring instead of listing gaps.</strong> "72% compliant" is not actionable by
-  anyone.</li>
-<li><strong>Measuring from the register.</strong> It records intent, not state.</li>
-<li><strong>Indicators that all fail.</strong> Nothing shows the instrument works.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons F1.13</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>f1-13-measuring-the-controls-on-cybertravels</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons F1.13</code></td><td>type <code>/f1-13-measuring-the-controls-on-cybertravels</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons F1.13</code></td><td>type <code>/f1-13-measuring-the-controls-on-cybertravels</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons F1.13</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons F1.13</code></td><td>type <code>$f1-13-measuring-the-controls-on-cybertravels</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py F1.13</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at F1.13 --out work/cybertravels
+<ul><li><strong>Scoring instead of listing gaps.</strong> &quot;72% compliant&quot; is not actionable by</li></ul>
+<p>  anyone.</p>
+<ul><li><strong>Measuring from the register.</strong> It records intent, not state.</li><li><strong>Indicators that all fail.</strong> Nothing shows the instrument works.</li></ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons F1.13</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>f1-13-measuring-the-controls-on-cybertravels</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons F1.13</code></td><td>type <code>/f1-13-measuring-the-controls-on-cybertravels</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons F1.13</code></td><td>type <code>/f1-13-measuring-the-controls-on-cybertravels</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons F1.13</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons F1.13</code></td><td>type <code>$f1-13-measuring-the-controls-on-cybertravels</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py F1.13</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at F1.13 --out work/cybertravels
 python3 scripts/checkpoint.py --at F1.13 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>One indicator met and five gaps, each with a named mitigation — and every number computed from the tree at run time rather than read from a register.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Write a seventh indicator for a control CyberTravels does have, and check it reads as met. An instrument that only ever says GAP is not measuring.</p></div></section><section class="ls ls-slate"><h2 class="lsh"><span class="lsi">→</span>Where this leaves you</h2><div class="lsb"><p><b>What you can do now.</b> A key control indicator you can compute, and everything it needs to be one: an inventory for its denominator, a risk tier for its target, a control map for its subject, an owner against its name, and verification that re-reads it instead of citing last year. F1.13 runs six of them over CyberTravels and returns five gaps.</p><p><b>What you still cannot do.</b> Every one of those indicators answers to you. A regulator does not ask what you measured; they ask which obligation it discharges, on what evidence, and whether the reading predates the incident.</p><p class="nextch">Chapter F2 points the same indicators outward — one measured control set quoted to several regimes, and documentation that is a series of readings rather than a description. Next → F2.1, the regulatory map.</p></div></section><p class="sub" style="margin-top:10px">Skill source: <code>skills/grc/kci-control-measurement</code></p></div><div class="pager"><a href="F1.12.html"><span class="k">← Previous</span><span class="t">F1.12 · Working the seams</span></a><a class="next" href="F2.1.html"><span class="k">Next →</span><span class="t">F2.1 · The regulatory map</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

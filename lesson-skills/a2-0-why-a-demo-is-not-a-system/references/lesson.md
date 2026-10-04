@@ -5,13 +5,19 @@
 You have a working agent. It is not yet a system, and the difference is not
 features — it is the machinery that lets somebody who is not you operate it.
 
-Three questions separate the two, and a demo answers none of them:
+Three capabilities separate the two, and a demo has none of them:
 
-| question | what it needs | where it goes wrong |
-|---|---|---|
-| what did it do? | a trace | the run emitted only its answer |
-| who caused it? | an audit trail | one shared identity in every row |
-| is it still right? | an evaluation | it was checked by hand, once |
+| capability | what it needs | where it goes wrong | built in |
+|---|---|---|---|
+| what did it do? | a trace | the run emitted only its answer | A2.1 |
+| who caused it? | an audit trail | one shared identity in every row | A2.2 |
+| is it still right? | an evaluation | it was checked by hand, once | A2.3 and A2.4 |
+
+Those are the three things you build next. **The skill in this lesson scores
+something different and narrower** — the three questions an *investigation*
+asks of a record that already exists: which human, what motivated it, which hop
+originated it. Keep the two triples apart: the first is the chapter's plan, the
+second is the number you are about to measure, and it is a number out of three.
 
 ### The order matters
 

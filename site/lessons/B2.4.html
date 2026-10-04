@@ -6,28 +6,15 @@
    +-----------------+            +---------------------+
    injection always finds         injection has to arrive
    a live credential              during the window, on that task</pre><p><strong>Mitigates: T3 Privilege Compromise · T2 Tool Misuse.</strong></p>
-<p>B2.3 narrows authority at the moment of delegation. This lesson removes it when
-the task is over.</p>
-<p>Standing authority is the reason an injection is always worth attempting: the
-credential is there, permanently, waiting. Every successful B1.3 lands on a live
-grant. Just-in-time authority changes the arithmetic — the attacker has to
-arrive during a window that exists only while a specific task is running, and
-that is bound to a specific resource.</p>
+<p>B2.3 narrows authority at the moment of delegation. This lesson removes it when the task is over.</p>
+<p>Standing authority is the reason an injection is always worth attempting: the credential is there, permanently, waiting. Every successful B1.3 lands on a live grant. Just-in-time authority changes the arithmetic — the attacker has to arrive during a window that exists only while a specific task is running, and that is bound to a specific resource.</p>
 <p>Three properties, and the third is the one usually skipped:</p>
 <p><strong>Short-lived.</strong> Minutes, not months. Theft has a deadline.</p>
-<p><strong>Purpose-bound.</strong> Scoped to <em>this</em> resource, not to the resource class. Not
-<code>reports:write</code> but <code>reports:write</code> on report 8812.</p>
-<p><strong>Revoked on completion.</strong> The grant ends when the task ends, not when the timer
-does. A task that finishes in ten seconds should not leave a fifteen-minute
-credential lying around, which is the difference between a TTL and an actual
-lifecycle.</p>
-<p>The operational cost is real and worth stating plainly: something must issue
-these, and if that path breaks, work stops. That is the trade — a system that
-fails closed under a control outage, in exchange for a system that has no
-standing authority to steal.</p><div class="how"><blockquote>
-<p><strong>What this control closes.</strong></p>
-<p>Removes the <strong>standing</strong> grant an injection needs. The attacker must now arrive inside a window bound to one task and one resource.</p>
-</blockquote>
+<p><strong>Purpose-bound.</strong> Scoped to <em>this</em> resource, not to the resource class. Not <code>reports:write</code> but <code>reports:write</code> on report 8812.</p>
+<p><strong>Revoked on completion.</strong> The grant ends when the task ends, not when the timer does. A task that finishes in ten seconds should not leave a fifteen-minute credential lying around, which is the difference between a TTL and an actual lifecycle.</p>
+<p>The operational cost is real and worth stating plainly: something must issue these, and if that path breaks, work stops. That is the trade — a system that fails closed under a control outage, in exchange for a system that has no standing authority to steal.</p><div class="how"><blockquote><strong>What this control closes.</strong></blockquote>
+<blockquote></blockquote>
+<blockquote>Removes the <strong>standing</strong> grant an injection needs. The attacker must now arrive inside a window bound to one task and one resource.</blockquote>
 <h2>2 · The control</h2><h2>3 · Finding the standing grants, as a skill</h2>
 <p>Just-in-time authority is only worth building where standing authority exists today, and at CyberTravels that list is not the one in the design document — it is in the authorisation graph and in the OAuth scopes the credential provider stored when someone first connected the payments API. The procedure diffs what each identity <em>holds</em> against what its declared tools actually <em>need</em>, and flags every permanent grant. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/entitlement-overprivilege-analyzer/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/entitlement-overprivilege-analyzer/SKILL.md</code></a></p><pre class="front"><code>name: entitlement-overprivilege-analyzer
 description: &gt;-
@@ -38,52 +25,35 @@ description: &gt;-
 allowed-tools: Bash, Read</code></pre><h1>Entitlement Overprivilege Analyzer</h1>
 <p><strong>Controls:</strong> Controls 1 and 3 — over-privileged access</p>
 <h2>What this adds beyond the IAM verifier</h2>
-<p>The IAM verifier measures cloud permissions against cloud usage. This skill
-measures <strong>application-level entitlements</strong> — relationship-graph authorisation,
-OAuth scopes on stored credential providers, and identity-registry
-relationships — against what the declared tool surface actually requires.</p>
-<p>An agent can hold a minimal cloud role and an OAuth token with full mailbox
-access.</p>
+<p>The IAM verifier measures cloud permissions against cloud usage. This skill measures <strong>application-level entitlements</strong> — relationship-graph authorisation, OAuth scopes on stored credential providers, and identity-registry relationships — against what the declared tool surface actually requires.</p>
+<p>An agent can hold a minimal cloud role and an OAuth token with full mailbox access.</p>
 <h2>When to use this</h2>
-<p>After the IAM baseline is verified, not instead of it. The IAM verifier asks
-whether the role is default-deny; this asks whether the entitlements actually
-granted exceed what the declared tools need. Reach for it when scopes were
-granted at integration time, when a credential provider holds OAuth scopes
-nobody has reviewed, or when looking for standing privilege.</p>
+<p>After the IAM baseline is verified, not instead of it. The IAM verifier asks whether the role is default-deny; this asks whether the entitlements actually granted exceed what the declared tools need. Reach for it when scopes were granted at integration time, when a credential provider holds OAuth scopes nobody has reviewed, or when looking for standing privilege.</p>
 <h2>Procedure</h2>
-<ol>
-<li><strong>Take the required capability set</strong> from the code-surface analyzer. This is
-   the denominator: what the declared tools genuinely need.</li>
-<li><strong>Enumerate granted entitlements</strong> from the authorisation graph for every
-   identity in the deployment manifest.</li>
-<li><strong>Enumerate credential-provider scopes.</strong> Stored OAuth scopes are frequently
-   far wider than the tool needs, because the consent screen offered a bundle.</li>
-<li><strong>Diff.</strong> Every grant with no corresponding requirement is an over-privilege
-   finding, and each needs a justification gap recorded — the grant, the
-   requirement it was presumably for, and the absence.</li>
-<li><strong>Flag standing privilege.</strong> Any grant that is permanent rather than issued
-   per task.</li>
-</ol>
+<ol><li><strong>Take the required capability set</strong> from the code-surface analyzer. This is</li></ol>
+<p>   the denominator: what the declared tools genuinely need.</p>
+<ol><li><strong>Enumerate granted entitlements</strong> from the authorisation graph for every</li></ol>
+<p>   identity in the deployment manifest.</p>
+<ol><li><strong>Enumerate credential-provider scopes.</strong> Stored OAuth scopes are frequently</li></ol>
+<p>   far wider than the tool needs, because the consent screen offered a bundle.</p>
+<ol><li><strong>Diff.</strong> Every grant with no corresponding requirement is an over-privilege</li></ol>
+<p>   finding, and each needs a justification gap recorded — the grant, the    requirement it was presumably for, and the absence.</p>
+<ol><li><strong>Flag standing privilege.</strong> Any grant that is permanent rather than issued</li></ol>
+<p>   per task.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/entitlement-overprivilege-analyzer/scripts/entitlement_overprivilege_analyzer.py" target="_blank" rel="noopener"><code>scripts/entitlement_overprivilege_analyzer.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>   the task's own write      ok      permitted
+<pre><code>   the task&#x27;s own write      ok      permitted
    a different report        REFUSED bound to report/8812
    a different scope         REFUSED scoped to reports:write
    after the task completes  REFUSED task closed
    after the TTL expires     REFUSED expired
 
 An injection landing at 09:14 needs a task to be open, on the resource
-it wants, holding the scope it wants. Standing authority required none
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+it wants, holding the scope it wants. Standing authority required none</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;identities&quot;: [
     {&quot;id&quot;: &quot;str&quot;,
@@ -94,13 +64,9 @@ checked.</p>
   &quot;oauth_scope_excess&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;granted_scope&quot;: &quot;str&quot;, &quot;needed_scope&quot;: &quot;str&quot;}],
   &quot;standing_privilege&quot;: [&quot;str&quot;],
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Comparing grants against other grants.</strong> The denominator is the tool
-  surface, not a peer deployment.</li>
-<li><strong>Accepting a bundled OAuth scope</strong> because it was what the provider offered.</li>
-<li><strong>Missing standing privilege</strong> because the scope itself looked narrow.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B2.4</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b2-4-just-in-time-authority</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B2.4</code></td><td>type <code>/b2-4-just-in-time-authority</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B2.4</code></td><td>type <code>/b2-4-just-in-time-authority</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B2.4</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B2.4</code></td><td>type <code>$b2-4-just-in-time-authority</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B2.4</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B2.4 --out work/cybertravels
-python3 scripts/checkpoint.py --at B2.4 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires. The skill also reports its shape. Note what its procedure insists on: the denominator is the capability set the tools require, not another set of grants — comparing grants against grants is how a review concludes that an over-privileged agent is normal — and a narrow-looking scope still counts as standing privilege if it never expires.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take one standing grant an agent holds and work out what would break if it expired in two minutes. That list is the real cost of just-in-time, and it is usually shorter than expected.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Keycloak</span><span>OPA</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/entitlement-overprivilege-analyzer</code></p></div><div class="pager"><a href="B2.3.html"><span class="k">← Previous</span><span class="t">B2.3 · Delegation that narrows, and survives audit</span></a><a class="next" href="B2.5.html"><span class="k">Next →</span><span class="t">B2.5 · The non-human identity lifecycle</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<ul><li><strong>Comparing grants against other grants.</strong> The denominator is the tool</li></ul>
+<p>  surface, not a peer deployment.</p>
+<ul><li><strong>Accepting a bundled OAuth scope</strong> because it was what the provider offered.</li><li><strong>Missing standing privilege</strong> because the scope itself looked narrow.</li></ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B2.4</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b2-4-just-in-time-authority</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B2.4</code></td><td>type <code>/b2-4-just-in-time-authority</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B2.4</code></td><td>type <code>/b2-4-just-in-time-authority</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B2.4</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B2.4</code></td><td>type <code>$b2-4-just-in-time-authority</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B2.4</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B2.4 --out work/cybertravels
+python3 scripts/checkpoint.py --at B2.4 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A grant bound to one scope, one resource and one task permits only the task&#x27;s own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires. The skill also reports its shape. Note what its procedure insists on: the denominator is the capability set the tools require, not another set of grants — comparing grants against grants is how a review concludes that an over-privileged agent is normal — and a narrow-looking scope still counts as standing privilege if it never expires.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take one standing grant an agent holds and work out what would break if it expired in two minutes. That list is the real cost of just-in-time, and it is usually shorter than expected.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Keycloak</span><span>OPA</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/entitlement-overprivilege-analyzer</code></p></div><div class="pager"><a href="B2.3.html"><span class="k">← Previous</span><span class="t">B2.3 · Delegation that narrows, and survives audit</span></a><a class="next" href="B2.5.html"><span class="k">Next →</span><span class="t">B2.5 · The non-human identity lifecycle</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

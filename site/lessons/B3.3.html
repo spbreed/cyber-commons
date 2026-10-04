@@ -7,32 +7,17 @@
                                     one place to enforce, one to log
 
    allow-all egress makes every control upstream best-effort</pre><p><strong>Mitigates: T2 Tool Misuse · T6 Intent Breaking · LLM02 Sensitive Information Disclosure.</strong></p>
-<p>Egress is the highest-leverage control in the architecture, for a structural
-reason: <strong>every exfiltration path ends at the network boundary</strong>, no matter how
-the agent was persuaded to take it.</p>
-<p>Injection, tool misuse, a compromised MCP server, model-authored code, a
-poisoned peer message — all of them converge on the same final step. Data leaves.
-A control at that step does not need to understand what happened upstream, which
-is exactly what makes it robust: it is the one place where you do not have to
-predict the attack.</p>
+<p>Egress is the highest-leverage control in the architecture, for a structural reason: <strong>every exfiltration path ends at the network boundary</strong>, no matter how the agent was persuaded to take it.</p>
+<p>Injection, tool misuse, a compromised MCP server, model-authored code, a poisoned peer message — all of them converge on the same final step. Data leaves. A control at that step does not need to understand what happened upstream, which is exactly what makes it robust: it is the one place where you do not have to predict the attack.</p>
 <p>Two rules that decide whether it works:</p>
-<p><strong>Allow-list, never deny-list.</strong> You cannot enumerate the internet. A deny-list
-blocks the destinations you thought of.</p>
-<p><strong>Specific destinations.</strong> <code>*.googleapis.com</code> or <code>*.s3.amazonaws.com</code> is not an
-egress policy — anyone can create a bucket in those namespaces, and B1.3's
-attacker will. The allow-list holds the destinations this workload actually
-needs, and there are usually fewer than five.</p>
-<p>And one placement rule: enforce it <strong>where the agent cannot rewrite it</strong> — the
-network layer, the sidecar, the gateway. An egress check inside the agent's own
-process is a suggestion to the component being attacked.</p>
-<p>The cost is honest: an agent that needs the open internet cannot have this
-control, and that is a design decision to make deliberately rather than by
-default.</p><div class="how"><blockquote>
-<p><strong>What this control closes.</strong></p>
-<p>The one control that does not need to know how the attack worked, because every exfiltration path ends here.</p>
-</blockquote>
+<p><strong>Allow-list, never deny-list.</strong> You cannot enumerate the internet. A deny-list blocks the destinations you thought of.</p>
+<p><strong>Specific destinations.</strong> <code><em>.googleapis.com</code> or <code></em>.s3.amazonaws.com</code> is not an egress policy — anyone can create a bucket in those namespaces, and B1.3&#x27;s attacker will. The allow-list holds the destinations this workload actually needs, and there are usually fewer than five.</p>
+<p>And one placement rule: enforce it <strong>where the agent cannot rewrite it</strong> — the network layer, the sidecar, the gateway. An egress check inside the agent&#x27;s own process is a suggestion to the component being attacked.</p>
+<p>The cost is honest: an agent that needs the open internet cannot have this control, and that is a design decision to make deliberately rather than by default.</p><div class="how"><blockquote><strong>What this control closes.</strong></blockquote>
+<blockquote></blockquote>
+<blockquote>The one control that does not need to know how the attack worked, because every exfiltration path ends here.</blockquote>
 <h2>2 · The control</h2><h2>3 · Probing the sandbox, as a skill</h2>
-<p>An allow-list in a config file is a claim. CyberTravels' Coding Agent runs model-authored code, so the claim worth making is <em>this runtime has no egress</em>, and that one is settled by probing, in an environment you own. The procedure names the residual paths — DNS first, because it is the one that has actually been used — and requires you to record what you did <strong>not</strong> test, because a probe list is a statement about coverage. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/sandbox-egress-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/sandbox-egress-verifier/SKILL.md</code></a></p><pre class="front"><code>name: sandbox-egress-verifier
+<p>An allow-list in a config file is a claim. CyberTravels&#x27; Coding Agent runs model-authored code, so the claim worth making is <em>this runtime has no egress</em>, and that one is settled by probing, in an environment you own. The procedure names the residual paths — DNS first, because it is the one that has actually been used — and requires you to record what you did <strong>not</strong> test, because a probe list is a statement about coverage. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/sandbox-egress-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/sandbox-egress-verifier/SKILL.md</code></a></p><pre class="front"><code>name: sandbox-egress-verifier
 description: &gt;-
   Verify AI-generated code executes only in an approved sandbox with no
   network egress, and probe the known bypass paths. Use when attesting a no-
@@ -41,62 +26,38 @@ description: &gt;-
 allowed-tools: Bash, Read</code></pre><h1>Sandbox Egress Verifier</h1>
 <p><strong>Controls:</strong> Control 2 — sandboxed no-egress runtime</p>
 <h2>Confidence: PARTIAL — and this ceiling is not negotiable</h2>
-<p>You can prove a sandbox is <strong>misconfigured</strong>. You cannot prove the negative
-"no covert channel exists". Network isolation has documented bypass paths, and
-a verdict of PASS on this control would be a claim the evidence cannot support.</p>
+<p>You can prove a sandbox is <strong>misconfigured</strong>. You cannot prove the negative &quot;no covert channel exists&quot;. Network isolation has documented bypass paths, and a verdict of PASS on this control would be a claim the evidence cannot support.</p>
 <p><strong>Cap every verdict this skill produces at PARTIAL.</strong></p>
 <h2>When to use this</h2>
-<p>When a deployment claims isolation. Run it knowing what it cannot do: absence
-of a covert channel is not provable, DNS and object-storage bypasses are
-documented, and the honest output is a capped PARTIAL rather than a pass.</p>
+<p>When a deployment claims isolation. Run it knowing what it cannot do: absence of a covert channel is not provable, DNS and object-storage bypasses are documented, and the honest output is a capped PARTIAL rather than a pass.</p>
 <h2>Procedure</h2>
-<ol>
-<li>
-<p><strong>Identify the runtime and its network mode.</strong> Record which isolation
-   technology is in use and which mode it runs in. A mode that permits general
-   outbound network access is an immediate FAIL — no probing required.</p>
-</li>
-<li>
-<p><strong>Confirm the runtime is on the approved list.</strong> An approved sandbox in the
-   wrong mode and an unapproved sandbox in the right mode are both findings.</p>
-</li>
-<li>
-<p><strong>Probe the known residual paths</strong>, in an environment you own:</p>
-</li>
-<li><strong>DNS.</strong> Name resolution is frequently permitted where general egress is
-     not, and A/AAAA queries carry data outward. This has been demonstrated to
-     yield interactive command-and-control on a major managed sandbox.</li>
-<li><strong>Object storage reachability.</strong> Managed storage endpoints are commonly
-     left reachable and have been used as a command-and-control channel.</li>
-<li>
-<p><strong>Host escape.</strong> Subprocess spawning and any path from the sandboxed
-     process to the host.</p>
-</li>
-<li>
-<p><strong>Record what you did not test.</strong> A probe list is a statement about coverage,
-   and coverage is the honest part of this verdict.</p>
-</li>
-</ol>
+<ol><li><strong>Identify the runtime and its network mode.</strong> Record which isolation</li></ol>
+<p>   technology is in use and which mode it runs in. A mode that permits general    outbound network access is an immediate FAIL — no probing required.</p>
+<ol><li><strong>Confirm the runtime is on the approved list.</strong> An approved sandbox in the</li></ol>
+<p>   wrong mode and an unapproved sandbox in the right mode are both findings.</p>
+<ol><li><strong>Probe the known residual paths</strong>, in an environment you own:</li></ol>
+<ul><li><strong>DNS.</strong> Name resolution is frequently permitted where general egress is</li></ul>
+<p>     not, and A/AAAA queries carry data outward. This has been demonstrated to      yield interactive command-and-control on a major managed sandbox.</p>
+<ul><li><strong>Object storage reachability.</strong> Managed storage endpoints are commonly</li></ul>
+<p>     left reachable and have been used as a command-and-control channel.</p>
+<ul><li><strong>Host escape.</strong> Subprocess spawning and any path from the sandboxed</li></ul>
+<p>     process to the host.</p>
+<ol><li><strong>Record what you did not test.</strong> A probe list is a statement about coverage,</li></ol>
+<p>   and coverage is the honest part of this verdict.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifier.py" target="_blank" rel="noopener"><code>scripts/sandbox_egress_verifier.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
 <pre><code>destination                           deny-list   allow-list  note
 api.corp.example                      allow       allow       the one it actually needs
-archive.evil.example                  block       block       B1.3's exfiltration target
+archive.evil.example                  block       block       B1.3&#x27;s exfiltration target
 attacker-bucket.s3.amazonaws.com      allow       block       a bucket anyone can create
 169.254.169.254                       allow       block       cloud metadata - every credential
-pastebin.example                      allow       block       not on anyone's deny-list
+pastebin.example                      allow       block       not on anyone&#x27;s deny-list
 
-deny-list lets through : 3  ['attacker-bucket.s3.amazonaws.com', '169.254.169.254', 'pastebin.example']
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+deny-list lets through : 3  [&#x27;attacker-bucket.s3.amazonaws.com&#x27;, &#x27;169.254.169.254&#x27;, &#x27;pastebin.example&#x27;]</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;sandbox_runtime&quot;: &quot;str&quot;,
   &quot;network_mode&quot;: &quot;str&quot;,
@@ -105,15 +66,12 @@ checked.</p>
   &quot;untested_paths&quot;: [&quot;str&quot;],
   &quot;verdict&quot;: &quot;PARTIAL|FAIL&quot;,
   &quot;verdict_ceiling_reason&quot;: &quot;absence of a covert channel is not provable at runtime&quot;
-}
-</code></pre>
+}</code></pre>
 <p><code>PASS</code> is not a permitted value. If a tool emits one, that tool is wrong.</p>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Reporting PASS</strong> because the configuration looked right. That is the whole
-  reason this skill has a ceiling.</li>
-<li><strong>Probing only general HTTP egress.</strong> DNS is the path that has actually been
-  used.</li>
-<li><strong>Testing against someone else's infrastructure.</strong> Probe only what you own.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B3.3</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b3-3-egress-control</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B3.3</code></td><td>type <code>/b3-3-egress-control</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B3.3</code></td><td>type <code>/b3-3-egress-control</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B3.3</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B3.3</code></td><td>type <code>$b3-3-egress-control</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B3.3</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B3.3 --out work/cybertravels
+<ul><li><strong>Reporting PASS</strong> because the configuration looked right. That is the whole</li></ul>
+<p>  reason this skill has a ceiling.</p>
+<ul><li><strong>Probing only general HTTP egress.</strong> DNS is the path that has actually been</li></ul>
+<p>  used.</p>
+<ul><li><strong>Testing against someone else&#x27;s infrastructure.</strong> Probe only what you own.</li></ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B3.3</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b3-3-egress-control</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B3.3</code></td><td>type <code>/b3-3-egress-control</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B3.3</code></td><td>type <code>/b3-3-egress-control</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B3.3</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B3.3</code></td><td>type <code>$b3-3-egress-control</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B3.3</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B3.3 --out work/cybertravels
 python3 scripts/checkpoint.py --at B3.3 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs. The skill also reports its shape. Its ceiling is PARTIAL and not negotiable: a configuration that looks right is not a PASS, and probing general HTTP while leaving DNS alone tests the path nobody uses. The untested list is part of the output, not an omission from it.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Write the allow-list for one agent by listing the hosts it genuinely calls. If it is under five, you can ship this control this week; if it is unbounded, that is the finding.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Cilium</span><span>agentgateway</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/sandbox-egress-verifier</code></p></div><div class="pager"><a href="B3.2.html"><span class="k">← Previous</span><span class="t">B3.2 · Sandboxed execution</span></a><a class="next" href="B3.4.html"><span class="k">Next →</span><span class="t">B3.4 · Budgets and stop conditions</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

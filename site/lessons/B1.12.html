@@ -6,34 +6,22 @@
 
    error compounds: 0.9 -&gt; 0.81 -&gt; 0.73
    confidence compounds the other way, because repetition reads as corroboration</pre><p><strong>OWASP T5 — Cascading Hallucination Attacks. LLM09 — Misinformation.</strong></p>
-<p>The <strong>model</strong> component produces confident text. Sometimes the text is wrong.
-That is a known property, and on its own it is a quality problem rather than a
-security one.</p>
-<p>It becomes a security problem when the architecture has more than one step,
-because an unverified claim from step one is an <em>input</em> to step two. And inputs
-are not re-examined — that is the point of a pipeline.</p>
+<p>The <strong>model</strong> component produces confident text. Sometimes the text is wrong. That is a known property, and on its own it is a quality problem rather than a security one.</p>
+<p>It becomes a security problem when the architecture has more than one step, because an unverified claim from step one is an <em>input</em> to step two. And inputs are not re-examined — that is the point of a pipeline.</p>
 <p>Watch what happens to a single fabrication as it travels:</p>
-<p><strong>Hop one.</strong> "I could not find a CVE for this dependency, it is probably fine."
-Hedged, and the hedge is visible.</p>
-<p><strong>Hop two.</strong> The next agent summarises: "dependency has no known CVEs."
-The hedge is gone. Nothing lied — summarising removes qualifiers, that is what
-summarising is.</p>
-<p><strong>Hop three.</strong> "Dependency verified clean." Now it is a finding, with the
-confidence of something that was checked, and no field anywhere records that
-nobody checked anything.</p>
-<p>The security consequence is that <strong>confidence rises as evidence disappears</strong>,
-which is exactly backwards. And it is not limited to accidents: an attacker who
-can inject one plausible claim early gets it laundered into an established fact
-by your own pipeline, which is why this sits in the threat taxonomy rather than
-in a quality backlog.</p><div class="how"><blockquote>
-<p><strong>Where this lands on the reference architecture.</strong></p>
-<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
-                               |              |
-                         messaging        tools / mcp
-                               |              |
-                      knowledge / memory   egress
-           identity + policy wrap every call · observability records it</code></p>
-</blockquote>
+<p><strong>Hop one.</strong> &quot;I could not find a CVE for this dependency, it is probably fine.&quot; Hedged, and the hedge is visible.</p>
+<p><strong>Hop two.</strong> The next agent summarises: &quot;dependency has no known CVEs.&quot; The hedge is gone. Nothing lied — summarising removes qualifiers, that is what summarising is.</p>
+<p><strong>Hop three.</strong> &quot;Dependency verified clean.&quot; Now it is a finding, with the confidence of something that was checked, and no field anywhere records that nobody checked anything.</p>
+<p>The security consequence is that <strong>confidence rises as evidence disappears</strong>, which is exactly backwards. And it is not limited to accidents: an attacker who can inject one plausible claim early gets it laundered into an established fact by your own pipeline, which is why this sits in the threat taxonomy rather than in a quality backlog.</p><div class="how"><blockquote><strong>Where this lands on the reference architecture.</strong></blockquote>
+<blockquote></blockquote>
+<blockquote>```</blockquote>
+<blockquote>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model</blockquote>
+<blockquote>|              |</blockquote>
+<blockquote>messaging        tools / mcp</blockquote>
+<blockquote>|              |</blockquote>
+<blockquote>knowledge / memory   egress</blockquote>
+<blockquote>identity + policy wrap every call · observability records it</blockquote>
+<blockquote>```</blockquote>
 <h2>2 · The risk, realised</h2>
 <p>One hedged guess, three hops, and the confidence it acquires on the way.</p><h2>3 · The check, as a skill</h2>
 <p>A hedged sentence about libfoo becomes a confident claim in three hops. The skill tracks both series — confidence and surviving provenance — because either one alone looks ordinary and the pair is the finding.</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/confidence-provenance-decay-check/SKILL.md" target="_blank" rel="noopener"><code>skills/threats/confidence-provenance-decay-check/SKILL.md</code></a></p><pre class="front"><code>name: confidence-provenance-decay-check
@@ -43,29 +31,15 @@ description: &gt;-
   input to another, in report chains, research pipelines, or any place a summary
   is summarised.
 allowed-tools: Read, Grep, Glob</code></pre><h1>Confidence rises at exactly the rate evidence disappears</h1>
-<p>"I could not find a CVE, it is probably fine" becomes "libfoo is clean" in
-three hops. Nothing in the chain lied. Each step did what summarising does —
-dropped the hedge, dropped the caveat, dropped the sentence saying where the
-claim came from — and the result is a confident statement with no evidence
-behind it.</p>
+<p>&quot;I could not find a CVE, it is probably fine&quot; becomes &quot;libfoo is clean&quot; in three hops. Nothing in the chain lied. Each step did what summarising does — dropped the hedge, dropped the caveat, dropped the sentence saying where the claim came from — and the result is a confident statement with no evidence behind it.</p>
 <h2>When to use this</h2>
-<p>Report generation, triage pipelines, research chains, any agent that consumes
-another agent's output, and any workflow where a human reads only the last
-artefact.</p>
+<p>Report generation, triage pipelines, research chains, any agent that consumes another agent&#x27;s output, and any workflow where a human reads only the last artefact.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Find the chains.</strong> Every place where generated text is input to a later
-generation step. Include the human-visible summary at the end; it is a hop.</p>
-<p><strong>2 — Instrument the original claim.</strong> Record its hedge, its confidence if one
-is stated, and its provenance — the source it rests on.</p>
-<p><strong>3 — Step the chain and record both series.</strong> After each hop, the claim's
-confidence and its surviving provenance fields. Two numbers per hop; the shape
-is the finding.</p>
-<p><strong>4 — Identify the hop where provenance empties.</strong> That is where the claim
-became unfalsifiable, and it is almost always earlier than where the confidence
-peaked.</p>
-<p><strong>5 — Test the carry rule.</strong> A chain that propagates confidence and provenance
-as structured fields, rather than as prose the next step must re-read, does not
-decay this way. Check whether the interface has those fields at all.</p>
+<p><strong>1 — Find the chains.</strong> Every place where generated text is input to a later generation step. Include the human-visible summary at the end; it is a hop.</p>
+<p><strong>2 — Instrument the original claim.</strong> Record its hedge, its confidence if one is stated, and its provenance — the source it rests on.</p>
+<p><strong>3 — Step the chain and record both series.</strong> After each hop, the claim&#x27;s confidence and its surviving provenance fields. Two numbers per hop; the shape is the finding.</p>
+<p><strong>4 — Identify the hop where provenance empties.</strong> That is where the claim became unfalsifiable, and it is almost always earlier than where the confidence peaked.</p>
+<p><strong>5 — Test the carry rule.</strong> A chain that propagates confidence and provenance as structured fields, rather than as prose the next step must re-read, does not decay this way. Check whether the interface has those fields at all.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/threats/confidence-provenance-decay-check/scripts/confidence_provenance_decay_check.py" target="_blank" rel="noopener"><code>scripts/confidence_provenance_decay_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
@@ -76,28 +50,18 @@ decay this way. Check whether the interface has those fields at all.</p>
    3         0.80  a CVE for libfoo, it is fine
 
 provenance recorded at hop 3: none
-confidence at hop 0: 0.20   at hop 3: 0.8
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+confidence at hop 0: 0.20   at hop 3: 0.8</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;chain&quot;: [{&quot;hop&quot;: 0, &quot;claim&quot;: &quot;str&quot;, &quot;confidence&quot;: 0.0, &quot;provenance&quot;: [&quot;str&quot;]}],
   &quot;confidence_delta&quot;: 0.0,
   &quot;provenance_lost_at&quot;: 0,
   &quot;interface&quot;: {&quot;carries_confidence&quot;: false, &quot;carries_provenance&quot;: false},
   &quot;human_reads_hop&quot;: 0
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Judging the final claim on its own.</strong> It reads well. That is the problem.</li>
-<li><strong>Measuring only confidence.</strong> The pair is the finding; either alone is
-  ordinary.</li>
-<li><strong>Fixing it with a prompt.</strong> "Preserve caveats" is advisory; a field is not.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B1.12</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b1-12-cascading-hallucination</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B1.12</code></td><td>type <code>/b1-12-cascading-hallucination</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B1.12</code></td><td>type <code>/b1-12-cascading-hallucination</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B1.12</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B1.12</code></td><td>type <code>$b1-12-cascading-hallucination</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B1.12</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B1.12 --out work/cybertravels
+<ul><li><strong>Judging the final claim on its own.</strong> It reads well. That is the problem.</li><li><strong>Measuring only confidence.</strong> The pair is the finding; either alone is</li></ul>
+<p>  ordinary.</p>
+<ul><li><strong>Fixing it with a prompt.</strong> &quot;Preserve caveats&quot; is advisory; a field is not.</li></ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons B1.12</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>b1-12-cascading-hallucination</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons B1.12</code></td><td>type <code>/b1-12-cascading-hallucination</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons B1.12</code></td><td>type <code>/b1-12-cascading-hallucination</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons B1.12</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons B1.12</code></td><td>type <code>$b1-12-cascading-hallucination</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py B1.12</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at B1.12 --out work/cybertravels
 python3 scripts/checkpoint.py --at B1.12 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Take a finding your pipeline produced and try to walk it back to the step that first asserted it. If you cannot reach a step that checked something, you have found a cascade rather than a finding.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>Inspect</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/threats/confidence-provenance-decay-check</code></p></div><div class="pager"><a href="B1.11.html"><span class="k">← Previous</span><span class="t">B1.11 · Rogue agents in a multi-agent system</span></a><a class="next" href="B1.13.html"><span class="k">Next →</span><span class="t">B1.13 · Resource overload</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

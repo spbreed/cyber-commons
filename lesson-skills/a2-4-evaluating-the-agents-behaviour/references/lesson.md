@@ -96,4 +96,4 @@ The skill below is the whole method: score the trajectory, score the outputs, ju
 
 ## Your turn
 
-Change R2's expected amount in the fixture from 140 to 1400 so the agent is now right, and re-run. Exact match rises and the two weak matchers do not move, because they were already scoring it as a pass. That asymmetry is the argument: the weak matchers cannot go up when you fix something, because they were never measuring it.
+Change R2's expected amount in the fixture from 140 to 1400 so the trajectory is now right, and re-run. Exact match rises to 0.667 and name-only does not move, because it was already scoring R2 as a pass. Order-ignored rises too — to 0.833 — and that is worth understanding before you read it as a contradiction: it compares arguments as well as order, so R2's wrong amount was failing it for a reason that had nothing to do with sequence. Then check output accuracy, which does not move at all: you changed the approved trajectory, not the recorded truth, so the agent still told the traveller the wrong number. Three matchers, three different answers to "did it get better".

@@ -52,7 +52,7 @@ the learner never has to type a command themselves: you run them.
    **Read this next**. Use only what it printed. If it says a step was skipped
    or refused, say that plainly and pass on the fix it gave; a skipped step is
    not a pass.
-5. **Give them the exercise.** Add an eighth component: an egress gateway. CyberTravels does not have one, which is why B3.7 exists. Mark which trust boundaries it would move and which it would not.
+5. **Give them the exercise.** Mark `egress` present in the fixture — change its third field from False to True — and re-run. The component count does not change, because the box was always on the map; what changes is which edges cross a boundary. Name the ones that move and the ones that do not, then read B3.7, which is the lesson about actually building it.
 6. **Point at the next lesson**, from the readback's last heading.
 
 ## The readback

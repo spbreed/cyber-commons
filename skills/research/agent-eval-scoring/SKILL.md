@@ -60,7 +60,7 @@ tool-call accuracy          n=6
    name only                0.667   <- +0.167 for free
    order ignored            0.667   <- +0.167 for free
 
-output accuracy             correct 3  incorrect 2  unscoreable 1  = 0.600
+output accuracy             correct 2  incorrect 3  unscoreable 1  = 0.400
 
 Neither number above needed a model. Only the unscoreable run does.
 ```

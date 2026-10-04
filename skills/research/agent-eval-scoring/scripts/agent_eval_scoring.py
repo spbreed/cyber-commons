@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[3] / "_runtime"))
@@ -110,6 +111,39 @@ def tool_call_accuracy(runs=RUNS) -> dict:
             "order_ignored": round(unordered / n, 3), "n": n}
 
 
+def _matches(truth: str, answer: str) -> bool:
+    """Does the answer contain every token of the truth, as a whole token?
+
+    This was `all(w in answer.lower() for w in truth.lower().split())` — a bare
+    substring test — and it scored R2 as **correct**: truth `refunded 140`
+    against answer `Refunded 1400.00 EUR`, because `"140"` is a substring of
+    `"1400.00"`. R2 is the run this lesson spends two paragraphs calling the
+    expensive near-miss, and the deterministic scorer passed it while the judge
+    correctly failed it — so a right verdict could be booked as a false fail in
+    `judge_validation`.
+
+    A lesson about metrics that flatter an agent committed the error it teaches,
+    and a reader checking the arithmetic by hand would have found it.
+
+    Tightening it to whole-token matching alone is wrong in the other direction:
+    R1's truth is `refunded 240` and its answer says `240.00 EUR`, which is the
+    same amount written differently. So numbers are compared **as numbers** and
+    words as words. 240 matches 240.00; 140 does not match 1400.00.
+    """
+    def toks(s: str) -> list[str]:
+        return re.findall(r"[a-z]+|[0-9]+(?:\.[0-9]+)?", s.lower())
+
+    got = toks(answer)
+    nums = {float(t) for t in got if t[0].isdigit()}
+    for want in toks(truth):
+        if want[0].isdigit():
+            if float(want) not in nums:
+                return False
+        elif want not in got:
+            return False
+    return True
+
+
 def output_accuracy(runs=RUNS) -> dict:
     """Scored only where a truth was recorded. Unscoreable gets its own column.
 
@@ -121,7 +155,7 @@ def output_accuracy(runs=RUNS) -> dict:
     for r in runs:
         if r["truth"] is None:
             unscoreable += 1
-        elif all(w in r["answer"].lower() for w in r["truth"].lower().split()):
+        elif _matches(r["truth"], r["answer"]):
             correct += 1
         else:
             incorrect += 1

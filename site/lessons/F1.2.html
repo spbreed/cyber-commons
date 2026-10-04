@@ -7,20 +7,11 @@
    | tools it holds . environment . last verified   |
    +------------------------------------------------+
 
-   building it is a project. keeping it true is the control.</pre><p>You cannot govern, tier, test or revoke what you cannot list. The AI inventory is
-therefore the first control, not a documentation exercise.</p>
-<p>The honest finding of every first inventory is the same: <strong>most of it was already
-in production.</strong> Not because anyone was reckless, but because AI features arrive
-inside products you already bought, and agents get created programmatically by
-other agents.</p>
+   building it is a project. keeping it true is the control.</pre><p>You cannot govern, tier, test or revoke what you cannot list. The AI inventory is therefore the first control, not a documentation exercise.</p>
+<p>The honest finding of every first inventory is the same: <strong>most of it was already in production.</strong> Not because anyone was reckless, but because AI features arrive inside products you already bought, and agents get created programmatically by other agents.</p>
 <p>Three sources, and the third finds what the first two miss:</p>
-<ol>
-<li>the <strong>model registry</strong> — what your ML team registered,</li>
-<li><strong>procurement and expense</strong> — what someone bought,</li>
-<li><strong>egress logs to model-provider domains</strong> — what is actually being used.</li>
-</ol>
-<p>Source 3 is the one that discovers the department using a frontier API on a
-personal card, and the SaaS product that quietly added an AI feature.</p><blockquote class="anchor">**Anchor → F1.1.** The inventory is the **denominator**. Every indicator is a share — of agents, of tool calls, of handlers — and a share whose denominator is unknown is a count wearing a percentage sign. An incomplete inventory does not make your indicators wrong; it makes them unfalsifiable.</blockquote><div class="how"><h2>2 · Demo — build the inventory from three sources</h2><h2>3 · Where it breaks — the gap distribution is always like this</h2><h2>4 · The control — a discovery query you can re-run</h2><h2>5 · Resolving one row into a deployment, as a skill</h2>
+<ol><li>the <strong>model registry</strong> — what your ML team registered,</li><li><strong>procurement and expense</strong> — what someone bought,</li><li><strong>egress logs to model-provider domains</strong> — what is actually being used.</li></ol>
+<p>Source 3 is the one that discovers the department using a frontier API on a personal card, and the SaaS product that quietly added an AI feature.</p><blockquote class="anchor">**Anchor → F1.1.** The inventory is the **denominator**. Every indicator is a share — of agents, of tool calls, of handlers — and a share whose denominator is unknown is a count wearing a percentage sign. An incomplete inventory does not make your indicators wrong; it makes them unfalsifiable.</blockquote><div class="how"><h2>2 · Demo — build the inventory from three sources</h2><h2>3 · Where it breaks — the gap distribution is always like this</h2><h2>4 · The control — a discovery query you can re-run</h2><h2>5 · Resolving one row into a deployment, as a skill</h2>
 <p>Discovery finds that a thing exists. Governing it needs the row resolved into artefacts: which repository at which commit, which image <strong>digest</strong> rather than which tag, which IAM role and SPIFFE ID, which gateway and guardrail, and every downstream its tools call. Every other attestation skill consumes this graph, which is why it runs first. This is the file in this repository:</p></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/deployment-inventory-resolver/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/deployment-inventory-resolver/SKILL.md</code></a></p><pre class="front"><code>name: deployment-inventory-resolver
 description: &gt;-
   Resolve a deployment_id into the artifacts that make up one agentic
@@ -31,35 +22,23 @@ description: &gt;-
 allowed-tools: Bash, Read, Grep, Glob</code></pre><h1>Deployment Inventory Resolver</h1>
 <p><strong>Controls:</strong> All — this skill produces the join key</p>
 <h2>Why this runs first</h2>
-<p><code>deployment_id</code> is the primary key for every other skill in this set. Without
-it, an IAM finding, a SPIFFE entry and a gateway policy are three unrelated
-facts about three things that may or may not be the same system.</p>
-<p>This skill turns that ID into a manifest of content-addressed artifacts, so
-every later finding resolves to one evaluable unit and cannot be silently
-confused with a neighbouring deployment.</p>
+<p><code>deployment_id</code> is the primary key for every other skill in this set. Without it, an IAM finding, a SPIFFE entry and a gateway policy are three unrelated facts about three things that may or may not be the same system.</p>
+<p>This skill turns that ID into a manifest of content-addressed artifacts, so every later finding resolves to one evaluable unit and cannot be silently confused with a neighbouring deployment.</p>
 <h2>When to use this</h2>
-<p><strong>First, before any control is evaluated.</strong> Nothing else in this chain can run
-without a resolved <code>deployment_id</code>: an IAM finding, an identity entry and a
-gateway policy are three unrelated facts until something establishes they
-describe the same system. Also run it whenever anyone asks which repo, image,
-role, workload identity, gateway or guardrail a deployment actually consists
-of — that question is usually answered from memory and usually wrongly.</p>
+<p><strong>First, before any control is evaluated.</strong> Nothing else in this chain can run without a resolved <code>deployment_id</code>: an IAM finding, an identity entry and a gateway policy are three unrelated facts until something establishes they describe the same system. Also run it whenever anyone asks which repo, image, role, workload identity, gateway or guardrail a deployment actually consists of — that question is usually answered from memory and usually wrongly.</p>
 <h2>Procedure</h2>
-<ol>
-<li><strong>Resolve the code.</strong> Repository URL plus the exact commit SHA that was
-   built. Not a branch — a branch moves.</li>
-<li><strong>Resolve the image.</strong> Registry digest (<code>sha256:…</code>), not a tag. Confirm the
-   digest matches the revision actually deployed, not the newest build.</li>
-<li><strong>Resolve the runtime identity.</strong> The IAM role ARN, the SPIFFE ID, and —
-   on platforms that auto-create one — the workload identity ARN exposed by the
-   runtime/gateway description API.</li>
-<li><strong>Resolve the traffic path.</strong> Gateway or route ARN, and the guardrail ID
-   attached to it.</li>
-<li><strong>Resolve the downstreams.</strong> Every service the deployment's tools call.
-   These become the input to the risk-registry skill.</li>
-<li><strong>Cross-link and check completeness.</strong> Every artifact must reference the
-   others. Report orphans rather than omitting them.</li>
-</ol>
+<ol><li><strong>Resolve the code.</strong> Repository URL plus the exact commit SHA that was</li></ol>
+<p>   built. Not a branch — a branch moves.</p>
+<ol><li><strong>Resolve the image.</strong> Registry digest (<code>sha256:…</code>), not a tag. Confirm the</li></ol>
+<p>   digest matches the revision actually deployed, not the newest build.</p>
+<ol><li><strong>Resolve the runtime identity.</strong> The IAM role ARN, the SPIFFE ID, and —</li></ol>
+<p>   on platforms that auto-create one — the workload identity ARN exposed by the    runtime/gateway description API.</p>
+<ol><li><strong>Resolve the traffic path.</strong> Gateway or route ARN, and the guardrail ID</li></ol>
+<p>   attached to it.</p>
+<ol><li><strong>Resolve the downstreams.</strong> Every service the deployment&#x27;s tools call.</li></ol>
+<p>   These become the input to the risk-registry skill.</p>
+<ol><li><strong>Cross-link and check completeness.</strong> Every artifact must reference the</li></ol>
+<p>   others. Report orphans rather than omitting them.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/deployment-inventory-resolver/scripts/deployment_inventory_resolver.py" target="_blank" rel="noopener"><code>scripts/deployment_inventory_resolver.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
@@ -70,16 +49,10 @@ support-summariser                copilot           L1        support-eng   regi
 vendor-contract-analyser          embedded-feature  L1        —             expense report
 unknown-openai-usage-marketing    copilot           L1        —             egress logs
 pr-remediation-agent              agent             L2.5      —             egress logs
-agent-worker-7f3c                 agent             L2.5      —             egress logs
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+agent-worker-7f3c                 agent             L2.5      —             egress logs</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;resolved_at&quot;: &quot;str&quot;,
   &quot;artifacts&quot;: {
@@ -92,17 +65,12 @@ checked.</p>
   &quot;missing&quot;: [&quot;str&quot;],
   &quot;orphans&quot;: [&quot;str&quot;],
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-</code></pre>
-<p>A manifest with entries in <code>missing</code> is <code>PARTIAL</code> at best. Every downstream
-skill inherits that ceiling — you cannot attest a control on an artifact you
-could not resolve.</p>
+}</code></pre>
+<p>A manifest with entries in <code>missing</code> is <code>PARTIAL</code> at best. Every downstream skill inherits that ceiling — you cannot attest a control on an artifact you could not resolve.</p>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Resolving a tag instead of a digest.</strong> Tags are mutable; the thing you
-  attested is not necessarily the thing running.</li>
-<li><strong>Treating an unresolvable artifact as absent.</strong> "No gateway configured" and
-  "I could not read the gateway API" are different findings.</li>
-<li><strong>Reusing a manifest across runs.</strong> Re-resolve. Drift is the point.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons F1.2</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>f1-2-building-the-ai-and-agent-inventory</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons F1.2</code></td><td>type <code>/f1-2-building-the-ai-and-agent-inventory</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons F1.2</code></td><td>type <code>/f1-2-building-the-ai-and-agent-inventory</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons F1.2</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons F1.2</code></td><td>type <code>$f1-2-building-the-ai-and-agent-inventory</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py F1.2</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at F1.2 --out work/cybertravels
-python3 scripts/checkpoint.py --at F1.2 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape. Two of its rules are what make an inventory hold: resolve digests rather than tags, because a tag is mutable and the thing you attested is not the thing running; and never record an unresolvable artefact as absent — "no gateway configured" and "could not read the gateway" are different findings with different owners.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run the egress query for real: one week of traffic to model-provider domains, joined against your inventory. It takes an hour and it always finds something.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>agentgateway</span><span>SPIRE</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/deployment-inventory-resolver</code></p></div><div class="pager"><a href="F1.1.html"><span class="k">← Previous</span><span class="t">F1.1 · From framework control to key control indicator</span></a><a class="next" href="F1.3.html"><span class="k">Next →</span><span class="t">F1.3 · Risk tiering agentic use cases</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<ul><li><strong>Resolving a tag instead of a digest.</strong> Tags are mutable; the thing you</li></ul>
+<p>  attested is not necessarily the thing running.</p>
+<ul><li><strong>Treating an unresolvable artifact as absent.</strong> &quot;No gateway configured&quot; and</li></ul>
+<p>  &quot;I could not read the gateway API&quot; are different findings.</p>
+<ul><li><strong>Reusing a manifest across runs.</strong> Re-resolve. Drift is the point.</li></ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons F1.2</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>f1-2-building-the-ai-and-agent-inventory</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons F1.2</code></td><td>type <code>/f1-2-building-the-ai-and-agent-inventory</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons F1.2</code></td><td>type <code>/f1-2-building-the-ai-and-agent-inventory</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons F1.2</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons F1.2</code></td><td>type <code>$f1-2-building-the-ai-and-agent-inventory</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py F1.2</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at F1.2 --out work/cybertravels
+python3 scripts/checkpoint.py --at F1.2 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The skill loads and reports its shape. Two of its rules are what make an inventory hold: resolve digests rather than tags, because a tag is mutable and the thing you attested is not the thing running; and never record an unresolvable artefact as absent — &quot;no gateway configured&quot; and &quot;could not read the gateway&quot; are different findings with different owners.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Run the egress query for real: one week of traffic to model-provider domains, joined against your inventory. It takes an hour and it always finds something.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>agentgateway</span><span>SPIRE</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/attestation/deployment-inventory-resolver</code></p></div><div class="pager"><a href="F1.1.html"><span class="k">← Previous</span><span class="t">F1.1 · From framework control to key control indicator</span></a><a class="next" href="F1.3.html"><span class="k">Next →</span><span class="t">F1.3 · Risk tiering agentic use cases</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

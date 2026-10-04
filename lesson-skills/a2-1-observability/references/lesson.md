@@ -7,9 +7,12 @@ is the *shape* of the run, and that is a trace.
 
 ### One span per thing worth alerting on
 
-CyberTravels emits nine kinds, and the vocabulary is the design:
+CyberTravels emits eleven kinds by the end of this lesson, and the vocabulary is
+the design. Count them in `cybertravels/observability.py` — the list below is
+all of them, not a selection:
 
 ```
+  start         the run opened, with the trace id everything else carries
   thought       what the model said between calls
   plan          the tool it chose, and the scope that implies
   approval      a human granted or refused
@@ -17,8 +20,15 @@ CyberTravels emits nine kinds, and the vocabulary is the design:
   denied        and WHERE: policy, human, or resource server
   tool_result   what came back
   budget        a ceiling was reached
+  error         something raised, and the run says so
   final         the answer
+  done          the run closed, so a truncated trace is detectable
 ```
+
+The four at the edges — `start`, `error`, `final`, `done` — are the ones that
+get left out of a hand-rolled tracer, and they are what make a *missing* span
+visible. A trace with no `done` is either a run still going or a run that died,
+and without the pair you cannot tell which.
 
 `denied` carrying *where* it was refused is the one that repays itself. "The
 policy refused" and "the resource server refused" are different incidents: the

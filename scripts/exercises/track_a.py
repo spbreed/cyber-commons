@@ -47,17 +47,25 @@ whose product is agentic. Not a diagram of one — the actual thing, running on
 your machine, which you will then spend the rest of the commons attacking,
 defending, detecting and governing.
 
-Seven components, and every later lesson names one of them:
+Nine components — the same nine the skill below maps, named the same way, so
+the page and the run agree. Eight of them exist in CyberTravels and the ninth
+does not, which is information rather than an omission:
 
 | component | what it is | what it will be blamed for |
 |---|---|---|
 | ingress | where traveller text arrives | every injection in Function B |
 | orchestrator | routes a request, holds no authority | the place controls get added |
 | agent runtime | the loop that turns text into a call | the step everything hinges on |
-| tools, over MCP | the only things that change anything | the blast radius |
-| knowledge and memory | text nobody on staff wrote | persistence |
-| agent-to-agent | four agents, talking | one injection becoming four |
-| identity and audit | who acted, and the record of it | every question an incident asks |
+| model | proposes; holds no credential, opens no socket | being trusted as a decision |
+| tools | the only things that change anything | the blast radius |
+| mcp servers | a third party's process, in your context | descriptions you approved once |
+| knowledge | retrieved text nobody on staff wrote | persistence |
+| messaging | four agents, talking | one injection becoming four |
+| egress | **absent here** — nothing checks what leaves | B3.7, which is about building it |
+
+Identity and audit are not on that list because they are not boxes on this
+map — they are properties every edge carries, which is why A1.3 and A2.2 are
+their own lessons rather than components here.
 
 ### Why the build comes first
 
@@ -80,12 +88,18 @@ one is bypassed.
   *skill_steps("architecture/agentic-architecture-map",
                "### The skill"),
  ],
- "expect": "The seven components, the edges between them, and the subset of "
-           "those edges where trust changes — which is a smaller set than the "
-           "edge count and is the only part worth arguing about.",
- "challenge": "Add an eighth component: an egress gateway. CyberTravels does "
-              "not have one, which is why B3.7 exists. Mark which trust "
-              "boundaries it would move and which it would not.",
+ "expect": "Nine components with eight marked present, the eleven edges "
+           "between them, and the subset of those edges where trust changes — "
+           "which is a smaller set than the edge count and is the only part "
+           "worth arguing about. `egress` comes back absent: that is the "
+           "fixture telling you the truth about CyberTravels, not a gap in "
+           "the map.",
+ "challenge": "Mark `egress` present in the fixture — change its third field "
+              "from False to True — and re-run. The component count does not "
+              "change, because the box was always on the map; what changes is "
+              "which edges cross a boundary. Name the ones that move and the "
+              "ones that do not, then read B3.7, which is the lesson about "
+              "actually building it.",
 },
 
 "A1.1": {
@@ -461,13 +475,19 @@ on 40% of runs last week is a thing you want to know.
 You have a working agent. It is not yet a system, and the difference is not
 features — it is the machinery that lets somebody who is not you operate it.
 
-Three questions separate the two, and a demo answers none of them:
+Three capabilities separate the two, and a demo has none of them:
 
-| question | what it needs | where it goes wrong |
-|---|---|---|
-| what did it do? | a trace | the run emitted only its answer |
-| who caused it? | an audit trail | one shared identity in every row |
-| is it still right? | an evaluation | it was checked by hand, once |
+| capability | what it needs | where it goes wrong | built in |
+|---|---|---|---|
+| what did it do? | a trace | the run emitted only its answer | A2.1 |
+| who caused it? | an audit trail | one shared identity in every row | A2.2 |
+| is it still right? | an evaluation | it was checked by hand, once | A2.3 and A2.4 |
+
+Those are the three things you build next. **The skill in this lesson scores
+something different and narrower** — the three questions an *investigation*
+asks of a record that already exists: which human, what motivated it, which hop
+originated it. Keep the two triples apart: the first is the chapter's plan, the
+second is the number you are about to measure, and it is a number out of three.
 
 ### The order matters
 
@@ -496,10 +516,15 @@ to do with models.
          "\"add logging\"."),
   *skill_steps("threats/audit-answerability-check", "### The skill"),
  ],
- "expect": "The questions an investigation asks, checked against what your run "
-           "currently emits, and a named list of the ones it cannot answer yet. "
-           "Expect that list to be most of them — that is the point of running "
-           "this first.",
+ "expect": "Three questions — which human, what motivated it, which hop — "
+           "checked against what the record currently holds, each with the "
+           "field that would answer it and whether that field is present. "
+           "Expect all three to come back unanswerable: the log has an actor "
+           "of `agent-svc` on every row and no motivating input at all. That "
+           "is the point of running this before you build. A2.2 then designs "
+           "the record that answers these three and a fourth — which call, "
+           "with its audience and scope — and scores four out of four on the "
+           "same incident.",
  "challenge": "Answer the same questions about a system you actually work on. "
               "The gap is usually wider than for the agent you just built, "
               "because nobody chose it.",
@@ -512,9 +537,12 @@ is the *shape* of the run, and that is a trace.
 
 ### One span per thing worth alerting on
 
-CyberTravels emits nine kinds, and the vocabulary is the design:
+CyberTravels emits eleven kinds by the end of this lesson, and the vocabulary is
+the design. Count them in `cybertravels/observability.py` — the list below is
+all of them, not a selection:
 
 ```
+  start         the run opened, with the trace id everything else carries
   thought       what the model said between calls
   plan          the tool it chose, and the scope that implies
   approval      a human granted or refused
@@ -522,8 +550,15 @@ CyberTravels emits nine kinds, and the vocabulary is the design:
   denied        and WHERE: policy, human, or resource server
   tool_result   what came back
   budget        a ceiling was reached
+  error         something raised, and the run says so
   final         the answer
+  done          the run closed, so a truncated trace is detectable
 ```
+
+The four at the edges — `start`, `error`, `final`, `done` — are the ones that
+get left out of a hand-rolled tracer, and they are what make a *missing* span
+visible. A trace with no `done` is either a run still going or a run that died,
+and without the pair you cannot tell which.
 
 `denied` carrying *where* it was refused is the one that repays itself. "The
 policy refused" and "the resource server refused" are different incidents: the
@@ -762,18 +797,25 @@ indicators. Saying so in the output is part of the procedure here.
  "expect": "Tool-call accuracy 0.500 on exact match over six runs, against "
            "0.667 for both weaker matchers — and the two extra passes are "
            "different runs, so neither weak matcher is merely a looser version "
-           "of the other. Output accuracy 0.600, from three correct and two "
+           "of the other. Output accuracy 0.400, from two correct and three "
            "incorrect, with the sixth run in its own unscoreable column rather "
-           "than in the denominator. Then the judge's verdicts, and before you "
-           "read any of them, its agreement with the five runs whose answer "
-           "was already recorded. A judge that disagrees with those is not "
-           "telling you anything about the sixth.",
+           "than in the denominator. R2 fails both surfaces, which is the "
+           "point: the run the weak matchers forgive is the run that was "
+           "wrong. Then the judge's verdicts, and before you read any of them, "
+           "its agreement with the five runs whose answer was already "
+           "recorded. A judge that disagrees with those is not telling you "
+           "anything about the sixth.",
  "challenge": "Change R2's expected amount in the fixture from 140 to 1400 so "
-              "the agent is now right, and re-run. Exact match rises and the "
-              "two weak matchers do not move, because they were already "
-              "scoring it as a pass. That asymmetry is the argument: the weak "
-              "matchers cannot go up when you fix something, because they were "
-              "never measuring it.",
+              "the trajectory is now right, and re-run. Exact match rises to "
+              "0.667 and name-only does not move, because it was already "
+              "scoring R2 as a pass. Order-ignored rises too — to 0.833 — and "
+              "that is worth understanding before you read it as a "
+              "contradiction: it compares arguments as well as order, so R2's "
+              "wrong amount was failing it for a reason that had nothing to do "
+              "with sequence. Then check output accuracy, which does not move "
+              "at all: you changed the approved trajectory, not the recorded "
+              "truth, so the agent still told the traveller the wrong number. "
+              "Three matchers, three different answers to \"did it get better\".",
 },
 
 "A2.5": {

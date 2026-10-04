@@ -205,7 +205,7 @@ Next up: A1.0, What an agent is, and what you are about to build.
 
 ### A1.0 · What an agent is, and what you are about to build
 
-Chapter A1 · lesson 1 of 8 · runs a skill · 459 words, about 3.3 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
+Chapter A1 · lesson 1 of 8 · runs a skill · 482 words, about 3.4 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -255,11 +255,11 @@ Edges marked as trust boundaries, against total edges. The second number is alwa
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The seven components, the edges between them, and the subset of those edges where trust changes — which is a smaller set than the edge count and is the only part worth arguing about.
+> Nine components with eight marked present, the eleven edges between them, and the subset of those edges where trust changes — which is a smaller set than the edge count and is the only part worth arguing about. egress comes back absent: that is the fixture telling you the truth about CyberTravels, not a gap in the map.
 
 **⑤ Hand it over**
 
-Add an eighth component: an egress gateway. CyberTravels does not have one, which is why B3.7 exists.
+Mark egress present in the fixture — change its third field from False to True — and re-run. The component count does not change, because the box was always on the map; what changes is which edges cross a boundary.
 
 Next up: A1.1, The loop — model, tools, and the step that turns text into an action.
 
@@ -679,7 +679,7 @@ Questions the current record cannot answer. Expect most of them, which is the po
 
 *[Point at the output on screen. Do not read it out.]*
 
-> The questions an investigation asks, checked against what your run currently emits, and a named list of the ones it cannot answer yet. Expect that list to be most of them — that is the point of running this first.
+> Three questions — which human, what motivated it, which hop — checked against what the record currently holds, each with the field that would answer it and whether that field is present. Expect all three to come back unanswerable: the log has an actor of agent-svc on every row and no motivating input at all.
 
 **⑤ Hand it over**
 
@@ -847,7 +847,7 @@ Next up: A2.4, Evaluating the agent's behaviour — tool calls, outputs, and the
 
 ### A2.4 · Evaluating the agent's behaviour — tool calls, outputs, and the model as judge
 
-Chapter A2 · lesson 5 of 6 · runs a skill · 323 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
+Chapter A2 · lesson 5 of 6 · runs a skill · 322 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
 
 **① Open**
 
@@ -891,7 +891,7 @@ Exact-match tool-call accuracy with its n beside it, and the gap to the two weak
 
 **⑤ Hand it over**
 
-Change R2's expected amount in the fixture from 140 to 1400 so the agent is now right, and re-run. Exact match rises and the two weak matchers do not move, because they were already scoring it as a pass.
+Change R2's expected amount in the fixture from 140 to 1400 so the trajectory is now right, and re-run. Exact match rises to 0.667 and name-only does not move, because it was already scoring R2 as a pass.
 
 Next up: A2.5, What you have built — and every way it can now go wrong.
 

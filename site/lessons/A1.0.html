@@ -8,73 +8,16 @@
                           │                   │              │
                           └──────── audit + spans ───────────┘
 
-  seven components · every later lesson names one of them</pre><p>Three verbs — plans, calls tools, acts on what it reads — and every one of
-them is both the reason an <strong>agent</strong> is useful and the reason it is
-dangerous.</p>
-<p>Compare it to the thing it is not. A chatbot that is wrong says something
-wrong. An agent that is wrong <em>does</em> something wrong — it cancels a booking,
-moves money, writes a file. The output is not text any more; it is a
-consequence, and a consequence cannot be retracted by a better next answer.</p>
+  seven components · every later lesson names one of them</pre><p>Three verbs — plans, calls tools, acts on what it reads — and every one of them is both the reason an <strong>agent</strong> is useful and the reason it is dangerous.</p>
+<p>Compare it to the thing it is not. A chatbot that is wrong says something wrong. An agent that is wrong <em>does</em> something wrong — it cancels a booking, moves money, writes a file. The output is not text any more; it is a consequence, and a consequence cannot be retracted by a better next answer.</p>
 <h3>What you are about to build</h3>
-<p>Across this chapter you build <strong>CyberTravels</strong>: a corporate travel platform
-whose product is agentic. Not a diagram of one — the actual thing, running on
-your machine, which you will then spend the rest of the commons attacking,
-defending, detecting and governing.</p>
-<p>Seven components, and every later lesson names one of them:</p>
-<table>
-<thead>
-<tr>
-<th>component</th>
-<th>what it is</th>
-<th>what it will be blamed for</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>ingress</td>
-<td>where traveller text arrives</td>
-<td>every injection in Function B</td>
-</tr>
-<tr>
-<td>orchestrator</td>
-<td>routes a request, holds no authority</td>
-<td>the place controls get added</td>
-</tr>
-<tr>
-<td>agent runtime</td>
-<td>the loop that turns text into a call</td>
-<td>the step everything hinges on</td>
-</tr>
-<tr>
-<td>tools, over MCP</td>
-<td>the only things that change anything</td>
-<td>the blast radius</td>
-</tr>
-<tr>
-<td>knowledge and memory</td>
-<td>text nobody on staff wrote</td>
-<td>persistence</td>
-</tr>
-<tr>
-<td>agent-to-agent</td>
-<td>four agents, talking</td>
-<td>one injection becoming four</td>
-</tr>
-<tr>
-<td>identity and audit</td>
-<td>who acted, and the record of it</td>
-<td>every question an incident asks</td>
-</tr>
-</tbody>
-</table>
+<p>Across this chapter you build <strong>CyberTravels</strong>: a corporate travel platform whose product is agentic. Not a diagram of one — the actual thing, running on your machine, which you will then spend the rest of the commons attacking, defending, detecting and governing.</p>
+<p>Nine components — the same nine the skill below maps, named the same way, so the page and the run agree. Eight of them exist in CyberTravels and the ninth does not, which is information rather than an omission:</p>
+<p>| component | what it is | what it will be blamed for | |---|---|---| | ingress | where traveller text arrives | every injection in Function B | | orchestrator | routes a request, holds no authority | the place controls get added | | agent runtime | the loop that turns text into a call | the step everything hinges on | | model | proposes; holds no credential, opens no socket | being trusted as a decision | | tools | the only things that change anything | the blast radius | | mcp servers | a third party&#x27;s process, in your context | descriptions you approved once | | knowledge | retrieved text nobody on staff wrote | persistence | | messaging | four agents, talking | one injection becoming four | | egress | <strong>absent here</strong> — nothing checks what leaves | B3.7, which is about building it |</p>
+<p>Identity and audit are not on that list because they are not boxes on this map — they are properties every edge carries, which is why A1.3 and A2.2 are their own lessons rather than components here.</p>
 <h3>Why the build comes first</h3>
-<p>This is the only function in the commons with no adversary in it. That is on
-purpose. You cannot threat-model a mechanism you have never seen work, and a
-reader handed "apply least privilege to your agent" before they have written a
-token exchange will apply it as a sentence in a document.</p>
-<p>By the end of A2 you will have built every control the rest of the commons
-refers to. Function B then tells you, component by component, exactly how each
-one is bypassed.</p><div class="how"><h2>2 · Draw it before you build it</h2>
+<p>This is the only function in the commons with no adversary in it. That is on purpose. You cannot threat-model a mechanism you have never seen work, and a reader handed &quot;apply least privilege to your agent&quot; before they have written a token exchange will apply it as a sentence in a document.</p>
+<p>By the end of A2 you will have built every control the rest of the commons refers to. Function B then tells you, component by component, exactly how each one is bypassed.</p><div class="how"><h2>2 · Draw it before you build it</h2>
 <p>The skill below is the same one B1.1 uses to audit an architecture. Here it is used the other way round — to <em>design</em> one. It takes a component list and marks the edges where trust changes, which is where every control in Function B will end up going.</p>
 <p>Read what it does before you run it.</p><h3>The skill</h3></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/architecture/agentic-architecture-map/SKILL.md" target="_blank" rel="noopener"><code>skills/architecture/agentic-architecture-map/SKILL.md</code></a></p><pre class="front"><code>name: agentic-architecture-map
 description: &gt;-
@@ -83,31 +26,15 @@ description: &gt;-
   mark the edges where trust changes. Use before naming any risk, because a risk
   with no component is an argument.
 allowed-tools: Read, Grep, Glob</code></pre><h1>Draw it before you argue about it</h1>
-<p>Every disagreement about agentic security is really a disagreement about which
-system is being discussed. The map fixes that: nine components and the edges
-between them, drawn the same way every time, so a risk can be pinned to a box
-and a control can be pinned to an edge.</p>
+<p>Every disagreement about agentic security is really a disagreement about which system is being discussed. The map fixes that: nine components and the edges between them, drawn the same way every time, so a risk can be pinned to a box and a control can be pinned to an edge.</p>
 <h2>When to use this</h2>
-<p>First. Before threat modelling, before writing a risk register, and before any
-conversation that contains the phrase "secure the agent".</p>
+<p>First. Before threat modelling, before writing a risk register, and before any conversation that contains the phrase &quot;secure the agent&quot;.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Place the nine components.</strong> Ingress, orchestrator, agent runtime, model,
-tools, MCP servers, memory and knowledge, agent-to-agent messaging, egress. Draw
-every one even if a system has only a stub of it — an absent box is a decision,
-not a gap in the diagram.</p>
-<p><strong>2 — Draw the edges as data flow, not as call direction.</strong> Where text goes is
-what matters; who initiated the call is an implementation detail that hides
-whether untrusted content reaches the model.</p>
-<p><strong>3 — Mark the trust level of each component.</strong> Which ones receive content from
-outside the boundary, and which ones hold authority. The edge from a lower trust
-level to a higher one is a boundary crossing, and there are always more of them
-than expected.</p>
-<p><strong>4 — Annotate each edge with what crosses it.</strong> User text, retrieved documents,
-tool results, peer messages, credentials. This is what turns the picture into
-something a threat model can walk.</p>
-<p><strong>5 — Name the components that do not exist yet.</strong> A system with no gateway and
-no messaging is a smaller map, and saying that explicitly stops a later
-conversation about controls for components nobody has.</p>
+<p><strong>1 — Place the nine components.</strong> Ingress, orchestrator, agent runtime, model, tools, MCP servers, memory and knowledge, agent-to-agent messaging, egress. Draw every one even if a system has only a stub of it — an absent box is a decision, not a gap in the diagram.</p>
+<p><strong>2 — Draw the edges as data flow, not as call direction.</strong> Where text goes is what matters; who initiated the call is an implementation detail that hides whether untrusted content reaches the model.</p>
+<p><strong>3 — Mark the trust level of each component.</strong> Which ones receive content from outside the boundary, and which ones hold authority. The edge from a lower trust level to a higher one is a boundary crossing, and there are always more of them than expected.</p>
+<p><strong>4 — Annotate each edge with what crosses it.</strong> User text, retrieved documents, tool results, peer messages, credentials. This is what turns the picture into something a threat model can walk.</p>
+<p><strong>5 — Name the components that do not exist yet.</strong> A system with no gateway and no messaging is a smaller map, and saying that explicitly stops a later conversation about controls for components nobody has.</p>
 <h2>Example</h2>
 <p><strong>Input</strong> — the fixture committed at the top of <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/architecture/agentic-architecture-map/scripts/agentic_architecture_map.py" target="_blank" rel="noopener"><code>scripts/agentic_architecture_map.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <pre><code>9 components, 8 present at CyberTravels
@@ -117,27 +44,16 @@ conversation about controls for components nobody has.</p>
    ingress              0          -  yes
    knowledge            0          -  yes
    mcp servers          1        yes  yes
-   messaging            2          -  yes
-</code></pre>
-<p>The run continues past this. <code>test_skills.py</code> executes the script on every
-build, <strong>with no model configured</strong> — so what CI proves is that it runs and
-refuses legibly, not that it prints these lines. The output above is a recorded
-run against a real model, and nothing re-diffs it: a model's answer is not
-reproducible, and this repository does not claim otherwise anywhere it can be
-checked.</p>
+   messaging            2          -  yes</code></pre>
+<p>The run continues past this. <code>test_skills.py</code> executes the script on every build, <strong>with no model configured</strong> — so what CI proves is that it runs and refuses legibly, not that it prints these lines. The output above is a recorded run against a real model, and nothing re-diffs it: a model&#x27;s answer is not reproducible, and this repository does not claim otherwise anywhere it can be checked.</p>
 <h2>Output contract</h2>
-<pre><code class="language-json">{
+<pre><code>{
   &quot;components&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;present&quot;: true, &quot;trust&quot;: 0, &quot;holds_authority&quot;: false}],
   &quot;edges&quot;: [{&quot;from&quot;: &quot;str&quot;, &quot;to&quot;: &quot;str&quot;, &quot;carries&quot;: [&quot;str&quot;], &quot;boundary_crossing&quot;: false}],
   &quot;crossings&quot;: 0,
   &quot;absent&quot;: [&quot;str&quot;]
-}
-</code></pre>
+}</code></pre>
 <h2>Failure modes</h2>
-<ul>
-<li><strong>Drawing call direction.</strong> It hides where untrusted content arrives.</li>
-<li><strong>Omitting components a system does not have.</strong> Their absence is information.</li>
-<li><strong>A map with no trust levels.</strong> Then no edge is a boundary and the diagram is
-  decoration.</li>
-</ul></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons A1.0</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>a1-0-what-an-agent-is</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons A1.0</code></td><td>type <code>/a1-0-what-an-agent-is</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons A1.0</code></td><td>type <code>/a1-0-what-an-agent-is</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons A1.0</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons A1.0</code></td><td>type <code>$a1-0-what-an-agent-is</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py A1.0</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at A1.0 --out work/cybertravels
-python3 scripts/checkpoint.py --at A1.0 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>The seven components, the edges between them, and the subset of those edges where trust changes — which is a smaller set than the edge count and is the only part worth arguing about.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Add an eighth component: an egress gateway. CyberTravels does not have one, which is why B3.7 exists. Mark which trust boundaries it would move and which it would not.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>MCP</span><span>FastAPI</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/architecture/agentic-architecture-map</code></p></div><div class="pager"><a href="A0.1.html"><span class="k">← Previous</span><span class="t">A0.1 · Nine words for an agent — harness to multi-agent, and where each is built</span></a><a class="next" href="A1.1.html"><span class="k">Next →</span><span class="t">A1.1 · The loop — model, tools, and the step that turns text into an action</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<ul><li><strong>Drawing call direction.</strong> It hides where untrusted content arrives.</li><li><strong>Omitting components a system does not have.</strong> Their absence is information.</li><li><strong>A map with no trust levels.</strong> Then no edge is a boundary and the diagram is</li></ul>
+<p>  decoration.</p></div><div class="runbox"><p class="waysintro"><b>Three ways to do this lesson. Pick one.</b> They run the same procedure against the same code — what changes is who drives it, and how much you see.</p><div class="way"><h4><span class="wn">1</span>In your AI agent <em>— you are taught</em></h4><p>The agent reads the lesson, explains the idea, fetches the code, runs the check and answers your questions as you go. This is the one to take if you are here to learn.</p><p><b>Install it, once.</b> From the folder you cloned. <code>--all</code> does every agent it finds on your machine:</p><pre><code>python3 scripts/install_skills.py --all --lessons A1.0</code></pre><p class="runnote">Then restart your agent and open it in that folder. On Windows, if <code>python3</code> says <em>Python was not found</em>, use <code>python</code> instead.</p><p><b>Then pick <code>a1-0-what-an-agent-is</code>:</b></p><table class="agents"><thead><tr><th>agent</th><th>install just for this agent</th><th>start it</th></tr></thead><tbody><tr><td>Claude Code</td><td><code>python3 scripts/install_skills.py --tool claude --lessons A1.0</code></td><td>type <code>/a1-0-what-an-agent-is</code></td></tr><tr><td>GitHub Copilot (VS Code)</td><td><code>python3 scripts/install_skills.py --tool copilot --lessons A1.0</code></td><td>type <code>/a1-0-what-an-agent-is</code> in Chat</td></tr><tr><td>Cursor</td><td><code>python3 scripts/install_skills.py --tool cursor --lessons A1.0</code></td><td>type <code>/</code> in Agent chat and search for it</td></tr><tr><td>Codex</td><td><code>python3 scripts/install_skills.py --tool agents --lessons A1.0</code></td><td>type <code>$a1-0-what-an-agent-is</code>, or run <code>/skills</code></td></tr></tbody></table></div><div class="way"><h4><span class="wn">2</span>As one Python command <em>— you just run it</em></h4><p>No agent, no conversation. The same lesson executes and prints the same readback. Take this one if you have no assistant, if you are reviewing rather than learning, or if you want the result without the teaching around it.</p><pre><code>python3 scripts/lesson.py A1.0</code></pre></div><div class="way"><h4><span class="wn">3</span>Read the code, and the difference <em>— nothing runs</em></h4><p>Neither of the above, and no model needed. The first command writes CyberTravels exactly as it stood at the end of this lesson; the second prints the <b>diff</b> — the lines this lesson added or changed, and nothing from any later one.</p><pre><code>python3 scripts/checkpoint.py --at A1.0 --out work/cybertravels
+python3 scripts/checkpoint.py --at A1.0 --diff</code></pre></div><p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A signed-in Claude Code CLI needs no API key, and any OpenAI-compatible endpoint works too. With neither, the audit exits 2 and says so rather than inventing an answer. <a href="A0.0.html">A0.0</a> sets this up.</p><p class="runnote">Ways 1 and 2 both end with the same <b>readback</b>: <em>What I did</em>, <em>What changed</em>, <em>The number</em> and <em>Read this next</em>. A step that was skipped or refused is reported as exactly that, never as a pass.</p></div></div></section><section class="ls ls-blue"><h2 class="lsh"><span class="lsi">✓</span>What you just proved</h2><div class="lsb"><p>Nine components with eight marked present, the eleven edges between them, and the subset of those edges where trust changes — which is a smaller set than the edge count and is the only part worth arguing about. <code>egress</code> comes back absent: that is the fixture telling you the truth about CyberTravels, not a gap in the map.</p></div></section><section class="ls ls-pink"><h2 class="lsh"><span class="lsi">✎</span>Your turn</h2><div class="lsb"><p>Mark <code>egress</code> present in the fixture — change its third field from False to True — and re-run. The component count does not change, because the box was always on the map; what changes is which edges cross a boundary. Name the ones that move and the ones that do not, then read B3.7, which is the lesson about actually building it.</p></div></section><p class="sub toolslab">Tools used</p><div class="chips"><span>MCP</span><span>FastAPI</span></div><p class="sub" style="margin-top:10px">Skill source: <code>skills/architecture/agentic-architecture-map</code></p></div><div class="pager"><a href="A0.1.html"><span class="k">← Previous</span><span class="t">A0.1 · Nine words for an agent — harness to multi-agent, and where each is built</span></a><a class="next" href="A1.1.html"><span class="k">Next →</span><span class="t">A1.1 · The loop — model, tools, and the step that turns text into an action</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
