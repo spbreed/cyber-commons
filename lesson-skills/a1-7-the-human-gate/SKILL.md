@@ -51,7 +51,7 @@ the learner never has to type a command themselves: you run them.
    **Read this next**. Use only what it printed. If it says a step was skipped
    or refused, say that plainly and pass on the fix it gave; a skipped step is
    not a pass.
-5. **Give them the exercise.** Raise MAX_TOOL_CALLS to 500 and give the agent a task it cannot finish. Watch the cost, and then decide what the right number is for your own loop — it is not 500 and it is not 2.
+5. **Give them the exercise.** Raise `MAX_TOOL_CALLS` in `cybertravels/config.py` to 500 and give the agent a task it cannot finish. Watch the cost, and then answer the question the skill raised: twelve calls is a ceiling on the run, and nothing yet stops all twelve landing on one traveller's booking. Write down the number you think that should be. B3.4 builds exactly this ceiling, and it is worth having guessed first — the number in the code is four.
 6. **Point at the next lesson**, from the readback's last heading.
 
 ## The readback

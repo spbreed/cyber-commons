@@ -4,8 +4,13 @@
    the workload   &quot;what acted&quot;             spiffe://…/agent/workflow
    the call       &quot;under what authority&quot;   aud=mcp:internal scope=bookings:read
 
-   collapse these into one key and every log row is identical</pre><p>A system that models only one of the <strong>three principals</strong> in an agent action cannot answer any question an incident asks.</p>
-<p>| principal | what it is | what it answers | |---|---|---| | the human | the person who asked | who wanted this | | the workload | the agent process | what acted | | the call | this one tool invocation | under what authority |</p>
+   collapse these into one key and every log row is identical</pre><h3>Three people, for the rest of Function A</h3>
+<p>Before the abstractions, the cast — they are real rows in <code>cybertravels/config.py</code> and they do not change again:</p>
+<p>| who | role | and so | |---|---|---| | <strong>Dana</strong> | traveller | books and cancels her own trips. Cannot refund anything. | | <strong>Alex</strong> | agent operations | runs the platform. Can write bookings, cannot refund. | | <strong>Priya</strong> | finance | the only one of the three who may approve a refund. |</p>
+<p>Dana owns booking <code>CT-4417</code>. Every example from here to the end of A2 is one of those three asking for something, and the interesting cases are all Dana asking for something only Priya may have.</p>
+<h3>And three principals in every action</h3>
+<p>A system that models only one of the <strong>three principals</strong> cannot answer any question an incident asks.</p>
+<p>| principal | what it is | in this request | what it answers | |---|---|---|---| | the human | the person who asked | Dana | who wanted this | | the workload | the agent process | the workflow agent | what acted | | the call | this one tool invocation | <code>refund(CT-4417)</code> | under what authority |</p>
 <p>Most systems collapse these into a service-account API key. Every action then looks identical in the log, and &quot;which agent did this, on whose behalf&quot; has no answer at all — not a slow answer, no answer.</p>
 <h3>A workload identity is not a secret</h3>
 <p>CyberTravels gives each agent a SPIFFE-style name:</p>
@@ -32,7 +37,7 @@ allowed-tools: Read, Grep, Glob</code></pre><h1>Agent identity and delegation re
 <p><strong>2 — Check the delegation narrows.</strong> In RFC 8693 token exchange the issued token must satisfy <strong>both</strong> rules:</p>
 <ul><li><strong>subset of presented</strong> — never more scope than the incoming token carried</li><li><strong>within the actor&#x27;s ceiling</strong> — never more than the agent is itself allowed</li></ul>
 <p>Either rule alone is insufficient. Subset-only lets a highly privileged user hand an agent authority the agent should never hold; ceiling-only lets an agent exceed the user who asked. Test both directions explicitly.</p>
-<p><strong>3 — Check the chain is preserved and not duplicated.</strong> The <code>act</code> chain should read <code>user → agent</code>, once. A chain that repeats the principal (<code>alice → alice → agent</code>) usually means the head was appended twice, and it breaks any audit query that counts hops.</p>
+<p><strong>3 — Check the chain is preserved and not duplicated.</strong> The <code>act</code> chain should read <code>user → agent</code>, once. A chain that repeats the principal (<code>dana → dana → agent</code>) usually means the head was appended twice, and it breaks any audit query that counts hops.</p>
 <p><strong>4 — Find where OBO stops.</strong> Some downstream systems cannot consume a delegated token — legacy databases, vendor APIs, anything with a static credential. Identify each, and require a <strong>choke point</strong>: a gateway that holds the credential, enforces per-user authorisation <em>before</em> the call, and logs the original principal. The credential must not be reachable by the agent directly.</p>
 <p><strong>5 — Check expiry and revocation.</strong> How long is the delegated token valid, and what stops it being replayed after the user&#x27;s session ends? Just-in-time authority that outlives the task is standing authority with extra steps.</p>
 <p><strong>6 — Check the log answers the audit question.</strong> Pick a real question — &quot;which user caused this row to be deleted?&quot; — and try to answer it from the logs alone. If you cannot, the delegation is not auditable regardless of how it is built.</p>

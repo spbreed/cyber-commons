@@ -38,7 +38,39 @@ reads those descriptions to decide what to call. They are instructions arriving
 from a third party, they can change after you approved them, and B1.9 is the
 lesson on what that enables. For now: notice that you are trusting them.
 
-## 2 · Two servers, and what each one declares
+## 2 · Start them, and read what each one declares
+
+**Install the application's dependencies first.** The skills in this commons are standard library only, but CyberTravels is a real application and speaks real MCP:
+
+```bash
+python3 -m pip install -r cybertravels/requirements.txt
+```
+
+Each server is a module you run directly. They talk MCP over stdio, so they wait quietly rather than printing a banner — that silence is the server working:
+
+```bash
+python3 -m cybertravels.mcp.internal_server    # bookings, payments
+python3 -m cybertravels.mcp.vendor_server      # the third party's
+```
+
+To see the whole thing serving instead, in one terminal:
+
+```bash
+./cybertravels/run.sh      # then open http://127.0.0.1:8000
+```
+
+If that says `main.py does not exist at this checkpoint yet`, you have a tree from before A1.1 and the message tells you which checkpoint to fetch. The script checks, because the obvious command used to fail with a uvicorn import error naming a module the reader had never heard of.
+
+**Then read the surface rather than the code.** Seven tools across the two servers, in `config.TOOL_POLICY`, and the split is the thing to notice:
+
+```python
+from cybertravels import config
+for tool, p in config.TOOL_POLICY.items():
+    print(f"{tool:20s} {p['audience']:14s} {p['scope']:16s} "
+          f"{'HIGH RISK' if p['high_risk'] else ''}")
+```
+
+Five tools are addressed to `mcp:internal` and two to `mcp:vendor`. A token minted for one is refused by the other, which is what makes a compromised call unable to wander sideways — and `cancel_booking` and `issue_refund` are the two marked high risk, which is A1.7's whole subject.
 
 The skill below enumerates an agent's declared tool surface — what it says it can do, against what the code actually does. B1.9 runs it to catch a rug-pull; here you run it on your own servers, to see the surface you just created.
 

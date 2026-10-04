@@ -20,6 +20,25 @@
 <p>The exchange refuses a scope the human&#x27;s own role may not delegate. Dana is a traveller, so however the model is prompted, argued with, or injected, it cannot obtain <code>payments:refund</code> on her behalf — the resource server is never even asked. That is defence in depth stated precisely: two independent things have to fail, and the second one does not depend on the model at all.</p>
 <h3>And the resource server verifies anyway</h3>
 <p>Minting a correct token is half of it. The other half is that <code>verify_delegated</code> runs at the top of every MCP tool and refuses on signature, audience, scope, actor registration or expiry. <strong>This is the step most systems skip</strong> — they log the actor claim and act regardless, which turns the delegation chain from a control into a description.</p><div class="how"><h2>2 · Exchange one, then watch a role refuse</h2>
+<p>Four lines, in a Python prompt opened in your checkout. Ask for the same refund twice — once as Dana, once as Priya:</p>
+<pre><code>from cybertravels import identity, config
+
+for who in (&quot;dana&quot;, &quot;priya&quot;):
+    user  = identity.mint_user_token(who)
+    agent = identity.mint_agent_token(&quot;workflow&quot;)
+    try:
+        identity.token_exchange(user, agent,
+                                scope=&quot;payments:refund&quot;,
+                                audience=config.AUD_INTERNAL_MCP)
+        print(who, &quot;-&gt; minted&quot;)
+    except identity.IdentityError as e:
+        print(who, &quot;-&gt; REFUSED:&quot;, e)</code></pre>
+<p>You get this, and the second line is the one to read:</p>
+<pre><code>dana   -&gt; REFUSED: role &#x27;traveller&#x27; may not delegate &#x27;payments:refund&#x27;
+          (allowed: [&#x27;bookings:read&#x27;, &#x27;kb:read&#x27;, &#x27;vendor:read&#x27;])
+priya  -&gt; minted</code></pre>
+<p>Notice what did <strong>not</strong> happen. The model was never consulted. No booking was looked up. The internal MCP server was never contacted — there was no token to present to it, so the request died two components before the thing it wanted to change. And Priya&#x27;s identical request succeeds, which is what makes Dana&#x27;s refusal a policy decision rather than a broken endpoint.</p>
+<p>Then install PyJWT if that import failed — <code>pip install PyJWT</code> — because the token is a real signed JWT and not a dictionary pretending to be one.</p>
 <p>The skill below verifies that a delegation chain is complete and enforced rather than merely recorded. B2.6 runs it against a system somebody else built; you are running it against yours.</p><h3>The skill</h3></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/identity-chain-verifier/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/identity-chain-verifier/SKILL.md</code></a></p><pre class="front"><code>name: identity-chain-verifier
 description: &gt;-
   Verify workload identity and end-to-end on-behalf-of propagation across

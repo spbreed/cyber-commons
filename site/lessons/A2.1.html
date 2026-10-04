@@ -13,14 +13,21 @@
   plan          the tool it chose, and the scope that implies
   approval      a human granted or refused
   token_issued  the delegated claims — summarised, never the token
-  denied        and WHERE: policy, human, or resource server
+  denied        and WHERE: policy, human, verifier, or resource server
   tool_result   what came back
   budget        a ceiling was reached
   error         something raised, and the run says so
   final         the answer
   done          the run closed, so a truncated trace is detectable</code></pre>
 <p>The four at the edges — <code>start</code>, <code>error</code>, <code>final</code>, <code>done</code> — are the ones that get left out of a hand-rolled tracer, and they are what make a <em>missing</em> span visible. A trace with no <code>done</code> is either a run still going or a run that died, and without the pair you cannot tell which.</p>
-<p><code>denied</code> carrying <em>where</em> it was refused is the one that repays itself. &quot;The policy refused&quot; and &quot;the resource server refused&quot; are different incidents: the first is a control working as designed, the second means a token that should never have existed reached a boundary.</p>
+<p><code>denied</code> carrying <em>where</em> it was refused is the one that repays itself. Four places refuse, and each is a different incident:</p>
+<ul><li><strong>policy</strong> — a control working as designed. Nothing to investigate.</li><li><strong>human</strong> — somebody looked and said no. Worth counting; B3.9 is about what</li></ul>
+<p>  happens to that number at four hundred a day.</p>
+<ul><li><strong>verifier</strong> — the call was authorised, it ran, and what came back was</li></ul>
+<p>  unacceptable. Something downstream is wrong, not something upstream.</p>
+<ul><li><strong>resource server</strong> — a token that should never have existed reached a</li></ul>
+<p>  boundary. This is the one that wakes people up.</p>
+<p>Collapse them into one <code>denied</code> with no <code>at</code> and all four read identically in the log, which is how &quot;the agent was denied 90 times last week&quot; becomes a sentence nobody can act on.</p>
 <h3>Three rules the emitting code follows</h3>
 <ul><li><strong>Every span carries the trace id</strong>, so the reasoning and the audit row can</li></ul>
 <p>  be joined. A log that cannot be joined to what caused it tells you what   happened and never why.</p>

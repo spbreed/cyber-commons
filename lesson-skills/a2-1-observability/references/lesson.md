@@ -17,7 +17,7 @@ all of them, not a selection:
   plan          the tool it chose, and the scope that implies
   approval      a human granted or refused
   token_issued  the delegated claims — summarised, never the token
-  denied        and WHERE: policy, human, or resource server
+  denied        and WHERE: policy, human, verifier, or resource server
   tool_result   what came back
   budget        a ceiling was reached
   error         something raised, and the run says so
@@ -30,10 +30,20 @@ get left out of a hand-rolled tracer, and they are what make a *missing* span
 visible. A trace with no `done` is either a run still going or a run that died,
 and without the pair you cannot tell which.
 
-`denied` carrying *where* it was refused is the one that repays itself. "The
-policy refused" and "the resource server refused" are different incidents: the
-first is a control working as designed, the second means a token that should
-never have existed reached a boundary.
+`denied` carrying *where* it was refused is the one that repays itself. Four
+places refuse, and each is a different incident:
+
+- **policy** — a control working as designed. Nothing to investigate.
+- **human** — somebody looked and said no. Worth counting; B3.9 is about what
+  happens to that number at four hundred a day.
+- **verifier** — the call was authorised, it ran, and what came back was
+  unacceptable. Something downstream is wrong, not something upstream.
+- **resource server** — a token that should never have existed reached a
+  boundary. This is the one that wakes people up.
+
+Collapse them into one `denied` with no `at` and all four read identically in
+the log, which is how "the agent was denied 90 times last week" becomes a
+sentence nobody can act on.
 
 ### Three rules the emitting code follows
 

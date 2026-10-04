@@ -40,7 +40,32 @@ The second and third are the ones that matter, and A1.7 builds them.
 
 ## 2 · The loop, and the verifier that is not the model
 
-`cybertravels/runtime.py` is the file this lesson builds. Read it alongside the skill: the `while budget.step()` loop is plan and act, and `execute_tool` is where your code disposes.
+`cybertravels/runtime.py` is the file this lesson builds. Three places to look, in this order:
+
+| stage | where | what it does |
+|---|---|---|
+| plan | `run()`, the `while budget.step()` loop | asks the model for the next step |
+| act | `execute_tool()` | gate, exchange, call — your code, not the model's |
+| verify | `_verify_result()`, called at the end of `execute_tool` | decides whether what came back is acceptable |
+
+Open `_verify_result` and read it before anything else. It is twenty lines, it takes the tool name, the arguments and the parsed result, and the only thing that matters about it is what it does **not** take: a model. It cannot ask. That is the independence the section above is about, expressed as a function signature.
+
+Now watch it fire, with no server running:
+
+```python
+from cybertravels import runtime
+
+# the resource server paid ten times what was asked
+print(runtime._verify_result("issue_refund", {"amount": 140},
+                            {"amount": 1400, "ok": True}))
+# -> asked to refund 140, resource server refunded 1400
+
+print(runtime._verify_result("issue_refund", {"amount": 140},
+                            {"amount": 140, "ok": True}))
+# -> None, which means acceptable
+```
+
+A rejection becomes a `denied` span with `at="verifier"`, so A2.1 can tell it apart from a policy refusal and a resource-server refusal. Three different incidents, three different places.
 
 The skill below is the one C2.1 uses to review a harness. Run it against the loop you are writing, not after it ships.
 
@@ -48,4 +73,8 @@ The skill below is the one C2.1 uses to review a harness. Run it against the loo
 
 ## Your turn
 
-Delete the verifier and run the same task. The loop still finishes and still reports success. That is the failure mode: it does not look like one.
+Delete the verifier — in `cybertravels/runtime.py`, replace the body of `_verify_result` with a single `return None`, which is the two-stage loop most systems actually ship. Then run the snippet above again: the 1400-for-140 refund now comes back `None`, meaning acceptable, and the run reports success.
+
+That is the failure mode, and the point is that **it does not look like one**. Nothing errored. No span says anything is wrong. The trace is shorter and tidier than before, because there is no `denied at="verifier"` row in it. A reviewer reading that trace sees a clean run.
+
+Then put it back — or keep going, and remember that `scripts/lesson.py` for A1.2 will tell you the tree has changed and offer you `--force`. That is the harness protecting your edit, not an error.

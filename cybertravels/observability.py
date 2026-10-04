@@ -87,8 +87,12 @@ class Trace:
     def final(self, text):
         return self.span("final", text=text)
 
-    def budget(self, what, used, ceiling):
-        return self.span("budget", what=what, used=used, ceiling=ceiling)
+    def budget(self, what, used, ceiling, **extra):
+        # `extra` carries which target bound, for the per-target ceiling. "The
+        # run stopped" and "the run stopped because one booking was being
+        # hammered" are different incidents and only the second is actionable.
+        return self.span("budget", what=what, used=used, ceiling=ceiling,
+                         **extra)
 
     def as_jsonl(self):
         return "\n".join(json.dumps(s, default=str) for s in self.spans)

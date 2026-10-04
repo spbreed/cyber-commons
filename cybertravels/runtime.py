@@ -245,9 +245,41 @@ class Budget:
     # step:B3.4 end
 
 
+# step:A1.1 add
+def _verify_result(tool, args, parsed):
+    """Is what came back acceptable? Returns a reason, or None if it is.
+
+    The verify stage of plan/act/verify. Nothing here asks the model anything —
+    that independence is the entire property, and a verifier that consults the
+    model is a model agreeing with itself.
+
+    Postconditions only. Authorisation happened upstream, and the owner check
+    that *would* close the IDOR is deliberately absent: that defect is labelled
+    in LABELS.md and Function C scores a scanner on finding it.
+    """
+    if isinstance(parsed, dict) and "error" in parsed:
+        return None                 # an error is a legitimate result, not a lie
+
+    # A refund that returns a different amount than the one requested is the
+    # 1400-for-140 class of failure A2.4 scores, and it is checkable here
+    # without a model and without a judgement call.
+    if tool == "issue_refund" and isinstance(parsed, dict):
+        asked, paid = args.get("amount"), parsed.get("amount")
+        if asked is not None and paid is not None and float(asked) != float(paid):
+            return f"asked to refund {asked}, resource server refunded {paid}"
+
+    # A tool declared as returning a record must return one. An empty result
+    # conforms to every schema and is the shape a silent failure takes.
+    if tool in ("get_booking", "lookup_vendor_doc") and parsed in (None, "", {}, []):
+        return f"{tool} returned nothing where a record was declared"
+
+    return None
+# step:A1.1 end
+
+
 async def execute_tool(tool, args, user_token, agent_token, trace, q,
                        budget: Budget):
-    """Gate -> exchange -> call -> audit. Returns the text the model sees."""
+    """Gate -> exchange -> call -> verify -> audit. Returns the text the model sees."""
     rule = config.TOOL_POLICY.get(tool)
     # `decision` stays None until B3.1 builds one. Everything downstream reads
     # it defensively, so the same path runs at every checkpoint.
@@ -297,6 +329,24 @@ async def execute_tool(tool, args, user_token, agent_token, trace, q,
         trace.budget("tool_calls", budget.calls, config.MAX_TOOL_CALLS)
         await q.put(trace.spans[-1])
         return json.dumps({"error": "tool-call budget exhausted"})
+
+    # step:B3.4 add
+    # The per-target ceiling, wired into the loop. `Budget.target` and
+    # MAX_CALLS_PER_TARGET existed, `exhausted()` reported on them and the smoke
+    # test exercised the counter directly — and nothing in `execute_tool` ever
+    # called it, so the ceiling could not bind on a real run. The same defect as
+    # the a2a hop counter: a control with a limit, a test and no call site.
+    #
+    # The target is the object being acted on, not the server: twelve calls
+    # spread across the estate is a busy run, and twelve against one booking is
+    # one traveller absorbing the entire budget.
+    target = str(args.get("booking_id") or args.get("vendor") or audience)
+    if not budget.target(target):
+        trace.budget("per_target", budget.per_target[target],
+                     config.MAX_CALLS_PER_TARGET, target=target)
+        await q.put(trace.spans[-1])
+        return json.dumps({"error": f"per-target ceiling reached for {target}"})
+    # step:B3.4 end
 
     await q.put(trace.plan(tool, args, scope, rule["high_risk"]))
 
@@ -363,6 +413,30 @@ async def execute_tool(tool, args, user_token, agent_token, trace, q,
         return json.dumps({"error": str(e)})
 
     parsed = _json(result)
+
+    # step:A1.1 add
+    # --- verify: the third stage, and the one that is usually missing --------
+    # Plan and act were above. This decides whether what came back is
+    # acceptable, and the only property that matters about it is that **the
+    # model is not consulted**. A loop that asks the model whether the model's
+    # call worked has two stages and a formality.
+    #
+    # A1.1 taught three stages while this file had two, and A1.1's challenge
+    # said "delete the verifier" when there was no verifier in the tree to
+    # delete. The reader was asked to remove something that did not exist.
+    #
+    # These are postconditions, not authorisation: authorisation already
+    # happened at the policy gate and the exchange. Deliberately *not* checked
+    # here is whether the row belongs to the caller — that is the IDOR in
+    # cybertravels/LABELS.md, it is planted on purpose, and Function C scores a
+    # scanner on finding it.
+    if (why := _verify_result(tool, args, parsed)) is not None:
+        db.audit("(verifier) => agent", tool, audience, scope, "denied", why,
+                 trace.trace_id)
+        await q.put(trace.denied(tool, why, at="verifier"))
+        return json.dumps({"error": f"result rejected: {why}"})
+    # step:A1.1 end
+
     summary = parsed if not isinstance(parsed, str) else parsed[:200]
     await q.put(trace.result(tool, summary))
     return result

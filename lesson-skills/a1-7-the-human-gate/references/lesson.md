@@ -37,10 +37,32 @@ on 40% of runs last week is a thing you want to know.
 
 ## 2 · Approve one, refuse one, then exhaust the budget
 
-The skill below audits whether a loop's ceilings actually bind and what a run returns when one does. B1.13 runs it on somebody else's agent; run it on yours before that happens.
+**The gate, in the browser.** Start the app, sign in as Dana, and ask for something high risk — the two gated tools are `cancel_booking` and `issue_refund`, and nothing else pauses:
+
+```bash
+./cybertravels/run.sh        # http://127.0.0.1:8000
+```
+
+Ask it to cancel booking `CT-4417`. The run stops and names the action and the scope it is about to request. Approve it, and watch the trace continue. Then ask again and refuse: both outcomes are audit rows, which is the part that matters — a gate that records only approvals cannot answer what was attempted.
+
+**The budget, without the browser.** Two ceilings, and you can watch each one bind in four lines:
+
+```python
+from cybertravels import runtime, config
+print(config.MAX_STEPS, config.MAX_TOOL_CALLS)   # 8 12
+
+b, n = runtime.Budget(), 0
+while b.call():
+    n += 1
+print(n, b.exhausted())        # 12 tool_calls
+```
+
+Twelve calls, then `call()` goes False and `exhausted()` names which ceiling was hit. That name is the whole design: the run returns an incomplete result **that says so**, rather than a confident summary of what it managed.
+
+A note on the skill below, because the numbers will not match and the mismatch is the point rather than a mistake. CyberTravels bounds two things — model turns and tool calls. The skill audits four kinds of ceiling, including per-target and wall-clock, and on its fixture the per-target ceiling fires first at six calls. **Your loop does not have a per-target ceiling.** That is the finding the skill is for: an agent that may make twelve calls total can still make all twelve against one traveller's booking.
 
 ### The skill
 
 ## Your turn
 
-Raise MAX_TOOL_CALLS to 500 and give the agent a task it cannot finish. Watch the cost, and then decide what the right number is for your own loop — it is not 500 and it is not 2.
+Raise `MAX_TOOL_CALLS` in `cybertravels/config.py` to 500 and give the agent a task it cannot finish. Watch the cost, and then answer the question the skill raised: twelve calls is a ceiling on the run, and nothing yet stops all twelve landing on one traveller's booking. Write down the number you think that should be. B3.4 builds exactly this ceiling, and it is worth having guessed first — the number in the code is four.

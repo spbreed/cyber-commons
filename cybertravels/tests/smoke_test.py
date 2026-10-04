@@ -176,6 +176,31 @@ def main():
     results.append(check("the hop ceiling binds, and the chain survives each hop",
                          hop_ceiling_actually_binds))
 
+    def verifier_is_independent_of_the_model():
+        """The third stage rejects a bad result without asking anything.
+
+        A1.1 taught plan/act/verify while runtime.py had plan and act, and its
+        challenge said "delete the verifier" when there was none to delete.
+        """
+        from .. import runtime
+        bad = runtime._verify_result("issue_refund", {"amount": 140},
+                                     {"amount": 1400, "ok": True})
+        if not bad:
+            raise AssertionError("a refund of 1400 for 140 was accepted")
+        good = runtime._verify_result("issue_refund", {"amount": 140},
+                                      {"amount": 140, "ok": True})
+        if good is not None:
+            raise AssertionError(f"a correct refund was rejected: {good}")
+        # An error is a legitimate result, not something to reject twice.
+        if runtime._verify_result("get_booking", {}, {"error": "denied"}) is not None:
+            raise AssertionError("an upstream error was re-rejected")
+        # And the owner check stays absent on purpose: it is the labelled IDOR.
+        if runtime._verify_result("get_booking", {"booking_id": 2},
+                                  {"id": 2, "owner": "priya"}) is not None:
+            raise AssertionError("the verifier closed the labelled IDOR")
+    results.append(check("the verify stage rejects a bad result, with no model",
+                         verifier_is_independent_of_the_model))
+
     # --- the audit log ---------------------------------------------------
     def audit_records_refusals():
         db.audit("dana => agent", "issue_refund", config.AUD_INTERNAL_MCP,
@@ -450,6 +475,23 @@ def main():
             f"the run stopped for {b.exhausted()!r}, which names no target"
     results.append(check("a per-target ceiling bounds what one vendor absorbs",
                          one_target_cannot_absorb_the_whole_budget))
+
+    def the_loop_actually_calls_the_target_ceiling():
+        """The counter bound; the loop never asked it to.
+
+        The test above exercised `Budget.target` directly and passed for as long
+        as `execute_tool` never called it — a ceiling with a limit, a config
+        entry, a named `exhausted()` reason and no call site, so it could not
+        bind on a real run. Assert the call site, not the counter.
+        """
+        import inspect
+        from cybertravels import runtime
+        src = inspect.getsource(runtime.execute_tool)
+        assert "budget.target(" in src, \
+            "execute_tool never calls budget.target, so the per-target " \
+            "ceiling cannot bind on a real run"
+    results.append(check("the loop calls the per-target ceiling, not just the counter",
+                         the_loop_actually_calls_the_target_ceiling))
 
     def spend_is_bounded_as_well_as_steps():
         b = Budget()

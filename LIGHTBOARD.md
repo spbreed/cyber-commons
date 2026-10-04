@@ -153,7 +153,7 @@ Next up: A0.1, Nine words for an agent — harness to multi-agent, and where eac
 
 ### A0.1 · Nine words for an agent — harness to multi-agent, and where each is built
 
-Chapter A0 · lesson 2 of 2 · reading lesson · 421 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · reading lesson · 402 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **① Open**
 
@@ -189,7 +189,7 @@ Of the nine, how many you can point at in the tree — a file, not a definition.
 
 **⑤ Hand it over**
 
-Find all nine in the tree without looking at the table above: a file, and ideally the line, for each word. Get the finished application first — not the copy this lesson's run block writes: ``bash python3 scripts/checkpoint.py --at A2.5 --out work/finished ` That matters, and it is the reason this is spelled out.
+Cover the table above and write down, from memory, the file you would expect each of the nine words to live in. Nine guesses, on paper — do not open the tree for this one.
 
 That closes chapter A0. You can run any lesson in the commons on either route, you know which function to open first, and you have the nine words — harness to multi-agent — that everything after this is built from.
 
@@ -267,7 +267,7 @@ Next up: A1.1, The loop — model, tools, and the step that turns text into an a
 
 ### A1.1 · The loop — model, tools, and the step that turns text into an action
 
-Chapter A1 · lesson 2 of 8 · runs a skill · 266 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A1.1.html)
+Chapter A1 · lesson 2 of 8 · runs a skill · 295 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/A1.1.html)
 
 **① Open**
 
@@ -311,7 +311,7 @@ Runs the verifier rejected. Zero means either the loop is perfect or the verifie
 
 **⑤ Hand it over**
 
-Delete the verifier and run the same task. The loop still finishes and still reports success.
+Delete the verifier — in cybertravels/runtime.py, replace the body of _verify_result with a single return None, which is the two-stage loop most systems actually ship. Then run the snippet above again: the 1400-for-140 refund now comes back None, meaning acceptable, and the run reports success.
 
 Next up: A1.2, Tools over MCP — a resource server, and why it is a separate process.
 
@@ -579,7 +579,7 @@ Next up: A1.7, The human gate, and the budget that stops the loop.
 
 ### A1.7 · The human gate, and the budget that stops the loop
 
-Chapter A1 · lesson 8 of 8 · runs a skill · 388 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A1.7.html)
+Chapter A1 · lesson 8 of 8 · runs a skill · 395 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A1.7.html)
 
 **① Open**
 
@@ -619,11 +619,11 @@ Approvals per reviewer per hour — the number that says whether the gate is sti
 
 *[Point at the output on screen. Do not read it out.]*
 
-> A high-risk action pausing and naming its scope, an approval and a refusal both recorded as audit rows, and a budget ceiling returning an incomplete result rather than a summary.
+> A high-risk action pausing and naming its scope, an approval and a refusal both recorded as audit rows, twelve tool calls before the ceiling binds with exhausted() naming tool calls, and a budget ceiling returning an incomplete result rather than a summary.
 
 **⑤ Hand it over**
 
-Raise MAX_TOOL_CALLS to 500 and give the agent a task it cannot finish. Watch the cost, and then decide what the right number is for your own loop — it is not 500 and it is not 2.
+Raise MAX_TOOL_CALLS in cybertravels/config.py to 500 and give the agent a task it cannot finish. Watch the cost, and then answer the question the skill raised: twelve calls is a ceiling on the run, and nothing yet stops all twelve landing on one traveller's booking.
 
 That closes chapter A1. A running agentic platform you built yourself: a reasoning loop with an independent verifier, two MCP resource servers behind a process boundary, a workload identity per agent, per-action delegation that a resource server actually enforces, memory that records where its contents came from, signed agent-to-agent envelopes, a human gate and a budget that binds.
 

@@ -45,7 +45,7 @@ exceed the user who asked. Test both directions explicitly.
 
 **3 — Check the chain is preserved and not duplicated.** The `act` chain should
 read `user → agent`, once. A chain that repeats the principal
-(`alice → alice → agent`) usually means the head was appended twice, and it
+(`dana → dana → agent`) usually means the head was appended twice, and it
 breaks any audit query that counts hops.
 
 **4 — Find where OBO stops.** Some downstream systems cannot consume a

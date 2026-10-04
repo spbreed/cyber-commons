@@ -17,7 +17,21 @@
 <p>  returns is somebody else&#x27;s writing.</p>
 <p>Each has its own <strong>audience</strong>. A token minted for one is useless at the other, which means a compromised call cannot wander sideways.</p>
 <h3>The tool description is part of the attack surface</h3>
-<p>An MCP server declares its tools — names, descriptions, schemas — and the agent reads those descriptions to decide what to call. They are instructions arriving from a third party, they can change after you approved them, and B1.9 is the lesson on what that enables. For now: notice that you are trusting them.</p><div class="how"><h2>2 · Two servers, and what each one declares</h2>
+<p>An MCP server declares its tools — names, descriptions, schemas — and the agent reads those descriptions to decide what to call. They are instructions arriving from a third party, they can change after you approved them, and B1.9 is the lesson on what that enables. For now: notice that you are trusting them.</p><div class="how"><h2>2 · Start them, and read what each one declares</h2>
+<p><strong>Install the application&#x27;s dependencies first.</strong> The skills in this commons are standard library only, but CyberTravels is a real application and speaks real MCP:</p>
+<pre><code>python3 -m pip install -r cybertravels/requirements.txt</code></pre>
+<p>Each server is a module you run directly. They talk MCP over stdio, so they wait quietly rather than printing a banner — that silence is the server working:</p>
+<pre><code>python3 -m cybertravels.mcp.internal_server    # bookings, payments
+python3 -m cybertravels.mcp.vendor_server      # the third party&#x27;s</code></pre>
+<p>To see the whole thing serving instead, in one terminal:</p>
+<pre><code>./cybertravels/run.sh      # then open http://127.0.0.1:8000</code></pre>
+<p>If that says <code>main.py does not exist at this checkpoint yet</code>, you have a tree from before A1.1 and the message tells you which checkpoint to fetch. The script checks, because the obvious command used to fail with a uvicorn import error naming a module the reader had never heard of.</p>
+<p><strong>Then read the surface rather than the code.</strong> Seven tools across the two servers, in <code>config.TOOL_POLICY</code>, and the split is the thing to notice:</p>
+<pre><code>from cybertravels import config
+for tool, p in config.TOOL_POLICY.items():
+    print(f&quot;{tool:20s} {p[&#x27;audience&#x27;]:14s} {p[&#x27;scope&#x27;]:16s} &quot;
+          f&quot;{&#x27;HIGH RISK&#x27; if p[&#x27;high_risk&#x27;] else &#x27;&#x27;}&quot;)</code></pre>
+<p>Five tools are addressed to <code>mcp:internal</code> and two to <code>mcp:vendor</code>. A token minted for one is refused by the other, which is what makes a compromised call unable to wander sideways — and <code>cancel_booking</code> and <code>issue_refund</code> are the two marked high risk, which is A1.7&#x27;s whole subject.</p>
 <p>The skill below enumerates an agent&#x27;s declared tool surface — what it says it can do, against what the code actually does. B1.9 runs it to catch a rug-pull; here you run it on your own servers, to see the surface you just created.</p><h3>The skill</h3></div></div></section><section class="ls ls-green"><h2 class="lsh"><span class="lsi">▶</span>Real time execution as skill</h2><div class="lsb"><div class="skillmd"><p class="skillref">The skill — <a href="https://github.com/spbreed/cyber-commons/blob/master/skills/attestation/agent-code-surface-analyzer/SKILL.md" target="_blank" rel="noopener"><code>skills/attestation/agent-code-surface-analyzer/SKILL.md</code></a></p><pre class="front"><code>name: agent-code-surface-analyzer
 description: &gt;-
   Statically enumerate an agent or MCP server&#x27;s declared tools, dangerous

@@ -43,6 +43,35 @@ delegation chain from a control into a description.
 
 ## 2 · Exchange one, then watch a role refuse
 
+Four lines, in a Python prompt opened in your checkout. Ask for the same refund twice — once as Dana, once as Priya:
+
+```python
+from cybertravels import identity, config
+
+for who in ("dana", "priya"):
+    user  = identity.mint_user_token(who)
+    agent = identity.mint_agent_token("workflow")
+    try:
+        identity.token_exchange(user, agent,
+                                scope="payments:refund",
+                                audience=config.AUD_INTERNAL_MCP)
+        print(who, "-> minted")
+    except identity.IdentityError as e:
+        print(who, "-> REFUSED:", e)
+```
+
+You get this, and the second line is the one to read:
+
+```
+dana   -> REFUSED: role 'traveller' may not delegate 'payments:refund'
+          (allowed: ['bookings:read', 'kb:read', 'vendor:read'])
+priya  -> minted
+```
+
+Notice what did **not** happen. The model was never consulted. No booking was looked up. The internal MCP server was never contacted — there was no token to present to it, so the request died two components before the thing it wanted to change. And Priya's identical request succeeds, which is what makes Dana's refusal a policy decision rather than a broken endpoint.
+
+Then install PyJWT if that import failed — `pip install PyJWT` — because the token is a real signed JWT and not a dictionary pretending to be one.
+
 The skill below verifies that a delegation chain is complete and enforced rather than merely recorded. B2.6 runs it against a system somebody else built; you are running it against yours.
 
 ### The skill

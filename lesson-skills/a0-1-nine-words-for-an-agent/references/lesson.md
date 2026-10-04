@@ -45,12 +45,8 @@ Every one of the nine is a real file in CyberTravels by the end of Function A, a
 
 ## Your turn
 
-Find all nine in the tree without looking at the table above: a file, and ideally the line, for each word. Get the finished application first — **not** the copy this lesson's run block writes:
+Cover the table above and write down, from memory, the file you would expect each of the nine words to live in. Nine guesses, on paper — **do not open the tree for this one.**
 
-```bash
-python3 scripts/checkpoint.py --at A2.5 --out work/finished
-```
+That is deliberate, and it is worth knowing why. Six of the nine have no file yet: `runtime.py`, `memory.py`, `identity.py`, `observability.py`, `mcp/internal_server.py` and `a2a/protocol.py` arrive across A1 and A2, because you are the one who builds them. An earlier version of this exercise sent readers to go and find all nine in the code they had at this point, where two thirds of the answers did not exist.
 
-That matters, and it is the reason this is spelled out. The tree as it stands at A0.1 does not contain `runtime.py`, `memory.py`, `identity.py`, `observability.py`, `mcp/internal_server.py` or `a2a/protocol.py` — six of the nine words have no file yet, because you have not built them. Asking for them there is asking for something that is not wrong so much as absent, and the first version of this exercise did exactly that.
-
-Count how many you placed. The ones you could not are the Function A lessons to read most carefully, and the count is worth taking again at the end of A2.5 — by then every one of them is something you wrote.
+Keep the nine guesses. A2.5 closes Function A by asking you to mark them against the tree you have by then — every word will have a file, and every file will be one you wrote. The guesses you got wrong are the lessons that taught you something.

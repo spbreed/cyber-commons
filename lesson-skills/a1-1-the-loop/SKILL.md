@@ -52,7 +52,11 @@ the learner never has to type a command themselves: you run them.
    **Read this next**. Use only what it printed. If it says a step was skipped
    or refused, say that plainly and pass on the fix it gave; a skipped step is
    not a pass.
-5. **Give them the exercise.** Delete the verifier and run the same task. The loop still finishes and still reports success. That is the failure mode: it does not look like one.
+5. **Give them the exercise.** Delete the verifier — in `cybertravels/runtime.py`, replace the body of `_verify_result` with a single `return None`, which is the two-stage loop most systems actually ship. Then run the snippet above again: the 1400-for-140 refund now comes back `None`, meaning acceptable, and the run reports success.
+
+That is the failure mode, and the point is that **it does not look like one**. Nothing errored. No span says anything is wrong. The trace is shorter and tidier than before, because there is no `denied at="verifier"` row in it. A reviewer reading that trace sees a clean run.
+
+Then put it back — or keep going, and remember that `scripts/lesson.py` for A1.2 will tell you the tree has changed and offer you `--force`. That is the harness protecting your edit, not an error.
 6. **Point at the next lesson**, from the readback's last heading.
 
 ## The readback

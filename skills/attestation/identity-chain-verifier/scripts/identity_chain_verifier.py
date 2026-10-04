@@ -36,14 +36,44 @@ SKILL = pathlib.Path(__file__).resolve().parents[1] / "SKILL.md"
 
 # ---------------------------------------------------------------- the fixture
 # --- layer 2: RFC 8693 token exchange --------------------------------------
-CEILINGS = {                        # what each actor may EVER hold
- "alice@cybertravels.com":
+# What each actor may EVER hold, copied from `ROLE_ALLOWED_SCOPES` and
+# `AGENT_IDS` in cybertravels/config.py rather than invented beside them.
+#
+# This read `alice@cybertravels.com` with `payments:refund` in her ceiling, and
+# there is no Alice in CyberTravels — the cast is Dana (traveller), Alex (agent
+# operations) and Priya (finance). Worse than the name: giving the traveller
+# `payments:refund` contradicted the claim A1.4 is built on, which is that a
+# traveller's role *cannot* delegate a refund however the model is argued with.
+# The lesson's central example and its own skill's fixture disagreed.
+#
+# Dana's ceiling is the finding. Priya's is the control case: the same request
+# from finance succeeds, which is what makes Dana's refusal a policy decision
+# rather than a broken endpoint.
+CEILINGS = {
+ "dana@cybertravels.example":                        # traveller
+    {"bookings:read", "vendor:read", "kb:read"},
+ "alex@cybertravels.example":                        # agent operations
+    {"bookings:read", "bookings:write", "vendor:read", "kb:read"},
+ "priya@cybertravels.example":                       # finance
+    {"bookings:read", "bookings:write", "payments:refund",
+     "vendor:read", "kb:read"},
+ "spiffe://cybertravels.local/agent/workflow":
     {"bookings:read", "bookings:write", "payments:refund"},
- "spiffe://cybertravels.com/ns/prod/sa/orchestrator":
-    {"bookings:read", "bookings:write"},
- "spiffe://cybertravels.com/ns/prod/sa/agent-alpha":
-    {"bookings:read"},
+ "spiffe://cybertravels.local/agent/rag-advisor":
+    {"kb:read", "vendor:read"},
 }
+
+# The two exchanges to attempt, and what each must return. The agent's own
+# ceiling holds `payments:refund`; the exchange still has to refuse on Dana's
+# behalf, because least privilege is keyed to the human and not to the agent.
+EXCHANGES = [
+ {"sub": "dana@cybertravels.example", "act": "spiffe://cybertravels.local/agent/workflow",
+  "scope": "payments:refund", "aud": "mcp:internal", "booking": "CT-4417",
+  "must": "refuse — a traveller's role may not delegate a refund"},
+ {"sub": "priya@cybertravels.example", "act": "spiffe://cybertravels.local/agent/workflow",
+  "scope": "payments:refund", "aud": "mcp:internal", "booking": "CT-4417",
+  "must": "mint — finance may, and the token is good for one audience only"},
+]
 
 SIGNING_KEY = b"demo-key-not-a-secret"
 # ------------------------------------------------------------------------ run
@@ -56,7 +86,8 @@ def task() -> str:
         for name, value in FIXTURE.items())
 
 
-FIXTURE = {"CEILINGS": CEILINGS, "SIGNING_KEY": SIGNING_KEY}
+FIXTURE = {"CEILINGS": CEILINGS, "EXCHANGES": EXCHANGES,
+           "SIGNING_KEY": SIGNING_KEY}
 
 
 def main() -> int:
