@@ -106,6 +106,18 @@ plan to finish this commons.
 
 The prices are per month and the free tiers are what you get without a card. Every name links to its own sign-up page.
 
+### Before you sign up for anything — the age rule
+
+Every tool in that table needs an account, and every one of them sets a minimum age in its terms. **Broadly: 13 is the floor, 18 is the default, and between the two you need a parent or guardian to set the account up and agree to the terms.** The exact rule differs by provider and by country, it is on the sign-up page, and this page is not the authority on it — read theirs.
+
+If you are under 18, the shortest honest path is:
+
+1. **Ask a parent, guardian or teacher to make the account.** That is what the terms require, and it is a two-minute conversation rather than a problem.
+2. **Or take Route B below and run a model on your own computer.** No account, no card, no age gate, nothing leaving the machine. It is slower and the answers are weaker, and it is a completely legitimate way to do this entire commons.
+3. **Or do the third way of every lesson**, which reads the code and the diff and needs no model whatsoever.
+
+Nothing in the commons asks you to lie about your age, and if a school or club is running this, option 1 or 2 is the answer rather than thirty individual accounts.
+
 ## 3 · Open a terminal and get the files
 
 **First, open a terminal.** It is already on your computer:
@@ -123,7 +135,9 @@ git --version          # any 2.x is fine
 python3 --version      # 3.10 or newer
 ```
 
-If either says *command not found*, install the missing one — [git-scm.com/downloads](https://git-scm.com/downloads) and [python.org/downloads](https://www.python.org/downloads/) — then close the terminal, open a new one, and check again. A terminal only notices a new program when it starts.
+**On Windows the second one is `python`, not `python3`.** If you type `python3` there you will usually get the Microsoft Store opening, or nothing useful — that is not an error you caused, it is the wrong command for that machine. `py -3 --version` works too.
+
+If either says *command not found*, install the missing one — [git-scm.com/downloads](https://git-scm.com/downloads) and [python.org/downloads](https://www.python.org/downloads/) — then close the terminal, open a new one, and check again. A terminal only notices a new program when it starts. On Windows, tick **Add python.exe to PATH** in the installer; it is off by default and it is the reason the next command fails if you skip it.
 
 **Third, copy this project onto your machine.** The first line downloads it; the second moves you inside the folder it made, the way double-clicking a folder moves you inside it:
 
@@ -134,7 +148,15 @@ cd cyber-commons
 
 That is the clone. You now have every lesson, every skill and every line of the example system on your own computer, and none of it needs the internet again until you ask a hosted model a question.
 
-There is nothing else to install. Every program here uses only what comes with Python — the one thing it needs is a model, and that is the next step.
+**Fourth, ask your own computer whether it is ready.** One command, and it checks the machine you are actually sitting at rather than asking you to compare output against a sentence:
+
+```bash
+python3 scripts/doctor.py
+```
+
+Every line it prints is either `ok`, or `FAIL` with the command that fixes it for your platform, or `--` for something optional that is absent. It exits 0 when nothing *required* is missing — so a reader with no model yet is told they are ready, because the third way of every lesson needs no model at all.
+
+The skills themselves need nothing installed: they use only what comes with Python. **CyberTravels, the application you build from A1.1, does** — it is a real web service and speaks real MCP, so A1.2 has you run one `pip install`. The one thing the lessons need is a model, and that is the next step.
 
 ## 4 · Tell it which model to ask
 
@@ -304,6 +326,25 @@ python3 scripts/install_skills.py --list              # what is linked where
 ```
 
 Those are **links into your clone**, not copies — symlinks, or junctions on Windows — so `git pull` updates every tool at once and an edit you make here is live in all of them. A copy would be a fork with a friendly name: you would fix a skill once and the other copies would keep the bug while still loading and still answering.
+
+### What it changes on your computer, and how to undo it
+
+This is worth stating plainly rather than leaving you to find out. `install_skills.py` does exactly one kind of thing: it creates links in your agent's own skills folder.
+
+| it writes | it does not |
+|---|---|
+| one link per skill under your agent's own folder — `~/.claude`, `~/.codex`, `~/.gemini`, `~/.cursor`, `~/.opencode` or `~/.config/goose`, and only for the tools you ask for | install any package, change your PATH, add a service, or touch anything outside those folders |
+| `.github/skills/` and `.agents/skills/` **inside your clone**, if you ask for `--tool copilot` or `--tool agents` | send anything anywhere — the only network call in the whole commons is the one *you* make to a model |
+| `work/` inside your clone, when a lesson writes CyberTravels there | need admin rights, at any point, for any of it |
+
+To remove all of it:
+
+```bash
+python3 scripts/install_skills.py --all --uninstall   # every link, gone
+python3 scripts/install_skills.py --list              # confirm nothing is left
+```
+
+And to remove the commons itself, delete the folder you cloned. There is nothing else: no installer ran, no registry key was written, nothing is left behind. `python3 scripts/doctor.py` prints which of those link folders currently exist on your machine, if you want to check before or after.
 
 ## Your turn
 

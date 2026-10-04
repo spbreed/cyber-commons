@@ -381,3 +381,57 @@ details.fold[open]>summary::before{transform:rotate(90deg)}
 details.fold>summary:hover{color:var(--defend)}
 details.fold>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 details.fold .foldbody{padding:2px 16px 14px;border-top:1px solid var(--line-soft)}
+
+/* Markdown pipe tables. The fallback renderer in build_site.py had no table
+   case, so 45 tables across 28 lessons emitted as one paragraph of pipes on a
+   single line — unreadable on every screen, not only small ones. `.tw` is the
+   scroll container for the wide ones; the stacking rule below is what the
+   students actually asked for, because a four-column table at phone width
+   either squeezes to nothing or forces the horizontal page scroll this
+   project's own design rules forbid. */
+.tw{margin:4px 0 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.md{width:100%;border-collapse:collapse;font-size:14px}
+table.md th{text-align:left;vertical-align:top;font-weight:600;
+  padding:7px 12px 7px 0;border-bottom:2px solid var(--line);
+  color:var(--text)}
+table.md td{text-align:left;vertical-align:top;padding:7px 12px 7px 0;
+  border-bottom:1px solid var(--line-soft);color:var(--text)}
+table.md tr:last-child td{border-bottom:0}
+table.md code{white-space:nowrap}
+
+@media(max-width:640px){
+  /* One block per row, each cell labelled with its column, so nothing is lost
+     and nothing scrolls sideways. */
+  .tw{overflow-x:visible}
+  table.md,table.md tbody,table.md tr,table.md td{display:block;width:100%}
+  table.md thead{display:none}
+  table.md tr{padding:9px 0;border-bottom:1px solid var(--line)}
+  table.md tr:last-child{border-bottom:0}
+  table.md td{border-bottom:0;padding:2px 0}
+  table.md td[data-h]:not([data-h=""])::before{content:attr(data-h) ": ";
+    font-weight:600;color:var(--text-dim)}
+  table.md code{white-space:normal;word-break:break-word}
+}
+
+/* The copy button on code blocks. Inserted by script after load, so this
+   styling only ever applies to a page where the script ran — a blocked script
+   leaves the <pre> exactly as it was. */
+pre.hascopy{position:relative}
+pre.hascopy > button.copy{position:absolute;top:8px;right:8px;
+  font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1;
+  padding:5px 8px;border-radius:5px;cursor:pointer;
+  color:var(--text-dim);background:var(--bg);border:1px solid var(--line);
+  opacity:0;transition:opacity .12s var(--ease),color .12s var(--ease)}
+pre.hascopy:hover > button.copy,
+pre.hascopy > button.copy:focus-visible{opacity:1}
+pre.hascopy > button.copy:hover{color:var(--accent);border-color:var(--accent)}
+pre.hascopy > button.copy:focus-visible{outline:2px solid var(--accent);
+  outline-offset:2px}
+@media(max-width:640px){
+  /* No hover on a touch screen, so it is always visible — which is the case
+     the students were actually asking about. */
+  pre.hascopy > button.copy{opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+  pre.hascopy > button.copy{transition:none}
+}

@@ -118,11 +118,18 @@ def md_to_html(text: str) -> str:
     while i < len(lines):
         ln = lines[i]
         if ln.startswith("```"):
+            # The fence's language is kept, and it is load-bearing rather than
+            # cosmetic: the copy button is added only to blocks that declare one.
+            # A bare fence in these sources is an ASCII diagram or a block of
+            # expected output, and offering "copy" on a picture is noise.
+            lang = re.sub(r"[^a-z0-9]", "", ln[3:].strip().lower())
             j = i + 1
             buf = []
             while j < len(lines) and not lines[j].startswith("```"):
                 buf.append(lines[j]); j += 1
-            out.append("<pre><code>" + html.escape("\n".join(buf)) + "</code></pre>")
+            cls = f' class="language-{lang}"' if lang else ""
+            out.append(f"<pre><code{cls}>" + html.escape("\n".join(buf))
+                       + "</code></pre>")
             i = j + 1; continue
         if m := re.match(r"^(#{1,4})\s+(.*)", ln):
             lvl = len(m.group(1)); out.append(f"<h{lvl}>{inline(m.group(2))}</h{lvl}>"); i += 1; continue
@@ -138,10 +145,47 @@ def md_to_html(text: str) -> str:
             out.append("<ol>" + "".join(items) + "</ol>"); continue
         if ln.startswith(">"):
             out.append("<blockquote>" + inline(ln.lstrip("> ")) + "</blockquote>"); i += 1; continue
+        # Pipe tables. The `markdown` package is asked for above and is never
+        # installed — standard library only — so this fallback is what every page
+        # actually renders through, and it had no table case at all. Forty-five
+        # tables across twenty-eight lessons were emitting as one paragraph of
+        # pipes on a single line. Students reported A1.0 as "the page lists seven
+        # parts while the instructions describe nine", which means they counted
+        # them out of that.
+        if "|" in ln and i + 1 < len(lines) and re.match(
+                r"^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$", lines[i + 1]):
+            def cells(row: str) -> list[str]:
+                row = row.strip()
+                if row.startswith("|"):
+                    row = row[1:]
+                if row.endswith("|"):
+                    row = row[:-1]
+                return [c.strip() for c in row.split("|")]
+
+            heads = cells(ln)
+            i += 2
+            body = []
+            while i < len(lines) and "|" in lines[i] and lines[i].strip():
+                row = cells(lines[i])
+                # data-h carries the column name so the CSS can stack the table
+                # on a phone with each cell labelled, instead of forcing a
+                # horizontal page scroll the design rules forbid.
+                body.append("<tr>" + "".join(
+                    f'<td data-h="{html.escape(heads[n] if n < len(heads) else "")}">'
+                    f"{inline(c)}</td>" for n, c in enumerate(row)) + "</tr>")
+                i += 1
+            out.append(
+                '<div class="tw"><table class="md"><thead><tr>'
+                + "".join(f"<th>{inline(h)}</th>" for h in heads)
+                + "</tr></thead><tbody>" + "".join(body) + "</tbody></table></div>")
+            continue
         if ln.strip():
             para = []
             while i < len(lines) and lines[i].strip() and not lines[i].startswith(("#", "```", ">")) \
-                    and not re.match(r"^\s*([-*]|\d+\.)\s+", lines[i]):
+                    and not re.match(r"^\s*([-*]|\d+\.)\s+", lines[i]) \
+                    and not ("|" in lines[i] and i + 1 < len(lines) and re.match(
+                        r"^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$",
+                        lines[i + 1])):
                 para.append(lines[i]); i += 1
             out.append("<p>" + inline(" ".join(para)) + "</p>"); continue
         i += 1
@@ -604,9 +648,47 @@ HEAD = ('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
         '&display=swap" rel="stylesheet">'
         '<link rel="stylesheet" href="../assets/lesson.css"></head><body>')
 
+# A copy button per code block. Students asked for "commands easy to copy or use
+# with a keyboard": the run block on every page is the whole product, and a
+# reader on a phone was expected to select a multi-line command by hand.
+#
+# It is added *by script, after load*, and that is deliberate rather than lazy.
+# The project's standing rule is that nothing is hidden behind JavaScript — so
+# the markup stays a plain <pre><code> that reads and selects normally, and a
+# blocked or failed script leaves a page that is exactly as usable as before,
+# minus a convenience. The button is a real <button>, so it is reachable by Tab
+# and fires on Enter and Space without any key handling of our own.
+COPY_JS = (
+    '<script>(function(){'
+    'if(!document.querySelectorAll)return;'
+    # Only blocks that declared a language in their fence. A bare fence here is
+    # an ASCII diagram or a sample of expected output, and a copy button on a
+    # picture is clutter — the first version of this put one on eleven blocks per
+    # page, most of them diagrams.
+    'var ps=document.querySelectorAll("pre > code[class^=\'language-\']");'
+    'for(var i=0;i<ps.length;i++){(function(code){'
+    'var pre=code.parentNode;'
+    'var b=document.createElement("button");'
+    'b.className="copy";b.type="button";'
+    'b.setAttribute("aria-label","Copy this command");b.textContent="copy";'
+    'b.onclick=function(){'
+    'var t=code.textContent;'
+    'var done=function(){b.textContent="copied";'
+    'setTimeout(function(){b.textContent="copy";},1400);};'
+    'if(navigator.clipboard&&navigator.clipboard.writeText){'
+    'navigator.clipboard.writeText(t).then(done,function(){});'
+    '}else{var a=document.createElement("textarea");a.value=t;'
+    'document.body.appendChild(a);a.select();'
+    'try{document.execCommand("copy");done();}catch(e){}'
+    'document.body.removeChild(a);}};'
+    'pre.insertBefore(b,pre.firstChild);'
+    'pre.className=(pre.className?pre.className+" ":"")+"hascopy";'
+    '})(ps[i]);}})();</script>')
+
 FOOT = ('<footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span>'
         f'<span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · '
-        f'<a href="{REPO}">Source</a></span></div></footer></body></html>')
+        f'<a href="{REPO}">Source</a></span></div></footer>'
+        + COPY_JS + '</body></html>')
 
 
 def lesson_page(entry, prev, nxt) -> str:
