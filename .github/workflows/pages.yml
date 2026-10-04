@@ -216,7 +216,12 @@ jobs:
 
       - name: Build lesson pages
         run: |
-          pip install --quiet markdown
+          # No `pip install markdown` here any more. It made CI render the pages
+          # one way and a contributor without the package render them another —
+          # different HTML on all 149 pages — so the staleness check below could
+          # only warn, and CSS written against the local markup did not apply to
+          # the deployed site. build_site.py now has one renderer and needs
+          # nothing installed.
           python3 scripts/build_site.py
           # if the commit did not include the regenerated pages, say so loudly.
           # index.html is in here too: its chapter grid and every count in its

@@ -102,11 +102,26 @@ def framework_chips(sid: str, track_id: str) -> str:
 
 # ----------------------------------------------------------------- markdown
 def md_to_html(text: str) -> str:
-    try:
-        import markdown  # type: ignore
-        return markdown.markdown(text, extensions=["fenced_code", "tables"])
-    except ImportError:
-        pass
+    """Render lesson markdown. One renderer, on purpose.
+
+    This used to prefer the `markdown` package and fall back to the code below
+    when it was absent — and the two produced **different HTML for all 149
+    pages**. CI installs the package, so the deployed site was rendered one way;
+    a contributor without it rendered the other. Gate 20 (`build_site.py
+    --check`) compares the committed pages against a rebuild, so whether it
+    passed depended on which machine ran it, which is why CI could only warn and
+    rebuild rather than fail.
+
+    It also made the markup unstylable: the library emitted bare `<table>`, so
+    the mobile stacking rules written against `table.md` applied on a
+    contributor's build and not on the live site.
+
+    So the fallback is now the only path. The output is identical everywhere,
+    gate 20 means something again, and the build needs nothing installed —
+    which is the rule the rest of this repository already follows. Verified
+    against the library's output on all 149 pages: the rendered text is the
+    same to within one word of whitespace handling.
+    """
     out, lines, i = [], text.splitlines(), 0
     def inline(s):
         s = html.escape(s)
