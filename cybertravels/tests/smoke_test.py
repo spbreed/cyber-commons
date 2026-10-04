@@ -144,6 +144,38 @@ def main():
     results.append(check("a peer message must carry the human it acts for",
                          envelope_needs_a_human))
 
+    def hop_ceiling_actually_binds():
+        """Forward until the ceiling refuses — the test that was missing.
+
+        Nothing incremented `hops` for a release, so MAX_HOPS could not fire and
+        no test noticed, because every test built its envelopes at hops=0. This
+        one bounces a real message between two agents and requires the refusal
+        to arrive on its own.
+        """
+        env = a2a.envelope("coding", "workflow", "please reprice CT-4417",
+                           on_behalf_of="dana", trace_id="tr-hop")
+        peers, hops = ("coding", "workflow"), 0
+        for i in range(a2a.MAX_HOPS + 2):
+            try:
+                env = a2a.forward(env, peers[i % 2], "and again")
+            except a2a.A2AError as e:
+                if "hop ceiling" not in str(e):
+                    raise AssertionError(f"refused for the wrong reason: {e}")
+                if hops != a2a.MAX_HOPS - 1:
+                    raise AssertionError(
+                        f"ceiling fired after {hops} hops, expected "
+                        f"{a2a.MAX_HOPS - 1}")
+                return
+            hops += 1
+            if env["on_behalf_of"] != "dana":
+                raise AssertionError("the human was dropped on a hop")
+            if env["trace_id"] != "tr-hop":
+                raise AssertionError("the trace id was dropped on a hop")
+        raise AssertionError(
+            f"forwarded {hops} times and the hop ceiling never fired")
+    results.append(check("the hop ceiling binds, and the chain survives each hop",
+                         hop_ceiling_actually_binds))
+
     # --- the audit log ---------------------------------------------------
     def audit_records_refusals():
         db.audit("dana => agent", "issue_refund", config.AUD_INTERNAL_MCP,

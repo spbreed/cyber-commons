@@ -527,7 +527,7 @@ Next up: A1.6, Agent to agent — handing work over without laundering authority
 
 ### A1.6 · Agent to agent — handing work over without laundering authority
 
-Chapter A1 · lesson 7 of 8 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.6.html)
+Chapter A1 · lesson 7 of 8 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.6.html)
 
 **① Open**
 
@@ -567,11 +567,11 @@ Tampered envelopes rejected: all. And the hop at which a cycle stops, which is a
 
 *[Point at the output on screen. Do not read it out.]*
 
-> A signed envelope naming its sender and the human it acts for, a refusal on a tampered one, and a refusal on an envelope with no human in the chain.
+> A signed envelope naming its sender and the human it acts for, a refusal on a tampered one, a refusal on an envelope with no human in the chain, and — from the loop above — three forwards that each keep Dana and the trace id, then hop ceiling reached (4) on the fourth.
 
 **⑤ Hand it over**
 
-Send a message with hops set one below the ceiling and let two agents bounce it. Count how many tool calls happen before the ceiling stops it, and multiply by your per-call cost.
+Replace the a2a.forward(...) call in the loop with a fresh a2a.envelope("coding", "workflow", "again", on behalf of="dana") and run it again. It never raises: hops prints 0 every time, because a new envelope starts the count over.
 
 Next up: A1.7, The human gate, and the budget that stops the loop.
 

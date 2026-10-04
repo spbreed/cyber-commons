@@ -52,7 +52,7 @@ the learner never has to type a command themselves: you run them.
    **Read this next**. Use only what it printed. If it says a step was skipped
    or refused, say that plainly and pass on the fix it gave; a skipped step is
    not a pass.
-5. **Give them the exercise.** Send a message with `hops` set one below the ceiling and let two agents bounce it. Count how many tool calls happen before the ceiling stops it, and multiply by your per-call cost.
+5. **Give them the exercise.** Replace the `a2a.forward(...)` call in the loop with a fresh `a2a.envelope("coding", "workflow", "again", on_behalf_of="dana")` and run it again. It never raises: `hops` prints 0 every time, because a new envelope starts the count over. You have just written the version of this code that has a hop ceiling in it and cannot reach one — which is how the real thing shipped for a release. Then decide what would have caught it, and notice that only a test which forwards for real would have.
 6. **Point at the next lesson**, from the readback's last heading.
 
 ## The readback

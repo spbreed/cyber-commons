@@ -102,6 +102,50 @@ def verify(env: dict) -> dict:
     return env
 
 
+def forward(received: dict, to_agent: str, content, *, origin=None) -> dict:
+    """Hand work onward, carrying the chain and spending one hop.
+
+    This is the function the ceiling in `verify` needs in order to mean
+    anything. For one release there was no such function: every caller built a
+    fresh `envelope()`, which defaults `hops=0`, and nothing anywhere ever
+    incremented the counter. `MAX_HOPS` was therefore unreachable in normal
+    operation — it could only fire if a caller hand-passed a high number, which
+    is the one case an attacker will not do for you. A1.6 taught it as a
+    control and the control could not trip.
+
+    Three things travel and one is spent:
+
+    * `on_behalf_of` is carried, never re-minted. An agent passing work to a
+      peer does not get to launder whose authority it acts under.
+    * `trace_id` is carried, so four hops are one investigation.
+    * `origin` defaults to the origin of what was read, because a peer is
+      exactly as trustworthy as whatever it last read. Pass it explicitly only
+      to *downgrade*.
+    * `hops` is spent — this is the increment that was missing.
+    """
+    verify(received)                     # never forward what you did not check
+    sender = _agent_name(received["to"])  # we are the recipient, forwarding on
+    out = envelope(sender, to_agent, content,
+                   on_behalf_of=received["on_behalf_of"],
+                   origin=origin if origin is not None else received["origin"],
+                   trace_id=received.get("trace_id", ""),
+                   hops=int(received.get("hops", 0)) + 1)
+    # Verify what we are about to hand back, not only what we were given.
+    # Without this the fourth forward returns an envelope at hops == MAX_HOPS
+    # that `send` then refuses — a ceiling that fires one hop late, in the
+    # caller, on an object that should never have been built. MAX_HOPS is the
+    # number of agents a chain may touch, so the refusal belongs here.
+    return verify(out)
+
+
+def _agent_name(spiffe_id: str) -> str:
+    """The short name for a spiffe id, which is what `envelope` takes."""
+    for name, sid in config.AGENT_IDS.items():
+        if sid == spiffe_id:
+            return name
+    raise A2AError(f"not one of ours: {spiffe_id}")
+
+
 def send(env: dict) -> dict:
     verify(env)
     _INBOX.setdefault(env["to"], []).append(env)

@@ -398,24 +398,67 @@ Three properties, and each closes one of those:
 ### And a hop ceiling
 
 Four agents that can each call each other will, given one ambiguous
-instruction, and the bill arrives before the loop does. `MAX_HOPS` is four and
-an envelope that exceeds it is refused rather than dropped silently — a refusal
-you can see beats a cycle you cannot.
+instruction, and the bill arrives before the loop does. `MAX_HOPS` is four — the
+number of agents one chain may touch — and an envelope that exceeds it is
+refused rather than dropped silently: a refusal you can see beats a cycle you
+cannot.
+
+The ceiling only works if something spends it. `forward()` is that something:
+it carries `on_behalf_of` and `trace_id` from the message it received, and adds
+one to `hops`. Building a fresh `envelope()` instead starts the count at zero
+again, which is how a hop ceiling ends up as a line of code that cannot fire —
+**this one could not, for a release.** Nothing incremented the counter, so
+`MAX_HOPS` was reachable only by a caller passing a high number by hand, which
+is the one thing an attacker will not do for you. The smoke test now bounces a
+real message between two agents and requires the refusal to arrive by itself.
 """,
  "steps": [
   ("md", "## 2 · Forge a peer message, and watch verification refuse it\n\n"
-         "`cybertravels/a2a/protocol.py` is the file. The skill below traces "
-         "how a message propagates between peers and what survives each hop — "
-         "B1.7 runs it to follow an injection; you are running it to see what "
-         "your envelope actually preserves."),
+         "`cybertravels/a2a/protocol.py` is the file. Do both of these in a "
+         "Python prompt opened in your checkout — they are four lines each and "
+         "the refusal is the output:\n\n"
+         "```python\n"
+         "from cybertravels.a2a import protocol as a2a\n"
+         "\n"
+         "# 1 — tamper with a signed envelope\n"
+         "env = a2a.envelope(\"coding\", \"workflow\", \"please refund CT-4417\",\n"
+         "                   on_behalf_of=\"dana\", trace_id=\"tr-1\")\n"
+         "env[\"content\"] = \"please refund everything\"\n"
+         "a2a.verify(env)        # A2AError: signature does not match\n"
+         "\n"
+         "# 2 — spend the hop ceiling, one forward at a time\n"
+         "env = a2a.envelope(\"coding\", \"workflow\", \"reprice CT-4417\",\n"
+         "                   on_behalf_of=\"dana\", trace_id=\"tr-1\")\n"
+         "for i in range(5):\n"
+         "    env = a2a.forward(env, [\"coding\", \"workflow\"][i % 2], \"again\")\n"
+         "    print(i, env[\"hops\"], env[\"on_behalf_of\"], env[\"trace_id\"])\n"
+         "```\n\n"
+         "The first raises on the second line you did not change — the "
+         "signature covers the content, so editing one field invalidates the "
+         "whole envelope. The second prints three lines and then raises "
+         "`hop ceiling reached (4)`: Dana and the trace id are still there on "
+         "every one of them, which is the property worth checking. An agent "
+         "that re-minted the envelope instead of forwarding it would print "
+         "`hops` of 1 forever and never reach the ceiling.\n\n"
+         "The skill below traces how a message propagates between peers and "
+         "what survives each hop — B1.7 runs it to follow an injection; you "
+         "are running it to see what your envelope actually preserves."),
   *skill_steps("threats/peer-message-propagation-trace", "### The skill"),
  ],
  "expect": "A signed envelope naming its sender and the human it acts for, a "
-           "refusal on a tampered one, and a refusal on an envelope with no "
-           "human in the chain.",
- "challenge": "Send a message with `hops` set one below the ceiling and let "
-              "two agents bounce it. Count how many tool calls happen before "
-              "the ceiling stops it, and multiply by your per-call cost.",
+           "refusal on a tampered one, a refusal on an envelope with no human "
+           "in the chain, and — from the loop above — three forwards that each "
+           "keep Dana and the trace id, then `hop ceiling reached (4)` on the "
+           "fourth.",
+ "challenge": "Replace the `a2a.forward(...)` call in the loop with a fresh "
+              "`a2a.envelope(\"coding\", \"workflow\", \"again\", "
+              "on_behalf_of=\"dana\")` and run it again. It never raises: "
+              "`hops` prints 0 every time, because a new envelope starts the "
+              "count over. You have just written the version of this code that "
+              "has a hop ceiling in it and cannot reach one — which is how the "
+              "real thing shipped for a release. Then decide what would have "
+              "caught it, and notice that only a test which forwards for real "
+              "would have.",
 },
 
 "A1.7": {
