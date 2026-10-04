@@ -40,6 +40,32 @@ The skill below computes reach and damage for a single run and maps that to an a
 
 ### The skill
 
+## 3 · Mark your own nine, and then do one small thing
+
+Two tasks to close Function A, and **an assistant cannot do either for you** — that is deliberate. Everything up to here can be driven by an agent that reads the lesson and runs the skill; these two ask what *you* now know.
+
+**First, the nine guesses from A0.1.** You wrote down which file you expected each of the nine words to live in. Get the finished tree and mark them:
+
+```bash
+python3 scripts/checkpoint.py --at A2.5 --out work/finished
+```
+
+Every one of the nine now has a file, and every one of those files is something you built. Count the guesses you got right. The ones you got wrong are the lessons that taught you something, and they are worth naming out loud.
+
+**Second, a task nobody walked you through.** Pick one:
+
+- Make the agent refuse an action it currently allows, and say which of the four refusal points you used — policy, human, verifier, or resource server — and why that one.
+- Add a tenth word to A0.1's nine: something CyberTravels has that the list does not name. Say which file it lives in.
+- Take the blast radius number above and reduce it by one irreversible action, without turning the feature off.
+
+Then answer these three in your own words, out loud or in writing, without re-reading the pages:
+
+1. **What can your agent do?** Name the tools and who they act for.
+2. **What stops it doing something it should not?** Name the controls in the order a request meets them.
+3. **What would you look at first** if it did something wrong yesterday at 3am?
+
+If any of the three is hard to answer, that is the signal — and the lesson to go back to is named in the answer you could not give. Function B assumes all three.
+
 ## Your turn
 
 Remove the human gate and recompute. The radius grows by exactly the irreversible actions, which is the argument for the gate stated as a number rather than as a principle.

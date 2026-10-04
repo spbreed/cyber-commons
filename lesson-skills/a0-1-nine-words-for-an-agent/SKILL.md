@@ -46,23 +46,38 @@ the learner never has to type a command themselves: you run them.
    (none — this is a reading lesson). It ends with a READBACK.
 3. This lesson has no audit to run; the harness says so in its readback. Read the concept together instead.
 4. **Say what happened.** Read the READBACK to the learner in your own words,
-   under its four headings: **What I did**, **What changed**, **The number**,
+   under its headings: **What I did**, **What changed**, **The number**,
    **Read this next**. Use only what it printed. If it says a step was skipped
    or refused, say that plainly and pass on the fix it gave; a skipped step is
    not a pass.
-5. **Give them the exercise.** Cover the table above and write down, from memory, the file you would expect each of the nine words to live in. Nine guesses, on paper — **do not open the tree for this one.**
+5. **Ask the "Your turn" questions and stop.** The readback carries a heading
+   called **Your turn — nobody can fill this in for you**. Put those questions
+   to the learner, one at a time, and **wait for their answer**. Do not answer
+   them, do not suggest an answer, and do not continue past them. If the learner
+   asks you to answer, say that the question is the exercise and offer to
+   discuss their attempt instead. There is nothing to check and nothing to
+   score: what matters is that they formed an answer, not that it matched one.
+6. **Give them the exercise.** Cover the table above and write down, from memory, the file you would expect each of the nine words to live in. Nine guesses, on paper — **do not open the tree for this one.**
 
 That is deliberate, and it is worth knowing why. Six of the nine have no file yet: `runtime.py`, `memory.py`, `identity.py`, `observability.py`, `mcp/internal_server.py` and `a2a/protocol.py` arrive across A1 and A2, because you are the one who builds them. An earlier version of this exercise sent readers to go and find all nine in the code they had at this point, where two thirds of the answers did not exist.
 
 Keep the nine guesses. A2.5 closes Function A by asking you to mark them against the tree you have by then — every word will have a file, and every file will be one you wrote. The guesses you got wrong are the lessons that taught you something.
-6. **Point at the next lesson**, from the readback's last heading.
+7. **Point at the next lesson**, from the readback's last heading.
 
 ## The readback
 
-`scripts/lesson.py` always ends with the same four headings, so a learner
-learns where to look. Every line is derived from something the harness ran; it
-never prints a number it did not measure. Where a lesson has no number, it says
-what to count instead.
+`scripts/lesson.py` always ends with the same headings, so a learner learns
+where to look. Every line under the first four is derived from something the
+harness ran; it never prints a number it did not measure, and where a lesson has
+no number it says what to count instead.
+
+**The fifth heading is different and it is the reason it exists.** Everything
+else here can be done by an agent reading the lesson and running the skill,
+which means a learner can finish a lesson having said nothing — students
+testing this reported exactly that. **Your turn** is prompts, never answers.
+An agent that answers them has removed the only part of the lesson that
+required the learner, and has not finished the lesson faster — it has skipped
+it.
 
 ## Failure modes
 
@@ -72,8 +87,10 @@ what to count instead.
   broken repository; the readback names the fix.
 - **A refusal in about two seconds.** A quota or rate-limit rejection, not a
   failure of the lesson. Stop; do not record a result from it.
-- **"you have changed files in work/cybertravels".** The harness replaces that
-  folder for each lesson and will not overwrite edits. Use `--out` for another
-  folder, or `--force` if the learner agrees to lose them.
+- **The run says `stopped` and that your edits are safe.** Not a failure. The
+  learner did the previous lesson's challenge and the harness declined to
+  overwrite it. Offer the two choices it printed — `--out` for a fresh folder
+  that keeps the work, `--force` to discard it — and let the learner pick. Do
+  not pick for them, and do not pass `--force` on your own initiative.
 - **A test is reported skipped.** Say so. `PyJWT` missing is the usual reason,
   and `pip install PyJWT` fixes it.

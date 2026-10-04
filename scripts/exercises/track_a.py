@@ -1100,10 +1100,47 @@ input to almost every decision in Function B.
          "that to an autonomy level. It is the last thing you do as the builder "
          "and the first number Function B argues with."),
   *skill_steps("architecture/blast-radius-review", "### The skill"),
+
+  ("md", "## 3 · Mark your own nine, and then do one small thing\n\n"
+         "Two tasks to close Function A, and **an assistant cannot do either "
+         "for you** — that is deliberate. Everything up to here can be driven "
+         "by an agent that reads the lesson and runs the skill; these two ask "
+         "what *you* now know.\n\n"
+         "**First, the nine guesses from A0.1.** You wrote down which file you "
+         "expected each of the nine words to live in. Get the finished tree and "
+         "mark them:\n\n"
+         "```bash\n"
+         "python3 scripts/checkpoint.py --at A2.5 --out work/finished\n"
+         "```\n\n"
+         "Every one of the nine now has a file, and every one of those files is "
+         "something you built. Count the guesses you got right. The ones you "
+         "got wrong are the lessons that taught you something, and they are "
+         "worth naming out loud.\n\n"
+         "**Second, a task nobody walked you through.** Pick one:\n\n"
+         "- Make the agent refuse an action it currently allows, and say which "
+         "of the four refusal points you used — policy, human, verifier, or "
+         "resource server — and why that one.\n"
+         "- Add a tenth word to A0.1's nine: something CyberTravels has that "
+         "the list does not name. Say which file it lives in.\n"
+         "- Take the blast radius number above and reduce it by one "
+         "irreversible action, without turning the feature off.\n\n"
+         "Then answer these three in your own words, out loud or in writing, "
+         "without re-reading the pages:\n\n"
+         "1. **What can your agent do?** Name the tools and who they act for.\n"
+         "2. **What stops it doing something it should not?** Name the controls "
+         "in the order a request meets them.\n"
+         "3. **What would you look at first** if it did something wrong "
+         "yesterday at 3am?\n\n"
+         "If any of the three is hard to answer, that is the signal — and the "
+         "lesson to go back to is named in the answer you could not give. "
+         "Function B assumes all three."),
  ],
  "expect": "The set of objects one run can reach, the subset it can change, the "
            "irreversible actions among those, and the autonomy level that "
-           "radius supports — which will be lower than the one you gave it.",
+           "radius supports — which will be lower than the one you gave it. "
+           "Then two things the skill cannot produce: your nine guesses marked "
+           "against the finished tree, and your own answers to what the agent "
+           "can do, what stops it, and where you would look first.",
  "challenge": "Remove the human gate and recompute. The radius grows by exactly "
               "the irreversible actions, which is the argument for the gate "
               "stated as a number rather than as a principle.",

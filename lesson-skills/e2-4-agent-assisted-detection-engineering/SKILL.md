@@ -48,19 +48,34 @@ the learner never has to type a command themselves: you run them.
    - The audit, `skills/detection/detection-rule-deployability`, **asks you a question**. You are the model. The harness prints the audit's task; answer it yourself, following the audit skill's procedure, with one JSON object written to `work/answer.json`, then run `PY scripts/lesson.py E2.4 --answer work/answer.json`.
    The readback printed *before* you answer is provisional; the one after `--answer` is the one to read to the learner. The harness checks your answer against the audit's own output contract and says how many places it broke it. Never fill in a number you did not derive from the task. If you cannot answer, say so; a made-up answer has the right shape and passes the check.
 4. **Say what happened.** Read the READBACK to the learner in your own words,
-   under its four headings: **What I did**, **What changed**, **The number**,
+   under its headings: **What I did**, **What changed**, **The number**,
    **Read this next**. Use only what it printed. If it says a step was skipped
    or refused, say that plainly and pass on the fix it gave; a skipped step is
    not a pass.
-5. **Give them the exercise.** Set your own alerts-per-true-positive budget and apply it to the rules already in production. Most SOCs discover that several long-standing rules would not pass the bar they would set today.
-6. **Point at the next lesson**, from the readback's last heading.
+5. **Ask the "Your turn" questions and stop.** The readback carries a heading
+   called **Your turn — nobody can fill this in for you**. Put those questions
+   to the learner, one at a time, and **wait for their answer**. Do not answer
+   them, do not suggest an answer, and do not continue past them. If the learner
+   asks you to answer, say that the question is the exercise and offer to
+   discuss their attempt instead. There is nothing to check and nothing to
+   score: what matters is that they formed an answer, not that it matched one.
+6. **Give them the exercise.** Set your own alerts-per-true-positive budget and apply it to the rules already in production. Most SOCs discover that several long-standing rules would not pass the bar they would set today.
+7. **Point at the next lesson**, from the readback's last heading.
 
 ## The readback
 
-`scripts/lesson.py` always ends with the same four headings, so a learner
-learns where to look. Every line is derived from something the harness ran; it
-never prints a number it did not measure. Where a lesson has no number, it says
-what to count instead.
+`scripts/lesson.py` always ends with the same headings, so a learner learns
+where to look. Every line under the first four is derived from something the
+harness ran; it never prints a number it did not measure, and where a lesson has
+no number it says what to count instead.
+
+**The fifth heading is different and it is the reason it exists.** Everything
+else here can be done by an agent reading the lesson and running the skill,
+which means a learner can finish a lesson having said nothing — students
+testing this reported exactly that. **Your turn** is prompts, never answers.
+An agent that answers them has removed the only part of the lesson that
+required the learner, and has not finished the lesson faster — it has skipped
+it.
 
 ## Failure modes
 
@@ -70,8 +85,10 @@ what to count instead.
   broken repository; the readback names the fix.
 - **A refusal in about two seconds.** A quota or rate-limit rejection, not a
   failure of the lesson. Stop; do not record a result from it.
-- **"you have changed files in work/cybertravels".** The harness replaces that
-  folder for each lesson and will not overwrite edits. Use `--out` for another
-  folder, or `--force` if the learner agrees to lose them.
+- **The run says `stopped` and that your edits are safe.** Not a failure. The
+  learner did the previous lesson's challenge and the harness declined to
+  overwrite it. Offer the two choices it printed — `--out` for a fresh folder
+  that keeps the work, `--force` to discard it — and let the learner pick. Do
+  not pick for them, and do not pass `--force` on your own initiative.
 - **A test is reported skipped.** Say so. `PyJWT` missing is the usual reason,
   and `pip install PyJWT` fixes it.

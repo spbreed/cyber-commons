@@ -420,11 +420,20 @@ between two procedures, not by having more to cover.
    lesson's skill in your agent": install once, pick `a0-0-…`, read what
    happened, with the direct `scripts/lesson.py` command last for a reader with
    no agent. The skill is generated (`scripts/build_lesson_skills.py`) and
-   `scripts/lesson.py` ends every run with the same four-heading readback —
-   *What I did, What changed, The number, Read this next* — so the page does not
-   print a sample of it. That would be a second conclusion, and "What you just
-   proved" already owns the conclusion. Which lessons are converted is
-   `scripts/exercises/lessonskills.py`.
+   `scripts/lesson.py` ends every run with the same five-heading readback —
+   *What I did, What changed, The number, Your turn, Read this next* — so the
+   page does not print a sample of it. That would be a second conclusion, and
+   "What you just proved" already owns the conclusion. Which lessons are
+   converted is `scripts/exercises/lessonskills.py`.
+
+   **The fourth heading is the one that is not derived from the run.** Four of
+   the five are assembled from what the harness did, which is what makes them
+   trustworthy and also what made a lesson completable by an agent alone:
+   students testing Function A reported finishing exercises without any learner
+   input, and they were right by construction. *Your turn* carries questions
+   keyed to the lesson's own metric and the number it just produced, it prints
+   the instruction that an assistant must not answer them, and nothing checks
+   the reply — the property worth having is that the learner formed one.
 
 The skills are **symlinked** into each agent's skills directory rather than
 copied, so a reader who edits a `SKILL.md` here sees the change in every tool at

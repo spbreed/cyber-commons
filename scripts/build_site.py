@@ -541,6 +541,16 @@ def lesson_skill_block(sid: str) -> str:
         '<em>What I did</em>, <em>What changed</em>, <em>The number</em> and '
         '<em>Read this next</em>. A step that was skipped or refused is reported '
         'as exactly that, never as a pass.</p>'
+        # Most "Your turn" challenges ask the reader to edit the tree. The next
+        # lesson then declines to overwrite it, and students read that as the
+        # next lesson failing because of something they did wrong. Say what is
+        # going to happen, on the page, before it does.
+        '<p class="runnote"><b>If you did the last lesson’s challenge, '
+        'expect this to stop.</b> Most challenges ask you to edit the code, and '
+        'ways 1 and 2 will not overwrite your edits: you get <em>stopped</em>, '
+        'not a failure, with two options — <code>--out</code> for a fresh '
+        'folder that keeps your work, or <code>--force</code> to discard it and '
+        'start this lesson clean.</p>'
         '</div>')
 
 
