@@ -43,7 +43,9 @@ delegation chain from a control into a description.
 
 ## 2 · Exchange one, then watch a role refuse
 
-Four lines, in a Python prompt opened in your checkout. Ask for the same refund twice — once as Dana, once as Priya:
+### Do this
+
+**1. Start Python** in the folder you cloned. **2. Type this in.** It asks for exactly the same refund twice — first as Dana the traveller, then as Priya in finance — and prints what happened each time:
 
 ```python
 from cybertravels import identity, config
@@ -60,7 +62,7 @@ for who in ("dana", "priya"):
         print(who, "-> REFUSED:", e)
 ```
 
-You get this, and the second line is the one to read:
+**3. Read the two lines it prints:**
 
 ```
 dana   -> REFUSED: role 'traveller' may not delegate 'payments:refund'
@@ -68,9 +70,11 @@ dana   -> REFUSED: role 'traveller' may not delegate 'payments:refund'
 priya  -> minted
 ```
 
-Notice what did **not** happen. The model was never consulted. No booking was looked up. The internal MCP server was never contacted — there was no token to present to it, so the request died two components before the thing it wanted to change. And Priya's identical request succeeds, which is what makes Dana's refusal a policy decision rather than a broken endpoint.
+**4. Now notice the three things that did not happen to Dana's request.** The model was never asked anything. No booking was looked up. The server that actually moves money was never contacted at all — there was no token to show it. The request stopped two steps before the thing it wanted to change.
 
-Then install PyJWT if that import failed — `pip install PyJWT` — because the token is a real signed JWT and not a dictionary pretending to be one.
+**5. And notice that Priya's identical request worked.** That is what makes Dana's refusal a decision about who she is, rather than a broken button. Same code, same request, different person.
+
+**If the first line failed with an import error,** you need one package: type `pip install PyJWT` (or `python -m pip install PyJWT` on Windows) and try again. The token here is a real signed token, not a pretend one, and that is the library that signs it.
 
 The skill below verifies that a delegation chain is complete and enforced rather than merely recorded. B2.6 runs it against a system somebody else built; you are running it against yours.
 

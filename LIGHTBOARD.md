@@ -153,7 +153,7 @@ Next up: A0.1, Nine words for an agent — harness to multi-agent, and where eac
 
 ### A0.1 · Nine words for an agent — harness to multi-agent, and where each is built
 
-Chapter A0 · lesson 2 of 2 · reading lesson · 402 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · reading lesson · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
 
 **① Open**
 
@@ -189,7 +189,7 @@ Of the nine, how many you can point at in the tree — a file, not a definition.
 
 **⑤ Hand it over**
 
-Cover the table above and write down, from memory, the file you would expect each of the nine words to live in. Nine guesses, on paper — do not open the tree for this one.
+This is a short written exercise. It takes five minutes, you do it on paper or in a notes app, and you do not need the computer for it.
 
 That closes chapter A0. You can run any lesson in the commons on either route, you know which function to open first, and you have the nine words — harness to multi-agent — that everything after this is built from.
 

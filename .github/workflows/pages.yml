@@ -96,6 +96,15 @@ jobs:
       - name: Check the prose for phrasing a reader must decode
         run: python3 scripts/check_clarity.py --check
 
+      # Students reviewing Function A asked for "clear steps they can follow on
+      # their own", and A0.0 is written for readers around year 9. This measures
+      # the do-this-now instructions only — the concept sections are deliberately
+      # argumentative and a gate that flattened them would be switched off. It is
+      # enforced on Function A, where the bar is met, and prints the other five
+      # functions as a backlog on every run so they stay visible.
+      - name: Keep the step instructions followable
+        run: python3 scripts/check_readability.py --check
+
       # Text that is present, correct and invisible. A white-theme change left
       # a dark-theme `pre` behind, a later rule gave every `code` a light pill
       # background, and fenced blocks rendered pale blue on near-white — the

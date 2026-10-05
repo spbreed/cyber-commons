@@ -57,11 +57,20 @@ the learner never has to type a command themselves: you run them.
    asks you to answer, say that the question is the exercise and offer to
    discuss their attempt instead. There is nothing to check and nothing to
    score: what matters is that they formed an answer, not that it matched one.
-6. **Give them the exercise.** Cover the table above and write down, from memory, the file you would expect each of the nine words to live in. Nine guesses, on paper — **do not open the tree for this one.**
+6. **Give them the exercise.** This is a short written exercise. It takes five minutes, you do it on paper or in a notes app, and **you do not need the computer for it.**
 
-That is deliberate, and it is worth knowing why. Six of the nine have no file yet: `runtime.py`, `memory.py`, `identity.py`, `observability.py`, `mcp/internal_server.py` and `a2a/protocol.py` arrive across A1 and A2, because you are the one who builds them. An earlier version of this exercise sent readers to go and find all nine in the code they had at this point, where two thirds of the answers did not exist.
+**What to do:**
 
-Keep the nine guesses. A2.5 closes Function A by asking you to mark them against the tree you have by then — every word will have a file, and every file will be one you wrote. The guesses you got wrong are the lessons that taught you something.
+1. Get a piece of paper, or open a blank note.
+2. Write the numbers 1 to 9 down the left-hand side.
+3. Beside each number, write one of the nine words from the table above — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A, multi-agent.
+4. Now **scroll up and cover the table**, or just stop looking at it.
+5. Beside each word, write the name of the file you think it would live in. For example, next to *memory* you might write `memory.py`. If you have no idea, write a question mark — that is a perfectly good answer here.
+6. Put the paper somewhere you will find it again.
+
+**Why you are guessing instead of looking it up.** Six of these nine files do not exist on your computer yet. `runtime.py`, `memory.py`, `identity.py`, `observability.py`, `mcp/internal_server.py` and `a2a/protocol.py` get created as you work through chapters A1 and A2, because **you are the person who writes them.** So there is nothing to look up. Guessing is the only thing you can honestly do today, and that is the point.
+
+**What happens to your list.** The last lesson of this function, A2.5, asks you to get it back out and mark it. By then all nine files will exist, and all nine will be ones you built. Every guess you got wrong is a thing you learned on the way, and the question marks are the most useful marks on the page.
 7. **Point at the next lesson**, from the readback's last heading.
 
 ## The readback

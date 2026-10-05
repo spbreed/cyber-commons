@@ -40,28 +40,37 @@ lesson on what that enables. For now: notice that you are trusting them.
 
 ## 2 · Start them, and read what each one declares
 
-**Install the application's dependencies first.** The skills in this commons are standard library only, but CyberTravels is a real application and speaks real MCP:
+### Do this
+
+**1. Install what the application needs.** The lessons themselves need nothing extra, but this is a real web service, so it does. One command — `python3` on a Mac, `python` on Windows:
 
 ```bash
 python3 -m pip install -r cybertravels/requirements.txt
 ```
 
-Each server is a module you run directly. They talk MCP over stdio, so they wait quietly rather than printing a banner — that silence is the server working:
+**2. Start one of the two tool servers.** Each is a program you run on its own:
 
 ```bash
 python3 -m cybertravels.mcp.internal_server    # bookings, payments
+```
+
+**It will look like nothing happened.** No banner, no message, just a cursor sitting there. That is correct — these servers talk over a pipe rather than to a screen, so silence means it is running and waiting. Press Control and C together to stop it.
+
+**3. Start the other one** the same way, in a second terminal window if you want both at once:
+
+```bash
 python3 -m cybertravels.mcp.vendor_server      # the third party's
 ```
 
-To see the whole thing serving instead, in one terminal:
+**4. Or start the whole application instead,** which is easier to see, because it opens in your browser:
 
 ```bash
 ./cybertravels/run.sh      # then open http://127.0.0.1:8000
 ```
 
-If that says `main.py does not exist at this checkpoint yet`, you have a tree from before A1.1 and the message tells you which checkpoint to fetch. The script checks, because the obvious command used to fail with a uvicorn import error naming a module the reader had never heard of.
+If that stops and says `main.py does not exist at this checkpoint yet`, nothing is broken — you have a copy of the code from before the web app was built. The message tells you which command to run to get a newer copy.
 
-**Then read the surface rather than the code.** Seven tools across the two servers, in `config.TOOL_POLICY`, and the split is the thing to notice:
+**5. Now look at what the two servers say they can do.** Stop the servers, start Python, and print the list:
 
 ```python
 from cybertravels import config
@@ -70,7 +79,9 @@ for tool, p in config.TOOL_POLICY.items():
           f"{'HIGH RISK' if p['high_risk'] else ''}")
 ```
 
-Five tools are addressed to `mcp:internal` and two to `mcp:vendor`. A token minted for one is refused by the other, which is what makes a compromised call unable to wander sideways — and `cancel_booking` and `issue_refund` are the two marked high risk, which is A1.7's whole subject.
+**6. Read the middle column.** Seven tools. Five of them say `mcp:internal` and two say `mcp:vendor`. That word is the *audience* — the one server a permission slip is valid at. A slip made for the internal server is refused by the vendor server, so a request that goes wrong in one place cannot wander into the other.
+
+**7. Read the last column.** Two tools are marked `HIGH RISK`: `cancel_booking` and `issue_refund`. Those are the two that are hard to undo, and they are what A1.7 puts a human in front of.
 
 The skill below enumerates an agent's declared tool surface — what it says it can do, against what the code actually does. B1.9 runs it to catch a rug-pull; here you run it on your own servers, to see the surface you just created.
 

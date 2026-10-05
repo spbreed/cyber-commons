@@ -37,15 +37,25 @@ on 40% of runs last week is a thing you want to know.
 
 ## 2 · Approve one, refuse one, then exhaust the budget
 
-**The gate, in the browser.** Start the app, sign in as Dana, and ask for something high risk — the two gated tools are `cancel_booking` and `issue_refund`, and nothing else pauses:
+### Do this — the gate, in your browser
+
+**1. Start the application:**
 
 ```bash
-./cybertravels/run.sh        # http://127.0.0.1:8000
+./cybertravels/run.sh        # then open http://127.0.0.1:8000
 ```
 
-Ask it to cancel booking `CT-4417`. The run stops and names the action and the scope it is about to request. Approve it, and watch the trace continue. Then ask again and refuse: both outcomes are audit rows, which is the part that matters — a gate that records only approvals cannot answer what was attempted.
+**2. Sign in as Dana** and ask it to cancel booking `CT-4417`.
 
-**The budget, without the browser.** Two ceilings, and you can watch each one bind in four lines:
+**3. Watch it stop.** It names the action it wants to take and the permission it is about to ask for, and then it waits for you. Only two tools do this — `cancel_booking` and `issue_refund` — because they are the two that are hard to undo.
+
+**4. Approve it,** and watch the rest of the run continue.
+
+**5. Now ask again, and refuse this time.** Both of your answers get written down. That is the part that matters: a gate that only records the times somebody said yes cannot answer the question an investigation asks first, which is *what did it try to do*.
+
+### Do this — the budget, without the browser
+
+Two limits, and you can watch one of them bite in four lines. Start Python and type:
 
 ```python
 from cybertravels import runtime, config
@@ -57,7 +67,7 @@ while b.call():
 print(n, b.exhausted())        # 12 tool_calls
 ```
 
-Twelve calls, then `call()` goes False and `exhausted()` names which ceiling was hit. That name is the whole design: the run returns an incomplete result **that says so**, rather than a confident summary of what it managed.
+It counts to twelve and stops, then prints the word `tool_calls`. **That word is the point.** The run does not just end — it ends *saying which limit it hit*, so what comes back is an unfinished answer that admits it is unfinished, rather than a confident summary of however far it got.
 
 A note on the skill below, because the numbers will not match and the mismatch is the point rather than a mistake. CyberTravels bounds two things — model turns and tool calls. The skill audits four kinds of ceiling, including per-target and wall-clock, and on its fixture the per-target ceiling fires first at six calls. **Your loop does not have a per-target ceiling.** That is the finding the skill is for: an agent that may make twelve calls total can still make all twelve against one traveller's booking.
 

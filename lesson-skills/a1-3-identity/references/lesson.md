@@ -54,7 +54,31 @@ authority for the action itself is minted separately — which is A1.4.
 
 ## 2 · Mint both, and read what makes them different
 
-`cybertravels/identity.py` mints these. The skill below is the one B2.3 uses to audit a delegation design; run it on yours while you still have the option of changing it.
+The file is `cybertravels/identity.py`.
+
+### Do this
+
+**1. Start Python** in the folder you cloned. **2. Make one of each kind of token** and print what is inside them:
+
+```python
+from cybertravels import identity
+import jwt
+
+person = identity.mint_user_token("dana")
+machine = identity.mint_agent_token("workflow")
+
+for name, token in (("Dana", person), ("the agent", machine)):
+    claims = jwt.decode(token, options={"verify_signature": False})
+    print(name, "->", claims)
+```
+
+**3. Compare the two lines it prints.** One describes a person. The other describes a piece of software. They are not the same kind of thing, and the system stores them separately — which is the whole idea of this lesson.
+
+**4. Look at what Dana's token lets her do.** It carries one permission: `agent:invoke`. That means *she may ask an agent to do something*. It does not let her book, cancel or refund anything herself. Those permissions get created later, one at a time, for one action each — and that is the next lesson.
+
+**If `import jwt` fails,** run `pip install PyJWT` and try again.
+
+The skill below is the one B2.3 uses to audit a delegation design. Run it on yours now, while changing the design is still easy.
 
 ### The skill
 

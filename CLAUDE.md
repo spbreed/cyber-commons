@@ -275,7 +275,7 @@ that are enforced or that get broken most.
 
 ## 5 · Pre-deployment testing
 
-Twenty-four gates, in the order CI runs them. Each exists because of a specific
+Twenty-five gates, in the order CI runs them. Each exists because of a specific
 failure — a gate whose reason is written down does not get deleted by the next
 person.
 
@@ -289,6 +289,7 @@ person.
 | 6 | `check_lessons.py --check` | the authoring contract: which sections a lesson renders and whether anything is behind them, Day 0/1/2, hook/diagram/concept, framework before code, chapter bridges and the chapter each one points at, E/F anchors, chapter numbering, and the `## N ·` section numbers a reader sees running 2, 3, 4 with no repeat and no gap |
 | 7 | `check_register.py --check` | the incident register's 40 controls — **its ids are `C1.1`–`C10.4`, syntactically identical to lesson ids**, and a blind lesson rename corrupts them |
 | 8 | `check_clarity.py --check` | weekday idioms and culture-specific phrasing, read from the rendered page |
+| 8a | `check_readability.py --check` | a do-this-now instruction a beginner cannot follow: any single step sentence over 45 words, or a lesson whose step instructions average over 25. **It reads the `steps` only** — the concept sections are deliberately long-sentenced and a gate that flattened them would be switched off and deserve to be. Enforced on the functions in `ENFORCED`, which is `A` today because that is where it is met and where a reader with no background starts; the other 39 lessons print as a backlog on every run rather than turning CI red on arrival. Widen the set as each function is rewritten |
 | 9 | `check_contrast.py --all --check` | text that is present, correct and invisible. Renders each page and measures foreground against the background actually painted behind it |
 | 10 | `render_diagrams.py --check` | a diagram source that Graphviz or PlantUML will not lay out — which ships as an empty or smeared SVG behind a green build. With a model reachable it runs the skills and also checks the committed source is fresh; in CI, where there is no model and every skill refuses, it validates the committed sources and says freshness is not covered. It used to fail every CI run with "no skill emitted a diagram", which is a gate nobody keeps |
 | 11 | `checkpoint.py --check` | a lesson checkpoint that no longer materialises. `cybertravels/` carries `step:` markers saying which lesson introduced each file and each block, so a reader can get the tree as it stood at any lesson. Checks the last checkpoint against the committed tree with a second implementation of the rule (a gate that asserts a function equals itself protects nothing), that every checkpoint parses, and that every `was` line is `#~`-commented — an uncommented one makes the committed application run the naive branch as well as the real one. It also refuses a region opened while another is still open: a missing `step:B3.10 end` once swallowed `class Budget:` whole, and every gate passed because what it ate still parsed |
@@ -314,7 +315,8 @@ gates=(
   "test_skills.py --check"              "check_determinism.py --seeds 4"
   "install_skills.py --tool claude --dry-run"
   "check_lessons.py --check"            "check_register.py --check"
-  "check_clarity.py --check"            "render_diagrams.py --check"
+  "check_clarity.py --check"            "check_readability.py --check"
+  "render_diagrams.py --check"
   "checkpoint.py --check"               "checkpoint.py --run"
   "check_labels.py --check"
   "check_claims.py --check"

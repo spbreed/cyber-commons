@@ -608,6 +608,14 @@ def lesson_skill_block(sid: str) -> str:
         f'<pre><code>python3 scripts/checkpoint.py --at {esc} --out work/cybertravels\n'
         f'python3 scripts/checkpoint.py --at {esc} --diff</code></pre></div>'
 
+        # One line rather than a Windows twin for every command on 149 pages.
+        # A0.0 explains it in full; this is the reminder at the point of use,
+        # because `python3` on Windows opens the Microsoft Store and reads as a
+        # broken repository to somebody who has never seen it before.
+        '<p class="runnote"><b>On Windows, type <code>python</code> wherever '
+        'these say <code>python3</code></b> — and use <code>\\</code> instead of '
+        '<code>/</code> in the paths. Everything else is identical. '
+        '<a href="A0.0.html">A0.0</a> step 2 explains why.</p>'
         '<p class="runnote"><b>Ways 1 and 2 need a model; way 3 does not.</b> A '
         'signed-in Claude Code CLI needs no API key, and any OpenAI-compatible '
         'endpoint works too. With neither, the audit exits 2 and says so rather '

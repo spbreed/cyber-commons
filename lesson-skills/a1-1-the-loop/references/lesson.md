@@ -40,32 +40,48 @@ The second and third are the ones that matter, and A1.7 builds them.
 
 ## 2 · The loop, and the verifier that is not the model
 
-`cybertravels/runtime.py` is the file this lesson builds. Three places to look, in this order:
+The file is `cybertravels/runtime.py`. Three things live in it, and they are the three stages from the section above:
 
-| stage | where | what it does |
+| stage | the code | what it does |
 |---|---|---|
-| plan | `run()`, the `while budget.step()` loop | asks the model for the next step |
-| act | `execute_tool()` | gate, exchange, call — your code, not the model's |
-| verify | `_verify_result()`, called at the end of `execute_tool` | decides whether what came back is acceptable |
+| plan | `run()` — the `while budget.step()` loop | asks the model what to do next |
+| act | `execute_tool()` | checks the rules, gets a token, makes the call |
+| verify | `_verify_result()`, at the end of `execute_tool` | decides whether the answer that came back is acceptable |
 
-Open `_verify_result` and read it before anything else. It is twenty lines, it takes the tool name, the arguments and the parsed result, and the only thing that matters about it is what it does **not** take: a model. It cannot ask. That is the independence the section above is about, expressed as a function signature.
+### Do this
 
-Now watch it fire, with no server running:
+**1. Open `cybertravels/runtime.py` and find `_verify_result`.** It is about twenty lines long.
+
+**2. Read what goes into it.** Three things: the name of the tool, the arguments it was called with, and the result that came back.
+
+**3. Notice what is missing from that list: the model.** The function is never given one, so it cannot ask one anything. That is the whole idea — the thing that checks the work is not the thing that did the work.
+
+**4. Now make it reject something.** You do not need a server running for this. Start Python in your checkout and type:
 
 ```python
 from cybertravels import runtime
 
-# the resource server paid ten times what was asked
+# we asked for a refund of 140 and the server says it paid 1400
 print(runtime._verify_result("issue_refund", {"amount": 140},
                             {"amount": 1400, "ok": True}))
-# -> asked to refund 140, resource server refunded 1400
-
-print(runtime._verify_result("issue_refund", {"amount": 140},
-                            {"amount": 140, "ok": True}))
-# -> None, which means acceptable
 ```
 
-A rejection becomes a `denied` span with `at="verifier"`, so A2.1 can tell it apart from a policy refusal and a resource-server refusal. Three different incidents, three different places.
+It prints the reason it refused:
+
+```
+asked to refund 140, resource server refunded 1400
+```
+
+**5. Now give it a correct result and watch it stay quiet:**
+
+```python
+print(runtime._verify_result("issue_refund", {"amount": 140},
+                            {"amount": 140, "ok": True}))
+```
+
+This prints `None`. In this function, `None` means *nothing wrong here* — there is no reason to give, so it gives none.
+
+**What you have just seen.** A refund that came back ten times too large was caught by nine lines of arithmetic, with no AI involved. When that happens inside a real run, the rejection is recorded with the label `at="verifier"`, which is how A2.1 tells it apart from the other three places a request can be refused.
 
 The skill below is the one C2.1 uses to review a harness. Run it against the loop you are writing, not after it ships.
 

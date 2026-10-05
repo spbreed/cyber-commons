@@ -40,7 +40,11 @@ becomes a regulator's question rather than an engineering one.
 
 ## 2 · Write an untrusted sentence in, and watch it come back labelled
 
-`cybertravels/memory.py` is the file. Write two sentences as Dana — one from policy, one from a vendor document — and then render the block the model would actually receive:
+The file is `cybertravels/memory.py`.
+
+### Do this
+
+**1. Start Python** in the folder you cloned. **2. Save two sentences into Dana's memory** — one that came from company policy, one that came from a document a travel vendor sent. **3. Then print the block of text the AI model would actually be given.** All of that is the code below:
 
 ```python
 from cybertravels import memory
@@ -62,7 +66,9 @@ Prior context for this traveller:
 ''
 ```
 
-**Two things to notice, and the second is the one people miss.** The labels survived the write, so the two sentences do not arrive with the same authority. And Priya's block is the empty string — the same call, a different owner, nothing shared. `recall` never crosses that boundary, which is the cheapest cross-tenant leak there is and it is closed by the key rather than by a filter.
+**4. Look at the two labels at the start of each line.** One says `trusted, origin=policy`. The other says `UNTRUSTED, origin=vendor-document`. Both sentences are sitting in the same place and they do not carry the same weight — and the only thing making that true is the label.
+
+**5. Look at the last line of output: it is `''`, an empty string.** That is Priya's memory. The same function call, a different person's name, and nothing comes back. Dana's notes are not in Priya's context, and the reason is the key the data is filed under — not a filter that tries to spot the problem afterwards. This is the cheapest kind of data leak there is, and it is closed here by storage, not by cleverness.
 
 The skill below audits memory scope and origin — B1.4 runs it to find a poisoning path; you are running it to check you left one closed.
 

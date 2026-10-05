@@ -44,13 +44,25 @@ The skill below computes reach and damage for a single run and maps that to an a
 
 Two tasks to close Function A, and **an assistant cannot do either for you** — that is deliberate. Everything up to here can be driven by an agent that reads the lesson and runs the skill; these two ask what *you* now know.
 
-**First, the nine guesses from A0.1.** You wrote down which file you expected each of the nine words to live in. Get the finished tree and mark them:
+**First, mark the list you wrote in A0.1.** Back then you wrote the nine words down the side of a page and guessed which file each one would live in. Find that page.
+
+1. Get the finished application onto your computer. On a Mac or Linux:
 
 ```bash
 python3 scripts/checkpoint.py --at A2.5 --out work/finished
 ```
 
-Every one of the nine now has a file, and every one of those files is something you built. Count the guesses you got right. The ones you got wrong are the lessons that taught you something, and they are worth naming out loud.
+   On Windows, the same line with `python` and backslashes:
+
+```bash
+python scripts\checkpoint.py --at A2.5 --out work\finished
+```
+
+2. Open the `work/finished` folder and look at the file names.
+3. Go down your list of nine and tick the ones you got right.
+4. Count the ticks.
+
+All nine words now have a file, and you wrote every one of those files. The ones you got wrong, and the question marks you left, are the things you learned between then and now — say them out loud, because that is the part that sticks.
 
 **Second, a task nobody walked you through.** Pick one:
 

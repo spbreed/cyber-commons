@@ -120,43 +120,87 @@ Nothing in the commons asks you to lie about your age, and if a school or club i
 
 ## 3 · Open a terminal and get the files
 
-**First, open a terminal.** It is already on your computer:
+Four steps here, then one more in section 4. Do them in order. **Find your own computer in each step and follow only those lines** — the commands really are different between Windows and a Mac, and mixing them up is the most common way this goes wrong.
 
-- **Windows** — press the Start button, type `powershell`, open *Windows PowerShell*.
-- **macOS** — press Command and the space bar together, type `terminal`, press Enter.
-- **Linux** — press Control, Alt and T together.
+### Step 1 — open the terminal
 
-A window opens with a blinking cursor. It is waiting for you to type a line and press Enter. Nothing you type below can damage anything.
+A terminal is a window where you type commands instead of clicking. Your computer already has one.
 
-**Second, check two programs are there.** Type each line, press Enter, and read what comes back:
+**On Windows:** press the Start button. Type `powershell`. Click *Windows PowerShell*.
+
+**On a Mac:** hold down Command and press the space bar. Type `terminal`. Press Enter.
+
+**On Linux:** hold Control and Alt, and press T.
+
+A window opens with a blinking cursor. It is waiting for you to type one line and press Enter. Nothing on this page can damage your computer.
+
+### Step 2 — check you have the two programs you need
+
+You need **git** (it copies the project onto your computer) and **Python** (it runs the lessons). Type one line, press Enter, read what comes back, then type the next.
+
+**On Windows, type these two:**
 
 ```bash
-git --version          # any 2.x is fine
-python3 --version      # 3.10 or newer
+git --version
+python --version
 ```
 
-**On Windows the second one is `python`, not `python3`.** If you type `python3` there you will usually get the Microsoft Store opening, or nothing useful — that is not an error you caused, it is the wrong command for that machine. `py -3 --version` works too.
+**On a Mac or Linux, type these two:**
 
-If either says *command not found*, install the missing one — [git-scm.com/downloads](https://git-scm.com/downloads) and [python.org/downloads](https://www.python.org/downloads/) — then close the terminal, open a new one, and check again. A terminal only notices a new program when it starts. On Windows, tick **Add python.exe to PATH** in the installer; it is off by default and it is the reason the next command fails if you skip it.
+```bash
+git --version
+python3 --version
+```
 
-**Third, copy this project onto your machine.** The first line downloads it; the second moves you inside the folder it made, the way double-clicking a folder moves you inside it:
+**The difference matters.** On a Mac the command is `python3`. On Windows it is `python`. If you type `python3` on Windows you will usually get the Microsoft Store opening, or a blank line. That is not a mistake you made — it is simply the wrong word for that computer. (`py -3 --version` also works on Windows.)
+
+**What a good answer looks like.** Something like `git version 2.43.0` and `Python 3.11.4`. Any git 2.x is fine. Python must be **3.10 or newer** — if it says 3.9 or lower, install a newer one below.
+
+**If it says `command not found`** (or on Windows, *is not recognized*), you do not have that program yet. Install the one that is missing:
+
+- git: [git-scm.com/downloads](https://git-scm.com/downloads)
+- Python: [python.org/downloads](https://www.python.org/downloads/)
+
+**Windows readers, one extra thing:** in the Python installer, tick the box that says **Add python.exe to PATH** before you click install. It is switched off by default, and leaving it off is the single most common reason the later commands fail.
+
+**After installing, close the terminal window and open a new one**, then run the checks again. A terminal only notices a newly installed program when it starts up.
+
+### Step 3 — copy the project onto your computer
+
+Two lines, the same on every computer. The first downloads the project. The second moves you inside the folder it just made — like double-clicking a folder to open it.
 
 ```bash
 git clone --branch master https://github.com/spbreed/cyber-commons.git
 cd cyber-commons
 ```
 
-That is the clone. You now have every lesson, every skill and every line of the example system on your own computer, and none of it needs the internet again until you ask a hosted model a question.
+That is called *cloning*. You now have every lesson, every skill and every line of the example application on your own computer.
 
-**Fourth, ask your own computer whether it is ready.** One command, and it checks the machine you are actually sitting at rather than asking you to compare output against a sentence:
+### Step 4 — ask your computer whether it is ready
+
+**What this is for.** You have just typed several commands and read the answers yourself. This one does that checking for you, on the machine you are actually sitting at, and tells you what to fix. Run it now, and run it again any time something later does not work — it is the first thing to try when you hit an error.
+
+**On Windows:**
+
+```bash
+python scripts\doctor.py
+```
+
+**On a Mac or Linux:**
 
 ```bash
 python3 scripts/doctor.py
 ```
 
-Every line it prints is either `ok`, or `FAIL` with the command that fixes it for your platform, or `--` for something optional that is absent. It exits 0 when nothing *required* is missing — so a reader with no model yet is told they are ready, because the third way of every lesson needs no model at all.
+It prints one line per thing it checked, and each line starts with one of three markers:
 
-The skills themselves need nothing installed: they use only what comes with Python. **CyberTravels, the application you build from A1.1, does** — it is a real web service and speaks real MCP, so A1.2 has you run one `pip install`. The one thing the lessons need is a model, and that is the next step.
+- **`ok`** — that thing is fine, nothing to do.
+- **`FAIL`** — something required is missing. The command that fixes it is printed underneath, already written for *your* operating system, so you can copy it straight into the terminal.
+- **`--`** — something optional is missing. You can start the lessons anyway. It tells you what you would gain by adding it.
+
+The last line is the summary. **If it says you are ready, you are ready** — even if some lines showed `--`. The third way of doing any lesson needs no AI model at all, so a missing model is never a blocker.
+
+**Is there anything to install?** For the lessons, no — they use only what comes with Python. The example application you start building in A1.1 does need a few extra pieces, because it is a real web service; A1.2 gives you that one command when you get there.
 
 ## 4 · Tell it which model to ask
 
@@ -259,7 +303,9 @@ export MODEL=gemini-2.5-flash
 
 ## 5 · How to read a lesson page
 
-Every page is built from a fixed set of sections in a fixed order, and the order is the argument. **A page shows only the sections it has something for**, so the set below is what is available rather than a checklist every page satisfies — this page, for one, has no Risk, no Day table and no CyberTravels scene, because it is about your machine rather than about a system anybody secures.
+Every page is built from the same set of sections, in the same order, and the order is part of the argument.
+
+**A page only shows the sections it has something to say in.** So the list below is what *can* appear, not a checklist every page fills in. This page is an example: it has no Risk, no Day table and no CyberTravels scene. It is about your own computer rather than about a system somebody has to secure.
 
 1. **Risk and Control** — one sentence each, at the top: what goes wrong here, and what closes it. On the lessons that are about a system.
 2. **The hook** — a scene, before anything else. Deliberately *not* a summary: it is the consequence of not knowing the lesson. The summary is section 3.
@@ -318,11 +364,18 @@ A control usually needs one of each: a threat it addresses, a tactic it frustrat
 
 Behind each lesson skill is an **audit skill** — the written procedure the lesson runs, in `skills/`. There are 14 areas, 140 skills, 140 of them with a script, and exactly one copy of each. Eighteen audits are shared by two or three lessons, which is why a lesson skill calls one rather than carrying its own copy.
 
-You can install a whole function at once rather than a lesson at a time, and ask what is currently linked:
+You can install a whole function at once rather than a lesson at a time, and ask what is currently linked. **On a Mac or Linux:**
 
 ```bash
 python3 scripts/install_skills.py --all --lessons A   # this function's lesson skills
 python3 scripts/install_skills.py --list              # what is linked where
+```
+
+**On Windows,** the same two with `python` and backslashes:
+
+```bash
+python scripts\install_skills.py --all --lessons A
+python scripts\install_skills.py --list
 ```
 
 Those are **links into your clone**, not copies — symlinks, or junctions on Windows — so `git pull` updates every tool at once and an edit you make here is live in all of them. A copy would be a fork with a friendly name: you would fix a skill once and the other copies would keep the bug while still loading and still answering.
@@ -337,14 +390,23 @@ This is worth stating plainly rather than leaving you to find out. `install_skil
 | `.github/skills/` and `.agents/skills/` **inside your clone**, if you ask for `--tool copilot` or `--tool agents` | send anything anywhere — the only network call in the whole commons is the one *you* make to a model |
 | `work/` inside your clone, when a lesson writes CyberTravels there | need admin rights, at any point, for any of it |
 
-To remove all of it:
+**To remove all of it, on Windows:**
 
 ```bash
-python3 scripts/install_skills.py --all --uninstall   # every link, gone
-python3 scripts/install_skills.py --list              # confirm nothing is left
+python scripts\install_skills.py --all --uninstall
+python scripts\install_skills.py --list
 ```
 
-And to remove the commons itself, delete the folder you cloned. There is nothing else: no installer ran, no registry key was written, nothing is left behind. `python3 scripts/doctor.py` prints which of those link folders currently exist on your machine, if you want to check before or after.
+**To remove all of it, on a Mac or Linux:**
+
+```bash
+python3 scripts/install_skills.py --all --uninstall
+python3 scripts/install_skills.py --list
+```
+
+The first line deletes every link. The second prints what is left, so you can see for yourself that nothing is — every line should say *not present*.
+
+**And to remove the commons itself:** delete the `cyber-commons` folder you cloned, the same way you would delete any other folder. There is nothing else to undo. No installer ran. Nothing was written to your system settings or the Windows registry. Running the doctor again will show you which link folders still exist, if you want to check before or after.
 
 ## Your turn
 

@@ -20,19 +20,29 @@ defending, detecting and governing.
 
 Nine components — the same nine the skill below maps, named the same way, so
 the page and the run agree. Eight of them exist in CyberTravels and the ninth
-does not, which is information rather than an omission:
+does not, which is information rather than an omission.
 
-| component | what it is | what it will be blamed for |
-|---|---|---|
-| ingress | where traveller text arrives | every injection in Function B |
-| orchestrator | routes a request, holds no authority | the place controls get added |
-| agent runtime | the loop that turns text into a call | the step everything hinges on |
-| model | proposes; holds no credential, opens no socket | being trusted as a decision |
-| tools | the only things that change anything | the blast radius |
-| mcp servers | a third party's process, in your context | descriptions you approved once |
-| knowledge | retrieved text nobody on staff wrote | persistence |
-| messaging | four agents, talking | one injection becoming four |
-| egress | **absent here** — nothing checks what leaves | B3.7, which is about building it |
+**Each one has a lesson that builds it and a skill that checks it.** That is
+the whole map of this chapter on one screen: read the row, and you know which
+lesson to open and which skill to run.
+
+| component | the file you write | lesson | skill that checks it | blamed for later |
+|---|---|---|---|---|
+| ingress | `ingress/chat.py` | A1.2 | `agent-code-surface-analyzer` | every injection in Function B |
+| orchestrator | `orchestrator/router.py` | A1.2 | `agent-code-surface-analyzer` | the place controls get added |
+| agent runtime | `runtime.py` | A1.1 | `agentic-harness-loop` | the step everything hinges on |
+| model | `config.py` | A1.1 | `agentic-harness-loop` | being trusted as a decision |
+| tools | `tools/*.py` | A1.2 | `agent-code-surface-analyzer` | the blast radius |
+| mcp servers | `mcp/internal_server.py` | A1.2 | `agent-code-surface-analyzer` | descriptions you approved once |
+| knowledge | `knowledge/retriever.py`, `memory.py` | A1.5 | `memory-scope-and-origin-audit` | persistence |
+| messaging | `a2a/protocol.py` | A1.6 | `peer-message-propagation-trace` | one injection becoming four |
+| egress | **nothing — it does not exist** | none in A | none, and that is the finding | B3.7, which is about building it |
+
+**Two honest notes about that table,** because a tidy nine-components-to-nine-skills
+mapping would be a lie. One skill covers four of the components, because they
+are all declared surface and a single audit reads all of it. And `egress` has no
+lesson and no skill here at all: you cannot check a component you never built,
+which is exactly why the map marks it absent and why B3.7 exists.
 
 Identity and audit are not on that list because they are not boxes on this
 map — they are properties every edge carries, which is why A1.3 and A2.2 are

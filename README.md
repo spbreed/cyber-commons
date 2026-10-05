@@ -388,7 +388,7 @@ python3 scripts/build_site.py          # everything      -> site/lessons/
 python3 scripts/build_lightboard.py    # lessons         -> LIGHTBOARD.md
 ```
 
-CI re-runs all of it with `--check`. It runs 22 scripts, each of which
+CI re-runs all of it with `--check`. It runs 23 scripts, each of which
 exists because of a specific failure: the secret scan, the determinism gate
 across four hash seeds, skill contracts and a
 real offline run of every skill script, every diagram rendered by actual

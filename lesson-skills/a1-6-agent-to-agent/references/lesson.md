@@ -44,7 +44,7 @@ real message between two agents and requires the refusal to arrive by itself.
 
 ## 2 · Forge a peer message, and watch verification refuse it
 
-`cybertravels/a2a/protocol.py` is the file. Do both of these in a Python prompt opened in your checkout — they are four lines each and the refusal is the output:
+The file is `cybertravels/a2a/protocol.py`. There are two small experiments here. Start Python in the folder you cloned and do them in order — in both cases, **the error message is the result you are looking for**, not a sign something went wrong:
 
 ```python
 from cybertravels.a2a import protocol as a2a
@@ -63,7 +63,11 @@ for i in range(5):
     print(i, env["hops"], env["on_behalf_of"], env["trace_id"])
 ```
 
-The first raises on the second line you did not change — the signature covers the content, so editing one field invalidates the whole envelope. The second prints three lines and then raises `hop ceiling reached (4)`: Dana and the trace id are still there on every one of them, which is the property worth checking. An agent that re-minted the envelope instead of forwarding it would print `hops` of 1 forever and never reach the ceiling.
+**What experiment 1 shows.** You changed one field — the message text — and the check refused the whole envelope, complaining about the *signature*, which you never touched. That is the point: the signature is calculated from every field at once, so changing any one of them breaks it. There is no way to edit a message on its way past and have it still look genuine.
+
+**What experiment 2 shows.** It prints three lines and then stops with `hop ceiling reached (4)`. Look at the three lines it did print: the `hops` number goes 1, 2, 3, and `dana` and `tr-1` are still on every one. So a message can be handed along, the person it acts for travels with it, and it is not allowed to bounce forever.
+
+**Why that second one works at all.** `forward()` is the thing that adds 1 to the count. If an agent built a brand-new envelope instead of forwarding the one it received, the count would start at zero every time and the ceiling would never be reached. That is not a hypothetical: it is how this shipped for one release, and the exercise at the end of this lesson has you reproduce it.
 
 The skill below traces how a message propagates between peers and what survives each hop — B1.7 runs it to follow an injection; you are running it to see what your envelope actually preserves.
 
