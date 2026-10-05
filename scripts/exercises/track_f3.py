@@ -40,7 +40,19 @@ than lobbying for a budget.
 ("md", "## 3 · Where it breaks — the findings-shaped update"),
 ("md", "## 4 · The control — exposure, likelihood, assurance, decision"),
   *skill_steps('programme/risk-translation-upward',
-               '## 2 · The procedure, as a skill\n\nThe skill computes exposure, containment ASR and control coverage, prints the findings-shaped update with what is wrong with it, and then writes the position — same numbers, an ask attached.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill computes three numbers: exposure, containment ASR, and "
+               "control coverage.\n"
+               "\n"
+               "Then it writes the same numbers up twice:\n"
+               "\n"
+               "- **The findings-shaped update**, with a note on what is wrong with "
+               "it.\n"
+               "- **The position**, which uses the identical numbers and attaches an"
+               " ask.\n"
+               "\n"
+               "Same evidence, two documents. Only one of them can be acted on.\n"),
 ],
  "expect": "The fleet's exposure totals 46 units, containment ASR is 25%, and "
            "control coverage is 50%. The findings-shaped update is shown with five "
@@ -82,7 +94,16 @@ nobody registers anything and your inventory dies.
 ("md", "## 3 · Where it breaks — govern tools instead, and watch it collapse"),
 ("md", "## 4 · The control — L1 must be free, or the inventory dies"),
   *skill_steps('programme/autonomy-ladder-decisions',
-               "## 2 · The procedure, as a skill\n\nGoverning the rung rather than the tool. The skill computes each request's blast radius, derives the rung it supports, and refuses with the condition attached — because a bare refusal produces an appeal and a conditional one produces a fix."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The idea here is to govern **the rung, not the tool.**\n"
+               "\n"
+               "The skill computes the blast radius of each request, works out which"
+               " rung of the autonomy ladder that radius can support, and then "
+               "refuses with a condition attached.\n"
+               "\n"
+               "**Why a condition and not just a no.** A bare refusal produces an "
+               "appeal. A conditional one produces a fix.\n"),
 ],
  "expect": "The four rungs print with their governance and budgets. The "
            "doc-summariser is approved at L1; `triage-bot` is refused at L2 for "
@@ -122,7 +143,18 @@ from evidence (4).
 ("md", "## 3 · Where it breaks — evaluation first"),
 ("md", "## 4 · The control — measure the programme by capability, not activity"),
   *skill_steps('programme/programme-sequencing',
-               '## 2 · The procedure, as a skill\n\nOnly the inventory is doable from a standing start. The skill simulates the popular evaluation-first order against the dependency-respecting one, and says what each produces at the end of every quarter — including the quiet ones.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Only one thing on the list is doable from a standing start: the "
+               "inventory.\n"
+               "\n"
+               "The skill simulates two build orders against each other — the "
+               "popular one that starts with evaluation, and the one that respects "
+               "what depends on what.\n"
+               "\n"
+               "It reports what each order has produced at the end of every quarter,"
+               " **including the quarters where the answer is nothing.** Those are "
+               "the ones a plan tends to leave out.\n"),
 ],
  "expect": "Only inventory is doable from a standing start. The popular "
            "evaluation-first order completes 4 of 6 on the first pass with 2 "
@@ -253,7 +285,16 @@ This lesson takes one genuinely uncomfortable request and gets to yes.
 ("md", "## 3 · Where it breaks — the flat no"),
 ("md", "## 4 · The control — five testable conditions, each owned"),
   *skill_steps('programme/conditional-approval-design',
-               '## 2 · The procedure, as a skill\n\nThe request tiers critical on an irreversible tenant-wide tool. The skill prices the flat refusal — where the capability ships anyway and the visibility does not — then writes conditions that are each testable and dated.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The request in front of you tiers critical, because the tool it "
+               "wants is irreversible and tenant-wide.\n"
+               "\n"
+               "The skill first prices the flat refusal. That price is not zero: "
+               "**the capability ships anyway, and the visibility does not.**\n"
+               "\n"
+               "Then it writes conditions instead — each one testable, and each one "
+               "with a date on it.\n"),
 ],
  "expect": "The request tiers critical with a blast radius of 16 from an "
            "irreversible tenant-wide tool. The flat refusal is shown to lose "

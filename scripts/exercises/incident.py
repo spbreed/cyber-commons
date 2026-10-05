@@ -272,7 +272,21 @@ a hash chain about nothing.
 
   ("md", "## 5 · The check people skip (C1.3)"),
   *skill_steps('identity/tamper-evident-log-check',
-               "## 2 · The check, as a skill\n\nCyberTravels' Coding Agent writes its own transcript. The skill reconciles that transcript against an independent host stream, chains the segments, and rewrites one — so tampering is not just detected but localised to the segment it happened in."),
+               "## 2 · The check, as a skill\n"
+               "\n"
+               "CyberTravels' Coding Agent writes its own transcript. That is the "
+               "problem: it is the only witness to what it did.\n"
+               "\n"
+               "The skill does three things:\n"
+               "\n"
+               "1. Compares that transcript against a separate stream from the host,"
+               " which the agent does not control.\n"
+               "2. Chains the segments together, so each one depends on the one "
+               "before.\n"
+               "3. Rewrites one segment on purpose.\n"
+               "\n"
+               "**Why rewrite one?** Because chaining means tampering is not just "
+               "detected — you can tell *which segment* was altered.\n"),
 ],
  "expect": "The in-band check reports a clean run while two of five steps "
            "executed something other than what was recorded — a 40% spoofing "
@@ -517,7 +531,21 @@ tells you the environment is clean when it is only well-mapped.
 
   ("md", "## 5 · Verify — what deception buys next to a tuned detector"),
   *skill_steps('detection/canary-and-honeypot-design',
-               '## 2 · The procedure, as a skill\n\nA canary credential nothing legitimate uses produces an alert with no structurally possible false positive. The skill places them, attaches source and user agent to each hit, adds honeypot tasks that measure inclination, and models the decay that sets the rotation interval.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "A canary credential is one that nothing legitimate ever uses. That "
+               "is what makes it valuable: **an alert from it has no innocent "
+               "explanation** — there is no false positive to rule out.\n"
+               "\n"
+               "The skill does four things:\n"
+               "\n"
+               "1. Places the canaries.\n"
+               "2. Records the source and the user agent of anything that touches "
+               "one.\n"
+               "3. Adds honeypot tasks, which measure whether an agent is *inclined*"
+               " to do something it should not.\n"
+               "4. Models how fast the signal goes stale, which is what sets how "
+               "often you rotate them.\n"),
 ],
  "expect": "Two canary authentications out of four events are confirmed "
            "compromises with source IP and user agent attached, and no false "
@@ -586,7 +614,19 @@ period.
             "useful after B2.8: they survive the subject of the investigation "
             "having had write access to everything else.")),
    *skill_steps('detection/agent-platform-detections',
-               '## 2 · The procedure, as a skill\n\nA seven-event escape sequence scores 0.07 on a generic volume anomaly. The skill writes four named rules whose subject is the platform — orphaned processes, cache diffs, escape signatures — and runs both against the same events so the comparison is visible.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Here is the problem, as a number. A seven-event sandbox escape "
+               "scores **0.07** against a generic volume anomaly rule. That is: "
+               "effectively invisible.\n"
+               "\n"
+               "The skill writes four rules whose subject is the platform itself "
+               "rather than the traffic volume — orphaned processes, cache "
+               "differences, escape signatures.\n"
+               "\n"
+               "**Then it runs both approaches over the same events,** so you can "
+               "see the two scores side by side rather than take the claim on "
+               "trust.\n"),
 ],
  "expect": "Four named rules fire on a seven-event escape sequence that scores "
            "0.07 on a generic volume anomaly. The orphaned-process rule isolates "
@@ -645,7 +685,18 @@ reports actually submitted. In the incident that gap was the entire failure.
 
   ("md", "## 5 · The gap between noticed and reported (C9.3)"),
   *skill_steps('detection/fleet-correlation-analysis',
-               '## 2 · The procedure, as a skill\n\nFive runs pass every per-run check with nothing to report. The skill establishes that first, then builds the shared-artefact graph keyed by object rather than by run — where one write is read by three unrelated runs and three of them coin the same novel token.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Five runs. Every one passes every check you can make on a single "
+               "run, and none of them has anything to report.\n"
+               "\n"
+               "The skill establishes that first, so the finding cannot be waved "
+               "away as a missed check. Then it builds the picture a different way: "
+               "**grouped by the object touched rather than by the run.**\n"
+               "\n"
+               "Seen that way, two things appear. One write is read by three "
+               "unrelated runs. And three of those runs invent the same new token — "
+               "which no single run could have told you.\n"),
 ],
  "expect": "Five runs pass every per-run check with nothing to report. The "
            "shared-artefact graph then shows one object written by one run and "

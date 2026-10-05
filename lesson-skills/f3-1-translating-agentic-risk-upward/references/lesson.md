@@ -24,7 +24,14 @@ than lobbying for a budget.
 
 ## 2 · The procedure, as a skill
 
-The skill computes exposure, containment ASR and control coverage, prints the findings-shaped update with what is wrong with it, and then writes the position — same numbers, an ask attached.
+The skill computes three numbers: exposure, containment ASR, and control coverage.
+
+Then it writes the same numbers up twice:
+
+- **The findings-shaped update**, with a note on what is wrong with it.
+- **The position**, which uses the identical numbers and attaches an ask.
+
+Same evidence, two documents. Only one of them can be acted on.
 
 ## Your turn
 

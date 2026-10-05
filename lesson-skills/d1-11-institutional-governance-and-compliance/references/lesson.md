@@ -21,11 +21,23 @@ report.
 
 ## 2 · The procedure, as a skill
 
-The skill turns a CyberTravels finding into a handover: the control it becomes, its owner, and an eval case that fails on the old build — so the fix is verifiable and cannot regress unseen.
+The skill turns a CyberTravels finding into a handover. A handover has three parts:
+
+- **The control** the finding becomes.
+- **The owner** — a named person, not a team.
+- **An eval case that fails on the old build.**
+
+That last one is what makes the fix checkable. If the case passes before the fix, it was never testing the fix, and the problem can come back without anybody noticing.
 
 ## 3 · And the write-up the handover ends in
 
-`cybertravels/redteam/handoff.py` enforces the shape: a finding will not construct without a rate and an interval, `verify()` refuses an eval case that passes against the old build, and an artefact nobody accepted counts as missing rather than done. This skill is the prose half — a report that names the absent control, states plainly what is **not** a fix, and carries the regression case with it.
+`cybertravels/redteam/handoff.py` enforces the shape. It refuses three things:
+
+- A finding with no rate and no interval will not even be created.
+- `verify()` rejects an eval case that already passes against the old build.
+- An artefact nobody has accepted counts as missing, not as done.
+
+This skill is the writing half. The report names the control that was absent, says plainly what is **not** a fix, and carries the regression case with it.
 
 ## Your turn
 

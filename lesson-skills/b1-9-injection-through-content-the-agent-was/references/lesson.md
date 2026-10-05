@@ -39,7 +39,9 @@ grants no exemption.
 
 ## 2 · The check, as a skill
 
-An agent asked to read a pull request is asked to trust nothing, and the tools worth guarding are not the ones whose names sound dangerous. The skill drives five carriers and then re-derives the privileged set from what each tool's output causes.
+An agent told to read a pull request is being told to trust nothing in it.
+
+**And the tools worth guarding are not the ones with dangerous-sounding names.** That is the trap. The skill drives five different carriers, then works out which tools are privileged from **what their output causes** — not from what they are called.
 
 ## Your turn
 

@@ -25,7 +25,11 @@ because every spine has gaps, and the gaps are where the sector overlay lives.
 
 ## 2 · The procedure, as a skill
 
-The skill computes coverage per framework against your own control catalogue, selects the widest as a spine, and supplies the remaining three controls from the others — then costs that against building a programme per framework.
+The skill works out, for each framework, how much of it your own control catalogue already covers.
+
+**Then it picks the widest one as a spine** and supplies the three remaining controls from the other frameworks. One programme, not four.
+
+Finally it prices that against the alternative — running a separate programme per framework — so the choice is made on cost rather than on which auditor asked most recently.
 
 ## Your turn
 

@@ -542,7 +542,38 @@ effort on three copies of the same claim.
          "Now check each surviving claim against the code. Three checks, all "
          "mechanical, none requiring judgement."),
   *skill_steps('appsec/finding-dedup-and-verification',
-               "## 2 · The stage, as a skill\n\nEight raw findings, five defects, three survivors. The queue is C2.3's, and the file is C2.3's: `cybertravels/tools/bookings_api.py`, read off disk. The CWE-89 is where Semgrep put it and the CWE-639 on `get_booking` is the hypothesis the model pass emitted, arriving here to be checked rather than believed. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than by a line number, and then rejects the survivors whose symbols are not in the file — because a finding about `os.system` in a file that never imports `os` should die here rather than in a maintainer's inbox.\n\nWatch what survives that it should not: a CWE-89 on `list_my_bookings`, whose query is parameterised and scoped to the session. Neither stage rejects it, and neither is meant to. These two remove what is provably duplicated and provably absent; judging a claim about code that genuinely exists is triage, and that is C2.15."),
+               "## 2 · The stage, as a skill\n"
+               "\n"
+               "Eight raw findings go in. Five distinct defects come out of that. "
+               "Three survive to the end.\n"
+               "\n"
+               "The queue and the file are both C2.3's: "
+               "`cybertravels/tools/bookings_api.py`, read off disk. The CWE-89 is "
+               "where Semgrep put it. The CWE-639 on `get_booking` is what the model"
+               " pass guessed, and it arrives here to be checked rather than "
+               "believed.\n"
+               "\n"
+               "**The skill does three things, in order:**\n"
+               "\n"
+               "1. Normalises the CWE aliases, so one defect under two labels stops "
+               "looking like two defects.\n"
+               "2. Keys each finding by the function that contains it, not by a line"
+               " number. Line numbers move; functions do not.\n"
+               "3. Rejects any survivor whose symbols are not actually in the "
+               "file.\n"
+               "\n"
+               "**Why step 3 earns its place.** A finding about `os.system` in a "
+               "file that never imports `os` should die here, not in a maintainer's "
+               "inbox.\n"
+               "\n"
+               "Now watch something survive that should not: a CWE-89 on "
+               "`list_my_bookings`, whose query is parameterised and scoped to the "
+               "session.\n"
+               "\n"
+               "**Neither stage rejects it, and neither is supposed to.** These two "
+               "stages remove what is provably duplicated and provably absent. "
+               "Judging a claim about code that genuinely exists is triage, and "
+               "triage is C2.15.\n"),
 ],
  "expect": "Eight raw findings collapse to five distinct defects, with the "
            "CWE-943 alias merging into CWE-89 and the taint result kept over grep "
@@ -640,15 +671,20 @@ none of those change when somebody wires the function back up.
          "framework-wired handlers live."),
 ("md", "## 4 · The control — route each bucket to a different place"),
 
-  ("md", "## 6 · Phase 3 as a skill — and the counts that police it\n\n"
-         "Stages 7 to 10 only ever *shrink* the list. That is a property worth "
-         "enforcing rather than trusting, so the skill's contract carries a "
-         "`counts` object and the rule that it must never increase.\n\n"
-         "A pipeline whose `verified` count exceeds its `deduped` count has "
-         "invented findings somewhere after the audit stage — and that is far "
-         "easier to do by accident than it sounds, because a verification step "
-         "that expands one finding per code path looks perfectly reasonable "
-         "from the inside."),
+  ("md", "## 6 · Phase 3 as a skill — and the counts that police it\n"
+         "\n"
+         "Stages 7 to 10 can only ever make the list **shorter**. That is a "
+         "property worth enforcing rather than trusting, so the skill's "
+         "contract carries a `counts` object with one rule: the number must "
+         "never go up.\n"
+         "\n"
+         "**What it means if it does.** A pipeline whose `verified` count is "
+         "higher than its `deduped` count has invented findings somewhere "
+         "after the audit stage.\n"
+         "\n"
+         "That is easier to do by accident than it sounds. A verification step"
+         " that produces one finding per code path looks perfectly reasonable "
+         "from the inside.\n"),
   ("skill", "appsec/appsec-vuln-audit"),
   ("skill_script", "appsec/appsec-vuln-audit/scripts/appsec_vuln_audit.py"),
 

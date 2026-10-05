@@ -31,7 +31,14 @@ Saying which signals are unavailable is part of the assessment, not a gap in it.
 
 ## 2 · The procedure, as a skill
 
-The skill scores each AI component on the two properties that make it different — silent change, and running with the agent's authority — then invalidates every control test taken before the model changed, because a test against a different model is evidence about something else.
+The skill scores each AI component on the two properties that make it different from ordinary software:
+
+- **It can change without telling you.**
+- **It runs with the agent's authority.**
+
+Then it does something that surprises people: it marks every control test taken before the model changed as no longer valid.
+
+**That is not pedantry.** A test run against a different model is evidence about that other model. It says nothing about the one running now.
 
 ## Your turn
 

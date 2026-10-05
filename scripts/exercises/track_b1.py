@@ -595,7 +595,15 @@ grants no exemption.
 ("md", "## 3 · Where it breaks — five carriers, none with blocklist vocabulary"),
 ("md", "## 4 · The control — provenance, and deriving what is privileged"),
   *skill_steps('threats/content-derived-privilege-check',
-               "## 2 · The check, as a skill\n\nAn agent asked to read a pull request is asked to trust nothing, and the tools worth guarding are not the ones whose names sound dangerous. The skill drives five carriers and then re-derives the privileged set from what each tool's output causes."),
+               "## 2 · The check, as a skill\n"
+               "\n"
+               "An agent told to read a pull request is being told to trust nothing "
+               "in it.\n"
+               "\n"
+               "**And the tools worth guarding are not the ones with dangerous-"
+               "sounding names.** That is the trap. The skill drives five different "
+               "carriers, then works out which tools are privileged from **what "
+               "their output causes** — not from what they are called.\n"),
 ],
  "expect": "The normal run executes all four tools. None of the five carriers "
            "contains blocklist vocabulary and all five reach `approve_pr` on the "

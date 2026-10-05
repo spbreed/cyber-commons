@@ -20,7 +20,9 @@ control that comes out of it maps to a detection somebody can deploy.
 
 ## 2 · The procedure, as a skill
 
-The skill takes the swarm incident and maps each observed behaviour to the control that would have caught it, so the case study ends in a deployable list rather than a narrative.
+The skill walks through the swarm incident one behaviour at a time. For each thing the attacker did, it names the control that would have stopped it.
+
+**The output is a list you can act on.** That is the difference between a case study and a story. A story ends when you finish reading it.
 
 ## Your turn
 

@@ -416,7 +416,18 @@ different door.
          "bounds the harm to **other people's** capacity, not just your "
          "bill.\\n\\n## 2 · The control"),
   *skill_steps('runtime/budget-and-stop-condition-audit',
-               "## 2 · The check, as a skill\n\nA loop usually carries several budgets and only one of them ever fires. The skill runs B1.13's impossible task against all of them, reports which binds first, and checks what the loop *returns* when it stops — because partial work reported as an answer is a budget converted into a quality problem."),
+               "## 2 · The check, as a skill\n"
+               "\n"
+               "A loop usually carries several budgets, and in practice only ever "
+               "one of them fires.\n"
+               "\n"
+               "The skill runs B1.13's impossible task against all of them and "
+               "reports which budget binds first. Then it checks something people "
+               "forget: **what the loop actually returns when it stops.**\n"
+               "\n"
+               "If partial work comes back looking like a finished answer, the "
+               "budget has not protected you. It has turned a cost problem into a "
+               "quality problem.\n"),
 ],
  "expect": "The impossible task from B1.13 now stops after six steps, halted by "
            "the per-target ceiling — before the token or action budgets are "

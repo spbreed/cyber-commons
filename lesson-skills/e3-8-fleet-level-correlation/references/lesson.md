@@ -46,7 +46,11 @@ reports actually submitted. In the incident that gap was the entire failure.
 
 ## 2 · The procedure, as a skill
 
-Five runs pass every per-run check with nothing to report. The skill establishes that first, then builds the shared-artefact graph keyed by object rather than by run — where one write is read by three unrelated runs and three of them coin the same novel token.
+Five runs. Every one passes every check you can make on a single run, and none of them has anything to report.
+
+The skill establishes that first, so the finding cannot be waved away as a missed check. Then it builds the picture a different way: **grouped by the object touched rather than by the run.**
+
+Seen that way, two things appear. One write is read by three unrelated runs. And three of those runs invent the same new token — which no single run could have told you.
 
 ## Your turn
 

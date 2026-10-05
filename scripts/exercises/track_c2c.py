@@ -126,7 +126,19 @@ fact, and the finding is checkable rather than asserted.
   ("md", "## 3 · Where it breaks — a sink list with no reachability is a scanner dump"),
   ("md", "## 4 · The control — paths, predicates, and the authn/authz split"),
   *skill_steps('redteam/whitebox-path-reachability',
-               "## 2 · The procedure, as a skill\n\nThe skill enumerates paths from four CyberTravels entry points to their sinks, classifies the predicate on each hop as authentication or authorisation, and separates reachable sinks from ones that are merely present."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill traces the paths from four CyberTravels entry points to "
+               "their sinks — a sink being somewhere data can do damage.\n"
+               "\n"
+               "On each hop it looks at the check being made and labels it:\n"
+               "\n"
+               "- **Authentication** — who are you?\n"
+               "- **Authorisation** — are you allowed to do this?\n"
+               "\n"
+               "Then it separates the sinks you can actually reach from the ones "
+               "that merely exist in the code. Those are different problems and only"
+               " one of them is urgent.\n"),
 ],
  "expect": "Of seven sinks in the tree, five are reachable from an entry point "
            "and two are reported as present-but-unreachable rather than dropped. "
@@ -172,7 +184,17 @@ become grey box (C2.13) rather than a more elaborate black-box guess.
   ("md", "## 3 · Where it breaks — the fluent architecture the evidence does not support"),
   ("md", "## 4 · The control — observed vs inferred, and no severity on a guess"),
   *skill_steps('redteam/blackbox-claim-provenance',
-               "## 2 · The procedure, as a skill\n\nThe skill takes twelve claims from an external probe of CyberTravels, splits them on whether the evidence entails or merely suggests each, and reports findings and open questions separately — with a severity on neither guess."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill takes twelve claims from an outside probe of CyberTravels "
+               "and sorts them into two piles:\n"
+               "\n"
+               "- Claims the evidence **proves**.\n"
+               "- Claims the evidence merely **suggests**.\n"
+               "\n"
+               "It reports the two piles separately — findings in one, open "
+               "questions in the other. **Neither pile gets a severity attached to a"
+               " guess.**\n"),
 ],
  "expect": "Five claims are entailed by their evidence and reported as findings; "
            "seven are only consistent with it and become open questions with no "
@@ -213,7 +235,18 @@ functionality test into a security test.
   ("md", "## 3 · Where it breaks — every endpoint touched, most cells untested"),
   ("md", "## 4 · The control — the matrix, its mismatches, and the ranked gaps"),
   *skill_steps('redteam/greybox-authorization-matrix',
-               "## 2 · The procedure, as a skill\n\nThe skill fills the roles-by-objects-by-verbs matrix for CyberTravels against what the design intends, flags the cells where the estate disagrees, and ranks the untested cells by blast radius rather than by schema order."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill fills in a grid: every role, against every object, against"
+               " every verb. Then it compares the grid against what the design says "
+               "should happen.\n"
+               "\n"
+               "It flags the cells where the running estate disagrees with the "
+               "design.\n"
+               "\n"
+               "**Then it ranks the cells nobody tested by blast radius** — by how "
+               "much damage each one could do — rather than in the order they happen"
+               " to appear in the schema.\n"),
 ],
  "expect": "The engagement exercises 12 of 30 cells (40%) and finds two "
            "mismatches — a traveller reading another traveller's booking and the "
@@ -260,7 +293,17 @@ reason to run it.
   ("md", "## 3 · Where it breaks — the quick-look run that skips the invisible controls"),
   ("md", "## 4 · The control — refuse with a reason, then brief the SOC"),
   *skill_steps('redteam/offensive-agent-safety-preflight',
-               "## 2 · The procedure, as a skill\n\nThe skill runs two CyberTravels engagement configurations through the preflight, refuses the one missing blocking controls with the reason for each, and prints the SOC brief for the one that may start."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill takes two CyberTravels engagement setups and runs both "
+               "through the preflight.\n"
+               "\n"
+               "**One is refused,** because it is missing controls that block a "
+               "start, and the skill names each missing control rather than just "
+               "saying no.\n"
+               "\n"
+               "**The other may begin,** and for that one it prints the brief the "
+               "SOC needs before anything starts running.\n"),
 ],
  "expect": "The quick-look configuration is refused with four blocking controls "
            "named — zero retention, egress allowlist, human in the loop and "

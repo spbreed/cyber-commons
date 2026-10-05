@@ -41,7 +41,15 @@ a hash chain about nothing.
 
 ## 2 · The check, as a skill
 
-CyberTravels' Coding Agent writes its own transcript. The skill reconciles that transcript against an independent host stream, chains the segments, and rewrites one — so tampering is not just detected but localised to the segment it happened in.
+CyberTravels' Coding Agent writes its own transcript. That is the problem: it is the only witness to what it did.
+
+The skill does three things:
+
+1. Compares that transcript against a separate stream from the host, which the agent does not control.
+2. Chains the segments together, so each one depends on the one before.
+3. Rewrites one segment on purpose.
+
+**Why rewrite one?** Because chaining means tampering is not just detected — you can tell *which segment* was altered.
 
 ## Your turn
 

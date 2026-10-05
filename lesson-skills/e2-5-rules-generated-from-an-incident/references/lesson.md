@@ -14,17 +14,20 @@ the naive rule looks clean against it.
 
 ## 2 · Write the bad candidates on purpose
 
-Two rules are worth writing precisely because they will be rejected.
+Two of these three rules are worth writing precisely **because they will be rejected.**
 
-The **naive generalisation** takes the tool that appeared in the incident:
-`any refund`. The **over-fitted** one takes the identifier: `refund on BK-772`.
-Both catch the incident. One buries the queue and the other is worthless
-tomorrow, and seeing them scored beside the good rule is what makes the good
-rule a choice rather than an assumption.
+- **The naive generalisation** takes the tool that appeared in the incident: `any refund`.
+- **The over-fitted one** takes the identifier: `refund on BK-772`.
+
+Both of them catch the incident. One buries the alert queue. The other is worthless tomorrow, when the next booking has a different number.
+
+**Seeing them scored beside the good rule is the point.** It turns the good rule into a choice you made rather than an assumption you started with.
 
 ## 3 · Generate, then measure before shipping
 
-Three candidates, one benign corpus, one number each. A rule with no measured false-positive rate is a guess with syntax.
+Three candidate rules. One corpus of benign traffic. One number each.
+
+**A rule with no measured false-positive rate is a guess with syntax.**
 
 ## Your turn
 

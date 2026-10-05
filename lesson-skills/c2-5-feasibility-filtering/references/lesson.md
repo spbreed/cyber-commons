@@ -94,9 +94,11 @@ The tempting simplification. It makes the queue shorter and it is how real bugs 
 
 ## 6 · Phase 3 as a skill — and the counts that police it
 
-Stages 7 to 10 only ever *shrink* the list. That is a property worth enforcing rather than trusting, so the skill's contract carries a `counts` object and the rule that it must never increase.
+Stages 7 to 10 can only ever make the list **shorter**. That is a property worth enforcing rather than trusting, so the skill's contract carries a `counts` object with one rule: the number must never go up.
 
-A pipeline whose `verified` count exceeds its `deduped` count has invented findings somewhere after the audit stage — and that is far easier to do by accident than it sounds, because a verification step that expands one finding per code path looks perfectly reasonable from the inside.
+**What it means if it does.** A pipeline whose `verified` count is higher than its `deduped` count has invented findings somewhere after the audit stage.
+
+That is easier to do by accident than it sounds. A verification step that produces one finding per code path looks perfectly reasonable from the inside.
 
 ## 7 · Where it breaks — deduplicating on the wrong key
 

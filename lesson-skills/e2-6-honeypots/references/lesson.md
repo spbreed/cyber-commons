@@ -39,7 +39,14 @@ tells you the environment is clean when it is only well-mapped.
 
 ## 2 · The procedure, as a skill
 
-A canary credential nothing legitimate uses produces an alert with no structurally possible false positive. The skill places them, attaches source and user agent to each hit, adds honeypot tasks that measure inclination, and models the decay that sets the rotation interval.
+A canary credential is one that nothing legitimate ever uses. That is what makes it valuable: **an alert from it has no innocent explanation** — there is no false positive to rule out.
+
+The skill does four things:
+
+1. Places the canaries.
+2. Records the source and the user agent of anything that touches one.
+3. Adds honeypot tasks, which measure whether an agent is *inclined* to do something it should not.
+4. Models how fast the signal goes stale, which is what sets how often you rotate them.
 
 ## Your turn
 

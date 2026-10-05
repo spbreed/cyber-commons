@@ -26,7 +26,11 @@ This lesson takes one genuinely uncomfortable request and gets to yes.
 
 ## 2 · The procedure, as a skill
 
-The request tiers critical on an irreversible tenant-wide tool. The skill prices the flat refusal — where the capability ships anyway and the visibility does not — then writes conditions that are each testable and dated.
+The request in front of you tiers critical, because the tool it wants is irreversible and tenant-wide.
+
+The skill first prices the flat refusal. That price is not zero: **the capability ships anyway, and the visibility does not.**
+
+Then it writes conditions instead — each one testable, and each one with a date on it.
 
 ## Your turn
 

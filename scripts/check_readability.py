@@ -46,19 +46,17 @@ from exercises import EXERCISES                               # noqa: E402
 SENTENCE_CEILING = 45
 AVERAGE_CEILING = 25
 
-# Which functions the ceilings are *enforced* on, as opposed to reported.
+# Which functions the ceilings are enforced on — now all six.
 #
-# Function A is where a reader with no background starts, it is the part the
-# student review actually tested, and it meets both ceilings as of this commit.
-# The other five functions do not: 39 lessons carry a single step instruction
-# that packs a whole skill's method into one sentence, averaging 25 to 33 words.
+# This was ("A",) for one commit, with the other five printed as a backlog,
+# because 42 lessons each packed a whole skill's method into one sentence and a
+# gate that is red on arrival gets switched off rather than fixed. Those 42 are
+# rewritten, so the exception is gone.
 #
-# Enforcing everywhere today would turn CI red on 39 lessons nobody has rewritten
-# yet, and a gate that is red on arrival gets switched off rather than fixed. So
-# the rest are printed as a backlog on every run, with the count, which keeps them
-# visible instead of discovered again in six months. Widen this set as each
-# function is rewritten — that is the whole point of it being a set.
-ENFORCED = ("A",)
+# Keep it as a tuple rather than inlining the check. If a sixth function is ever
+# added mid-draft, holding it out of here for a few commits is the honest way to
+# land it — and the backlog print is still below for exactly that case.
+ENFORCED = ("A", "B", "C", "D", "E", "F")
 
 # A sentence that is mostly a path, a command or a contract key is not prose and
 # counting its words says nothing about whether a reader can follow it.
@@ -81,8 +79,23 @@ def step_prose(sid: str) -> str:
         s = re.sub(r"```.*?```", " . ", s, flags=re.S)   # code -> boundary
         s = re.sub(r"^\s*\|.*$", " ", s, flags=re.M)     # table rows
         s = re.sub(r"^#+ .*$", " . ", s, flags=re.M)     # headings
+        s = "\n".join(l for l in s.splitlines() if not _diagram(l))
         out.append(s)
     return " ".join(out)
+
+
+def _diagram(line: str) -> bool:
+    """Is this line a picture rather than a sentence?
+
+    C2.4 and C2.5 carry an ASCII pipeline diagram inside a blockquote, so it is
+    not inside a fenced block and survived the code strip. The gate reported it
+    as a 35-word instruction, which is a false positive that would have been
+    "fixed" by mangling a diagram. A line whose visible characters are mostly
+    box-drawing, arrows and punctuation is not prose.
+    """
+    body = re.sub(r"^\s*>?\s*", "", line)
+    letters = sum(c.isalpha() or c.isspace() for c in body)
+    return bool(body) and letters / len(body) < 0.75
 
 
 def sentences(text: str) -> list[str]:

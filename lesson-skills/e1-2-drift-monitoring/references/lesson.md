@@ -27,7 +27,14 @@ F1.7 turns the second into a compliance posture. This lesson produces the signal
 
 ## 2 · The procedure, as a skill
 
-Four of six things that change an agent's behaviour never reach change management. The skill counts them, then tracks drift across a quarter and attributes the rise that coincides with the model upgrade — and the one that does not.
+Six things can change how an agent behaves. **Four of them never go near change management.** The skill counts those four first.
+
+Then it tracks the drift across a quarter and splits the rise in two:
+
+- The part that lines up with the model upgrade.
+- The part that does not.
+
+The second part is the interesting one, because nothing in your change log explains it.
 
 ## Your turn
 

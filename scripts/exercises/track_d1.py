@@ -37,7 +37,17 @@ and a dataset re-pulled on every train can change under a name that never did.
   ("md", "## 3 · Where it breaks — the trusted name that was never verified"),
   ("md", "## 4 · The control — assess on mutability, not on popularity"),
   *skill_steps('research/agent-supply-chain-assessment',
-               "## 2 · The procedure, as a skill\n\nThe skill scores each component CyberTravels pulls in on whether it can change without notice, and separates the pinned artefacts from the ones a registry can replace at any time."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill does two things.\n"
+               "\n"
+               "**It scores every component CyberTravels pulls in.** The question it"
+               " asks about each one is simple: can this change without anybody "
+               "telling us?\n"
+               "\n"
+               "**Then it sorts them into two piles.** One pile is pinned to an "
+               "exact version. The other can be swapped by a registry at any moment."
+               " The second pile is the one to worry about.\n"),
 ],
  "expect": "The pinned libraries score low-risk, the hosted model and the "
            "re-pulled dataset score high because neither can be pinned, and the "
@@ -66,7 +76,17 @@ record that carried it.
   ("md", "## 3 · Where it breaks — RCE on the indexing host, not the serving one"),
   ("md", "## 4 · The control — a provenance manifest for everything ingested"),
   *skill_steps('research/training-data-provenance-manifest',
-               "## 2 · The procedure, as a skill\n\nThe skill builds a manifest of what CyberTravels' RAG pipeline ingested — source, parser, and a digest per record — so an embedding run that executed something can be traced to the record that carried it."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill builds a list of everything CyberTravels' RAG pipeline "
+               "read in. For each record it notes three things: where it came from, "
+               "what parsed it, and a digest, which is a short fingerprint of the "
+               "content.\n"
+               "\n"
+               "**Why the fingerprint matters.** If an embedding run turns out to "
+               "have executed something, you can trace it back to the exact record "
+               "that carried it. Without the list you know something happened and "
+               "not what.\n"),
 ],
  "expect": "The manifest names each source and the parser that touched it, and "
            "the record with no verifiable origin is flagged as the one a payload "
@@ -133,7 +153,22 @@ credential at a machine's tempo.
   ("md", "## 3 · Where it breaks — the agent that reads as its owner"),
   ("md", "## 4 · The control — a threshold set by cost, not by accuracy"),
   *skill_steps('detection/agent-versus-human-scoring',
-               "## 2 · The procedure, as a skill\n\nThe skill scores five CyberTravels actors on behaviour rather than on what they claim to be, and picks the threshold by expected cost — a flagged human costs half an analyst-hour, a missed agent costs forty."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill looks at five CyberTravels accounts and works out which "
+               "are people and which are software. **It judges them on how they "
+               "behave, not on what they call themselves** — anyone can set a "
+               "label.\n"
+               "\n"
+               "Then it has to choose a cut-off. It chooses by cost, not by "
+               "accuracy:\n"
+               "\n"
+               "- Wrongly flagging a person costs about half an hour of an analyst's"
+               " time.\n"
+               "- Missing an agent costs about forty hours.\n"
+               "\n"
+               "Those numbers are eighty times apart. So the cut-off with the best "
+               "accuracy score is not the cut-off you want.\n"),
 ],
  "expect": "The service accounts and unregistered token score highest, the human "
            "lowest, and cost-weighting selects a low threshold that finds the "
@@ -160,7 +195,15 @@ control that comes out of it maps to a detection somebody can deploy.
   ("md", "## 3 · Where it breaks — every run is individually innocent"),
   ("md", "## 4 · The control — analysis across the population, not the run"),
   *skill_steps('research/incident-control-mapping',
-               "## 2 · The procedure, as a skill\n\nThe skill takes the swarm incident and maps each observed behaviour to the control that would have caught it, so the case study ends in a deployable list rather than a narrative."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill walks through the swarm incident one behaviour at a time. "
+               "For each thing the attacker did, it names the control that would "
+               "have stopped it.\n"
+               "\n"
+               "**The output is a list you can act on.** That is the difference "
+               "between a case study and a story. A story ends when you finish "
+               "reading it.\n"),
 ],
  "expect": "Each behaviour in the incident resolves to a named control, and the "
            "ones with no control behind them are the gaps the case study exists "
@@ -187,7 +230,16 @@ is kept and one that buries the queue is rejected with its numbers.
   ("md", "## 3 · Where it breaks — every rule detects something"),
   ("md", "## 4 · The control — score against history, ship few"),
   *skill_steps('detection/detection-rule-deployability',
-               "## 2 · The procedure, as a skill\n\nEvery candidate rule detects the anomaly. The skill replays each against CyberTravels' history and scores firing volume, so a rule that produces hundreds of alerts for one true positive is rejected with the number attached."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Every candidate rule here detects the anomaly. That is not the "
+               "question.\n"
+               "\n"
+               "The skill replays each rule against CyberTravels' real history and "
+               "counts **how often it would have fired.** A rule that raises "
+               "hundreds of alerts to catch one real problem is rejected, and the "
+               "number is printed beside the rejection. That makes it an argument "
+               "rather than an opinion.\n"),
 ],
  "expect": "All candidates detect the anomaly, but their firing volumes differ by "
            "orders of magnitude, and the deployable one is chosen by the volume "
@@ -214,7 +266,18 @@ conclude on its own. The skill is knowing which signals the loop may believe.
   ("md", "## 3 · Where it breaks — closing a true positive is silent"),
   ("md", "## 4 · The control — the loop may close, but not above the floor"),
   *skill_steps('secops/detection-triage',
-               "## 2 · The procedure, as a skill\n\nThe skill runs an agentic triage loop over CyberTravels' alerts, samples what it auto-closed with a stable seed, and enforces a severity floor no automatic closure may cross."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill does three things to CyberTravels' alert queue.\n"
+               "\n"
+               "**1. It runs an agentic triage loop over the alerts.**\n"
+               "\n"
+               "**2. It samples whatever the loop closed by itself.** The sample "
+               "uses a fixed seed, so you get the same sample every run and can "
+               "compare.\n"
+               "\n"
+               "**3. It sets a severity floor.** Above that line nothing may be "
+               "closed automatically, however confident the loop is.\n"),
 ],
  "expect": "The loop matches ground truth on the routine alerts, the severity "
            "floor converts every high closure into an escalation, and the "
@@ -243,7 +306,19 @@ into a tuned one.
   ("md", "## 3 · Where it breaks — the canary something legitimate reads"),
   ("md", "## 4 · The control — bait nothing legitimate has a reason to touch"),
   *skill_steps('detection/canary-and-honeypot-design',
-               "## 2 · The procedure, as a skill\n\nThe skill places canary tokens and a honeypot task in CyberTravels' environment, checks that no legitimate path reaches them, and reads a touch as a zero-false-positive signal."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Two words first. A **canary token** is a credential that looks real "
+               "and that nothing legitimate ever uses. A **honeypot task** is a job "
+               "nobody should take.\n"
+               "\n"
+               "The skill places both in CyberTravels' environment. Then it checks "
+               "something important: that no normal, honest path reaches either of "
+               "them.\n"
+               "\n"
+               "**That check is what makes the alert worth having.** If nothing "
+               "legitimate can touch it, a touch cannot be a false alarm. There is "
+               "no innocent explanation left to rule out.\n"),
 ],
  "expect": "The canaries sit outside every legitimate path, so a single touch is "
            "a high-confidence alert with no threshold, and the one placed too "
@@ -272,7 +347,16 @@ Moltbook lesson, 770,000 agents behind one missing policy.
   ("md", "## 3 · Where it breaks — terminated agents, still-valid tokens"),
   ("md", "## 4 · The control — one policy, enforced at the gateway"),
   *skill_steps('response/fleet-kill-switch-test',
-               "## 2 · The procedure, as a skill\n\nThe skill exercises a fleet kill switch against CyberTravels' agents and checks the property that matters — that revoked credentials, not just terminated processes, are what ends the persistence."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill pulls a fleet-wide kill switch on CyberTravels' agents. "
+               "Then it checks the thing that actually matters.\n"
+               "\n"
+               "**Stopping a program is not the same as ending its access.** A "
+               "killed agent whose credentials still work has not been stopped, it "
+               "has been paused, and anything else holding those credentials carries"
+               " on. So the skill checks that the credentials were cancelled, not "
+               "just that the programs died.\n"),
 ],
  "expect": "The kill switch selects the whole fleet in one action and the run "
            "shows persistence surviving termination but not revocation, so the "
@@ -300,7 +384,16 @@ reproducing a different system.
   ("md", "## 3 · Where it breaks — the unpinned model version"),
   ("md", "## 4 · The control — log at design time what replay will need"),
   *skill_steps('response/run-replayability-audit',
-               "## 2 · The procedure, as a skill\n\nThe skill audits a CyberTravels run for the four fields a replay needs, and reports which are missing — because a run you cannot reproduce is a story, not evidence."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Replaying a run needs four specific fields to be in the record. The "
+               "skill checks a real CyberTravels run for all four and tells you "
+               "which are missing.\n"
+               "\n"
+               "**Why do this before an incident rather than during one.** A run you"
+               " cannot reproduce is a story about what happened. It is not evidence"
+               " of what happened, and that difference matters the moment somebody "
+               "disagrees with you.\n"),
 ],
  "expect": "A run with all four fields replays identically; one missing the model "
            "version cannot be demonstrated, only described, which is the moment "
@@ -327,16 +420,32 @@ report.
   ("md", "## 3 · Where it breaks — the finding with no owner and no eval case"),
   ("md", "## 4 · The control — handover with a regression test attached"),
   *skill_steps('research/finding-to-control-handover',
-               "## 2 · The procedure, as a skill\n\nThe skill turns a CyberTravels finding into a handover: the control it becomes, its owner, and an eval case that fails on the old build — so the fix is verifiable and cannot regress unseen."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill turns a CyberTravels finding into a handover. A handover "
+               "has three parts:\n"
+               "\n"
+               "- **The control** the finding becomes.\n"
+               "- **The owner** — a named person, not a team.\n"
+               "- **An eval case that fails on the old build.**\n"
+               "\n"
+               "That last one is what makes the fix checkable. If the case passes "
+               "before the fix, it was never testing the fix, and the problem can "
+               "come back without anybody noticing.\n"),
   *skill_steps('redteam/agentic-finding-report',
-               "## 3 · And the write-up the handover ends in\n\n"
-               "`cybertravels/redteam/handoff.py` enforces the shape: a "
-               "finding will not construct without a rate and an interval, "
-               "`verify()` refuses an eval case that passes against the old "
-               "build, and an artefact nobody accepted counts as missing "
-               "rather than done. This skill is the prose half — a report that "
-               "names the absent control, states plainly what is **not** a "
-               "fix, and carries the regression case with it."),
+               "## 3 · And the write-up the handover ends in\n"
+               "\n"
+               "`cybertravels/redteam/handoff.py` enforces the shape. It refuses "
+               "three things:\n"
+               "\n"
+               "- A finding with no rate and no interval will not even be created.\n"
+               "- `verify()` rejects an eval case that already passes against the "
+               "old build.\n"
+               "- An artefact nobody has accepted counts as missing, not as done.\n"
+               "\n"
+               "This skill is the writing half. The report names the control that "
+               "was absent, says plainly what is **not** a fix, and carries the "
+               "regression case with it.\n"),
 ],
  "expect": "The finding leaves with a named control, an owner and an eval case "
            "that fails on the unfixed build, and a finding missing any of the "

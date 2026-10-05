@@ -21,7 +21,9 @@ reproducing a different system.
 
 ## 2 · The procedure, as a skill
 
-The skill audits a CyberTravels run for the four fields a replay needs, and reports which are missing — because a run you cannot reproduce is a story, not evidence.
+Replaying a run needs four specific fields to be in the record. The skill checks a real CyberTravels run for all four and tells you which are missing.
+
+**Why do this before an incident rather than during one.** A run you cannot reproduce is a story about what happened. It is not evidence of what happened, and that difference matters the moment somebody disagrees with you.
 
 ## Your turn
 

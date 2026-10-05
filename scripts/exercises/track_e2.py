@@ -132,15 +132,24 @@ operational reason C2.0 bounds delegation depth in the first place.
 ("md", "## 3 · Where it breaks — the undercount grows with depth"),
 ("md", "## 4 · The control — scope from the act chain, then widen by shared resources"),
 
-  ("md", "## 6 · Scoping as a skill\n\n"
-         "Scoping a human incident asks where someone logged in. Scoping this "
-         "one asks what the agent **decided** — every action was individually "
-         "authorised, so nothing looks wrong at the authentication layer.\n\n"
-         "Two fields in the contract carry most of the weight. `reach` and "
-         "`confirmed_exfiltration` are separate numbers, because reach is the "
-         "scope until proven otherwise and the smaller number must never stand "
-         "in for the larger in a notification decision. And `does_not_stop` "
-         "makes containment state its own limits."),
+  ("md", "## 6 · Scoping as a skill\n"
+         "\n"
+         "Scoping a human incident asks one question: where did somebody log "
+         "in?\n"
+         "\n"
+         "Scoping this one asks a different question: **what did the agent "
+         "decide?** Every single action it took was properly authorised, so "
+         "nothing looks wrong at the login layer. There is nothing there to "
+         "find.\n"
+         "\n"
+         "Two fields in the output carry most of the weight:\n"
+         "\n"
+         "- **`reach` and `confirmed_exfiltration` are separate numbers.** "
+         "Reach is the scope until you prove otherwise. The smaller number "
+         "must never stand in for the larger one when deciding whether to "
+         "notify people.\n"
+         "- **`does_not_stop`** makes containment state its own limits out "
+         "loud, rather than implying it stopped everything.\n"),
   ("skill", "secops/incident-scoping"),
   ("skill_script", "secops/incident-scoping/scripts/incident_scoping.py"),
 
@@ -208,7 +217,17 @@ upgrade does not reproduce the incident that happened before it.
 ("md", "## 3 · Where it breaks — the silent upgrade"),
 ("md", "## 4 · The control — record the four, cheapest first"),
   *skill_steps('response/run-replayability-audit',
-               '## 2 · The procedure, as a skill\n\nReplay needs five inputs and the typical production run records three. The skill checks each against a real record, then replays under two later model versions — where a different action means the original decision cannot be reproduced at all.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Replaying a run needs five inputs. A typical production run records "
+               "three.\n"
+               "\n"
+               "The skill checks all five against a real record, then replays the "
+               "run under two later model versions.\n"
+               "\n"
+               "**Watch what happens when the model gives a different answer.** The "
+               "original decision then cannot be reproduced at all — not disagreed "
+               "with, not re-checked. There is no way back to it.\n"),
 ],
  "expect": "Only the fully instrumented run is replayable; the typical production "
            "run is missing the model version and seed. Replaying the incident "
@@ -304,7 +323,19 @@ a board will each ask for in different words.
 ("md", "## 3 · Where it breaks — mechanism matters more than speed"),
 ("md", "## 4 · The control — run the game day and record the number"),
   *skill_steps('response/stop-authority-readiness',
-               '## 2 · The procedure, as a skill\n\nThe skill prints the vague answers beside the concrete ones, then establishes what each mechanism actually survives — killing the process does not survive a restart, revoking the identity does — and reports a measured twelve-second time-to-stop from a game day rather than an estimate.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill puts the vague answers next to the concrete ones, then "
+               "asks what each stopping mechanism actually survives:\n"
+               "\n"
+               "- **Killing the process** does not survive a restart. It comes "
+               "back.\n"
+               "- **Revoking the identity** does survive a restart. It stays "
+               "stopped.\n"
+               "\n"
+               "It finishes with a time-to-stop of **twelve seconds**, and that "
+               "number comes from a game day somebody actually ran. It is not an "
+               "estimate.\n"),
 ],
  "expect": "The vague and concrete answers print side by side. Killing the "
            "process stops the agent but does not survive a restart, while "

@@ -22,9 +22,14 @@ operational reason C2.0 bounds delegation depth in the first place.
 
 ## 6 · Scoping as a skill
 
-Scoping a human incident asks where someone logged in. Scoping this one asks what the agent **decided** — every action was individually authorised, so nothing looks wrong at the authentication layer.
+Scoping a human incident asks one question: where did somebody log in?
 
-Two fields in the contract carry most of the weight. `reach` and `confirmed_exfiltration` are separate numbers, because reach is the scope until proven otherwise and the smaller number must never stand in for the larger in a notification decision. And `does_not_stop` makes containment state its own limits.
+Scoping this one asks a different question: **what did the agent decide?** Every single action it took was properly authorised, so nothing looks wrong at the login layer. There is nothing there to find.
+
+Two fields in the output carry most of the weight:
+
+- **`reach` and `confirmed_exfiltration` are separate numbers.** Reach is the scope until you prove otherwise. The smaller number must never stand in for the larger one when deciding whether to notify people.
+- **`does_not_stop`** makes containment state its own limits out loud, rather than implying it stopped everything.
 
 ## Your turn
 

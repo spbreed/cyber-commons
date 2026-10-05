@@ -42,7 +42,11 @@ period.
 
 ## 2 · The procedure, as a skill
 
-A seven-event escape sequence scores 0.07 on a generic volume anomaly. The skill writes four named rules whose subject is the platform — orphaned processes, cache diffs, escape signatures — and runs both against the same events so the comparison is visible.
+Here is the problem, as a number. A seven-event sandbox escape scores **0.07** against a generic volume anomaly rule. That is: effectively invisible.
+
+The skill writes four rules whose subject is the platform itself rather than the traffic volume — orphaned processes, cache differences, escape signatures.
+
+**Then it runs both approaches over the same events,** so you can see the two scores side by side rather than take the claim on trust.
 
 ## Your turn
 

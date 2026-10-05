@@ -39,7 +39,11 @@ cutting them removes the only thing E5.1 can replay a run from.
 
 ## 2 · The procedure, as a skill
 
-The skill tiers six CyberTravels sources by the fastest query that reads each, prices hot against tiered, and names the source that would have been cut.
+The skill sorts six CyberTravels log sources by one question: **how fast does the quickest query that reads this need an answer?**
+
+Then it prices two options against each other — keeping everything in fast storage, against moving some to cheaper slow storage.
+
+The last thing it prints is the source somebody would have cut to save money, and what that would have cost you during an incident.
 
 ## Your turn
 

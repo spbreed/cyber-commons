@@ -101,7 +101,17 @@ Each one resolves to controls you already built in tracks A, B and D.
 ("md", "## 3 · Where it breaks — the clause answered with prose"),
 ("md", "## 4 · The control — produce the evidence, then check it is fresh"),
   *skill_steps('regulatory/horizontal-requirement-to-control',
-               '## 2 · The procedure, as a skill\n\nThe skill maps four regulatory themes to named controls with concrete artefacts, then applies the show-me test to the prose answers a policy currently offers — and counts how many sentences survive it.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill maps four regulatory themes onto named controls, each with"
+               " a concrete artefact you could hand over.\n"
+               "\n"
+               "Then it applies the show-me test to the prose your policy offers "
+               "today. The test is one question per sentence: **if somebody asked me"
+               " to show them this, what would I show them?**\n"
+               "\n"
+               "It counts how many sentences survive. The count is usually lower "
+               "than people expect.\n"),
 ],
  "expect": "Four regulatory themes resolve to named controls, each with a concrete "
            "evidence artefact. All four prose answers fail the show-me test. "
@@ -135,7 +145,18 @@ because every spine has gaps, and the gaps are where the sector overlay lives.
 ("md", "## 3 · Where it breaks — one framework per regulation"),
 ("md", "## 4 · The control — one spine, mapped outward, gaps named"),
   *skill_steps('regulatory/framework-spine-selection',
-               '## 2 · The procedure, as a skill\n\nThe skill computes coverage per framework against your own control catalogue, selects the widest as a spine, and supplies the remaining three controls from the others — then costs that against building a programme per framework.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill works out, for each framework, how much of it your own "
+               "control catalogue already covers.\n"
+               "\n"
+               "**Then it picks the widest one as a spine** and supplies the three "
+               "remaining controls from the other frameworks. One programme, not "
+               "four.\n"
+               "\n"
+               "Finally it prices that against the alternative — running a separate "
+               "programme per framework — so the choice is made on cost rather than "
+               "on which auditor asked most recently.\n"),
 ],
  "expect": "NIST AI RMF covers the most controls (4 of 8) and is selected as the "
            "spine, leaving SB-2, EV-1 and ST-1 as gaps supplied by ISO 42001, the "

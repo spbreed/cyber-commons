@@ -21,7 +21,9 @@ Moltbook lesson, 770,000 agents behind one missing policy.
 
 ## 2 · The procedure, as a skill
 
-The skill exercises a fleet kill switch against CyberTravels' agents and checks the property that matters — that revoked credentials, not just terminated processes, are what ends the persistence.
+The skill pulls a fleet-wide kill switch on CyberTravels' agents. Then it checks the thing that actually matters.
+
+**Stopping a program is not the same as ending its access.** A killed agent whose credentials still work has not been stopped, it has been paused, and anything else holding those credentials carries on. So the skill checks that the credentials were cancelled, not just that the programs died.
 
 ## Your turn
 

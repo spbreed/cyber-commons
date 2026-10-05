@@ -20,7 +20,13 @@ conclude on its own. The skill is knowing which signals the loop may believe.
 
 ## 2 · The procedure, as a skill
 
-The skill runs an agentic triage loop over CyberTravels' alerts, samples what it auto-closed with a stable seed, and enforces a severity floor no automatic closure may cross.
+The skill does three things to CyberTravels' alert queue.
+
+**1. It runs an agentic triage loop over the alerts.**
+
+**2. It samples whatever the loop closed by itself.** The sample uses a fixed seed, so you get the same sample every run and can compare.
+
+**3. It sets a severity floor.** Above that line nothing may be closed automatically, however confident the loop is.
 
 ## Your turn
 

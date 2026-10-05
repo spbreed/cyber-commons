@@ -38,7 +38,11 @@ reason to run it.
 
 ## 2 · The procedure, as a skill
 
-The skill runs two CyberTravels engagement configurations through the preflight, refuses the one missing blocking controls with the reason for each, and prints the SOC brief for the one that may start.
+The skill takes two CyberTravels engagement setups and runs both through the preflight.
+
+**One is refused,** because it is missing controls that block a start, and the skill names each missing control rather than just saying no.
+
+**The other may begin,** and for that one it prints the brief the SOC needs before anything starts running.
 
 ## Your turn
 

@@ -54,9 +54,16 @@ retention conversation actually is.
 
 ## 4 · The control — pick the threshold from the cost, not from accuracy
 
-## 2 · Finding the actor, as a skill
+## 4 · Keeping the trace, as a skill
 
-The skill scores five actors on behaviour rather than on what they claim to be, sweeps the threshold, and then picks it by expected cost — because a flagged human costs half an analyst-hour and a missed agent costs forty.
+The run record holds something that looks like a payment card number. It is in a source file the agent was entirely allowed to read.
+
+The skill scans every field, then sets how long each field is kept separately:
+
+- Timestamps and verdicts are kept for 400 days, because an investigation may need them.
+- Prompts are dropped before 30 days, because that is where the card number is.
+
+**Per field, not per record.** Deleting the whole record to lose the card number also loses the evidence.
 
 ## 3 · What the trace you just started keeping contains
 

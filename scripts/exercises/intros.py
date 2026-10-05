@@ -425,15 +425,25 @@ can run — a red team that produces only a slide has produced nothing.
          "team findings first and governance items last."),
   *skill_steps(
       "redteam/attack-success-rate-campaign",
-      "## 4 · The arithmetic, before the first attack\n\n"
-      "This function's whole argument is that an offensive result without a "
-      "denominator is an anecdote, so the first thing it builds is the "
-      "denominator. `cybertravels/redteam/campaign.py` is the tree increment "
-      "this lesson adds: cases with a criterion stated **before** the run, a "
-      "rate with an interval that behaves at 0/20, benign cases so a technique "
-      "that fires on everything cannot report a success rate of 1.0, and the "
-      "ablation that says whether you measured the model or your own "
-      "scaffolding. This is the procedure:"),
+      "## 4 · The arithmetic, before the first attack\n"
+      "\n"
+      "This function argues one thing: **an offensive result with no "
+      "denominator is an anecdote.** So the first thing it builds is the "
+      "denominator.\n"
+      "\n"
+      "`cybertravels/redteam/campaign.py` is what this lesson adds to the "
+      "tree. It gives you four things:\n"
+      "\n"
+      "- **Cases whose pass criterion is written down before the run**, not"
+      " after you have seen the answers.\n"
+      "- **A rate with an interval** that still behaves sensibly at 0 out "
+      "of 20.\n"
+      "- **Benign cases**, so a technique that fires on everything cannot "
+      "come back claiming a success rate of 1.0.\n"
+      "- **An ablation**, which tells you whether you measured the model or"
+      " your own scaffolding around it.\n"
+      "\n"
+      "This is the procedure:\n"),
  ],
  "expect": "The four stages of the agentic red-team lifecycle, from the "
            "ingestion and elicitation surfaces an attacker reaches first through "

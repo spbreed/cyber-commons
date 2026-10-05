@@ -40,9 +40,21 @@ Now check each surviving claim against the code. Three checks, all mechanical, n
 
 ## 2 · The stage, as a skill
 
-Eight raw findings, five defects, three survivors. The queue is C2.3's, and the file is C2.3's: `cybertravels/tools/bookings_api.py`, read off disk. The CWE-89 is where Semgrep put it and the CWE-639 on `get_booking` is the hypothesis the model pass emitted, arriving here to be checked rather than believed. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than by a line number, and then rejects the survivors whose symbols are not in the file — because a finding about `os.system` in a file that never imports `os` should die here rather than in a maintainer's inbox.
+Eight raw findings go in. Five distinct defects come out of that. Three survive to the end.
 
-Watch what survives that it should not: a CWE-89 on `list_my_bookings`, whose query is parameterised and scoped to the session. Neither stage rejects it, and neither is meant to. These two remove what is provably duplicated and provably absent; judging a claim about code that genuinely exists is triage, and that is C2.15.
+The queue and the file are both C2.3's: `cybertravels/tools/bookings_api.py`, read off disk. The CWE-89 is where Semgrep put it. The CWE-639 on `get_booking` is what the model pass guessed, and it arrives here to be checked rather than believed.
+
+**The skill does three things, in order:**
+
+1. Normalises the CWE aliases, so one defect under two labels stops looking like two defects.
+2. Keys each finding by the function that contains it, not by a line number. Line numbers move; functions do not.
+3. Rejects any survivor whose symbols are not actually in the file.
+
+**Why step 3 earns its place.** A finding about `os.system` in a file that never imports `os` should die here, not in a maintainer's inbox.
+
+Now watch something survive that should not: a CWE-89 on `list_my_bookings`, whose query is parameterised and scoped to the session.
+
+**Neither stage rejects it, and neither is supposed to.** These two stages remove what is provably duplicated and provably absent. Judging a claim about code that genuinely exists is triage, and triage is C2.15.
 
 ## Your turn
 

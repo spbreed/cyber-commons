@@ -21,7 +21,11 @@ supervisor asking "show me".
 
 ## 2 · The procedure, as a skill
 
-The skill maps eight operating controls outward to clauses across five frameworks, attaches the evidence artefact each control would be shown by, and derives what a critical tier requires — so coverage comes out as an output rather than a claim.
+The skill starts from eight controls you actually operate, and maps outward to the clauses they satisfy across five frameworks. **That direction matters** — starting from the frameworks and working back produces a wish list.
+
+For each control it attaches the evidence artefact you would be asked to show.
+
+Then it works out what a critical tier requires. Coverage comes out as a result you computed, rather than a claim you made.
 
 ## Your turn
 

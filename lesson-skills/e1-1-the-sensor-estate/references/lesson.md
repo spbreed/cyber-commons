@@ -37,7 +37,11 @@ move them.
 
 ## 2 · The procedure, as a skill
 
-The skill scores four sensor classes against nine things CyberTravels' agents do in an ordinary day, takes the union per row rather than summing the columns, and prints the actions no class sees at all.
+The skill takes nine things CyberTravels' agents do on an ordinary day, and four classes of sensor that might see them. It scores every pair.
+
+**It adds the rows up, not the columns.** If three sensors each see the same action, that action is covered once, not three times. Summing the columns makes thin coverage look thick.
+
+The useful output is the short list at the end: the actions that **no** sensor class sees at all.
 
 ## Your turn
 

@@ -29,7 +29,11 @@ from evidence (4).
 
 ## 2 · The procedure, as a skill
 
-Only the inventory is doable from a standing start. The skill simulates the popular evaluation-first order against the dependency-respecting one, and says what each produces at the end of every quarter — including the quiet ones.
+Only one thing on the list is doable from a standing start: the inventory.
+
+The skill simulates two build orders against each other — the popular one that starts with evaluation, and the one that respects what depends on what.
+
+It reports what each order has produced at the end of every quarter, **including the quarters where the answer is nothing.** Those are the ones a plan tends to leave out.
 
 ## Your turn
 

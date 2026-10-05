@@ -13,13 +13,13 @@ thousand.
 
 ## 2 · Refusals are evidence, not errors
 
-A refused query carries the exact query text, so a human can grant it
-deliberately and the grant is on the record.
+When a query is refused, the refusal keeps the exact text of the query. That means a human can look at it and grant it on purpose — and the granting is on the record too.
 
-That matters twice. The investigator can escalate precisely rather than asking
-for "more access", and the refusal log is what shows afterwards that the
-response did not become the second incident — which is a question a regulator
-will ask about an agent that read production during an outage.
+**This matters twice over.**
+
+First, the investigator can ask for one specific thing instead of asking for "more access".
+
+Second, the refusal log is what shows afterwards that the response did not turn into a second incident. A regulator will ask that question about any agent that read production during an outage.
 
 ## 3 · One admission set, six queries
 

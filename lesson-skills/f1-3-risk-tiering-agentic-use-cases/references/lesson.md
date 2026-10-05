@@ -26,7 +26,13 @@ smaller term than consequence.
 
 ## 2 · The procedure, as a skill
 
-The skill tiers five assets by autonomy, data and reach, then re-tiers them with the questionnaire that leads with the model question — and reports the inversion, where a small local model with deploy rights and regulated data moves from low to critical.
+The skill tiers five assets twice, and the second answer is the point.
+
+**First pass:** it tiers them on what they can actually do — how much autonomy they have, what data they touch, how far they reach.
+
+**Second pass:** it tiers them again using the questionnaire that opens with "which model is it?"
+
+**Then it reports where the two disagree.** One asset flips from low to critical: a small local model that happens to hold deploy rights and read regulated data. The questionnaire asked about the model and missed everything that mattered.
 
 ## Your turn
 

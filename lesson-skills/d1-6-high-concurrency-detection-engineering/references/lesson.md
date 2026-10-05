@@ -20,7 +20,9 @@ is kept and one that buries the queue is rejected with its numbers.
 
 ## 2 · The procedure, as a skill
 
-Every candidate rule detects the anomaly. The skill replays each against CyberTravels' history and scores firing volume, so a rule that produces hundreds of alerts for one true positive is rejected with the number attached.
+Every candidate rule here detects the anomaly. That is not the question.
+
+The skill replays each rule against CyberTravels' real history and counts **how often it would have fired.** A rule that raises hundreds of alerts to catch one real problem is rejected, and the number is printed beside the rejection. That makes it an argument rather than an opinion.
 
 ## Your turn
 

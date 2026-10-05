@@ -66,19 +66,31 @@ rule, legitimate refunds. A corpus of unrelated traffic proves nothing, because
 the naive rule looks clean against it.
 """,
  "steps": [
-  ("md", """## 2 · Write the bad candidates on purpose
-
-Two rules are worth writing precisely because they will be rejected.
-
-The **naive generalisation** takes the tool that appeared in the incident:
-`any refund`. The **over-fitted** one takes the identifier: `refund on BK-772`.
-Both catch the incident. One buries the queue and the other is worthless
-tomorrow, and seeing them scored beside the good rule is what makes the good
-rule a choice rather than an assumption."""),
+  ("md", "## 2 · Write the bad candidates on purpose\n"
+         "\n"
+         "Two of these three rules are worth writing precisely **because they "
+         "will be rejected.**\n"
+         "\n"
+         "- **The naive generalisation** takes the tool that appeared in the "
+         "incident: `any refund`.\n"
+         "- **The over-fitted one** takes the identifier: `refund on "
+         "BK-772`.\n"
+         "\n"
+         "Both of them catch the incident. One buries the alert queue. The "
+         "other is worthless tomorrow, when the next booking has a different "
+         "number.\n"
+         "\n"
+         "**Seeing them scored beside the good rule is the point.** It turns "
+         "the good rule into a choice you made rather than an assumption you "
+         "started with.\n"),
   *skill_steps('detection/detection-rule-synthesis',
-               "## 3 · Generate, then measure before shipping\\n\\n"
-               "Three candidates, one benign corpus, one number each. A rule "
-               "with no measured false-positive rate is a guess with syntax."),
+               "## 3 · Generate, then measure before shipping\n"
+               "\n"
+               "Three candidate rules. One corpus of benign traffic. One number "
+               "each.\n"
+               "\n"
+               "**A rule with no measured false-positive rate is a guess with "
+               "syntax.**\n"),
  ],
  "expect": "All three candidates catch the incident; only the sequence rule ships. "
            "The naive rule fires on 18 legitimate refunds — a 21% false-positive "
@@ -100,15 +112,20 @@ same fields is an investigation at four hundred rows and a copy at ninety
 thousand.
 """,
  "steps": [
-  ("md", """## 2 · Refusals are evidence, not errors
-
-A refused query carries the exact query text, so a human can grant it
-deliberately and the grant is on the record.
-
-That matters twice. The investigator can escalate precisely rather than asking
-for "more access", and the refusal log is what shows afterwards that the
-response did not become the second incident — which is a question a regulator
-will ask about an agent that read production during an outage."""),
+  ("md", "## 2 · Refusals are evidence, not errors\n"
+         "\n"
+         "When a query is refused, the refusal keeps the exact text of the "
+         "query. That means a human can look at it and grant it on purpose — "
+         "and the granting is on the record too.\n"
+         "\n"
+         "**This matters twice over.**\n"
+         "\n"
+         "First, the investigator can ask for one specific thing instead of "
+         "asking for \"more access\".\n"
+         "\n"
+         "Second, the refusal log is what shows afterwards that the response "
+         "did not turn into a second incident. A regulator will ask that "
+         "question about any agent that read production during an outage.\n"),
   *skill_steps('secops/investigation-admission-rules',
                "## 3 · One admission set, six queries\\n\\n"
                "Three are refused. Look at the third: same source and same "

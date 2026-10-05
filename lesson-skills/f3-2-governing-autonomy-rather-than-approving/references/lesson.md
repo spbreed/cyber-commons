@@ -32,7 +32,11 @@ nobody registers anything and your inventory dies.
 
 ## 2 · The procedure, as a skill
 
-Governing the rung rather than the tool. The skill computes each request's blast radius, derives the rung it supports, and refuses with the condition attached — because a bare refusal produces an appeal and a conditional one produces a fix.
+The idea here is to govern **the rung, not the tool.**
+
+The skill computes the blast radius of each request, works out which rung of the autonomy ladder that radius can support, and then refuses with a condition attached.
+
+**Why a condition and not just a no.** A bare refusal produces an appeal. A conditional one produces a fix.
 
 ## Your turn
 

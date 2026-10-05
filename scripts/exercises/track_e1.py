@@ -191,7 +191,16 @@ cutting them removes the only thing E5.1 can replay a run from.
 ("md", "## 3 · Where it breaks — index everything, then read the bill"),
 ("md", "## 4 · The control — one tier per source, derived and defensible"),
   *skill_steps('detection/telemetry-tiering-cost',
-               '## 2 · The procedure, as a skill\n\nThe skill tiers six CyberTravels sources by the fastest query that reads each, prices hot against tiered, and names the source that would have been cut.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill sorts six CyberTravels log sources by one question: **how "
+               "fast does the quickest query that reads this need an answer?**\n"
+               "\n"
+               "Then it prices two options against each other — keeping everything "
+               "in fast storage, against moving some to cheaper slow storage.\n"
+               "\n"
+               "The last thing it prints is the source somebody would have cut to "
+               "save money, and what that would have cost you during an incident.\n"),
 ],
  "expect": "Four sources go hot because triage and scoping read them in seconds, "
            "host EDR goes warm, and agent prompts go cold — read by one query "
@@ -323,7 +332,22 @@ retention conversation actually is.
 ("md", "## 3 · Where it breaks — sweep the threshold and read both errors"),
 ("md", "## 4 · The control — pick the threshold from the cost, not from accuracy"),
   *skill_steps('detection/agent-versus-human-scoring',
-               '## 2 · Finding the actor, as a skill\n\nThe skill scores five actors on behaviour rather than on what they claim to be, sweeps the threshold, and then picks it by expected cost — because a flagged human costs half an analyst-hour and a missed agent costs forty.'),
+               "## 4 · Keeping the trace, as a skill\n"
+               "\n"
+               "The run record holds something that looks like a payment card "
+               "number. It is in a source file the agent was entirely allowed to "
+               "read.\n"
+               "\n"
+               "The skill scans every field, then sets how long each field is kept "
+               "separately:\n"
+               "\n"
+               "- Timestamps and verdicts are kept for 400 days, because an "
+               "investigation may need them.\n"
+               "- Prompts are dropped before 30 days, because that is where the card"
+               " number is.\n"
+               "\n"
+               "**Per field, not per record.** Deleting the whole record to lose the"
+               " card number also loses the evidence.\n"),
 
   ("md", "## 3 · What the trace you just started keeping contains"),
   *skill_steps('detection/agent-telemetry-retention',
@@ -380,7 +404,18 @@ move them.
 ("md", "## 3 · Where it breaks — the combined column, and the four rows in it"),
 ("md", "## 4 · The control — derive the next source from the uncovered set"),
   *skill_steps('detection/sensor-coverage-matrix',
-               '## 2 · The procedure, as a skill\n\nThe skill scores four sensor classes against nine things CyberTravels\' agents do in an ordinary day, takes the union per row rather than summing the columns, and prints the actions no class sees at all.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill takes nine things CyberTravels' agents do on an ordinary "
+               "day, and four classes of sensor that might see them. It scores every"
+               " pair.\n"
+               "\n"
+               "**It adds the rows up, not the columns.** If three sensors each see "
+               "the same action, that action is covered once, not three times. "
+               "Summing the columns makes thin coverage look thick.\n"
+               "\n"
+               "The useful output is the short list at the end: the actions that "
+               "**no** sensor class sees at all.\n"),
 ],
  "expect": "EDR and CNAPP each cover about a third of the agent's day, DLP and "
            "CSPM almost none of it, and all four combined still leave four of "
@@ -429,7 +464,19 @@ F1.7 turns the second into a compliance posture. This lesson produces the signal
             "also the failure mode with no ticket.")),
   ("md", "## 4 · The control — freshness derived from the observed drift rate"),
   *skill_steps('detection/behavioural-drift-monitor',
-               "## 2 · The procedure, as a skill\n\nFour of six things that change an agent's behaviour never reach change management. The skill counts them, then tracks drift across a quarter and attributes the rise that coincides with the model upgrade — and the one that does not."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Six things can change how an agent behaves. **Four of them never go "
+               "near change management.** The skill counts those four first.\n"
+               "\n"
+               "Then it tracks the drift across a quarter and splits the rise in "
+               "two:\n"
+               "\n"
+               "- The part that lines up with the model upgrade.\n"
+               "- The part that does not.\n"
+               "\n"
+               "The second part is the interesting one, because nothing in your "
+               "change log explains it.\n"),
 ],
  "expect": "Drift rises across the quarter from 0.0 at sign-off to roughly 0.35 "
            "after the model upgrade, with `run_shell` appearing as a new tool. "

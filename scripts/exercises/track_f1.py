@@ -201,7 +201,21 @@ smaller term than consequence.
 ("md", "## 3 · Where it breaks — tier by model instead, and compare"),
 ("md", "## 4 · The control — the four questions the questionnaire should ask"),
   *skill_steps('grc/agentic-risk-tiering',
-               '## 2 · The procedure, as a skill\n\nThe skill tiers five assets by autonomy, data and reach, then re-tiers them with the questionnaire that leads with the model question — and reports the inversion, where a small local model with deploy rights and regulated data moves from low to critical.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill tiers five assets twice, and the second answer is the "
+               "point.\n"
+               "\n"
+               "**First pass:** it tiers them on what they can actually do — how "
+               "much autonomy they have, what data they touch, how far they reach.\n"
+               "\n"
+               "**Second pass:** it tiers them again using the questionnaire that "
+               "opens with \"which model is it?\"\n"
+               "\n"
+               "**Then it reports where the two disagree.** One asset flips from low"
+               " to critical: a small local model that happens to hold deploy rights"
+               " and read regulated data. The questionnaire asked about the model "
+               "and missed everything that mattered.\n"),
 ],
  "expect": "The public read-only chatbot tiers low; the small local model with "
            "deploy rights and regulated data tiers critical at score 12. Tiering "
@@ -232,7 +246,18 @@ supervisor asking "show me".
 ("md", "## 3 · Where it breaks — start from the framework instead"),
 ("md", "## 4 · The control — evidence flows from the control, not the clause"),
   *skill_steps('grc/control-to-framework-mapping',
-               '## 2 · The procedure, as a skill\n\nThe skill maps eight operating controls outward to clauses across five frameworks, attaches the evidence artefact each control would be shown by, and derives what a critical tier requires — so coverage comes out as an output rather than a claim.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill starts from eight controls you actually operate, and maps "
+               "outward to the clauses they satisfy across five frameworks. **That "
+               "direction matters** — starting from the frameworks and working back "
+               "produces a wish list.\n"
+               "\n"
+               "For each control it attaches the evidence artefact you would be "
+               "asked to show.\n"
+               "\n"
+               "Then it works out what a critical tier requires. Coverage comes out "
+               "as a result you computed, rather than a claim you made.\n"),
 ],
  "expect": "The catalogue's 8 controls map to framework clauses across NIST AI "
            "RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier "
@@ -411,7 +436,20 @@ Saying which signals are unavailable is part of the assessment, not a gap in it.
 ("md", "## 3 · Where it breaks — the silent change, priced"),
 ("md", "## 4 · The control — the four questions, and stating the gaps"),
   *skill_steps('grc/third-party-ai-assessment',
-               "## 2 · The procedure, as a skill\n\nThe skill scores each AI component on the two properties that make it different — silent change, and running with the agent's authority — then invalidates every control test taken before the model changed, because a test against a different model is evidence about something else."),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "The skill scores each AI component on the two properties that make "
+               "it different from ordinary software:\n"
+               "\n"
+               "- **It can change without telling you.**\n"
+               "- **It runs with the agent's authority.**\n"
+               "\n"
+               "Then it does something that surprises people: it marks every control"
+               " test taken before the model changed as no longer valid.\n"
+               "\n"
+               "**That is not pedantry.** A test run against a different model is "
+               "evidence about that other model. It says nothing about the one "
+               "running now.\n"),
 ],
  "expect": "The hosted model and the MCP tool package both tier high — one for "
            "silent change, one for running with agent authority. The silent model "
@@ -466,7 +504,18 @@ because everyone believes it is gone.
   ("md", "## 3 · Where it breaks — the identity that outlived the agent"),
 ("md", "## 4 · The control — two automated checks that close the loop"),
   *skill_steps('grc/agent-lifecycle-governance',
-               '## 2 · The procedure, as a skill\n\nFour of six lifecycle events leave no reliable record. The skill starts from the identity provider rather than the register, joins to services and owners, and ranks what it finds by what the credential can still do.'),
+               "## 2 · The procedure, as a skill\n"
+               "\n"
+               "Six events make up an identity's life. **Four of them leave no "
+               "reliable record.**\n"
+               "\n"
+               "So the skill does not start from the register, which only knows what"
+               " somebody wrote down. It starts from the identity provider, which "
+               "knows what actually exists, then joins that to services and "
+               "owners.\n"
+               "\n"
+               "It ranks what it finds by **what the credential can still do** — not"
+               " by how old it is, and not by who forgot about it.\n"),
 ],
  "expect": "Four of six lifecycle events generate no reliable record at all. The identity "
            "review flags `sunset-agent` as critical — an active credential for a "

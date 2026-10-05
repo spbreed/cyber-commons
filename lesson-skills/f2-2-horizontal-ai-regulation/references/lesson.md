@@ -29,7 +29,11 @@ Each one resolves to controls you already built in tracks A, B and D.
 
 ## 2 · The procedure, as a skill
 
-The skill maps four regulatory themes to named controls with concrete artefacts, then applies the show-me test to the prose answers a policy currently offers — and counts how many sentences survive it.
+The skill maps four regulatory themes onto named controls, each with a concrete artefact you could hand over.
+
+Then it applies the show-me test to the prose your policy offers today. The test is one question per sentence: **if somebody asked me to show them this, what would I show them?**
+
+It counts how many sentences survive. The count is usually lower than people expect.
 
 ## Your turn
 

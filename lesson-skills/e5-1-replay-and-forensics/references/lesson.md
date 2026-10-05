@@ -23,7 +23,11 @@ upgrade does not reproduce the incident that happened before it.
 
 ## 2 · The procedure, as a skill
 
-Replay needs five inputs and the typical production run records three. The skill checks each against a real record, then replays under two later model versions — where a different action means the original decision cannot be reproduced at all.
+Replaying a run needs five inputs. A typical production run records three.
+
+The skill checks all five against a real record, then replays the run under two later model versions.
+
+**Watch what happens when the model gives a different answer.** The original decision then cannot be reproduced at all — not disagreed with, not re-checked. There is no way back to it.
 
 ## Your turn
 

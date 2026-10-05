@@ -22,7 +22,9 @@ record that carried it.
 
 ## 2 · The procedure, as a skill
 
-The skill builds a manifest of what CyberTravels' RAG pipeline ingested — source, parser, and a digest per record — so an embedding run that executed something can be traced to the record that carried it.
+The skill builds a list of everything CyberTravels' RAG pipeline read in. For each record it notes three things: where it came from, what parsed it, and a digest, which is a short fingerprint of the content.
+
+**Why the fingerprint matters.** If an embedding run turns out to have executed something, you can trace it back to the exact record that carried it. Without the list you know something happened and not what.
 
 ## Your turn
 

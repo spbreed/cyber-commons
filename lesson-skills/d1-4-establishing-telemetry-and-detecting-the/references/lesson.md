@@ -21,7 +21,14 @@ credential at a machine's tempo.
 
 ## 2 · The procedure, as a skill
 
-The skill scores five CyberTravels actors on behaviour rather than on what they claim to be, and picks the threshold by expected cost — a flagged human costs half an analyst-hour, a missed agent costs forty.
+The skill looks at five CyberTravels accounts and works out which are people and which are software. **It judges them on how they behave, not on what they call themselves** — anyone can set a label.
+
+Then it has to choose a cut-off. It chooses by cost, not by accuracy:
+
+- Wrongly flagging a person costs about half an hour of an analyst's time.
+- Missing an agent costs about forty hours.
+
+Those numbers are eighty times apart. So the cut-off with the best accuracy score is not the cut-off you want.
 
 ## Your turn
 

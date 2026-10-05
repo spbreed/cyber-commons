@@ -21,7 +21,11 @@ and a dataset re-pulled on every train can change under a name that never did.
 
 ## 2 · The procedure, as a skill
 
-The skill scores each component CyberTravels pulls in on whether it can change without notice, and separates the pinned artefacts from the ones a registry can replace at any time.
+The skill does two things.
+
+**It scores every component CyberTravels pulls in.** The question it asks about each one is simple: can this change without anybody telling us?
+
+**Then it sorts them into two piles.** One pile is pinned to an exact version. The other can be swapped by a registry at any moment. The second pile is the one to worry about.
 
 ## Your turn
 

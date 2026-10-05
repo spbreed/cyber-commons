@@ -27,7 +27,12 @@ a board will each ask for in different words.
 
 ## 2 · The procedure, as a skill
 
-The skill prints the vague answers beside the concrete ones, then establishes what each mechanism actually survives — killing the process does not survive a restart, revoking the identity does — and reports a measured twelve-second time-to-stop from a game day rather than an estimate.
+The skill puts the vague answers next to the concrete ones, then asks what each stopping mechanism actually survives:
+
+- **Killing the process** does not survive a restart. It comes back.
+- **Revoking the identity** does survive a restart. It stays stopped.
+
+It finishes with a time-to-stop of **twelve seconds**, and that number comes from a game day somebody actually ran. It is not an estimate.
 
 ## Your turn
 

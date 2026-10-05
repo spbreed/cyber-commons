@@ -21,7 +21,11 @@ into a tuned one.
 
 ## 2 · The procedure, as a skill
 
-The skill places canary tokens and a honeypot task in CyberTravels' environment, checks that no legitimate path reaches them, and reads a touch as a zero-false-positive signal.
+Two words first. A **canary token** is a credential that looks real and that nothing legitimate ever uses. A **honeypot task** is a job nobody should take.
+
+The skill places both in CyberTravels' environment. Then it checks something important: that no normal, honest path reaches either of them.
+
+**That check is what makes the alert worth having.** If nothing legitimate can touch it, a touch cannot be a false alarm. There is no innocent explanation left to rule out.
 
 ## Your turn
 

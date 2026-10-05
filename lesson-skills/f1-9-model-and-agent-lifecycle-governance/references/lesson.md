@@ -30,7 +30,11 @@ because everyone believes it is gone.
 
 ## 2 · The procedure, as a skill
 
-Four of six lifecycle events leave no reliable record. The skill starts from the identity provider rather than the register, joins to services and owners, and ranks what it finds by what the credential can still do.
+Six events make up an identity's life. **Four of them leave no reliable record.**
+
+So the skill does not start from the register, which only knows what somebody wrote down. It starts from the identity provider, which knows what actually exists, then joins that to services and owners.
+
+It ranks what it finds by **what the credential can still do** — not by how old it is, and not by who forgot about it.
 
 ## Your turn
 

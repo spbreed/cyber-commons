@@ -36,7 +36,16 @@ Each lesson is a turn of the same loop: reach a surface, weaponise it, prove it 
 
 ## 4 · The arithmetic, before the first attack
 
-This function's whole argument is that an offensive result without a denominator is an anecdote, so the first thing it builds is the denominator. `cybertravels/redteam/campaign.py` is the tree increment this lesson adds: cases with a criterion stated **before** the run, a rate with an interval that behaves at 0/20, benign cases so a technique that fires on everything cannot report a success rate of 1.0, and the ablation that says whether you measured the model or your own scaffolding. This is the procedure:
+This function argues one thing: **an offensive result with no denominator is an anecdote.** So the first thing it builds is the denominator.
+
+`cybertravels/redteam/campaign.py` is what this lesson adds to the tree. It gives you four things:
+
+- **Cases whose pass criterion is written down before the run**, not after you have seen the answers.
+- **A rate with an interval** that still behaves sensibly at 0 out of 20.
+- **Benign cases**, so a technique that fires on everything cannot come back claiming a success rate of 1.0.
+- **An ablation**, which tells you whether you measured the model or your own scaffolding around it.
+
+This is the procedure:
 
 ## Your turn
 
