@@ -269,8 +269,16 @@ SECTIONS = {
 
 
 def sec_open(key: str, extra: str = "") -> str:
+    """One section. The `id` is the section key, so every section is linkable.
+
+    Lesson pages carried no anchors at all, which meant a review finding, a
+    student question or a bug report could only ever cite a whole page and
+    "scroll until you see it". The keys are already stable — layout.py declares
+    which of them a lesson renders — so they make better anchors than generated
+    slugs, which change when a heading is reworded.
+    """
     hue, icon, title = SECTIONS[key]
-    return (f'<section class="ls ls-{hue}">'
+    return (f'<section class="ls ls-{hue}" id="{key}">'
             f'<h2 class="lsh"><span class="lsi">{icon}</span>'
             f'{html.escape(title)}{extra}</h2>'
             f'<div class="lsb">')
@@ -469,8 +477,16 @@ NUMBERED_H2 = re.compile(r"<h2>\d+\s*·")
 
 
 def renumber_sections(body: str) -> str:
+    # The number is also the anchor — `#s3` is the step the reader sees as "3 ·".
+    # It is assigned here rather than at the source, because the number itself is
+    # only known once the whole body is assembled.
     n = itertools.count(2)
-    return NUMBERED_H2.sub(lambda _: f"<h2>{next(n)} ·", body)
+
+    def one(_):
+        i = next(n)
+        return f'<h2 id="s{i}">{i} ·'
+
+    return NUMBERED_H2.sub(one, body)
 
 
 
