@@ -834,7 +834,14 @@ def index_page(seq) -> str:
     parts.append('<div class="wrap"><div class="lhead">'
                  '<div class="sid">Curriculum</div><h1>All lessons</h1>'
                  f'<div class="badges"><span class="badge b">{len(seq)} lessons</span>'
-                 f'<span class="badge d">{done} recorded</span></div></div>')
+                 f'<span class="badge d">{done} recorded</span></div>'
+                 # The trainer guide is not a lesson, so it cannot appear in
+                 # the list below — and a page nothing links to is a page
+                 # nobody finds.
+                 '<p style="margin:14px 0 0;color:var(--text-dim)">'
+                 'Running a session rather than taking one? '
+                 '<a href="../teach/function-a.html">The Function A trainer '
+                 'guide</a> is the four-hour run sheet.</p></div>')
     cur_fn = None
     for e in seq:
         if e["fn"] != cur_fn:

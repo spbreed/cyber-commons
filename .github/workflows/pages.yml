@@ -201,6 +201,17 @@ jobs:
       - name: Check the lesson skills are in step with the lessons
         run: python3 scripts/build_lesson_skills.py --check
 
+      # The trainer guide repeats facts that live in the lesson sources and the
+      # application, and a hand-written draft of it reached review with three
+      # already wrong — fifteen lessons when there were sixteen, "seven to nine
+      # components" after A1.0 had settled on nine, and A2.4's output accuracy
+      # at 0.600 after the scorer was corrected to 0.400. Somebody reads that
+      # page standing in front of a class. So it is generated, and this refuses
+      # a Function A lesson no module teaches, a lab with no expected output, a
+      # dead lesson link, and a committed page stale against its source.
+      - name: Check the trainer guide is in step with the lessons
+        run: python3 scripts/build_trainer_guide.py --check
+
       - name: Every lesson's framework labels must resolve, and be real
         run: python3 scripts/check_frameworks.py
 
