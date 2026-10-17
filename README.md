@@ -145,14 +145,15 @@ failures happen in the seams.
 | in the SOC — detection, IR, threat hunting | **E1**→**E5** — discover, detect, understand, respond, recover |
 | in GRC, risk, audit, or you carry the regulator | **F1**→**F3** — risk and control, regulatory, running the programme |
 
-**Teaching Function A to a room?** The
-[Function A trainer guide](https://cybercommons.ai/teach/function-a.html) is the
+**Doing Function A, or running it for other people?** The
+[Function A course guide](https://cybercommons.ai/guide/function-a.html) is the
 four-hour run sheet: the prompt to paste and the output it actually prints for
-all sixteen labs, the debrief question for each, what to do when a learner's
-machine fails, and the questions to mark the capstone against. Every number on
-it is generated from the lesson sources and the application, so an expected
-output there is what the command prints — see
-`scripts/build_trainer_guide.py`.
+all sixteen labs, the question to answer before moving on, what to do when a
+machine fails, and what a good capstone answer contains. It serves both readers
+— the blocks marked *For a room* are the only parts a solo reader skips. Every
+number on it is generated from the lesson sources and the application, so an
+expected output there is what the command prints — see
+`scripts/build_guide.py`.
 
 **Recording or teaching this?** [LIGHTBOARD.md](LIGHTBOARD.md) is a
 **word-for-word** script for every lesson — open it and talk. Read every plain
@@ -397,7 +398,7 @@ python3 scripts/build_site.py          # everything      -> site/lessons/
 python3 scripts/build_lightboard.py    # lessons         -> LIGHTBOARD.md
 ```
 
-CI re-runs all of it with `--check`. It runs 24 scripts, each of which
+CI re-runs all of it with `--check`. It runs 25 scripts, each of which
 exists because of a specific failure: the secret scan, the determinism gate
 across four hash seeds, skill contracts and a
 real offline run of every skill script, every diagram rendered by actual
@@ -430,7 +431,7 @@ lesson-skills/              one skill per converted lesson, generated — what a
 labs/                       attestation · incident-register · b2.10-eval-harness
 labs/evidence/              the recorded offline run of every skill script
 site/                       the website (index + generated lesson pages)
-site/teach/                 generated pages that are not lessons — the Function A trainer guide
+site/guide/                 generated pages that are not lessons — the Function A course guide
 scripts/                    build_* · check_* · install_skills.py
 CLAUDE.md                   how to work in this repo · LESSON_DESIGN.md — the authoring contract
 LIGHTBOARD.md               generated recording script, one per lesson

@@ -201,16 +201,26 @@ jobs:
       - name: Check the lesson skills are in step with the lessons
         run: python3 scripts/build_lesson_skills.py --check
 
-      # The trainer guide repeats facts that live in the lesson sources and the
+      # The course guide repeats facts that live in the lesson sources and the
       # application, and a hand-written draft of it reached review with three
       # already wrong — fifteen lessons when there were sixteen, "seven to nine
       # components" after A1.0 had settled on nine, and A2.4's output accuracy
-      # at 0.600 after the scorer was corrected to 0.400. Somebody reads that
-      # page standing in front of a class. So it is generated, and this refuses
-      # a Function A lesson no module teaches, a lab with no expected output, a
-      # dead lesson link, and a committed page stale against its source.
-      - name: Check the trainer guide is in step with the lessons
-        run: python3 scripts/build_trainer_guide.py --check
+      # at 0.600 after the scorer was corrected to 0.400. It is read standing
+      # in front of a class, or alone with nobody to catch the error. So it is
+      # generated, and this refuses a Function A lesson no module teaches, a
+      # lab with no expected output, a dead lesson link, and either committed
+      # page — the guide or the redirect at its old address — stale against
+      # its source.
+      - name: Check the course guide is in step with the lessons
+        run: python3 scripts/build_guide.py --check
+
+      # 78 of the 149 lesson pages were serving raw markdown in visible prose
+      # — `**Anchor -> E1.0.**` on fifty, a grounding line with its backticks
+      # on 39, and list items cut in half at a source line break. Every page
+      # built green because nothing read the rendered text. This does, and it
+      # runs after build_site so it sees the pages the deploy will upload.
+      - name: Check no markdown source reaches the reader
+        run: python3 scripts/check_rendered_markdown.py --check
 
       - name: Every lesson's framework labels must resolve, and be real
         run: python3 scripts/check_frameworks.py

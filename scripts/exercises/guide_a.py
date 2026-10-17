@@ -1,64 +1,83 @@
-"""The Function A trainer guide — the teaching notes only.
+"""The Function A course guide — the teaching notes only.
 
-**What is in here and what is not.** This file holds what a trainer needs and
-the tree cannot know: the opening hook, the Claude prompt for each lab, what to
-say in the debrief, the quick-check questions. Everything else on the generated
-page — lesson titles, Risk, Control, the lab line, how many lessons there are,
-the counts inside the expected outputs — is read from `curriculum.json`, from
-`cybertravels/`, or by calling the skill's own functions.
+**Two readers, one page.** Somebody working through Function A on their own,
+and somebody running it for a room. The page was written for the second alone
+and renamed for both, which is a content change rather than a title change:
+instructions addressed to a trainer ("project the component table", "run this
+as a demo") are useless to a solo learner and were the bulk of several labs.
+
+So each lab holds two lists. `notes` is what both readers need — predict
+before you run, what the output means, which bug this really was. `teach` is
+the room-only half, rendered in its own labelled block so a solo reader can
+skip it and a trainer can find it. The same split runs through the pre-work,
+the pitfalls and the capstone.
+
+**What is in here and what is not.** This file holds what a reader needs and
+the tree cannot know: the Claude prompt for each lab, what to say in the
+debrief, the quick-check questions. Everything else on the generated page —
+lesson titles, Risk, Control, the lab line, how many lessons there are, the
+counts inside the expected outputs, the reading volume — is read from
+`curriculum.json`, from `cybertravels/`, or by calling the skill's own
+functions.
 
 That split exists because of a specific failure. A hand-written draft of this
 guide reached review with three numbers already stale: it said fifteen lessons
 when there were sixteen, "seven to nine components" after A1.0 had settled on
 nine, and A2.4's output accuracy at 0.600 after the scorer was corrected to
-0.400. A trainer guide is read by somebody standing in front of a class, so a
-stale number there is worse than a stale number in a design document.
+0.400. This page is read by somebody standing in front of a class or working
+alone with nobody to correct them, so a stale number here is worse than a
+stale number in a design document.
 
-`build_trainer_guide.py --check` is the gate: it fails if a lab here names a
-lesson the curriculum does not carry, if a Function A lesson has no lab entry,
-or if the committed page has drifted from this source.
+`build_guide.py --check` is the gate: it fails if a lab here names a lesson the
+curriculum does not carry, if a Function A lesson has no lab entry, or if the
+committed page has drifted from this source.
 """
 
 # ------------------------------------------------------------------ the course
 
 COURSE = {
- "duration": "about four hours",
+ "duration": "about four hours taught",
  "audience": "Anyone new to cybersecurity — career changers, developers, "
-             "analysts, students.",
+             "analysts, students. No security background is assumed.",
  "prereq": "A computer and a Claude account. Reading Python helps from Module "
            "1 on; writing it is not required.",
- "ratio": "1 trainer per ~15 learners, working in pairs.",
- "hook": "A chatbot that is wrong says something wrong. An agent that is wrong "
-         "*does* something wrong — it cancels a booking or moves money.",
- "board": "Proposes vs. Decides",
- "short": "Keep Modules 0, 1 and 4 whole. Run A1.5–A1.7 as a 15-minute trainer "
-          "demo, and teach A2.0–A2.4 as one 20-minute discussion of \"what "
+ "solo": "Work through it in order, one module per sitting if four hours in "
+         "one go is too much. The module boundaries are the natural stopping "
+         "points: each one ends with something printed that you can look at.",
+ "room": "1 trainer per ~15 learners, working in pairs — one driver prompts "
+         "Claude, one checker compares the output against this page.",
+ "board": "The model proposes, your code decides",
+ "short": "Keep Modules 0, 1 and 4 whole. A1.5–A1.7 can be read rather than "
+          "run, and A2.0–A2.4 collapse into one pass at the question \"what "
           "would an investigator ask?\". Do not cut the capstone: it is the "
           "only part that shows whether anything stuck.",
+ "short_room": "Run A1.5–A1.7 as a single 15-minute demo from your machine, "
+               "and teach A2.0–A2.4 as one 20-minute discussion rather than "
+               "five labs.",
 }
 
 # The six outcomes. `proves` names the lessons that evidence each one, and the
 # generator checks every id against the curriculum.
 OUTCOMES = [
  ("Name the nine parts of an agent and point to the file each lives in",
-  ["A0.1", "A2.5"], "Their own guess sheet, ticked against the finished tree"),
+  ["A0.1", "A2.5"], "Your own guess sheet, ticked against the finished tree"),
  ("Explain the core security idea: the model proposes, your code decides",
-  ["A1.1"], "Can say why a verifier must not be the model"),
+  ["A1.1"], "You can say why a verifier must not be the model"),
  ("Demonstrate five controls with real output",
   ["A1.1", "A1.4", "A1.5", "A1.6", "A1.7"],
   "Five printed refusals or labels, not five claims"),
  ("Put the four investigation questions to an audit record, and say which fails",
   ["A2.2"], "The question-4 answer naming the retrieved document"),
  ("Read an evaluation score critically — denominator, matcher, interval, judge",
-  ["A2.3", "A2.4"], "Three questions they now ask of any \"90% accurate\""),
- ("State the blast radius of what they built, and hand it to Function B",
+  ["A2.3", "A2.4"], "Three questions you now ask of any \"90% accurate\""),
+ ("State the blast radius of what you built, and hand it to Function B",
   ["A2.5"], "A number, and the map of what each component becomes"),
 ]
 
-# window, title, lesson ids, what the learner leaves with. The generator checks
-# that these cover every Function A lesson exactly once.
+# window, title, lesson ids, what you leave with. The generator checks that
+# these cover every Function A lesson exactly once.
 MODULES = [
- ("0:00–0:15", "Welcome and framing", [],
+ ("0:00–0:15", "Framing", [],
   "The \"chatbot says, agent does\" distinction"),
  ("0:15–0:45", "Setup and the nine words", ["A0.0", "A0.1"],
   "A working lab, and a nine-word guess sheet"),
@@ -77,13 +96,29 @@ MODULES = [
   "Blast radius, marked sheet, three answers"),
 ]
 
+# Module 0 has no lesson of its own: it is the idea the rest hangs off, and a
+# solo reader needs it stated rather than delivered.
+FRAMING = [
+ "**A chatbot that is wrong says something wrong. An agent that is wrong "
+ "does something wrong** — it cancels a booking or moves money. The verb is "
+ "the whole difference, and everything in Function A follows from it.",
+ "You are going to build the agent first and secure it second, in that order, "
+ "because every control in the five functions after this one attaches to a "
+ "mechanism you will have written yourself. There is no adversary in Function "
+ "A. That is deliberate: you cannot reason about an attack on a system you "
+ "cannot describe.",
+ "Hold one sentence through all sixteen lessons: **the model proposes, your "
+ "code decides.** Most of what follows is the second half of that sentence.",
+]
+
 MODULE_INTRO = {
  "Setup and the nine words":
-   "Learners leave with Claude running the repo and a written guess for where "
-   "each of the nine agent parts lives. The sheet is collected now and marked "
-   "in Module 4.",
+   "You leave this module with Claude running the repo and a written guess for "
+   "where each of the nine agent parts lives. Keep the sheet — it is marked in "
+   "Module 4, and the difference between your guess and the answer is the "
+   "point.",
  "Build the agent core":
-   "In 65 minutes learners see the four things that sit between a model's "
+   "In 65 minutes you see the four things that sit between a model's "
    "suggestion and a real action: a verifier, a process boundary, an identity "
    "per actor, and one token per action.",
  "Memory, peers, and stopping the loop":
@@ -92,14 +127,14 @@ MODULE_INTRO = {
    "limit that contains it.",
  "Harness engineering":
    "The agent works. This module asks whether anyone else could investigate "
-   "it, and whether its scores mean anything. Frame the whole module with one "
-   "scenario and keep returning to it: a traveller disputes a cancellation "
-   "three weeks later, and the only log line says `run completed`.",
+   "it, and whether its scores mean anything. Hold one scenario across all "
+   "five labs: a traveller disputes a cancellation three weeks later, and the "
+   "only log line says `run completed`.",
  "Capstone and handover":
-   "Learners switch from builder to attacker's-eye view, put a number on what "
-   "their agent could damage, and prove to themselves what they now know. "
-   "**The final tasks are done without Claude, on purpose** — and the lesson "
-   "page says so in those words.",
+   "You switch from builder to attacker's-eye view, put a number on what your "
+   "agent could damage, and prove to yourself what you now know. **The final "
+   "tasks are done without Claude, on purpose** — and the lesson page says so "
+   "in those words.",
 }
 
 # The cast, read from cybertravels/config.py by the generator; this is only the
@@ -111,29 +146,37 @@ CAST_NOTE = {
 }
 
 # ------------------------------------------------------------------- the labs
-# minutes · key idea · the prompt a learner pastes · what to expect · the
-# debrief question and its answer · any extra notes.
+# minutes · key idea · the prompt to paste · what to expect · notes for every
+# reader · notes only a trainer needs · the debrief question and its answer.
 #
-# `expect` may contain {placeholders} the generator fills from the tree. Any
-# placeholder it cannot fill is an error rather than a silent gap, which is how
-# a number here stops being able to go stale.
+# `expect` and the notes may contain {placeholders} the generator fills from
+# the tree. Any placeholder it cannot fill is an error rather than a silent
+# gap, which is how a number here stops being able to go stale.
 LABS = {
 "A0.0": {
  "minutes": 15,
  "idea": "A skill is a written procedure (`SKILL.md`) the model follows. The "
-         "document and the instruction are the same bytes, so learners can "
-         "read exactly what runs.",
+         "document and the instruction are the same bytes, so you can read "
+         "exactly what runs.",
  "prompt": "Run scripts/doctor.py and explain each ok / FAIL / -- line to me.\n"
            "Then run scripts/lesson.py A0.0 and tell me exactly what happened.",
  "expect": "The doctor ends with a \"ready\" summary; `--` lines are fine. "
            "`lesson.py` either completes and names the model, or stops with "
            "\"no model configured\". **Both are correct.**",
- "notes": ["**Teach the stop.** If it stops, celebrate it. The program refused "
-           "to invent an answer, and that is the first security behaviour of "
-           "the day.",
-           "**Per operating system.** The page gives Windows and Mac their own "
-           "lines throughout. On Windows the command is `python`, not "
-           "`python3`, and typing `python3` opens the Microsoft Store."],
+ "notes": ["**If it stops, that is the lesson, not a failure.** The program "
+           "refused to invent an answer rather than print something "
+           "plausible, and that is the first security behaviour of the day. "
+           "Way 3 of every lesson needs no model at all.",
+           "**Your operating system matters here and almost nowhere else.** "
+           "The page gives Windows and Mac their own lines throughout. On "
+           "Windows the command is `python`, not `python3` — typing `python3` "
+           "opens the Microsoft Store."],
+ "teach": ["Celebrate the stop out loud when a learner's machine produces it. "
+           "Left unexplained it reads as a broken repository, and that reader "
+           "stops.",
+           "Collect the doctor's last line from every learner before the "
+           "session if you can — it is the one failure that costs the whole "
+           "room time."],
  "debrief": ("Zero contract violations means the answer had the right shape. "
              "Does it mean the answer is right?",
              "No. Shape is not truth."),
@@ -147,17 +190,23 @@ LABS = {
            "each, using a\ntravel-booking example. Do not tell me which files "
            "they live in.",
  "expect": "Nine one-line explanations and no file names. The lesson's own "
-           "exercise is six numbered steps on paper, and it tells learners to "
-           "write a question mark where they have no idea.",
- "notes": ["**Say why they are guessing.** Six of the nine files do not exist "
-           "on their computer yet — `runtime.py`, `memory.py`, `identity.py`, "
-           "`observability.py`, `mcp/internal_server.py` and "
-           "`a2a/protocol.py` get created across Modules 1–3, by them. There "
-           "is nothing to look up.",
-           "**Talk track — how they stack.** The harness is the agent. Memory, "
-           "RAG, MCP and skills feed context in. Guardrails sit on the way out "
-           "and are the only one that says no. Evals sit beside it. A2A and "
+           "exercise is six numbered steps on paper, and it tells you to write "
+           "a question mark where you have no idea.",
+ "notes": ["**You are guessing on purpose.** Six of the nine files do not "
+           "exist on your computer yet — `runtime.py`, `memory.py`, "
+           "`identity.py`, `observability.py`, `mcp/internal_server.py` and "
+           "`a2a/protocol.py` get created across Modules 1–3, by you. There "
+           "is nothing to look up, and a wrong guess costs nothing.",
+           "**How the nine stack up.** The harness is the agent. Memory, RAG, "
+           "MCP and skills feed context in. Guardrails sit on the way out and "
+           "are the only one that says no. Evals sit beside it. A2A and "
            "multi-agent are several harnesses at once."],
+ "teach": ["Print the guess sheet beforehand: one page, nine blank rows, "
+           "columns *word* and *guessed file*. Collect them and hand them "
+           "back in Module 4.",
+           "Say the \"six of these do not exist yet\" line explicitly. "
+           "Without it the room spends ten minutes searching the tree for "
+           "files nobody has written."],
  "debrief": ("Every arrow into the harness is a way for text you did not write "
              "to reach the model. Which of the nine worries you most, and why?",
              None),
@@ -169,15 +218,16 @@ LABS = {
  "prompt": "Run lesson A1.0's checkpoint diff, then draw me a simple diagram "
            "of\nCyberTravels' components and mark which edges cross a trust "
            "boundary.",
- "expect": "**{components} components, {present} present.** `egress` is "
+ "expect": "**{components} components, {present} present.** {absent} is "
            "absent, and that absence is a finding rather than a gap.",
- "notes": ["**Project the component table.** It names, for each component, the "
-           "file the learner writes, the lesson that builds it and the skill "
-           "that checks it.",
-           "**Worth saying out loud:** it is *not* nine components to nine "
-           "skills, and the page says so. One skill covers four of them, and "
-           "`egress` has none, because you cannot check a component nobody "
-           "built."],
+ "notes": ["**It is not nine components to nine skills**, and the page says "
+           "so. One skill covers four of them, and {absent} has none, because "
+           "you cannot check a component nobody built.",
+           "The lesson's component table names, for each component, the file "
+           "you write, the lesson that builds it and the skill that checks "
+           "it. It is worth keeping open for the rest of Module 1."],
+ "teach": ["Project the component table and leave it up for the whole module. "
+           "It is the only place the shape of the build is visible at once."],
  "debrief": ("Why mark a box that doesn't exist?",
              "So nobody later argues about controls for a component nobody "
              "built."),
@@ -192,11 +242,14 @@ LABS = {
  "expect": "First check prints `asked to refund 140, resource server refunded "
            "1400`. Second prints `None`, which in this function means "
            "*nothing wrong here*.",
- "notes": ["**Your turn — predict first.** Replace `_verify_result`'s body "
-           "with `return None` and rerun. The 1400 refund now passes "
-           "silently. Point out what the page points out: nothing errored, no "
-           "span says anything is wrong, and **the trace is tidier than "
-           "before**. A reviewer reading it sees a clean run."],
+ "notes": ["**Predict before you run the \"Your turn\".** Replace "
+           "`_verify_result`'s body with `return None` and rerun. The 1400 "
+           "refund now passes silently. Nothing errors, no span says anything "
+           "is wrong, and **the trace is tidier than before** — a reviewer "
+           "reading it sees a clean run. That is what a missing verifier "
+           "looks like from the outside."],
+ "teach": ["This is the lab to slow down on. If the room only remembers one "
+           "thing from four hours, it should be the tidier-trace point."],
  "debrief": ("Why not just ask the model whether its answer was right?",
              "That is a second opinion, not a verification."),
 },
@@ -210,11 +263,12 @@ LABS = {
            "HIGH RISK columns.",
  "expect": "{tools} tools: {internal} `mcp:internal`, {vendor} "
            "`mcp:vendor`. {high_risk} marked HIGH RISK — {high_risk_names}.",
- "notes": ["**Teaching moment, now on the page.** Starting an MCP server shows "
-           "a blank cursor and nothing else. A1.2 says so explicitly: *\"It "
-           "will look like nothing happened… silence means it is running and "
-           "waiting.\"* Without that line this is ten minutes of learners "
-           "thinking they broke it."],
+ "notes": ["**Starting an MCP server shows a blank cursor and nothing else.** "
+           "A1.2 says so explicitly: *\"It will look like nothing happened… "
+           "silence means it is running and waiting.\"* Without that line this "
+           "is ten minutes of thinking you broke it. Control-C stops it."],
+ "teach": ["Have the two servers already running on your machine. The install "
+           "step is the most common place a room desynchronises."],
  "debrief": ("A tool's description says read-only. Should you believe it?",
              "No. Annotations are hints, not guarantees, and B1.9 is the "
              "lesson on what that enables."),
@@ -228,8 +282,11 @@ LABS = {
  "expect": "Two different kinds of identity. Dana's token carries exactly one "
            "scope, `agent:invoke` — she may *ask* an agent to act, not act "
            "herself.",
- "notes": ["**Introduce the cast here.** The page opens with it now, and every "
-           "example to the end of Module 3 uses these three people."],
+ "notes": ["**Meet the cast here.** Dana, Alex and Priya appear on this page "
+           "and in every example to the end of Module 3. The table above is "
+           "worth a second read before moving on — A1.4 turns on the "
+           "difference between Dana and Priya."],
+ "teach": [],
  "debrief": ("Three principals: the human, the workload, the call. Which "
              "question can't you answer if you only log one?", None),
 },
@@ -241,11 +298,13 @@ LABS = {
            "then as Priya.\nExplain why the results differ.",
  "expect": "`dana -> REFUSED: role 'traveller' may not delegate "
            "'payments:refund'` and `priya -> minted`.",
- "notes": ["**The key point, and the page now lists all three.** Dana's "
-           "request stopped before the model was asked anything, before any "
-           "booking was looked up, and before the payment server was "
-           "contacted at all. Two independent things must fail, and the second "
-           "does not depend on the model."],
+ "notes": ["**Where the refusal happened matters more than that it "
+           "happened**, and the page lists all three: Dana's request stopped "
+           "before the model was asked anything, before any booking was "
+           "looked up, and before the payment server was contacted at all. "
+           "Two independent things must fail for a refund to go through, and "
+           "the second does not depend on the model."],
+ "teach": [],
  "debrief": ("Is Dana's refusal a broken button?",
              "No: same code, same request, different person."),
 },
@@ -258,14 +317,15 @@ LABS = {
            "block for\nowner 1 and owner 2.",
  "expect": "Owner 1 shows `[trusted, origin=policy]` and `[UNTRUSTED, "
            "origin=vendor-document]`. Owner 2 prints `''` — an empty string.",
- "notes": ["**Two things to point at, in this order.** The labels survived the "
+ "notes": ["**Two things to look at, in this order.** The labels survived the "
            "write, so the two sentences do not arrive with equal weight. And "
-           "Priya's block is empty: same call, different owner, nothing "
+           "owner 2's block is empty: same call, different owner, nothing "
            "shared. The page's words — *\"closed here by storage, not by "
            "cleverness.\"*",
-           "**Your turn — predict first.** \"If we drop the origin column, "
-           "what does the model see?\" Both sentences now carry equal weight. "
-           "Nothing errors."],
+           "**Predict before you run the \"Your turn\".** If the origin "
+           "column is dropped, what does the model see? Both sentences now "
+           "carry equal weight, and nothing errors."],
+ "teach": [],
  "debrief": ("Why is the label the control, rather than an instruction telling "
              "the model to ignore untrusted text?",
              "An instruction is a request; a label is structure."),
@@ -279,14 +339,16 @@ LABS = {
  "expect": "Experiment 1 raises `A2AError: signature does not match`. "
            "Experiment 2 prints hops 1, 2, 3 — each still carrying `dana` and "
            "`tr-1` — then stops with `hop ceiling reached ({max_hops})`.",
- "notes": ["**Frame both errors as the result**, which the page now does up "
-           "front: *\"in both cases, the error message is the result you are "
-           "looking for, not a sign something went wrong.\"*",
-           "**Your turn.** Replace `forward(...)` with a fresh "
-           "`envelope(...)`. Hops print 0 forever and the ceiling never "
-           "fires. **This bug really shipped for one release** — nothing "
-           "incremented the counter, so the ceiling was unreachable. Only a "
-           "test that forwards for real would have caught it."],
+ "notes": ["**Both errors are the result**, which the page says up front: "
+           "*\"in both cases, the error message is the result you are looking "
+           "for, not a sign something went wrong.\"*",
+           "**The \"Your turn\" is a bug that really shipped.** Replace "
+           "`forward(...)` with a fresh `envelope(...)` and the hops print 0 "
+           "forever — the ceiling never fires. That was the real state of "
+           "this code for one release: nothing incremented the counter, so "
+           "`MAX_HOPS` was unreachable. Only a test that forwards for real "
+           "would have caught it."],
+ "teach": [],
  "debrief": ("The error message was the result we wanted. Where else in "
              "security is a refusal the success case?", None),
 },
@@ -300,13 +362,18 @@ LABS = {
  "expect": "`{max_steps} {max_calls}`, then `{max_calls} tool_calls`. The run "
            "ends *saying which limit it hit* — an unfinished answer that "
            "admits it is unfinished.",
- "notes": ["**Trainer demo, in the browser.** Run `./cybertravels/run.sh`, "
-           "sign in as Dana, ask to cancel `CT-4417`. The page's steps are "
-           "numbered: watch it stop and name the scope it wants, approve once, "
-           "then ask again and refuse. Both decisions are recorded.",
-           "**Discussion.** At 10 approvals a day a person reads each one; at "
-           "400 they approve the queue. Coverage stays at 100% while real "
-           "review falls to zero. That is B3.9."],
+ "notes": ["**The gate, in your browser.** Run `./cybertravels/run.sh`, sign "
+           "in as Dana, ask to cancel `CT-4417`. The lesson's steps are "
+           "numbered: watch it stop and name the scope it wants, approve "
+           "once, then ask again and refuse. Both decisions are recorded — a "
+           "gate that only logs the yeses cannot answer *what did it try to "
+           "do*.",
+           "**Worth sitting with.** At 10 approvals a day a person reads each "
+           "one; at 400 they approve the queue. Coverage stays at 100% while "
+           "real review falls to zero. That is B3.9, and it is why a human "
+           "gate is a control with a capacity rather than a control."],
+ "teach": ["Run the browser half from your machine if learner setups are "
+           "uneven — it is the one lab that needs the web app running."],
  "debrief": ("{max_calls} calls is a ceiling on the run. What stops all "
              "{max_calls} hitting one traveller's booking?",
              "Nothing yet. That is the per-target ceiling, and it is built in "
@@ -319,11 +386,12 @@ LABS = {
            "me which of\nthe three questions the sample log cannot answer.",
  "expect": "`answerable_count: 0` — all {a20_questions} unanswerable. Every "
            "row says `agent-svc`, and there is no motivating input at all.",
- "notes": ["**Keep two triples apart**, which the page now does explicitly. "
-           "The three *capabilities* the chapter builds — a trace, an audit "
-           "trail, an evaluation — are not the three *questions* the skill "
-           "scores. The skill asks: which human, what motivated it, which "
-           "hop. It is a number out of {a20_questions}."],
+ "notes": ["**Two triples, and they are not the same triple.** The three "
+           "*capabilities* this chapter builds — a trace, an audit trail, an "
+           "evaluation — are not the three *questions* the skill scores. The "
+           "skill asks: which human, what motivated it, which hop. It is a "
+           "number out of {a20_questions}."],
+ "teach": [],
  "debrief": ("Is the agent identity the same as the principal?",
              "No. It answers what ran, never who wanted it."),
 },
@@ -338,14 +406,15 @@ LABS = {
            "tracer leaves out, and they are what make a *missing* span "
            "visible.",
  "notes": ["**Four refusal points, four different incidents**, and the page "
-           "names all four: `policy` is a control working as designed; `human` "
-           "is somebody saying no; `verifier` means the call was authorised, "
-           "ran, and came back unacceptable; `resource server` means a token "
-           "that should never have existed reached a boundary — **that is the "
-           "one that wakes people up**.",
-           "**Your turn.** \"What happens if we log the whole token instead of "
-           "its claims?\" The trace gets more useful, and the credential is "
-           "now in every log backup."],
+           "names all four: `policy` is a control working as designed; "
+           "`human` is somebody saying no; `verifier` means the call was "
+           "authorised, ran, and came back unacceptable; `resource server` "
+           "means a token that should never have existed reached a boundary — "
+           "**that is the one that wakes people up**.",
+           "**Predict before you run the \"Your turn\".** What happens if the "
+           "whole token is logged instead of its claims? The trace gets more "
+           "useful, and the credential is now in every log backup."],
+ "teach": [],
  "debrief": ("A trace with no `done` span: is that a run still going, or a run "
              "that died?",
              "You cannot tell, which is why the pair exists."),
@@ -360,11 +429,12 @@ LABS = {
  "expect": "4/4 answered, and question 4 reads roughly: *the traveller asked "
            "about a double charge, but `wiki/473` — a retrieved document, "
            "origin `knowledge` — is what triggered the `DELETE`*.",
- "notes": ["**Note the count changes.** A2.0 scored out of three; this is out "
-           "of four. The fourth question — which call, with its audience and "
-           "scope — is the one A2.0's three did not include.",
-           "It is deliberately the same incident as A2.0, told by a record "
-           "designed to answer."],
+ "notes": ["**The count changed, and that is the point.** A2.0 scored out of "
+           "{a20_questions}; this is out of four. The fourth question — which "
+           "call, with its audience and scope — is the one A2.0's three did "
+           "not include. It is deliberately the same incident as A2.0, told "
+           "by a record designed to answer."],
+ "teach": [],
  "debrief": ("Without question 4, how does this incident get closed?",
              "\"The agent misbehaved\", which fixes nothing."),
 },
@@ -380,6 +450,7 @@ LABS = {
            "unchanged and the skill saying so — *\"The build did not change. "
            "The number improved by 60%.\"*",
  "notes": [],
+ "teach": [],
  "debrief": ("Conformance versus accuracy: an empty result matches every "
              "schema. Is it correct?", None),
 },
@@ -394,17 +465,19 @@ LABS = {
            "**{order_ignored}**, `n={n}`. Output accuracy **{accuracy}** — "
            "{correct} correct, {incorrect} incorrect, {unscoreable} "
            "unscoreable.",
- "notes": ["**Teaching moment.** Name-only forgives R2, which refunded 1400 "
-           "where 140 was owed. Order-ignored forgives R4, which booked the "
-           "new seat before releasing the old one so the traveller held two. "
-           "**Different failures, hidden by each** — which is why quoting one "
-           "of them alone is worse than quoting neither.",
-           "**If you used an older version of this guide:** output accuracy is "
+ "notes": ["**What each weaker matcher forgives.** Name-only forgives R2, "
+           "which refunded 1400 where 140 was owed. Order-ignored forgives "
+           "R4, which booked the new seat before releasing the old one so the "
+           "traveller held two. **Different failures, hidden by each** — "
+           "which is why quoting one of them alone is worse than quoting "
+           "neither.",
+           "**If you have an older copy of this guide:** output accuracy is "
            "{accuracy}, not 0.600. The scorer previously used substring "
            "matching and scored R2's 1400 as correct, because \"140\" sits "
            "inside \"1400.00\" — the lesson was committing the error it "
            "teaches. It compares numbers as numbers now, and R2 fails both "
            "surfaces."],
+ "teach": [],
  "debrief": ("Someone says our agent is 90% accurate. What three things do you "
              "ask?",
              "Accurate on which matcher, over how many runs, and who judged "
@@ -420,9 +493,13 @@ LABS = {
            "{irreversible} are irreversible — {irreversible_names} — and "
            "{external} of those are also external: {external_names}. Those are "
            "the ones routed to human approval.",
- "notes": ["**Say the thing that makes the handover land:** nothing in the "
-           "Function B column is a criticism of their build. It is what the "
-           "build looks like to somebody who wants it to fail."],
+ "notes": ["**Nothing in the Function B column is a criticism of what you "
+           "built.** It is what the build looks like to somebody who wants it "
+           "to fail, which is a different question from whether you built it "
+           "well."],
+ "teach": ["Say that out loud before showing the handover table. A room that "
+           "reads it as a list of their mistakes disengages from Function B "
+           "before it starts."],
  "debrief": ("Which number decides how much autonomy this agent can be given?",
              "The blast radius, which is why it is the last thing Function A "
              "produces and the first thing Function B argues with."),
@@ -448,18 +525,27 @@ HANDOVER = [
 ]
 
 CAPSTONE = [
- "**Mark the guess sheet.** Run the A2.5 checkpoint into `work/finished`, open "
- "the folder, and tick each correct guess from Module 0. Pairs share one thing "
- "they got wrong and what they learned. All nine words now have a file, and "
- "they wrote every one.",
+ "**Mark your guess sheet.** Run the A2.5 checkpoint into `work/finished`, "
+ "open the folder, and tick each correct guess from Module 0. All nine words "
+ "now have a file, and you wrote every one. The guesses you got wrong are the "
+ "useful half — write down why you expected it somewhere else.",
  "**One unguided task — pick one.** Make the agent refuse an action it "
- "currently allows and name which of the four refusal points you used. Or name "
- "a tenth word CyberTravels has that the list does not, and its file. Or cut "
- "the blast radius by one irreversible action without turning the feature off. "
- "Claude may be used here, but **the learner explains the result**.",
- "**Three answers, in their own words, without re-reading the pages.** What "
- "can your agent do? What stops it doing something it should not, in the order "
- "a request meets them? What would you look at first if it misbehaved at 3am?",
+ "currently allows and name which of the four refusal points you used. Or "
+ "name a tenth word CyberTravels has that the list does not, and its file. Or "
+ "cut the blast radius by one irreversible action without turning the feature "
+ "off. Claude may be used here, but **you have to explain the result**.",
+ "**Three answers, in your own words, without re-reading the pages.** What "
+ "can your agent do? What stops it doing something it should not, in the "
+ "order a request meets them? What would you look at first if it misbehaved "
+ "at 3am?",
+]
+
+CAPSTONE_ROOM = [
+ "Pairs swap guess sheets and each shares one thing they got wrong and what "
+ "they learned from it. The wrong guesses are more interesting than the right "
+ "ones and a room will not volunteer them unprompted.",
+ "Take the three answers verbally, one pair at a time, against the table "
+ "below. Written answers get copied from the pages; spoken ones do not.",
 ]
 
 QUICK_CHECK = [
@@ -490,7 +576,7 @@ CAPSTONE_GUIDE = [
  ("What stops it?",
   "In order: delegation refused by role → human gate on irreversible actions → "
   "resource server verifies the token → verifier checks the result → budget "
-  "stops the loop. Credit any answer that gets the *order* right even if a "
+  "stops the loop. An answer that gets the *order* right counts even if a "
   "name is fuzzy; the order is the understanding."),
  ("Where would you look at 3am?",
   "The trace, by trace id. Then the audit rows, starting with any `denied` "
@@ -499,47 +585,69 @@ CAPSTONE_GUIDE = [
 ]
 
 PITFALLS = [
- ("Learners accept Claude's narration as the result",
-  "Insist they find the actual printed output and compare it against this "
-  "guide. This is the course's own lesson applied to the course."),
- ("\"No model configured\" read as failure",
-  "Reframe it every time: the program refused to make something up."),
- ("Edits from a \"Your turn\" block the next lesson",
-  "The run prints `stopped`, not `FAILED`, says the edits are safe, and offers "
-  "two choices. Use `--out` for a fresh folder; do not let learners `--force` "
-  "away work they wanted to keep."),
- ("Rushing past predictions",
-  "The predict-then-run step is where the learning happens. Protect the time "
-  "even if a lab finishes early."),
+ ("Accepting Claude's narration as the result",
+  "Find the actual printed output and compare it against this page. This is "
+  "the course's own lesson applied to the course, and it is the single "
+  "easiest way to come out of four hours having learned nothing.",
+  "Make the checker in each pair responsible for exactly this."),
+ ("Reading \"no model configured\" as failure",
+  "It is the program refusing to make something up. Way 3 of every lesson "
+  "needs no model, so an unconfigured machine is not a blocked reader.",
+  "Reframe it out loud every time it appears in the room."),
+ ("Edits from a \"Your turn\" blocking the next lesson",
+  "The run prints `stopped`, not `FAILED`, says the edits are safe, and "
+  "offers two choices. Use `--out` for a fresh folder; do not `--force` away "
+  "work you wanted to keep.",
+  ""),
+ ("Rushing past the predictions",
+  "The predict-then-run step is where the learning happens — a prediction you "
+  "got wrong teaches more than output you expected.",
+  "Protect the time even where a lab finishes early."),
  ("Turning it into an attack class",
-  "Function A has no adversary by design. Park attack questions for Function "
-  "B — that is what the parking lot is for."),
+  "Function A has no adversary by design. An attack question is a Function B "
+  "question, and arriving there with a system you can describe is the whole "
+  "point of doing this first.",
+  "Keep a visible parking lot and put them in it."),
  ("An expected output here not matching the run",
-  "Trust the run, not this guide, and correct the source. Every number on this "
-  "page is generated from the tree for exactly this reason, but a prompt's "
-  "wording can still drift."),
+  "Trust the run, not this guide, and correct the source. Every number on "
+  "this page is generated from the tree for exactly this reason, but a "
+  "prompt's wording can still drift.",
+  ""),
 ]
 
-PREWORK = {
+# Pre-work, split by reader. The solo list is what one person needs before
+# starting; the room list is everything that only matters with fifteen people
+# and one projector.
+PREWORK_SOLO = [
+ "Install Git and Python 3.10 or newer, clone the repository, install the "
+ "Claude desktop app and sign in.",
+ "Run the doctor and read its last line: `python3 scripts/doctor.py`, or "
+ "`python scripts\\doctor.py` on Windows. If the summary says ready, you are "
+ "ready — `--` lines are optional things that are absent, not faults.",
+ "Install the application's own dependencies before Module 1: "
+ "`python3 -m pip install -r cybertravels/requirements.txt`. This brings in "
+ "PyJWT, which A1.3 and A1.4 need.",
+ "Keep paper beside you. Two exercises — the nine-word guess sheet in A0.1 "
+ "and the three answers in A2.5 — are deliberately done away from the "
+ "machine.",
+]
+
+PREWORK_ROOM = {
  "One week before": [
-  "Send the setup email: install Git and Python 3.10+, clone the repo, install "
-  "the Claude desktop app, sign in.",
+  "Send the setup list above as the session's pre-work, and ask every learner "
+  "to reply with the doctor's last line. It is the one failure that costs the "
+  "whole room time.",
   "Point under-18 learners at A0.0's age guidance — broadly 13 is the floor "
   "and 18 the default, and between the two a parent or guardian sets the "
   "account up. For a class, one adult account or a local model beats thirty "
   "sign-ups.",
-  "Ask every learner to run the doctor and reply with its last line: "
-  "`python3 scripts/doctor.py`, or `python scripts\\doctor.py` on Windows.",
   "Dry-run every lab. Note any output that differs from this page and correct "
-  "`scripts/exercises/trainer_a.py`.",
+  "`scripts/exercises/guide_a.py`.",
  ],
  "Day before": [
-  "Install the application's dependencies on your demo machine: "
-  "`python3 -m pip install -r cybertravels/requirements.txt`. This also brings "
-  "in PyJWT, which A1.3 and A1.4 need.",
-  "Confirm `./cybertravels/run.sh` serves `http://127.0.0.1:8000`. A1.7's "
-  "human-gate demo needs it; run it as a trainer demo if learner machines "
-  "struggle.",
+  "Confirm `./cybertravels/run.sh` serves `http://127.0.0.1:8000` on your "
+  "machine. A1.7's human-gate demo needs it; run it yourself if learner "
+  "machines struggle.",
   "Print the nine-word guess sheet: one page, nine blank rows, columns *word* "
   "and *guessed file*.",
   "Record a screen capture of each lab's output as a fallback for learners "
@@ -547,8 +655,8 @@ PREWORK = {
  ],
  "In the room": [
   "Projector on the lesson index.",
-  "**Pairs, not solo.** One driver prompts Claude, one checker compares output "
-  "against this page. Swap each module.",
+  "**Pairs, not solo.** One driver prompts Claude, one checker compares "
+  "output against this page. Swap each module.",
   "A visible parking lot for questions that belong to Functions B–F.",
  ],
 }
@@ -561,12 +669,12 @@ FAILURES = [
  ("Python 3.9 or older", "Too old for the repo",
   "Install 3.10+; on Windows tick **Add python.exe to PATH**"),
  ("`import jwt` fails", "PyJWT missing", "`pip install PyJWT`"),
- ("Lesson prints **stopped**", "Learner edited code in a \"Your turn\"",
+ ("A lesson prints **stopped**", "You edited code in a \"Your turn\"",
   "`--out` a fresh folder to keep the work, or `--force` to reset"),
  ("`main.py does not exist at this checkpoint yet`",
   "Tree from before A1.1", "Run the checkpoint command the message prints"),
- ("Doctor shows `--` lines", "Something optional is absent",
-  "Nothing to fix. If the summary says ready, they are ready"),
+ ("The doctor shows `--` lines", "Something optional is absent",
+  "Nothing to fix. If the summary says ready, you are ready"),
 ]
 
 PROMPT_BANK = [
@@ -623,15 +731,15 @@ For each lesson I name: (1) explain the Risk and Control in plain English in 3 s
 Never invent output. If a command fails, show me the error and what it means."""
 
 WAYS = [
- ("1 — in your AI agent", "Agent reads the lesson, teaches, runs the check",
-  "No — Claude is the agent", "Default for every lab"),
+ ("1 — in your AI agent", "The agent reads the lesson, teaches it, runs the check",
+  "No — Claude is the agent", "The default for every lab"),
  ("2 — `scripts/lesson.py <id>`",
   "Runs the lesson, prints a five-heading readback",
   "Yes, or it exits 2 saying \"no model configured\"",
-  "Show once in A0.0, so learners meet that message on purpose"),
+  "Worth doing once in A0.0, to meet that message on purpose"),
  ("3 — `scripts/checkpoint.py --at <id> --diff`",
   "Shows the code this lesson added", "No",
-  "Every \"what changed?\" question"),
+  "Any \"what actually changed?\" question"),
 ]
 
 ROLE_STARTS = [

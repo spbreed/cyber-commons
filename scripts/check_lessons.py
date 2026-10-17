@@ -341,8 +341,15 @@ def main() -> int:
                                 f"scripts/exercises/anchors.py")
             else:
                 seen_anchors.add(sid)
-                import html as _h
-                if _h.escape(anchor.splitlines()[0]) not in page:
+                # Match the anchor as the page renders it, not as it is
+                # written. This used to html.escape the raw source and find
+                # it — which only worked because the anchor was being emitted
+                # as raw markdown, `**Anchor -> E1.0.**` and all, on fifty
+                # pages. When build_site started rendering it properly this
+                # check failed on every one of them, so it was asserting the
+                # bug rather than the behaviour.
+                from build_site import inline_md
+                if inline_md(anchor.splitlines()[0]) not in page:
                     problems.append(f"{sid}: anchor defined but not rendered — "
                                     f"rebuild the site")
 

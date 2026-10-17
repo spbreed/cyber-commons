@@ -33,10 +33,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 PAGES = ROOT / "site" / "lessons"
-# Generated pages that are not lessons. The trainer guide introduced five new
-# blocks and two new tinted panels, which is precisely the combination this
-# gate exists for — a stylesheet whose declarations are each fine alone.
-TEACH = ROOT / "site" / "teach"
+# Generated pages that are not lessons. The course guide introduced five new
+# blocks and three tinted panels, which is precisely the combination this gate
+# exists for — a stylesheet whose declarations are each fine alone. Both
+# directories: site/teach/ now holds only the redirect left at the guide's
+# former address, and a redirect stub is still a page somebody can land on.
+EXTRA = [ROOT / "site" / "guide", ROOT / "site" / "teach"]
 INDEX = ROOT / "site" / "index.html"
 
 CHROME_CANDIDATES = [
@@ -149,13 +151,14 @@ def main() -> int:
         print("no Chromium found — skipping the contrast audit")
         return 0
 
-    pages = ([INDEX] + sorted(PAGES.glob("*.html"))
-             + sorted(TEACH.glob("*.html")))
+    pages = [INDEX] + sorted(PAGES.glob("*.html"))
+    for d in EXTRA:
+        pages += sorted(d.glob("*.html"))
     if not a.all:
         # A sample that covers every distinct page shape: the homepage, the
         # lesson index, a lesson that embeds a kernel, one that does not, one
-        # of each function's introduction, and the trainer guide, which is the
-        # only page using the tinted expected-output and debrief panels.
+        # of each function's introduction, and the course guide, which is the
+        # only page using the tinted expected-output, debrief and room panels.
         keep = {"index.html", "A0.0.html", "B1.0.html", "B1.19.html",
                 "C2.0.html", "D1.0.html", "E1.0.html", "F1.0.html",
                 "function-a.html"}

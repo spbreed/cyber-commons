@@ -1,31 +1,41 @@
 #!/usr/bin/env python3
-"""Render the Function A trainer guide to site/teach/function-a.html.
+"""Render the Function A course guide to site/guide/function-a.html.
 
-    python3 scripts/build_trainer_guide.py            # write the page
-    python3 scripts/build_trainer_guide.py --check    # fail if it has drifted
+    python3 scripts/build_guide.py            # write the page
+    python3 scripts/build_guide.py --check    # fail if it has drifted
 
-**Why this is generated.** A trainer guide repeats facts that live in the
-lesson sources — how many lessons there are, what each lab prints, which
-ceiling fires at what number — and a hand-written draft of this one reached
-review with three of them already wrong: fifteen lessons when there were
-sixteen, "seven to nine components" after A1.0 had settled on nine, and A2.4's
-output accuracy at 0.600 after the scorer was corrected to 0.400. Somebody
-reads this page standing in front of a class, so a stale number here is worse
-than a stale number in a design document.
+**Two readers.** Somebody working through Function A alone, and somebody
+running it for a room. It was built as a trainer guide and is now both, which
+was a content change rather than a retitle: every lab's notes are split into
+what both readers need and a room-only half rendered in its own block, so a
+solo reader can skip the instructions to project things and a trainer can
+still find them.
 
-So the narrative lives in `scripts/exercises/trainer_a.py` and **every number
-is measured here**: lesson titles, Risk and Control and the lab line come from
+**Why this is generated.** A guide repeats facts that live in the lesson
+sources — how many lessons there are, what each lab prints, which ceiling
+fires at what number — and a hand-written draft of this one reached review
+with three of them already wrong: fifteen lessons when there were sixteen,
+"seven to nine components" after A1.0 had settled on nine, and A2.4's output
+accuracy at 0.600 after the scorer was corrected to 0.400. This page is read
+standing in front of a class, or alone with nobody to catch the error, so a
+stale number here is worse than a stale number in a design document.
+
+So the narrative lives in `scripts/exercises/guide_a.py` and **every number is
+measured here**: lesson titles, Risk and Control and the lab line come from
 `curriculum.json`; the component count from the architecture-map skill's own
 fixture; the tool table from `cybertravels/config.TOOL_POLICY`; the span kinds
 by reading the calls in `cybertravels/`; the ceilings from `config` and
 `a2a/protocol`; A2.4's six numbers by calling the skill's own scoring
-functions. `{placeholders}` in an expected output are filled from that
-measurement, and **an unknown placeholder is an error** rather than a silent
-gap — which is the mechanism that stops a number here going stale again.
+functions; the reading volume by counting the lesson prose.
+`{placeholders}` in an expected output are filled from that measurement, and
+**an unknown placeholder is an error** rather than a silent gap — which is the
+mechanism that stops a number here going stale again.
 
-The page is written to `site/teach/` rather than `site/lessons/`, because
+The page is written to `site/guide/` rather than `site/lessons/`, because
 `build_site.py` prunes any `*.html` in `site/lessons/` that is not a current
-lesson page. A guide put there would be deleted by the next build.
+lesson page. A guide put there would be deleted by the next build. A generated
+one-line redirect stays at the page's former `site/teach/` address, because a
+link that has been handed to somebody should not start 404ing.
 """
 from __future__ import annotations
 
@@ -43,10 +53,13 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from build_site import COPY_JS, md_to_html                      # noqa: E402
 from exercises.repo import BRANCH, REPO                         # noqa: E402
-from exercises import trainer_a as T                            # noqa: E402
+from exercises import guide_a as T                              # noqa: E402
+from exercises import EXERCISES                                 # noqa: E402
 
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
-OUT = ROOT / "site" / "teach" / "function-a.html"
+OUT = ROOT / "site" / "guide" / "function-a.html"
+# Where this page used to live. A generated stub redirects from it.
+MOVED = ROOT / "site" / "teach" / "function-a.html"
 
 
 # ------------------------------------------------------------------ the tree
@@ -84,9 +97,9 @@ def int_const(rel: str, name: str) -> int:
                 isinstance(t, ast.Name) and t.id == name for t in node.targets):
             if isinstance(node.value, ast.Constant) and isinstance(node.value.value, int):
                 return node.value.value
-            raise SystemExit(f"build_trainer_guide.py: {rel}:{name} is no "
+            raise SystemExit(f"build_guide.py: {rel}:{name} is no "
                              f"longer an integer literal")
-    raise SystemExit(f"build_trainer_guide.py: {rel} has no {name}")
+    raise SystemExit(f"build_guide.py: {rel} has no {name}")
 
 
 def span_kinds() -> list[str]:
@@ -108,6 +121,35 @@ def span_kinds() -> list[str]:
     return seen
 
 
+READING_WPM = 180      # the rate the page states beside the figure it derives
+
+
+def reading_volume() -> tuple[int, int]:
+    """(words, minutes) of Function A prose, counted from the lesson sources.
+
+    A self-study reader needs a figure the taught duration does not give them:
+    "about four hours" is a facilitated session, and somebody working alone
+    wants to know how much of it is reading. Commands and table rows are
+    stripped, because typing a command is not reading a sentence, and the rate
+    is printed next to the number so it is a derivation rather than a claim.
+    """
+    ids = [s for s in sessions() if s.startswith("A")]
+    total = 0
+    for sid in ids:
+        ex = EXERCISES.get(sid) or {}
+        for key in ("hook", "concept", "steps", "challenge"):
+            v = ex.get(key)
+            items = [v] if isinstance(v, str) else (v or [])
+            for item in items:
+                for part in (item if isinstance(item, (list, tuple)) else [item]):
+                    if not isinstance(part, str):
+                        continue
+                    t = re.sub(r"```.*?```", " ", part, flags=re.S)
+                    t = re.sub(r"^\s*\|.*$", " ", t, flags=re.M)
+                    total += len(t.split())
+    return total, round(total / READING_WPM)
+
+
 def measure() -> dict[str, object]:
     """Every number the guide quotes, taken from the thing that produces it."""
     arch = load("skills/architecture/agentic-architecture-map/scripts/"
@@ -126,6 +168,7 @@ def measure() -> dict[str, object]:
     extern = [k for k in irrev if blast.ACTIONS[k]["external"]]
     tca, oa = score.tool_call_accuracy(), score.output_accuracy()
     spans = span_kinds()
+    words, minutes = reading_volume()
 
     def names(xs):
         xs = [f"`{x}`" for x in xs]
@@ -142,6 +185,8 @@ def measure() -> dict[str, object]:
                       if v["audience"] == cfg.AUD_VENDOR_MCP),
         "high_risk": sum(1 for v in pol.values() if v["high_risk"]),
         "high_risk_names": names([k for k, v in pol.items() if v["high_risk"]]),
+        "words": f"{words:,}", "reading_minutes": minutes,
+        "reading_wpm": READING_WPM,
         "max_steps": cfg.MAX_STEPS,
         "max_calls": cfg.MAX_TOOL_CALLS,
         "max_per_target": cfg.MAX_CALLS_PER_TARGET,
@@ -165,7 +210,7 @@ def measure() -> dict[str, object]:
 def fill(text: str, facts: dict) -> str:
     """Substitute {placeholders} from the measurements, loudly.
 
-    `str.format` would raise KeyError with no context. A trainer guide that
+    `str.format` would raise KeyError with no context. A course guide that
     half-renders is worse than one that refuses to build, so the unknown name
     and the sentence it is in both go into the message.
     """
@@ -173,7 +218,7 @@ def fill(text: str, facts: dict) -> str:
         key = m.group(1)
         if key not in facts:
             raise SystemExit(
-                f"build_trainer_guide.py: no measurement named {{{key}}}, in:\n"
+                f"build_guide.py: no measurement named {{{key}}}, in:\n"
                 f"  {text[:160]}\n"
                 f"  known: {', '.join(sorted(k for k in facts if k != 'cast'))}")
         return str(facts[key])
@@ -214,6 +259,7 @@ FOOT = ('<footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singul
 # glossary does not.
 HUES = {
     "glance": "cyan", "outcomes": "blue", "prework": "violet",
+    "framing": "violet",
     "schedule": "cyan", "labs": "green", "capstone": "blue",
     "check": "pink", "handover": "slate", "pitfalls": "amber",
     "failures": "amber", "prompts": "green", "glossary": "slate",
@@ -274,39 +320,51 @@ def inline(text: str) -> str:
 
 
 def glance(ses: dict, facts: dict) -> str:
-    """Course at a glance: the facts a trainer checks before saying yes."""
+    """Course at a glance: what either reader checks before committing to it."""
     ids = [sid for m in T.MODULES for sid in m[2]]
     rows = [
         ["Function", "A — Getting Started: Building Agentic AI"],
         ["Lessons", f'{len(ids)} — {lesson_link(ids[0], ses)} '
                     f'through {lesson_link(ids[-1], ses)}'],
-        ["Duration", T.COURSE["duration"]],
+        # The taught figure alone misleads somebody working alone, who has no
+        # facilitator setting the pace. The reading half is counted from the
+        # lesson prose and the rate is stated, so it is a derivation rather
+        # than an estimate somebody typed.
+        ["Duration", f'{html.escape(T.COURSE["duration"])} — of which about '
+                     f'{facts["reading_minutes"]} minutes is reading '
+                     f'({facts["words"]} words of lesson prose at '
+                     f'{facts["reading_wpm"]} words a minute). On your own, '
+                     f'expect longer: the labs are where the time goes'],
         ["Audience", inline(T.COURSE["audience"])],
         ["Prerequisites", inline(T.COURSE["prereq"])],
-        ["Format", inline(T.COURSE["ratio"])],
-        ["What learners build",
+        ["On your own", inline(T.COURSE["solo"])],
+        ["With a room", inline(T.COURSE["room"])],
+        ["What you build",
          'The CyberTravels agentic platform — '
          f'{facts["present"]} of the {facts["components"]} agent components, '
          f'{facts["tools"]} tools behind two MCP servers, and the controls '
          'between a model\'s suggestion and a real action'],
-        ["Opening line", inline(T.COURSE["hook"])],
-        ["On the board all day", f'<b>{html.escape(T.COURSE["board"])}</b>'],
+        ["The one sentence to hold",
+         f'<b>{html.escape(T.COURSE["board"])}</b>'],
     ]
     mod = table(
-        ["Time", "Module", "Lessons", "Learners leave with"],
+        ["Time", "Module", "Lessons", "You leave with"],
         [[m[0], f"<b>{html.escape(m[1])}</b>",
           " · ".join(lesson_link(x, ses, short=True) for x in m[2]) or "—",
           inline(m[3]) or "—"] for m in T.MODULES])
-    short = md("**Half the time?** " + T.COURSE["short"])
+    short = (md("**Half the time?** " + T.COURSE["short"])
+             + room("", [T.COURSE["short_room"]]))
     ways = table(
         ["Way", "What it does", "Needs a model?", "Use it for"],
         [[inline(f"**{w[0]}**"), inline(w[1]), inline(w[2]), inline(w[3])]
          for w in T.WAYS])
     return (rows_table(rows) + '<h3>The four hours</h3>' + mod + short
             + '<h3>Three ways to do any lesson</h3>'
-            + '<p>Every lesson can be done three ways, and a trainer should '
-              'know all three because learner machines fail in different '
-              'ways.</p>' + ways)
+            + '<p>Every lesson can be done three ways. Way 1 is the '
+              'default; the other two matter because a machine with no model '
+              'configured can still do every lesson, and because "what '
+              'actually changed?" is the question that comes up most.</p>'
+            + ways)
 
 
 def rows_table(rows: list[list[str]]) -> str:
@@ -317,18 +375,41 @@ def rows_table(rows: list[list[str]]) -> str:
 
 
 def outcomes(ses: dict) -> str:
-    return table(["By the end, a learner can…", "Proved in", "Evidence"],
+    return table(["By the end, you can…", "Proved in", "Evidence"],
                  [[inline(o[0]),
                    " · ".join(lesson_link(x, ses, short=True) for x in o[1]),
                    inline(o[2])] for o in T.OUTCOMES])
 
 
+def room(title: str, items: list[str]) -> str:
+    """A block only somebody running this for other people needs.
+
+    Rendered separately rather than mixed into the prose, because "project the
+    component table" is noise to a solo reader and the page is now written for
+    both. An empty list renders nothing at all.
+    """
+    items = [i for i in items if i]
+    if not items:
+        return ""
+    body = ("<ul>" + "".join(f"<li>{inline(i)}</li>" for i in items) + "</ul>"
+            if len(items) > 1 else md(items[0]))
+    # The label is "For a room" alone unless the title adds something a
+    # reader cannot see from where the block sits. A lab block's title is its
+    # lesson id, which is in the heading six lines above it.
+    suffix = f' · {html.escape(title)}' if title else ""
+    return (f'<div class="room"><div class="rl">For a room{suffix}</div>'
+            f'{body}</div>')
+
+
 def prework() -> str:
-    out = []
-    for when, items in T.PREWORK.items():
-        out.append(f"<h3>{html.escape(when)}</h3><ul>"
-                   + "".join(f"<li>{inline(i)}</li>" for i in items)
-                   + "</ul>")
+    out = [md("Whoever you are, this is the part that blocks everything else: "
+              "a machine that cannot run a lesson is the one failure that "
+              "stops a reader entirely."),
+           "<ul>"
+           + "".join(f"<li>{inline(i)}</li>" for i in T.PREWORK_SOLO)
+           + "</ul>"]
+    for when, items in T.PREWORK_ROOM.items():
+        out.append(room(when, items))
     return "".join(out)
 
 
@@ -349,6 +430,8 @@ def labs(ses: dict, facts: dict) -> str:
     out = []
     for mod in T.MODULES:
         window, name, ids, _ = mod
+        if not ids:
+            continue      # Framing has its own section; a break has no lab
         out.append(f'<h3 id="m-{slug(name)}">{html.escape(window)} · '
                    f'{html.escape(name)}</h3>')
         if name in T.MODULE_INTRO:
@@ -398,11 +481,17 @@ def lab_block(sid: str, ses: dict, facts: dict) -> str:
              '<div class="expected">' + md(fill(lab["expect"], facts)) + '</div>')
     for note in lab["notes"]:
         p.append(md(fill(note, facts)))
+    p.append(room("", [fill(n, facts) for n in lab["teach"]]))
     q, a = lab["debrief"]
-    p.append('<div class="debrief"><div class="dl">Debrief question</div>'
+    # "Debrief" is a trainer's word. Alone, the same question is the thing you
+    # answer before moving on, which is why it is labelled for both and the
+    # no-single-answer line no longer says "the discussion".
+    p.append('<div class="debrief"><div class="dl">Answer this before moving '
+             'on</div>'
              + md(fill(q, facts))
              + (md("**Answer.** " + fill(a, facts)) if a else
-                md("*No single right answer — the discussion is the point.*"))
+                md("*No single right answer — having one of your own is the "
+                   "point.*"))
              + '</div>')
     if s.get("lab"):
         p.append(md(f"**Lab.** {s['lab']}"))
@@ -414,7 +503,12 @@ def capstone(facts: dict) -> str:
     out = ["<ol>"]
     for item in T.CAPSTONE:
         out.append(f"<li>{inline(fill(item, facts))}</li>")
-    out.append("</ol><h3>Marking the three answers</h3>")
+    out.append("</ol>")
+    out.append(room("", T.CAPSTONE_ROOM))
+    out.append("<h3>What a good answer to each contains</h3>")
+    out.append(md("Check your own three answers against this, or mark "
+                  "somebody else's. An answer that misses a name but gets the "
+                  "*order* right is the better answer."))
     out.append(table(["The question", "What a good answer contains"],
                      [[f"<b>{html.escape(q)}</b>", inline(a)]
                       for q, a in T.CAPSTONE_GUIDE]))
@@ -428,7 +522,7 @@ def quick_check() -> str:
 
 
 def handover(ses: dict) -> str:
-    return table(["What they built", "Attacked in", "By"],
+    return table(["What you built", "Attacked in", "By"],
                  [[inline(w), lesson_link(sid, ses), inline(how)]
                   for w, sid, how in T.HANDOVER])
 
@@ -442,13 +536,31 @@ def roles(ses: dict) -> str:
 
 
 def failures() -> str:
-    return table(["What a learner sees", "Why", "Fix"],
+    return table(["What you see", "Why", "Fix"],
                  [[inline(a), inline(b), inline(c)] for a, b, c in T.FAILURES])
 
 
 def pitfalls() -> str:
-    return table(["Pitfall", "What to do"],
-                 [[f"<b>{inline(a)}</b>", inline(b)] for a, b in T.PITFALLS])
+    """Each pitfall, what to do about it, and the room-only addition if any.
+
+    The third column is empty on half the rows and that is correct — three of
+    these are the same mistake whether you are alone or facilitating, and
+    inventing a trainer action for them would be padding.
+    """
+    return table(["Pitfall", "What to do", "If you are running it for a room"],
+                 [[f"<b>{inline(a)}</b>", inline(b), inline(c) if c else "—"]
+                  for a, b, c in T.PITFALLS])
+
+
+def framing() -> str:
+    """Module 0, which has no lesson of its own.
+
+    A taught session gets this in the first fifteen minutes from the person at
+    the front. A solo reader got nothing — the schedule listed a module with
+    no lessons and no content, which reads as a gap rather than as the idea
+    the other fifteen lessons hang off.
+    """
+    return "".join(md(x) for x in T.FRAMING)
 
 
 def prompts() -> str:
@@ -464,10 +576,11 @@ def glossary() -> str:
 
 INDEX = [
     ("glance", "Course at a glance"),
-    ("outcomes", "What a learner can do by the end"),
-    ("prework", "Before the session"),
+    ("outcomes", "What you can do by the end"),
+    ("prework", "Before you start"),
+    ("framing", "The idea the whole course hangs off"),
     ("labs", "The four hours, lab by lab"),
-    ("capstone", "Capstone and marking"),
+    ("capstone", "Capstone, and what a good answer contains"),
     ("check", "Quick check"),
     ("handover", "What Function B does to all of this"),
     ("pitfalls", "Pitfalls, and what to do"),
@@ -489,39 +602,46 @@ def page() -> str:
            + "</ol></nav>")
 
     parts = [
-        HEAD.format(title="Function A Trainer Guide — Building Agentic AI | "
+        HEAD.format(title="Function A Course Guide — Building Agentic AI | "
                           "Cyber Commons",
                     desc=html.escape(
-                        f"How to teach Function A in {T.COURSE['duration']}: "
+                        f"Work through Function A alone or run it for a room: "
                         f"{len(ids)} lessons, the prompt and expected output "
                         f"for every lab, and what to do when a machine fails.")),
         NAV,
         '<div class="wrap"><div class="lhead">',
         '<div class="crumb"><a href="../lessons/index.html">All lessons</a> › '
-        'Teach</div>',
-        '<div class="sid">TRAINER GUIDE</div>',
+        'Course guide</div>',
+        '<div class="sid">COURSE GUIDE</div>',
         '<h1>Function A — Building Agentic AI with Claude</h1>',
         '<div class="badges">'
         f'<span class="badge d">{len(ids)} lessons</span>'
         f'<span class="badge t">{html.escape(T.COURSE["duration"])}</span>'
-        '<span class="badge b">For trainers</span></div>',
-        md("For the person running the session. Every number on this page is "
-           "generated from the lesson sources and the application, so an "
-           "expected output here is what the command actually prints. If a run "
-           "disagrees with this page, **trust the run** and correct "
-           "`scripts/exercises/trainer_a.py`."),
+        '<span class="badge b">Self-study or taught</span></div>',
+        md("**Use this on your own, or to run Function A for other people.** "
+           "Everything here serves both; the shaded blocks marked *For a room* "
+           "are the only parts a solo reader can skip."),
+        md("Every number on this page is generated from the lesson sources and "
+           "the application, so an expected output here is what the command "
+           "actually prints. If a run disagrees with this page, **trust the "
+           "run** and correct `scripts/exercises/guide_a.py`."),
         '</div>',
         toc,
         sec("glance", "Course at a glance", "◉", glance(ses, facts)),
-        sec("outcomes", "What a learner can do by the end", "✓",
+        sec("outcomes", "What you can do by the end", "✓",
             outcomes(ses)),
-        sec("prework", "Before the session", "◴", prework()),
+        sec("prework", "Before you start", "◴", prework()),
+        sec("framing", "The idea the whole course hangs off", "▦", framing(),
+            "Fifteen minutes before the first lesson. A taught session opens "
+            "with this; alone, read it and move on."),
         sec("labs", "The four hours, lab by lab", "▶", labs(ses, facts),
             "Key idea, the prompt to paste, what it prints, and the question "
-            "to ask afterwards."),
-        sec("capstone", "Capstone and marking", "✓", capstone(facts)),
+            "to answer before moving on."),
+        sec("capstone", "Capstone, and what a good answer contains", "✓",
+            capstone(facts)),
         sec("check", "Quick check", "✎", quick_check(),
-            "Eight questions. Use any three."),
+            "Eight questions. Cover the answer column, or use any three with "
+            "a room."),
         sec("handover", "What Function B does to all of this", "→",
             handover(ses) + roles(ses)),
         sec("pitfalls", "Pitfalls, and what to do", "◉", pitfalls()),
@@ -576,36 +696,66 @@ def consistency(ses: dict) -> list[str]:
     return bad
 
 
+def redirect_stub() -> str:
+    """The page's former address, as a generated redirect rather than a 404.
+
+    It is generated rather than hand-written so `--check` covers it: a
+    hand-written file in a directory nothing regenerates is the category of
+    artefact this repository distrusts. It carries a visible link as well as
+    the meta refresh, because a refresh a browser blocks must still leave
+    something clickable.
+    """
+    url = "../guide/function-a.html"
+    return ('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
+            f'<meta http-equiv="refresh" content="0; url={url}">'
+            f'<link rel="canonical" href="{url}">'
+            '<title>Moved — Function A Course Guide | Cyber Commons</title>'
+            '<meta name="robots" content="noindex">'
+            '<link rel="stylesheet" href="../assets/lesson.css"></head><body>'
+            '<div class="wrap"><div class="lhead">'
+            '<h1>This page has moved</h1>'
+            '<p>The Function A trainer guide is now the '
+            f'<a href="{url}">Function A course guide</a> \u2014 it serves '
+            'self-study as well as taught sessions.</p>'
+            '</div></div></body></html>')
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--check", action="store_true",
-                    help="non-zero exit if the committed page has drifted")
+                    help="non-zero exit if a committed page has drifted")
     a = ap.parse_args()
 
     problems = consistency(sessions())
     for p in problems:
-        print(f"::error::trainer guide: {p}", file=sys.stderr)
+        print(f"::error::course guide: {p}", file=sys.stderr)
     if problems:
-        print(f"\n{len(problems)} problem(s) in scripts/exercises/trainer_a.py")
+        print(f"\n{len(problems)} problem(s) in scripts/exercises/guide_a.py")
         return 1
 
-    fresh = page()
-    old = OUT.read_text() if OUT.is_file() else ""
+    want = {OUT: page(), MOVED: redirect_stub()}
+    stale = [f for f, text in want.items()
+             if (f.read_text() if f.is_file() else "") != text]
+
     if a.check:
-        if fresh != old:
-            print("::error::site/teach/function-a.html is stale — run "
-                  "python3 scripts/build_trainer_guide.py", file=sys.stderr)
+        if stale:
+            for f in stale:
+                print(f"::error::{f.relative_to(ROOT)} is stale — run "
+                      f"python3 scripts/build_guide.py", file=sys.stderr)
             return 1
-        print(f"site/teach/function-a.html is current "
-              f"({len(T.LABS)} labs, {len(old):,} bytes)")
+        print(f"site/guide/function-a.html is current "
+              f"({len(T.LABS)} labs, {len(want[OUT]):,} bytes), and so is the "
+              f"redirect at its old address")
         return 0
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(fresh)
-    print(f"wrote site/teach/function-a.html — {len(T.LABS)} labs, "
-          f"{len(fresh):,} bytes"
-          + ("" if fresh != old else " (unchanged)"))
+    for f, text in want.items():
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text(text)
+    print(f"wrote site/guide/function-a.html — {len(T.LABS)} labs, "
+          f"{len(want[OUT]):,} bytes"
+          + ("" if stale else " (unchanged)")
+          + "\nwrote site/teach/function-a.html — redirect to its new address")
     return 0
 
 

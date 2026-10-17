@@ -101,6 +101,52 @@ def framework_chips(sid: str, track_id: str) -> str:
 
 
 # ----------------------------------------------------------------- markdown
+def inline_md(s: str) -> str:
+    """Code, bold, italic and links in one line of markdown.
+
+    Lifted out of md_to_html so anything rendering a single line can use it.
+    The anchor blockquote on 50 Function E and F pages was emitted with
+    `html.escape` alone, so every one of them rendered a literal
+    `**Anchor -> E1.0.**` on the page — markdown source, visible to the reader,
+    behind a green build.
+
+    The bold rule allows `*` inside, which `[^*]+` did not: `**a *b* c**` left
+    its asterisks on the page across 28 more lessons. Bold runs first and the
+    italic rule then picks up what is left inside it, so the nesting resolves
+    in that order and not the other.
+    """
+    s = html.escape(s)
+    s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+    s = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", s)
+    s = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<em>\1</em>", s)
+    s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', s)
+    return s
+
+
+# A list item is one item even when its source wraps onto an indented second
+# line. The loop that only consumed lines matching the bullet pattern closed
+# the <li> at the line break and emitted the remainder as its own <p> — which
+# cut the sentence in half and, where the item was bold, left the reader a
+# literal `**fail` ... `closed**` across two block elements. It was visible on
+# C2.0 and F1.1 and in every embedded SKILL.md with a wrapped failure mode.
+CONT_STOP = re.compile(r"^\s*(?:[-*]\s|\d+\.\s|#{1,4}\s|```|>|\|)")
+
+
+def list_items(lines: list[str], i: int, marker: str, inline) -> tuple[list[str], int]:
+    """Consume one list, folding indented continuation lines into their item."""
+    items = []
+    while i < len(lines) and re.match(marker, lines[i]):
+        body = [re.sub(marker, "", lines[i])]
+        i += 1
+        while (i < len(lines) and lines[i].strip()
+               and lines[i][:1].isspace()          # indented under the item
+               and not CONT_STOP.match(lines[i])):
+            body.append(lines[i].strip())
+            i += 1
+        items.append("<li>" + inline(" ".join(body)) + "</li>")
+    return items, i
+
+
 def md_to_html(text: str) -> str:
     """Render lesson markdown. One renderer, on purpose.
 
@@ -123,13 +169,7 @@ def md_to_html(text: str) -> str:
     same to within one word of whitespace handling.
     """
     out, lines, i = [], text.splitlines(), 0
-    def inline(s):
-        s = html.escape(s)
-        s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
-        s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
-        s = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"<em>\1</em>", s)
-        s = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', s)
-        return s
+    inline = inline_md
     while i < len(lines):
         ln = lines[i]
         if ln.startswith("```"):
@@ -149,17 +189,17 @@ def md_to_html(text: str) -> str:
         if m := re.match(r"^(#{1,4})\s+(.*)", ln):
             lvl = len(m.group(1)); out.append(f"<h{lvl}>{inline(m.group(2))}</h{lvl}>"); i += 1; continue
         if re.match(r"^\s*[-*]\s+", ln):
-            items = []
-            while i < len(lines) and re.match(r"^\s*[-*]\s+", lines[i]):
-                items.append("<li>" + inline(re.sub(r"^\s*[-*]\s+", "", lines[i])) + "</li>"); i += 1
+            items, i = list_items(lines, i, r"^\s*[-*]\s+", inline)
             out.append("<ul>" + "".join(items) + "</ul>"); continue
         if re.match(r"^\s*\d+\.\s+", ln):
-            items = []
-            while i < len(lines) and re.match(r"^\s*\d+\.\s+", lines[i]):
-                items.append("<li>" + inline(re.sub(r"^\s*\d+\.\s+", "", lines[i])) + "</li>"); i += 1
+            items, i = list_items(lines, i, r"^\s*\d+\.\s+", inline)
             out.append("<ol>" + "".join(items) + "</ol>"); continue
         if ln.startswith(">"):
-            out.append("<blockquote>" + inline(ln.lstrip("> ")) + "</blockquote>"); i += 1; continue
+            quote = []
+            while i < len(lines) and lines[i].startswith(">"):
+                quote.append(lines[i].lstrip("> ").rstrip()); i += 1
+            out.append("<blockquote>" + inline(" ".join(quote))
+                       + "</blockquote>"); continue
         # Pipe tables. The `markdown` package is asked for above and is never
         # installed — standard library only — so this fallback is what every page
         # actually renders through, and it had no table case at all. Forty-five
@@ -365,10 +405,13 @@ def lesson_body(entry: dict) -> str:
     # 1 — why this matters, as a scene in the running system
     if "relevance" in parts:
         out.append(sec_open("relevance"))
-        out.append(f"<p class=\"lead\">{html.escape(ex['hook'].strip())}</p>")
+        out.append(f"<p class=\"lead\">{inline_md(ex['hook'].strip())}</p>")
         if ground := GROUNDING.get(sid):
+            # inline_md, not html.escape. The grounding lines are written in
+            # markdown and 39 pages showed the reader `bind_call()` complete
+            # with its backticks and a literal `**not**`.
             out.append(f'<div class="ct"><b>At CyberTravels.</b> '
-                       f'{html.escape(ground.strip())}</div>')
+                       f'{inline_md(ground.strip())}</div>')
         out.append("</div></section>")
     else:
         # The hook is still the best paragraph on the page. It is just not a
@@ -426,7 +469,9 @@ def lesson_body(entry: dict) -> str:
     out.append(f'<pre class="dia">{html.escape(ex["diagram"].strip(chr(10)))}</pre>')
     out.append(md_to_html(ex["concept"].strip()))
     if anchor := ANCHORS.get(sid):
-        out.append(f'<blockquote class="anchor">{html.escape(anchor.strip())}'
+        # inline_md, not html.escape: the anchor lines are written in markdown
+        # and every one of them shipped its `**` to the reader.
+        out.append(f'<blockquote class="anchor">{inline_md(anchor.strip())}'
                    f'</blockquote>')
     if prose:
         out.append(f'<div class="how">{prose}</div>')
@@ -766,7 +811,9 @@ def lesson_page(entry, prev, nxt) -> str:
     parts.append('<div class="sec"><h2>The lab</h2>')
     # From the session: the goal has one copy, in curriculum.json.
     if s.get("lab"):
-        parts.append(f'<p class="sub">{html.escape(s["lab"])}</p>')
+        # inline_md: the lab line is written in markdown in curriculum.json,
+        # and E3.4's showed the reader `act` complete with its backticks.
+        parts.append(f'<p class="sub">{inline_md(s["lab"])}</p>')
 
     # One button, and only on a lesson that has something to run — a reading
     # lesson gets none, because there is nothing on the other end of it.
@@ -835,12 +882,12 @@ def index_page(seq) -> str:
                  '<div class="sid">Curriculum</div><h1>All lessons</h1>'
                  f'<div class="badges"><span class="badge b">{len(seq)} lessons</span>'
                  f'<span class="badge d">{done} recorded</span></div>'
-                 # The trainer guide is not a lesson, so it cannot appear in
+                 # The course guide is not a lesson, so it cannot appear in
                  # the list below — and a page nothing links to is a page
                  # nobody finds.
                  '<p style="margin:14px 0 0;color:var(--text-dim)">'
-                 'Running a session rather than taking one? '
-                 '<a href="../teach/function-a.html">The Function A trainer '
+                 'Taking Function A, or running it for other people? '
+                 '<a href="../guide/function-a.html">The Function A course '
                  'guide</a> is the four-hour run sheet.</p></div>')
     cur_fn = None
     for e in seq:
