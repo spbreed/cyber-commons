@@ -145,15 +145,25 @@ failures happen in the seams.
 | in the SOC — detection, IR, threat hunting | **E1**→**E5** — discover, detect, understand, respond, recover |
 | in GRC, risk, audit, or you carry the regulator | **F1**→**F3** — risk and control, regulatory, running the programme |
 
-**Doing Function A, or running it for other people?** The
-[Function A course guide](https://cybercommons.ai/guide/function-a.html) is the
-four-hour run sheet: the prompt to paste and the output it actually prints for
-all sixteen labs, the question to answer before moving on, what to do when a
-machine fails, and what a good capstone answer contains. It serves both readers
-— the blocks marked *For a room* are the only parts a solo reader skips. Every
-number on it is generated from the lesson sources and the application, so an
-expected output there is what the command prints — see
-`scripts/build_guide.py`.
+**Doing a function, or running it for other people?** There is a
+[course guide for each of the six](https://cybercommons.ai/guide/index.html):
+what it proves, the chapters in order, every lesson's risk, control and
+measure, the skill it runs and what that skill prints, the pitfalls, and a
+quick check. They serve both readers — the blocks marked *For a room* are the
+only parts a solo reader skips.
+
+[Function A's](https://cybercommons.ai/guide/function-a.html) is the one to
+start with, and the one that carries a **hand-verified** output for every lab,
+because it has sixteen of them. B–F derive their per-lesson detail from the
+tree and show each skill's own committed example run instead; writing 133
+transcripts without running them would be inventing them, and the pages say so.
+See `scripts/build_guide.py`.
+
+**Recording it?** [LIGHTBOARD.md](LIGHTBOARD.md) now carries three kinds of
+script — one **introduction** to the commons that publishes on the home page,
+one **course overview** per function that publishes on that function's guide,
+and one per lesson. Record them in that order: the first two are what somebody
+watches before deciding to spend the hours, and they are short.
 
 **Recording or teaching this?** [LIGHTBOARD.md](LIGHTBOARD.md) is a
 **word-for-word** script for every lesson — open it and talk. Read every plain
@@ -431,7 +441,7 @@ lesson-skills/              one skill per converted lesson, generated — what a
 labs/                       attestation · incident-register · b2.10-eval-harness
 labs/evidence/              the recorded offline run of every skill script
 site/                       the website (index + generated lesson pages)
-site/guide/                 generated pages that are not lessons — the Function A course guide
+site/guide/                 generated pages that are not lessons — a course guide per function, and their index
 scripts/                    build_* · check_* · install_skills.py
 CLAUDE.md                   how to work in this repo · LESSON_DESIGN.md — the authoring contract
 LIGHTBOARD.md               generated recording script, one per lesson

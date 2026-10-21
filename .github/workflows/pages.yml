@@ -272,11 +272,18 @@ jobs:
           for fn in cur['functions']:
               for tr in fn['tracks']:
                   ids |= {s['id'] for s in tr['sessions']}
-          bad = [k for k in vid.get('videos', {}) if k not in ids]
+          # Three kinds of recording now have a slot on the site, so three
+          # kinds of key are legal here: a lesson id, `intro` for the home
+          # page's introductory video, and `overview-<f>` for a course guide's
+          # overview. Anything else is a typo that would publish a player
+          # nowhere, which is the failure this check exists for.
+          extra = {'intro'} | {f"overview-{f['id'].lower()}" for f in cur['functions']}
+          bad = [k for k in vid.get('videos', {}) if k not in ids | extra]
           if bad:
-              print(f"::error::videos.json references unknown session ids: {bad}")
+              print(f"::error::videos.json references unknown recording keys: {bad}")
               sys.exit(1)
-          print(f"ok: {len(ids)} sessions, {len(vid.get('videos', {}))} with recordings")
+          print(f"ok: {len(ids)} sessions + {len(extra)} overview/intro slots, "
+                f"{len(vid.get('videos', {}))} with recordings")
           PY
 
       # ONE-TIME MANUAL STEP: Settings → Pages → Source: "GitHub Actions".

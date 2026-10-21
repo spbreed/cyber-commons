@@ -65,6 +65,9 @@ from exercises import EXERCISES                              # noqa: E402
 from exercises.cybertravels import GROUNDING                 # noqa: E402
 from exercises.days import DAYS, FUNCTION_DAYS, FUNCTION_INTRO  # noqa: E402
 from exercises.framing import BRIDGES                        # noqa: E402
+from exercises import guide_a as GA                          # noqa: E402
+from exercises import guides as G                            # noqa: E402
+from exercises.lessonskills import audits_of                 # noqa: E402
 
 SITE = "https://cybercommons.ai"
 WPM = 140          # unhurried delivery to camera, measured against a read-through
@@ -451,11 +454,171 @@ def script(item: dict) -> str:
     return "\n".join(out)
 
 
+# ------------------------------------------------- the two overview scripts
+#
+# Three kinds of recording live in this file now: one introduction to the
+# commons, one overview per function, and one per lesson. They were added in
+# that order of usefulness rather than that order of size — a visitor watches
+# the first before deciding whether to spend four hours, and somebody choosing
+# a function watches the second before committing to thirty-nine lessons.
+
+def tree_counts() -> dict[str, object]:
+    """Every number the two overview scripts quote, measured from the tree.
+
+    Typed into a script they would go stale silently, the way the header's own
+    lesson count did: it said 134 while the curriculum carried 148, and it sits
+    in a generated file so no gate looked at it. These are the counts a visitor
+    hears in the first thirty seconds, which makes them the most expensive ones
+    in the project to get wrong.
+    """
+    ls = lessons()
+    ids = [x["s"]["id"] for x in ls]
+    skills = {ref for sid in ids for ref, _ in audits_of(sid)}
+    words = 0
+    for sid in [i for i in ids if i.startswith("A")]:
+        ex = EXERCISES.get(sid) or {}
+        for key in ("hook", "concept", "steps", "challenge"):
+            v = ex.get(key)
+            items = [v] if isinstance(v, str) else (v or [])
+            for item in items:
+                for part in (item if isinstance(item, (list, tuple)) else [item]):
+                    if isinstance(part, str):
+                        t = re.sub(r"```.*?```", " ", part, flags=re.S)
+                        words += len(re.sub(r"^\s*\|.*$", " ", t, flags=re.M).split())
+    return {
+        "sessions": len(ls),
+        "functions": len({x["fn"]["id"] for x in ls}),
+        "chapters": len({x["tr"]["id"] for x in ls}),
+        "skills": len(skills),
+        # Function A's reading time, at the rate the course guides state.
+        "reading_minutes": round(words / 180),
+    }
+
+
+def fill_counts(text: str, counts: dict) -> str:
+    """Substitute {placeholders}, loudly — an unknown one is a build failure.
+
+    A half-rendered sentence read to camera is worse than a build that stops,
+    because nobody notices until the video is cut.
+    """
+    def one(m):
+        key = m.group(1)
+        if key not in counts:
+            raise SystemExit(
+                f"build_lightboard.py: no measurement named {{{key}}}, in:\n"
+                f"  {text[:160]}\n"
+                f"  known: {', '.join(sorted(counts))}")
+        return str(counts[key])
+    return re.sub(r"\{([a-z_]+)\}", one, text)
+
+
+def intro_script(counts: dict) -> str:
+    """The one video about the commons as a whole."""
+    spoken = []
+    out = [f"### INTRO · {G.INTRO['title']}", ""]
+    for head, lines in G.INTRO["beats"]:
+        spoken += [fill_counts(x, counts) for x in lines]
+    words = sum(len(say(x).split()) for x in spoken)
+    out.append(f"The whole commons in one recording · {words} words, about "
+               f"{words / WPM:.1f} min spoken · publishes on the home page "
+               f"from `recordings/intro.mp4` · [site]({SITE}/)")
+    out.append("")
+    out.append(f"*[On the board for the whole take: "
+               f"{say(G.INTRO['board'])}]*")
+    out.append("")
+    for head, lines in G.INTRO["beats"]:
+        out.append(f"**{head}**")
+        out.append("")
+        if d := G.INTRO["directions"].get(head):
+            out.append(f"*[{fill_counts(d, counts)}]*")
+            out.append("")
+        for line in lines:
+            out.append(say(fill_counts(line, counts)))
+            out.append("")
+    out.append("---")
+    out.append("")
+    return "\n".join(out)
+
+
+def overview_script(fid: str, title: str, counts: dict) -> str:
+    """One recording per course guide: is this function the one you need?
+
+    Five beats, the same shape as a lesson, so somebody who has recorded
+    lessons is not learning a second format. Everything spoken comes from
+    `days.FUNCTION_DAYS` and the guide narrative, so an overview cannot
+    describe a function that has moved.
+    """
+    fd = FUNCTION_DAYS.get(fid) or {}
+    ls = [x for x in lessons() if x["fn"]["id"] == fid]
+    chapters = []
+    for x in ls:
+        if not chapters or chapters[-1][0] != x["tr"]["id"]:
+            chapters.append((x["tr"]["id"], x["tr"]["title"], 0))
+        cid, ct, n = chapters[-1]
+        chapters[-1] = (cid, ct, n + 1)
+    board = (GA.COURSE["board"] if fid == "A"
+             else G.FUNCTIONS[fid]["board"])
+
+    rows = [("① WHO IT IS FOR", "say",
+             f"Function {fid} is {title}. {fd.get('who', '')}")]
+    rows.append(("① WHO IT IS FOR", "say",
+                 f"One sentence to hold for the whole function. {board}"))
+    rows.append(("② WHY IT MATTERS", "say", sentences(fd.get("day0", ""), 3)))
+    rows.append(("③ WHAT YOU DO", "do",
+                 "Write the chapters down the board as you name them."))
+    rows.append(("③ WHAT YOU DO", "say",
+                 f"{len(ls)} lessons, in {len(chapters)} "
+                 f"{'chapter' if len(chapters) == 1 else 'chapters'}. "
+                 + " ".join(f"{cid}, {ct}, is {n} "
+                            f"{'lesson' if n == 1 else 'lessons'}."
+                            for cid, ct, n in chapters)))
+    rows.append(("③ WHAT YOU DO", "say", sentences(fd.get("day1", ""), 3)))
+    rows.append(("④ WHAT COMES OUT", "say", sentences(fd.get("day2", ""), 3)))
+    rows.append(("⑤ WHO SHOULD DO IT", "say", G.OVERVIEW_CLOSE[fid]))
+    rows.append(("⑤ WHO SHOULD DO IT", "say",
+                 f"The course guide has the whole run sheet — every lesson's "
+                 f"risk, control and measure, and what each skill prints. "
+                 f"Start at {ls[0]['s']['id']}."))
+
+    words = sum(len(say(t).split()) for _, kind, t in rows if kind == "say")
+    out = [f"### OVERVIEW {fid} · Function {fid} — {title}", ""]
+    out.append(f"The course guide as a recording · {len(ls)} lessons · "
+               f"{words} words, about {words / WPM:.1f} min spoken · "
+               f"publishes from `recordings/overview-{fid.lower()}.mp4` · "
+               f"[guide]({SITE}/guide/function-{fid.lower()}.html)")
+    out.append("")
+    head = None
+    for h, kind, text in rows:
+        if h != head:
+            head = h
+            out.append(f"**{h}**")
+            out.append("")
+        out.append(f"*[{text}]*" if kind == "do" else say(text))
+        out.append("")
+    out.append("---")
+    out.append("")
+    return "\n".join(out)
+
+
 HEADER = """# LIGHTBOARD.md — the word-for-word script, lesson by lesson
 
-A recording script for all {n_lessons} lessons, written to be **read aloud exactly as
-written**. Open the lesson, talk. No translating notes into sentences while the
-camera is running.
+A recording script for **one introduction, {n_overview} course overviews and all
+{n_lessons} lessons**, written to be **read aloud exactly as written**. Open it,
+talk. No translating notes into sentences while the camera is running.
+
+## Three kinds of recording, and the order to make them
+
+| | what it is | how many | where it publishes |
+|---|---|---|---|
+| **Introduction** | what the commons is, in one video | 1 | the home page, from `recordings/intro.mp4` |
+| **Course overview** | one per function: is this the one you need? | {n_overview} | each course guide, from `recordings/overview-<f>.mp4` |
+| **Lesson** | the lesson itself, five beats | {n_lessons} | the lesson page, from `recordings/<id>.mp4` |
+
+**Record in that order.** The introduction is what somebody watches before
+deciding to spend an afternoon, and the overview is what they watch before
+committing to a function — so each is worth more per minute of recording than
+any single lesson, and each is short. The introduction is the one take worth
+doing twice.
 
 ## The one rule
 
@@ -544,7 +707,31 @@ def build() -> str:
     # in a GENERATED file so check_claims.py never looked at it. A number in a
     # generated artefact goes stale more quietly than one in prose, because
     # nobody thinks to check a file they did not write.
-    doc = [HEADER.format(n_lessons=len(lessons()), n_orient=len(ORIENT))]
+    counts = tree_counts()
+    doc = [HEADER.format(n_lessons=len(lessons()), n_orient=len(ORIENT),
+                         n_overview=counts["functions"])]
+
+    # The introduction and the six overviews come first, because that is the
+    # order somebody records in: one video that says what this is, six that say
+    # which function you want, then the lessons.
+    doc.append("\n## The introduction\n")
+    doc.append("*[One recording, before any lesson. It is what a visitor "
+               "watches on the home page, so it is the one take worth doing "
+               "twice.]*\n")
+    doc.append("---\n")
+    doc.append(intro_script(counts))
+
+    doc.append("\n## The six course overviews\n")
+    doc.append("*[One per function, each pointing at that function's course "
+               "guide. Record these before the lessons in the function: they "
+               "are what somebody watches to decide whether to spend the "
+               "hours.]*\n")
+    doc.append("---\n")
+    for f in CUR["functions"]:
+        doc.append(overview_script(f["id"], f["title"], counts))
+
+    doc.append("\n## The lessons\n")
+    doc.append("---\n")
     current_fn = None
     for item in lessons():
         fn = item["fn"]
@@ -580,15 +767,19 @@ def main() -> int:
             print("::error::LIGHTBOARD.md is stale — run "
                   "python3 scripts/build_lightboard.py", file=sys.stderr)
             return 1
-        print(f"ok: LIGHTBOARD.md is up to date ({n} lesson scripts)")
+        print(f"ok: LIGHTBOARD.md is up to date ({n} scripts: 1 intro, "
+              f"{len(CUR['functions'])} overviews, "
+              f"{n - 1 - len(CUR['functions'])} lessons)")
         return 0
 
     spoken = sum(len(t.split()) for item in lessons()
                  for _, kind, t in beats(item) if kind == "say")
     OUT.write_text(text)
-    print(f"wrote {OUT.name} — {n} word-for-word scripts, {len(ORIENT)} with a "
-          f"ground-rules beat, {spoken} spoken words, "
-          f"about {spoken / WPM / 60:.1f} hours of recording")
+    print(f"wrote {OUT.name} — {n} word-for-word scripts "
+          f"(1 introduction, {len(CUR['functions'])} course overviews, "
+          f"{n - 1 - len(CUR['functions'])} lessons), {len(ORIENT)} with a "
+          f"ground-rules beat, {spoken} spoken words in the lessons, "
+          f"about {spoken / WPM / 60:.1f} hours of lesson recording")
     return 0
 
 

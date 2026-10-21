@@ -517,3 +517,14 @@ table.md.kv th{width:30%;border-bottom:1px solid var(--line-soft);
     letter-spacing:.04em;text-transform:uppercase;color:var(--text-faint)}
   .tlabmin{margin-left:0}
 }
+
+/* The derived lesson blocks in the Function B-F course guides. Those pages
+   carry one block per lesson built entirely from the tree, so they need two
+   labels Function A's hand-authored guide does not: the Day 2 measure with its
+   denominator, and what a skill's output contract requires. */
+.tmeas{margin:0 0 12px;font-size:15px;color:var(--text-dim)}
+.tmeas b{color:var(--s-violet)}
+.tcontract{margin:0 0 12px;font-size:14.5px;color:var(--text-dim)}
+.tcontract b{color:var(--text)}
+.tlab > .anchor{margin:14px 0 0}
+.tlab details.fold{margin:0 0 4px}
