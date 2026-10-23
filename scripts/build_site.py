@@ -972,27 +972,44 @@ def home_numbers() -> dict[str, int]:
 # from, so renaming them there for a copy change would ripple through the whole
 # tree. The mapping lives here instead, and a function missing from it fails
 # the build rather than quietly falling back to the stored title.
+# The six homepage cards. The name is the **function being transformed**, not a
+# topic: the curriculum's structure already maps onto the functions a CISO
+# organisation runs, and naming them as topics was the thing that made the site
+# read as a reading list rather than as a transformation programme.
 TRACKS = {
-    "A": ("Build an agentic system",
-          "Set your machine up, then build CyberTravels end to end — the loop, "
-          "MCP tools, identity and delegation, memory, agent-to-agent, spans "
-          "and an audit trail — before any of it is called a risk."),
-    "B": ("Agent architecture &amp; risks",
-          "One reference architecture for agentic systems, and every risk that "
-          "attaches to a component of it."),
-    "C": ("AI SDLC &amp; harness",
-          "An AppSec pipeline that runs before and after deploy, and the harness "
-          "that measures whether it works."),
-    "D": ("AI red teaming",
-          "One authorised, scoped offensive lifecycle against your own estate — "
-          "from ingestion and elicitation to containment, forensics and "
-          "governance."),
-    "E": ("Agentic SOC",
-          "Detection and response when the analyst is directing agents rather "
-          "than reading alerts one at a time."),
-    "F": ("AI GRC",
-          "Risk, control, regulatory mapping and the CISO office, for systems "
-          "that take actions on their own."),
+    "A": ("Build the agentic system",
+          "The capability everything else is built on. Set your machine up, "
+          "then build CyberTravels end to end — the loop, MCP tools, identity "
+          "and delegation, memory, agent-to-agent, spans and an audit trail. "
+          "Whatever function you run, you cannot transform it with agents you "
+          "have never built."),
+    "B": ("Security architecture &amp; infrastructure",
+          "The architecture and design-review function, rebuilt. One reference "
+          "architecture for agentic systems, every risk that attaches to a "
+          "component of it, and the identity, ingress and runtime controls "
+          "that close them — so a review produces a register with owners "
+          "rather than an opinion."),
+    "C": ("Application security &amp; the AI SDLC",
+          "The AppSec function, rebuilt as a pipeline. Threat model, two-pass "
+          "scan, deduplication, reachability, sandboxed proof, supply chain "
+          "and a fix gated on evidence — running before and after deploy, at "
+          "the speed agents now write code."),
+    "D": ("Offensive security &amp; evaluation",
+          "The red-team and evaluation function, rebuilt. One authorised, "
+          "scoped offensive lifecycle against your own estate — from ingestion "
+          "and elicitation to containment, forensics and governance — "
+          "reporting findings that reproduce instead of findings that worked "
+          "once."),
+    "E": ("Security operations",
+          "The SOC, rebuilt around five intervals of one clock. Detection and "
+          "response when the analyst is directing agents rather than reading "
+          "alerts one at a time, and when the actor under investigation is "
+          "itself an agent."),
+    "F": ("Governance, risk &amp; compliance",
+          "The GRC function and the CISO office, rebuilt. Framework controls "
+          "turned into indicators somebody can compute, mapped outward to the "
+          "regimes that apply, with a programme sequenced to produce control "
+          "coverage rather than demos."),
 }
 
 

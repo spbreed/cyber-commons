@@ -1,9 +1,19 @@
 <h1>Cyber Commons</h1>
 
-**Democratizing defensive AI cyber knowledge, before the hackers outrun us.**
+**Your security function, rebuilt to run on agents — because the adversary
+already does.**
 
-A free, open commons for Cyber AI — the skills to defend *with* AI, and to
-secure the AI *itself*.
+Cyber Commons is how a security organisation **transforms its own practice and
+operations**. Architecture and infrastructure security, application security,
+offensive security, the SOC, governance — **each function taken apart and stood
+back up with agents doing the work**. Securing AI is part of it, not the whole
+of it: you are rebuilding your operations with the same technology that is
+creating your newest attack surface, so both halves are in here.
+
+It is a transformation programme rather than a reading list, which is why every
+lesson carries three days and not one: **Day 0**, why the change is worth
+making; **Day 1**, the thing you stand up; **Day 2**, the number that says it
+is still working a quarter later.
 
 **149 lessons across 16 chapters.** Every lesson is the idea, the diagram, the
 control, and what it looks like in one running system — and then it **runs a

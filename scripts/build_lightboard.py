@@ -94,9 +94,11 @@ ORIENT = {
   "difference. And it is also the entire problem. A chatbot that is wrong says "
   "something wrong. An agent that is wrong does something wrong.",
   "So here is how this works. You are going to build one. Not read about one — "
-  "build it, on your own machine, over this chapter and the next. Then the "
-  "five functions after that take the thing you built and attack it, review "
-  "it, watch it and govern it. Everything is free and nothing needs an account.",
+  "build it, on your own machine, over this chapter and the next. That is the "
+  "capability. Then the five functions after this one are the five operations "
+  "of a security organisation — architecture, application security, offensive "
+  "security, the SOC and governance — and each one gets rebuilt around the "
+  "thing you just built. Everything is free and nothing needs an account.",
  ],
  "A0.0": [
   "Before anything else, thirty seconds on what an agent actually is, because "
@@ -107,7 +109,10 @@ ORIENT = {
   "difference. And it is also the entire problem. A chatbot that is wrong says "
   "something wrong. An agent that is wrong does something wrong. Everything "
   "here follows from that one sentence.",
-  "So, what this is. Five functions on top of the one you just built. It is "
+  "So, what this is. It is not a course about AI security. It is how a "
+  "security function gets rebuilt to run on agents — five of them on top of "
+  "the capability you just built: architecture and infrastructure security, "
+  "application security, offensive security, the SOC, and governance. It is "
   "free, there is no vendor, there is no paid account, and every lesson runs "
   "with one command on your own machine, in whichever coding assistant you "
   "already use. I am going to use one made-up company for all of it, and you "
@@ -125,6 +130,9 @@ ORIENT = {
   "report is counting in a third. By the fourth function you are not learning a "
   "fourth example. You are watching a system you already understand fail in a "
   "new way.",
+  "And what this function rebuilds is architecture and infrastructure "
+  "security. By the end of it a design review stops producing an opinion and "
+  "starts producing a register with an owner against every risk.",
  ],
  "C2.0": [
   "If you have done application security before, let me tell you what is "
@@ -133,6 +141,9 @@ ORIENT = {
   "any human review can keep up with, and some of it was written by an agent "
   "that cannot tell you why it wrote it. Everything in this chapter comes out "
   "of that one pressure.",
+  "So this is the application security function rebuilt as a pipeline. Not a "
+  "better gate — a different operation, one that can keep up with code an "
+  "agent wrote this morning.",
  ],
  "D1.0": [
   "One distinction before we start, because most people hear red team and think "
@@ -141,6 +152,10 @@ ORIENT = {
   "Getting an agent to do something it should not do — spend money, touch a "
   "file, message another agent — is an incident. This chapter is about the "
   "second one, and it is the one almost nobody has a playbook for.",
+  "This is the offensive security and evaluation function rebuilt. What "
+  "changes most is what you are allowed to call a finding: one that "
+  "reproduces, with a rate and a denominator, rather than one that worked "
+  "once.",
  ],
  "E1.0": [
   "Let me say this up front: your SOC already works. You have sensors, you have "
@@ -149,6 +164,9 @@ ORIENT = {
   "The question this whole chapter asks is narrower than that, and a bit more "
   "uncomfortable. When an agent is the thing that went wrong — would any of it "
   "have fired?",
+  "So this is security operations rebuilt around that question. What changes "
+  "is the analyst's job: directing a loop, rather than reading alerts one at a "
+  "time, against an actor that is itself an agent.",
  ],
  "F1.0": [
   "Governance has a reputation, so let me get ahead of it. Most people hear "
@@ -157,6 +175,9 @@ ORIENT = {
   "somebody who is not on your side, that a decision was made on purpose and by "
   "a named person. That is an engineering problem. And it is the one that "
   "decides whether the thing you built is allowed to stay switched on.",
+  "This is the governance function rebuilt, and the artefact is what changes. "
+  "Not a control statement — an indicator somebody can compute, from a named "
+  "source, with a date on it.",
  ],
 }
 
@@ -605,6 +626,17 @@ HEADER = """# LIGHTBOARD.md — the word-for-word script, lesson by lesson
 A recording script for **one introduction, {n_overview} course overviews and all
 {n_lessons} lessons**, written to be **read aloud exactly as written**. Open it,
 talk. No translating notes into sentences while the camera is running.
+
+**What the whole thing is about, so every take carries it.** Cyber Commons is
+how a security organisation rebuilds its own functions to run on agentic AI —
+architecture and infrastructure security, application security, offensive
+security, the SOC, governance. It is a transformation programme, not a reading
+list about AI security. Each of the six tracks is one of those functions, and
+the number at the end of every lesson is there because changing an operation
+means being able to say next quarter whether the change held. Say "your
+function" and "what changes" rather than "you will learn"; the scripts below
+are written that way, and a take that drifts back into lecturing is the one to
+redo.
 
 ## Three kinds of recording, and the order to make them
 
