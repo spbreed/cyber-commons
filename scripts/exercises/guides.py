@@ -789,20 +789,20 @@ FUNCTIONS = {
 # and the generator renders it from there.
 
 INDEX_BLURB = {
- "A": "The capability the other five are transformed with. Set your machine up "
-      "and build the agentic platform. Start here whatever function you run.",
- "B": "Rebuilds architecture and infrastructure security. Name every risk the "
-      "platform carries, then close them — identity and ingress first, then "
-      "the runtime layer under both.",
- "C": "Rebuilds application security as a pipeline that keeps up with code an "
-      "agent wrote, with a verifier that is not another model.",
- "D": "Rebuilds offensive security and evaluation around one lifecycle, end to "
-      "end, reporting findings that reproduce.",
- "E": "Rebuilds security operations as five intervals of one clock: would you "
+ "A": "The system the other five tracks are about. Set your machine up and "
+      "build it. Start here whatever your job is.",
+ "B": "What changes in architecture and infrastructure security. Name every "
+      "risk the system carries, then close them — identity and ingress first, "
+      "then the runtime layer under both.",
+ "C": "What changes in application security when agents write the code: a "
+      "pipeline that keeps up, with a check that is not another model.",
+ "D": "What changes in a red team. One lifecycle end to end, and findings "
+      "that happen again rather than once.",
+ "E": "What changes in a SOC, across five intervals of one clock: would you "
       "see it, could you stop it, and could you prove what happened.",
- "F": "Rebuilds governance. Framework controls become indicators somebody can "
-      "compute, mapped outward to the regimes that apply, with a programme "
-      "sequenced to produce coverage rather than demos.",
+ "F": "What changes in governance. Framework controls become numbers somebody "
+      "can compute, mapped out to the rules that apply to you, in a programme "
+      "ordered to produce coverage rather than demos.",
 }
 
 
@@ -823,97 +823,93 @@ INDEX_BLURB = {
 
 INTRO = {
  "title": "Cyber Commons — what this is, and how to use it",
- "board": "Your function, rebuilt. Not a reading list.",
+ "board": "How the work changes when agents do it.",
  "beats": [
   ("① WHAT THIS IS", [
-   "This is Cyber Commons, and the first thing to say is what it is not. It is "
-   "not a reading list about AI security.",
-   "It is how a security organisation rebuilds its own functions to run on "
-   "agentic AI. Architecture and infrastructure security. Application "
-   "security. Offensive security. The SOC. Governance. Each one taken apart "
-   "and stood back up with agents doing the work — {sessions} lessons across "
-   "{functions} functions, every one of them running on your own computer.",
+   "This is Cyber Commons. It is free, open training for security teams, and "
+   "it comes in {functions} tracks.",
+   "The first builds an agentic system. The other five each take one part of a "
+   "security organisation — architecture and infrastructure, application "
+   "security, offensive security, the SOC, and governance — and teach the same "
+   "thing about each: how that work changes when agents do it. {sessions} "
+   "lessons in all, and every one of them runs on your own computer.",
    "A commons is a shared resource no one owns and everyone may draw from. "
    "This one is open, and it is openly corrected — if a lesson is wrong, the "
    "fix is a pull request.",
   ]),
   ("② WHY IT EXISTS", [
-   "Here is the problem it was built for, and it is not the one people expect.",
-   "Breakout time — the gap between an attacker getting in and moving "
+   "Here is the problem it was built for.",
+   "Breakout time — how long it takes an attacker to get in and start moving "
    "sideways — is down to twenty-nine minutes. The fastest on record is "
-   "twenty-seven seconds. Now look at how a security function actually "
-   "operates against that. Architecture reviewed quarterly. Alerts triaged one "
-   "at a time. Controls evidenced once a year for an auditor.",
-   "That is not a tooling gap. It is a cadence gap, and you do not close it by "
-   "reading faster. Attackers are already directing agents. The only answer "
-   "that scales is to change how the function itself operates — and that is a "
-   "transformation programme, not a training course.",
+   "twenty-seven seconds. Now think about how most security work is actually "
+   "done. Architecture reviewed every few months. Alerts read one at a time. "
+   "Controls checked once a year for an auditor.",
+   "Attackers are already using AI to go faster. You cannot close that gap by "
+   "reading faster. The work itself has to be done differently, and that takes "
+   "knowing how — which is what this is for.",
    "There is a second half, and it matters just as much. The systems you are "
-   "defending are themselves becoming agents. A chatbot that is wrong says "
+   "defending are becoming agents themselves. A chatbot that is wrong says "
    "something wrong. An agent that is wrong does something wrong — it cancels "
-   "a booking, or moves money, or deletes a row. So you are transforming your "
-   "operations with the same technology that is creating your newest attack "
-   "surface, which is why both halves are in here.",
+   "a booking, or moves money, or deletes a row. So the same technology you "
+   "are using to go faster is also your newest attack surface. Both halves are "
+   "in here.",
   ]),
   ("③ WHAT YOU BUILD", [
-   "You do not read about a system. You build one, and then you transform a "
-   "function around it.",
+   "You do not read about a system. You build one.",
    "CyberTravels is a corporate travel company with an agentic platform — four "
    "agents that book trips, issue refunds, read vendor documents and write "
-   "code. Function A has you build it, one increment per lesson. That is the "
-   "capability. You cannot rebuild a function with agents you have never "
-   "built.",
-   "Then the five functions after it are the five operations of a security "
-   "organisation, each one rebuilt against the thing you now own. Function B "
-   "is architecture and infrastructure security: a review that produces a risk "
-   "register with owners instead of an opinion. Function C is application "
-   "security: a pipeline that keeps up with code an agent wrote. Function D is "
-   "offensive security: findings that reproduce instead of findings that "
-   "worked once. Function E is the SOC: an analyst directing a loop instead of "
-   "reading alerts one at a time. Function F is governance: an indicator "
-   "somebody can compute, with a date on it, instead of a control statement.",
+   "code. The first track has you build it, one piece per lesson. It is hard "
+   "to secure an agent you have never built.",
+   "Then the five tracks after it each take one part of a security "
+   "organisation and show you what changes. Track B is architecture and "
+   "infrastructure: a design review that ends with a list of risks and owners "
+   "instead of an opinion. Track C is application security: a pipeline that "
+   "keeps up with code an agent wrote. Track D is offensive security: findings "
+   "that happen again rather than once. Track E is the SOC: an analyst "
+   "directing a loop instead of reading alerts one at a time. Track F is "
+   "governance: a number somebody can compute, with a date on it, instead of a "
+   "control statement.",
    "That is why there is one system and not six examples. A sharper example is "
    "not worth you holding a second system in your head.",
   ]),
   ("④ HOW IT ACTUALLY WORKS", [
    "Three things to know before you start.",
    "First, there is nothing to install beyond Python and Git. No account with "
-   "us, no hosted notebook, no API key of ours. The one dependency is a model, "
-   "and a signed-in Claude command line counts.",
-   "Second, every lesson answers three questions in order, because that is "
-   "what it takes to actually change an operation rather than demonstrate one. "
-   "Day 0, why this change is worth making. Day 1, the thing you stand up. Day "
-   "2, the number that says it is still working a quarter later. The third one "
-   "is the one most training leaves out, and it is the one your own "
+   "us, no hosted notebook, no API key of ours. The one thing you need is a "
+   "model, and a signed-in Claude command line counts.",
+   "Second, every lesson answers three questions, in order, because that is "
+   "what it takes to change how work gets done rather than just demonstrate "
+   "something. Day 0, why this is worth doing. Day 1, the thing you build. Day "
+   "2, the number that tells you next quarter that it still works. The third "
+   "one is what most training leaves out, and it is the one your own "
    "organisation will ask you for.",
    "Third, {skills} procedures in here are written as skills. A skill is a "
    "document and an instruction in the same bytes, so what you read is exactly "
-   "what runs. Nothing is ever substituted for a model's answer: if there is "
-   "no model configured, the program stops and says so rather than printing "
-   "something plausible.",
+   "what runs. And nothing is ever put in place of a model's answer: if there "
+   "is no model configured, the program stops and says so rather than printing "
+   "something that looks plausible.",
   ]),
   ("⑤ WHERE TO START", [
-   "Start at A0.0, whatever function you run. It sets your machine up, and the "
-   "whole of Function A is about {reading_minutes} minutes of reading, so you "
+   "Start at A0.0, whatever your job is. It sets your machine up, and the "
+   "whole first track is about {reading_minutes} minutes of reading, so you "
    "are not committing a quarter to find out whether this is for you.",
-   "After that, take the function you own. There are {chapters} chapters and "
-   "nobody takes all {sessions} lessons — architecture and infrastructure go "
-   "to Function B, application security to C, offensive security to D, the SOC "
-   "to E, governance to F. Each one has a course guide that is a run sheet for "
-   "rebuilding that operation.",
-   "One sentence to take with you, because the rest of the curriculum is the "
-   "second half of it. The model proposes. Your code decides.",
+   "After that, take the track that matches your job. There are {chapters} "
+   "chapters and nobody takes all {sessions} lessons — architecture and "
+   "infrastructure go to track B, application security to C, offensive "
+   "security to D, the SOC to E, governance to F. Each one has a course guide "
+   "with the whole run sheet in it.",
+   "One sentence to take with you, because the rest of it is the second half "
+   "of that sentence. The model proposes. Your code decides.",
   ]),
  ],
  "directions": {
-  "① WHAT THIS IS": "Write CYBER COMMONS on the board. Under it, strike "
-                    "through the words READING LIST and write YOUR FUNCTION, "
-                    "REBUILT. Then the numbers: {sessions} lessons, "
-                    "{functions} functions.",
-  "② WHY IT EXISTS": "Two columns. Left, THE ADVERSARY: 29 minutes, 27 "
-                     "seconds, directing agents. Right, THE FUNCTION: "
-                     "quarterly review, one alert at a time, annual evidence. "
-                     "Circle the gap between the columns, not the rows.",
+  "① WHAT THIS IS": "Write CYBER COMMONS on the board, and under it HOW THE "
+                    "WORK CHANGES. Then the numbers: {sessions} lessons, "
+                    "{functions} tracks.",
+  "② WHY IT EXISTS": "Two columns. Left, THE ATTACKER: 29 minutes, 27 "
+                     "seconds, using AI. Right, THE WORK: reviewed every few "
+                     "months, one alert at a time, checked once a year. "
+                     "Circle the space between the columns.",
   "③ WHAT YOU BUILD": "Draw four boxes labelled workflow, advisor, coding, "
                       "files, and one box around all four: CYBERTRAVELS. Then "
                       "five arrows out of it, labelled ARCHITECTURE, APPSEC, "
@@ -922,7 +918,7 @@ INTRO = {
                              "DAY 2 across. Do not run anything here — this "
                              "beat is the promise, not the demo.",
   "⑤ WHERE TO START": "Write A0.0 large. Then B to F down the side, each with "
-                      "the function it rebuilds rather than a topic.",
+                      "the part of the organisation it is about.",
  },
 }
 
@@ -934,23 +930,22 @@ INTRO = {
 # changed. These two lines per function are the only part written here.
 
 OVERVIEW_CLOSE = {
- "A": "Do this one whatever function you run. It is the capability the other "
-      "five are transformed with, and everything after it attaches to "
-      "something you will have written yourself.",
- "B": "Do this one if you own architecture or infrastructure security — and do "
-      "the first chapter before you let anybody buy a control. What changes is "
-      "what a design review produces: a register with owners instead of an "
-      "opinion.",
- "C": "Do this one if you own application security. What changes is whether "
-      "your gate can keep up with code an agent wrote this morning.",
- "D": "Do this one if you own offensive security or evaluation. What changes "
-      "is what counts as a finding: one that reproduces, not one that worked "
+ "A": "Do this one whatever your job is. It builds the system the other five "
+      "tracks are about, and everything after it attaches to something you "
+      "will have written yourself.",
+ "B": "Do this one if you work on architecture or infrastructure security — "
+      "and do the first chapter before anybody buys a control. What changes "
+      "is how a design review ends: with a list of risks and owners, rather "
+      "than an opinion.",
+ "C": "Do this one if you work in application security. What changes is "
+      "whether your gate can keep up with code an agent wrote this morning.",
+ "D": "Do this one if you do offensive work or evaluation. What changes is "
+      "what counts as a finding: one that happens again, not one that worked "
       "once.",
- "E": "Do this one if you own security operations. What changes is the "
-      "analyst's job — directing a loop rather than reading alerts one at a "
-      "time — and the clock is how long an agent gets before somebody stops "
-      "it.",
- "F": "Do this one if you own governance, risk or compliance. What changes is "
-      "the artefact: an indicator somebody can compute, with a date on it, "
-      "instead of a control statement.",
+ "E": "Do this one if you work in the SOC. What changes is the analyst's job "
+      "— directing a loop instead of reading alerts one at a time — and the "
+      "clock is how long an agent gets before somebody stops it.",
+ "F": "Do this one if you work in governance, risk or compliance. What "
+      "changes is what you hand over: a number somebody can compute, with a "
+      "date on it, instead of a control statement.",
 }

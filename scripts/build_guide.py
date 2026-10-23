@@ -1188,30 +1188,28 @@ def index_page() -> str:
         '<div class="crumb"><a href="../lessons/index.html">All lessons</a> › '
         'Course guides</div>',
         '<div class="sid">COURSE GUIDES</div>',
-        '<h1>Six functions of a security organisation, one guide each</h1>',
+        '<h1>Six tracks, one guide each</h1>',
         '<div class="badges">'
         f'<span class="badge d">{len(fns)} guides</span>'
         f'<span class="badge t">{total} lessons</span>'
         '<span class="badge b">Self-study or taught</span></div>',
-        md("These are not six subjects. They are the functions a CISO "
-           "organisation actually runs — architecture and infrastructure "
-           "security, application security, offensive security and "
-           "evaluation, security operations, and governance — and each guide "
-           "is the run sheet for **rebuilding that operation to run on "
-           "agents**: what it changes, the chapters in order, every lesson's "
-           "risk, control and measure, the skill it runs and what that skill "
+        md("These are not six subjects. They are the parts a security "
+           "organisation is made of — architecture and infrastructure, "
+           "application security, offensive security, the SOC, and governance "
+           "— and each guide is the run sheet for one of them: **what changes "
+           "in that work**, the chapters in order, every lesson's risk, "
+           "control and measure, the skill it runs and what that skill "
            "prints, plus the pitfalls, a quick check, and the blocks marked "
            "*For a room* for anybody running it as a session."),
-        md(f"**Start with [Function A](function-a.html)** whatever function "
-           f"you run: it builds the agentic capability the other five are "
-           f"transformed with, and you cannot rebuild an operation with agents "
-           f"you have never built. Its guide is also the one with a "
-           f"hand-verified output for every lab, because it has sixteen of "
-           f"them."),
+        md(f"**Start with [Function A](function-a.html)** whatever your "
+           f"job is: it builds the system the other five tracks are about, and "
+           f"it is hard to secure an agent you have never built. Its guide is "
+           f"also the one with a hand-verified output for every lab, because "
+           f"it has sixteen of them."),
         '</div>',
         sec("glance", "The six", "◉",
-            table(["Guide", "Lessons / chapters", "What it rebuilds",
-                   "Whose function"], rows)),
+            table(["Guide", "Lessons / chapters", "What changes",
+                   "Who it is for"], rows)),
         '<div class="pager">'
         '<a href="../lessons/A0.0.html"><div class="k">Start here</div>'
         '<div class="t">A0.0 — set up your computer</div></a>'

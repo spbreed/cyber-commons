@@ -972,43 +972,47 @@ def home_numbers() -> dict[str, int]:
 # from, so renaming them there for a copy change would ripple through the whole
 # tree. The mapping lives here instead, and a function missing from it fails
 # the build rather than quietly falling back to the stored title.
-# The six homepage cards. The name is the **function being transformed**, not a
-# topic: the curriculum's structure already maps onto the functions a CISO
-# organisation runs, and naming them as topics was the thing that made the site
-# read as a reading list rather than as a transformation programme.
+# The six homepage cards. The name is the **part of a security organisation**
+# the track is about, not a topic — the curriculum's structure already maps onto
+# the parts a security organisation is made of, and naming them as topics was
+# what made the site read as a reading list.
+#
+# Plain words on purpose. These are the first sentences a visitor reads, and an
+# earlier version of them ("the architecture and design-review function,
+# rebuilt") claimed the course does the rebuilding. It does not: it teaches you
+# how the work changes, and you do the rest.
 TRACKS = {
-    "A": ("Build the agentic system",
-          "The capability everything else is built on. Set your machine up, "
+    "A": ("Build an agentic system",
+          "The thing the other five tracks are about. Set your machine up, "
           "then build CyberTravels end to end — the loop, MCP tools, identity "
           "and delegation, memory, agent-to-agent, spans and an audit trail. "
-          "Whatever function you run, you cannot transform it with agents you "
-          "have never built."),
-    "B": ("Security architecture &amp; infrastructure",
-          "The architecture and design-review function, rebuilt. One reference "
-          "architecture for agentic systems, every risk that attaches to a "
-          "component of it, and the identity, ingress and runtime controls "
-          "that close them — so a review produces a register with owners "
-          "rather than an opinion."),
+          "Whatever your job, it is hard to secure an agent you have never "
+          "built."),
+    "B": ("Architecture &amp; infrastructure security",
+          "What changes in a design review. One reference architecture for "
+          "agentic systems, every risk that attaches to a part of it, and the "
+          "identity, ingress and runtime controls that close them — so a "
+          "review ends with a list of risks and owners instead of an "
+          "opinion."),
     "C": ("Application security &amp; the AI SDLC",
-          "The AppSec function, rebuilt as a pipeline. Threat model, two-pass "
-          "scan, deduplication, reachability, sandboxed proof, supply chain "
-          "and a fix gated on evidence — running before and after deploy, at "
-          "the speed agents now write code."),
+          "What changes in an AppSec pipeline when agents write the code. "
+          "Threat model, two-pass scan, deduplication, reachability, a proof "
+          "in a sandbox, supply chain, and a fix that has to show evidence "
+          "before it merges — before and after deploy."),
     "D": ("Offensive security &amp; evaluation",
-          "The red-team and evaluation function, rebuilt. One authorised, "
-          "scoped offensive lifecycle against your own estate — from ingestion "
-          "and elicitation to containment, forensics and governance — "
-          "reporting findings that reproduce instead of findings that worked "
-          "once."),
+          "What changes in a red team. One authorised, scoped lifecycle "
+          "against your own estate, from ingestion and elicitation to "
+          "containment, forensics and governance — and why a finding has to "
+          "reproduce before it counts."),
     "E": ("Security operations",
-          "The SOC, rebuilt around five intervals of one clock. Detection and "
-          "response when the analyst is directing agents rather than reading "
-          "alerts one at a time, and when the actor under investigation is "
-          "itself an agent."),
+          "What changes in a SOC, across five intervals of one clock. "
+          "Detection and response when the analyst is directing agents "
+          "instead of reading alerts one at a time, and when the thing being "
+          "investigated is itself an agent."),
     "F": ("Governance, risk &amp; compliance",
-          "The GRC function and the CISO office, rebuilt. Framework controls "
-          "turned into indicators somebody can compute, mapped outward to the "
-          "regimes that apply, with a programme sequenced to produce control "
+          "What changes in GRC and the CISO office. Framework controls become "
+          "numbers somebody can actually compute, mapped out to the rules "
+          "that apply to you, in a programme ordered to produce control "
           "coverage rather than demos."),
 }
 

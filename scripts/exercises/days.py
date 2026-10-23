@@ -28,11 +28,12 @@ from __future__ import annotations
 # --------------------------------------------------------------------------
 # Function level — who it is for, and the three days across the whole function.
 # `who` is deliberately in job titles rather than skills, because a reader
-# decides whether to open a track by recognising their own role in it. It now
-# also names **the function being transformed**, because the curriculum's six
-# tracks are the functions a CISO organisation runs and a reader deciding
-# between them is choosing an operation to change rather than a subject to
-# study.
+# decides whether to open a track by recognising their own role in it. It also
+# names **the part of a security organisation** the track is about, because the
+# six tracks are those parts and a reader choosing between them is choosing
+# which of their own working practices to change, not which subject to study.
+# Plain words: an earlier version opened each one with "Transforms the …
+# function", which claimed the curriculum does the transforming.
 # `who_short` is the same thing at homepage-card width — the full sentence does
 # not fit in a card and a truncated sentence reads worse than a written one.
 # --------------------------------------------------------------------------
@@ -40,10 +41,9 @@ from __future__ import annotations
 FUNCTION_DAYS: dict[str, dict[str, str]] = {
 
 "A": {
- "who_short": "Everyone, first · the capability every other function is "
-              "transformed with",
- "who": "Everyone, whichever function you run, because this is the "
-        "capability the other five are transformed with. Engineers building an "
+ "who_short": "Everyone, first · the system the other five tracks are about",
+ "who": "Everyone, whatever your job, because this is the system the other "
+        "five tracks are about. Engineers building an "
         "agentic feature, and equally the AppSec "
         "engineers, red teamers, SOC analysts and GRC leads who will be handed "
         "one. It assumes you can read a Python function. It assumes no security "
@@ -69,13 +69,13 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "B": {
- "who_short": "Transforms the architecture and infrastructure security "
-              "function · architects · engineers shipping an agentic feature",
- "who": "The architecture and infrastructure security function. Security "
-        "architects, principal security engineers, and the product engineers "
-        "and product managers who are building an agentic feature and have "
-        "been asked whether it is safe to ship. What changes is the output of "
-        "a review: a register with owners rather than an opinion.",
+ "who_short": "Architecture and infrastructure security · architects · "
+              "engineers shipping an agentic feature",
+ "who": "Architecture and infrastructure security. Security architects, "
+        "principal security engineers, and the product engineers and product "
+        "managers who are building an agentic feature and have been asked "
+        "whether it is safe to ship. What changes is how a review ends: with "
+        "a list of risks and owners rather than an opinion.",
  "day0": "You are about to build, review or approve an agentic system. Before "
          "any control is worth choosing you need the picture: which components "
          "exist, what each one can reach, and which risks attach to each. Choose "
@@ -95,12 +95,12 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "C": {
- "who_short": "Transforms the application security function · AppSec and "
-              "product security engineers · penetration testers",
- "who": "The application security function. AppSec engineers, product "
-        "security engineers, secure code reviewers and penetration testers — "
-        "the people who already run a security gate on every release, and now "
-        "have to run it at the speed agents write code.",
+ "who_short": "Application security · AppSec and product security engineers "
+              "· penetration testers",
+ "who": "Application security. AppSec engineers, product security "
+        "engineers, secure code reviewers and penetration testers — the "
+        "people who already run a security gate on every release, and now "
+        "have to keep up with code an agent wrote.",
  "day0": "You already do this work: SAST, DAST, dependency and container "
          "scanning, and a penetration test before launch. Two things changed. "
          "Agentic code puts authority behind a model's output, so the classes "
@@ -125,12 +125,12 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "D": {
- "who_short": "Transforms the offensive security and evaluation function · "
-              "red team operators · AI security researchers",
- "who": "The offensive security and evaluation function. Red team operators, "
-        "AI security researchers and offensive ML engineers — and the "
-        "defenders who have to receive what they find. What changes is what "
-        "counts as a finding: one that reproduces, not one that worked once.",
+ "who_short": "Offensive security and evaluation · red team operators · AI "
+              "security researchers",
+ "who": "Offensive security and evaluation. Red team operators, AI "
+        "security researchers and offensive ML engineers — and the defenders "
+        "who have to receive what they find. What changes is what counts as a "
+        "finding: one that happens again, not one that worked once.",
  "day0": "Nobody can tell you how your agentic system fails until somebody has "
          "tried to break it. Deterministic exploits have signatures; an agentic "
          "failure is a reasoning loop, code generated at run time and tool calls "
@@ -149,12 +149,12 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "E": {
- "who_short": "Transforms security operations · SOC analysts · detection "
-              "engineers · incident responders",
+ "who_short": "Security operations · SOC analysts · detection engineers · "
+              "incident responders",
  "who": "Security operations. SOC analysts, detection engineers, incident "
         "responders, threat hunters and DFIR leads — running a SOC that now "
         "has agents in it, and agents watching it. What changes is the "
-        "analyst's job: directing a loop rather than reading alerts one at a "
+        "analyst's job: directing a loop instead of reading alerts one at a "
         "time.",
  "day0": "Your SOC was tuned for people. One hour of an agent is roughly 1,400 "
          "tool calls across 260 resources; one hour of a person is twelve "
@@ -177,12 +177,12 @@ FUNCTION_DAYS: dict[str, dict[str, str]] = {
 },
 
 "F": {
- "who_short": "Transforms the governance, risk and compliance function · "
-              "risk owners · the CISO office",
- "who": "The governance, risk and compliance function and the CISO office. "
-        "GRC analysts, risk and compliance managers, control owners, privacy "
+ "who_short": "Governance, risk and compliance · risk owners · the CISO "
+              "office",
+ "who": "Governance, risk and compliance, and the CISO office. GRC "
+        "analysts, risk and compliance managers, control owners, privacy "
         "engineers and BISOs — anyone who has to answer for the estate rather "
-        "than build it. What changes is the artefact: an indicator somebody "
+        "than build it. What changes is what you hand over: a number somebody "
         "can compute, with a date on it, instead of a control statement.",
  "day0": "Somebody signed off on the platform when it was a chatbot. It now "
          "moves money, ships code and reads contracts, and nothing in the "

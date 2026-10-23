@@ -1,19 +1,19 @@
 <h1>Cyber Commons</h1>
 
-**Your security function, rebuilt to run on agents — because the adversary
-already does.**
+**Learn how to transform your security team with AI — because attackers
+already have.**
 
-Cyber Commons is how a security organisation **transforms its own practice and
-operations**. Architecture and infrastructure security, application security,
-offensive security, the SOC, governance — **each function taken apart and stood
-back up with agents doing the work**. Securing AI is part of it, not the whole
-of it: you are rebuilding your operations with the same technology that is
-creating your newest attack surface, so both halves are in here.
+Free, open training for security teams. Six tracks: the first builds an
+agentic system, and the other five each take **one part of a security
+organisation** — architecture and infrastructure, application security,
+offensive security, the SOC and governance — to teach **how that work changes
+when agents do it**. You also learn how to
+secure the AI itself: the same technology you use to go faster is your newest
+attack surface, so both halves are in here.
 
-It is a transformation programme rather than a reading list, which is why every
-lesson carries three days and not one: **Day 0**, why the change is worth
-making; **Day 1**, the thing you stand up; **Day 2**, the number that says it
-is still working a quarter later.
+That is also why every lesson carries three days and not one: **Day 0**, why
+this is worth doing; **Day 1**, the thing you build; **Day 2**, the number that
+tells you next quarter that it still works.
 
 **149 lessons across 16 chapters.** Every lesson is the idea, the diagram, the
 control, and what it looks like in one running system — and then it **runs a

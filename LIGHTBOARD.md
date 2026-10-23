@@ -5,15 +5,16 @@ A recording script for **one introduction, 6 course overviews and all
 talk. No translating notes into sentences while the camera is running.
 
 **What the whole thing is about, so every take carries it.** Cyber Commons is
-how a security organisation rebuilds its own functions to run on agentic AI —
-architecture and infrastructure security, application security, offensive
-security, the SOC, governance. It is a transformation programme, not a reading
-list about AI security. Each of the six tracks is one of those functions, and
-the number at the end of every lesson is there because changing an operation
-means being able to say next quarter whether the change held. Say "your
-function" and "what changes" rather than "you will learn"; the scripts below
-are written that way, and a take that drifts back into lecturing is the one to
-redo.
+free training for security teams, and each of the six tracks is one part of a
+security organisation — architecture and infrastructure, application security,
+offensive security, the SOC, governance. What it teaches, for every one of
+them, is **how that work changes when agents do it**. The number at the end of
+each lesson is there because changing how work gets done means being able to
+say next quarter whether it held.
+
+**Keep the words plain.** Short sentences, ordinary words, and "what changes"
+rather than "transformation" or "paradigm". The scripts below are written that
+way on purpose: somebody watching has a job to get back to.
 
 ## Three kinds of recording, and the order to make them
 
@@ -116,41 +117,41 @@ ground-rules beats live in the generator; everything else is each lesson's own.
 
 ### INTRO · Cyber Commons — what this is, and how to use it
 
-The whole commons in one recording · 793 words, about 5.7 min spoken · publishes on the home page from `recordings/intro.mp4` · [site](https://cybercommons.ai/)
+The whole commons in one recording · 761 words, about 5.4 min spoken · publishes on the home page from `recordings/intro.mp4` · [site](https://cybercommons.ai/)
 
-*[On the board for the whole take: Your function, rebuilt. Not a reading list.]*
+*[On the board for the whole take: How the work changes when agents do it.]*
 
 **① WHAT THIS IS**
 
-*[Write CYBER COMMONS on the board. Under it, strike through the words READING LIST and write YOUR FUNCTION, REBUILT. Then the numbers: 149 lessons, 6 functions.]*
+*[Write CYBER COMMONS on the board, and under it HOW THE WORK CHANGES. Then the numbers: 149 lessons, 6 tracks.]*
 
-This is Cyber Commons, and the first thing to say is what it is not. It is not a reading list about AI security.
+This is Cyber Commons. It is free, open training for security teams, and it comes in 6 tracks.
 
-It is how a security organisation rebuilds its own functions to run on agentic AI. Architecture and infrastructure security. Application security. Offensive security. The SOC. Governance. Each one taken apart and stood back up with agents doing the work — 149 lessons across 6 functions, every one of them running on your own computer.
+The first builds an agentic system. The other five each take one part of a security organisation — architecture and infrastructure, application security, offensive security, the SOC, and governance — and teach the same thing about each: how that work changes when agents do it. 149 lessons in all, and every one of them runs on your own computer.
 
 A commons is a shared resource no one owns and everyone may draw from. This one is open, and it is openly corrected — if a lesson is wrong, the fix is a pull request.
 
 **② WHY IT EXISTS**
 
-*[Two columns. Left, THE ADVERSARY: 29 minutes, 27 seconds, directing agents. Right, THE FUNCTION: quarterly review, one alert at a time, annual evidence. Circle the gap between the columns, not the rows.]*
+*[Two columns. Left, THE ATTACKER: 29 minutes, 27 seconds, using AI. Right, THE WORK: reviewed every few months, one alert at a time, checked once a year. Circle the space between the columns.]*
 
-Here is the problem it was built for, and it is not the one people expect.
+Here is the problem it was built for.
 
-Breakout time — the gap between an attacker getting in and moving sideways — is down to twenty-nine minutes. The fastest on record is twenty-seven seconds. Now look at how a security function actually operates against that. Architecture reviewed quarterly. Alerts triaged one at a time. Controls evidenced once a year for an auditor.
+Breakout time — how long it takes an attacker to get in and start moving sideways — is down to twenty-nine minutes. The fastest on record is twenty-seven seconds. Now think about how most security work is actually done. Architecture reviewed every few months. Alerts read one at a time. Controls checked once a year for an auditor.
 
-That is not a tooling gap. It is a cadence gap, and you do not close it by reading faster. Attackers are already directing agents. The only answer that scales is to change how the function itself operates — and that is a transformation programme, not a training course.
+Attackers are already using AI to go faster. You cannot close that gap by reading faster. The work itself has to be done differently, and that takes knowing how — which is what this is for.
 
-There is a second half, and it matters just as much. The systems you are defending are themselves becoming agents. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong — it cancels a booking, or moves money, or deletes a row. So you are transforming your operations with the same technology that is creating your newest attack surface, which is why both halves are in here.
+There is a second half, and it matters just as much. The systems you are defending are becoming agents themselves. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong — it cancels a booking, or moves money, or deletes a row. So the same technology you are using to go faster is also your newest attack surface. Both halves are in here.
 
 **③ WHAT YOU BUILD**
 
 *[Draw four boxes labelled workflow, advisor, coding, files, and one box around all four: CYBERTRAVELS. Then five arrows out of it, labelled ARCHITECTURE, APPSEC, OFFENSIVE, SOC, GOVERNANCE.]*
 
-You do not read about a system. You build one, and then you transform a function around it.
+You do not read about a system. You build one.
 
-CyberTravels is a corporate travel company with an agentic platform — four agents that book trips, issue refunds, read vendor documents and write code. Function A has you build it, one increment per lesson. That is the capability. You cannot rebuild a function with agents you have never built.
+CyberTravels is a corporate travel company with an agentic platform — four agents that book trips, issue refunds, read vendor documents and write code. The first track has you build it, one piece per lesson. It is hard to secure an agent you have never built.
 
-Then the five functions after it are the five operations of a security organisation, each one rebuilt against the thing you now own. Function B is architecture and infrastructure security: a review that produces a risk register with owners instead of an opinion. Function C is application security: a pipeline that keeps up with code an agent wrote. Function D is offensive security: findings that reproduce instead of findings that worked once. Function E is the SOC: an analyst directing a loop instead of reading alerts one at a time. Function F is governance: an indicator somebody can compute, with a date on it, instead of a control statement.
+Then the five tracks after it each take one part of a security organisation and show you what changes. Track B is architecture and infrastructure: a design review that ends with a list of risks and owners instead of an opinion. Track C is application security: a pipeline that keeps up with code an agent wrote. Track D is offensive security: findings that happen again rather than once. Track E is the SOC: an analyst directing a loop instead of reading alerts one at a time. Track F is governance: a number somebody can compute, with a date on it, instead of a control statement.
 
 That is why there is one system and not six examples. A sharper example is not worth you holding a second system in your head.
 
@@ -160,21 +161,21 @@ That is why there is one system and not six examples. A sharper example is not w
 
 Three things to know before you start.
 
-First, there is nothing to install beyond Python and Git. No account with us, no hosted notebook, no API key of ours. The one dependency is a model, and a signed-in Claude command line counts.
+First, there is nothing to install beyond Python and Git. No account with us, no hosted notebook, no API key of ours. The one thing you need is a model, and a signed-in Claude command line counts.
 
-Second, every lesson answers three questions in order, because that is what it takes to actually change an operation rather than demonstrate one. Day 0, why this change is worth making. Day 1, the thing you stand up. Day 2, the number that says it is still working a quarter later. The third one is the one most training leaves out, and it is the one your own organisation will ask you for.
+Second, every lesson answers three questions, in order, because that is what it takes to change how work gets done rather than just demonstrate something. Day 0, why this is worth doing. Day 1, the thing you build. Day 2, the number that tells you next quarter that it still works. The third one is what most training leaves out, and it is the one your own organisation will ask you for.
 
-Third, 140 procedures in here are written as skills. A skill is a document and an instruction in the same bytes, so what you read is exactly what runs. Nothing is ever substituted for a model's answer: if there is no model configured, the program stops and says so rather than printing something plausible.
+Third, 140 procedures in here are written as skills. A skill is a document and an instruction in the same bytes, so what you read is exactly what runs. And nothing is ever put in place of a model's answer: if there is no model configured, the program stops and says so rather than printing something that looks plausible.
 
 **⑤ WHERE TO START**
 
-*[Write A0.0 large. Then B to F down the side, each with the function it rebuilds rather than a topic.]*
+*[Write A0.0 large. Then B to F down the side, each with the part of the organisation it is about.]*
 
-Start at A0.0, whatever function you run. It sets your machine up, and the whole of Function A is about 88 minutes of reading, so you are not committing a quarter to find out whether this is for you.
+Start at A0.0, whatever your job is. It sets your machine up, and the whole first track is about 88 minutes of reading, so you are not committing a quarter to find out whether this is for you.
 
-After that, take the function you own. There are 16 chapters and nobody takes all 149 lessons — architecture and infrastructure go to Function B, application security to C, offensive security to D, the SOC to E, governance to F. Each one has a course guide that is a run sheet for rebuilding that operation.
+After that, take the track that matches your job. There are 16 chapters and nobody takes all 149 lessons — architecture and infrastructure go to track B, application security to C, offensive security to D, the SOC to E, governance to F. Each one has a course guide with the whole run sheet in it.
 
-One sentence to take with you, because the rest of the curriculum is the second half of it. The model proposes. Your code decides.
+One sentence to take with you, because the rest of it is the second half of that sentence. The model proposes. Your code decides.
 
 ---
 
@@ -187,11 +188,11 @@ One sentence to take with you, because the rest of the curriculum is the second 
 
 ### OVERVIEW A · Function A — Getting Started — Building Agentic AI
 
-The course guide as a recording · 16 lessons · 341 words, about 2.4 min spoken · publishes from `recordings/overview-a.mp4` · [guide](https://cybercommons.ai/guide/function-a.html)
+The course guide as a recording · 16 lessons · 340 words, about 2.4 min spoken · publishes from `recordings/overview-a.mp4` · [guide](https://cybercommons.ai/guide/function-a.html)
 
 **① WHO IT IS FOR**
 
-Function A is Getting Started — Building Agentic AI. Everyone, whichever function you run, because this is the capability the other five are transformed with. Engineers building an agentic feature, and equally the AppSec engineers, red teamers, SOC analysts and GRC leads who will be handed one. It assumes you can read a Python function. It assumes no security background at all, and no prior agent work.
+Function A is Getting Started — Building Agentic AI. Everyone, whatever your job, because this is the system the other five tracks are about. Engineers building an agentic feature, and equally the AppSec engineers, red teamers, SOC analysts and GRC leads who will be handed one. It assumes you can read a Python function. It assumes no security background at all, and no prior agent work.
 
 One sentence to hold for the whole function. The model proposes, your code decides.
 
@@ -213,7 +214,7 @@ The system runs, and four numbers say how well: scopes on a delegated token (one
 
 **⑤ WHO SHOULD DO IT**
 
-Do this one whatever function you run. It is the capability the other five are transformed with, and everything after it attaches to something you will have written yourself.
+Do this one whatever your job is. It builds the system the other five tracks are about, and everything after it attaches to something you will have written yourself.
 
 The course guide has the whole run sheet — every lesson's risk, control and measure, and what each skill prints. Start at A0.0.
 
@@ -221,11 +222,11 @@ The course guide has the whole run sheet — every lesson's risk, control and me
 
 ### OVERVIEW B · Function B — Securing AI Architectures
 
-The course guide as a recording · 39 lessons · 335 words, about 2.4 min spoken · publishes from `recordings/overview-b.mp4` · [guide](https://cybercommons.ai/guide/function-b.html)
+The course guide as a recording · 39 lessons · 337 words, about 2.4 min spoken · publishes from `recordings/overview-b.mp4` · [guide](https://cybercommons.ai/guide/function-b.html)
 
 **① WHO IT IS FOR**
 
-Function B is Securing AI Architectures. The architecture and infrastructure security function. Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship. What changes is the output of a review: a register with owners rather than an opinion.
+Function B is Securing AI Architectures. Architecture and infrastructure security. Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship. What changes is how a review ends: with a list of risks and owners rather than an opinion.
 
 One sentence to hold for the whole function. Name the risk before you choose the control.
 
@@ -247,7 +248,7 @@ The register in B1.18 is the scorecard. Count the risks that have a named owning
 
 **⑤ WHO SHOULD DO IT**
 
-Do this one if you own architecture or infrastructure security — and do the first chapter before you let anybody buy a control. What changes is what a design review produces: a register with owners instead of an opinion.
+Do this one if you work on architecture or infrastructure security — and do the first chapter before anybody buys a control. What changes is how a design review ends: with a list of risks and owners, rather than an opinion.
 
 The course guide has the whole run sheet — every lesson's risk, control and measure, and what each skill prints. Start at B1.0.
 
@@ -255,11 +256,11 @@ The course guide has the whole run sheet — every lesson's risk, control and me
 
 ### OVERVIEW C · Function C — Application Security with an AI SDLC
 
-The course guide as a recording · 20 lessons · 257 words, about 1.8 min spoken · publishes from `recordings/overview-c.mp4` · [guide](https://cybercommons.ai/guide/function-c.html)
+The course guide as a recording · 20 lessons · 255 words, about 1.8 min spoken · publishes from `recordings/overview-c.mp4` · [guide](https://cybercommons.ai/guide/function-c.html)
 
 **① WHO IT IS FOR**
 
-Function C is Application Security with an AI SDLC. The application security function. AppSec engineers, product security engineers, secure code reviewers and penetration testers — the people who already run a security gate on every release, and now have to run it at the speed agents write code.
+Function C is Application Security with an AI SDLC. Application security. AppSec engineers, product security engineers, secure code reviewers and penetration testers — the people who already run a security gate on every release, and now have to keep up with code an agent wrote.
 
 One sentence to hold for the whole function. A pipeline is a harness, and a harness needs a verifier.
 
@@ -281,7 +282,7 @@ This function is measured on a before-and-after you can state out loud. Determin
 
 **⑤ WHO SHOULD DO IT**
 
-Do this one if you own application security. What changes is whether your gate can keep up with code an agent wrote this morning.
+Do this one if you work in application security. What changes is whether your gate can keep up with code an agent wrote this morning.
 
 The course guide has the whole run sheet — every lesson's risk, control and measure, and what each skill prints. Start at C2.0.
 
@@ -293,7 +294,7 @@ The course guide as a recording · 12 lessons · 280 words, about 2.0 min spoken
 
 **① WHO IT IS FOR**
 
-Function D is Agentic Evaluation and Red Teaming. The offensive security and evaluation function. Red team operators, AI security researchers and offensive ML engineers — and the defenders who have to receive what they find. What changes is what counts as a finding: one that reproduces, not one that worked once.
+Function D is Agentic Evaluation and Red Teaming. Offensive security and evaluation. Red team operators, AI security researchers and offensive ML engineers — and the defenders who have to receive what they find. What changes is what counts as a finding: one that happens again, not one that worked once.
 
 One sentence to hold for the whole function. If you cannot reproduce it, you have not found it.
 
@@ -315,7 +316,7 @@ A transcript is not a finding. Every technique reports a reproduction rate acros
 
 **⑤ WHO SHOULD DO IT**
 
-Do this one if you own offensive security or evaluation. What changes is what counts as a finding: one that reproduces, not one that worked once.
+Do this one if you do offensive work or evaluation. What changes is what counts as a finding: one that happens again, not one that worked once.
 
 The course guide has the whole run sheet — every lesson's risk, control and measure, and what each skill prints. Start at D1.0.
 
@@ -323,11 +324,11 @@ The course guide has the whole run sheet — every lesson's risk, control and me
 
 ### OVERVIEW E · Function E — The Agentic SOC
 
-The course guide as a recording · 31 lessons · 338 words, about 2.4 min spoken · publishes from `recordings/overview-e.mp4` · [guide](https://cybercommons.ai/guide/function-e.html)
+The course guide as a recording · 31 lessons · 339 words, about 2.4 min spoken · publishes from `recordings/overview-e.mp4` · [guide](https://cybercommons.ai/guide/function-e.html)
 
 **① WHO IT IS FOR**
 
-Function E is The Agentic SOC. Security operations. SOC analysts, detection engineers, incident responders, threat hunters and DFIR leads — running a SOC that now has agents in it, and agents watching it. What changes is the analyst's job: directing a loop rather than reading alerts one at a time.
+Function E is The Agentic SOC. Security operations. SOC analysts, detection engineers, incident responders, threat hunters and DFIR leads — running a SOC that now has agents in it, and agents watching it. What changes is the analyst's job: directing a loop instead of reading alerts one at a time.
 
 One sentence to hold for the whole function. Every detection has a subject, and a clock.
 
@@ -349,7 +350,7 @@ Five intervals, one per phase, and all five are numbers: time to discover, to de
 
 **⑤ WHO SHOULD DO IT**
 
-Do this one if you own security operations. What changes is the analyst's job — directing a loop rather than reading alerts one at a time — and the clock is how long an agent gets before somebody stops it.
+Do this one if you work in the SOC. What changes is the analyst's job — directing a loop instead of reading alerts one at a time — and the clock is how long an agent gets before somebody stops it.
 
 The course guide has the whole run sheet — every lesson's risk, control and measure, and what each skill prints. Start at E1.0.
 
@@ -357,11 +358,11 @@ The course guide has the whole run sheet — every lesson's risk, control and me
 
 ### OVERVIEW F · Function F — AI Governance for Agentic Systems
 
-The course guide as a recording · 31 lessons · 303 words, about 2.2 min spoken · publishes from `recordings/overview-f.mp4` · [guide](https://cybercommons.ai/guide/function-f.html)
+The course guide as a recording · 31 lessons · 306 words, about 2.2 min spoken · publishes from `recordings/overview-f.mp4` · [guide](https://cybercommons.ai/guide/function-f.html)
 
 **① WHO IT IS FOR**
 
-Function F is AI Governance for Agentic Systems. The governance, risk and compliance function and the CISO office. GRC analysts, risk and compliance managers, control owners, privacy engineers and BISOs — anyone who has to answer for the estate rather than build it. What changes is the artefact: an indicator somebody can compute, with a date on it, instead of a control statement.
+Function F is AI Governance for Agentic Systems. Governance, risk and compliance, and the CISO office. GRC analysts, risk and compliance managers, control owners, privacy engineers and BISOs — anyone who has to answer for the estate rather than build it. What changes is what you hand over: a number somebody can compute, with a date on it, instead of a control statement.
 
 One sentence to hold for the whole function. A control you cannot evidence is a control you do not have.
 
@@ -383,7 +384,7 @@ The unit is the key control indicator: computed from the estate, with a denomina
 
 **⑤ WHO SHOULD DO IT**
 
-Do this one if you own governance, risk or compliance. What changes is the artefact: an indicator somebody can compute, with a date on it, instead of a control statement.
+Do this one if you work in governance, risk or compliance. What changes is what you hand over: a number somebody can compute, with a date on it, instead of a control statement.
 
 The course guide has the whole run sheet — every lesson's risk, control and measure, and what each skill prints. Start at F1.0.
 
@@ -397,7 +398,7 @@ The course guide has the whole run sheet — every lesson's risk, control and me
 
 ## Function A — Getting Started — Building Agentic AI
 
-*[Who is watching: Everyone, whichever function you run, because this is the capability the other five are transformed with. Engineers building an agentic feature, and equally the AppSec engineers, red teamers, SOC analysts and GRC leads who will be handed one. It assumes you can read a Python function. It assumes no security background at all, and no prior agent work.]*
+*[Who is watching: Everyone, whatever your job, because this is the system the other five tracks are about. Engineers building an agentic feature, and equally the AppSec engineers, red teamers, SOC analysts and GRC leads who will be handed one. It assumes you can read a Python function. It assumes no security background at all, and no prior agent work.]*
 
 *[The pitch for the whole function, if you need it in one breath: Every control in the other five functions attaches to a mechanism. Hand somebody a control before they have built the mechanism and they apply it as a sentence in a document — which is the single most common reason agentic security guidance is read, agreed with, and not implemented.]*
 
@@ -407,7 +408,7 @@ The course guide has the whole run sheet — every lesson's risk, control and me
 
 ### A0.0 · Set up your computer — what this is, who it is for, and the model every lesson runs on
 
-Chapter A0 · lesson 1 of 2 · runs a skill · 408 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+Chapter A0 · lesson 1 of 2 · runs a skill · 403 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -417,7 +418,7 @@ Before anything else, thirty seconds on what an agent actually is, because if yo
 
 A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong. Everything here follows from that one sentence.
 
-So, what this is. It is not a course about AI security. It is how a security function gets rebuilt to run on agents — five of them on top of the capability you just built: architecture and infrastructure security, application security, offensive security, the SOC, and governance. It is free, there is no vendor, there is no paid account, and every lesson runs with one command on your own machine, in whichever coding assistant you already use. I am going to use one made-up company for all of it, and you have already met them.
+So, what this is. Six tracks, one for each part of a security organisation: the system you just built, then architecture and infrastructure, application security, offensive security, the SOC, and governance. Each one shows you how that work changes when agents do it. It is free, there is no vendor, there is no paid account, and every lesson runs with one command on your own machine, in whichever coding assistant you already use. I am going to use one made-up company for all of it, and you have already met them.
 
 **① Open**
 
@@ -517,7 +518,7 @@ Next up: A1.0, What an agent is, and what you are about to build.
 
 ### A1.0 · What an agent is, and what you are about to build
 
-Chapter A1 · lesson 1 of 8 · runs a skill · 502 words, about 3.6 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
+Chapter A1 · lesson 1 of 8 · runs a skill · 500 words, about 3.6 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -527,7 +528,7 @@ Before anything else, thirty seconds on what an agent actually is, because if yo
 
 A model that only answers questions is a chatbot. Give it tools — let it call an API, read a file, move money — and give it a loop that decides which tool to call next, and now it is an agent. That is the entire difference. And it is also the entire problem. A chatbot that is wrong says something wrong. An agent that is wrong does something wrong.
 
-So here is how this works. You are going to build one. Not read about one — build it, on your own machine, over this chapter and the next. That is the capability. Then the five functions after this one are the five operations of a security organisation — architecture, application security, offensive security, the SOC and governance — and each one gets rebuilt around the thing you just built. Everything is free and nothing needs an account.
+So here is how this works. You are going to build one. Not read about one — build it, on your own machine, over this chapter and the next. Then the five tracks after this one each take one part of a security organisation — architecture, application security, offensive security, the SOC and governance — and show you how that work changes, using the thing you just built. Everything is free and nothing needs an account.
 
 **① Open**
 
@@ -1272,7 +1273,7 @@ Next up: B1.0, Start here — what securing an AI architecture means.
 
 ## Function B — Securing AI Architectures
 
-*[Who is watching: The architecture and infrastructure security function. Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship. What changes is the output of a review: a register with owners rather than an opinion.]*
+*[Who is watching: Architecture and infrastructure security. Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship. What changes is how a review ends: with a list of risks and owners rather than an opinion.]*
 
 *[The pitch for the whole function, if you need it in one breath: You are about to build, review or approve an agentic system. Before any control is worth choosing you need the picture: which components exist, what each one can reach, and which risks attach to each.]*
 
@@ -1282,7 +1283,7 @@ Next up: B1.0, Start here — what securing an AI architecture means.
 
 ### B1.0 · Start here — what securing an AI architecture means
 
-Chapter B1 · lesson 1 of 20 · reading lesson · 431 words, about 3.1 min spoken · [page](https://cybercommons.ai/lessons/B1.0.html)
+Chapter B1 · lesson 1 of 20 · reading lesson · 433 words, about 3.1 min spoken · [page](https://cybercommons.ai/lessons/B1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -1294,7 +1295,7 @@ CyberTravels is a corporate travel company that does not exist. I made them up. 
 
 Every lesson, in all six functions, is grounded in this same company. So the refund limit an attacker walks straight past in one lesson is the same limit a detection is watching in another, and the same limit a compliance report is counting in a third. By the fourth function you are not learning a fourth example. You are watching a system you already understand fail in a new way.
 
-And what this function rebuilds is architecture and infrastructure security. By the end of it a design review stops producing an opinion and starts producing a register with an owner against every risk.
+This track is about architecture and infrastructure security. By the end of it a design review stops ending in an opinion and starts ending in a list of risks, with an owner against each one.
 
 **① Open**
 
@@ -3341,7 +3342,7 @@ Next up: C2.0, The AI SDLC — what runs before a deploy, and what runs after.
 
 ## Function C — Application Security with an AI SDLC
 
-*[Who is watching: The application security function. AppSec engineers, product security engineers, secure code reviewers and penetration testers — the people who already run a security gate on every release, and now have to run it at the speed agents write code.]*
+*[Who is watching: Application security. AppSec engineers, product security engineers, secure code reviewers and penetration testers — the people who already run a security gate on every release, and now have to keep up with code an agent wrote.]*
 
 *[The pitch for the whole function, if you need it in one breath: You already do this work: SAST, DAST, dependency and container scanning, and a penetration test before launch. Two things changed.]*
 
@@ -3351,7 +3352,7 @@ Next up: C2.0, The AI SDLC — what runs before a deploy, and what runs after.
 
 ### C2.0 · The AI SDLC — what runs before a deploy, and what runs after
 
-Chapter C2 · lesson 1 of 20 · runs a skill · 447 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/C2.0.html)
+Chapter C2 · lesson 1 of 20 · runs a skill · 448 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/C2.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -3361,7 +3362,7 @@ If you have done application security before, let me tell you what is different 
 
 The pipeline is not new. What is new is that code now arrives faster than any human review can keep up with, and some of it was written by an agent that cannot tell you why it wrote it. Everything in this chapter comes out of that one pressure.
 
-So this is the application security function rebuilt as a pipeline. Not a better gate — a different operation, one that can keep up with code an agent wrote this morning.
+So this track is application security, built as a pipeline. Not a better gate — a different way of working, one that can keep up with code an agent wrote this morning.
 
 **① Open**
 
@@ -4412,7 +4413,7 @@ Next up: D1.0, Start here — the evolution of non-deterministic threat simulati
 
 ## Function D — Agentic Evaluation and Red Teaming
 
-*[Who is watching: The offensive security and evaluation function. Red team operators, AI security researchers and offensive ML engineers — and the defenders who have to receive what they find. What changes is what counts as a finding: one that reproduces, not one that worked once.]*
+*[Who is watching: Offensive security and evaluation. Red team operators, AI security researchers and offensive ML engineers — and the defenders who have to receive what they find. What changes is what counts as a finding: one that happens again, not one that worked once.]*
 
 *[The pitch for the whole function, if you need it in one breath: Nobody can tell you how your agentic system fails until somebody has tried to break it. Deterministic exploits have signatures; an agentic failure is a reasoning loop, code generated at run time and tool calls at machine speed, and none of that shows up in a scanner.]*
 
@@ -4422,7 +4423,7 @@ Next up: D1.0, Start here — the evolution of non-deterministic threat simulati
 
 ### D1.0 · Start here — the evolution of non-deterministic threat simulation
 
-Chapter D1 · lesson 1 of 12 · runs a skill · 444 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/D1.0.html)
+Chapter D1 · lesson 1 of 12 · runs a skill · 443 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/D1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -4432,7 +4433,7 @@ One distinction before we start, because most people hear red team and think jai
 
 Getting a model to say something it should not say is a prompt result. Getting an agent to do something it should not do — spend money, touch a file, message another agent — is an incident. This chapter is about the second one, and it is the one almost nobody has a playbook for.
 
-This is the offensive security and evaluation function rebuilt. What changes most is what you are allowed to call a finding: one that reproduces, with a rate and a denominator, rather than one that worked once.
+This track is offensive security and evaluation. What changes most is what you are allowed to call a finding: one that happens again, with a rate and a denominator, rather than one that worked once.
 
 **① Open**
 
@@ -5067,7 +5068,7 @@ Next up: E1.0, Start here — the agentic SOC, and the stack that runs it.
 
 ## Function E — The Agentic SOC
 
-*[Who is watching: Security operations. SOC analysts, detection engineers, incident responders, threat hunters and DFIR leads — running a SOC that now has agents in it, and agents watching it. What changes is the analyst's job: directing a loop rather than reading alerts one at a time.]*
+*[Who is watching: Security operations. SOC analysts, detection engineers, incident responders, threat hunters and DFIR leads — running a SOC that now has agents in it, and agents watching it. What changes is the analyst's job: directing a loop instead of reading alerts one at a time.]*
 
 *[The pitch for the whole function, if you need it in one breath: Your SOC was tuned for people. One hour of an agent is roughly 1,400 tool calls across 260 resources; one hour of a person is twelve actions.]*
 
@@ -5087,7 +5088,7 @@ Let me say this up front: your SOC already works. You have sensors, you have a l
 
 The question this whole chapter asks is narrower than that, and a bit more uncomfortable. When an agent is the thing that went wrong — would any of it have fired?
 
-So this is security operations rebuilt around that question. What changes is the analyst's job: directing a loop, rather than reading alerts one at a time, against an actor that is itself an agent.
+So this track is security operations, built around that question. What changes is the analyst's job: directing a loop, rather than reading alerts one at a time, against something that is itself an agent.
 
 **① Open**
 
@@ -6742,7 +6743,7 @@ Next up: F1.0, Start here — what AI governance means.
 
 ## Function F — AI Governance for Agentic Systems
 
-*[Who is watching: The governance, risk and compliance function and the CISO office. GRC analysts, risk and compliance managers, control owners, privacy engineers and BISOs — anyone who has to answer for the estate rather than build it. What changes is the artefact: an indicator somebody can compute, with a date on it, instead of a control statement.]*
+*[Who is watching: Governance, risk and compliance, and the CISO office. GRC analysts, risk and compliance managers, control owners, privacy engineers and BISOs — anyone who has to answer for the estate rather than build it. What changes is what you hand over: a number somebody can compute, with a date on it, instead of a control statement.]*
 
 *[The pitch for the whole function, if you need it in one breath: Somebody signed off on the platform when it was a chatbot. It now moves money, ships code and reads contracts, and nothing in the approval process noticed.]*
 
@@ -6762,7 +6763,7 @@ Governance has a reputation, so let me get ahead of it. Most people hear that wo
 
 Here is what I actually mean by it: being able to show, later, and to somebody who is not on your side, that a decision was made on purpose and by a named person. That is an engineering problem. And it is the one that decides whether the thing you built is allowed to stay switched on.
 
-This is the governance function rebuilt, and the artefact is what changes. Not a control statement — an indicator somebody can compute, from a named source, with a date on it.
+This track is governance, and what changes is what you hand over. Not a control statement — a number somebody can compute, from a named source, with a date on it.
 
 **① Open**
 
