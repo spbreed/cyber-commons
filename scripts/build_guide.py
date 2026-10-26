@@ -1361,11 +1361,19 @@ def pager(fid: str, ses: dict) -> str:
 
 
 def index_page() -> str:
-    """The guide index, as a brochure for the commons as a whole.
+    """The guide index, as a two-page brochure for the commons as a whole.
 
-    Same eight sections as a function's brochure, filled from the site's own
-    statements: the homepage's account of the problem and of what the tracks
-    teach, the six blurbs, and counts measured from the tree.
+    Two pages, because that is what was asked for, and it changes the shape
+    rather than the amount of type. The function guides run to eight pages, one
+    per brochure section. Here the same material is folded into two: the cover,
+    overview and highlights on the first, and on the second the six guides —
+    which carry what the separate "what you will learn", "curriculum" and "who
+    should attend" sections carry elsewhere — then what is included and the
+    call to action.
+
+    Filled, as every brochure is, from the site's own statements: the homepage's
+    account of the problem and of what the tracks teach, the six blurbs, and
+    counts measured from the tree.
     """
     ses, fns = sessions(), functions()
     profs = {fid: profile(fid, ses) for fid in fns}
@@ -1412,36 +1420,25 @@ def index_page() -> str:
         '<p><b>Where to start:</b> '
         + lesson_link("A0.0", ses) + ', whatever your job is.</p></div>')
 
-    learn = bro_sec("learn", "learn", "The six guides",
-        '<ol class="bro-skills">' + "".join(
-            f'<li><b><a href="function-{fid.lower()}.html">Function {fid} — '
-            f'{html.escape(p["title"])}</a></b>'
-            f'<span>{inline(G.INDEX_BLURB[fid])}</span>'
-            f'<em>{p["lessons"]} lessons · {p["n_chapters"]} chapters</em></li>'
-            for fid, p in profs.items()) + '</ol>')
-
-    cards = []
+    rows = []
     for fid, p in profs.items():
-        links = "".join(
-            f'<a class="bro-row" href="function-{fid.lower()}.html#ch-{cid}">'
-            f'<b>{html.escape(cid)}</b> {html.escape(ct)}'
-            f'<small>{len(ids)} lessons</small></a>'
+        chapters = " · ".join(
+            f'<a href="function-{fid.lower()}.html#ch-{cid}"><b>{html.escape(cid)}</b>'
+            f' {html.escape(ct)}</a> <small>({len(ids)})</small>'
             for cid, ct, ids in p["chapters"])
-        cards.append(f'<div class="bro-card"><div class="bro-cid">Function '
-                     f'{fid}</div><h3>{html.escape(p["title"])}</h3>{links}</div>')
-    curriculum = bro_sec("cur", "curriculum", "Curriculum", card_grid(cards))
-
-    who = bro_sec("who", "who", "Who should attend?",
-        '<p class="bro-lead">Security teams — and the engineers building the '
-        'agentic systems they are asked to secure. Each track names the job '
-        'titles it is for, and nobody needs all six.</p>'
-        '<div class="bro-rows">' + "".join(
-            f'<div><span>Function {fid}</span>'
-            f'<b>{html.escape(p["who_short"])}</b></div>'
-            for fid, p in profs.items()) + '</div>')
+        rows.append(
+            f'<div class="bro-guide"><div class="bro-gl">{fid}</div><div>'
+            f'<h3><a href="function-{fid.lower()}.html">'
+            f'{html.escape(p["title"])}</a></h3>'
+            f'<p>{inline(G.INDEX_BLURB[fid])}</p>'
+            f'<p class="bro-gm"><b>For:</b> {html.escape(p["who_short"])} · '
+            f'{p["lessons"]} lessons</p>'
+            f'<p class="bro-gc">{chapters}</p></div></div>')
+    guides = bro_sec("learn", "guides", "The six guides",
+                     '<div class="bro-guides">' + "".join(rows) + '</div>')
 
     included = bro_sec("inc", "included", "What\u2019s included",
-        '<div class="bro-cols">'
+        '<div class="bro-cols two">'
         '<div><h3>Lessons and skills</h3><ul>'
         f'<li>{total} lesson pages: the risk, the control, and the three '
         'days</li>'
@@ -1450,12 +1447,12 @@ def index_page() -> str:
         '<div><h3>In each guide</h3><ul>'
         '<li>Each lesson\u2019s risk, control, three days and measure</li>'
         '<li>A capstone, a quick check, and the pitfalls</li>'
-        '<li>A prompt bank and a glossary</li>'
-        '<li>Blocks for running it as a session</li></ul></div></div>')
+        '<li>A prompt bank, a glossary, and blocks for running it as a '
+        'session</li></ul></div></div>')
 
     cta = bro_sec("cta", "start", "Ready to start?",
         '<p class="bro-go"><a href="../lessons/A0.0.html">Start at A0.0 →'
-        '</a></p><div class="bro-rows">'
+        '</a></p><div class="bro-rows inline">'
         '<div><span>Website</span><b><a href="../index.html">cybercommons.ai'
         '</a></b></div>'
         f'<div><span>Source</span><b><a href="{REPO}">'
@@ -1472,8 +1469,11 @@ def index_page() -> str:
         'style="padding-bottom:0"><div class="crumb">'
         '<a href="../lessons/index.html">All lessons</a> › Course guides'
         '</div></div></div>',
-        cover, pdf_bar(False),
-        overview, highlights, learn, curriculum, who, included, cta,
+        # Two pages. A `bro-page` is one printed page; the sections inside it
+        # do not break between themselves.
+        '<div class="bro-page" id="page-1">', cover, pdf_bar(False),
+        overview, highlights, '</div>',
+        '<div class="bro-page" id="page-2">', guides, included, cta, '</div>',
         '<div class="wrap noprint"><div class="pager">'
         '<a href="../lessons/A0.0.html"><div class="k">Start here</div>'
         '<div class="t">A0.0 — set up your computer</div></a>'
@@ -1621,6 +1621,34 @@ def chapter_link_problems(want: dict) -> list[str]:
     return bad
 
 
+def page_shape_problems(want: dict) -> list[str]:
+    """The index is two printed pages; a function guide's brochure is eight.
+
+    This counts the structure that produces the page count — two `bro-page`
+    blocks, eight brochure sections — not the pages themselves. Counting those
+    needs a browser, and CI has none that it can rely on, so **it does not catch
+    a section that grew until it overflowed**. That was found by printing real
+    PDFs and looking: the first draft of the index ran to eight pages, then
+    four, then three. What this stops is the cheaper mistake of adding or
+    dropping a section and not noticing it changed the page count.
+    """
+    bad = []
+    for f, text in want.items():
+        if f.parent != GUIDE:
+            continue
+        if f.name == "index.html":
+            n = text.count('class="bro-page"')
+            if n != 2:
+                bad.append(f"the guide index has {n} page blocks and is "
+                           f"meant to be exactly 2")
+        else:
+            n = text.count('<section class="bro ')
+            if n != 8:
+                bad.append(f"{f.name} has {n} brochure sections and a "
+                           f"function guide is meant to have 8")
+    return bad
+
+
 def redirect_stub() -> str:
     """The page's former address, as a generated redirect rather than a 404.
 
@@ -1669,7 +1697,7 @@ def main() -> int:
              if (f.read_text() if f.is_file() else "") != text]
 
     if a.check:
-        links = chapter_link_problems(want)
+        links = chapter_link_problems(want) + page_shape_problems(want)
         for l in links:
             print(f"::error::course guide: {l}", file=sys.stderr)
         if links:

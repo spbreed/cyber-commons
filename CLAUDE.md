@@ -114,8 +114,12 @@ leaves. *Export as PDF* is the print stylesheet in `site/assets/lesson.css` plus
 two buttons a script inserts; no PDF file is committed, because one would go
 stale and nothing in CI could regenerate it without a browser. A page is 810 by
 1440 CSS px to match the reference, and **a section that overflows prints an
-orphan page**, so check the page count after changing the brochure (it is
-eight for every guide today). They cannot live
+orphan page**, so check the page count after changing the brochure: it is
+eight for each function's guide and **two for the index**, which folds the
+same material into two pages (cover, overview and highlights; then the six
+guides, what is included and the call to action). Print real PDFs with
+headless Chromium and count them — `--check` only counts the structure
+(two page blocks, eight sections), not whether one overflowed. They cannot live
 in `site/lessons/`: `build_site.py` prunes any `*.html` there that is not a
 current lesson page, so a guide put there is deleted by the next build.
 `site/teach/` is the course guide's former address and now holds nothing but a
