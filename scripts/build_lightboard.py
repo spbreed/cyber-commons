@@ -68,6 +68,7 @@ from exercises.framing import BRIDGES                        # noqa: E402
 from exercises import guide_a as GA                          # noqa: E402
 from exercises import guides as G                            # noqa: E402
 from exercises.lessonskills import audits_of                 # noqa: E402
+import build_guide as BG                                     # noqa: E402
 
 SITE = "https://cybercommons.ai"
 WPM = 140          # unhurried delivery to camera, measured against a read-through
@@ -484,35 +485,28 @@ def script(item: dict) -> str:
 # a function watches the second before committing to thirty-nine lessons.
 
 def tree_counts() -> dict[str, object]:
-    """Every number the two overview scripts quote, measured from the tree.
+    """Every number the intro script quotes, measured from the tree.
 
     Typed into a script they would go stale silently, the way the header's own
     lesson count did: it said 134 while the curriculum carried 148, and it sits
     in a generated file so no gate looked at it. These are the counts a visitor
     hears in the first thirty seconds, which makes them the most expensive ones
     in the project to get wrong.
+
+    The reading time comes from the guide builder, which is where the guides
+    print it. There used to be a second copy of the word count here; two copies
+    of one measurement is how a script and a page come to quote different
+    numbers.
     """
     ls = lessons()
     ids = [x["s"]["id"] for x in ls]
     skills = {ref for sid in ids for ref, _ in audits_of(sid)}
-    words = 0
-    for sid in [i for i in ids if i.startswith("A")]:
-        ex = EXERCISES.get(sid) or {}
-        for key in ("hook", "concept", "steps", "challenge"):
-            v = ex.get(key)
-            items = [v] if isinstance(v, str) else (v or [])
-            for item in items:
-                for part in (item if isinstance(item, (list, tuple)) else [item]):
-                    if isinstance(part, str):
-                        t = re.sub(r"```.*?```", " ", part, flags=re.S)
-                        words += len(re.sub(r"^\s*\|.*$", " ", t, flags=re.M).split())
     return {
         "sessions": len(ls),
         "functions": len({x["fn"]["id"] for x in ls}),
         "chapters": len({x["tr"]["id"] for x in ls}),
         "skills": len(skills),
-        # Function A's reading time, at the rate the course guides state.
-        "reading_minutes": round(words / 180),
+        "reading_minutes": BG.reading_volume("A")[1],
     }
 
 
@@ -562,50 +556,87 @@ def intro_script(counts: dict) -> str:
 
 
 def overview_script(fid: str, title: str, counts: dict) -> str:
-    """One recording per course guide: is this function the one you need?
+    """One recording per course guide, made with that guide open on screen.
 
-    Five beats, the same shape as a lesson, so somebody who has recorded
-    lessons is not learning a second format. Everything spoken comes from
-    `days.FUNCTION_DAYS` and the guide narrative, so an overview cannot
-    describe a function that has moved.
+    It walks the page in the order the page runs — cover, overview, highlights,
+    what you will learn, curriculum, then where to start — and each stage
+    direction says where to scroll and what to point at. The earlier version
+    followed the shape of a lesson script instead (why, what you do, what comes
+    out), which meant the narration and the page showed the same material in
+    two different orders, and it never read out the outcomes, which are the
+    main section of the brochure.
+
+    Everything spoken comes from the same sources as the page: `days.py` for
+    the problem and the solution, the outcomes for what you will learn, the
+    chapter list for the curriculum, and counts that `build_guide.profile`
+    measures. A brochure for a paid course carries a fee, dates and a contact
+    address; this one carries none of those, because the page has none, and
+    nothing is invented to fill the gap.
     """
+    P = BG.profile(fid, BG.sessions())
     fd = FUNCTION_DAYS.get(fid) or {}
     ls = [x for x in lessons() if x["fn"]["id"] == fid]
-    chapters = []
-    for x in ls:
-        if not chapters or chapters[-1][0] != x["tr"]["id"]:
-            chapters.append((x["tr"]["id"], x["tr"]["title"], 0))
-        cid, ct, n = chapters[-1]
-        chapters[-1] = (cid, ct, n + 1)
-    board = (GA.COURSE["board"] if fid == "A"
-             else G.FUNCTIONS[fid]["board"])
+    n_ch = P["n_chapters"]
+    chap_word = "chapter" if n_ch == 1 else "chapters"
 
-    rows = [("① WHO IT IS FOR", "say",
-             f"Function {fid} is {title}. {fd.get('who', '')}")]
-    rows.append(("① WHO IT IS FOR", "say",
-                 f"One sentence to hold for the whole function. {board}"))
-    rows.append(("② WHY IT MATTERS", "say", sentences(fd.get("day0", ""), 3)))
-    rows.append(("③ WHAT YOU DO", "do",
-                 "Write the chapters down the board as you name them."))
-    rows.append(("③ WHAT YOU DO", "say",
-                 f"{len(ls)} lessons, in {len(chapters)} "
-                 f"{'chapter' if len(chapters) == 1 else 'chapters'}. "
-                 + " ".join(f"{cid}, {ct}, is {n} "
-                            f"{'lesson' if n == 1 else 'lessons'}."
-                            for cid, ct, n in chapters)))
-    rows.append(("③ WHAT YOU DO", "say", sentences(fd.get("day1", ""), 3)))
-    rows.append(("④ WHAT COMES OUT", "say", sentences(fd.get("day2", ""), 3)))
-    rows.append(("⑤ WHO SHOULD DO IT", "say", G.OVERVIEW_CLOSE[fid]))
-    rows.append(("⑤ WHO SHOULD DO IT", "say",
-                 f"The course guide has the whole run sheet — every lesson's "
-                 f"risk, control and measure, and what each skill prints. "
-                 f"Start at {ls[0]['s']['id']}."))
+    rows: list[tuple[str, str, str]] = []
+
+    def beat(head: str, direction: str, *lines: str) -> None:
+        rows.append((head, "do", direction))
+        rows.extend((head, "say", x) for x in lines)
+
+    beat("① WHO IT IS FOR",
+         f"Open the Function {fid} course guide on its cover. Point at the "
+         f"title, then at the line that says primary audience.",
+         f"Function {fid} is {title}. {fd.get('who', '')}",
+         f"One sentence to hold for the whole function. {P['board']}.")
+
+    beat("② THE PROBLEM, AND THE WAY THROUGH IT",
+         "Scroll to Overview. Point at the problem column, then the solution "
+         "column, then the one on how you know it worked.",
+         f"First, the problem. {sentences(fd.get('day0', ''), 3)}",
+         f"And the way through it. {sentences(fd.get('day1', ''), 3)}",
+         f"How you know it worked. {sentences(fd.get('day2', ''), 2)}")
+
+    beat("③ THE NUMBERS",
+         "Scroll to Highlights. Touch each of the four big numbers as you "
+         "say it.",
+         f"{P['lessons']} lessons, in {n_ch} {chap_word}. You run "
+         f"{P['skills']} skills on your own computer. The lesson text is "
+         f"about {P['minutes']} minutes of reading, and taught, it comes to "
+         f"{P['taught']}.")
+
+    beat("④ WHAT YOU WILL BE ABLE TO DO",
+         "Scroll to What you'll learn. Read the numbered outcomes in order.",
+         "By the end, you can do these things.",
+         *[f"{o}." for o, _ids, _ev in P["outcomes"]])
+
+    chapters = " ".join(
+        f"{cid}, {ct}, is {len(ids)} "
+        f"{'lesson' if len(ids) == 1 else 'lessons'}."
+        for cid, ct, ids in P["chapters"])
+    beat("⑤ THE CHAPTERS",
+         "Scroll to Curriculum. Point at each chapter card as you name it.",
+         # The count was said in the numbers beat; saying it again here read
+         # as a stutter, so this beat only names the chapters.
+         f"It is {n_ch} {chap_word}. " + chapters,
+         "Every chapter starts with a link back to its place in this guide, "
+         "so you can find your way back from the lesson.")
+
+    beat("⑥ WHERE TO START",
+         "Scroll to the end and point at the start button. Then scroll up and "
+         "point at the two export buttons.",
+         G.OVERVIEW_CLOSE[fid],
+         f"Start at {P['entry']}. Under the brochure there is a run sheet "
+         f"that goes lesson by lesson. And you can save this guide as a PDF, "
+         f"either the brochure on its own or the whole thing.")
 
     words = sum(len(say(t).split()) for _, kind, t in rows if kind == "say")
     out = [f"### OVERVIEW {fid} · Function {fid} — {title}", ""]
-    out.append(f"The course guide as a recording · {len(ls)} lessons · "
-               f"{words} words, about {words / WPM:.1f} min spoken · "
-               f"publishes from `recordings/overview-{fid.lower()}.mp4` · "
+    out.append(f"The course guide as a recording, made with the guide open · "
+               f"{len(ls)} lessons · {words} words, about {words / WPM:.1f} "
+               f"min spoken · publishes from "
+               f"`recordings/overview-{fid.lower()}.mp4` · "
                f"[guide]({SITE}/guide/function-{fid.lower()}.html)")
     out.append("")
     head = None
@@ -644,7 +675,7 @@ way on purpose: somebody watching has a job to get back to.
 | | what it is | how many | where it publishes |
 |---|---|---|---|
 | **Introduction** | what the commons is, in one video | 1 | the home page, from `recordings/intro.mp4` |
-| **Course overview** | one per function: is this the one you need? | {n_overview} | each course guide, from `recordings/overview-<f>.mp4` |
+| **Course overview** | one per function, made with its course guide open: is this the one you need? | {n_overview} | each course guide, from `recordings/overview-<f>.mp4` |
 | **Lesson** | the lesson itself, five beats | {n_lessons} | the lesson page, from `recordings/<id>.mp4` |
 
 **Record in that order.** The introduction is what somebody watches before

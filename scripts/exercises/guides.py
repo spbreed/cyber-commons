@@ -896,8 +896,9 @@ INTRO = {
    "After that, take the track that matches your job. There are {chapters} "
    "chapters and nobody takes all {sessions} lessons — architecture and "
    "infrastructure go to track B, application security to C, offensive "
-   "security to D, the SOC to E, governance to F. Each one has a course guide "
-   "with the whole run sheet in it.",
+   "security to D, the SOC to E, governance to F. Each one has a course "
+   "guide: a short brochure at the top, a run sheet for every lesson "
+   "underneath, and a button to save it as a PDF.",
    "One sentence to take with you, because the rest of it is the second half "
    "of that sentence. The model proposes. Your code decides.",
   ]),

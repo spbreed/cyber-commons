@@ -576,9 +576,14 @@ def overview_video(fid: str) -> str:
     return video_block(
         f"overview-{fid.lower()}",
         f"Function {fid} — course overview",
+        # No duration here. It was "about two minutes", typed, and the script
+        # it described came out at 2.4 once it walked the whole page; the
+        # script's own header computes its length from the word count, and a
+        # second, typed copy of that number is the one that goes stale.
         blurb=f"Not recorded yet. The script is written — LIGHTBOARD.md, "
-              f"under <b>OVERVIEW {html.escape(fid)}</b> — and it answers one "
-              f"question in about two minutes: is this the function you need?")
+              f"under <b>OVERVIEW {html.escape(fid)}</b> — and it walks this "
+              f"guide from the top to answer one question: is this the "
+              f"function you need?")
 
 
 def fold(summary_html: str, body_html: str) -> str:
