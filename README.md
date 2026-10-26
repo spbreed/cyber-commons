@@ -156,10 +156,13 @@ failures happen in the seams.
 | in GRC, risk, audit, or you carry the regulator | **F1**→**F3** — risk and control, regulatory, running the programme |
 
 **Doing a function, or running it for other people?** There is a
-[course guide for each of the six](https://cybercommons.ai/guide/index.html):
-what it proves, the chapters in order, every lesson's risk, control and
-measure, the skill it runs and what that skill prints, the pitfalls, and a
-quick check. They serve both readers — the blocks marked *For a room* are the
+[course guide for each of the six](https://cybercommons.ai/guide/index.html).
+Each opens as a brochure — overview, highlights, what you will learn, the
+curriculum chapter by chapter, who it is for, what is included — and can be
+**exported as a PDF** from the page (or with your browser's Print, Save as PDF).
+Under the brochure is the run sheet: every lesson's risk, control and measure,
+the skill it runs and what that skill prints, the pitfalls, and a quick check.
+Each chapter begins with a link to its place in the guide. They serve both readers — the blocks marked *For a room* are the
 only parts a solo reader skips.
 
 [Function A's](https://cybercommons.ai/guide/function-a.html) is the one to

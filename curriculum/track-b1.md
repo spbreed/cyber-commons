@@ -3,6 +3,8 @@
 **Function B · Securing AI Architectures**  
 *CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
+**Course guide:** [B1 in the Function B course guide](https://cybercommons.ai/guide/function-b.html#ch-B1)
+
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
 **What changes:** CyberTravels as built, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and closed by a register. 18 lessons.

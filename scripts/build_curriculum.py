@@ -113,6 +113,13 @@ def render() -> dict[Path, str]:
 
             md = [f"# Track {tr['id']} — {tr['title']}", "",
                   f"**Function {fn['id']} · {fn['title']}**  ", f"*{fn['blurb']}*", "",
+                  # The guide is linked where the chapter begins. It is an
+                  # absolute URL because these files are read on GitHub and
+                  # in an editor, where a relative path into site/ would not
+                  # lead to the page.
+                  f"**Course guide:** [{tr['id']} in the Function {fn['id']} "
+                  f"course guide](https://cybercommons.ai/guide/function-"
+                  f"{fn['id'].lower()}.html#ch-{tr['id']})", "",
                   f"**Job titles:** {tr.get('titles','')}", "",
                   f"**What changes:** {tr.get('changes','')}", "",
                   f"**Autonomy focus:** {tr.get('autonomy','')}", "",

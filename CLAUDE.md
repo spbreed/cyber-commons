@@ -103,7 +103,19 @@ generated so that registering `recordings/intro.mp4` in `videos.json` publishes
 the player with nobody editing the page, which is how a finished recording
 otherwise sits unpublished.
 
-`site/guide/` holds generated pages that are **not** lessons. They cannot live
+`site/guide/` holds generated pages that are **not** lessons. Each opens as a
+**brochure** — cover, overview, highlights, what you will learn, curriculum, who
+it is for, what is included, a call to action — and the long run sheet follows.
+Every brochure field is filled from something already on the site (Day 0/1/2,
+the outcomes, the chapter notes, counts measured from the tree). **It carries no
+pricing, dates, instructors, contact details, certificate or support promises,
+because none of those exist here** — do not add one to fill a gap the format
+leaves. *Export as PDF* is the print stylesheet in `site/assets/lesson.css` plus
+two buttons a script inserts; no PDF file is committed, because one would go
+stale and nothing in CI could regenerate it without a browser. A page is 810 by
+1440 CSS px to match the reference, and **a section that overflows prints an
+orphan page**, so check the page count after changing the brochure (it is
+eight for every guide today). They cannot live
 in `site/lessons/`: `build_site.py` prunes any `*.html` there that is not a
 current lesson page, so a guide put there is deleted by the next build.
 `site/teach/` is the course guide's former address and now holds nothing but a
@@ -320,7 +332,7 @@ person.
 | 18 | `check_repo_links.py --check` | a link into this repository pinning a branch that is not the published one. The branch lives in `scripts/exercises/repo.py`; it was spelled out longhand in nine files and one had drifted to `main`, which has never existed on the remote |
 | 19 | `build_lightboard.py --check` | LIGHTBOARD.md stale against the lessons — a recording script for a lesson that no longer says that. It carries **three** kinds of script now: one `INTRO` for the home page, one `OVERVIEW` per function pointing at its course guide, and one per lesson. The counts the intro speaks are measured, because the header's own lesson count was typed and said 134 while the tree carried 148 |
 | 20 | `build_lesson_skills.py --check` | a lesson skill stale against the lesson it teaches, a `lesson-skills/` directory no lesson owns (it would still load and still answer), a skill whose description does not open with its lesson id, or one naming an audit that is not in `skills/` |
-| 21 | `build_guide.py --check` | any of the **seven** course-guide pages drifted from the lessons — a Function A lesson no module teaches, a lab with no prompt or no expected output, a chapter of B–F with no narrative (or narrative for a chapter that does not exist), a cited lesson id that does not exist, a skill whose `SKILL.md` lost the output contract or the example run a derived block needs, or any committed page (six guides, the index, the redirect at the old `site/teach/` address) stale against its source. **Function A's labs are hand-verified and B–F's are derived, on purpose**: sixteen outputs were checked by running them, and writing 133 more without running them would be inventing them. The pages say which they are showing |
+| 21 | `build_guide.py --check` | any of the **seven** course-guide pages drifted from the lessons, **or a chapter's guide link stopped landing**: the guide is linked at the start of every chapter (the first lesson page, the lessons index, the chapter doc in `curriculum/`), the anchor `ch-<id>` is owned by this script but the links are written by `build_site.py` and `build_curriculum.py`, so it resolves all 48 against the guides it just generated and counts them (16 chapters, 16 of each) — a Function A lesson no module teaches, a lab with no prompt or no expected output, a chapter of B–F with no narrative (or narrative for a chapter that does not exist), a cited lesson id that does not exist, a skill whose `SKILL.md` lost the output contract or the example run a derived block needs, or any committed page (six guides, the index, the redirect at the old `site/teach/` address) stale against its source. **Function A's labs are hand-verified and B–F's are derived, on purpose**: sixteen outputs were checked by running them, and writing 133 more without running them would be inventing them. The pages say which they are showing |
 | 22 | `check_rendered_markdown.py --check` | markdown source reaching the reader as literal text. 78 of 149 lesson pages were serving it — `**Anchor → E1.0.**` on fifty Function E/F pages, a grounding line printing its own backticks on 39, and list items cut in half at a source line break. Five causes, all in `build_site.py`: three emitters that escaped markdown instead of rendering it (the anchor blockquote, the CyberTravels grounding line, the lab line), a bold rule whose `[^*]+` could not span a nested `*emphasis*`, and list and blockquote loops that took one source line per block. It reads the **rendered page**, with `pre`/`code` exempt |
 | 23 | `check_frameworks.py` | a framework label that is not real |
 | 24 | `check_framework_links.py` | a framework label that links nowhere. `continue-on-error`: an upstream site being down must not hold the deploy |

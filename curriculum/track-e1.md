@@ -3,6 +3,8 @@
 **Function E · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
+**Course guide:** [E1 in the Function E course guide](https://cybercommons.ai/guide/function-e.html#ch-E1)
+
 **Job titles:** SOC Analyst, Security Engineer, Cloud Security Engineer, Security Data Engineer
 
 **What changes:** What already watches the estate — EDR, DLP, CSPM, CNAPP — what each sees when the actor is an agent, the drift that arrives without a code change, and a bonus on finding the agents nobody registered. 4 lessons.

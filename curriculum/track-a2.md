@@ -3,6 +3,8 @@
 **Function A · Getting Started — Building Agentic AI**  
 *Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Each of the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — is a component built here. Everything the other five functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
+**Course guide:** [A2 in the Function A course guide](https://cybercommons.ai/guide/function-a.html#ch-A2)
+
 **Job titles:** The same audience, one chapter later. Particularly anyone who has to operate, review or sign off on something an agent does.
 
 **What changes:** Five lessons on the machinery that turns a loop that worked once into a system somebody can run: spans, an audit trail that answers the four investigation questions, an evaluation suite with intervals, and the handover that re-reads everything you built as an attack surface. 5 lessons.

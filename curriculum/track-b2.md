@@ -3,6 +3,8 @@
 **Function B · Securing AI Architectures**  
 *CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
+**Course guide:** [B2 in the Function B course guide](https://cybercommons.ai/guide/function-b.html#ch-B2)
+
 **Job titles:** IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer
 
 **What changes:** The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 8 lessons.

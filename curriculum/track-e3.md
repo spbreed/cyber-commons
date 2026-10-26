@@ -3,6 +3,8 @@
 **Function E · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
+**Course guide:** [E3 in the Function E course guide](https://cybercommons.ai/guide/function-e.html#ch-E3)
+
 **Job titles:** Incident Responder, SOC Analyst, DFIR Lead, Threat Hunter, Threat Intelligence Analyst
 
 **What changes:** Understanding what happened and who is doing it: an investigation bounded before it starts, a trace where the first theory was abandoned in the open, scope along the delegation graph, correlation across the population, third-party intel that names the tactic, and a hunt for what no rule covers. 10 lessons.

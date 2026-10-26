@@ -3,6 +3,8 @@
 **Function F · AI Governance for Agentic Systems**  
 *Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
+**Course guide:** [F2 in the Function F course guide](https://cybercommons.ai/guide/function-f.html#ch-F2)
+
 **Job titles:** Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead
 
 **What changes:** What a travel company holding passports, payment and health data owes, to whom, and how to evidence it once rather than per regulator. 9 lessons.

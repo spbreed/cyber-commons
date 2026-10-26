@@ -3,6 +3,8 @@
 **Function A · Getting Started — Building Agentic AI**  
 *Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Each of the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — is a component built here. Everything the other five functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
+**Course guide:** [A0 in the Function A course guide](https://cybercommons.ai/guide/function-a.html#ch-A0)
+
 **Job titles:** Anyone, in any of the five roles. This chapter assumes no security background. It does assume you can install software on the machine in front of you.
 
 **What changes:** Two lessons. The first is the whole front door on one page: what the commons is and who it is for, the developer AI tools compared on context window and real cost, the clone, and the model endpoint every later lesson depends on, proven with one run — then how a lesson page is built, which function to open first, what Day 0/1/2 mean, the open-source-first rule, and the four frameworks. The second is the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — drawn on one page and placed in CyberTravels. 2 lessons.

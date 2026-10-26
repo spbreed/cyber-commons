@@ -3,6 +3,8 @@
 **Function E · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
+**Course guide:** [E2 in the Function E course guide](https://cybercommons.ai/guide/function-e.html#ch-E2)
+
 **Job titles:** Detection Engineer, SOC Engineer, Security Data Engineer
 
 **What changes:** The lake the rules are written against, then detections for two different subjects — the agent and the platform running it — mapped to ATT&CK and ATLAS, plus the loop that writes rules, the corpus that decides whether they ship, and the one detector that needs no threshold. 6 lessons.

@@ -400,23 +400,13 @@ def inline(text: str) -> str:
 
 
 def glance(ses: dict, facts: dict) -> str:
-    """Course at a glance: what either reader checks before committing to it."""
-    ids = [sid for m in T.MODULES for sid in m[2]]
+    """How to work through it: the part of "at a glance" the brochure lacks.
+
+    The lesson count, duration, audience and prerequisites moved into the
+    brochure's Highlights and Who sections. They are not repeated here: one
+    statement per page, and the second copy is the one that goes stale.
+    """
     rows = [
-        ["Function", "A — Getting Started: Building Agentic AI"],
-        ["Lessons", f'{len(ids)} — {lesson_link(ids[0], ses)} '
-                    f'through {lesson_link(ids[-1], ses)}'],
-        # The taught figure alone misleads somebody working alone, who has no
-        # facilitator setting the pace. The reading half is counted from the
-        # lesson prose and the rate is stated, so it is a derivation rather
-        # than an estimate somebody typed.
-        ["Duration", f'{html.escape(T.COURSE["duration"])} — of which about '
-                     f'{facts["reading_minutes"]} minutes is reading '
-                     f'({facts["words"]} words of lesson prose at '
-                     f'{facts["reading_wpm"]} words a minute). On your own, '
-                     f'expect longer: the labs are where the time goes'],
-        ["Audience", inline(T.COURSE["audience"])],
-        ["Prerequisites", inline(T.COURSE["prereq"])],
         ["On your own", inline(T.COURSE["solo"])],
         ["With a room", inline(T.COURSE["room"])],
         ["What you build",
@@ -452,13 +442,6 @@ def rows_table(rows: list[list[str]]) -> str:
     body = "".join(f'<tr><th>{html.escape(k)}</th><td>{v}</td></tr>'
                    for k, v in rows)
     return f'<div class="tw"><table class="md kv"><tbody>{body}</tbody></table></div>'
-
-
-def outcomes(ses: dict) -> str:
-    return table(["By the end, you can…", "Proved in", "Evidence"],
-                 [[inline(o[0]),
-                   " · ".join(lesson_link(x, ses, short=True) for x in o[1]),
-                   inline(o[2])] for o in T.OUTCOMES])
 
 
 def room(title: str, items: list[str]) -> str:
@@ -840,9 +823,288 @@ def glossary() -> str:
                  [[f"<b>{inline(a)}</b>", inline(b)] for a, b in T.GLOSSARY])
 
 
+# ----------------------------------------------------- the brochure format
+#
+# The guides open as a brochure — cover, overview, highlights, what you will
+# learn, curriculum, who it is for, what is included, and a call to action —
+# because that is the shape a person deciding whether to spend the hours
+# expects, and the long run sheet that follows is for somebody who has decided.
+#
+# **Every field is filled from something that already exists.** A brochure for
+# a paid cohort carries a fee, dates, instructors, a contact address, a
+# certificate and promised support. None of those is true of this curriculum or
+# present anywhere in it, so none of them is here, and nothing has been written
+# to fill the gap they leave. What stands in their place is what the site
+# already states: Day 0/1/2 for the problem, the solution and the measure; the
+# outcomes for what you will learn; the chapter notes for the curriculum; the
+# counts measured from the tree for the highlights.
+
+def first_sentences(text: str, n: int = 2) -> str:
+    """The first `n` sentences of a paragraph, cut at a sentence end.
+
+    Markdown is left in, because it is rendered afterwards. The split needs
+    whitespace after the stop, which keeps "E3.1–E3.4" in one piece.
+    """
+    parts = re.split(r"(?<=[.!?])\s+", text.strip())
+    return " ".join(parts[:n])
+
+
+def taught_hours(n: int) -> str:
+    return f"about {n * PACE_HOURS / PACE_LESSONS:.0f} hours"
+
+
+def profile(fid: str, ses: dict) -> dict:
+    """Everything a function's brochure says, gathered once from its sources."""
+    fn = functions()[fid]
+    fd = FUNCTION_DAYS.get(fid) or {}
+    ids = fn["ids"]
+    words, minutes = reading_volume(fid)
+    skills = {ref for sid in ids for ref, _ in audits_of(sid)}
+    if fid == AUTHORED:
+        outcomes_, board = T.OUTCOMES, T.COURSE["board"]
+        taught = T.COURSE["duration"].replace(" taught", "")
+        prereq = inline(T.COURSE["prereq"])
+        entry = "A0.0"
+    else:
+        nar = G.FUNCTIONS[fid]
+        outcomes_, board, entry = nar["outcomes"], nar["board"], nar["entry"]
+        taught = taught_hours(len(ids))
+        prereq = (f'Function A, which builds the system this function is about '
+                  f'— at minimum {lesson_link("A0.0", ses, True)} and '
+                  f'{lesson_link("A1.0", ses, True)}')
+    return {"fid": fid, "title": fn["title"], "chapters": fn["chapters"],
+            "ids": ids, "who": fd.get("who", ""),
+            "who_short": fd.get("who_short", ""), "day0": fd.get("day0", ""),
+            "day1": fd.get("day1", ""), "day2": fd.get("day2", ""),
+            "lessons": len(ids), "n_chapters": len(fn["chapters"]),
+            "skills": len(skills), "minutes": minutes, "words": words,
+            "taught": taught, "outcomes": outcomes_, "board": board,
+            "prereq": prereq, "entry": entry}
+
+
+def stat(number: str, label: str) -> str:
+    return (f'<div class="bro-stat"><b>{html.escape(str(number))}</b>'
+            f'<span>{html.escape(label)}</span></div>')
+
+
+def bro_sec(cls: str, ident: str, title: str, body: str) -> str:
+    return (f'<section class="bro bro-{cls}" id="{ident}"><div class="bro-in">'
+            f'<h2>{html.escape(title)}</h2>{body}</div></section>')
+
+
+def bro_cover(title: str, tag: str, meta: list[tuple[str, str]],
+              kicker: str = "Course guide") -> str:
+    """The first page: the site name over a soft band, the title below it."""
+    cells = "".join(f'<div><span>{html.escape(k)}</span><b>{v}</b></div>'
+                    for k, v in meta)
+    return ('<section class="bro bro-cover" id="cover">'
+            '<div class="bro-top"><a href="../index.html">cybercommons.ai</a>'
+            '<span aria-hidden="true">↗</span></div>'
+            '<div class="bro-bottom">'
+            '<div class="bro-kicker"><img src="../assets/logo-mark.png" alt="">'
+            f'<span>Cyber Commons · {html.escape(kicker)}</span></div>'
+            f'<h1>{title}</h1>'
+            f'<p class="bro-tag">{html.escape(tag)}</p>'
+            f'<div class="bro-meta">{cells}</div></div></section>')
+
+
+def pdf_bar(full: bool) -> str:
+    """The export controls, and the plain-text way to do it without them.
+
+    The buttons are inserted by a script after load (PDF_JS), on the same rule
+    as the copy buttons: content is never behind JavaScript. A blocked script
+    leaves the sentence below, which is the whole instruction.
+    """
+    what = ("the brochure above, or the whole guide including the lesson-by-"
+            "lesson run sheet" if full else "this brochure")
+    return ('<div class="pdfbar noprint"><div>'
+            '<b>Save as PDF.</b> Export '
+            f'{what}. If a button does not appear, use your browser\'s Print '
+            'and choose Save as PDF.</div>'
+            f'<div class="pdfbtns" data-pdfbtns="{"full" if full else "one"}">'
+            '</div></div>')
+
+
+PDF_JS = (
+    '<script>(function(){'
+    'var h=document.querySelector("[data-pdfbtns]");'
+    'if(!h||!window.print)return;'
+    'var full=h.getAttribute("data-pdfbtns")==="full";'
+    'function go(mode){return function(){'
+    'var r=document.documentElement;r.setAttribute("data-pdf",mode);'
+    'var done=function(){r.removeAttribute("data-pdf");'
+    'window.removeEventListener("afterprint",done);};'
+    'window.addEventListener("afterprint",done);window.print();};}'
+    'function mk(label,mode,primary){var b=document.createElement("button");'
+    'b.type="button";b.className="pdfbtn"+(primary?" p":"");'
+    'b.textContent=label;b.onclick=go(mode);h.appendChild(b);}'
+    'mk(full?"Export brochure as PDF":"Export as PDF","brochure",true);'
+    'if(full)mk("Export full guide as PDF","full",false);'
+    '})();</script>')
+
+
+def card_grid(cards: list[str]) -> str:
+    """The cards, in a grid that gets a third column when there are five or more.
+
+    Two columns fit four cards on a printed page and no more, so the fifth
+    printed alone on a page of its own. Function E has five chapters and the
+    index has six functions, which is exactly where it showed.
+    """
+    cls = "bro-cards many" if len(cards) >= 5 else "bro-cards"
+    return f'<div class="{cls}">' + "".join(cards) + '</div>'
+
+
+def chapter_cards(prof: dict) -> str:
+    """One card per chapter, each the beginning of that chapter in the guide.
+
+    Function A's chapters have no narrative of their own, so a card carries what
+    its modules say you leave with — which is in `guide_a.MODULES` already.
+    B to F take the opening of the chapter note in `guides.py`.
+    """
+    fid, cards = prof["fid"], []
+    for cid, ctitle, ids in prof["chapters"]:
+        if fid == AUTHORED:
+            leave = [m[3] for m in T.MODULES
+                     if m[2] and set(m[2]) <= set(ids) and m[3]]
+            blurb = ("<p><b>You leave with:</b> "
+                     + "; ".join(inline(x) for x in leave) + ".</p>"
+                     if leave else "")
+            more = f'<a href="#labs">Lab by lab →</a>'
+        else:
+            intro = G.FUNCTIONS[fid]["chapters"].get(cid, {}).get("intro", "")
+            first = intro.split("\n\n")[0] if intro else ""
+            blurb = md(first_sentences(first, 2)) if first else ""
+            more = f'<a href="#c-{cid}">Lesson by lesson →</a>'
+        chips = "".join(
+            f'<a href="../lessons/{x}.html">{html.escape(x)}</a>' for x in ids)
+        cards.append(
+            f'<div class="bro-card" id="ch-{cid}">'
+            f'<div class="bro-cid">{html.escape(cid)} · {len(ids)} lessons</div>'
+            f'<h3>{html.escape(ctitle)}</h3>{blurb}'
+            f'<div class="bro-chips">{chips}</div>'
+            f'<div class="bro-more">{more}</div></div>')
+    return card_grid(cards)
+
+
+def brochure(fid: str, ses: dict) -> str:
+    """One function's brochure: eight sections, no pricing, nothing invented."""
+    P = profile(fid, ses)
+    entry_link = lesson_link(P["entry"], ses, short=True)
+    cover = bro_cover(
+        f'Function {html.escape(fid)} — {html.escape(P["title"])}',
+        P["board"],
+        [("Primary audience", html.escape(P["who_short"])),
+         ("Start with", entry_link)])
+
+    overview = bro_sec("over", "overview", "Overview",
+        '<div class="bro-cols">'
+        f'<div><h3>The problem</h3><p>{inline(P["day0"])}</p></div>'
+        f'<div><h3>The solution</h3><p>{inline(P["day1"])}</p></div>'
+        f'<div><h3>How you know it worked</h3><p>{inline(P["day2"])}</p></div>'
+        '</div>')
+
+    highlights = bro_sec("hi", "highlights", "Highlights",
+        '<div class="bro-stats">'
+        + stat(P["lessons"], "Lessons")
+        + stat(P["n_chapters"], "Chapters")
+        + stat(P["skills"], "Skills you run")
+        + stat(P["minutes"], "Minutes of reading")
+        + '</div><div class="bro-facts">'
+        f'<p><b>Taught duration:</b> {html.escape(P["taught"])}'
+        f' <small>(Function A\'s pace is {PACE_LESSONS} lessons in '
+        f'{PACE_HOURS} hours)</small></p>'
+        f'<p><b>Primary audience:</b> {html.escape(P["who_short"])}</p>'
+        f'<p><b>Prerequisites:</b> {P["prereq"]}</p>'
+        f'<p><b>Reading:</b> {html.escape(str(P["words"]))} words of lesson '
+        f'prose, at {READING_WPM} words a minute.</p></div>')
+
+    learn = bro_sec("learn", "learn", "What you’ll learn",
+        '<ol class="bro-skills">' + "".join(
+            f'<li><b>{inline(o)}</b><span>{inline(ev)}</span>'
+            f'<em>Proved in '
+            + " · ".join(lesson_link(x, ses, short=True) for x in ids)
+            + '</em></li>' for o, ids, ev in P["outcomes"]) + '</ol>')
+
+    curriculum = bro_sec("cur", "curriculum", "Curriculum",
+        chapter_cards(P))
+
+    who = bro_sec("who", "who", "Who should attend?",
+        f'<p class="bro-lead">{inline(P["who"])}</p>'
+        '<div class="bro-rows">'
+        f'<div><span>Ideal role</span><b>{html.escape(P["who_short"])}</b></div>'
+        f'<div><span>Prerequisites</span><b>{P["prereq"]}</b></div>'
+        f'<div><span>Time</span><b>{html.escape(P["taught"])} taught, or '
+        f'about {P["minutes"]} minutes of reading</b></div></div>')
+
+    guide_items = (
+        ["A prompt, the output it prints, and a question to answer for each "
+         f'of the {P["lessons"]} lessons',
+         "Setup failures, in the order they happen"]
+        if fid == AUTHORED else
+        ["Each lesson’s risk, control, three days and measure, with its "
+         "skill’s output contract and committed example run"])
+    included = bro_sec("inc", "included", "What’s included",
+        '<div class="bro-cols">'
+        '<div><h3>Lessons and skills</h3><ul>'
+        f'<li>{P["lessons"]} lesson pages: the risk, the control, and the '
+        'three days</li>'
+        f'<li>{P["skills"]} skills you run on your own computer</li>'
+        '<li>Nothing to install beyond Python and Git; the one thing you '
+        'need is a model</li>'
+        '<li>Every lesson can be done three ways</li></ul></div>'
+        '<div><h3>In this guide</h3><ul>'
+        + "".join(f"<li>{html.escape(x)}</li>" for x in guide_items)
+        + '<li>A capstone, a quick check, and the pitfalls</li>'
+          '<li>A prompt bank and a glossary</li>'
+          '<li>Blocks for running it as a session</li></ul></div></div>')
+
+    cta = bro_sec("cta", "start", "Ready to start?",
+        f'<p class="bro-go"><a href="../lessons/{P["entry"]}.html">'
+        f'Start at {html.escape(P["entry"])} →</a></p>'
+        '<div class="bro-rows">'
+        f'<div><span>Taught duration</span><b>{html.escape(P["taught"])}</b></div>'
+        '<div><span>Website</span><b><a href="../index.html">cybercommons.ai'
+        '</a></b></div>'
+        f'<div><span>Source</span><b><a href="{REPO}">'
+        f'{html.escape(REPO.replace("https://", ""))}</a></b></div></div>')
+
+    return (cover + pdf_bar(True)
+            + '<div class="bro-video noprint">' + overview_video(fid)
+            + '</div>'
+            + "".join([overview, highlights, learn, curriculum, who,
+                        included, cta]))
+
+
+def runsheet_open(fid: str, honest: bool) -> str:
+    """The heading that separates the brochure from the long run sheet."""
+    note = ""
+    if honest:
+        note = md("Every per-lesson fact below is **generated from the lesson "
+                  "sources and the skills** — risk, control, the lab, Day "
+                  "0/1/2, the measure, the command, and each skill's own "
+                  "committed example run. Unlike [the Function A guide]"
+                  "(function-a.html), it does not carry a hand-verified "
+                  "transcript of every run: sixteen of those were checked by "
+                  "running them, and writing 133 more without running them "
+                  "would be making them up. **Trust the run over this "
+                  "page**, and correct `scripts/exercises/guides.py`.")
+    else:
+        note = md("Every number on this page is generated from the lesson "
+                  "sources and the application, so an expected output here is "
+                  "what the command actually prints. If a run disagrees with "
+                  "this page, **trust the run** and correct "
+                  "`scripts/exercises/guide_a.py`.")
+    return ('<div class="runsheet-head" id="runsheet"><h2>The run sheet, '
+            'in detail</h2>'
+            + md(f"**Use this on your own, or to run Function {fid} for other "
+                 f"people.** Everything here serves both; the shaded blocks "
+                 f"marked *For a room* are the only parts a solo reader can "
+                 f"skip.")
+            + note + '</div>')
+
+
 INDEX = [
-    ("glance", "Course at a glance"),
-    ("outcomes", "What you can do by the end"),
+    ("glance", "How to work through it"),
     ("prework", "Before you start"),
     ("framing", "The idea the whole course hangs off"),
     ("labs", "The four hours, lab by lab"),
@@ -856,18 +1118,29 @@ INDEX = [
 ]
 
 
+def foot() -> str:
+    """The shared footer, plus the export-button script these pages need."""
+    return FOOT.replace("</body></html>", PDF_JS + "</body></html>")
+
+
+def crumb(fid: str) -> str:
+    return ('<div class="wrap noprint"><div class="lhead" '
+            'style="padding-bottom:0"><div class="crumb">'
+            '<a href="index.html">Course guides</a> › '
+            f'Function {html.escape(fid)}</div></div></div>')
+
+
+def run_toc(entries: list) -> str:
+    return ('<nav class="toc" aria-label="On this page">'
+            '<div class="tocl">In the run sheet</div><ol>'
+            + "".join(f'<li><a href="#{k}">{html.escape(t)}</a></li>'
+                      for k, t in entries) + "</ol></nav>")
+
+
 def page() -> str:
-    ses = sessions()
-    facts = measure()
+    ses, facts = sessions(), measure()
     ids = [sid for m in T.MODULES for sid in m[2]]
-
-    toc = ('<nav class="toc" aria-label="On this page">'
-           '<div class="tocl">On this page</div><ol>'
-           + "".join(f'<li><a href="#{k}">{html.escape(t)}</a></li>'
-                     for k, t in INDEX)
-           + "</ol></nav>")
-
-    parts = [
+    return "".join([
         HEAD.format(title="Function A Course Guide — Building Agentic AI | "
                           "Cyber Commons",
                     desc=html.escape(
@@ -875,28 +1148,12 @@ def page() -> str:
                         f"{len(ids)} lessons, the prompt and expected output "
                         f"for every lab, and what to do when a machine fails.")),
         NAV,
-        '<div class="wrap"><div class="lhead">',
-        '<div class="crumb"><a href="index.html">Course guides</a> › '
-        'Function A</div>',
-        '<div class="sid">COURSE GUIDE</div>',
-        '<h1>Function A — Building Agentic AI with Claude</h1>',
-        '<div class="badges">'
-        f'<span class="badge d">{len(ids)} lessons</span>'
-        f'<span class="badge t">{html.escape(T.COURSE["duration"])}</span>'
-        '<span class="badge b">Self-study or taught</span></div>',
-        md("**Use this on your own, or to run Function A for other people.** "
-           "Everything here serves both; the shaded blocks marked *For a room* "
-           "are the only parts a solo reader can skip."),
-        md("Every number on this page is generated from the lesson sources and "
-           "the application, so an expected output here is what the command "
-           "actually prints. If a run disagrees with this page, **trust the "
-           "run** and correct `scripts/exercises/guide_a.py`."),
-        '</div>',
-        overview_video("A"),
-        toc,
-        sec("glance", "Course at a glance", "◉", glance(ses, facts)),
-        sec("outcomes", "What you can do by the end", "✓",
-            outcomes(ses)),
+        crumb("A"),
+        brochure("A", ses),
+        '<div class="runsheet"><div class="wrap">',
+        runsheet_open("A", honest=False),
+        run_toc(INDEX),
+        sec("glance", "How to work through it", "◉", glance(ses, facts)),
         sec("prework", "Before you start", "◴", prework()),
         sec("framing", "The idea the whole course hangs off", "▦", framing(),
             "Fifteen minutes before the first lesson. A taught session opens "
@@ -917,40 +1174,22 @@ def page() -> str:
         sec("prompts", "Prompt bank", "▶", prompts()),
         sec("glossary", "Glossary", "▦", glossary()),
         pager("A", ses),
-        '</div>',
-        FOOT,
-    ]
-    return "".join(parts)
+        '</div></div>',
+        foot(),
+    ])
 
 
 # ------------------------------------------------------- the B to F pages
 
 def derived_glance(fid: str, fns: dict, ses: dict, facts: dict) -> str:
-    """Course at a glance for a function whose labs are derived."""
-    fn = fns[fid]
-    ids, nar = fn["ids"], G.FUNCTIONS[fid]
-    fd = FUNCTION_DAYS.get(fid) or {}
-    words, minutes = reading_volume(fid)
-    skills = sorted({ref for sid in ids for ref, _ in audits_of(sid)})
+    """How to work through a function whose labs are derived."""
+    fn, nar = fns[fid], G.FUNCTIONS[fid]
     rows = [
-        ["Function", f'{fid} — {fn["title"]}'],
-        ["Lessons", f'{len(ids)} in {len(fn["chapters"])} chapters, '
-                    f'{lesson_link(ids[0], ses, short=True)} through '
-                    f'{lesson_link(ids[-1], ses, short=True)}'],
-        ["Skills to run", f'{len(skills)} audit skills across the '
-                          f'{len(ids)} lessons'],
-        ["Reading", f'about {minutes} minutes ({words} words of lesson prose '
-                    f'at {READING_WPM} words a minute)'],
-        ["Taught duration", taught_estimate(len(ids))
-                            + ". Anything over about four hours is normally "
-                              "split across sittings, and the chapter "
-                              "boundaries are the splits"],
-        ["Who it is for", inline(fd.get("who", "—"))],
-        ["Before this", f'Function A, which builds the system this function is '
-                        f'about — at minimum {lesson_link("A0.0", ses, True)} '
-                        f'and {lesson_link("A1.0", ses, True)}'],
         ["On your own", inline(nar["solo"])],
         ["With a room", inline(nar["room"])],
+        ["Splitting it up", "Anything over about four hours is normally "
+                            "split across sittings, and the chapter "
+                            "boundaries are the splits"],
         ["The one sentence to hold", f'<b>{html.escape(nar["board"])}</b>'],
     ]
     chaps = table(["Chapter", "Lessons", "What it does"],
@@ -970,17 +1209,6 @@ def derived_glance(fid: str, fns: dict, ses: dict, facts: dict) -> str:
               'other two matter because a machine with no model configured can '
               'still do every lesson, and because "what actually changed?" is '
               'the question that comes up most.</p>' + ways)
-
-
-def listed(title: str, rows: list, cols: list[str]) -> str:
-    return table(cols, rows)
-
-
-def derived_outcomes(fid: str, ses: dict) -> str:
-    return table(["By the end, you can…", "Proved in", "Evidence"],
-                 [[inline(a), " · ".join(lesson_link(x, ses, short=True)
-                                         for x in b), inline(c)]
-                  for a, b, c in G.FUNCTIONS[fid]["outcomes"]])
 
 
 def derived_capstone(fid: str) -> str:
@@ -1044,8 +1272,7 @@ def derived_prework(fid: str, ses: dict) -> str:
 
 
 DERIVED_INDEX = [
-    ("glance", "Course at a glance"),
-    ("outcomes", "What you can do by the end"),
+    ("glance", "How to work through it"),
     ("prework", "Before you start"),
     ("framing", "The idea the whole course hangs off"),
     ("labs", "Chapter by chapter, lesson by lesson"),
@@ -1063,14 +1290,7 @@ def derived_page(fid: str) -> str:
     ses, fns, facts = sessions(), functions(), measure()
     fn, nar = fns[fid], G.FUNCTIONS[fid]
     ids = fn["ids"]
-
-    toc = ('<nav class="toc" aria-label="On this page">'
-           '<div class="tocl">On this page</div><ol>'
-           + "".join(f'<li><a href="#{k}">{html.escape(t)}</a></li>'
-                     for k, t in DERIVED_INDEX)
-           + "</ol></nav>")
-
-    parts = [
+    return "".join([
         HEAD.format(title=f"Function {fid} Course Guide — {fn['title']} | "
                           f"Cyber Commons",
                     desc=html.escape(
@@ -1079,37 +1299,16 @@ def derived_page(fid: str) -> str:
                         f"chapters, every risk, control, measure and skill, "
                         f"and what each one prints.")),
         NAV,
-        '<div class="wrap"><div class="lhead">',
-        '<div class="crumb"><a href="index.html">Course guides</a> › '
-        f'Function {html.escape(fid)}</div>',
-        '<div class="sid">COURSE GUIDE</div>',
-        f'<h1>Function {html.escape(fid)} — {html.escape(fn["title"])}</h1>',
-        '<div class="badges">'
-        f'<span class="badge d">{len(ids)} lessons</span>'
-        f'<span class="badge t">{len(fn["chapters"])} chapters</span>'
-        '<span class="badge b">Self-study or taught</span></div>',
-        md(f"**Use this on your own, or to run Function {fid} for other "
-           f"people.** Everything here serves both; the shaded blocks marked "
-           f"*For a room* are the only parts a solo reader can skip."),
-        # The honesty note. It is on the page rather than only in the source,
-        # because the difference between a verified output and a skill's own
-        # example is exactly the kind of thing a reader is entitled to know
-        # before they rely on it in front of a class.
-        md("Every per-lesson fact below is **generated from the lesson "
-           "sources and the skills** — risk, control, the lab, Day 0/1/2, the "
-           "measure, the command, and each skill's own committed example run. "
-           "Unlike [the Function A guide](function-a.html), it does not carry "
-           "a hand-verified transcript of every run: sixteen of those were "
-           "checked by running them, and writing 133 more without running "
-           "them would be making them up. **Trust the run over this page**, "
-           "and correct `scripts/exercises/guides.py`."),
-        '</div>',
-        overview_video(fid),
-        toc,
-        sec("glance", "Course at a glance", "◉",
+        crumb(fid),
+        brochure(fid, ses),
+        '<div class="runsheet"><div class="wrap">',
+        # The honesty note stays on the page, not only in the source: the
+        # difference between a verified output and a skill's own example is
+        # what a reader is entitled to know before relying on it in a room.
+        runsheet_open(fid, honest=True),
+        run_toc(DERIVED_INDEX),
+        sec("glance", "How to work through it", "◉",
             derived_glance(fid, fns, ses, facts)),
-        sec("outcomes", "What you can do by the end", "✓",
-            derived_outcomes(fid, ses)),
         sec("prework", "Before you start", "◴", derived_prework(fid, ses)),
         sec("framing", "The idea the whole course hangs off", "▦",
             "".join(md(x) for x in nar["framing"]),
@@ -1128,10 +1327,9 @@ def derived_page(fid: str) -> str:
         sec("prompts", "Prompt bank", "▶", prompts()),
         sec("glossary", "Glossary", "▦", glossary()),
         pager(fid, ses),
-        '</div>',
-        FOOT,
-    ]
-    return "".join(parts)
+        '</div></div>',
+        foot(),
+    ])
 
 
 def pager(fid: str, ses: dict) -> str:
@@ -1163,60 +1361,126 @@ def pager(fid: str, ses: dict) -> str:
 
 
 def index_page() -> str:
-    """The guide index: six functions, who each is for, and where to start."""
+    """The guide index, as a brochure for the commons as a whole.
+
+    Same eight sections as a function's brochure, filled from the site's own
+    statements: the homepage's account of the problem and of what the tracks
+    teach, the six blurbs, and counts measured from the tree.
+    """
     ses, fns = sessions(), functions()
-    total = sum(len(f["ids"]) for f in fns.values())
-    rows = []
-    for fid, fn in fns.items():
-        fd = FUNCTION_DAYS.get(fid) or {}
-        rows.append([
-            f'<b><a href="function-{fid.lower()}.html">Function {fid}</a></b><br>'
-            f'{html.escape(fn["title"])}',
-            f'{len(fn["ids"])} in {len(fn["chapters"])}',
-            inline(G.INDEX_BLURB[fid]),
-            inline(fd.get("who_short", "—")),
-        ])
+    profs = {fid: profile(fid, ses) for fid in fns}
+    total = sum(p["lessons"] for p in profs.values())
+    n_chapters = sum(p["n_chapters"] for p in profs.values())
+    n_skills = len({ref for sid in ses for ref, _ in audits_of(sid)})
+
+    cover = bro_cover(
+        "Cyber Commons — course guides",
+        "How the work changes when agents do it.",
+        [("Tracks", str(len(fns))),
+         ("Start with", lesson_link("A0.0", ses, short=True))],
+        kicker="Course guides")
+
+    overview = bro_sec("over", "overview", "Overview",
+        '<div class="bro-cols">'
+        '<div><h3>The problem</h3><p>Breakout time — how long it takes an '
+        'attacker to get from first access to moving sideways — is now '
+        '<b>29 minutes</b>. The fastest on record is <b>27 seconds</b>. Most '
+        'security work is still done more slowly than that: architecture '
+        'reviewed every few months, alerts read one at a time, controls '
+        'checked once a year.</p></div>'
+        '<div><h3>The solution</h3><p>Six tracks. The first builds an agentic '
+        'system, and the other five each take one part of a security '
+        'organisation — architecture and infrastructure, application '
+        'security, offensive security, the SOC and governance — and teach how '
+        'that work changes when agents do it. You also learn how to secure '
+        'the AI itself.</p></div>'
+        '<div><h3>How you know it worked</h3><p>Every lesson answers three '
+        'questions in order: Day 0, why this is worth doing; Day 1, the thing '
+        'you build; Day 2, the number that tells you next quarter that it '
+        'still works.</p></div></div>')
+
+    highlights = bro_sec("hi", "highlights", "Highlights",
+        '<div class="bro-stats">'
+        + stat(total, "Lessons") + stat(len(fns), "Tracks")
+        + stat(n_chapters, "Chapters") + stat(n_skills, "Skills you run")
+        + '</div><div class="bro-facts">'
+        '<p><b>Open source:</b> every tool named in the lessons is open '
+        'source.</p>'
+        '<p><b>Runs on:</b> your own computer. Nothing to install beyond '
+        'Python and Git, no GPU, no licence — the one thing you need is a '
+        'model.</p>'
+        '<p><b>Where to start:</b> '
+        + lesson_link("A0.0", ses) + ', whatever your job is.</p></div>')
+
+    learn = bro_sec("learn", "learn", "The six guides",
+        '<ol class="bro-skills">' + "".join(
+            f'<li><b><a href="function-{fid.lower()}.html">Function {fid} — '
+            f'{html.escape(p["title"])}</a></b>'
+            f'<span>{inline(G.INDEX_BLURB[fid])}</span>'
+            f'<em>{p["lessons"]} lessons · {p["n_chapters"]} chapters</em></li>'
+            for fid, p in profs.items()) + '</ol>')
+
+    cards = []
+    for fid, p in profs.items():
+        links = "".join(
+            f'<a class="bro-row" href="function-{fid.lower()}.html#ch-{cid}">'
+            f'<b>{html.escape(cid)}</b> {html.escape(ct)}'
+            f'<small>{len(ids)} lessons</small></a>'
+            for cid, ct, ids in p["chapters"])
+        cards.append(f'<div class="bro-card"><div class="bro-cid">Function '
+                     f'{fid}</div><h3>{html.escape(p["title"])}</h3>{links}</div>')
+    curriculum = bro_sec("cur", "curriculum", "Curriculum", card_grid(cards))
+
+    who = bro_sec("who", "who", "Who should attend?",
+        '<p class="bro-lead">Security teams — and the engineers building the '
+        'agentic systems they are asked to secure. Each track names the job '
+        'titles it is for, and nobody needs all six.</p>'
+        '<div class="bro-rows">' + "".join(
+            f'<div><span>Function {fid}</span>'
+            f'<b>{html.escape(p["who_short"])}</b></div>'
+            for fid, p in profs.items()) + '</div>')
+
+    included = bro_sec("inc", "included", "What\u2019s included",
+        '<div class="bro-cols">'
+        '<div><h3>Lessons and skills</h3><ul>'
+        f'<li>{total} lesson pages: the risk, the control, and the three '
+        'days</li>'
+        f'<li>{n_skills} skills you run on your own computer</li>'
+        '<li>Every lesson can be done three ways</li></ul></div>'
+        '<div><h3>In each guide</h3><ul>'
+        '<li>Each lesson\u2019s risk, control, three days and measure</li>'
+        '<li>A capstone, a quick check, and the pitfalls</li>'
+        '<li>A prompt bank and a glossary</li>'
+        '<li>Blocks for running it as a session</li></ul></div></div>')
+
+    cta = bro_sec("cta", "start", "Ready to start?",
+        '<p class="bro-go"><a href="../lessons/A0.0.html">Start at A0.0 →'
+        '</a></p><div class="bro-rows">'
+        '<div><span>Website</span><b><a href="../index.html">cybercommons.ai'
+        '</a></b></div>'
+        f'<div><span>Source</span><b><a href="{REPO}">'
+        f'{html.escape(REPO.replace("https://", ""))}</a></b></div></div>')
+
     return "".join([
         HEAD.format(title="Course guides — Cyber Commons",
                     desc=html.escape(
-                        f"A run sheet for each of the six functions: "
-                        f"{total} lessons, every risk, control and measure, "
-                        f"and what each skill prints. For self-study or for "
-                        f"running a session.")),
+                        f"A guide for each of the six tracks: {total} lessons, "
+                        f"every risk, control and measure, and what each skill "
+                        f"prints. For self-study or for running a session.")),
         NAV,
-        '<div class="wrap"><div class="lhead">',
-        '<div class="crumb"><a href="../lessons/index.html">All lessons</a> › '
-        'Course guides</div>',
-        '<div class="sid">COURSE GUIDES</div>',
-        '<h1>Six tracks, one guide each</h1>',
-        '<div class="badges">'
-        f'<span class="badge d">{len(fns)} guides</span>'
-        f'<span class="badge t">{total} lessons</span>'
-        '<span class="badge b">Self-study or taught</span></div>',
-        md("These are not six subjects. They are the parts a security "
-           "organisation is made of — architecture and infrastructure, "
-           "application security, offensive security, the SOC, and governance "
-           "— and each guide is the run sheet for one of them: **what changes "
-           "in that work**, the chapters in order, every lesson's risk, "
-           "control and measure, the skill it runs and what that skill "
-           "prints, plus the pitfalls, a quick check, and the blocks marked "
-           "*For a room* for anybody running it as a session."),
-        md(f"**Start with [Function A](function-a.html)** whatever your "
-           f"job is: it builds the system the other five tracks are about, and "
-           f"it is hard to secure an agent you have never built. Its guide is "
-           f"also the one with a hand-verified output for every lab, because "
-           f"it has sixteen of them."),
-        '</div>',
-        sec("glance", "The six", "◉",
-            table(["Guide", "Lessons / chapters", "What changes",
-                   "Who it is for"], rows)),
-        '<div class="pager">'
+        '<div class="wrap noprint"><div class="lhead" '
+        'style="padding-bottom:0"><div class="crumb">'
+        '<a href="../lessons/index.html">All lessons</a> › Course guides'
+        '</div></div></div>',
+        cover, pdf_bar(False),
+        overview, highlights, learn, curriculum, who, included, cta,
+        '<div class="wrap noprint"><div class="pager">'
         '<a href="../lessons/A0.0.html"><div class="k">Start here</div>'
         '<div class="t">A0.0 — set up your computer</div></a>'
         f'<a class="next" href="../lessons/index.html">'
         f'<div class="k">All {total} lessons</div>'
-        f'<div class="t">The full curriculum</div></a></div>',
-        '</div>', FOOT,
+        f'<div class="t">The full curriculum</div></a></div></div>',
+        foot(),
     ])
 
 
@@ -1301,6 +1565,62 @@ def consistency(ses: dict) -> list[str]:
     return bad
 
 
+def chapter_link_problems(want: dict) -> list[str]:
+    """Every chapter's guide is linked where it begins, and every link lands.
+
+    The anchor (`ch-<id>`) is owned here, in `chapter_cards`, but the links to
+    it are written by two other scripts: `build_site.py` for the first lesson
+    of each chapter and the lessons index, and `build_curriculum.py` for the
+    chapter docs. Rename the anchor in one place and the other two would carry
+    on emitting links to nothing, with every page still building green — so
+    this reads what those scripts actually produced and resolves each link
+    against the guide that this script just generated.
+
+    It also counts. Sixteen chapters means sixteen first-lesson banners, sixteen
+    index headings and sixteen chapter docs; a chapter that lost its link would
+    otherwise have nothing to fail.
+    """
+    bad = []
+    pages = {f.name: t for f, t in want.items() if f.parent == GUIDE}
+    chapters = [(fid, cid) for fid, fn in functions().items()
+                for cid, _, _ in fn["chapters"]]
+
+    def lands(href: str) -> bool:
+        m = re.search(r"guide/(function-[a-f]\.html)#(ch-[A-F]\d)", href)
+        return bool(m) and f'id="{m.group(2)}"' in pages.get(m.group(1), "")
+
+    banners = {}
+    for f in sorted((ROOT / "site" / "lessons").glob("*.html")):
+        m = re.search(r'class="chapguide".*?href="([^"]+)"', f.read_text(), re.S)
+        if m:
+            banners[f.stem] = m.group(1)
+    if len(banners) != len(chapters):
+        bad.append(f"{len(banners)} lesson pages open with a chapter-guide "
+                   f"link and there are {len(chapters)} chapters")
+    for sid, href in banners.items():
+        if not lands(href):
+            bad.append(f"{sid}: its chapter-guide link goes nowhere ({href})")
+
+    idx = (ROOT / "site" / "lessons" / "index.html").read_text()
+    heads = re.findall(r'class="chaphead".*?href="([^"]+)"', idx, re.S)
+    if len(heads) != len(chapters):
+        bad.append(f"the lessons index has {len(heads)} chapter-guide links "
+                   f"and there are {len(chapters)} chapters")
+    bad += [f"lessons index: chapter-guide link goes nowhere ({h})"
+            for h in heads if not lands(h)]
+
+    for fid, cid in chapters:
+        doc = ROOT / "curriculum" / f"track-{cid.lower()}.md"
+        m = re.search(r"\*\*Course guide:\*\* \[[^\]]+\]\(([^)]+)\)",
+                      doc.read_text() if doc.is_file() else "")
+        if not m:
+            bad.append(f"curriculum/{doc.name} has no link to its course guide")
+        elif not lands(m.group(1)):
+            bad.append(f"curriculum/{doc.name}: course-guide link goes "
+                       f"nowhere ({m.group(1)})")
+    return bad
+
+
 def redirect_stub() -> str:
     """The page's former address, as a generated redirect rather than a 404.
 
@@ -1349,6 +1669,11 @@ def main() -> int:
              if (f.read_text() if f.is_file() else "") != text]
 
     if a.check:
+        links = chapter_link_problems(want)
+        for l in links:
+            print(f"::error::course guide: {l}", file=sys.stderr)
+        if links:
+            return 1
         if stale:
             for f in stale:
                 print(f"::error::{f.relative_to(ROOT)} is stale — run "

@@ -263,8 +263,21 @@ def flatten():
                             # bridges were written, checked for existing, and
                             # shown to nobody; the gate only ever asked whether
                             # BRIDGES had a key for the track.
-                            "last_in_track": i == len(tr["sessions"]) - 1})
+                            "last_in_track": i == len(tr["sessions"]) - 1,
+                            # The guide is linked where a chapter begins, and
+                            # the beginning is the first lesson in it.
+                            "first_in_track": i == 0})
     return seq
+
+
+def chapter_guide(fn_id: str, track_id: str) -> str:
+    """Where a chapter begins in its function's course guide.
+
+    Relative to site/lessons/, which is where every page that uses it lives.
+    `ch-<id>` is the chapter's card in the guide's Curriculum section, set by
+    `build_guide.chapter_cards` — the one place that owns the anchor.
+    """
+    return f"../guide/function-{fn_id.lower()}.html#ch-{track_id}"
 
 
 def exercise_link(sid: str) -> tuple[str, str]:
@@ -804,7 +817,18 @@ def lesson_page(entry, prev, nxt) -> str:
         badges.append('<span class="badge s">Flagship lab</span>')
     badges.append(f'<span class="badge t">{html.escape(entry["track_id"])}</span>')
     parts.append('<div class="badges">' + "".join(badges) + '</div>')
-    parts.append(framework_chips(sid, entry["track_id"]) + '</div>')
+    parts.append(framework_chips(sid, entry["track_id"]))
+    if entry["first_in_track"]:
+        # Chapters begin here, and the course guide for the chapter is what
+        # somebody arriving at the start of one is looking for: what it
+        # covers, and its lessons in order.
+        parts.append(
+            '<p class="chapguide"><b>This starts chapter '
+            f'{html.escape(entry["track_id"])}.</b> Its course guide is '
+            f'<a href="{chapter_guide(entry["fn_id"], entry["track_id"])}">'
+            f'{html.escape(entry["track_id"])} in the Function '
+            f'{html.escape(entry["fn_id"])} course guide →</a></p>')
+    parts.append('</div>')
 
     parts.append(video_block(sid, f"{sid} — {s['title']}"))
 
@@ -906,12 +930,22 @@ def index_page(seq) -> str:
         if e["fn"] != cur_fn:
             cur_fn = e["fn"]
             parts.append(f'<div class="sec"><h2>{html.escape(cur_fn)}</h2>')
+        if e["first_in_track"]:
+            # The index listed lessons under a function with no chapter
+            # boundaries at all, so there was nowhere for a chapter's guide
+            # to begin. The chapter name moves up here from the end of every
+            # row, where it was repeated 149 times.
+            parts.append(
+                f'<h3 class="chaphead"><span class="sid">'
+                f'{html.escape(e["track_id"])}</span> '
+                f'{html.escape(e["track"])} '
+                f'<a href="{chapter_guide(e["fn_id"], e["track_id"])}">'
+                f'Course guide →</a></h3>')
         sid = e["s"]["id"]
         mark = "▶" if sid in VIDEOS else "·"
         parts.append(f'<p style="margin:6px 0"><a href="{sid}.html" style="text-decoration:none">'
                      f'<span class="sid">{mark} {html.escape(sid)}</span> '
-                     f'<span style="color:var(--text)">{html.escape(e["s"]["title"])}</span></a> '
-                     f'<span style="color:var(--text-faint);font-size:13px">— {html.escape(e["track"])}</span></p>')
+                     f'<span style="color:var(--text)">{html.escape(e["s"]["title"])}</span></a></p>')
     parts.append('</div></div>')
     parts.append(FOOT)
     return "".join(parts)

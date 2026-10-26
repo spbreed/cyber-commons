@@ -3,6 +3,8 @@
 **Function F · AI Governance for Agentic Systems**  
 *Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
+**Course guide:** [F3 in the Function F course guide](https://cybercommons.ai/guide/function-f.html#ch-F3)
+
 **Job titles:** BISO, Deputy CISO, Head of Security Strategy, CISO
 
 **What changes:** Sequencing, org design, metrics and stop authority for an estate that will not stop at four agents. 8 lessons.

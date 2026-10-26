@@ -3,6 +3,8 @@
 **Function C · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*
 
+**Course guide:** [C2 in the Function C course guide](https://cybercommons.ai/guide/function-c.html#ch-C2)
+
 **Job titles:** AppSec Engineer, Product Security Engineer, Secure Code Reviewer
 
 **What changes:** The SDLC split into what runs before a deploy and what runs after, then one lesson per stage of an agentic AppSec pipeline — audit, supply chain, dynamic validation, triage, remediation, attestation. 15 lessons.

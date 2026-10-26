@@ -3,6 +3,8 @@
 **Function E · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
+**Course guide:** [E5 in the Function E course guide](https://cybercommons.ai/guide/function-e.html#ch-E5)
+
 **Job titles:** Incident Responder, DFIR Lead, Security Programme Manager, Regulatory Liaison
 
 **What changes:** The part after containment: a run you can reproduce, a root cause that names a control, the fix placed at the layer it belongs in, the indicators re-measured, the policy changed as a diff — and a regulatory clock that started before anyone knew. 6 lessons.

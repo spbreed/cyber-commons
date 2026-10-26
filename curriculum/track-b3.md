@@ -3,6 +3,8 @@
 **Function B · Securing AI Architectures**  
 *CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
+**Course guide:** [B3 in the Function B course guide](https://cybercommons.ai/guide/function-b.html#ch-B3)
+
 **Job titles:** Platform Security Engineer, Cloud Security Architect, SRE
 
 **What changes:** What holds when identity has already been defeated — and how the controls collapse into one enforcement point once you run more than a handful of agents. 10 lessons.

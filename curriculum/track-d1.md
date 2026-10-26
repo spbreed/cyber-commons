@@ -3,6 +3,8 @@
 **Function D · Agentic Evaluation and Red Teaming**  
 *Red-team CyberTravels as a non-deterministic actor: one lifecycle from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, to the telemetry, containment and forensic governance every finding must end in.*
 
+**Course guide:** [D1 in the Function D course guide](https://cybercommons.ai/guide/function-d.html#ch-D1)
+
 **Job titles:** Red Team Operator, AI Security Researcher, Offensive ML Engineer
 
 **What changes:** A single lifecycle: from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, into the telemetry, detection, triage, containment and forensic replay a researcher hands the defender, and out to institutional governance. 12 lessons.

@@ -3,6 +3,8 @@
 **Function E · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
+**Course guide:** [E4 in the Function E course guide](https://cybercommons.ai/guide/function-e.html#ch-E4)
+
 **Job titles:** Incident Responder, SOAR Engineer, Platform Security Engineer
 
 **What changes:** A response whose blast radius is known before it fires: actions classified on reversibility and radius, tiers derived from that rather than from their author, containment timed against the attacker, and a fleet stop that revokes as well as terminates. 5 lessons.
