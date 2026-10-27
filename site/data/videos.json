@@ -1,5 +1,12 @@
 {
  "_note": "Registry of published lightboard recordings. Written by scripts/link_video.py and by the publish-video GitHub Action after a successful YouTube upload. Keys are a session id from curriculum.json (e.g. 'B2.5'), or 'intro' for the home page's introductory video, or 'overview-<function>' (e.g. 'overview-b') for a course guide's overview. The script for every one of them is in LIGHTBOARD.md.",
  "playlist": "",
- "videos": {}
+ "videos": {
+  "intro": {
+   "youtube_id": "N_fiKcmZ9Eg",
+   "url": "https://youtu.be/N_fiKcmZ9Eg",
+   "label": "Introduction \u00b7 Closing the Cyber Security Gap with Agentic AI",
+   "orientation": "portrait"
+  }
+ }
 }

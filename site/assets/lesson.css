@@ -820,3 +820,6 @@ table.md.kv th{width:30%;border-bottom:1px solid var(--line-soft);
   .bro-gc{font-size:11px!important;line-height:1.4}
   .bro-cols.two{grid-template-columns:1fr 1fr}
 }
+
+.video.portrait{max-width:340px}
+.video.portrait .frame{aspect-ratio:9/16}

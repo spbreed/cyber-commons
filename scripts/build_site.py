@@ -720,9 +720,13 @@ def video_block(sid: str, title: str, *, recording: str | None = None,
                  f'<div class="ph"><div class="icon">▶</div>'
                  f'<p><a href="{html.escape(v["url"])}">Watch the recording</a></p></div>')
         link = v.get("url") or f"https://www.youtube.com/watch?v={yid}"
-        cap = (f'<span>Lightboard recording{" · " + html.escape(v["duration"]) if v.get("duration") else ""}</span>'
+        cap = (f'<span>{html.escape(v.get("label") or "Lightboard recording")}{" · " + html.escape(v["duration"]) if v.get("duration") else ""}</span>'
                f'<a href="{html.escape(link)}" target="_blank" rel="noopener">Open on YouTube ↗</a>')
-        return f'<div class="video"><div class="frame">{inner}</div><div class="cap">{cap}</div></div>'
+        # A YouTube Short is 9:16. Forced into the 16:9 frame it plays as a
+        # narrow strip with black bars either side, so the registry can say
+        # "portrait" and the player takes the shape of what was recorded.
+        shape = " portrait" if v.get("orientation") == "portrait" else ""
+        return f'<div class="video{shape}"><div class="frame">{inner}</div><div class="cap">{cap}</div></div>'
     # placeholder — the script is written, the recording is not made yet
     say = blurb or ('Not recorded yet. The lesson below is complete and '
                     'runnable today — the video is added later without '
