@@ -555,6 +555,30 @@ def intro_script(counts: dict) -> str:
     return "\n".join(out)
 
 
+READ_ALOUD_MAX_WORDS = 28
+
+
+def read_aloud_problems(lines: list[str]) -> list[str]:
+    """What a person cannot say without deciding, on camera, what to do.
+
+    The overview scripts are recorded by reading them. A dash, a semicolon or a
+    bracket is punctuation the reader must interpret, and a sentence past about
+    thirty words runs out of breath. The first overview scripts were spliced
+    from the page's own prose and ran to 65 words a sentence with up to eight
+    dashes, so this is checked at generation rather than hoped for.
+    """
+    bad = []
+    for line in lines:
+        t = say(line)
+        for ch in ("\u2014", "\u2013", ";", "(", ")", ":", "/"):
+            if ch in t:
+                bad.append(f"contains {ch!r}: {t[:70]}")
+        for sent in re.split(r"(?<=[.!?])\s+", t):
+            if len(sent.split()) > READ_ALOUD_MAX_WORDS:
+                bad.append(f"{len(sent.split())} words: {sent[:70]}")
+    return bad
+
+
 def overview_script(fid: str, title: str, counts: dict) -> str:
     """One recording per course guide, made with that guide open on screen.
 
@@ -574,10 +598,11 @@ def overview_script(fid: str, title: str, counts: dict) -> str:
     nothing is invented to fill the gap.
     """
     P = BG.profile(fid, BG.sessions())
-    fd = FUNCTION_DAYS.get(fid) or {}
+    O = G.OVERVIEW[fid]
     ls = [x for x in lessons() if x["fn"]["id"] == fid]
     n_ch = P["n_chapters"]
     chap_word = "chapter" if n_ch == 1 else "chapters"
+    n_les = len(ls)
 
     rows: list[tuple[str, str, str]] = []
 
@@ -585,51 +610,51 @@ def overview_script(fid: str, title: str, counts: dict) -> str:
         rows.append((head, "do", direction))
         rows.extend((head, "say", x) for x in lines)
 
-    beat("① WHO IT IS FOR",
+    beat("1 · WHO IT IS FOR",
          f"Open the Function {fid} course guide on its cover. Point at the "
-         f"title, then at the line that says primary audience.",
-         f"Function {fid} is {title}. {fd.get('who', '')}",
-         f"One sentence to hold for the whole function. {P['board']}.")
+         f"title.",
+         *O["who"])
 
-    beat("② THE PROBLEM, AND THE WAY THROUGH IT",
-         "Scroll to Overview. Point at the problem column, then the solution "
-         "column, then the one on how you know it worked.",
-         f"First, the problem. {sentences(fd.get('day0', ''), 3)}",
-         f"And the way through it. {sentences(fd.get('day1', ''), 3)}",
-         f"How you know it worked. {sentences(fd.get('day2', ''), 2)}")
+    beat("2 · THE PROBLEM",
+         "Scroll to Overview. Point at the problem column.",
+         *O["problem"])
 
-    beat("③ THE NUMBERS",
-         "Scroll to Highlights. Touch each of the four big numbers as you "
-         "say it.",
-         f"{P['lessons']} lessons, in {n_ch} {chap_word}. You run "
-         f"{P['skills']} skills on your own computer. The lesson text is "
-         f"about {P['minutes']} minutes of reading, and taught, it comes to "
-         f"{P['taught']}.")
+    beat("3 · WHAT YOU DO",
+         "Point at the solution column.",
+         *O["what"])
 
-    beat("④ WHAT YOU WILL BE ABLE TO DO",
-         "Scroll to What you'll learn. Read the numbered outcomes in order.",
-         "By the end, you can do these things.",
-         *[f"{o}." for o, _ids, _ev in P["outcomes"]])
+    beat("4 · THE NUMBERS",
+         "Scroll to Highlights. Touch each big number as you say it.",
+         f"There are {n_les} lessons, in {n_ch} {chap_word}.",
+         f"You run {P['skills']} skills on your own computer.",
+         f"Reading the lessons takes about {P['minutes']} minutes. "
+         f"With a teacher, it takes {P['taught']}.")
 
-    chapters = " ".join(
-        f"{cid}, {ct}, is {len(ids)} "
-        f"{'lesson' if len(ids) == 1 else 'lessons'}."
-        for cid, ct, ids in P["chapters"])
-    beat("⑤ THE CHAPTERS",
+    beat("5 · WHAT YOU WILL BE ABLE TO DO",
+         "Scroll to What you will learn. Point at each one as you read it.",
+         "By the end, you will be able to do these things.",
+         *O["can"])
+
+    chap_lines = []
+    for cid, _ct, ids in P["chapters"]:
+        n = len(ids)
+        chap_lines.append(
+            f"{cid} has {n} {'lesson' if n == 1 else 'lessons'}. "
+            f"{O['chapters'][cid]}")
+    beat("6 · THE CHAPTERS",
          "Scroll to Curriculum. Point at each chapter card as you name it.",
-         # The count was said in the numbers beat; saying it again here read
-         # as a stutter, so this beat only names the chapters.
-         f"It is {n_ch} {chap_word}. " + chapters,
-         "Every chapter starts with a link back to its place in this guide, "
-         "so you can find your way back from the lesson.")
+         f"There {'is' if n_ch == 1 else 'are'} {n_ch} {chap_word}.",
+         *chap_lines)
 
-    beat("⑥ WHERE TO START",
-         "Scroll to the end and point at the start button. Then scroll up and "
-         "point at the two export buttons.",
-         G.OVERVIEW_CLOSE[fid],
-         f"Start at {P['entry']}. Under the brochure there is a run sheet "
-         f"that goes lesson by lesson. And you can save this guide as a PDF, "
-         f"either the brochure on its own or the whole thing.")
+    beat("7 · WHERE TO START",
+         "Scroll to the end and point at the start button.",
+         O["start"],
+         "You can save this guide as a PDF. Use the buttons at the top.")
+
+    problems = read_aloud_problems([t for _, k, t in rows if k == "say"])
+    if problems:
+        raise SystemExit(f"OVERVIEW {fid} is not readable aloud:\n  "
+                         + "\n  ".join(problems))
 
     words = sum(len(say(t).split()) for _, kind, t in rows if kind == "say")
     out = [f"### OVERVIEW {fid} · Function {fid} — {title}", ""]

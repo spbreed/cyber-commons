@@ -188,393 +188,499 @@ One sentence to take with you, because the rest of it is the second half of that
 
 ### OVERVIEW A · Function A — Getting Started — Building Agentic AI
 
-The course guide as a recording, made with the guide open · 16 lessons · 494 words, about 3.5 min spoken · publishes from `recordings/overview-a.mp4` · [guide](https://cybercommons.ai/guide/function-a.html)
+The course guide as a recording, made with the guide open · 16 lessons · 319 words, about 2.3 min spoken · publishes from `recordings/overview-a.mp4` · [guide](https://cybercommons.ai/guide/function-a.html)
 
-**① WHO IT IS FOR**
+**1 · WHO IT IS FOR**
 
-*[Open the Function A course guide on its cover. Point at the title, then at the line that says primary audience.]*
+*[Open the Function A course guide on its cover. Point at the title.]*
 
-Function A is Getting Started — Building Agentic AI. Everyone, whatever your job, because this is the system the other five tracks are about. Engineers building an agentic feature, and equally the AppSec engineers, red teamers, SOC analysts and GRC leads who will be handed one. It assumes you can read a Python function. It assumes no security background at all, and no prior agent work.
+This is Function A. It is called Getting Started, Building Agentic AI.
 
-One sentence to hold for the whole function. The model proposes, your code decides.
+It is for everyone, whatever your job.
 
-**② THE PROBLEM, AND THE WAY THROUGH IT**
+You do not need a security background. It helps if you can read a little Python.
 
-*[Scroll to Overview. Point at the problem column, then the solution column, then the one on how you know it worked.]*
+Do this one first. The other five functions are all about the system you build here.
 
-First, the problem. Every control in the other five functions attaches to a mechanism. Hand somebody a control before they have built the mechanism and they apply it as a sentence in a document — which is the single most common reason agentic security guidance is read, agreed with, and not implemented.
+**2 · THE PROBLEM**
 
-And the way through it. Build CyberTravels end to end on your own machine: the reasoning loop with an independent verifier, two MCP resource servers behind a process boundary, a workload identity per agent, per-action delegation the resource server actually enforces, memory that records where its contents came from, signed agent-to-agent envelopes, a human gate and a budget.
+*[Scroll to Overview. Point at the problem column.]*
 
-How you know it worked. The system runs, and four numbers say how well: scopes on a delegated token (one), memory entries carrying an origin (all of them), audit rows answering all four investigation questions (usually three, and the fourth is the finding), and the blast radius you carry into Function B. None of those is 'it worked once'.
+An agent is a program that does things, not just a program that answers.
 
-**③ THE NUMBERS**
+A chatbot that is wrong says something wrong. An agent that is wrong does something wrong.
 
-*[Scroll to Highlights. Touch each of the four big numbers as you say it.]*
+Most advice on securing agents gets read, agreed with, and never put in place.
 
-16 lessons, in 3 chapters. You run 15 skills on your own computer. The lesson text is about 88 minutes of reading, and taught, it comes to about four hours.
+That is usually because people have never built one.
 
-**④ WHAT YOU WILL BE ABLE TO DO**
+**3 · WHAT YOU DO**
 
-*[Scroll to What you'll learn. Read the numbered outcomes in order.]*
+*[Point at the solution column.]*
 
-By the end, you can do these things.
+So you build one, on your own computer.
 
-Name the nine parts of an agent and point to the file each lives in.
+It belongs to a made-up travel company called CyberTravels. Its agents book trips, issue refunds, read documents and write code.
 
-Explain the core security idea: the model proposes, your code decides.
+You build it one piece at a time. Then you add a record of what it did, checks on its work, and a way to score how well it performs.
 
-Demonstrate five controls with real output.
+At the end, you work out how much damage it could do.
 
-Put the four investigation questions to an audit record, and say which fails.
+**4 · THE NUMBERS**
 
-Read an evaluation score critically — denominator, matcher, interval, judge.
+*[Scroll to Highlights. Touch each big number as you say it.]*
 
-State the blast radius of what you built, and hand it to Function B.
+There are 16 lessons, in 3 chapters.
 
-**⑤ THE CHAPTERS**
+You run 15 skills on your own computer.
+
+Reading the lessons takes about 88 minutes. With a teacher, it takes about four hours.
+
+**5 · WHAT YOU WILL BE ABLE TO DO**
+
+*[Scroll to What you will learn. Point at each one as you read it.]*
+
+By the end, you will be able to do these things.
+
+Name the nine parts of an agent.
+
+Explain the main idea. The model proposes. Your code decides.
+
+Show five controls working, with real output.
+
+Say how much damage your agent could do.
+
+**6 · THE CHAPTERS**
 
 *[Scroll to Curriculum. Point at each chapter card as you name it.]*
 
-It is 3 chapters. A0, Set Up — Your Machine, How to Use This, and the Words for an Agent, is 2 lessons. A1, Build the Agent — From a Loop to a Running Platform, is 8 lessons. A2, Harness Engineering — Making a Demo Into a System, is 6 lessons.
+There are 3 chapters.
 
-Every chapter starts with a link back to its place in this guide, so you can find your way back from the lesson.
+A0 has 2 lessons. Set up your computer, and learn the nine words for an agent.
 
-**⑥ WHERE TO START**
+A1 has 8 lessons. Build the agent, from a simple loop to a running platform.
 
-*[Scroll to the end and point at the start button. Then scroll up and point at the two export buttons.]*
+A2 has 6 lessons. Turn the demo into a real system. Record what it does, check it, and score it.
 
-Do this one whatever your job is. It builds the system the other five tracks are about, and everything after it attaches to something you will have written yourself.
+**7 · WHERE TO START**
 
-Start at A0.0. Under the brochure there is a run sheet that goes lesson by lesson. And you can save this guide as a PDF, either the brochure on its own or the whole thing.
+*[Scroll to the end and point at the start button.]*
+
+Start at A0.0.
+
+You can save this guide as a PDF. Use the buttons at the top.
 
 ---
 
 ### OVERVIEW B · Function B — Securing AI Architectures
 
-The course guide as a recording, made with the guide open · 39 lessons · 487 words, about 3.5 min spoken · publishes from `recordings/overview-b.mp4` · [guide](https://cybercommons.ai/guide/function-b.html)
+The course guide as a recording, made with the guide open · 39 lessons · 319 words, about 2.3 min spoken · publishes from `recordings/overview-b.mp4` · [guide](https://cybercommons.ai/guide/function-b.html)
 
-**① WHO IT IS FOR**
+**1 · WHO IT IS FOR**
 
-*[Open the Function B course guide on its cover. Point at the title, then at the line that says primary audience.]*
+*[Open the Function B course guide on its cover. Point at the title.]*
 
-Function B is Securing AI Architectures. Architecture and infrastructure security. Security architects, principal security engineers, and the product engineers and product managers who are building an agentic feature and have been asked whether it is safe to ship. What changes is how a review ends: with a list of risks and owners rather than an opinion.
+This is Function B. It is called Securing AI Architectures.
 
-One sentence to hold for the whole function. Name the risk before you choose the control.
+It is for security architects, and for the engineers who build agent features.
 
-**② THE PROBLEM, AND THE WAY THROUGH IT**
+If you have ever been asked whether something is safe to ship, this is for you.
 
-*[Scroll to Overview. Point at the problem column, then the solution column, then the one on how you know it worked.]*
+**2 · THE PROBLEM**
 
-First, the problem. You are about to build, review or approve an agentic system. Before any control is worth choosing you need the picture: which components exist, what each one can reach, and which risks attach to each. Choose controls before you can name the risks and you will buy the ones that are easy to buy.
+*[Scroll to Overview. Point at the problem column.]*
 
-And the way through it. Draw the architecture, then close the two controls that shut the most risks — knowing who is calling, and marking what came in from outside — then the runtime layer that still holds after identity has been defeated: default-deny on the tool call, sandboxing, egress control, budgets and an approval path that survives volume.
+Before you pick any control, you need to know what can go wrong, and where.
 
-How you know it worked. The register in B1.18 is the scorecard. Count the risks that have a named owning control, the agents with an attested identity rather than a shared key, and the share of tool calls that a default-deny policy actually adjudicated.
+If you pick controls first, you tend to buy the ones that are easy to buy.
 
-**③ THE NUMBERS**
+This function gives you the full list of risks. It ties each one to the part of the system it hits.
 
-*[Scroll to Highlights. Touch each of the four big numbers as you say it.]*
+**3 · WHAT YOU DO**
 
-39 lessons, in 3 chapters. You run 38 skills on your own computer. The lesson text is about 125 minutes of reading, and taught, it comes to about 10 hours.
+*[Point at the solution column.]*
 
-**④ WHAT YOU WILL BE ABLE TO DO**
+So you start by drawing the architecture.
 
-*[Scroll to What you'll learn. Read the numbered outcomes in order.]*
+Then you close the two controls that shut the most risks. One is knowing who is calling. The other is marking what came in from outside.
 
-By the end, you can do these things.
+Then you add a layer that still protects you if identity fails. It blocks any tool call that was not allowed. It limits what the agent can reach. And it keeps human approvals useful, even when there are lots of them.
 
-Draw the agentic reference architecture and mark where trust changes.
+**4 · THE NUMBERS**
 
-Name a risk against a named component, rather than in the abstract.
+*[Scroll to Highlights. Touch each big number as you say it.]*
 
-Fill a risk register whose control column is honest about what is missing.
+There are 39 lessons, in 3 chapters.
 
-Make a delegation that narrows, and show it in an audit row.
+You run 38 skills on your own computer.
 
-Mark untrusted content at the door and keep the mark.
+Reading the lessons takes about 125 minutes. With a teacher, it takes about 10 hours.
 
-Put a runtime layer under the identity layer, and say what each stops.
+**5 · WHAT YOU WILL BE ABLE TO DO**
 
-Show where an approval gate stops working, with a number.
+*[Scroll to What you will learn. Point at each one as you read it.]*
 
-**⑤ THE CHAPTERS**
+By the end, you will be able to do these things.
+
+Draw the architecture, and mark where trust changes.
+
+Name each risk against the part of the system it hits.
+
+Fill in a risk register that is honest about what is missing.
+
+Show the point where an approval step stops working.
+
+**6 · THE CHAPTERS**
 
 *[Scroll to Curriculum. Point at each chapter card as you name it.]*
 
-It is 3 chapters. B1, CyberTravels' Architecture, and Every Risk It Carries, is 20 lessons. B2, Securing the Architecture — Identity and Ingress, is 8 lessons. B3, Securing the Architecture — Runtime and the Gateway, is 11 lessons.
+There are 3 chapters.
 
-Every chapter starts with a link back to its place in this guide, so you can find your way back from the lesson.
+B1 has 20 lessons. Every risk the system carries, one lesson each. It ends with a risk register.
 
-**⑥ WHERE TO START**
+B2 has 8 lessons. Who is calling, and what came in from outside.
 
-*[Scroll to the end and point at the start button. Then scroll up and point at the two export buttons.]*
+B3 has 11 lessons. The protection that still holds when identity fails.
 
-Do this one if you work on architecture or infrastructure security — and do the first chapter before anybody buys a control. What changes is how a design review ends: with a list of risks and owners, rather than an opinion.
+**7 · WHERE TO START**
 
-Start at B1.0. Under the brochure there is a run sheet that goes lesson by lesson. And you can save this guide as a PDF, either the brochure on its own or the whole thing.
+*[Scroll to the end and point at the start button.]*
+
+Do the first chapter before anyone buys a control. Start at B1.0.
+
+You can save this guide as a PDF. Use the buttons at the top.
 
 ---
 
 ### OVERVIEW C · Function C — Application Security with an AI SDLC
 
-The course guide as a recording, made with the guide open · 20 lessons · 397 words, about 2.8 min spoken · publishes from `recordings/overview-c.mp4` · [guide](https://cybercommons.ai/guide/function-c.html)
+The course guide as a recording, made with the guide open · 20 lessons · 323 words, about 2.3 min spoken · publishes from `recordings/overview-c.mp4` · [guide](https://cybercommons.ai/guide/function-c.html)
 
-**① WHO IT IS FOR**
+**1 · WHO IT IS FOR**
 
-*[Open the Function C course guide on its cover. Point at the title, then at the line that says primary audience.]*
+*[Open the Function C course guide on its cover. Point at the title.]*
 
-Function C is Application Security with an AI SDLC. Application security. AppSec engineers, product security engineers, secure code reviewers and penetration testers — the people who already run a security gate on every release, and now have to keep up with code an agent wrote.
+This is Function C. It is called Application Security with an AI SDLC.
 
-One sentence to hold for the whole function. A pipeline is a harness, and a harness needs a verifier.
+It is for application security engineers, code reviewers and penetration testers.
 
-**② THE PROBLEM, AND THE WAY THROUGH IT**
+You already run a security check on every release. Now you have to keep up with code that an agent wrote.
 
-*[Scroll to Overview. Point at the problem column, then the solution column, then the one on how you know it worked.]*
+**2 · THE PROBLEM**
 
-First, the problem. You already do this work: SAST, DAST, dependency and container scanning, and a penetration test before launch. Two things changed.
+*[Scroll to Overview. Point at the problem column.]*
 
-And the way through it. Build the pipeline in order rather than buying it: threat model from what the estate already knows, deterministic SAST first and a model pass second, then deduplicate, filter for reachability, replicate in a sandbox, exploit dynamically, chain what composes, and only then calibrate severity and hand a fix to a human.
+You already scan code, test it, and run a penetration test before launch.
 
-How you know it worked. This function is measured on a before-and-after you can state out loud. Deterministic SAST on the sample in C2.3 has precision 1.00 and finds roughly one real defect in seven; the reasoning pass finds about six in ten — four times the recall, on the same code.
+Two things have changed.
 
-**③ THE NUMBERS**
+When an agent writes code, a model's output ends up in charge of real actions. Fixed rules cannot catch every kind of mistake that causes.
 
-*[Scroll to Highlights. Touch each of the four big numbers as you say it.]*
+And coding agents now open pull requests faster than anyone can read them.
 
-20 lessons, in 1 chapter. You run 25 skills on your own computer. The lesson text is about 78 minutes of reading, and taught, it comes to about 5 hours.
+**3 · WHAT YOU DO**
 
-**④ WHAT YOU WILL BE ABLE TO DO**
+*[Point at the solution column.]*
 
-*[Scroll to What you'll learn. Read the numbered outcomes in order.]*
+So you build the pipeline in order, one stage at a time.
 
-By the end, you can do these things.
+You start with a threat model. Then you scan the code twice, once with fixed rules and once with a model.
 
-Say what makes a pipeline a harness rather than a prompt.
+You remove duplicates, and anything that cannot be reached. You prove what is left in a safe copy of the system.
 
-Run a two-pass scan and explain why the deterministic pass goes first.
+Then you rate how serious it is, and hand the fix to a person.
 
-Cut a findings queue without cutting real defects.
+You also learn three kinds of penetration test run by an agent, and the safeguards an attacking agent needs.
 
-Prove a finding rather than assert it, inside a replica.
+**4 · THE NUMBERS**
 
-Say what each colour of agentic pentest can prove.
+*[Scroll to Highlights. Touch each big number as you say it.]*
 
-Gate a fix on evidence rather than on a green build.
+There are 20 lessons, in 1 chapter.
 
-**⑤ THE CHAPTERS**
+You run 25 skills on your own computer.
+
+Reading the lessons takes about 78 minutes. With a teacher, it takes about 5 hours.
+
+**5 · WHAT YOU WILL BE ABLE TO DO**
+
+*[Scroll to What you will learn. Point at each one as you read it.]*
+
+By the end, you will be able to do these things.
+
+Explain why a pipeline needs a check that is not another model.
+
+Cut a long list of findings without losing the real problems.
+
+Prove a finding, instead of just claiming it.
+
+Hold back a fix until it shows evidence that it works.
+
+**6 · THE CHAPTERS**
 
 *[Scroll to Curriculum. Point at each chapter card as you name it.]*
 
-It is 1 chapter. C2, The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy, is 20 lessons.
+There is 1 chapter.
 
-Every chapter starts with a link back to its place in this guide, so you can find your way back from the lesson.
+C2 has 20 lessons. The whole function is this one chapter. It follows the pipeline in order, from the threat model to the final fix. Two of the lessons are bonus lessons.
 
-**⑥ WHERE TO START**
+**7 · WHERE TO START**
 
-*[Scroll to the end and point at the start button. Then scroll up and point at the two export buttons.]*
+*[Scroll to the end and point at the start button.]*
 
-Do this one if you work in application security. What changes is whether your gate can keep up with code an agent wrote this morning.
+Start at C2.0.
 
-Start at C2.0. Under the brochure there is a run sheet that goes lesson by lesson. And you can save this guide as a PDF, either the brochure on its own or the whole thing.
+You can save this guide as a PDF. Use the buttons at the top.
 
 ---
 
 ### OVERVIEW D · Function D — Agentic Evaluation and Red Teaming
 
-The course guide as a recording, made with the guide open · 12 lessons · 425 words, about 3.0 min spoken · publishes from `recordings/overview-d.mp4` · [guide](https://cybercommons.ai/guide/function-d.html)
+The course guide as a recording, made with the guide open · 12 lessons · 307 words, about 2.2 min spoken · publishes from `recordings/overview-d.mp4` · [guide](https://cybercommons.ai/guide/function-d.html)
 
-**① WHO IT IS FOR**
+**1 · WHO IT IS FOR**
 
-*[Open the Function D course guide on its cover. Point at the title, then at the line that says primary audience.]*
+*[Open the Function D course guide on its cover. Point at the title.]*
 
-Function D is Agentic Evaluation and Red Teaming. Offensive security and evaluation. Red team operators, AI security researchers and offensive ML engineers — and the defenders who have to receive what they find. What changes is what counts as a finding: one that happens again, not one that worked once.
+This is Function D. It is called Agentic Evaluation and Red Teaming.
 
-One sentence to hold for the whole function. If you cannot reproduce it, you have not found it.
+It is for red team operators and AI security researchers. It is also for the defenders who receive what they find.
 
-**② THE PROBLEM, AND THE WAY THROUGH IT**
+What changes is what counts as a finding. It has to happen again. It is not enough that it worked once.
 
-*[Scroll to Overview. Point at the problem column, then the solution column, then the one on how you know it worked.]*
+**2 · THE PROBLEM**
 
-First, the problem. Nobody can tell you how your agentic system fails until somebody has tried to break it. Deterministic exploits have signatures; an agentic failure is a reasoning loop, code generated at run time and tool calls at machine speed, and none of that shows up in a scanner.
+*[Scroll to Overview. Point at the problem column.]*
 
-And the way through it. Work one lifecycle end to end rather than collecting techniques: the ingestion and supply-chain surfaces an attacker reaches first, elicitation that scales, then the pivot — turn what you found into gateway telemetry, a deployable detection, a triage playbook, containment and a forensic replay, and hand it over as policy.
+Nobody can tell you how your agent system fails until someone has tried to break it.
 
-How you know it worked. A transcript is not a finding. Every technique reports a reproduction rate across attempts with its denominator, every detection reports the queue volume it would add, and every finding leaves with an evaluation case that fails on the unfixed build — so the fix is verifiable and cannot regress unnoticed.
+An agent failure is a chain of reasoning, code written on the fly, and tool calls at machine speed. A scanner cannot see that.
 
-**③ THE NUMBERS**
+If you do nothing, your first real evidence arrives as an incident.
 
-*[Scroll to Highlights. Touch each of the four big numbers as you say it.]*
+**3 · WHAT YOU DO**
 
-12 lessons, in 1 chapter. You run 14 skills on your own computer. The lesson text is about 22 minutes of reading, and taught, it comes to about 3 hours.
+*[Point at the solution column.]*
 
-**④ WHAT YOU WILL BE ABLE TO DO**
+So you work through one full attack, from start to finish.
 
-*[Scroll to What you'll learn. Read the numbered outcomes in order.]*
+You begin with the ways in that an attacker reaches first. Then you scale the attack up.
 
-By the end, you can do these things.
+Then you switch sides. You turn what you found into logs and alerts, and a rule you can deploy. You add a plan for sorting alerts, a way to contain the damage, and a replay of what happened.
 
-Say why one successful attack against a model is not a finding.
+You hand all of that over as policy.
 
-Weaponise an ingestion path and record what it actually reached.
+**4 · THE NUMBERS**
 
-Scale elicitation and report the result honestly.
+*[Scroll to Highlights. Touch each big number as you say it.]*
 
-Detect the actor rather than the payload.
+There are 12 lessons, in 1 chapter.
 
-Triage a non-deterministic swarm without a per-alert queue.
+You run 14 skills on your own computer.
 
-Contain at machine speed and prove the containment held.
+Reading the lessons takes about 22 minutes. With a teacher, it takes about 3 hours.
 
-Leave a record an auditor can use.
+**5 · WHAT YOU WILL BE ABLE TO DO**
 
-**⑤ THE CHAPTERS**
+*[Scroll to What you will learn. Point at each one as you read it.]*
+
+By the end, you will be able to do these things.
+
+Say why one successful attack is not a finding.
+
+Report how often an attack works, and how many times you tried.
+
+Stop an attack at machine speed, and prove that it held.
+
+Leave a record that an auditor can use.
+
+**6 · THE CHAPTERS**
 
 *[Scroll to Curriculum. Point at each chapter card as you name it.]*
 
-It is 1 chapter. D1, One Red-Team Lifecycle, End to End, is 12 lessons.
+There is 1 chapter.
 
-Every chapter starts with a link back to its place in this guide, so you can find your way back from the lesson.
+D1 has 12 lessons. One attack from start to finish. The first lessons attack. The rest defend, and they end with a record for auditors.
 
-**⑥ WHERE TO START**
+**7 · WHERE TO START**
 
-*[Scroll to the end and point at the start button. Then scroll up and point at the two export buttons.]*
+*[Scroll to the end and point at the start button.]*
 
-Do this one if you do offensive work or evaluation. What changes is what counts as a finding: one that happens again, not one that worked once.
+Start at D1.0.
 
-Start at D1.0. Under the brochure there is a run sheet that goes lesson by lesson. And you can save this guide as a PDF, either the brochure on its own or the whole thing.
+You can save this guide as a PDF. Use the buttons at the top.
 
 ---
 
 ### OVERVIEW E · Function E — The Agentic SOC
 
-The course guide as a recording, made with the guide open · 31 lessons · 496 words, about 3.5 min spoken · publishes from `recordings/overview-e.mp4` · [guide](https://cybercommons.ai/guide/function-e.html)
+The course guide as a recording, made with the guide open · 31 lessons · 344 words, about 2.5 min spoken · publishes from `recordings/overview-e.mp4` · [guide](https://cybercommons.ai/guide/function-e.html)
 
-**① WHO IT IS FOR**
+**1 · WHO IT IS FOR**
 
-*[Open the Function E course guide on its cover. Point at the title, then at the line that says primary audience.]*
+*[Open the Function E course guide on its cover. Point at the title.]*
 
-Function E is The Agentic SOC. Security operations. SOC analysts, detection engineers, incident responders, threat hunters and DFIR leads — running a SOC that now has agents in it, and agents watching it. What changes is the analyst's job: directing a loop instead of reading alerts one at a time.
+This is Function E. It is called The Agentic SOC.
 
-One sentence to hold for the whole function. Every detection has a subject, and a clock.
+SOC means security operations centre. It is the team that watches for attacks.
 
-**② THE PROBLEM, AND THE WAY THROUGH IT**
+This function is for analysts, detection engineers, incident responders and threat hunters.
 
-*[Scroll to Overview. Point at the problem column, then the solution column, then the one on how you know it worked.]*
+Your SOC now has agents in it, and agents to watch. What changes is the analyst's job. You direct a loop. You stop reading alerts one at a time.
 
-First, the problem. Your SOC was tuned for people. One hour of an agent is roughly 1,400 tool calls across 260 resources; one hour of a person is twelve actions.
+**2 · THE PROBLEM**
 
-And the way through it. Build it in five phases, on open source you can run: discover with the sensors you have plus agent telemetry that no product emits, detect against a lake tiered by the queries you actually run with rules mapped to MITRE, understand with bounded investigation and correlation across the fleet, respond with tiers derived from reversibility, and recover with replay, root cause and a policy diff.
+*[Scroll to Overview. Point at the problem column.]*
 
-How you know it worked. Five intervals, one per phase, and all five are numbers: time to discover, to detect, to understand, to contain, and to recover to target. CyberTravels' detection interval is 194 minutes against a 15-minute target and its manual containment finishes in 34 minutes against a 29-minute breakout.
+Your SOC was set up for people.
 
-**③ THE NUMBERS**
+An agent works far faster than a person, so the limits and alerts you set for people do not fit it.
 
-*[Scroll to Highlights. Touch each of the four big numbers as you say it.]*
+And some of what an agent does in an ordinary day is not seen by any sensor you already own.
 
-31 lessons, in 5 chapters. You run 32 skills on your own computer. The lesson text is about 67 minutes of reading, and taught, it comes to about 8 hours.
+**3 · WHAT YOU DO**
 
-**④ WHAT YOU WILL BE ABLE TO DO**
+*[Point at the solution column.]*
 
-*[Scroll to What you'll learn. Read the numbered outcomes in order.]*
+So you build it in five steps, using open source tools you can run.
 
-By the end, you can do these things.
+First, discover. Second, detect. Third, understand what happened. Fourth, respond. Fifth, recover.
 
-Say which of the five intervals a given control shortens.
+Each step has a number you measure. For example, how long it takes to detect a problem, or to contain it.
 
-Separate an agent's tempo from a person's, with signals.
+**4 · THE NUMBERS**
 
-Write a detection whose subject is named, and score it before it ships.
+*[Scroll to Highlights. Touch each big number as you say it.]*
 
-Investigate an agent actor without the three instincts that misfire.
+There are 31 lessons, in 5 chapters.
 
-Bound what an investigating agent may touch.
+You run 32 skills on your own computer.
 
-Contain at machine speed and know what the stop left behind.
+Reading the lessons takes about 67 minutes. With a teacher, it takes about 8 hours.
 
-Write a root cause that names a control rather than a person.
+**5 · WHAT YOU WILL BE ABLE TO DO**
 
-**⑤ THE CHAPTERS**
+*[Scroll to What you will learn. Point at each one as you read it.]*
+
+By the end, you will be able to do these things.
+
+Say which step a control makes faster.
+
+Tell an agent's pace from a person's pace.
+
+Write a detection rule, and test it before you use it.
+
+Contain an attack at machine speed, and know what the stop left behind.
+
+**6 · THE CHAPTERS**
 
 *[Scroll to Curriculum. Point at each chapter card as you name it.]*
 
-It is 5 chapters. E1, Discover — the Sensors, and the Agent-Shaped Hole in Them, is 4 lessons. E2, Detect — the Lake, and Rules Mapped to MITRE, is 6 lessons. E3, Understand — Correlation, Intel and the Hunt, is 10 lessons. E4, Respond — From a Conclusion to the Actor Stopped, is 5 lessons. E5, Recover and Root Cause — From Stopped to Back at Target, is 6 lessons.
+There are 5 chapters.
 
-Every chapter starts with a link back to its place in this guide, so you can find your way back from the lesson.
+E1 has 4 lessons. Discover. Find out what your sensors can and cannot see.
 
-**⑥ WHERE TO START**
+E2 has 6 lessons. Detect. Where the agent data lands, and the rules that catch it.
 
-*[Scroll to the end and point at the start button. Then scroll up and point at the two export buttons.]*
+E3 has 10 lessons. Understand. Investigate, join up the evidence, and hunt.
 
-Do this one if you work in the SOC. What changes is the analyst's job — directing a loop instead of reading alerts one at a time — and the clock is how long an agent gets before somebody stops it.
+E4 has 5 lessons. Respond. Contain an attack, and decide who is allowed to stop it.
 
-Start at E1.0. Under the brochure there is a run sheet that goes lesson by lesson. And you can save this guide as a PDF, either the brochure on its own or the whole thing.
+E5 has 6 lessons. Recover. Find the root cause, and fix it for good.
+
+**7 · WHERE TO START**
+
+*[Scroll to the end and point at the start button.]*
+
+Start at E1.0. It sets up the clock that the rest of the function uses.
+
+You can save this guide as a PDF. Use the buttons at the top.
 
 ---
 
 ### OVERVIEW F · Function F — AI Governance for Agentic Systems
 
-The course guide as a recording, made with the guide open · 31 lessons · 461 words, about 3.3 min spoken · publishes from `recordings/overview-f.mp4` · [guide](https://cybercommons.ai/guide/function-f.html)
+The course guide as a recording, made with the guide open · 31 lessons · 376 words, about 2.7 min spoken · publishes from `recordings/overview-f.mp4` · [guide](https://cybercommons.ai/guide/function-f.html)
 
-**① WHO IT IS FOR**
+**1 · WHO IT IS FOR**
 
-*[Open the Function F course guide on its cover. Point at the title, then at the line that says primary audience.]*
+*[Open the Function F course guide on its cover. Point at the title.]*
 
-Function F is AI Governance for Agentic Systems. Governance, risk and compliance, and the CISO office. GRC analysts, risk and compliance managers, control owners, privacy engineers and BISOs — anyone who has to answer for the estate rather than build it. What changes is what you hand over: a number somebody can compute, with a date on it, instead of a control statement.
+This is Function F. It is called AI Governance for Agentic Systems.
 
-One sentence to hold for the whole function. A control you cannot evidence is a control you do not have.
+It is for risk and compliance teams, control owners, privacy engineers and the CISO office.
 
-**② THE PROBLEM, AND THE WAY THROUGH IT**
+It is for anyone who has to answer for the system, rather than build it.
 
-*[Scroll to Overview. Point at the problem column, then the solution column, then the one on how you know it worked.]*
+What changes is what you hand over. It is a number that someone can check, with a date on it. It is no longer just a sentence saying a control exists.
 
-First, the problem. Somebody signed off on the platform when it was a chatbot. It now moves money, ships code and reads contracts, and nothing in the approval process noticed.
+**2 · THE PROBLEM**
 
-And the way through it. Build the indicator set: an inventory for the denominator, risk tiering for the target, control mapping for the subject, owners by name, and verification that re-reads rather than citing last year. Then point the same indicators outward at regulators, and run them as a programme sequenced by distance from target.
+*[Scroll to Overview. Point at the problem column.]*
 
-How you know it worked. The unit is the key control indicator: computed from the estate, with a denominator, and a target written before the measurement. F1.13 computes six of them against the CyberTravels repository and returns five gaps and one pass — the pass being what proves the instrument discriminates rather than simply complaining.
+Someone signed off on the platform when it was a chatbot.
 
-**③ THE NUMBERS**
+Now it moves money, ships code and reads contracts, and the approval process did not notice.
 
-*[Scroll to Highlights. Touch each of the four big numbers as you say it.]*
+A control that was tested six months ago is not passing. It is unproven.
 
-31 lessons, in 3 chapters. You run 34 skills on your own computer. The lesson text is about 69 minutes of reading, and taught, it comes to about 8 hours.
+Most tools cannot show that. So a report can look fully green, and still have nothing behind it.
 
-**④ WHAT YOU WILL BE ABLE TO DO**
+**3 · WHAT YOU DO**
 
-*[Scroll to What you'll learn. Read the numbered outcomes in order.]*
+*[Point at the solution column.]*
 
-By the end, you can do these things.
+So you build a set of numbers you can check.
 
-Turn a framework control into an indicator somebody can compute.
+You start with a list of what you have. You rate each use by its risk. You match each control to the thing it protects. And you name an owner for each one.
 
-Tier a use case by what it can do rather than which model it uses.
+Then you re-check the controls, so you are not relying on last year's result.
 
-Offer evaluation output as audit evidence, and say what it does not prove.
+After that, you point the same numbers at regulators, and run it all as a programme, in a sensible order.
 
-Map your controls outward to the regimes that apply.
+**4 · THE NUMBERS**
 
-Say what an autonomous action's audit trail must answer.
+*[Scroll to Highlights. Touch each big number as you say it.]*
 
-Translate agentic risk upward without losing it.
+There are 31 lessons, in 3 chapters.
 
-Say yes with conditions rather than no.
+You run 34 skills on your own computer.
 
-**⑤ THE CHAPTERS**
+Reading the lessons takes about 69 minutes. With a teacher, it takes about 8 hours.
+
+**5 · WHAT YOU WILL BE ABLE TO DO**
+
+*[Scroll to What you will learn. Point at each one as you read it.]*
+
+By the end, you will be able to do these things.
+
+Turn a framework control into a number someone can check.
+
+Rate a use of AI by what it can do, not by which model it uses.
+
+Map your controls to the rules that apply to you.
+
+Say yes with conditions, instead of just saying no.
+
+**6 · THE CHAPTERS**
 
 *[Scroll to Curriculum. Point at each chapter card as you name it.]*
 
-It is 3 chapters. F1, Building the Governance Framework — Risk and Control, is 14 lessons. F2, Building the Governance Platform — Regulatory and Compliance, is 9 lessons. F3, Running the Programme — the CISO Office, is 8 lessons.
+There are 3 chapters.
 
-Every chapter starts with a link back to its place in this guide, so you can find your way back from the lesson.
+F1 has 14 lessons. Build the framework. Turn controls into numbers you can check.
 
-**⑥ WHERE TO START**
+F2 has 9 lessons. Build the platform. Map your controls to the rules that apply.
 
-*[Scroll to the end and point at the start button. Then scroll up and point at the two export buttons.]*
+F3 has 8 lessons. Run the programme. Report to leaders, set priorities, and say yes or no with conditions.
 
-Do this one if you work in governance, risk or compliance. What changes is what you hand over: a number somebody can compute, with a date on it, instead of a control statement.
+**7 · WHERE TO START**
 
-Start at F1.0. Under the brochure there is a run sheet that goes lesson by lesson. And you can save this guide as a PDF, either the brochure on its own or the whole thing.
+*[Scroll to the end and point at the start button.]*
+
+Start at F1.0. Lesson F1.1 is the one the rest of the function builds on.
+
+You can save this guide as a PDF. Use the buttons at the top.
 
 ---
 

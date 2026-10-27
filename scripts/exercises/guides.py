@@ -930,23 +930,216 @@ INTRO = {
 # and the narrative above, so an overview cannot describe a function that has
 # changed. These two lines per function are the only part written here.
 
-OVERVIEW_CLOSE = {
- "A": "Do this one whatever your job is. It builds the system the other five "
-      "tracks are about, and everything after it attaches to something you "
-      "will have written yourself.",
- "B": "Do this one if you work on architecture or infrastructure security — "
-      "and do the first chapter before anybody buys a control. What changes "
-      "is how a design review ends: with a list of risks and owners, rather "
-      "than an opinion.",
- "C": "Do this one if you work in application security. What changes is "
-      "whether your gate can keep up with code an agent wrote this morning.",
- "D": "Do this one if you do offensive work or evaluation. What changes is "
-      "what counts as a finding: one that happens again, not one that worked "
-      "once.",
- "E": "Do this one if you work in the SOC. What changes is the analyst's job "
-      "— directing a loop instead of reading alerts one at a time — and the "
-      "clock is how long an agent gets before somebody stops it.",
- "F": "Do this one if you work in governance, risk or compliance. What "
-      "changes is what you hand over: a number somebody can compute, with a "
-      "date on it, instead of a control statement.",
+# Written to be read aloud, by somebody who has not rehearsed it. That is a
+# different job from writing for a page, and the first version of these did the
+# page's job: it spliced in `days.FUNCTION_DAYS`, which is written to be read on
+# a screen. Measured, the longest sentence in each script ran 31 to 65 words,
+# every script carried three to eight em-dashes, and the vocabulary was the
+# page's own - "workload identity", "SAST", "denominator", "adjudicated".
+#
+# So these are written for the ear. Short sentences, one idea each. No dashes,
+# semicolons or brackets, because a reader cannot say them and has to decide on
+# camera what to do with them. Technical terms are explained or left out. The
+# facts all come from the same place the page's do (Day 0/1/2, the outcomes, the
+# chapter notes), restated; **no number is copied from them**, because a number
+# typed into a script is a number that goes stale. Lessons, chapters, skills,
+# reading time and taught time are filled in from the tree by the generator.
+#
+# `build_lightboard.py` fails the build if a line here breaks those rules, so a
+# later edit cannot quietly put the dashes back.
+#
+# Per function: `who`, `problem`, `what`, `can` (what you will be able to do),
+# `chapters` (one plain line per chapter id) and `start`. Each list item is one
+# paragraph in the script.
+
+OVERVIEW = {
+
+"A": {
+ "who": [
+  "This is Function A. It is called Getting Started, Building Agentic AI.",
+  "It is for everyone, whatever your job.",
+  "You do not need a security background. It helps if you can read a little Python.",
+  "Do this one first. The other five functions are all about the system you build here.",
+ ],
+ "problem": [
+  "An agent is a program that does things, not just a program that answers.",
+  "A chatbot that is wrong says something wrong. An agent that is wrong does something wrong.",
+  "Most advice on securing agents gets read, agreed with, and never put in place.",
+  "That is usually because people have never built one.",
+ ],
+ "what": [
+  "So you build one, on your own computer.",
+  "It belongs to a made-up travel company called CyberTravels. Its agents book trips, issue refunds, read documents and write code.",
+  "You build it one piece at a time. Then you add a record of what it did, checks on its work, and a way to score how well it performs.",
+  "At the end, you work out how much damage it could do.",
+ ],
+ "can": [
+  "Name the nine parts of an agent.",
+  "Explain the main idea. The model proposes. Your code decides.",
+  "Show five controls working, with real output.",
+  "Say how much damage your agent could do.",
+ ],
+ "chapters": {
+  "A0": "Set up your computer, and learn the nine words for an agent.",
+  "A1": "Build the agent, from a simple loop to a running platform.",
+  "A2": "Turn the demo into a real system. Record what it does, check it, and score it.",
+ },
+ "start": "Start at A0.0.",
+},
+
+"B": {
+ "who": [
+  "This is Function B. It is called Securing AI Architectures.",
+  "It is for security architects, and for the engineers who build agent features.",
+  "If you have ever been asked whether something is safe to ship, this is for you.",
+ ],
+ "problem": [
+  "Before you pick any control, you need to know what can go wrong, and where.",
+  "If you pick controls first, you tend to buy the ones that are easy to buy.",
+  "This function gives you the full list of risks. It ties each one to the part of the system it hits.",
+ ],
+ "what": [
+  "So you start by drawing the architecture.",
+  "Then you close the two controls that shut the most risks. One is knowing who is calling. The other is marking what came in from outside.",
+  "Then you add a layer that still protects you if identity fails. It blocks any tool call that was not allowed. It limits what the agent can reach. And it keeps human approvals useful, even when there are lots of them.",
+ ],
+ "can": [
+  "Draw the architecture, and mark where trust changes.",
+  "Name each risk against the part of the system it hits.",
+  "Fill in a risk register that is honest about what is missing.",
+  "Show the point where an approval step stops working.",
+ ],
+ "chapters": {
+  "B1": "Every risk the system carries, one lesson each. It ends with a risk register.",
+  "B2": "Who is calling, and what came in from outside.",
+  "B3": "The protection that still holds when identity fails.",
+ },
+ "start": "Do the first chapter before anyone buys a control. Start at B1.0.",
+},
+
+"C": {
+ "who": [
+  "This is Function C. It is called Application Security with an AI SDLC.",
+  "It is for application security engineers, code reviewers and penetration testers.",
+  "You already run a security check on every release. Now you have to keep up with code that an agent wrote.",
+ ],
+ "problem": [
+  "You already scan code, test it, and run a penetration test before launch.",
+  "Two things have changed.",
+  "When an agent writes code, a model's output ends up in charge of real actions. Fixed rules cannot catch every kind of mistake that causes.",
+  "And coding agents now open pull requests faster than anyone can read them.",
+ ],
+ "what": [
+  "So you build the pipeline in order, one stage at a time.",
+  "You start with a threat model. Then you scan the code twice, once with fixed rules and once with a model.",
+  "You remove duplicates, and anything that cannot be reached. You prove what is left in a safe copy of the system.",
+  "Then you rate how serious it is, and hand the fix to a person.",
+  "You also learn three kinds of penetration test run by an agent, and the safeguards an attacking agent needs.",
+ ],
+ "can": [
+  "Explain why a pipeline needs a check that is not another model.",
+  "Cut a long list of findings without losing the real problems.",
+  "Prove a finding, instead of just claiming it.",
+  "Hold back a fix until it shows evidence that it works.",
+ ],
+ "chapters": {
+  "C2": "The whole function is this one chapter. It follows the pipeline in order, from the threat model to the final fix. Two of the lessons are bonus lessons.",
+ },
+ "start": "Start at C2.0.",
+},
+
+"D": {
+ "who": [
+  "This is Function D. It is called Agentic Evaluation and Red Teaming.",
+  "It is for red team operators and AI security researchers. It is also for the defenders who receive what they find.",
+  "What changes is what counts as a finding. It has to happen again. It is not enough that it worked once.",
+ ],
+ "problem": [
+  "Nobody can tell you how your agent system fails until someone has tried to break it.",
+  "An agent failure is a chain of reasoning, code written on the fly, and tool calls at machine speed. A scanner cannot see that.",
+  "If you do nothing, your first real evidence arrives as an incident.",
+ ],
+ "what": [
+  "So you work through one full attack, from start to finish.",
+  "You begin with the ways in that an attacker reaches first. Then you scale the attack up.",
+  "Then you switch sides. You turn what you found into logs and alerts, and a rule you can deploy. You add a plan for sorting alerts, a way to contain the damage, and a replay of what happened.",
+  "You hand all of that over as policy.",
+ ],
+ "can": [
+  "Say why one successful attack is not a finding.",
+  "Report how often an attack works, and how many times you tried.",
+  "Stop an attack at machine speed, and prove that it held.",
+  "Leave a record that an auditor can use.",
+ ],
+ "chapters": {
+  "D1": "One attack from start to finish. The first lessons attack. The rest defend, and they end with a record for auditors.",
+ },
+ "start": "Start at D1.0.",
+},
+
+"E": {
+ "who": [
+  "This is Function E. It is called The Agentic SOC.",
+  "SOC means security operations centre. It is the team that watches for attacks.",
+  "This function is for analysts, detection engineers, incident responders and threat hunters.",
+  "Your SOC now has agents in it, and agents to watch. What changes is the analyst's job. You direct a loop. You stop reading alerts one at a time.",
+ ],
+ "problem": [
+  "Your SOC was set up for people.",
+  "An agent works far faster than a person, so the limits and alerts you set for people do not fit it.",
+  "And some of what an agent does in an ordinary day is not seen by any sensor you already own.",
+ ],
+ "what": [
+  "So you build it in five steps, using open source tools you can run.",
+  "First, discover. Second, detect. Third, understand what happened. Fourth, respond. Fifth, recover.",
+  "Each step has a number you measure. For example, how long it takes to detect a problem, or to contain it.",
+ ],
+ "can": [
+  "Say which step a control makes faster.",
+  "Tell an agent's pace from a person's pace.",
+  "Write a detection rule, and test it before you use it.",
+  "Contain an attack at machine speed, and know what the stop left behind.",
+ ],
+ "chapters": {
+  "E1": "Discover. Find out what your sensors can and cannot see.",
+  "E2": "Detect. Where the agent data lands, and the rules that catch it.",
+  "E3": "Understand. Investigate, join up the evidence, and hunt.",
+  "E4": "Respond. Contain an attack, and decide who is allowed to stop it.",
+  "E5": "Recover. Find the root cause, and fix it for good.",
+ },
+ "start": "Start at E1.0. It sets up the clock that the rest of the function uses.",
+},
+
+"F": {
+ "who": [
+  "This is Function F. It is called AI Governance for Agentic Systems.",
+  "It is for risk and compliance teams, control owners, privacy engineers and the CISO office.",
+  "It is for anyone who has to answer for the system, rather than build it.",
+  "What changes is what you hand over. It is a number that someone can check, with a date on it. It is no longer just a sentence saying a control exists.",
+ ],
+ "problem": [
+  "Someone signed off on the platform when it was a chatbot.",
+  "Now it moves money, ships code and reads contracts, and the approval process did not notice.",
+  "A control that was tested six months ago is not passing. It is unproven.",
+  "Most tools cannot show that. So a report can look fully green, and still have nothing behind it.",
+ ],
+ "what": [
+  "So you build a set of numbers you can check.",
+  "You start with a list of what you have. You rate each use by its risk. You match each control to the thing it protects. And you name an owner for each one.",
+  "Then you re-check the controls, so you are not relying on last year's result.",
+  "After that, you point the same numbers at regulators, and run it all as a programme, in a sensible order.",
+ ],
+ "can": [
+  "Turn a framework control into a number someone can check.",
+  "Rate a use of AI by what it can do, not by which model it uses.",
+  "Map your controls to the rules that apply to you.",
+  "Say yes with conditions, instead of just saying no.",
+ ],
+ "chapters": {
+  "F1": "Build the framework. Turn controls into numbers you can check.",
+  "F2": "Build the platform. Map your controls to the rules that apply.",
+  "F3": "Run the programme. Report to leaders, set priorities, and say yes or no with conditions.",
+ },
+ "start": "Start at F1.0. Lesson F1.1 is the one the rest of the function builds on.",
+},
 }

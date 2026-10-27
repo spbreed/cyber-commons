@@ -146,7 +146,7 @@ exactly the artefact this repo distrusts.
 | the colours inside lesson diagrams | `scripts/exercises/diagrams.py` |
 | Function A's course guide — the prompt, the question after it, the pitfalls | `scripts/exercises/guide_a.py` (narrative only; every number on that page is measured). Each lab holds two note lists: `notes` for every reader, `teach` for the room-only half |
 | a B–F course guide — the chapter arc, the outcomes, the pitfalls | `scripts/exercises/guides.py`. **Per-lesson detail there is derived, not written**: risk/control/lab from `curriculum.json`, days from `scripts/exercises/days.py`, the measure from `scripts/exercises/metrics.py`, the anchor from `scripts/exercises/anchors.py`, and each skill's own contract and committed example run from its `SKILL.md` |
-| the intro video or a course-overview video script | `scripts/exercises/guides.py` — `INTRO` and `OVERVIEW_CLOSE` |
+| the intro video or a course-overview video script | `scripts/exercises/guides.py` — `INTRO` and `OVERVIEW` (the overviews are hand-written for the ear, and `build_lightboard.py` fails on a dash, bracket or over-long sentence) |
 
 ### The build order
 
