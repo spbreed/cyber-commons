@@ -834,7 +834,7 @@ def lesson_page(entry, prev, nxt) -> str:
         # browser, built by scripts/build_lab.py; this is the door to it.
         parts.append(
             '<p class="chapguide trylab"><b>Try it first, in your browser.</b> '
-            f'<a href="../lab/index.html#{html.escape(sid)}">Run {html.escape(sid)} '
+            f'<a href="../lab/{html.escape(sid)}.html">Run {html.escape(sid)} '
             'step by step, hands on →</a></p>')
     parts.append('</div>')
 
@@ -949,7 +949,7 @@ def index_page(seq) -> str:
                 f'{html.escape(e["track"])} '
                 f'<a href="{chapter_guide(e["fn_id"], e["track_id"])}">'
                 f'Course guide →</a>'
-                + (f'<a href="../lab/index.html#{e["s"]["id"]}">Hands-on lab →</a>'
+                + (f'<a href="../lab/{e["s"]["id"]}.html">Hands-on lab →</a>'
                    if e["fn_id"] == "A" else "") + '</h3>')
         sid = e["s"]["id"]
         mark = "▶" if sid in VIDEOS else "·"

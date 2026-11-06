@@ -94,7 +94,7 @@ happened, and calls the audit skill rather than repeating it (§3).
 | | `LIGHTBOARD.md` |
 | | `lesson-skills/*` — the skill a learner picks to do a lesson, from `build_lesson_skills.py` |
 | `scripts/exercises/guide_a.py` — the teaching notes for Function A | `site/guide/function-a.html`, from `build_guide.py` |
-| `scripts/exercises/lab_a.py` — Function A's hands-on steps: lanes, arrows, plain lines, the Python each step runs and what it prints | `site/lab/index.html` and `site/lab/cybertravels.json` (each lesson's checkpoint, files stored once), from `build_lab.py` |
+| `scripts/exercises/lab_a.py` — Function A's hands-on steps: lanes, arrows, plain lines, the Python each step runs and what it prints | `site/lab/` — an index and one page per lesson (`A1.4.html`), plus `cybertravels.json` (each lesson's checkpoint, files stored once), from `build_lab.py` |
 | `scripts/exercises/guides.py` — the chapter notes for B–F, plus the intro and overview video narrative | `site/guide/function-{b…f}.html`, `site/guide/index.html`, the redirect at `site/teach/`, and the INTRO and OVERVIEW scripts in LIGHTBOARD.md |
 
 `site/index.html` is **hand-written except between its markers** —
@@ -162,7 +162,7 @@ python3 scripts/build_guide.py         # lessons+app    -> site/guide/ (7 pages)
 python3 scripts/build_lab.py           # lab_a.py + checkpoints -> site/lab/
 ```
 
-`site/lab/` is **Function A, hands on**: one page, lessons down the left, the
+`site/lab/` is **Function A, hands on**: one page per lesson, lessons down the left, the
 parties in a lesson as lanes with each step an arrow between two of them, and a
 play bar (reset, back, play, step, speed). Every step is real Python run by
 Pyodide in the reader's browser, against CyberTravels **as it stood at the end

@@ -209,6 +209,7 @@ body{background:#fbfcfd}
 .lab-shell{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:calc(100vh - 64px)}
 .lab-side{border-right:1px solid var(--line-soft);background:#f6f8fa;padding:18px 14px 28px;
   position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto}
+.lab-side .fn a{font-size:inherit;color:inherit;display:inline;padding:0;background:none}
 .lab-side .fn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-faint);margin:2px 8px 10px}
 .lab-side .ch{margin:14px 0 4px;padding:0 8px;font-weight:700;font-size:15px;color:var(--text)}
@@ -217,13 +218,29 @@ body{background:#fbfcfd}
   color:var(--text-dim);text-decoration:none;font-size:15px;line-height:1.3}
 .lab-side a b{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:500;color:var(--text-faint);min-width:34px}
 .lab-side a:hover{background:#eef3f7;color:var(--text)}
-.lab-side a[aria-current=true]{background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(13,27,38,.08),0 0 0 1px var(--line-soft)}
-.lab-side a[aria-current=true] b{color:var(--defend)}
+.lab-side a[aria-current=page]{background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(13,27,38,.08),0 0 0 1px var(--line-soft)}
+.lab-side a[aria-current=page] b{color:var(--defend)}
 .lab-side .foot{margin-top:22px;padding:12px 10px 0;border-top:1px solid var(--line-soft);font-size:13.5px;line-height:1.5;color:var(--text-faint)}
 .lab-main{padding:22px 28px 60px;min-width:0}
 .lab-intro{max-width:880px;margin:0 0 18px}
 .lab-intro h1{font-size:30px;margin:6px 0 6px}
 .lab-intro p{margin:0;color:var(--text-dim);font-size:16.5px}
+.lab-intro.slim{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.lab-intro.slim .py{margin-top:0}
+.lab-pn{display:flex;justify-content:space-between;gap:12px;margin-left:auto;font-size:15px}
+.lab-main>.lab-pn{margin:0 0 10px;max-width:none}
+.lab-pn a{text-decoration:none;font-weight:600}
+.lab-go{display:inline-block;background:var(--defend);color:#fff !important;text-decoration:none;font-weight:600;
+  padding:8px 18px;border-radius:9px}
+.lab-ch{display:flex;gap:10px;align-items:center;font-size:21px;margin:26px 0 10px}
+.lab-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.lab-card{display:block;border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px 16px;
+  text-decoration:none;color:var(--text);transition:box-shadow .15s,border-color .15s}
+.lab-card:hover{border-color:var(--defend);box-shadow:0 4px 14px rgba(13,27,38,.08)}
+.lab-card b{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--defend)}
+.lab-card h3{font-size:18px;margin:2px 0 4px}
+.lab-card p{margin:0 0 8px;font-size:15px;color:var(--text-dim);line-height:1.45}
+.lab-card span{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text-faint)}
 .lab-intro .py{display:inline-flex;gap:8px;align-items:center;margin-top:10px;font-family:"IBM Plex Mono",monospace;
   font-size:12px;color:var(--text-faint)}
 .lab-intro .py i{width:8px;height:8px;border-radius:50%;background:#c3ced8;display:inline-block}
@@ -453,7 +470,18 @@ function setup(sec){
     sec.querySelector(".next").disabled = cur === steps.length - 1;
   }
   function mark(i, ok){ rows[i].classList.toggle("done", ok); rows[i].classList.toggle("fail", !ok); }
-  function exec(i){ return runStep(sec, steps[i]).then(function(ok){ mark(i, ok); return ok; }); }
+  // Steps share one Python session, so step 3 may use a name step 1 made.
+  // Running step 3 first raised NameError, which read as broken code; any
+  // earlier step not yet run in this session is run first, in order.
+  function exec(i){
+    var chain = Promise.resolve(true);
+    for (var k = 0; k < i; k++) (function(k){
+      chain = chain.then(function(ok){ if (!ok || rows[k].classList.contains("done")) return ok;
+        return runStep(sec, steps[k]).then(function(r){ mark(k, r); return r; }); });
+    })(k);
+    return chain.then(function(ok){ if (!ok) return false;
+      return runStep(sec, steps[i]).then(function(r){ mark(i, r); return r; }); });
+  }
   function stop(){ playing = false; clearTimeout(timer); play.textContent = "▶ Play"; }
   function loop(){
     if (!playing) return;
@@ -500,16 +528,11 @@ function copyable(){
 }
 
 function route(){
-  var id = decodeURIComponent((location.hash || "").slice(1)), secs = document.querySelectorAll("section.lab");
-  var sec = document.getElementById(id) || secs[0];
-  secs.forEach(function(s){ s.classList.toggle("on", s === sec); });
-  document.querySelectorAll(".lab-side a[data-l]").forEach(function(a){ a.setAttribute("aria-current", a.dataset.l === sec.id); });
-  if (id && document.getElementById(id)) window.scrollTo(0, 0);
+  document.querySelectorAll("section.lab").forEach(function(x){ x.classList.add("on"); });
 }
 
 document.querySelectorAll("section.lab").forEach(setup);
 copyable();
-window.addEventListener("hashchange", route);
 route();
 })();
 """
@@ -637,46 +660,97 @@ def section(track: dict, s: dict, tid: str) -> str:
             f'{ide_html(sid, s["title"], lab)}</section>')
 
 
-def page(b: dict) -> str:
-    import build_site as BS
-    side = ['<aside class="lab-side"><div class="fn">Function A · hands-on</div><nav>']
+def side(current: str | None) -> str:
+    out = ['<aside class="lab-side"><div class="fn"><a href="index.html" '
+           'style="padding:0;display:inline">Function A · hands-on</a></div><nav>']
     for t in FN["tracks"]:
-        side.append(f'<div class="ch">{E(t["id"])} <small>{E(t["title"].split(" — ")[0])}</small></div>')
+        out.append(f'<div class="ch">{E(t["id"])} <small>{E(t["title"].split(" — ")[0])}</small></div>')
         for s in t["sessions"]:
             short = s["title"].split(" — ")[0]
-            side.append(f'<a href="#{s["id"]}" data-l="{s["id"]}"><b>{s["id"]}</b>'
-                        f'<span>{E(short)}</span></a>')
-    side.append('</nav><div class="foot">Every step runs real Python in your '
-                'browser, against CyberTravels as it stood at the end of that '
-                'lesson. Nothing is installed on your computer.<br><br>'
-                '<a href="../lessons/index.html" style="padding:0">All lessons</a> · '
-                '<a href="../guide/function-a.html" style="padding:0">Course guide</a></div></aside>')
-    n_code = sum(1 for l in LAB.values() for st in l["steps"] if "code" in st)
-    intro = (f'<div class="lab-intro"><span class="tag">FUNCTION A · LAB</span>'
-             f'<h1>Build an agent, one step at a time, in your browser</h1>'
-             f'<p>Pick a lesson. Press <b>Play</b> to run its steps in order, or '
-             f'<b>Run</b> one step at a time. Every one of the {n_code} Python '
-             f'steps is real code from CyberTravels, and you can change it. '
-             f'To do the same on your computer, open <b>In your IDE</b>.</p>'
-             f'<div class="py" data-state="idle"><i></i><span>Python starts the '
-             f'first time you press Run or Play.</span></div></div>')
-    secs = "".join(section(t, s, b["lessons"][s["id"]]) for t, s in lessons())
-    head = BS.HEAD.format(title="Function A lab — Cyber Commons",
-                          desc="Function A, hands on: every step runs real Python "
-                               "in your browser.")
-    js = JS % {"pyodide": json.dumps(PYODIDE), "pyjwt": json.dumps(PYJWT)}
+            cur = ' aria-current="page"' if s["id"] == current else ""
+            out.append(f'<a href="{s["id"]}.html"{cur}><b>{s["id"]}</b>'
+                       f'<span>{E(short)}</span></a>')
+    out.append('</nav><div class="foot">Every step runs real Python in your '
+               'browser, against CyberTravels as it stood at the end of that '
+               'lesson. Nothing is installed on your computer.<br><br>'
+               '<a href="../lessons/index.html" style="padding:0">All lessons</a> · '
+               '<a href="../guide/function-a.html" style="padding:0">Course guide</a></div></aside>')
+    return "".join(out)
+
+
+STATUS = ('<div class="py" data-state="idle"><i></i><span>Python starts the '
+          'first time you press Run or Play.</span></div>')
+
+
+def shell(title: str, desc: str, current: str | None, main: str, script: str) -> str:
+    import build_site as BS
+    head = BS.HEAD.format(title=E(title), desc=E(desc))
     return (head.replace("</head>", f"<style>{CSS}</style>"
                          "<script>document.documentElement.classList.add('js')</script></head>")
             + "<!-- Generated by scripts/build_lab.py from scripts/exercises/lab_a.py. Do not edit. -->"
             + BS.NAV.replace('href="index.html">All lessons', 'href="../lessons/index.html">All lessons')
-            + f'<div class="lab-shell">{"".join(side)}<main class="lab-main">{intro}{secs}</main></div>'
-            + f"<script>{js}</script></body></html>\n")
+            + f'<div class="lab-shell">{side(current)}<main class="lab-main">{main}</main></div>'
+            + (f"<script>{script}</script>" if script else "") + "</body></html>\n")
+
+
+def index_page() -> str:
+    """The way in: what the lab is, and every lesson as a card.
+
+    One page per lesson, because sixteen lessons in one file was 250 KB to
+    show one of them. Old links pointed at `index.html#A1.4`; the one line of
+    script below sends those to the lesson's own page.
+    """
+    n_code = sum(1 for l in LAB.values() for st in l["steps"] if "code" in st)
+    cards = []
+    for t in FN["tracks"]:
+        cards.append(f'<h2 class="lab-ch"><span class="tag">{E(t["id"])}</span> '
+                     f'{E(t["title"].split(" — ")[0])}</h2><div class="lab-cards">')
+        for s in t["sessions"]:
+            lab = LAB[s["id"]]
+            n = len(lab["steps"])
+            runs = sum(1 for st in lab["steps"] if "code" in st)
+            cards.append(f'<a class="lab-card" href="{s["id"]}.html"><b>{s["id"]}</b>'
+                         f'<h3>{E(s["title"].split(" — ")[0])}</h3><p>{E(lab["goal"])}</p>'
+                         f'<span>{n} steps · {runs} run in your browser</span></a>')
+        cards.append("</div>")
+    main = (f'<div class="lab-intro"><span class="tag">FUNCTION A · LAB</span>'
+            f'<h1>Build an agent, one step at a time, in your browser</h1>'
+            f'<p>Pick a lesson. Press <b>Play</b> to run its steps in order, or '
+            f'<b>Run</b> one step at a time. Every one of the {n_code} Python '
+            f'steps is real code from CyberTravels, and you can change it. '
+            f'To do the same on your computer, open <b>In your IDE</b> on any lesson.</p>'
+            f'<p style="margin-top:12px"><a class="lab-go" href="A0.0.html">Start at A0.0 →</a></p>'
+            f'</div>{"".join(cards)}')
+    redirect = ('function go(){var h=decodeURIComponent(location.hash.slice(1));'
+                'if(/^A\\d\\.\\d+$/.test(h))location.replace(h+".html");}'
+                'go();window.addEventListener("hashchange",go);')
+    return shell("Function A lab — Cyber Commons",
+                 "Function A, hands on: every step runs real Python in your browser.",
+                 None, main, redirect)
+
+
+def lesson_page(b: dict, i: int) -> str:
+    seq = lessons()
+    t, s = seq[i]
+    prev = seq[i - 1][1] if i else None
+    nxt = seq[i + 1][1] if i + 1 < len(seq) else None
+    nav = '<div class="lab-pn">' + (
+        f'<a href="{prev["id"]}.html">← {prev["id"]}</a>' if prev else '<span></span>') + (
+        f'<a href="{nxt["id"]}.html">{nxt["id"]} →</a>' if nxt else '<span></span>') + '</div>'
+    main = (f'<div class="lab-intro slim">{STATUS}{nav}</div>'
+            f'{section(t, s, b["lessons"][s["id"]])}{nav}')
+    js = JS % {"pyodide": json.dumps(PYODIDE), "pyjwt": json.dumps(PYJWT)}
+    return shell(f"{s['id']} hands-on — {s['title']} | Cyber Commons",
+                 f"{s['id']}, hands on: {LAB[s['id']]['goal']}", s["id"], main, js)
 
 
 def render() -> dict[Path, str]:
     b = bundle()
-    return {BUNDLE: json.dumps(b, indent=0, sort_keys=True, ensure_ascii=False) + "\n",
-            PAGE: page(b)}
+    out = {BUNDLE: json.dumps(b, indent=0, sort_keys=True, ensure_ascii=False) + "\n",
+           PAGE: index_page()}
+    for i, (_t, s) in enumerate(lessons()):
+        out[OUT / f"{s['id']}.html"] = lesson_page(b, i)
+    return out
 
 
 def main() -> int:
@@ -692,6 +766,8 @@ def main() -> int:
     if args.check:
         stale = [p.relative_to(ROOT).as_posix() for p, t in out.items()
                  if not p.exists() or p.read_text(encoding="utf8") != t]
+        stale += [f"{p.relative_to(ROOT).as_posix()} (no lesson owns it)"
+                  for p in OUT.glob("*.html") if p not in out]
         drift = run_problems()
         for p in stale:
             print(f"stale: {p} — run python3 scripts/build_lab.py")
@@ -704,9 +780,12 @@ def main() -> int:
               f"{len(LAB)} lessons print what they say, each at its own checkpoint")
         return 0
     OUT.mkdir(parents=True, exist_ok=True)
+    for p in OUT.glob("*.html"):
+        if p not in out:
+            p.unlink()          # a page for a lesson that is gone would still load
     for p, t in out.items():
         p.write_text(t, encoding="utf8")
-    print(f"wrote {PAGE.relative_to(ROOT)} and {BUNDLE.relative_to(ROOT)} "
+    print(f"wrote {len(out) - 1} pages under {OUT.relative_to(ROOT)} and {BUNDLE.relative_to(ROOT)} "
           f"({len(json.loads(out[BUNDLE])['trees'])} distinct trees for {len(LAB)} lessons)")
     return 0
 
