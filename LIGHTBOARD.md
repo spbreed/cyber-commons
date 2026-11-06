@@ -1226,7 +1226,7 @@ Approvals per reviewer per hour — the number that says whether the gate is sti
 
 *[Point at the output on screen. Do not read it out.]*
 
-> A high-risk action pausing and naming its scope, an approval and a refusal both recorded as audit rows, twelve tool calls before the ceiling binds with exhausted() naming tool calls, and a budget ceiling returning an incomplete result rather than a summary.
+> A high-risk action pausing and naming its scope, an approval and a refusal both recorded as audit rows, twelve tool calls before the ceiling binds and its budget span names tool calls, and a budget ceiling returning an incomplete result rather than a summary.
 
 **⑤ Hand it over**
 

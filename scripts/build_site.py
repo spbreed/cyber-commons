@@ -828,6 +828,14 @@ def lesson_page(entry, prev, nxt) -> str:
             f'<a href="{chapter_guide(entry["fn_id"], entry["track_id"])}">'
             f'{html.escape(entry["track_id"])} in the Function '
             f'{html.escape(entry["fn_id"])} course guide →</a></p>')
+    if entry["fn_id"] == "A":
+        # Function A read as a lot of text before anything ran. Each of its
+        # lessons now has a hands-on version where every step runs in the
+        # browser, built by scripts/build_lab.py; this is the door to it.
+        parts.append(
+            '<p class="chapguide trylab"><b>Try it first, in your browser.</b> '
+            f'<a href="../lab/index.html#{html.escape(sid)}">Run {html.escape(sid)} '
+            'step by step, hands on →</a></p>')
     parts.append('</div>')
 
     parts.append(video_block(sid, f"{sid} — {s['title']}"))
@@ -940,7 +948,9 @@ def index_page(seq) -> str:
                 f'{html.escape(e["track_id"])}</span> '
                 f'{html.escape(e["track"])} '
                 f'<a href="{chapter_guide(e["fn_id"], e["track_id"])}">'
-                f'Course guide →</a></h3>')
+                f'Course guide →</a>'
+                + (f'<a href="../lab/index.html#{e["s"]["id"]}">Hands-on lab →</a>'
+                   if e["fn_id"] == "A" else "") + '</h3>')
         sid = e["s"]["id"]
         mark = "▶" if sid in VIDEOS else "·"
         parts.append(f'<p style="margin:6px 0"><a href="{sid}.html" style="text-decoration:none">'

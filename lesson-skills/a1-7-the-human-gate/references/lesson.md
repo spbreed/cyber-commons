@@ -64,10 +64,10 @@ print(config.MAX_STEPS, config.MAX_TOOL_CALLS)   # 8 12
 b, n = runtime.Budget(), 0
 while b.call():
     n += 1
-print(n, b.exhausted())        # 12 tool_calls
+print(n)                       # 12
 ```
 
-It counts to twelve and stops, then prints the word `tool_calls`. **That word is the point.** The run does not just end — it ends *saying which limit it hit*, so what comes back is an unfinished answer that admits it is unfinished, rather than a confident summary of however far it got.
+It counts to twelve and stops. Inside a real run, the record written at that moment is a `budget` span naming `tool_calls` as the limit that was hit. **That name is the point.** The run does not just end — it ends *saying which limit it hit*, so what comes back is an unfinished answer that admits it is unfinished, rather than a confident summary of however far it got.
 
 A note on the skill below, because the numbers will not match and the mismatch is the point rather than a mistake. CyberTravels bounds two things — model turns and tool calls. The skill audits four kinds of ceiling, including per-target and wall-clock, and on its fixture the per-target ceiling fires first at six calls. **Your loop does not have a per-target ceiling.** That is the finding the skill is for: an agent that may make twelve calls total can still make all twelve against one traveller's booking.
 

@@ -757,10 +757,11 @@ on 40% of runs last week is a thing you want to know.
          "b, n = runtime.Budget(), 0\n"
          "while b.call():\n"
          "    n += 1\n"
-         "print(n, b.exhausted())        # 12 tool_calls\n"
+         "print(n)                       # 12\n"
          "```\n\n"
-         "It counts to twelve and stops, then prints the word `tool_calls`. "
-         "**That word is the point.** The run does not just end — it ends "
+         "It counts to twelve and stops. Inside a real run, the record written "
+         "at that moment is a `budget` span naming `tool_calls` as the limit "
+         "that was hit. **That name is the point.** The run does not just end — it ends "
          "*saying which limit it hit*, so what comes back is an unfinished "
          "answer that admits it is unfinished, rather than a confident summary "
          "of however far it got.\n\n"
@@ -776,7 +777,7 @@ on 40% of runs last week is a thing you want to know.
  ],
  "expect": "A high-risk action pausing and naming its scope, an approval and a "
            "refusal both recorded as audit rows, twelve tool calls before the "
-           "ceiling binds with `exhausted()` naming `tool_calls`, and a budget "
+           "ceiling binds and its `budget` span names `tool_calls`, and a budget "
            "ceiling returning an incomplete result rather than a summary. From "
            "the skill: a per-target ceiling reported as missing, which it is.",
  "challenge": "Raise `MAX_TOOL_CALLS` in `cybertravels/config.py` to 500 and "

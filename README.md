@@ -155,6 +155,8 @@ failures happen in the seams.
 | in the SOC — detection, IR, threat hunting | **E1**→**E5** — discover, detect, understand, respond, recover |
 | in GRC, risk, audit, or you carry the regulator | **F1**→**F3** — risk and control, regulatory, running the programme |
 
+**New to all of it? Start hands on.** [Function A, in your browser](https://cybercommons.ai/lab/index.html): every lesson as a few steps you play or run one at a time. Each step is real Python, run in the browser against CyberTravels as it stood at the end of that lesson, and you can edit it. Nothing to install. Each lesson also shows how to run the same steps, and its skill, in your own IDE.
+
 **Doing a function, or running it for other people?** There is a
 [course guide for each of the six](https://cybercommons.ai/guide/index.html).
 Each opens as a brochure — overview, highlights, what you will learn, the
@@ -421,7 +423,7 @@ python3 scripts/build_site.py          # everything      -> site/lessons/
 python3 scripts/build_lightboard.py    # lessons         -> LIGHTBOARD.md
 ```
 
-CI re-runs all of it with `--check`. It runs 25 scripts, each of which
+CI re-runs all of it with `--check`. It runs 26 scripts, each of which
 exists because of a specific failure: the secret scan, the determinism gate
 across four hash seeds, skill contracts and a
 real offline run of every skill script, every diagram rendered by actual

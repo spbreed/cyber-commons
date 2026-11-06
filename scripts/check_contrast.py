@@ -38,7 +38,9 @@ PAGES = ROOT / "site" / "lessons"
 # exists for — a stylesheet whose declarations are each fine alone. Both
 # directories: site/teach/ now holds only the redirect left at the guide's
 # former address, and a redirect stub is still a page somebody can land on.
-EXTRA = [ROOT / "site" / "guide", ROOT / "site" / "teach"]
+# site/lab/ is the hands-on Function A page: dark editors, tinted output panes
+# and a sequence diagram whose lane labels sit over dashed lines.
+EXTRA = [ROOT / "site" / "guide", ROOT / "site" / "teach", ROOT / "site" / "lab"]
 INDEX = ROOT / "site" / "index.html"
 
 CHROME_CANDIDATES = [
