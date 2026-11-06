@@ -953,7 +953,10 @@ def index_page(seq) -> str:
                    if e["fn_id"] == "A" else "") + '</h3>')
         sid = e["s"]["id"]
         mark = "▶" if sid in VIDEOS else "·"
-        parts.append(f'<p style="margin:6px 0"><a href="{sid}.html" style="text-decoration:none">'
+        # Function A rows open the hands-on page; the long lesson is one
+        # click on from there ("Read the full lesson").
+        row = f"../lab/{sid}.html" if e["fn_id"] == "A" else f"{sid}.html"
+        parts.append(f'<p style="margin:6px 0"><a href="{row}" style="text-decoration:none">'
                      f'<span class="sid">{mark} {html.escape(sid)}</span> '
                      f'<span style="color:var(--text)">{html.escape(e["s"]["title"])}</span></a></p>')
     parts.append('</div></div>')
@@ -1111,7 +1114,10 @@ def curriculum_block() -> str:
         first = body[0]["sessions"][0]["id"]
         n = sum(len(t["sessions"]) for t in body)
         who = FUNCTION_DAYS[fn["id"]]["who_short"]
-        out.append(f'<a class="trk" href="lessons/{first}.html">'
+        # Function A starts in the hands-on lab: a reader with no background
+        # landed on a long page of text, which is what the lab exists to fix.
+        href = "lab/index.html" if fn["id"] == "A" else f"lessons/{first}.html"
+        out.append(f'<a class="trk" href="{href}">'
                    f'<div class="k">{i:02d}</div>'
                    f'<h3>{name}</h3><p>{blurb}</p>'
                    f'<p class="for">{html.escape(who)}</p>'
