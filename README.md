@@ -23,7 +23,7 @@ skill**. 147 of the 149 do, and the skill is the deliverable: the page shows the
 use. Every skill is executed in CI before it ships. **Every skill is executed
 by a language model** — the
 script is the harness, not the procedure — so there is one prerequisite, and
-[A0.0](https://cybercommons.ai/lessons/A0.0.html) sets it up on a free tier. No
+[A0.0](https://cybercommons.ai/lab/A0.0.html) sets it up on a free tier. No
 licence, no vendor, no paid plan required.
 
 🌐 **[cybercommons.ai](https://cybercommons.ai)** · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md) · 🎙 [Recording scripts](LIGHTBOARD.md)
@@ -37,7 +37,7 @@ until you decide you want it local.
 
 ## 1 · Set your machine up — this is the one that blocks everything
 
-**[A0.0 — Set up your machine](https://cybercommons.ai/lessons/A0.0.html)**
+**[A0.0 — Set up your machine](https://cybercommons.ai/lab/A0.0.html)**
 compares the developer AI tools on the two things that decide the choice (real
 context window, and what the free tier gets you), then installs, clones, and
 points the skill runtime at a model. It ends by running one skill end to end
@@ -73,10 +73,10 @@ the contract, and is not a model result.
 
 ## 2 · Read one page, then run a lesson
 
-**[A0.0](https://cybercommons.ai/lessons/A0.0.html)** is the whole introduction
+**[A0.0](https://cybercommons.ai/lab/A0.0.html)** is the whole introduction
 on one page: who this is for, the setup, what a lesson is made of, which track
 to open first, and what Day 0/1/2 mean.
-**[A0.1](https://cybercommons.ai/lessons/A0.1.html)** is the nine words for an
+**[A0.1](https://cybercommons.ai/lab/A0.1.html)** is the nine words for an
 agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and
 multi-agent — drawn on one page and placed in the code. Then
 **[B1.0](https://cybercommons.ai/lessons/B1.0.html)**, which introduces

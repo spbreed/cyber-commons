@@ -136,6 +136,15 @@ PART_SOURCE = {
 # lists the template's sections in bold ("<strong>What you just proved</strong>")
 # and, once it stopped rendering that section, `>What you just proved<` found
 # the list item and reported the page as carrying a section it does not.
+# What a Function A lab page folds, per declared part, by the fold's heading.
+LAB_FOLD = {
+    "idea":        "The idea",
+    "riskcontrol": "Risk and control",
+    "days":        "Day 0, 1 and 2",
+    "turn":        "Your turn",
+    "bridge":      "Where this leaves you",
+}
+
 PAGE_MARK = {
     "riskcontrol": '<div class="rc">',
     "relevance":   "</span>Use case relevance</h2>",
@@ -276,6 +285,29 @@ def main() -> int:
         # build_site.py. The rule is unchanged — the framework has to come
         # before anything that runs — only where it is enforced moved.
         page_f = PAGES / f"{sid}.html"
+        if fn == "A":
+            # Function A is read on its hands-on lab page, where the steps run
+            # in the browser and the lesson's own parts are folded beneath them
+            # (build_lab.py, from build_site.lab_sections). Its contract there:
+            # the skill is offered, the idea is present, and every part the
+            # lesson declares is folded on the page, by its fold's heading.
+            page_f = ROOT / "site" / "lab" / f"{sid}.html"
+            if not page_f.is_file():
+                problems.append(f"{sid}: lab page not built — run build_lab.py")
+                continue
+            page = page_f.read_text()
+            name = skill_name(sid, s["title"])
+            if name not in page or f"scripts/lesson.py {sid}" not in page:
+                problems.append(f"{sid}: no skill: the lab page does not offer "
+                                f"{name} and `scripts/lesson.py {sid}`")
+            for part, head in LAB_FOLD.items():
+                if part == "idea" or part in parts:
+                    if f"<summary>{head}</summary>" not in page:
+                        problems.append(f"{sid}: the lab page has no "
+                                        f"\"{head}\" fold")
+            if last and track not in BRIDGES:
+                problems.append(f"{sid}: last lesson of {track} with no chapter bridge")
+            continue
         if not page_f.is_file():
             problems.append(f"{sid}: lesson page not built — run build_site.py")
             continue

@@ -517,6 +517,89 @@ def lesson_body(entry: dict) -> str:
     return renumber_sections("".join(out))
 
 
+def lab_sections(entry: dict) -> list[tuple[str, str]]:
+    """The lesson, for its hands-on lab page: (heading, html) pairs.
+
+    Function A's lessons are read on their lab page now (scripts/build_lab.py),
+    where the steps run in the browser. What moves there is only what the lab
+    does not already show: the steps' own code and output are the lab, the
+    skill is the IDE tab, and "what you just proved" is the output a reader has
+    just watched print. Each section is folded on the page; this returns them
+    in the order a reader wants them.
+    """
+    sid, s = entry["s"]["id"], entry["s"]
+    ex = EXERCISES[sid]
+    parts = page_parts(entry)
+    out = []
+    why = f"<p>{inline_md(ex['hook'].strip())}</p>"
+    if ground := GROUNDING.get(sid):
+        why += f'<p><b>At CyberTravels.</b> {inline_md(ground.strip())}</p>'
+    out.append(("Why it matters", why))
+    if "riskcontrol" in parts and (s.get("risk") or s.get("control")):
+        rc = ""
+        if s.get("risk"):
+            rc += f'<p><b>Risk.</b> {html.escape(s["risk"])}</p>'
+        if s.get("control"):
+            rc += f'<p><b>Control.</b> {html.escape(s["control"])}</p>'
+        out.append(("Risk and control", rc))
+    idea = (f'<pre class="dia">{html.escape(ex["diagram"].strip(chr(10)))}</pre>'
+            + md_to_html(ex["concept"].strip()))
+    if anchor := ANCHORS.get(sid):
+        idea += f'<blockquote class="anchor">{inline_md(anchor.strip())}</blockquote>'
+    out.append(("The idea", idea))
+    # A lesson's own walkthrough moves only when the lab does not already run
+    # it. Every walkthrough with a Python block is one the lab's steps replace
+    # line for line; the rest (machine setup, the nine cards, the eval
+    # numbers) has nowhere else to live once the lesson page is gone.
+    if not any(k == "md" and "```python" in str(src) for k, src in ex.get("steps", [])):
+        prose, _ = steps_html(sid, ex)
+        if prose.strip():
+            out.append(("The full walkthrough", prose))
+    if "days" in parts and (day := DAYS.get(sid)):
+        d = "".join(f'<p><b>{lab}.</b> {html.escape(t.strip())}</p>'
+                    for lab, t in zip(("Day 0, why", "Day 1, how", "Day 2, measure"), day))
+        if ms := METRICS.get(sid):
+            d += ('<table><thead><tr><th>Measure this</th><th>denominator or target</th>'
+                  '</tr></thead><tbody>' + "".join(
+                      f'<tr><td>{html.escape(a)}</td><td>{html.escape(b)}</td></tr>'
+                      for a, b in ms) + '</tbody></table>')
+        out.append(("Day 0, 1 and 2", d))
+    if "turn" in parts and (ch := ex.get("challenge")):
+        out.append(("Your turn", md_to_html(ch.strip())))
+    if "bridge" in parts and (b := BRIDGES.get(entry["track_id"])):
+        out.append(("Where this leaves you",
+                    f"<p><b>What you can do now.</b> {html.escape(b['gained'])}</p>"
+                    f"<p><b>What you still cannot do.</b> {html.escape(b['gap'])}</p>"
+                    f"<p>{html.escape(b['next'])}</p>"))
+    return out
+
+
+def lab_href(sid: str, depth: int = 1) -> str:
+    """Where a reader reads lesson `sid`: its lab page for Function A."""
+    pre = "../" * depth
+    if sid.startswith("A"):
+        return f"{pre}lab/{sid}.html"
+    return f"{pre}lessons/{sid}.html"
+
+
+def lesson_redirect(sid: str) -> str:
+    """What is left at a Function A lesson's old address.
+
+    The lesson lives on its lab page now. The old URL is in the chapter docs,
+    LIGHTBOARD.md, bookmarks and other people's notes, so it forwards rather
+    than 404s; a meta refresh, because the site is static and has no server to
+    send a redirect from.
+    """
+    to = f"../lab/{sid}.html"
+    return ('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'
+            f'<title>{html.escape(sid)} has moved</title>'
+            f'<link rel="canonical" href="{to}">'
+            f'<meta http-equiv="refresh" content="0; url={to}">'
+            '<meta name="robots" content="noindex"></head><body>'
+            f'<p>{html.escape(sid)} is now a hands-on lab: '
+            f'<a href="{to}">{to}</a></p></body></html>\n')
+
+
 # A step's heading is written `## 2 · Demo`, `## 3 · Where it breaks`, and
 # LESSON_DESIGN.md §3 tells an author to write those and stop thinking about
 # it because the build renumbers them. The build did not: the numbers went
@@ -906,7 +989,7 @@ def lesson_page(entry, prev, nxt) -> str:
 
     parts.append('<div class="pager">')
     if prev:
-        parts.append(f'<a href="{prev["s"]["id"]}.html"><span class="k">← Previous</span>'
+        parts.append(f'<a href="{lab_href(prev["s"]["id"], 1).replace("../lessons/", "")}"><span class="k">← Previous</span>'
                      f'<span class="t">{html.escape(prev["s"]["id"])} · {html.escape(prev["s"]["title"])}</span></a>')
     else:
         parts.append('<span></span>')
@@ -915,7 +998,10 @@ def lesson_page(entry, prev, nxt) -> str:
                      f'<span class="t">{html.escape(nxt["s"]["id"])} · {html.escape(nxt["s"]["title"])}</span></a>')
     parts.append('</div></div>')
     parts.append(FOOT)
-    return "".join(parts)
+    # Function A's lessons live on their lab pages. Lesson prose cross-links by
+    # bare file name ("A0.0 sets this up", the pager), and those would go
+    # through a redirect; one rewrite here covers every way a link is written.
+    return re.sub(r'href="(A\d\.\d+)\.html', r'href="../lab/\1.html', "".join(parts))
 
 
 def index_page(seq) -> str:
@@ -1178,8 +1264,9 @@ def main() -> int:
         return 1
 
     OUT.mkdir(parents=True, exist_ok=True)
-    pages = {f"{e['s']['id']}.html": lesson_page(e, seq[i - 1] if i else None,
-                                                 seq[i + 1] if i + 1 < len(seq) else None)
+    pages = {f"{e['s']['id']}.html": (lesson_redirect(e["s"]["id"]) if e["fn_id"] == "A"
+                                      else lesson_page(e, seq[i - 1] if i else None,
+                                                       seq[i + 1] if i + 1 < len(seq) else None))
              for i, e in enumerate(seq)}
     pages["index.html"] = index_page(seq)
 

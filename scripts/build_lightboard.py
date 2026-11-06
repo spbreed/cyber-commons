@@ -451,7 +451,7 @@ def script(item: dict) -> str:
     out.append(f"Chapter {item['tr']['id']} · lesson {item['i'] + 1} of "
                f"{item['n']} · {'runs a skill' if runs else 'reading lesson'} "
                f"· {words} words, about {words / WPM:.1f} min spoken · "
-               f"[page]({SITE}/lessons/{sid}.html)")
+               f"[page]({SITE}/{'lab' if sid.startswith('A') else 'lessons'}/{sid}.html)")
     out.append("")
 
     head = None

@@ -64,6 +64,8 @@ from exercises.lessonskills import audits_of                    # noqa: E402
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 GUIDE = ROOT / "site" / "guide"
 OUT = GUIDE / "function-a.html"
+# The run sheet for running Function A in a room, split off the brochure.
+RUNSHEET = GUIDE / "function-a-run-sheet.html"
 # Where the Function A page used to live. A generated stub redirects from it.
 MOVED = ROOT / "site" / "teach" / "function-a.html"
 
@@ -354,6 +356,16 @@ def sec(key: str, title: str, icon: str, body: str, sub: str = "") -> str:
             f'<div class="lsb">{subhtml}{body}</div></section>')
 
 
+def lhref(sid: str) -> str:
+    """Where a guide sends a reader for lesson `sid`.
+
+    Function A's lessons are read on their hands-on lab pages; the old lesson
+    addresses only forward there, and a guide that linked through a redirect
+    would make every click a two-step one.
+    """
+    return f"../lab/{sid}.html" if sid.startswith("A") else f"../lessons/{sid}.html"
+
+
 def lesson_link(sid: str, ses: dict, short: bool = False) -> str:
     """A link to a lesson page. `short` gives the id alone.
 
@@ -365,9 +377,9 @@ def lesson_link(sid: str, ses: dict, short: bool = False) -> str:
     s = ses.get(sid)
     if short:
         t = f' title="{html.escape(s["title"])}"' if s else ""
-        return f'<a href="../lessons/{sid}.html"{t}>{html.escape(sid)}</a>'
+        return f'<a href="{lhref(sid)}"{t}>{html.escape(sid)}</a>'
     label = f"{sid} — {s['title']}" if s else sid
-    return f'<a href="../lessons/{sid}.html">{html.escape(label)}</a>'
+    return f'<a href="{lhref(sid)}">{html.escape(label)}</a>'
 
 
 def table(headers: list[str], rows: list[list[str]]) -> str:
@@ -523,7 +535,7 @@ def lab_block(sid: str, ses: dict, facts: dict) -> str:
     # shrink every lab block's contents to 10px uppercase.
     p = [f'<div class="tlab" id="{sid}">',
          f'<div class="tlabh"><span class="tlabid">{html.escape(sid)}</span>',
-         f'<a href="../lessons/{sid}.html">{html.escape(s["title"])}</a>',
+         f'<a href="{lhref(sid)}">{html.escape(s["title"])}</a>',
          f'<span class="tlabmin">{lab["minutes"]} min</span></div>']
 
     if s.get("risk") or s.get("control"):
@@ -647,7 +659,7 @@ def derived_lab(sid: str, ses: dict) -> str:
     s = ses[sid]
     p = [f'<div class="tlab" id="{sid}">',
          f'<div class="tlabh"><span class="tlabid">{html.escape(sid)}</span>',
-         f'<a href="../lessons/{sid}.html">{html.escape(s["title"])}</a>']
+         f'<a href="{lhref(sid)}">{html.escape(s["title"])}</a>']
     audits = audits_of(sid)
     if audits:
         p.append(f'<span class="tlabmin">{len(audits)} skill'
@@ -974,14 +986,14 @@ def chapter_cards(prof: dict) -> str:
             blurb = ("<p><b>You leave with:</b> "
                      + "; ".join(inline(x) for x in leave) + ".</p>"
                      if leave else "")
-            more = f'<a href="#labs">Lab by lab →</a>'
+            more = f'<a href="{RUNSHEET.name}#labs">Lab by lab →</a>'
         else:
             intro = G.FUNCTIONS[fid]["chapters"].get(cid, {}).get("intro", "")
             first = intro.split("\n\n")[0] if intro else ""
             blurb = md(first_sentences(first, 2)) if first else ""
             more = f'<a href="#c-{cid}">Lesson by lesson →</a>'
         chips = "".join(
-            f'<a href="../lessons/{x}.html">{html.escape(x)}</a>' for x in ids)
+            f'<a href="{lhref(x)}">{html.escape(x)}</a>' for x in ids)
         cards.append(
             f'<div class="bro-card" id="ch-{cid}">'
             f'<div class="bro-cid">{html.escape(cid)} · {len(ids)} lessons</div>'
@@ -1064,7 +1076,7 @@ def brochure(fid: str, ses: dict) -> str:
           '<li>Blocks for running it as a session</li></ul></div></div>')
 
     cta = bro_sec("cta", "start", "Ready to start?",
-        f'<p class="bro-go"><a href="../lessons/{P["entry"]}.html">'
+        f'<p class="bro-go"><a href="{lhref(P["entry"])}">'
         f'Start at {html.escape(P["entry"])} →</a></p>'
         '<div class="bro-rows">'
         f'<div><span>Taught duration</span><b>{html.escape(P["taught"])}</b></div>'
@@ -1073,7 +1085,7 @@ def brochure(fid: str, ses: dict) -> str:
         f'<div><span>Source</span><b><a href="{REPO}">'
         f'{html.escape(REPO.replace("https://", ""))}</a></b></div></div>')
 
-    return (cover + pdf_bar(True)
+    return (cover + pdf_bar(fid != AUTHORED)
             + '<div class="bro-video noprint">' + overview_video(fid)
             + '</div>'
             + "".join([overview, highlights, learn, curriculum, who,
@@ -1128,11 +1140,13 @@ def foot() -> str:
     return FOOT.replace("</body></html>", PDF_JS + "</body></html>")
 
 
-def crumb(fid: str) -> str:
+def crumb(fid: str, run_sheet: bool = False) -> str:
+    tail = (f'<a href="function-{fid.lower()}.html">Function {html.escape(fid)}</a>'
+            ' › Run sheet' if run_sheet else f'Function {html.escape(fid)}')
     return ('<div class="wrap noprint"><div class="lhead" '
             'style="padding-bottom:0"><div class="crumb">'
             '<a href="index.html">Course guides</a> › '
-            f'Function {html.escape(fid)}</div></div></div>')
+            f'{tail}</div></div></div>')
 
 
 def run_toc(entries: list) -> str:
@@ -1142,21 +1156,70 @@ def run_toc(entries: list) -> str:
                       for k, t in entries) + "</ol></nav>")
 
 
+def teacher_note() -> str:
+    """Where the brochure ends: the two ways on from it.
+
+    The run sheet used to follow here on the same page, 35,000 words under a
+    brochure, so a reader working alone scrolled past a room's timings, prompt
+    bank and setup failures to find nothing addressed to them. It is its own
+    page now, and this says who it is for.
+    """
+    return ('<div class="wrap noprint"><div class="teachnote">'
+            '<p><b>Learning on your own?</b> Go straight to the '
+            '<a href="../lab/index.html">hands-on lab</a>: every lesson runs '
+            'step by step in your browser.</p>'
+            '<p><b>If you are a teacher, follow the '
+            f'<a href="{RUNSHEET.name}">run sheet</a>.</b> It has the timings, '
+            'the prompt for every lab and what it prints, the capstone, a quick '
+            'check, the pitfalls, the setup failures in the order they happen, '
+            'a prompt bank and a glossary.</p></div></div>')
+
+
 def page() -> str:
-    ses, facts = sessions(), measure()
+    ses = sessions()
     ids = [sid for m in T.MODULES for sid in m[2]]
     return "".join([
         HEAD.format(title="Function A Course Guide — Building Agentic AI | "
                           "Cyber Commons",
                     desc=html.escape(
-                        f"Work through Function A alone or run it for a room: "
-                        f"{len(ids)} lessons, the prompt and expected output "
-                        f"for every lab, and what to do when a machine fails.")),
+                        f"Function A at a glance: {len(ids)} lessons, what you "
+                        f"will learn, and where to start.")),
         NAV,
         crumb("A"),
         brochure("A", ses),
-        '<div class="runsheet"><div class="wrap">',
-        runsheet_open("A", honest=False),
+        teacher_note(),
+        # Links into the run sheet were written as function-a.html#labs and
+        # the like before it moved; they land on its new page, same anchor.
+        '<script>(function(){var h=location.hash.slice(1),k='
+        + json.dumps(["runsheet"] + [k for k, _ in INDEX])
+        + ';if(k.indexOf(h)>=0||/^(lab|m)-/.test(h))location.replace("'
+        + RUNSHEET.name + '#"+h);})();</script>',
+        foot(),
+    ])
+
+
+def runsheet_page() -> str:
+    """Function A's run sheet: everything a teacher needs, on its own page."""
+    ses, facts = sessions(), measure()
+    return "".join([
+        HEAD.format(title="Function A Run Sheet — for teachers | Cyber Commons",
+                    desc=html.escape(
+                        "Running Function A for a room: timings, the prompt and "
+                        "expected output for every lab, the capstone, pitfalls "
+                        "and setup failures.")),
+        NAV,
+        crumb("A", run_sheet=True),
+        '<div class="runsheet standalone"><div class="wrap">',
+        ('<div class="runsheet-head" id="runsheet"><h2>Function A run sheet, '
+         'for teachers</h2>'
+         + md("**If you are teaching Function A, follow this page.** It is the "
+              "whole session: timings, the prompt for every lab and what it "
+              "prints, the questions to ask, and what to do when a machine "
+              "fails. Learning on your own? Use the "
+              "[hands-on lab](../lab/index.html) instead.")
+         + md("Every number here is generated from the lesson sources and the "
+              "application. If a run disagrees with this page, **trust the "
+              "run** and correct `scripts/exercises/guide_a.py`.") + '</div>'),
         run_toc(INDEX),
         sec("glance", "How to work through it", "◉", glance(ses, facts)),
         sec("prework", "Before you start", "◴", prework()),
@@ -1350,7 +1413,7 @@ def pager(fid: str, ses: dict) -> str:
                    f'<div class="t">Function {prev} — '
                    f'{html.escape(functions()[prev]["title"])}</div></a>')
     else:
-        out.append('<a href="../lessons/A0.0.html"><div class="k">Start here'
+        out.append('<a href="../lab/A0.0.html"><div class="k">Start here'
                    '</div><div class="t">A0.0 — set up your computer</div></a>')
     if nxt:
         out.append(f'<a class="next" href="function-{nxt.lower()}.html">'
@@ -1456,7 +1519,7 @@ def index_page() -> str:
         'session</li></ul></div></div>')
 
     cta = bro_sec("cta", "start", "Ready to start?",
-        '<p class="bro-go"><a href="../lessons/A0.0.html">Start at A0.0 →'
+        '<p class="bro-go"><a href="../lab/A0.0.html">Start at A0.0 →'
         '</a></p><div class="bro-rows inline">'
         '<div><span>Website</span><b><a href="../index.html">cybercommons.ai'
         '</a></b></div>'
@@ -1480,7 +1543,7 @@ def index_page() -> str:
         overview, highlights, '</div>',
         '<div class="bro-page" id="page-2">', guides, included, cta, '</div>',
         '<div class="wrap noprint"><div class="pager">'
-        '<a href="../lessons/A0.0.html"><div class="k">Start here</div>'
+        '<a href="../lab/A0.0.html"><div class="k">Start here</div>'
         '<div class="t">A0.0 — set up your computer</div></a>'
         f'<a class="next" href="../lessons/index.html">'
         f'<div class="k">All {total} lessons</div>'
@@ -1599,6 +1662,18 @@ def chapter_link_problems(want: dict) -> list[str]:
         m = re.search(r'class="chapguide".*?href="([^"]+)"', f.read_text(), re.S)
         if m:
             banners[f.stem] = m.group(1)
+    # Function A's lessons are read on their lab pages, and each opens with a
+    # link to its chapter in the guide. The first lesson of each A chapter is
+    # where that chapter begins, so that is the one counted.
+    for fid, fn in functions().items():
+        if fid != AUTHORED:
+            continue
+        for cid, _, ids in fn["chapters"]:
+            lab = ROOT / "site" / "lab" / f"{ids[0]}.html"
+            m = re.search(r'href="(\.\./guide/function-a\.html#ch-[A-F]\d)"',
+                          lab.read_text() if lab.is_file() else "")
+            if m:
+                banners[ids[0]] = m.group(1)
     if len(banners) != len(chapters):
         bad.append(f"{len(banners)} lesson pages open with a chapter-guide "
                    f"link and there are {len(chapters)} chapters")
@@ -1641,6 +1716,8 @@ def page_shape_problems(want: dict) -> list[str]:
     for f, text in want.items():
         if f.parent != GUIDE:
             continue
+        if f == RUNSHEET:
+            continue                      # a run sheet, not a brochure
         if f.name == "index.html":
             n = text.count('class="bro-page"')
             if n != 2:
@@ -1692,7 +1769,7 @@ def main() -> int:
         print(f"\n{len(problems)} problem(s) in scripts/exercises/")
         return 1
 
-    want = {OUT: page(), MOVED: redirect_stub(),
+    want = {OUT: page(), RUNSHEET: runsheet_page(), MOVED: redirect_stub(),
             GUIDE / "index.html": index_page()}
     for fid in functions():
         if fid != AUTHORED:

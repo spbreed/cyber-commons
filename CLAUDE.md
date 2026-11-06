@@ -93,7 +93,7 @@ happened, and calls the audit skill rather than repeating it (§3).
 | | `site/assets/diagrams/*.svg` |
 | | `LIGHTBOARD.md` |
 | | `lesson-skills/*` — the skill a learner picks to do a lesson, from `build_lesson_skills.py` |
-| `scripts/exercises/guide_a.py` — the teaching notes for Function A | `site/guide/function-a.html`, from `build_guide.py` |
+| `scripts/exercises/guide_a.py` — the teaching notes for Function A | `site/guide/function-a.html` (the brochure) and `site/guide/function-a-run-sheet.html` (the run sheet, for teachers), from `build_guide.py` |
 | `scripts/exercises/lab_a.py` — Function A's hands-on steps: lanes, arrows, plain lines, the Python each step runs and what it prints | `site/lab/` — an index and one page per lesson (`A1.4.html`), plus `cybertravels.json` (each lesson's checkpoint, files stored once), from `build_lab.py` |
 | `scripts/exercises/guides.py` — the chapter notes for B–F, plus the intro and overview video narrative | `site/guide/function-{b…f}.html`, `site/guide/index.html`, the redirect at `site/teach/`, and the INTRO and OVERVIEW scripts in LIGHTBOARD.md |
 
@@ -158,7 +158,7 @@ python3 scripts/render_diagrams.py     # emitted DOT    -> site/assets/diagrams/
 python3 scripts/build_curriculum.py    # curriculum.json-> curriculum/track-*.md + README
 python3 scripts/build_site.py          # everything     -> site/lessons/
 python3 scripts/build_lightboard.py    # lessons        -> LIGHTBOARD.md
-python3 scripts/build_guide.py         # lessons+app    -> site/guide/ (7 pages)
+python3 scripts/build_guide.py         # lessons+app    -> site/guide/ (8 pages)
 python3 scripts/build_lab.py           # lab_a.py + checkpoints -> site/lab/
 ```
 
@@ -172,7 +172,16 @@ page says so and prints nothing. **No step asks a model anything**; where a
 lesson is about what a model proposes, the reader types the proposal, because a
 canned model answer is the substitution §4 forbids. Each lesson's *In your IDE*
 tab gives the same steps as one lab.py file, the lesson skill to link or copy, and
-`lesson.py`. Pyodide and PyJWT are pinned by exact URL; `ssl` and `sqlite3` are
+`lesson.py`. **The lab page is the lesson.** Function A has no lesson page any
+more: `site/lessons/A*.html` are generated redirects to the lab, and the lesson's
+own parts — why it matters, risk and control, the idea, Day 0/1/2, your turn,
+the chapter bridge, and the walkthrough where the lab does not already run it —
+are folded under the steps by `build_site.lab_sections`, closed until clicked.
+What the lab already shows (the steps' code and output, the skill, "what you
+just proved") is not repeated. `check_lessons.py`, `check_clarity.py` and
+`checkpoint.py --check` read the lab page for Function A; reading the redirect
+would pass sixteen lessons on no words. Function A's course guide is the
+brochure alone; its run sheet is its own page, addressed to teachers. Pyodide and PyJWT are pinned by exact URL; `ssl` and `sqlite3` are
 loaded separately because Pyodide ships them unvendored, and without `ssl`,
 `import jwt` fails and every identity step refuses for a false reason.
 

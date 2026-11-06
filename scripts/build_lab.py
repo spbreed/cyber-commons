@@ -330,6 +330,18 @@ ol.steps{list-style:none;margin:0;padding:0}
 .cell .out.err{border-color:#f0c4c4;background:#fff7f7;color:#7f1d1d}
 .cell .out:empty::before{content:"Output appears here when you press Run.";color:var(--text-faint);font-style:italic}
 .cell .mine{font-size:13.5px;color:var(--text-faint);margin:8px 2px 0}
+/* the lesson, folded */
+.lesson{padding:18px 22px 22px;border-top:1px solid var(--line-soft);background:#fcfdfe}
+.lesson h3{font-size:18px;margin:0 0 2px}
+.lesson>p{margin:0 0 10px;font-size:14.5px;color:var(--text-faint)}
+.lfold{border:1px solid var(--line-soft);border-radius:10px;background:#fff;margin:6px 0}
+.lfold summary{cursor:pointer;padding:9px 14px;font-weight:600;font-size:16px;color:var(--text)}
+.lfold[open] summary{border-bottom:1px solid var(--line-soft)}
+.lbody{padding:6px 16px 12px;font-size:15.5px;color:var(--text-dim);max-width:900px}
+.lbody pre{overflow:auto}
+.lbody table{border-collapse:collapse;width:100%;font-size:14.5px;margin:8px 0}
+.lbody th,.lbody td{border:1px solid var(--line-soft);padding:5px 8px;text-align:left;vertical-align:top}
+.lbody h2,.lbody h3{font-size:17px;margin:14px 0 6px}
 /* the IDE route */
 .ide{padding:18px 22px 22px}
 .ide h3{font-size:18px;margin:16px 0 6px}
@@ -642,7 +654,7 @@ def section(track: dict, s: dict, tid: str) -> str:
             f'<button type="button" data-m="run" aria-pressed="true">In your browser</button>'
             f'<button type="button" data-m="ide" aria-pressed="false">In your IDE</button></span></div>'
             f'<h2>{E(s["title"])}</h2><p>{E(lab["goal"])}</p>'
-            f'<div class="links"><a href="{ext_link(sid)}">Read the full lesson →</a>'
+            f'<div class="links"><a href="#lesson">The lesson behind this lab ↓</a>'
             f'<a href="../guide/function-a.html#ch-{E(track["id"])}">Course guide →</a></div></div>')
     bar = ('<div class="bar"><button type="button" class="reset" title="Start this lesson again">↺ Reset</button>'
            '<button type="button" class="prev" aria-label="Previous step">‹</button>'
@@ -657,7 +669,24 @@ def section(track: dict, s: dict, tid: str) -> str:
            f'{rows}</div>{bar}<ol class="steps">{steps}</ol></div>')
     return (f'<section class="lab" id="{sid}" data-tree="{tid}" data-mode="run" '
             f'aria-label="{sid} {E(s["title"])}">{head}{run}'
-            f'{ide_html(sid, s["title"], lab)}</section>')
+            f'{ide_html(sid, s["title"], lab)}{lesson_html(sid)}</section>')
+
+
+def lesson_html(sid: str) -> str:
+    """The lesson itself, folded under the lab.
+
+    Function A's lesson pages are gone; their content lives here, each part
+    closed until a reader opens it, so the page stays about the lab. Only what
+    the lab does not already show comes across — `build_site.lab_sections`
+    decides that, next to the lesson renderer it borrows from.
+    """
+    import build_site as BS
+    entry = next(e for e in BS.flatten() if e["s"]["id"] == sid)
+    folds = "".join(f'<details class="lfold"><summary>{E(h)}</summary>'
+                    f'<div class="lbody">{body}</div></details>'
+                    for h, body in BS.lab_sections(entry))
+    return (f'<div class="lesson" id="lesson"><h3>The lesson behind this lab</h3>'
+            f'<p>Open any part to read it.</p>{folds}</div>')
 
 
 def side(current: str | None) -> str:

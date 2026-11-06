@@ -704,6 +704,7 @@ table.md.kv th{width:30%;border-bottom:1px solid var(--line-soft);
   button.copy,.crumb{display:none!important}
   .runsheet{display:none}
   html[data-pdf="full"] .runsheet{display:block}
+  .runsheet.standalone{display:block}
 
   /* A tall page needs larger type than a screen does, or each section fills
      the top third and the rest is white. `zoom` scales the whole section,
@@ -820,3 +821,10 @@ table.md.kv th{width:30%;border-bottom:1px solid var(--line-soft);
   .bro-gc{font-size:11px!important;line-height:1.4}
   .bro-cols.two{grid-template-columns:1fr 1fr}
 }
+
+/* Function A's guide ends here; the run sheet is its own page for teachers. */
+.teachnote{margin:34px 0 48px;padding:18px 22px;border:1px solid var(--line);
+  border-left:4px solid var(--defend);border-radius:0 12px 12px 0;background:var(--s-cyan-bg)}
+.teachnote p{margin:6px 0;font-size:17px;color:var(--text-dim)}
+.teachnote b{color:var(--text)}
+.teachnote a{color:var(--defend);font-weight:600}

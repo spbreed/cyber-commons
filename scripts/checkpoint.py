@@ -305,18 +305,20 @@ def check(order: list[str]) -> list[str]:
     pages = ROOT / "site" / "lessons"
     if pages.is_dir():
         for sid in order:
-            page = pages / f"{sid}.html"
+            # Function A's lessons are read on their lab pages; the old lesson
+            # address is a redirect with nothing on it to check.
+            page = (ROOT / "site" / "lab" if sid.startswith("A") else pages) / f"{sid}.html"
             if not page.is_file():
                 continue
             found = set(asked.findall(page.read_text()))
             if not found:
                 problems.append(
-                    f"site/lessons/{sid}.html: no checkpoint command on the "
+                    f"{page.relative_to(ROOT)}: no checkpoint command on the "
                     f"page — a reader landing here has no way to get the tree "
                     f"as it stood")
             elif found != {sid}:
                 problems.append(
-                    f"site/lessons/{sid}.html: offers checkpoint "
+                    f"{page.relative_to(ROOT)}: offers checkpoint "
                     f"{sorted(found)} rather than its own")
 
     # 2 — every checkpoint parses

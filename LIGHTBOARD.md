@@ -702,7 +702,7 @@ You can save this guide as a PDF. Use the buttons at the top.
 
 ### A0.0 · Set up your computer — what this is, who it is for, and the model every lesson runs on
 
-Chapter A0 · lesson 1 of 2 · runs a skill · 403 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/A0.0.html)
+Chapter A0 · lesson 1 of 2 · runs a skill · 403 words, about 2.9 min spoken · [page](https://cybercommons.ai/lab/A0.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -760,7 +760,7 @@ Next up: A0.1, Nine words for an agent — harness to multi-agent, and where eac
 
 ### A0.1 · Nine words for an agent — harness to multi-agent, and where each is built
 
-Chapter A0 · lesson 2 of 2 · reading lesson · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A0.1.html)
+Chapter A0 · lesson 2 of 2 · reading lesson · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lab/A0.1.html)
 
 **① Open**
 
@@ -812,7 +812,7 @@ Next up: A1.0, What an agent is, and what you are about to build.
 
 ### A1.0 · What an agent is, and what you are about to build
 
-Chapter A1 · lesson 1 of 8 · runs a skill · 500 words, about 3.6 min spoken · [page](https://cybercommons.ai/lessons/A1.0.html)
+Chapter A1 · lesson 1 of 8 · runs a skill · 500 words, about 3.6 min spoken · [page](https://cybercommons.ai/lab/A1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -874,7 +874,7 @@ Next up: A1.1, The loop — model, tools, and the step that turns text into an a
 
 ### A1.1 · The loop — model, tools, and the step that turns text into an action
 
-Chapter A1 · lesson 2 of 8 · runs a skill · 295 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/A1.1.html)
+Chapter A1 · lesson 2 of 8 · runs a skill · 295 words, about 2.1 min spoken · [page](https://cybercommons.ai/lab/A1.1.html)
 
 **① Open**
 
@@ -926,7 +926,7 @@ Next up: A1.2, Tools over MCP — a resource server, and why it is a separate pr
 
 ### A1.2 · Tools over MCP — a resource server, and why it is a separate process
 
-Chapter A1 · lesson 3 of 8 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.2.html)
+Chapter A1 · lesson 3 of 8 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/A1.2.html)
 
 **① Open**
 
@@ -978,7 +978,7 @@ Next up: A1.3, Identity — the human, the workload, and the call.
 
 ### A1.3 · Identity — the human, the workload, and the call
 
-Chapter A1 · lesson 4 of 8 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.3.html)
+Chapter A1 · lesson 4 of 8 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/A1.3.html)
 
 **① Open**
 
@@ -1030,7 +1030,7 @@ Next up: A1.4, Delegation — one token per action.
 
 ### A1.4 · Delegation — one token per action
 
-Chapter A1 · lesson 5 of 8 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.4.html)
+Chapter A1 · lesson 5 of 8 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/A1.4.html)
 
 **① Open**
 
@@ -1082,7 +1082,7 @@ Next up: A1.5, Memory — what it remembers, and where that came from.
 
 ### A1.5 · Memory — what it remembers, and where that came from
 
-Chapter A1 · lesson 6 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A1.5.html)
+Chapter A1 · lesson 6 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/A1.5.html)
 
 **① Open**
 
@@ -1134,7 +1134,7 @@ Next up: A1.6, Agent to agent — handing work over without laundering authority
 
 ### A1.6 · Agent to agent — handing work over without laundering authority
 
-Chapter A1 · lesson 7 of 8 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A1.6.html)
+Chapter A1 · lesson 7 of 8 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/A1.6.html)
 
 **① Open**
 
@@ -1186,7 +1186,7 @@ Next up: A1.7, The human gate, and the budget that stops the loop.
 
 ### A1.7 · The human gate, and the budget that stops the loop
 
-Chapter A1 · lesson 8 of 8 · runs a skill · 395 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/A1.7.html)
+Chapter A1 · lesson 8 of 8 · runs a skill · 395 words, about 2.8 min spoken · [page](https://cybercommons.ai/lab/A1.7.html)
 
 **① Open**
 
@@ -1246,7 +1246,7 @@ Next up: A2.0, Why a demo is not a system — the harness around the loop.
 
 ### A2.0 · Why a demo is not a system — the harness around the loop
 
-Chapter A2 · lesson 1 of 6 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/A2.0.html)
+Chapter A2 · lesson 1 of 6 · runs a skill · 254 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/A2.0.html)
 
 **① Open**
 
@@ -1298,7 +1298,7 @@ Next up: A2.1, Observability — the run as spans.
 
 ### A2.1 · Observability — the run as spans
 
-Chapter A2 · lesson 2 of 6 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.1.html)
+Chapter A2 · lesson 2 of 6 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/A2.1.html)
 
 **① Open**
 
@@ -1350,7 +1350,7 @@ Next up: A2.2, The audit trail, and the four questions it has to answer.
 
 ### A2.2 · The audit trail, and the four questions it has to answer
 
-Chapter A2 · lesson 3 of 6 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/A2.2.html)
+Chapter A2 · lesson 3 of 6 · runs a skill · 269 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/A2.2.html)
 
 **① Open**
 
@@ -1402,7 +1402,7 @@ Next up: A2.3, Evaluating what you built, before anybody attacks it.
 
 ### A2.3 · Evaluating what you built, before anybody attacks it
 
-Chapter A2 · lesson 4 of 6 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/A2.3.html)
+Chapter A2 · lesson 4 of 6 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/A2.3.html)
 
 **① Open**
 
@@ -1454,7 +1454,7 @@ Next up: A2.4, Evaluating the agent's behaviour — tool calls, outputs, and the
 
 ### A2.4 · Evaluating the agent's behaviour — tool calls, outputs, and the model as judge
 
-Chapter A2 · lesson 5 of 6 · runs a skill · 322 words, about 2.3 min spoken · [page](https://cybercommons.ai/lessons/A2.4.html)
+Chapter A2 · lesson 5 of 6 · runs a skill · 322 words, about 2.3 min spoken · [page](https://cybercommons.ai/lab/A2.4.html)
 
 **① Open**
 
@@ -1506,7 +1506,7 @@ Next up: A2.5, What you have built — and every way it can now go wrong.
 
 ### A2.5 · What you have built — and every way it can now go wrong
 
-Chapter A2 · lesson 6 of 6 · runs a skill · 367 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/A2.5.html)
+Chapter A2 · lesson 6 of 6 · runs a skill · 367 words, about 2.6 min spoken · [page](https://cybercommons.ai/lab/A2.5.html)
 
 **① Open**
 
