@@ -1068,55 +1068,74 @@ QUIZ = [
 
 
 def quest_block() -> str:
-    """The quest: Function A's labs as a map, with progress kept in the browser.
+    """The home page's one panel: run it here, run it at home, progress, a quiz.
 
-    Students asked for a reason to come back to the second lesson. Progress is
-    the reader's own browser storage — no account, nothing sent anywhere — and
-    the lab pages write it when a step runs. Without JavaScript this is a plain
-    list of links and a quiz with its answers folded, so nothing is hidden.
+    It used to be three things stacked down the page — an explainer animation,
+    a sixteen-row lab map with badges, and a three-question quiz — which put the
+    first section about the threat a full screen below the fold. Now it is one
+    panel of four scenes in the hero, cycling until the reader touches it.
+    Progress is the reader's own browser storage, written by the lab pages as
+    steps run; no account, nothing sent anywhere, and no score — progress is
+    labs done. Without JavaScript the four scenes sit as a still grid, the quiz
+    with its answers folded.
     """
     from exercises.labs import MODULES
     fns = [f for f in CUR["functions"] if f["id"] in MODULES]
-    rows = []
-    for t in (t for f in fns for t in f["tracks"]):
-        nodes = "".join(
-            f'<a class="qn" href="lab/{s["id"]}.html" data-l="{s["id"]}" '
-            f'title="{html.escape(s["title"])}"><b>{s["id"]}</b>'
-            f'<span>{html.escape(s["title"])}</span></a>' for s in t["sessions"])
-        rows.append(f'<div class="qrow"><div class="qch"><b>{t["id"]}</b> '
-                    f'{html.escape(t["title"].split(" — ")[0])}</div>'
-                    f'<div class="qnodes">{nodes}</div></div>')
+    tracks = [t for f in fns for t in f["tracks"]]
+    total = sum(len(t["sessions"]) for t in tracks)
+    names = {"A0": "Set up", "A1": "Builder", "A2": "Harness engineer",
+             "B1": "Risk spotter", "B2": "Identity keeper", "B3": "Runtime guard"}
+    badges = ([("first", "First run")]
+              + [(t["id"], names.get(t["id"], t["id"])) for t in tracks]
+              + [("local", "Took it local"), ("quiz", "Sharp eye")])
+    order = [s["id"] for t in tracks for s in t["sessions"]]
     qs = []
     for i, (q, opts, right, sid, why) in enumerate(QUIZ):
         btns = "".join(f'<button type="button" data-o="{k}">{html.escape(o)}</button>'
                        for k, o in enumerate(opts))
         qs.append(f'<div class="qq" data-q="{i}" data-a="{right}"><p class="qt">'
-                  f'<b>{i + 1}.</b> {html.escape(q)}</p><div class="qo">{btns}</div>'
+                  f'{html.escape(q)}</p><div class="qo">{btns}</div>'
                   f'<details class="qa"><summary>Answer</summary><p><b>'
                   f'{html.escape(opts[right])}.</b> {html.escape(why)} '
                   f'<a href="lab/{sid}.html">Run it in {sid} →</a></p></details></div>')
-    names = {"A0": "Set up", "A1": "Builder", "A2": "Harness engineer",
-             "B1": "Risk spotter", "B2": "Identity keeper", "B3": "Runtime guard"}
-    badges = ([("first", "First run", "Run one step in a lab")]
-              + [(t["id"], names.get(t["id"], t["id"]), f"Finish chapter {t['id']}")
-                 for f in fns for t in f["tracks"]]
-              + [("local", "Took it local", "Copy a command from In your IDE"),
-                 ("quiz", "Sharp eye", "Get all three right")])
-    bd = "".join(f'<li data-b="{k}"><i aria-hidden="true">★</i><b>{html.escape(n)}</b>'
-                 f'<span>{html.escape(d)}</span></li>' for k, n, d in badges)
-    return (f'<div class="quest" id="quest">'
-            f'<div class="hud"><div class="lvl"><span>Level</span><b data-hud="level">Visitor</b></div>'
-            f'<div class="xp"><div class="xpl"><span>Progress</span>'
-            f'<em data-hud="labs">0 of {sum(len(t["sessions"]) for f in fns for t in f["tracks"])} labs</em></div>'
-            f'<div class="bar"><i data-hud="bar"></i></div></div>'
-            f'<a class="go" data-hud="next" href="lab/A0.0.html">Start the first lab ▶</a></div>'
-            f'<div class="qmap">{"".join(rows)}</div>'
-            f'<div class="qcols"><div class="quiz"><h3>60-second challenge</h3>'
-            f'<p>Three questions. Each answer is something you can run.</p>{"".join(qs)}</div>'
-            f'<div class="badges"><h3>Badges</h3><ul>{bd}</ul>'
-            f'<p class="note">Progress stays in this browser. No account, nothing '
-            f'is sent anywhere.</p></div></div></div>')
-
+    tabs = ["Run in your browser", "Run on your machine", "Your progress",
+            "60-second challenge"]
+    return (
+        f'<figure class="mg" id="quest" aria-label="How the labs work">'
+        f'<div class="mg-tabs" role="tablist">'
+        + "".join(f'<button type="button" role="tab" data-s="{k}"><b>{k + 1}</b>{t}</button>'
+                  for k, t in enumerate(tabs))
+        + '</div><div class="mg-frame" data-scene="0">'
+        # 1 — the browser
+        '<div class="mg-scene s0"><div class="win"><div class="chrome"><i></i><i></i><i></i>'
+        '<span>cybercommons.ai/lab/A1.4</span><em class="playbtn">▶ Play</em></div>'
+        '<div class="lanes4"><span>Person</span><span>Agent</span><span>Token exchange</span>'
+        '<span>Payments</span></div><div class="arr a1"></div><div class="arr a2"></div>'
+        '<pre class="out"><span class="t1">dana  -&gt; REFUSED: role \'traveller\' may not delegate</span>'
+        '<span class="t2">priya -&gt; minted</span></pre></div>'
+        '<p class="cap">Real Python, running in this tab. Change it and run it again. '
+        '<a href="lab/A1.4.html">Try A1.4 ▶</a></p></div>'
+        # 2 — the reader's own machine
+        '<div class="mg-scene s1"><div class="win ide"><div class="chrome"><i></i><i></i><i></i>'
+        '<span>your terminal</span></div><pre class="term">'
+        '<span class="t1">$ python3 scripts/install_skills.py --all --lessons A1.4</span>'
+        '<span class="t2">$ claude   &gt; /a1-4-one-token-per-action</span>'
+        '<span class="t3">dana  -&gt; REFUSED</span><span class="t4">priya -&gt; minted</span>'
+        '<span class="t5 ok">✓ ran on your machine</span></pre></div>'
+        '<p class="cap">The same steps on your machine, or as a skill in the AI tool you use. '
+        '<a href="lab/A0.0.html">Set up ▶</a></p></div>'
+        # 3 — progress
+        f'<div class="mg-scene s2"><div class="card hud"><div class="hrow">'
+        f'<div><span class="k">Level</span><b data-hud="level">Visitor</b></div>'
+        f'<div class="grow"><span class="k">Progress</span><div class="bar"><i data-hud="bar"></i></div>'
+        f'<em data-hud="labs">0 of {total} labs</em></div>'
+        f'<a class="go" data-hud="next" data-order="{" ".join(order)}" href="lab/A0.0.html">Start with A0.0 ▶</a></div>'
+        f'<ul class="bdg">' + "".join(f'<li data-b="{k}">★ {html.escape(n)}</li>' for k, n in badges)
+        + '</ul><p class="note">Kept in this browser only. No account, nothing sent.</p></div></div>'
+        # 4 — the challenge
+        f'<div class="mg-scene s3"><div class="card quiz">{"".join(qs)}'
+        f'<button type="button" class="qnext">Next question →</button></div></div>'
+        '</div></figure>')
 
 def intro_block() -> str:
     """The home page's introductory video, or the space reserved for it.
@@ -1276,11 +1295,12 @@ def homepage(src: str) -> str:
     _, tail = rest.split(DAY_END, 1)
     src = f"{head}{DAY_BEGIN}\n{days_block()}\n{DAY_END}{tail}"
 
-    if INTRO_BEGIN not in src or INTRO_END not in src:
-        raise SystemExit("site/index.html has lost its INTRO markers")
-    head, rest = src.split(INTRO_BEGIN, 1)
-    _, tail = rest.split(INTRO_END, 1)
-    src = f"{head}{INTRO_BEGIN}\n{intro_block()}\n{INTRO_END}{tail}"
+    # The intro video's slot. Optional now: the home page's hero carries the
+    # labs panel instead, and a video slot nobody asked for is real estate.
+    if INTRO_BEGIN in src and INTRO_END in src:
+        head, rest = src.split(INTRO_BEGIN, 1)
+        _, tail = rest.split(INTRO_END, 1)
+        src = f"{head}{INTRO_BEGIN}\n{intro_block()}\n{INTRO_END}{tail}"
 
     if QUEST_BEGIN not in src or QUEST_END not in src:
         raise SystemExit("site/index.html has lost its QUEST markers")

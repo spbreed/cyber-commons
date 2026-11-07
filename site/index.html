@@ -116,7 +116,6 @@
   /* The hero player runs the full width of the page under the pitch. Beside
      the headline it squeezed the title into a narrow column and left the
      space under it empty; a recording that is the introduction gets the room. */
-  .hero .video{max-width:none;margin-top:40px;box-shadow:0 18px 50px rgba(13,27,38,.18)}
   .video .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
   .video .ph{position:absolute;inset:0;display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:11px;text-align:center;
@@ -137,112 +136,90 @@
   .video .cap code{font-size:11px;color:var(--text-dim)}
 
 
-  /* ---- 00 · learn by doing: the explainer ---- */
-  .mg{margin:28px 0 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0d1b26}
-  .mg-frame{position:relative;aspect-ratio:16/8;overflow:hidden;
-    background:radial-gradient(120% 90% at 20% 10%,#16384a 0,#0d1b26 60%)}
+  /* ---- the labs panel in the hero: four scenes, one frame ---- */
+  /* Beside the pitch on a wide screen, so the hero is one screen tall. */
+  @media(min-width:1100px){
+    .hero .wrap:has(#quest){display:grid;grid-template-columns:minmax(0,1fr) 560px;column-gap:44px;align-items:center}
+    .hero .wrap:has(#quest)>*{grid-column:1}
+    .hero .wrap:has(#quest)>#quest{grid-column:2;grid-row:1/span 4;margin:0}
+    .hero .wrap:has(#quest) h1{font-size:clamp(34px,3.6vw,50px)}
+    .mg-tabs button{font-size:13px;padding:5px 9px}
+  }
+  .mg{margin:30px 0 0;border:1px solid #1d3646;border-radius:16px;overflow:hidden;background:#0d1b26}
+  .mg-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:8px;background:#0f2230;border-bottom:1px solid #1d3646}
+  .mg-tabs button{font:inherit;font-size:14.5px;font-weight:600;color:#a9c3d1;background:transparent;border:0;
+    border-radius:8px;padding:6px 12px;cursor:pointer;display:flex;align-items:center;gap:8px}
+  .mg-tabs button b{width:20px;height:20px;border-radius:50%;background:#1d3646;color:#cfe3ec;font-size:12px;
+    display:inline-flex;align-items:center;justify-content:center}
+  .mg-tabs button[aria-selected=true]{background:#16384a;color:#fff}
+  .mg-tabs button[aria-selected=true] b{background:#22d3ee;color:#0d1b26}
+  .mg-frame{position:relative;height:330px;overflow:hidden;
+    background:radial-gradient(120% 90% at 20% 10%,#16384a 0,#0d1b26 60%);background-color:#0d1b26}
   .mg-scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    gap:14px;padding:24px;opacity:0;transform:scale(.97);transition:opacity .5s,transform .5s}
+    gap:12px;padding:18px;opacity:0;visibility:hidden;transform:scale(.98);transition:opacity .45s,transform .45s}
   .mg-frame[data-scene="0"] .s0,.mg-frame[data-scene="1"] .s1,.mg-frame[data-scene="2"] .s2,
-  .mg-frame[data-scene="3"] .s3{opacity:1;transform:none}
-  .mg .cap{margin:0;color:#e6f3f8;font-size:clamp(16px,2.2vw,22px);font-weight:600}
-  .mg .cap b{display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--accent);
-    color:#fff;align-items:center;justify-content:center;font-size:15px;margin-right:8px}
-  .win{width:min(640px,92%);background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.35);position:relative}
+  .mg-frame[data-scene="3"] .s3{opacity:1;visibility:visible;transform:none}
+  .mg .cap{margin:0;color:#e6f3f8;font-size:16px;font-weight:600;text-align:center}
+  .mg .cap a{color:#a5f3fc;margin-left:6px;text-decoration:none}
+  .win{width:min(620px,94%);background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.35)}
   .win.ide{background:#0a141c;border:1px solid #23394a}
-  .chrome{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#eef3f7;border-bottom:1px solid #d9e3ea}
+  .chrome{display:flex;gap:6px;align-items:center;padding:7px 10px;background:#eef3f7;border-bottom:1px solid #d9e3ea}
   .win.ide .chrome{background:#13232f;border-color:#23394a}
   .chrome i{width:9px;height:9px;border-radius:50%;background:#c9d6df}
-  .chrome span{margin-left:10px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:#475a6b}
+  .chrome span{margin-left:8px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:#475a6b}
   .win.ide .chrome span{color:#8fb3c6}
-  .pick{padding:12px 16px;display:grid;gap:6px;font-size:15px;color:#34495a}
-  .pick div{padding:6px 10px;border-radius:7px;border:1px solid #e6eef4}
-  .s0 .pick .hit{animation:hit 2.4s .6s both}
-  @keyframes hit{0%{background:#fff}40%,100%{background:#cdeaf2;border-color:#0e7490;color:#0d1b26;font-weight:600}}
-  .lanes4{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-weight:700;font-size:13px;
-    color:#0d1b26;padding:10px 8px 6px;border-bottom:2px solid #d3e0e9}
-  .arr{height:2px;background:#0e7490;margin:14px 0 0;transform-origin:left;transform:scaleX(0)}
+  .playbtn{margin-left:auto;font-style:normal;background:#0e7490;color:#fff;font-weight:600;font-size:12.5px;padding:2px 10px;border-radius:6px}
+  .lanes4{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-weight:700;font-size:12.5px;
+    color:#0d1b26;padding:8px 6px 5px;border-bottom:2px solid #d3e0e9}
+  .arr{height:2px;background:#0e7490;margin:11px 0 0;transform-origin:left;transform:scaleX(0)}
   .arr.a1{margin-left:37.5%;width:25%}.arr.a2{margin-left:62.5%;width:25%}
-  .s1 .arr.a1{animation:draw .6s 1.4s forwards}.s1 .arr.a2{animation:draw .6s 2.1s forwards}
+  .s0 .arr.a1{animation:draw .6s .6s forwards}.s0 .arr.a2{animation:draw .6s 1.2s forwards}
   @keyframes draw{to{transform:scaleX(1)}}
-  .playbtn{position:absolute;right:10px;top:4px;background:#0e7490;color:#fff;font-weight:600;font-size:13px;
-    padding:4px 12px;border-radius:7px;animation:press 1s .5s both}
-  @keyframes press{40%{transform:scale(.88)}100%{transform:none}}
-  .mg pre{margin:12px;padding:10px 12px;border-radius:8px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;
-    line-height:1.7;white-space:pre-wrap;min-height:64px}
+  .mg pre{margin:10px;padding:8px 10px;border-radius:8px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.65;min-height:52px}
   .mg pre.out{background:#f6f9fb;color:#0d1b26;border:1px solid #e6eef4}
   .mg pre.term{background:transparent;color:#d7e6ee}
-  .mg pre span{display:block;opacity:0;white-space:pre}
-  .s1 .t1{animation:type .4s 2.8s forwards}.s1 .t2{animation:type .4s 3.3s forwards}
-  .s2 .t1{animation:type .4s .6s forwards}.s2 .t2{animation:type .4s 1.7s forwards}.s2 .t3{animation:type .4s 2.6s forwards}
-  .s3 .t1{animation:type .4s .5s forwards}.s3 .t2{animation:type .4s 1s forwards}.s3 .t3{animation:type .4s 1.8s forwards}
+  .mg pre span{display:block;opacity:0;white-space:pre-wrap}
+  .s0 .t1{animation:type .4s 1.8s forwards}.s0 .t2{animation:type .4s 2.2s forwards}
+  .s1 .t1{animation:type .4s .3s forwards}.s1 .t2{animation:type .4s 1.1s forwards}.s1 .t3{animation:type .4s 1.9s forwards}
+  .s1 .t4{animation:type .4s 2.2s forwards}.s1 .t5{animation:type .4s 2.8s forwards}
   .mg .ok{color:#6ee7b7;font-weight:600}
   @keyframes type{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
-  .xpop{position:absolute;right:14px;bottom:14px;background:#a7f3d0;color:#064e3b;font-weight:700;font-size:13px;
-    padding:5px 12px;border-radius:999px;opacity:0;animation:pop .5s 2.4s forwards}
-  @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.8)}to{opacity:1;transform:none}}
-  .mg-ctl{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0f2230;border-top:1px solid #1d3646}
-  .mg-ctl button{font:inherit;cursor:pointer}
-  .mg-pp{background:transparent;border:1px solid #2d4a5c;color:#cfe3ec;border-radius:7px;padding:2px 10px}
-  .mg-dots{display:flex;gap:6px}
-  .mg-dots button{width:26px;height:6px;border-radius:3px;border:0;background:#2d4a5c;padding:0}
-  .mg-dots button[aria-current=true]{background:#22d3ee}
-  .mg-try{margin-left:auto;color:#a5f3fc;text-decoration:none;font-weight:600}
-  /* No script, or reduced motion: the four scenes as a still strip. */
-  html:not(.js) .mg-frame,.mg-frame.still{aspect-ratio:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;padding:8px}
-  html:not(.js) .mg-scene,.mg-frame.still .mg-scene{position:static;opacity:1;transform:none}
-  html:not(.js) .mg pre span,.mg-frame.still pre span,.mg-frame.still .xpop{opacity:1;animation:none}
-  .mg-frame.still .arr{transform:none;animation:none}
-  html:not(.js) .mg-ctl{display:none}
-  @media (max-width:640px){.mg-frame{aspect-ratio:4/5}.mg .cap{font-size:16px}}
-
-  /* ---- the quest ---- */
-  .qh{font-size:22px;margin:40px 0 12px}
-  .quest .hud{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:14px 18px;border:1px solid var(--line);
-    border-radius:14px;background:linear-gradient(90deg,#f0fbfe,#fff);background-color:#f0fbfe}
-  .hud .lvl span,.hud .xpl span{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;
-    text-transform:uppercase;color:var(--text-faint)}
-  .hud .lvl b{font-size:20px}
-  .hud .xp{flex:1;min-width:220px}
-  .hud .xpl{display:flex;gap:10px;align-items:baseline}
-  .hud .xpl b{font-size:20px}.hud .xpl em{font-style:normal;color:var(--text-faint);font-size:14px;margin-left:auto}
-  .hud .bar{height:10px;border-radius:5px;background:#e3edf3;overflow:hidden;margin-top:6px}
+  .mg .card{width:min(720px,96%);background:#fff;border-radius:12px;padding:16px 18px;color:var(--text);box-shadow:0 18px 50px rgba(0,0,0,.3)}
+  .hud .hrow{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .hud .k{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-faint)}
+  .hud .hrow b{font-size:20px}
+  .hud .grow{flex:1;min-width:200px}
+  .hud .bar{height:10px;border-radius:5px;background:#e3edf3;overflow:hidden;margin:6px 0 4px}
   .hud .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#0891b2,#0e7490);transition:width .8s}
+  .hud em{font-style:normal;color:var(--text-faint);font-size:14px}
   .hud .go{background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:9px}
-  .qmap{margin-top:14px;display:grid;gap:10px}
-  .qrow{display:grid;grid-template-columns:170px 1fr;gap:12px;align-items:center}
-  .qch{font-size:14.5px;color:var(--text-dim)}.qch b{color:var(--text);font-family:"IBM Plex Mono",monospace}
-  .qnodes{display:flex;flex-wrap:wrap;gap:8px}
-  .qn{position:relative;display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border:1px solid var(--line);
-    border-radius:999px;background:#fff;text-decoration:none;color:var(--text-dim);font-size:14px;transition:transform .15s,border-color .15s}
-  .qn:hover{transform:translateY(-2px);border-color:var(--accent)}
-  .qn b{width:40px;height:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;
-    font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:#eef3f7;color:var(--text-dim)}
-  .qn span{max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .qn.done{border-color:#6fb59a;background:#f1fbf7}.qn.done b{background:#047857;color:#fff}
-  .qn.next{border-color:var(--accent);box-shadow:0 0 0 3px #cdeaf2}
-  .qcols{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:18px;margin-top:22px}
-  .quiz,.badges{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff}
-  .quiz h3,.badges h3{font-size:19px;margin:0 0 4px}
-  .quiz>p,.badges .note{margin:0 0 10px;color:var(--text-faint);font-size:14.5px}
-  .qq{border-top:1px solid var(--line-soft);padding:10px 0}
-  .qt{margin:0 0 8px;color:var(--text)}
+  .bdg{list-style:none;margin:14px 0 6px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .bdg li{font-size:13.5px;border:1px dashed var(--line);border-radius:999px;padding:3px 10px;color:var(--text-faint)}
+  .bdg li.got{border:1px solid #6fb59a;background:#f1fbf7;color:#065f46;font-weight:600}
+  .hud .note{margin:0;font-size:13px;color:var(--text-faint)}
+  .quiz .qq{display:none}.quiz .qq.on{display:block}
+  .qt{margin:0 0 10px;font-weight:600;font-size:16.5px}
   .qo{display:flex;flex-wrap:wrap;gap:6px}
   .qo button{font:inherit;font-size:14.5px;text-align:left;border:1px solid var(--line);background:#f6f9fb;
     color:var(--text-dim);border-radius:9px;padding:6px 12px;cursor:pointer}
   .qo button:hover{border-color:var(--accent)}
   .qo button.right{background:#d1fae5;border-color:#047857;color:#064e3b}
   .qo button.wrong{background:#fdecec;border-color:#b91c1c;color:#7f1d1d}
-  .qa{margin-top:6px;font-size:14.5px;color:var(--text-dim)}.qa summary{cursor:pointer;color:var(--accent)}
-  .badges ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .badges li{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;color:var(--text-faint);font-size:13px;line-height:1.35}
-  .badges li i{font-style:normal;color:#c3ced8;font-size:18px;margin-right:6px}
-  .badges li b{color:var(--text-dim);font-size:14.5px}.badges li span{display:block}
-  .badges li.got{border:1px solid #6fb59a;background:#f1fbf7}.badges li.got i{color:#047857}
-  .badges li.got b{color:var(--text)}
+  .qa{margin-top:8px;font-size:14.5px;color:var(--text-dim)}.qa summary{cursor:pointer;color:var(--accent)}
+  .qnext{margin-top:10px;font:inherit;font-size:14px;border:0;background:transparent;color:var(--accent);font-weight:600;cursor:pointer;padding:0}
   .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0d1b26;color:#fff;
-    padding:10px 18px;border-radius:999px;font-weight:600;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-  @media (max-width:760px){.qrow{grid-template-columns:1fr}.qcols{grid-template-columns:1fr}.badges ul{grid-template-columns:1fr}}
+    padding:10px 18px;border-radius:999px;font-weight:600;z-index:90}
+  /* No script, or reduced motion: every scene, still, in a grid. */
+  html:not(.js) .mg-frame,.mg-frame.still{height:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;padding:10px}
+  html:not(.js) .mg-scene,.mg-frame.still .mg-scene{position:static;opacity:1;visibility:visible;transform:none}
+  html:not(.js) .mg pre span,.mg-frame.still pre span{opacity:1;animation:none}
+  html:not(.js) .arr,.mg-frame.still .arr{transform:none;animation:none}
+  html:not(.js) .quiz .qq{display:block;margin-bottom:12px}
+  html:not(.js) .mg-tabs,html:not(.js) .qnext{display:none}
+  .mg-scene.s3{justify-content:flex-start;overflow:auto}
+  .mg-scene.s3 .card{margin:auto 0}
+  @media (max-width:640px){.mg-frame{height:400px}.lanes4{font-size:11px}.mg .cap{font-size:14.5px}
+    .mg-tabs{display:grid;grid-template-columns:1fr 1fr}.mg-tabs button{font-size:12.5px;padding:5px 6px}}
   .btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
   .btn{font-family:"IBM Plex Mono";font-size:14px;text-decoration:none;padding:15px 26px;
     border-radius:10px;display:inline-block;
@@ -366,6 +343,7 @@
   <div class="wrap nav-in">
     <a class="brand" href="#top"><img src="assets/logo-mark.png" alt="Cyber Commons"><span class="bt"><span>Cyber&nbsp;<b>Commons</b></span><small>Navigating Cyber Singularity</small></span></a>
     <nav class="nav-links">
+      <a href="lab/index.html">Labs</a>
       <a href="#gap">The gap</a>
       <a href="#mission">Mission</a>
       <a href="#tracks">Tracks</a>
@@ -385,64 +363,17 @@
   <div class="wrap">
     <span class="eyebrow">Open source · Practitioner-curated · Free</span>
     <h1>Learn how to <span class="a">transform your security team</span> with AI — because <span class="b">attackers already have</span>.</h1>
-    <p class="lede">Free, open training for security teams. Six tracks: the first builds an agentic system, and the other five each take <b>one part of a security organisation</b> — architecture and infrastructure, application security, offensive security, the SOC and governance — to show you <b>how that work changes when agents do it</b>. You also learn how to secure the AI itself. Every lesson runs on your own computer, in the AI tool you already use.</p>
+    <p class="lede">Free, open training for security teams, in six tracks: one builds an agentic system, and five take <b>one part of a security organisation</b> each — architecture, application security, offensive security, the SOC and governance — and show <b>how that work changes when agents do it</b>. Every lesson is a lab. <b>Run it in your browser, then on your own machine.</b></p>
     <div class="btns">
-      <a class="btn p" href="lab/A0.0.html">Start the first lesson →</a>
+      <a class="btn p" href="lab/A0.0.html">Start in your browser ▶</a>
       <a class="btn g" href="lessons/index.html">Browse all <span data-n="sessions">149</span> lessons</a>
-      <a class="btn g" href="lab/index.html">Try it in your browser ▶</a>
     </div>
 
-    <!-- INTRO:BEGIN — generated by scripts/build_site.py, do not hand-edit -->
-<div class="video"><div class="frame"><iframe src="https://www.youtube-nocookie.com/embed/N_fiKcmZ9Eg" title="Cyber Commons — what this is, and how to use it" loading="lazy" allowfullscreen allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe></div><div class="cap"><span>Introduction</span><a href="https://youtu.be/N_fiKcmZ9Eg" target="_blank" rel="noopener">Open on YouTube ↗</a></div></div>
-<!-- INTRO:END -->
-
-  </div>
-</div>
-
-<!-- ================= 0 · LEARN BY DOING ================= -->
-<section class="sec" id="play">
-  <div class="wrap">
-    <span class="eyebrow">00 / Learn by doing</span>
-    <h2>Run it in your browser. Then run it on your own machine.</h2>
-    <p class="say">Every lesson in Functions A and B is a lab. Press <b>Play</b> and real Python runs in this browser, step by step, against the real CyberTravels code. Then copy the same steps into your own IDE and run them there. <b>Watching is not the lesson. Running it is.</b></p>
-
-    <!-- The explainer. Four scenes on a loop, driven by a class the script
-         below sets. Without the script, or with reduced motion asked for, the
-         four scenes sit side by side as a still strip and say the same thing. -->
-    <figure class="mg rv" aria-label="How a lab works: pick a lab, run it in your browser, take it to your IDE, run it on your machine.">
-      <div class="mg-frame" data-scene="0">
-        <div class="mg-scene s0">
-          <div class="win"><div class="chrome"><i></i><i></i><i></i><span>cybercommons.ai/lab</span></div>
-            <div class="pick"><div>A0.0 Set up your computer</div><div>A1.1 The agent loop</div><div class="hit">A1.4 One token per action</div><div>A1.5 Memory</div></div></div>
-          <p class="cap"><b>1</b> Pick a lab</p></div>
-        <div class="mg-scene s1">
-          <div class="win"><div class="chrome"><i></i><i></i><i></i><span>cybercommons.ai/lab/A1.4</span></div>
-            <div class="lanes4"><span>Person</span><span>Agent</span><span>Token exchange</span><span>Payments</span></div>
-            <div class="arr a1"></div><div class="arr a2"></div>
-            <div class="playbtn">▶ Play</div>
-            <pre class="out"><span class="t1">dana  -&gt; REFUSED: role 'traveller' may not delegate</span><span class="t2">priya -&gt; minted</span></pre></div>
-          <p class="cap"><b>2</b> Press Play. It runs in your browser</p></div>
-        <div class="mg-scene s2">
-          <div class="win ide"><div class="chrome"><i></i><i></i><i></i><span>your IDE · terminal</span></div>
-            <pre class="term"><span class="t1">$ python3 scripts/install_skills.py --all --lessons A1.4</span><span class="t2">$ claude</span><span class="t3">&gt; /a1-4-one-token-per-action</span></pre></div>
-          <p class="cap"><b>3</b> Copy it into your IDE</p></div>
-        <div class="mg-scene s3">
-          <div class="win ide"><div class="chrome"><i></i><i></i><i></i><span>your machine</span></div>
-            <pre class="term"><span class="t1">dana  -&gt; REFUSED</span><span class="t2">priya -&gt; minted</span><span class="t3 ok">✓ ran on your machine</span></pre>
-            <div class="xpop">✓ Badge: Took it local</div></div>
-          <p class="cap"><b>4</b> Run it yourself. That is the lesson</p></div>
-      </div>
-      <div class="mg-ctl"><button type="button" class="mg-pp" aria-label="Pause">❚❚</button>
-        <span class="mg-dots"><button type="button" data-s="0" aria-label="Scene 1"></button><button type="button" data-s="1" aria-label="Scene 2"></button><button type="button" data-s="2" aria-label="Scene 3"></button><button type="button" data-s="3" aria-label="Scene 4"></button></span>
-        <a class="mg-try" href="lab/A1.4.html">Try A1.4 now ▶</a></div>
-    </figure>
-
-    <h3 class="qh">Your quest: every hands-on lab</h3>
 <!-- QUEST:BEGIN — generated by scripts/build_site.py, do not hand-edit -->
-<div class="quest" id="quest"><div class="hud"><div class="lvl"><span>Level</span><b data-hud="level">Visitor</b></div><div class="xp"><div class="xpl"><span>Progress</span><em data-hud="labs">0 of 55 labs</em></div><div class="bar"><i data-hud="bar"></i></div></div><a class="go" data-hud="next" href="lab/A0.0.html">Start the first lab ▶</a></div><div class="qmap"><div class="qrow"><div class="qch"><b>A0</b> Set Up</div><div class="qnodes"><a class="qn" href="lab/A0.0.html" data-l="A0.0" title="Set up your computer"><b>A0.0</b><span>Set up your computer</span></a><a class="qn" href="lab/A0.1.html" data-l="A0.1" title="9 agent concepts you need to know"><b>A0.1</b><span>9 agent concepts you need to know</span></a></div></div><div class="qrow"><div class="qch"><b>A1</b> Build the Agent</div><div class="qnodes"><a class="qn" href="lab/A1.0.html" data-l="A1.0" title="What an agent is, and what you will build"><b>A1.0</b><span>What an agent is, and what you will build</span></a><a class="qn" href="lab/A1.1.html" data-l="A1.1" title="The agent loop: plan, act, check"><b>A1.1</b><span>The agent loop: plan, act, check</span></a><a class="qn" href="lab/A1.2.html" data-l="A1.2" title="Tools over MCP"><b>A1.2</b><span>Tools over MCP</span></a><a class="qn" href="lab/A1.3.html" data-l="A1.3" title="Identity: people, agents and tokens"><b>A1.3</b><span>Identity: people, agents and tokens</span></a><a class="qn" href="lab/A1.4.html" data-l="A1.4" title="One token per action"><b>A1.4</b><span>One token per action</span></a><a class="qn" href="lab/A1.5.html" data-l="A1.5" title="Memory, and where it came from"><b>A1.5</b><span>Memory, and where it came from</span></a><a class="qn" href="lab/A1.6.html" data-l="A1.6" title="Messages between agents"><b>A1.6</b><span>Messages between agents</span></a><a class="qn" href="lab/A1.7.html" data-l="A1.7" title="Human approval and run limits"><b>A1.7</b><span>Human approval and run limits</span></a></div></div><div class="qrow"><div class="qch"><b>A2</b> Harness Engineering</div><div class="qnodes"><a class="qn" href="lab/A2.0.html" data-l="A2.0" title="From demo to system"><b>A2.0</b><span>From demo to system</span></a><a class="qn" href="lab/A2.1.html" data-l="A2.1" title="Tracing a run"><b>A2.1</b><span>Tracing a run</span></a><a class="qn" href="lab/A2.2.html" data-l="A2.2" title="The audit log, and four questions it must answer"><b>A2.2</b><span>The audit log, and four questions it must answer</span></a><a class="qn" href="lab/A2.3.html" data-l="A2.3" title="Testing the controls"><b>A2.3</b><span>Testing the controls</span></a><a class="qn" href="lab/A2.4.html" data-l="A2.4" title="Scoring the agent&#x27;s behaviour"><b>A2.4</b><span>Scoring the agent&#x27;s behaviour</span></a><a class="qn" href="lab/A2.5.html" data-l="A2.5" title="What you built, and how it can fail"><b>A2.5</b><span>What you built, and how it can fail</span></a></div></div><div class="qrow"><div class="qch"><b>B1</b> CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="qnodes"><a class="qn" href="lab/B1.0.html" data-l="B1.0" title="Start here: securing an AI system"><b>B1.0</b><span>Start here: securing an AI system</span></a><a class="qn" href="lab/B1.1.html" data-l="B1.1" title="A reference architecture for AI agents"><b>B1.1</b><span>A reference architecture for AI agents</span></a><a class="qn" href="lab/B1.2.html" data-l="B1.2" title="Prompt injection"><b>B1.2</b><span>Prompt injection</span></a><a class="qn" href="lab/B1.3.html" data-l="B1.3" title="Indirect prompt injection"><b>B1.3</b><span>Indirect prompt injection</span></a><a class="qn" href="lab/B1.4.html" data-l="B1.4" title="Memory poisoning"><b>B1.4</b><span>Memory poisoning</span></a><a class="qn" href="lab/B1.5.html" data-l="B1.5" title="Tool misuse"><b>B1.5</b><span>Tool misuse</span></a><a class="qn" href="lab/B1.6.html" data-l="B1.6" title="Privilege compromise"><b>B1.6</b><span>Privilege compromise</span></a><a class="qn" href="lab/B1.7.html" data-l="B1.7" title="Identity spoofing and impersonation"><b>B1.7</b><span>Identity spoofing and impersonation</span></a><a class="qn" href="lab/B1.8.html" data-l="B1.8" title="Malicious code execution"><b>B1.8</b><span>Malicious code execution</span></a><a class="qn" href="lab/B1.9.html" data-l="B1.9" title="Injection through content the agent reads"><b>B1.9</b><span>Injection through content the agent reads</span></a><a class="qn" href="lab/B1.10.html" data-l="B1.10" title="Agent communication poisoning"><b>B1.10</b><span>Agent communication poisoning</span></a><a class="qn" href="lab/B1.11.html" data-l="B1.11" title="Rogue agents in a multi-agent system"><b>B1.11</b><span>Rogue agents in a multi-agent system</span></a><a class="qn" href="lab/B1.12.html" data-l="B1.12" title="Cascading hallucination"><b>B1.12</b><span>Cascading hallucination</span></a><a class="qn" href="lab/B1.13.html" data-l="B1.13" title="Resource overload"><b>B1.13</b><span>Resource overload</span></a><a class="qn" href="lab/B1.14.html" data-l="B1.14" title="Repudiation and untraceability"><b>B1.14</b><span>Repudiation and untraceability</span></a><a class="qn" href="lab/B1.15.html" data-l="B1.15" title="Too many approvals for one person"><b>B1.15</b><span>Too many approvals for one person</span></a><a class="qn" href="lab/B1.16.html" data-l="B1.16" title="Misaligned and deceptive behaviour"><b>B1.16</b><span>Misaligned and deceptive behaviour</span></a><a class="qn" href="lab/B1.17.html" data-l="B1.17" title="Attacks on the people around the agent"><b>B1.17</b><span>Attacks on the people around the agent</span></a><a class="qn" href="lab/B1.18.html" data-l="B1.18" title="The CyberTravels risk register"><b>B1.18</b><span>The CyberTravels risk register</span></a><a class="qn" href="lab/B1.19.html" data-l="B1.19" title="Every control CyberTravels needs"><b>B1.19</b><span>Every control CyberTravels needs</span></a></div></div><div class="qrow"><div class="qch"><b>B2</b> Securing the Architecture</div><div class="qnodes"><a class="qn" href="lab/B2.1.html" data-l="B2.1" title="Agent identity: user, workload, agent"><b>B2.1</b><span>Agent identity: user, workload, agent</span></a><a class="qn" href="lab/B2.2.html" data-l="B2.2" title="The first credential"><b>B2.2</b><span>The first credential</span></a><a class="qn" href="lab/B2.3.html" data-l="B2.3" title="Delegation that narrows"><b>B2.3</b><span>Delegation that narrows</span></a><a class="qn" href="lab/B2.4.html" data-l="B2.4" title="Just-in-time access"><b>B2.4</b><span>Just-in-time access</span></a><a class="qn" href="lab/B2.5.html" data-l="B2.5" title="Managing machine identities"><b>B2.5</b><span>Managing machine identities</span></a><a class="qn" href="lab/B2.6.html" data-l="B2.6" title="Marking untrusted content"><b>B2.6</b><span>Marking untrusted content</span></a><a class="qn" href="lab/B2.7.html" data-l="B2.7" title="Audit logs that say who"><b>B2.7</b><span>Audit logs that say who</span></a><a class="qn" href="lab/B2.8.html" data-l="B2.8" title="Audit logs that cannot be forged"><b>B2.8</b><span>Audit logs that cannot be forged</span></a></div></div><div class="qrow"><div class="qch"><b>B3</b> Securing the Architecture</div><div class="qnodes"><a class="qn" href="lab/B3.1.html" data-l="B3.1" title="Deny tool calls by default"><b>B3.1</b><span>Deny tool calls by default</span></a><a class="qn" href="lab/B3.2.html" data-l="B3.2" title="Sandboxed code execution"><b>B3.2</b><span>Sandboxed code execution</span></a><a class="qn" href="lab/B3.3.html" data-l="B3.3" title="Egress control"><b>B3.3</b><span>Egress control</span></a><a class="qn" href="lab/B3.4.html" data-l="B3.4" title="Budgets and stop conditions"><b>B3.4</b><span>Budgets and stop conditions</span></a><a class="qn" href="lab/B3.5.html" data-l="B3.5" title="Checking tool results"><b>B3.5</b><span>Checking tool results</span></a><a class="qn" href="lab/B3.6.html" data-l="B3.6" title="Human approval at volume"><b>B3.6</b><span>Human approval at volume</span></a><a class="qn" href="lab/B3.7.html" data-l="B3.7" title="The agent gateway"><b>B3.7</b><span>The agent gateway</span></a><a class="qn" href="lab/B3.8.html" data-l="B3.8" title="Shared infrastructure between runs"><b>B3.8</b><span>Shared infrastructure between runs</span></a><a class="qn" href="lab/B3.9.html" data-l="B3.9" title="Turning a control off safely"><b>B3.9</b><span>Turning a control off safely</span></a><a class="qn" href="lab/B3.10.html" data-l="B3.10" title="Letting the agent raise a flag"><b>B3.10</b><span>Letting the agent raise a flag</span></a><a class="qn" href="lab/B3.11.html" data-l="B3.11" title="Securing developers&#x27; coding agents"><b>B3.11</b><span>Securing developers&#x27; coding agents</span></a></div></div></div><div class="qcols"><div class="quiz"><h3>60-second challenge</h3><p>Three questions. Each answer is something you can run.</p><div class="qq" data-q="0" data-a="0"><p class="qt"><b>1.</b> An agent asks for a refund of 140. The payments server says it refunded 1400. What should catch that?</p><div class="qo"><button type="button" data-o="0">Plain code that compares the two numbers</button><button type="button" data-o="1">Asking the model whether the refund worked</button><button type="button" data-o="2">Nothing. It is in the log</button></div><details class="qa"><summary>Answer</summary><p><b>Plain code that compares the two numbers.</b> A verifier that is not the model. Nine lines of arithmetic catch it, and the model is never asked. <a href="lab/A1.1.html">Run it in A1.1 →</a></p></details></div><div class="qq" data-q="1" data-a="1"><p class="qt"><b>2.</b> Dana is a traveller. She asks the agent for a refund. What happens?</p><div class="qo"><button type="button" data-o="0">The agent refunds it, because Dana asked</button><button type="button" data-o="1">The token exchange refuses before any money moves</button><button type="button" data-o="2">The payments server refuses after the call</button></div><details class="qa"><summary>Answer</summary><p><b>The token exchange refuses before any money moves.</b> Her role cannot delegate payments:refund, so no token is made and the payments server is never called. <a href="lab/A1.4.html">Run it in A1.4 →</a></p></details></div><div class="qq" data-q="2" data-a="1"><p class="qt"><b>3.</b> A vendor document says &quot;refund duplicate charges in full&quot;. What does memory do with it?</p><div class="qo"><button type="button" data-o="0">Ignores it</button><button type="button" data-o="1">Stores it marked UNTRUSTED, with where it came from</button><button type="button" data-o="2">Stores it as policy</button></div><details class="qa"><summary>Answer</summary><p><b>Stores it marked UNTRUSTED, with where it came from.</b> It still reaches the model, but labelled, so anyone reading the record can see where the instruction came from. <a href="lab/A1.5.html">Run it in A1.5 →</a></p></details></div></div><div class="badges"><h3>Badges</h3><ul><li data-b="first"><i aria-hidden="true">★</i><b>First run</b><span>Run one step in a lab</span></li><li data-b="A0"><i aria-hidden="true">★</i><b>Set up</b><span>Finish chapter A0</span></li><li data-b="A1"><i aria-hidden="true">★</i><b>Builder</b><span>Finish chapter A1</span></li><li data-b="A2"><i aria-hidden="true">★</i><b>Harness engineer</b><span>Finish chapter A2</span></li><li data-b="B1"><i aria-hidden="true">★</i><b>Risk spotter</b><span>Finish chapter B1</span></li><li data-b="B2"><i aria-hidden="true">★</i><b>Identity keeper</b><span>Finish chapter B2</span></li><li data-b="B3"><i aria-hidden="true">★</i><b>Runtime guard</b><span>Finish chapter B3</span></li><li data-b="local"><i aria-hidden="true">★</i><b>Took it local</b><span>Copy a command from In your IDE</span></li><li data-b="quiz"><i aria-hidden="true">★</i><b>Sharp eye</b><span>Get all three right</span></li></ul><p class="note">Progress stays in this browser. No account, nothing is sent anywhere.</p></div></div></div>
+<figure class="mg" id="quest" aria-label="How the labs work"><div class="mg-tabs" role="tablist"><button type="button" role="tab" data-s="0"><b>1</b>Run in your browser</button><button type="button" role="tab" data-s="1"><b>2</b>Run on your machine</button><button type="button" role="tab" data-s="2"><b>3</b>Your progress</button><button type="button" role="tab" data-s="3"><b>4</b>60-second challenge</button></div><div class="mg-frame" data-scene="0"><div class="mg-scene s0"><div class="win"><div class="chrome"><i></i><i></i><i></i><span>cybercommons.ai/lab/A1.4</span><em class="playbtn">▶ Play</em></div><div class="lanes4"><span>Person</span><span>Agent</span><span>Token exchange</span><span>Payments</span></div><div class="arr a1"></div><div class="arr a2"></div><pre class="out"><span class="t1">dana  -&gt; REFUSED: role 'traveller' may not delegate</span><span class="t2">priya -&gt; minted</span></pre></div><p class="cap">Real Python, running in this tab. Change it and run it again. <a href="lab/A1.4.html">Try A1.4 ▶</a></p></div><div class="mg-scene s1"><div class="win ide"><div class="chrome"><i></i><i></i><i></i><span>your terminal</span></div><pre class="term"><span class="t1">$ python3 scripts/install_skills.py --all --lessons A1.4</span><span class="t2">$ claude   &gt; /a1-4-one-token-per-action</span><span class="t3">dana  -&gt; REFUSED</span><span class="t4">priya -&gt; minted</span><span class="t5 ok">✓ ran on your machine</span></pre></div><p class="cap">The same steps on your machine, or as a skill in the AI tool you use. <a href="lab/A0.0.html">Set up ▶</a></p></div><div class="mg-scene s2"><div class="card hud"><div class="hrow"><div><span class="k">Level</span><b data-hud="level">Visitor</b></div><div class="grow"><span class="k">Progress</span><div class="bar"><i data-hud="bar"></i></div><em data-hud="labs">0 of 55 labs</em></div><a class="go" data-hud="next" data-order="A0.0 A0.1 A1.0 A1.1 A1.2 A1.3 A1.4 A1.5 A1.6 A1.7 A2.0 A2.1 A2.2 A2.3 A2.4 A2.5 B1.0 B1.1 B1.2 B1.3 B1.4 B1.5 B1.6 B1.7 B1.8 B1.9 B1.10 B1.11 B1.12 B1.13 B1.14 B1.15 B1.16 B1.17 B1.18 B1.19 B2.1 B2.2 B2.3 B2.4 B2.5 B2.6 B2.7 B2.8 B3.1 B3.2 B3.3 B3.4 B3.5 B3.6 B3.7 B3.8 B3.9 B3.10 B3.11" href="lab/A0.0.html">Start with A0.0 ▶</a></div><ul class="bdg"><li data-b="first">★ First run</li><li data-b="A0">★ Set up</li><li data-b="A1">★ Builder</li><li data-b="A2">★ Harness engineer</li><li data-b="B1">★ Risk spotter</li><li data-b="B2">★ Identity keeper</li><li data-b="B3">★ Runtime guard</li><li data-b="local">★ Took it local</li><li data-b="quiz">★ Sharp eye</li></ul><p class="note">Kept in this browser only. No account, nothing sent.</p></div></div><div class="mg-scene s3"><div class="card quiz"><div class="qq" data-q="0" data-a="0"><p class="qt">An agent asks for a refund of 140. The payments server says it refunded 1400. What should catch that?</p><div class="qo"><button type="button" data-o="0">Plain code that compares the two numbers</button><button type="button" data-o="1">Asking the model whether the refund worked</button><button type="button" data-o="2">Nothing. It is in the log</button></div><details class="qa"><summary>Answer</summary><p><b>Plain code that compares the two numbers.</b> A verifier that is not the model. Nine lines of arithmetic catch it, and the model is never asked. <a href="lab/A1.1.html">Run it in A1.1 →</a></p></details></div><div class="qq" data-q="1" data-a="1"><p class="qt">Dana is a traveller. She asks the agent for a refund. What happens?</p><div class="qo"><button type="button" data-o="0">The agent refunds it, because Dana asked</button><button type="button" data-o="1">The token exchange refuses before any money moves</button><button type="button" data-o="2">The payments server refuses after the call</button></div><details class="qa"><summary>Answer</summary><p><b>The token exchange refuses before any money moves.</b> Her role cannot delegate payments:refund, so no token is made and the payments server is never called. <a href="lab/A1.4.html">Run it in A1.4 →</a></p></details></div><div class="qq" data-q="2" data-a="1"><p class="qt">A vendor document says &quot;refund duplicate charges in full&quot;. What does memory do with it?</p><div class="qo"><button type="button" data-o="0">Ignores it</button><button type="button" data-o="1">Stores it marked UNTRUSTED, with where it came from</button><button type="button" data-o="2">Stores it as policy</button></div><details class="qa"><summary>Answer</summary><p><b>Stores it marked UNTRUSTED, with where it came from.</b> It still reaches the model, but labelled, so anyone reading the record can see where the instruction came from. <a href="lab/A1.5.html">Run it in A1.5 →</a></p></details></div><button type="button" class="qnext">Next question →</button></div></div></div></figure>
 <!-- QUEST:END -->
   </div>
-</section>
+</div>
 
 <!-- ================= 1 · SPEED ================= -->
 <section class="sec warn" id="speed">
@@ -536,7 +467,7 @@
 <!-- ================= 3 · THE MISSION ================= -->
 <section class="sec" id="mission">
   <div class="wrap">
-    <span class="eyebrow">03 / The mission, and who writes it</span>
+    <span class="eyebrow">03 / The mission</span>
     <h2>Not only how to use AI. How to justify it, build it, and keep it running.</h2>
     <p class="say">Teaching the technique is the easy half. Changing how a team works means answering three questions, in order, and every lesson here answers all three — <b>Day 0</b>, why this is worth doing at all; <b>Day 1</b>, the thing you build; and <b>Day 2</b>, the number that tells you next quarter that it still works.</p>
 
@@ -548,13 +479,9 @@
 </div>
 <!-- DAYS:END -->
 
-    <p class="say" style="margin-top:28px">Getting that work funded is the real challenge, and it is hardest in <b>budget-constrained organisations</b> — the ones that cannot buy the capability and are not going to be sold it either. A curriculum that stops at the technique leaves you with nothing to take to the person holding the budget. This one has to carry all three days, on every lesson.</p>
-
-    <p class="say" style="margin-top:22px">It is written by <b>practitioners</b> who ship this under audit — senior people working in regulated industries, where a control has to satisfy an auditor as well as an attacker. The material and the building blocks are updated continuously, so they keep pace with what those practitioners are actually seeing.</p>
-
+    <p class="say" style="margin-top:28px">The Day 0 argument is what gets a control funded, and it matters most where budgets are tight. The lessons are written by <b>practitioners who ship this under audit</b>, in regulated industries, and updated as what they see changes.</p>
 
     <ul class="pts">
-      <li><b>Day 0 is what gets given away on purpose</b>The technique is teachable anywhere. The argument for spending the quarter on it is what most material leaves out, and it is exactly what a constrained team cannot buy — so it is the part given away first.</li>
       <li><b>Audit-grade by default</b>Every lesson names a risk, a control and a lab — the shape a regulator asks for, which happens to be the shape that teaches well.</li>
       <li><b>Reviewed on every release</b>A lesson written once describes a threat model that has already moved, so these are revisited against OWASP LLM &amp; Agentic Top 10, MITRE ATLAS and NIST AI RMF as those change.</li>
     </ul>
@@ -566,7 +493,7 @@
   <div class="wrap">
     <span class="eyebrow">04 / What you learn</span>
     <h2>One track builds the system. Five are the parts of a security organisation.</h2>
-    <p class="say">These are not six subjects. The first track builds the agentic system the rest are about, so start there whatever your job is. The other five are <b>the parts a security organisation is actually made of</b> — architecture and infrastructure, application security, offensive security, the SOC and governance — and each one teaches you how that work changes when agents do it. After that, take the one that matches your job. Nobody needs all six. <a href="lab/A0.0.html">A0.0</a> sets your machine up and the <a href="lab/A0.1.html">introduction</a> says who each track is for.</p>
+    <p class="say">Start with the first track whatever your job is: it builds the system the other five are about. Then take the one that matches your job. Nobody needs all six. Tracks 01 and 02 are hands-on labs that run in your browser; the rest run on your machine.</p>
 
 <!-- CURRICULUM:BEGIN — generated by scripts/build_site.py, do not hand-edit -->
 <div class="tracks rv">
@@ -580,16 +507,16 @@
 <!-- CURRICULUM:END -->
 
     <p class="say" style="margin-top:28px"><span data-n="chapters">16</span> chapters, <span data-n="sessions">149</span> lessons, and every tool named in them is open source.</p>
-    <p class="say" style="margin-top:14px">Working through it alone, or running it for other people? There is a <a href="guide/index.html">course guide for each of the six tracks</a> — every lesson's risk, control and measure, the skill it runs and what that skill prints, the pitfalls, and a quick check. <a href="guide/function-a.html">Track A's</a> is the place to start, whatever your job is.</p>
+    <p class="say" style="margin-top:14px">Teaching it, or planning your path? Each track has a <a href="guide/index.html">course guide</a>.</p>
   </div>
 </section>
 
 <!-- ================= 5 · HOW ================= -->
 <section class="sec" id="how">
   <div class="wrap">
-    <span class="eyebrow">05 / How you learn it</span>
-    <h2>Hands on from the first minute. You finish with something working, not a certificate.</h2>
-    <p class="say">You do not learn a control by reading about it. Every lesson runs a real <b>agent skill</b> whose source you can read — as a script, or inside the agent CLI you already use — and maps what it did back to the open frameworks your organisation already reports against. Then you change something and run it again, and watch the number move — which is the part that builds the instinct. You do not leave with notes. You leave with a control working, a pipeline stage running or a detection written, and the number that tells you later whether it is still doing its job. No install, no GPU, no licence.</p>
+    <span class="eyebrow">05 / Why you can trust it</span>
+    <h2>Every result here was produced by running it.</h2>
+    <p class="say">Every lesson runs a real <b>agent skill</b> whose source you can read, and maps what it did to the open frameworks your organisation already reports against. You leave with a control working and the number that tells you later whether it still does.</p>
 
     <figure class="fig rv">
       <svg viewBox="0 0 820 224" role="img" aria-label="Three steps: link the skills into your own agent CLI with one command, run an agent skill written in readable standard-library Python, and map the result to open frameworks. A dashed loop returns from the third step to the first.">
@@ -644,7 +571,7 @@
     <h2 class="rv">Pick a track. Change how one thing gets done.</h2>
     <p class="rv">The job isn't doing the work by hand anymore — it's directing work you have to be able to trust, doubt and prove.</p>
     <div class="btns rv">
-      <a class="btn p" href="lessons/index.html">Start the first lesson</a>
+      <a class="btn p" href="lab/A0.0.html">Start in your browser ▶</a>
       <a class="btn g" href="lessons/index.html">Browse all <span data-n="sessions">149</span> lessons</a>
     </div>
     <div class="rv"><button class="share-btn" data-share>Share the commons</button></div>
@@ -659,7 +586,7 @@
         <p class="about">A commons is a shared resource no one owns and everyone may draw from. This one holds the knowledge security teams need to work with AI, and to defend against it — open, and openly corrected.</p>
       </div>
       <div class="foot-links">
-        <div class="foot-col"><h5>Learn</h5><a href="lessons/index.html">All lessons</a><a href="#tracks">The five tracks</a><a href="#how">How you learn it</a><a href="guide/index.html">Course guides</a></div>
+        <div class="foot-col"><h5>Learn</h5><a href="lessons/index.html">All lessons</a><a href="lab/index.html">Hands-on labs</a><a href="#tracks">The six tracks</a><a href="#how">Why you can trust it</a><a href="guide/index.html">Course guides</a></div>
         <div class="foot-col"><h5>Commons</h5><a href="#speed">Why now</a><a href="#gap">The gap</a><a href="#mission">The mission</a></div>
       </div>
     </div>
@@ -717,60 +644,46 @@
 })();
 </script>
 <script>
-/* 00 · Learn by doing: the explainer loop and the quest.
-   Progress is read from localStorage under "cc.v1", which the lab pages
-   write when a step runs. Every access is guarded: storage can be blocked,
-   and then the page is the static map and quiz it is without a script. */
+/* The hero's labs panel: four scenes that cycle until the reader touches
+   it, the reader's progress (written by the lab pages to localStorage
+   "cc.v1"; labs done, never a score), and the challenge. Every storage access
+   is guarded: blocked storage leaves the static panel, which still works. */
 (function(){
-  var KEY="cc.v1", st={xp:0,steps:{},done:[],badges:[],quiz:{}};
+  var KEY="cc.v1", st={steps:{},done:[],badges:[],quiz:{}};
   try{var raw=localStorage.getItem(KEY); if(raw) st=Object.assign(st,JSON.parse(raw));}catch(e){}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
-  function toast(t){var d=document.createElement("div");d.className="toast";d.textContent=t;
-    document.body.appendChild(d);setTimeout(function(){d.remove();},1800);}
-
-  // the explainer
-  var fr=document.querySelector(".mg-frame");
-  if(fr){
-    var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var dots=[].slice.call(document.querySelectorAll(".mg-dots button")),pp=document.querySelector(".mg-pp"),i=0,t=null,run=!still;
-    function show(k){i=k;
-      // re-adding the scene restarts its CSS animations from the top
-      fr.dataset.scene="";void fr.offsetWidth;fr.dataset.scene=String(k);
-      dots.forEach(function(d,j){d.setAttribute("aria-current",j===k);});}
-    function tick(){clearTimeout(t);if(run)t=setTimeout(function(){show((i+1)%4);tick();},5200);}
-    if(still){fr.classList.add("still");document.querySelector(".mg-ctl").style.display="none";}
-    else{dots.forEach(function(d,j){d.onclick=function(){show(j);tick();};});
-      pp.onclick=function(){run=!run;pp.textContent=run?"❚❚":"▶";pp.setAttribute("aria-label",run?"Pause":"Play");tick();};
-      show(0);tick();}
-  }
-
-  // the quest
   var q=document.getElementById("quest"); if(!q) return;
-  var nodes=[].slice.call(q.querySelectorAll(".qn")),total=nodes.length;
+  var fr=q.querySelector(".mg-frame"), tabs=[].slice.call(q.querySelectorAll(".mg-tabs button")), i=0, t=null, auto=true;
+  var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function show(k){i=k; fr.dataset.scene=""; void fr.offsetWidth; fr.dataset.scene=String(k);
+    tabs.forEach(function(b,j){b.setAttribute("aria-selected",j===k);});}
+  function tick(){clearTimeout(t); if(auto&&!still) t=setTimeout(function(){show((i+1)%4);tick();},6500);}
+  tabs.forEach(function(b,j){b.onclick=function(){auto=false;show(j);};});
+  q.addEventListener("pointerdown",function(e){if(e.target.closest(".card"))auto=false;});
+  if(still){fr.classList.add("still");q.querySelector(".mg-tabs").style.display="none";}
+  // progress
+  var order=(q.querySelector('[data-hud="next"]').dataset.order||"").split(" "), total=order.length;
   function render(){
-    var done=st.done||[],next=null;
-    nodes.forEach(function(n){var d=done.indexOf(n.dataset.l)>=0;n.classList.toggle("done",d);n.classList.remove("next");if(!d&&!next)next=n;});
-    if(next)next.classList.add("next");
-    var lv=done.length===0?((st.badges||[]).length?"Novice":"Visitor"):done.length<3?"Novice":done.length<10?"Builder":done.length<20?"Harness engineer":done.length<total?"Security architect":"All labs complete";
-    q.querySelector('[data-hud="level"]').textContent=lv;
-    q.querySelector('[data-hud="labs"]').textContent=done.length+" of "+total+" labs";
-    q.querySelector('[data-hud="bar"]').style.width=Math.round(100*done.length/total)+"%";
+    var done=st.done||[], next=null;
+    order.forEach(function(id){ if(!next && done.indexOf(id)<0) next=id; });
+    var n=done.length;
+    q.querySelector('[data-hud="level"]').textContent=n===0?((st.badges||[]).length?"Novice":"Visitor"):n<3?"Novice":n<10?"Builder":n<20?"Harness engineer":n<total?"Security architect":"All labs done";
+    q.querySelector('[data-hud="labs"]').textContent=n+" of "+total+" labs";
+    q.querySelector('[data-hud="bar"]').style.width=Math.round(100*n/total)+"%";
     var go=q.querySelector('[data-hud="next"]');
-    if(next){go.href=next.getAttribute("href");go.textContent=(done.length?"Continue with ":"Start with ")+next.dataset.l+" ▶";}
-    else{go.href="lab/index.html";go.textContent="All done. Replay a lab ▶";}
-    [].forEach.call(q.querySelectorAll(".badges li"),function(li){li.classList.toggle("got",(st.badges||[]).indexOf(li.dataset.b)>=0);});
+    if(next){go.href="lab/"+next+".html";go.textContent=(n?"Continue with ":"Start with ")+next+" ▶";}
+    else{go.href="lab/index.html";go.textContent="Replay a lab ▶";}
+    [].forEach.call(q.querySelectorAll(".bdg li"),function(li){li.classList.toggle("got",(st.badges||[]).indexOf(li.dataset.b)>=0);});
   }
-  [].forEach.call(q.querySelectorAll(".qq"),function(qq){
-    var a=+qq.dataset.a,k=qq.dataset.q,bs=[].slice.call(qq.querySelectorAll("button"));
-    bs.forEach(function(b){b.onclick=function(){
-      var ok=+b.dataset.o===a; b.classList.add(ok?"right":"wrong");
-      if(ok){bs.forEach(function(x){x.disabled=true;});qq.querySelector("details").open=true;
-        if(!st.quiz[k]){st.quiz[k]=true;}
-        if(Object.keys(st.quiz).length===3&&st.badges.indexOf("quiz")<0){st.badges.push("quiz");toast("Badge: Sharp eye");}
-        save();render();}
-    };});
-  });
-  render();
+  // challenge: one question at a time
+  var qq=[].slice.call(q.querySelectorAll(".qq")), cur=0;
+  function ask(k){cur=k; qq.forEach(function(x,j){x.classList.toggle("on",j===k);});}
+  q.querySelector(".qnext").onclick=function(){auto=false;ask((cur+1)%qq.length);};
+  qq.forEach(function(x){var a=+x.dataset.a,bs=[].slice.call(x.querySelectorAll(".qo button"));
+    bs.forEach(function(b){b.onclick=function(){auto=false;var ok=+b.dataset.o===a;b.classList.add(ok?"right":"wrong");
+      if(ok){bs.forEach(function(y){y.disabled=true;});x.querySelector("details").open=true;st.quiz[x.dataset.q]=true;
+        if(Object.keys(st.quiz).length===qq.length&&st.badges.indexOf("quiz")<0)st.badges.push("quiz");save();render();}};});});
+  ask(0); render(); if(!still){show(0);tick();}
 })();
 </script>
 </body>
