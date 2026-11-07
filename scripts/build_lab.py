@@ -348,6 +348,10 @@ ol.steps{list-style:none;margin:0;padding:0}
 .lesson h3{font-size:18px;margin:0 0 2px}
 .lesson>p{margin:0 0 10px;font-size:14.5px;color:var(--text-faint)}
 .lfold{border:1px solid var(--line-soft);border-radius:10px;background:#fff;margin:6px 0}
+.lbody h4{font-size:18px;margin:18px 0 6px;padding-top:12px;border-top:1px solid var(--line-soft);color:var(--text)}
+.lbody h4:first-child{border-top:0;padding-top:0;margin-top:8px}
+.lbody h5{font-size:16px;margin:12px 0 4px;color:var(--text)}
+.lbody h6{font-size:15px;margin:10px 0 4px;color:var(--text-dim)}
 .lfold summary{cursor:pointer;padding:9px 14px;font-weight:600;font-size:16px;color:var(--text)}
 .lfold[open] summary{border-bottom:1px solid var(--line-soft)}
 .lbody{padding:6px 16px 12px;font-size:15.5px;color:var(--text-dim);max-width:900px}
@@ -553,15 +557,15 @@ function progress(sid, i, n){
   var st = load(); if (!st) return;
   var got = st.steps[sid] = st.steps[sid] || [];
   if (got.indexOf(i) >= 0) return;
-  got.push(i); st.xp += 10; toast("+10 XP");
+  got.push(i);
   badge(st, "first", "First run");
-  if (got.length === n && st.done.indexOf(sid) < 0) { st.done.push(sid); st.xp += 20; toast("Lab " + sid + " complete · +20 XP"); }
+  if (got.length === n && st.done.indexOf(sid) < 0) { st.done.push(sid); toast("Lab " + sid + " complete"); }
   Object.keys(CHAPTERS).forEach(function(c){
     if (CHAPTERS[c].every(function(x){ return st.done.indexOf(x) >= 0; })) badge(st, c, "Chapter " + c + " cleared"); });
   store(st); hud();
 }
 function hud(){ var st = load(), el = document.querySelector(".lab-hud"); if (!st || !el) return;
-  el.textContent = st.xp + " XP · " + st.done.length + " of " + %(total)d + " labs"; }
+  el.textContent = st.done.length + " of " + %(total)d + " labs done"; }
 document.addEventListener("click", function(e){
   if (e.target.closest && e.target.closest(".ide .copy")) { var st = load(); if (st) { badge(st, "local", "Took it local"); store(st); } } });
 
@@ -699,7 +703,7 @@ def section(track: dict, s: dict, tid: str) -> str:
             f'<button type="button" data-m="run" aria-pressed="true">In your browser</button>'
             f'<button type="button" data-m="ide" aria-pressed="false">In your IDE</button></span></div>'
             f'<h2>{E(s["title"])}</h2><p>{E(lab["goal"])}</p>'
-            f'<div class="links"><a href="#lesson">For detailed learning ↓</a>'
+            f'<div class="links"><a href="#lesson">Full walkthrough ↓</a>'
             '</div></div>')
     bar = ('<div class="bar"><button type="button" class="reset" title="Start this lesson again">↺ Reset</button>'
            '<button type="button" class="prev" aria-label="Previous step">‹</button>'
@@ -718,21 +722,68 @@ def section(track: dict, s: dict, tid: str) -> str:
 
 
 def lesson_html(sid: str) -> str:
-    """The lesson itself, folded under the lab.
+    """The lesson itself, as one folded walkthrough under the lab.
 
-    Function A's lesson pages are gone; their content lives here, each part
-    closed until a reader opens it, so the page stays about the lab. Only what
-    the lab does not already show comes across — `build_site.lab_sections`
+    It was seven folds — why it matters, risk and control, the idea, and so
+    on — and readers opened them one at a time and met the same sentence two
+    or three times: the hook restated in the risk, the risk restated in Day 0.
+    Now it is one fold with those as subsections, and a paragraph whose words
+    mostly repeats what is above it is dropped (see `_dedupe`). Only
+    what the lab does not already show comes across — `build_site.lab_sections`
     decides that, next to the lesson renderer it borrows from.
     """
     import build_site as BS
     entry = next(e for e in BS.flatten() if e["s"]["id"] == sid)
-    folds = "".join(f'<details class="lfold"><summary>{E(h)}</summary>'
-                    f'<div class="lbody">{body}</div></details>'
-                    for h, body in BS.lab_sections(entry))
+    lab = LAB[sid]
+    seen = _content(lab["goal"] + " " + " ".join(" ".join(st["say"]) for st in lab["steps"]))
+    parts = []
+    for head, body in BS.lab_sections(entry):
+        # "Your turn" is an exercise, not an explanation: it reuses the lab's
+        # words on purpose, and dropping it left five lessons with no task.
+        if head != "Your turn":
+            body = _dedupe(body, seen)
+        if not re.sub(r"<[^>]+>", "", body).strip():
+            continue
+        # The lesson's own headings sit one level under the subsection's.
+        body = re.sub(r"<(/?)h2\b", r"<\1h5", re.sub(r"<(/?)h3\b", r"<\1h6", body))
+        parts.append(f'<h4>{E(head)}</h4>{body}')
     return (f'<div class="lesson" id="lesson"><h3>For detailed learning</h3>'
-            f'<p>The ideas behind the steps above. Open any part to read it.</p>{folds}</div>')
+            f'<p>The ideas behind the steps above.</p>'
+            f'<details class="lfold"><summary>Full walkthrough</summary>'
+            f'<div class="lbody">{"".join(parts)}</div></details></div>')
 
+
+_STOP = set("the a an and or of to in is it its that this for on with as at by be "
+            "are was were not no from what which who when how they them their there "
+            "then than so but if into out up can may must will would has have had "
+            "does do did your you our we his her one two all any each more most only "
+            "also just very same such these those".split())
+
+
+def _content(html_: str) -> set[str]:
+    text = re.sub(r"<[^>]+>", " ", html.unescape(html_)).lower()
+    return {w for w in re.findall(r"[a-z0-9']{4,}", text) if w not in _STOP}
+
+
+def _dedupe(body: str, seen: set[str]) -> str:
+    """Drop a paragraph or list item that mostly repeats what came before it.
+
+    "Before it" includes the lab's own goal and step lines, because the reader
+    has just read those. Exact matching found one repeat in 1,159 paragraphs;
+    the repeats readers meant were restatements — the Day 0 line saying the
+    hook again in other words — so this measures overlap of content words: 70%
+    already seen, in a paragraph long enough to judge (six words or more), and
+    it goes. A lead-in ending with a colon always stays, or the list after it
+    would arrive with no introduction.
+    """
+    def keep(m):
+        words = _content(m.group(0))
+        lead_in = re.sub(r"<[^>]+>", "", m.group(0)).rstrip().endswith(":")
+        if not lead_in and len(words) >= 6 and len(words & seen) / len(words) >= 0.7:
+            return ""
+        seen.update(words)
+        return m.group(0)
+    return re.sub(r"<p\b[^>]*>.*?</p>|<li\b[^>]*>.*?</li>", keep, body, flags=re.S)
 
 def side(current: str | None) -> str:
     out = ['<aside class="lab-side"><div class="fn"><a href="index.html" '

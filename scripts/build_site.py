@@ -545,7 +545,7 @@ def lab_sections(entry: dict) -> list[tuple[str, str]]:
     if not any(k == "md" and "```python" in str(src) for k, src in ex.get("steps", [])):
         prose, _ = steps_html(sid, ex)
         if prose.strip():
-            out.append(("The full walkthrough", prose))
+            out.append(("Step by step", prose))
     if "days" in parts and (day := DAYS.get(sid)):
         d = "".join(f'<p><b>{lab}.</b> {html.escape(t.strip())}</p>'
                     for lab, t in zip(("Day 0, why", "Day 1, how", "Day 2, measure"), day))
@@ -1106,7 +1106,7 @@ def quest_block() -> str:
                  f'<span>{html.escape(d)}</span></li>' for k, n, d in badges)
     return (f'<div class="quest" id="quest">'
             f'<div class="hud"><div class="lvl"><span>Level</span><b data-hud="level">Visitor</b></div>'
-            f'<div class="xp"><div class="xpl"><span>XP</span><b data-hud="xp">0</b>'
+            f'<div class="xp"><div class="xpl"><span>Progress</span>'
             f'<em data-hud="labs">0 of {sum(len(t["sessions"]) for f in fns for t in f["tracks"])} labs</em></div>'
             f'<div class="bar"><i data-hud="bar"></i></div></div>'
             f'<a class="go" data-hud="next" href="lab/A0.0.html">Start the first lab ▶</a></div>'

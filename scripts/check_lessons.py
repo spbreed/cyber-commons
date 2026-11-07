@@ -301,11 +301,14 @@ def main() -> int:
             if name not in page or f"scripts/lesson.py {sid}" not in page:
                 problems.append(f"{sid}: no skill: the lab page does not offer "
                                 f"{name} and `scripts/lesson.py {sid}`")
+            if page.count('<details class="lfold">') != 1:
+                problems.append(f"{sid}: the lab page should fold the lesson "
+                                f"into one Full walkthrough")
             for part, head in LAB_FOLD.items():
                 if part == "idea" or part in parts:
-                    if f"<summary>{head}</summary>" not in page:
-                        problems.append(f"{sid}: the lab page has no "
-                                        f"\"{head}\" fold")
+                    if f"<h4>{head}</h4>" not in page:
+                        problems.append(f"{sid}: the walkthrough has no "
+                                        f"\"{head}\" section")
             if last and track not in BRIDGES:
                 problems.append(f"{sid}: last lesson of {track} with no chapter bridge")
             continue
