@@ -3,8 +3,6 @@
 **Function E · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Course guide:** [E4 in the Function E course guide](https://cybercommons.ai/guide/function-e.html#ch-E4)
-
 **Job titles:** Incident Responder, SOAR Engineer, Platform Security Engineer
 
 **What changes:** A response whose blast radius is known before it fires: actions classified on reversibility and radius, tiers derived from that rather than from their author, containment timed against the attacker, and a fleet stop that revokes as well as terminates. 5 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### E4.1 — Remediation policy — what may be done without asking
+### E4.1 — What can be fixed without asking
 
 - **Risk** — Automation scope is decided per runbook by whoever wrote it, so the blast radius of the response is unknown until it fires.
 - **Control** — One remediation policy keyed on blast radius and reversibility, from which each runbook's tier is derived rather than chosen.
@@ -35,9 +33,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E4.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e4-1-remediation-policy
-#         (Claude Code and Copilot: /e4-1-remediation-policy · Cursor: type / and
-#         search · Codex: $e4-1-remediation-policy). It ends with a readback. ---
+#         e4-1-what-can-be-fixed-without-asking
+#         (Claude Code and Copilot: /e4-1-what-can-be-fixed-without-asking · Cursor: type / and
+#         search · Codex: $e4-1-what-can-be-fixed-without-asking). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E4.1
@@ -45,7 +43,7 @@ python3 scripts/lesson.py E4.1
 
 ---
 
-### E4.2 — Runbook tiers — fully automated, human in the loop, manual
+### E4.2 — Runbook tiers
 
 - **Risk** — Everything is written as fully automated because that is the impressive demo, and the first wrong action is unrecoverable.
 - **Control** — Tier assigned from the remediation policy, with the human-in-the-loop tier carrying a real decision point rather than a confirmation dialog.
@@ -101,7 +99,7 @@ python3 scripts/lesson.py E4.3
 
 ---
 
-### E4.4 — Stop authority — who halts a fleet, and how long it takes
+### E4.4 — Who can stop the fleet
 
 - **Risk** — Nobody has rehearsed halting an autonomous workflow.
 - **Control** — Named holder, measured time-to-stop, tested.
@@ -119,9 +117,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E4.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e4-4-stop-authority
-#         (Claude Code and Copilot: /e4-4-stop-authority · Cursor: type / and
-#         search · Codex: $e4-4-stop-authority). It ends with a readback. ---
+#         e4-4-who-can-stop-the-fleet
+#         (Claude Code and Copilot: /e4-4-who-can-stop-the-fleet · Cursor: type / and
+#         search · Codex: $e4-4-who-can-stop-the-fleet). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E4.4

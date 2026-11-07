@@ -3,8 +3,6 @@
 **Function E · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Course guide:** [E2 in the Function E course guide](https://cybercommons.ai/guide/function-e.html#ch-E2)
-
 **Job titles:** Detection Engineer, SOC Engineer, Security Data Engineer
 
 **What changes:** The lake the rules are written against, then detections for two different subjects — the agent and the platform running it — mapped to ATT&CK and ATLAS, plus the loop that writes rules, the corpus that decides whether they ship, and the one detector that needs no threshold. 6 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### E2.1 — The detection data lake — where agent telemetry lands
+### E2.1 — Where agent logs land
 
 - **Risk** — Everything is indexed hot because nobody priced it, so retention is cut across the board and the traces go first.
 - **Control** — A tiering decision per source, driven by the queries the SOC actually runs, with the cost of each tier stated.
@@ -35,9 +33,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E2.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e2-1-the-detection-data-lake
-#         (Claude Code and Copilot: /e2-1-the-detection-data-lake · Cursor: type / and
-#         search · Codex: $e2-1-the-detection-data-lake). It ends with a readback. ---
+#         e2-1-where-agent-logs-land
+#         (Claude Code and Copilot: /e2-1-where-agent-logs-land · Cursor: type / and
+#         search · Codex: $e2-1-where-agent-logs-land). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E2.1
@@ -45,7 +43,7 @@ python3 scripts/lesson.py E2.1
 
 ---
 
-### E2.2 — Detections whose subject is the agent — mapped to ATT&CK and ATLAS
+### E2.2 — Detections for agents, mapped to ATT&CK and ATLAS
 
 - **Risk** — Scope drift, unusual tool sequencing, off-hours autonomous action.
 - **Control** — Detections whose subject is a non-human principal.
@@ -63,9 +61,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E2.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e2-2-detections-whose-subject-is-the-agent
-#         (Claude Code and Copilot: /e2-2-detections-whose-subject-is-the-agent · Cursor: type / and
-#         search · Codex: $e2-2-detections-whose-subject-is-the-agent). It ends with a readback. ---
+#         e2-2-detections-for-agents
+#         (Claude Code and Copilot: /e2-2-detections-for-agents · Cursor: type / and
+#         search · Codex: $e2-2-detections-for-agents). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E2.2
@@ -73,7 +71,7 @@ python3 scripts/lesson.py E2.2
 
 ---
 
-### E2.3 — Detections whose subject is the agent platform
+### E2.3 — Detections for the agent platform
 
 - **Risk** — Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.
 - **Control** — Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
@@ -91,9 +89,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E2.3
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e2-3-detections-whose-subject-is-the-agent
-#         (Claude Code and Copilot: /e2-3-detections-whose-subject-is-the-agent · Cursor: type / and
-#         search · Codex: $e2-3-detections-whose-subject-is-the-agent). It ends with a readback. ---
+#         e2-3-detections-for-the-agent-platform
+#         (Claude Code and Copilot: /e2-3-detections-for-the-agent-platform · Cursor: type / and
+#         search · Codex: $e2-3-detections-for-the-agent-platform). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E2.3
@@ -101,7 +99,7 @@ python3 scripts/lesson.py E2.3
 
 ---
 
-### E2.4 — Agent-assisted detection engineering — written by a loop, shipped by a human
+### E2.4 — Writing detections with an agent
 
 - **Risk** — Coverage gaps nobody mapped.
 - **Control** — Detection-as-code with agents inside the CI loop.
@@ -121,9 +119,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E2.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e2-4-agent-assisted-detection-engineering
-#         (Claude Code and Copilot: /e2-4-agent-assisted-detection-engineering · Cursor: type / and
-#         search · Codex: $e2-4-agent-assisted-detection-engineering). It ends with a readback. ---
+#         e2-4-writing-detections-with-an-agent
+#         (Claude Code and Copilot: /e2-4-writing-detections-with-an-agent · Cursor: type / and
+#         search · Codex: $e2-4-writing-detections-with-an-agent). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E2.4
@@ -131,7 +129,7 @@ python3 scripts/lesson.py E2.4
 
 ---
 
-### E2.5 — Rules generated from an incident — and the benign corpus that decides them
+### E2.5 — Rules from an incident
 
 - **Risk** — A rule generated from one incident matches that incident and nothing else, or matches everything and buries the queue.
 - **Control** — Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess.
@@ -149,9 +147,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E2.5
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e2-5-rules-generated-from-an-incident
-#         (Claude Code and Copilot: /e2-5-rules-generated-from-an-incident · Cursor: type / and
-#         search · Codex: $e2-5-rules-generated-from-an-incident). It ends with a readback. ---
+#         e2-5-rules-from-an-incident
+#         (Claude Code and Copilot: /e2-5-rules-from-an-incident · Cursor: type / and
+#         search · Codex: $e2-5-rules-from-an-incident). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E2.5
@@ -159,7 +157,7 @@ python3 scripts/lesson.py E2.5
 
 ---
 
-### E2.6 — Honeypots, canaries and deception — the detector with no threshold
+### E2.6 — Honeypots and canaries
 
 - **Risk** — Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.
 - **Control** — Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
@@ -179,9 +177,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E2.6
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e2-6-honeypots
-#         (Claude Code and Copilot: /e2-6-honeypots · Cursor: type / and
-#         search · Codex: $e2-6-honeypots). It ends with a readback. ---
+#         e2-6-honeypots-and-canaries
+#         (Claude Code and Copilot: /e2-6-honeypots-and-canaries · Cursor: type / and
+#         search · Codex: $e2-6-honeypots-and-canaries). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E2.6

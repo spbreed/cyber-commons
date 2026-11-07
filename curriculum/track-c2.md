@@ -3,8 +3,6 @@
 **Function C · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*
 
-**Course guide:** [C2 in the Function C course guide](https://cybercommons.ai/guide/function-c.html#ch-C2)
-
 **Job titles:** AppSec Engineer, Product Security Engineer, Secure Code Reviewer
 
 **What changes:** The SDLC split into what runs before a deploy and what runs after, then one lesson per stage of an agentic AppSec pipeline — audit, supply chain, dynamic validation, triage, remediation, attestation. 15 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### C2.0 — The AI SDLC — what runs before a deploy, and what runs after
+### C2.0 — The AI SDLC: before and after deploy
 
 - **Risk** — A security pipeline built as if it were exempt from the risks it exists to find.
 - **Control** — Build the pipeline and the harness as one system, and hold both to the same evidence standard.
@@ -45,7 +43,7 @@ python3 scripts/lesson.py C2.0
 
 ---
 
-### C2.1 — What building a harness means in security engineering
+### C2.1 — Building a security harness
 
 - **Risk** — A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds incorrectly, files a clean trace, and the bug is found by whoever merged the patch.
 - **Control** — An independent verifier, and a budget that stops the loop when it cannot pass.
@@ -62,9 +60,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-1-what-building-a-harness-means-in
-#         (Claude Code and Copilot: /c2-1-what-building-a-harness-means-in · Cursor: type / and
-#         search · Codex: $c2-1-what-building-a-harness-means-in). It ends with a readback. ---
+#         c2-1-building-a-security-harness
+#         (Claude Code and Copilot: /c2-1-building-a-security-harness · Cursor: type / and
+#         search · Codex: $c2-1-building-a-security-harness). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.1
@@ -72,7 +70,7 @@ python3 scripts/lesson.py C2.1
 
 ---
 
-### C2.2 — Threat modelling from what the estate already knows
+### C2.2 — Threat modelling
 
 - **Risk** — Threat models are written once, by hand, against a system that has since changed.
 - **Control** — Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.
@@ -92,9 +90,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-2-threat-modelling-from-what-the-estate
-#         (Claude Code and Copilot: /c2-2-threat-modelling-from-what-the-estate · Cursor: type / and
-#         search · Codex: $c2-2-threat-modelling-from-what-the-estate). It ends with a readback. ---
+#         c2-2-threat-modelling
+#         (Claude Code and Copilot: /c2-2-threat-modelling · Cursor: type / and
+#         search · Codex: $c2-2-threat-modelling). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.2
@@ -102,7 +100,7 @@ python3 scripts/lesson.py C2.2
 
 ---
 
-### C2.3 — SAST for agentic code — deterministic Semgrep, then the model pass
+### C2.3 — SAST: rules, then a model
 
 - **Risk** — Pattern matching floods the queue; the false-positive rate is what actually changed.
 - **Control** — Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.
@@ -122,9 +120,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.3
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-3-sast-for-agentic-code
-#         (Claude Code and Copilot: /c2-3-sast-for-agentic-code · Cursor: type / and
-#         search · Codex: $c2-3-sast-for-agentic-code). It ends with a readback. ---
+#         c2-3-sast
+#         (Claude Code and Copilot: /c2-3-sast · Cursor: type / and
+#         search · Codex: $c2-3-sast). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.3
@@ -132,7 +130,7 @@ python3 scripts/lesson.py C2.3
 
 ---
 
-### C2.4 — Deduplication and contextual verification
+### C2.4 — Removing duplicates and checking findings
 
 - **Risk** — Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.
 - **Control** — Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.
@@ -152,9 +150,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-4-deduplication-and-contextual
-#         (Claude Code and Copilot: /c2-4-deduplication-and-contextual · Cursor: type / and
-#         search · Codex: $c2-4-deduplication-and-contextual). It ends with a readback. ---
+#         c2-4-removing-duplicates-and-checking
+#         (Claude Code and Copilot: /c2-4-removing-duplicates-and-checking · Cursor: type / and
+#         search · Codex: $c2-4-removing-duplicates-and-checking). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.4
@@ -162,7 +160,7 @@ python3 scripts/lesson.py C2.4
 
 ---
 
-### C2.5 — Feasibility filtering, reachability and dead code
+### C2.5 — Reachability and dead code
 
 - **Risk** — A finding in dead code costs the same to triage as one on the login path.
 - **Control** — Stage 10: decide whether an external caller can actually reach the sink before anyone is paged.
@@ -182,9 +180,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.5
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-5-feasibility-filtering
-#         (Claude Code and Copilot: /c2-5-feasibility-filtering · Cursor: type / and
-#         search · Codex: $c2-5-feasibility-filtering). It ends with a readback. ---
+#         c2-5-reachability-and-dead-code
+#         (Claude Code and Copilot: /c2-5-reachability-and-dead-code · Cursor: type / and
+#         search · Codex: $c2-5-reachability-and-dead-code). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.5
@@ -192,7 +190,7 @@ python3 scripts/lesson.py C2.5
 
 ---
 
-### C2.6 — Sandbox replication
+### C2.6 — A safe copy to test in
 
 - **Risk** — Dynamic testing is run against staging, so a destructive probe becomes an incident.
 - **Control** — Stage 11: replicate the application in an isolated, disposable runtime with no path to production.
@@ -212,9 +210,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.6
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-6-sandbox-replication
-#         (Claude Code and Copilot: /c2-6-sandbox-replication · Cursor: type / and
-#         search · Codex: $c2-6-sandbox-replication). It ends with a readback. ---
+#         c2-6-a-safe-copy-to-test-in
+#         (Claude Code and Copilot: /c2-6-a-safe-copy-to-test-in · Cursor: type / and
+#         search · Codex: $c2-6-a-safe-copy-to-test-in). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.6
@@ -222,7 +220,7 @@ python3 scripts/lesson.py C2.6
 
 ---
 
-### C2.7 — Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries
+### C2.7 — Supply chain and dependencies
 
 - **Risk** — A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety, and is evidence of nothing but the manifest's contents.
 - **Control** — Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers.
@@ -239,9 +237,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.7
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-7-supply-chain
-#         (Claude Code and Copilot: /c2-7-supply-chain · Cursor: type / and
-#         search · Codex: $c2-7-supply-chain). It ends with a readback. ---
+#         c2-7-supply-chain-and-dependencies
+#         (Claude Code and Copilot: /c2-7-supply-chain-and-dependencies · Cursor: type / and
+#         search · Codex: $c2-7-supply-chain-and-dependencies). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.7
@@ -249,7 +247,7 @@ python3 scripts/lesson.py C2.7
 
 ---
 
-### C2.8 — Dynamic exploitation (DAST)
+### C2.8 — Dynamic testing (DAST)
 
 - **Risk** — A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed.
 - **Control** — Stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.
@@ -269,9 +267,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.8
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-8-dynamic-exploitation-dast
-#         (Claude Code and Copilot: /c2-8-dynamic-exploitation-dast · Cursor: type / and
-#         search · Codex: $c2-8-dynamic-exploitation-dast). It ends with a readback. ---
+#         c2-8-dynamic-testing-dast
+#         (Claude Code and Copilot: /c2-8-dynamic-testing-dast · Cursor: type / and
+#         search · Codex: $c2-8-dynamic-testing-dast). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.8
@@ -279,7 +277,7 @@ python3 scripts/lesson.py C2.8
 
 ---
 
-### C2.9 — Exploit chaining
+### C2.9 — Chaining exploits
 
 - **Risk** — Three medium findings are triaged as three mediums, and nobody notices they compose.
 - **Control** — Stage 13: combine validated findings into multi-step sequences and score the chain, not the links.
@@ -299,9 +297,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.9
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-9-exploit-chaining
-#         (Claude Code and Copilot: /c2-9-exploit-chaining · Cursor: type / and
-#         search · Codex: $c2-9-exploit-chaining). It ends with a readback. ---
+#         c2-9-chaining-exploits
+#         (Claude Code and Copilot: /c2-9-chaining-exploits · Cursor: type / and
+#         search · Codex: $c2-9-chaining-exploits). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.9
@@ -309,7 +307,7 @@ python3 scripts/lesson.py C2.9
 
 ---
 
-### C2.10 — Agentic penetration testing — the loop, and who runs each turn
+### C2.10 — Pentesting with agents
 
 - **Risk** — Payload suggestions instead of attack chains — and an offensive loop with no hard scope enforcement, which is an incident with a project plan.
 - **Control** — Full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.
@@ -329,9 +327,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.10
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-10-agentic-penetration-testing
-#         (Claude Code and Copilot: /c2-10-agentic-penetration-testing · Cursor: type / and
-#         search · Codex: $c2-10-agentic-penetration-testing). It ends with a readback. ---
+#         c2-10-pentesting-with-agents
+#         (Claude Code and Copilot: /c2-10-pentesting-with-agents · Cursor: type / and
+#         search · Codex: $c2-10-pentesting-with-agents). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.10
@@ -339,7 +337,7 @@ python3 scripts/lesson.py C2.10
 
 ---
 
-### C2.11 — White-box agentic pentest — the source, and what it lets you prove
+### C2.11 — White-box pentest
 
 - **Risk** — Full source produces a finding list nobody can act on, because presence is reported where reachability was needed.
 - **Control** — Every candidate carries the path that reaches it and the authorisation predicate on that path; unreachable sinks are reported as unreachable rather than dropped.
@@ -357,9 +355,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.11
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-11-white-box-agentic-pentest
-#         (Claude Code and Copilot: /c2-11-white-box-agentic-pentest · Cursor: type / and
-#         search · Codex: $c2-11-white-box-agentic-pentest). It ends with a readback. ---
+#         c2-11-white-box-pentest
+#         (Claude Code and Copilot: /c2-11-white-box-pentest · Cursor: type / and
+#         search · Codex: $c2-11-white-box-pentest). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.11
@@ -367,7 +365,7 @@ python3 scripts/lesson.py C2.11
 
 ---
 
-### C2.12 — Black-box agentic pentest — inference, and refusing to report it as fact
+### C2.12 — Black-box pentest
 
 - **Risk** — An agent narrates a confident architecture from status codes, and the report is fiction that reads like findings.
 - **Control** — Every claim is labelled observed or inferred, with the evidence that supports it, and inferences never carry a severity.
@@ -385,9 +383,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.12
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-12-black-box-agentic-pentest
-#         (Claude Code and Copilot: /c2-12-black-box-agentic-pentest · Cursor: type / and
-#         search · Codex: $c2-12-black-box-agentic-pentest). It ends with a readback. ---
+#         c2-12-black-box-pentest
+#         (Claude Code and Copilot: /c2-12-black-box-pentest · Cursor: type / and
+#         search · Codex: $c2-12-black-box-pentest). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.12
@@ -395,7 +393,7 @@ python3 scripts/lesson.py C2.12
 
 ---
 
-### C2.13 — Grey-box agentic pentest — one credential per role, and the matrix it fills
+### C2.13 — Grey-box pentest
 
 - **Risk** — Object-level authorisation is assumed correct because the endpoint list was covered, and BOLA lives in the cells nobody enumerated.
 - **Control** — A roles-by-objects-by-verbs matrix with every cell marked tested, assumed or unreachable, and the assumed cells ranked by blast radius.
@@ -413,9 +411,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.13
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-13-grey-box-agentic-pentest
-#         (Claude Code and Copilot: /c2-13-grey-box-agentic-pentest · Cursor: type / and
-#         search · Codex: $c2-13-grey-box-agentic-pentest). It ends with a readback. ---
+#         c2-13-grey-box-pentest
+#         (Claude Code and Copilot: /c2-13-grey-box-pentest · Cursor: type / and
+#         search · Codex: $c2-13-grey-box-pentest). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.13
@@ -423,7 +421,7 @@ python3 scripts/lesson.py C2.13
 
 ---
 
-### C2.14 — Bonus — testing safely: the controls an offensive agent runs inside
+### C2.14 — Bonus: safety controls for an attacking agent
 
 - **Risk** — The offensive agent is the least supervised and most capable thing in the estate, and its own traffic looks exactly like an attack.
 - **Control** — A preflight that refuses to start the engagement until every control is present, and tells the SOC what to expect.
@@ -440,9 +438,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.14
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-14-bonus
-#         (Claude Code and Copilot: /c2-14-bonus · Cursor: type / and
-#         search · Codex: $c2-14-bonus). It ends with a readback. ---
+#         c2-14-safety-controls-for-an-attacking-agent
+#         (Claude Code and Copilot: /c2-14-safety-controls-for-an-attacking-agent · Cursor: type / and
+#         search · Codex: $c2-14-safety-controls-for-an-attacking-agent). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.14
@@ -450,7 +448,7 @@ python3 scripts/lesson.py C2.14
 
 ---
 
-### C2.15 — Severity calibration, triaging and reporting
+### C2.15 — Severity, triage and reports
 
 - **Risk** — Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing.
 - **Control** — Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.
@@ -470,9 +468,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.15
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-15-severity-calibration
-#         (Claude Code and Copilot: /c2-15-severity-calibration · Cursor: type / and
-#         search · Codex: $c2-15-severity-calibration). It ends with a readback. ---
+#         c2-15-severity
+#         (Claude Code and Copilot: /c2-15-severity · Cursor: type / and
+#         search · Codex: $c2-15-severity). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.15
@@ -480,7 +478,7 @@ python3 scripts/lesson.py C2.15
 
 ---
 
-### C2.16 — Remediation engineering — proven in a sandbox before the merge request
+### C2.16 — Proving a fix before merge
 
 - **Risk** — A patch that silences the scanner is indistinguishable from a patch that fixes the bug.
 - **Control** — Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
@@ -500,9 +498,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.16
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-16-remediation-engineering
-#         (Claude Code and Copilot: /c2-16-remediation-engineering · Cursor: type / and
-#         search · Codex: $c2-16-remediation-engineering). It ends with a readback. ---
+#         c2-16-proving-a-fix-before-merge
+#         (Claude Code and Copilot: /c2-16-proving-a-fix-before-merge · Cursor: type / and
+#         search · Codex: $c2-16-proving-a-fix-before-merge). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.16
@@ -510,7 +508,7 @@ python3 scripts/lesson.py C2.16
 
 ---
 
-### C2.17 — Context engineering — cutting the false positives
+### C2.17 — Cutting false positives with context
 
 - **Risk** — The model is given the repository and asked to be thorough, so the relevant line falls out of the window.
 - **Control** — Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.
@@ -530,9 +528,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.17
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-17-context-engineering
-#         (Claude Code and Copilot: /c2-17-context-engineering · Cursor: type / and
-#         search · Codex: $c2-17-context-engineering). It ends with a readback. ---
+#         c2-17-cutting-false-positives-with-context
+#         (Claude Code and Copilot: /c2-17-cutting-false-positives-with-context · Cursor: type / and
+#         search · Codex: $c2-17-cutting-false-positives-with-context). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.17
@@ -540,7 +538,7 @@ python3 scripts/lesson.py C2.17
 
 ---
 
-### C2.18 — Agentic AI in the pipeline — attesting control intent for agents and MCP servers
+### C2.18 — Attesting agents and MCP servers
 
 - **Risk** — Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.
 - **Control** — Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.
@@ -560,9 +558,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.18
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-18-agentic-ai-in-the-pipeline
-#         (Claude Code and Copilot: /c2-18-agentic-ai-in-the-pipeline · Cursor: type / and
-#         search · Codex: $c2-18-agentic-ai-in-the-pipeline). It ends with a readback. ---
+#         c2-18-attesting-agents-and-mcp-servers
+#         (Claude Code and Copilot: /c2-18-attesting-agents-and-mcp-servers · Cursor: type / and
+#         search · Codex: $c2-18-attesting-agents-and-mcp-servers). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.18
@@ -570,7 +568,7 @@ python3 scripts/lesson.py C2.18
 
 ---
 
-### C2.19 — Bonus — Google Mantis, the pipeline in production
+### C2.19 — Bonus: Google Mantis in production
 
 - **Risk** — A reference implementation is adopted as a product, and its outputs are trusted without an eval.
 - **Control** — Map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.
@@ -590,9 +588,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons C2.19
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         c2-19-bonus
-#         (Claude Code and Copilot: /c2-19-bonus · Cursor: type / and
-#         search · Codex: $c2-19-bonus). It ends with a readback. ---
+#         c2-19-google-mantis-in-production
+#         (Claude Code and Copilot: /c2-19-google-mantis-in-production · Cursor: type / and
+#         search · Codex: $c2-19-google-mantis-in-production). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py C2.19

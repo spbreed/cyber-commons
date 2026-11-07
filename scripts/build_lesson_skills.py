@@ -5,7 +5,7 @@
     python3 scripts/build_lesson_skills.py --check    # CI: nothing stale, nothing loose
 
 A learner should not have to open a terminal to learn a lesson. They pick one
-skill in their own agent — `/a1-1-the-loop` in Claude Code, the same name in
+skill in their own agent — `/a1-1-the-agent-loop` in Claude Code, the same name in
 Codex, Cursor or Copilot — and the agent teaches the idea, gets the code that
 lesson adds, runs it, and says what happened. This writes that skill.
 

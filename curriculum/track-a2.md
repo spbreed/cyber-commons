@@ -3,8 +3,6 @@
 **Function A · Getting Started — Building Agentic AI**  
 *Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Each of the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — is a component built here. Everything the other five functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
-**Course guide:** [A2 in the Function A course guide](https://cybercommons.ai/guide/function-a.html#ch-A2)
-
 **Job titles:** The same audience, one chapter later. Particularly anyone who has to operate, review or sign off on something an agent does.
 
 **What changes:** Five lessons on the machinery that turns a loop that worked once into a system somebody can run: spans, an audit trail that answers the four investigation questions, an evaluation suite with intervals, and the handover that re-reads everything you built as an attack surface. 5 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### A2.0 — Why a demo is not a system — the harness around the loop
+### A2.0 — From demo to system
 
 - **Risk** — A demo promoted to production carries none of the machinery an incident needs, and the first investigation discovers that at the worst moment.
 - **Control** — Spans, an audit trail, an evaluation, and a stop — built before they are needed.
@@ -35,9 +33,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A2.0
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a2-0-why-a-demo-is-not-a-system
-#         (Claude Code and Copilot: /a2-0-why-a-demo-is-not-a-system · Cursor: type / and
-#         search · Codex: $a2-0-why-a-demo-is-not-a-system). It ends with a readback. ---
+#         a2-0-from-demo-to-system
+#         (Claude Code and Copilot: /a2-0-from-demo-to-system · Cursor: type / and
+#         search · Codex: $a2-0-from-demo-to-system). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A2.0
@@ -45,7 +43,7 @@ python3 scripts/lesson.py A2.0
 
 ---
 
-### A2.1 — Observability — the run as spans
+### A2.1 — Tracing a run
 
 - **Risk** — A trace holding only successful calls hides exactly the events worth alerting on, and a token pasted into a span is a credential in the log pipeline.
 - **Control** — One trace id joining the reasoning to the audit row; refusals as first-class spans.
@@ -63,9 +61,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A2.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a2-1-observability
-#         (Claude Code and Copilot: /a2-1-observability · Cursor: type / and
-#         search · Codex: $a2-1-observability). It ends with a readback. ---
+#         a2-1-tracing-a-run
+#         (Claude Code and Copilot: /a2-1-tracing-a-run · Cursor: type / and
+#         search · Codex: $a2-1-tracing-a-run). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A2.1
@@ -73,7 +71,7 @@ python3 scripts/lesson.py A2.1
 
 ---
 
-### A2.2 — The audit trail, and the four questions it has to answer
+### A2.2 — The audit log, and four questions it must answer
 
 - **Risk** — An append-only log the workload can still edit proves nothing, and one that records only successes cannot show what was attempted.
 - **Control** — Append-only storage, the delegation chain on every row, and refusals recorded alongside actions.
@@ -91,9 +89,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A2.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a2-2-the-audit-trail
-#         (Claude Code and Copilot: /a2-2-the-audit-trail · Cursor: type / and
-#         search · Codex: $a2-2-the-audit-trail). It ends with a readback. ---
+#         a2-2-the-audit-log
+#         (Claude Code and Copilot: /a2-2-the-audit-log · Cursor: type / and
+#         search · Codex: $a2-2-the-audit-log). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A2.2
@@ -101,7 +99,7 @@ python3 scripts/lesson.py A2.2
 
 ---
 
-### A2.3 — Evaluating what you built, before anybody attacks it
+### A2.3 — Testing the controls
 
 - **Risk** — A suite everything passes measures nothing, and a score with no interval is a number that will move next week and nobody will know why.
 - **Control** — Cases that fail on the old build and pass on the new one, scored with intervals.
@@ -119,9 +117,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A2.3
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a2-3-evaluating-what-you-built
-#         (Claude Code and Copilot: /a2-3-evaluating-what-you-built · Cursor: type / and
-#         search · Codex: $a2-3-evaluating-what-you-built). It ends with a readback. ---
+#         a2-3-testing-the-controls
+#         (Claude Code and Copilot: /a2-3-testing-the-controls · Cursor: type / and
+#         search · Codex: $a2-3-testing-the-controls). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A2.3
@@ -129,7 +127,7 @@ python3 scripts/lesson.py A2.3
 
 ---
 
-### A2.4 — Evaluating the agent's behaviour — tool calls, outputs, and the model as judge
+### A2.4 — Scoring the agent's behaviour
 
 - **Risk** — "The agent is 90% accurate" with no denominator, no matcher named and no judge validation. Three different numbers can be quoted from one run, the most flattering is the easiest to compute, and an unvalidated judge is a second unmeasured model grading the first.
 - **Control** — Exact-match tool-call accuracy reported with its n and beside the two weaker matchers, output accuracy with unscoreable runs in their own column, and a judge whose agreement with ground truth is published before its verdicts are.
@@ -147,9 +145,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A2.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a2-4-evaluating-the-agents-behaviour
-#         (Claude Code and Copilot: /a2-4-evaluating-the-agents-behaviour · Cursor: type / and
-#         search · Codex: $a2-4-evaluating-the-agents-behaviour). It ends with a readback. ---
+#         a2-4-scoring-the-agents-behaviour
+#         (Claude Code and Copilot: /a2-4-scoring-the-agents-behaviour · Cursor: type / and
+#         search · Codex: $a2-4-scoring-the-agents-behaviour). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A2.4
@@ -157,7 +155,7 @@ python3 scripts/lesson.py A2.4
 
 ---
 
-### A2.5 — What you have built — and every way it can now go wrong
+### A2.5 — What you built, and how it can fail
 
 - **Risk** — Builders who never see their own system described adversarially ship the same defect in the next one.
 - **Control** — The same architecture map, annotated with what an attacker reaches for at each edge.
@@ -175,9 +173,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A2.5
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a2-5-what-you-have-built
-#         (Claude Code and Copilot: /a2-5-what-you-have-built · Cursor: type / and
-#         search · Codex: $a2-5-what-you-have-built). It ends with a readback. ---
+#         a2-5-what-you-built
+#         (Claude Code and Copilot: /a2-5-what-you-built · Cursor: type / and
+#         search · Codex: $a2-5-what-you-built). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A2.5

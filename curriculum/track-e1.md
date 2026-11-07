@@ -3,8 +3,6 @@
 **Function E · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Course guide:** [E1 in the Function E course guide](https://cybercommons.ai/guide/function-e.html#ch-E1)
-
 **Job titles:** SOC Analyst, Security Engineer, Cloud Security Engineer, Security Data Engineer
 
 **What changes:** What already watches the estate — EDR, DLP, CSPM, CNAPP — what each sees when the actor is an agent, the drift that arrives without a code change, and a bonus on finding the agents nobody registered. 4 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### E1.0 — Start here — the agentic SOC, and the stack that runs it
+### E1.0 — Start here: a SOC with agents in it
 
 - **Risk** — A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.
 - **Control** — Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.
@@ -34,9 +32,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E1.0
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e1-0-start-here
-#         (Claude Code and Copilot: /e1-0-start-here · Cursor: type / and
-#         search · Codex: $e1-0-start-here). It ends with a readback. ---
+#         e1-0-a-soc-with-agents-in-it
+#         (Claude Code and Copilot: /e1-0-a-soc-with-agents-in-it · Cursor: type / and
+#         search · Codex: $e1-0-a-soc-with-agents-in-it). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E1.0
@@ -44,7 +42,7 @@ python3 scripts/lesson.py E1.0
 
 ---
 
-### E1.1 — The sensor estate — EDR, DLP, CSPM and CNAPP against an agent
+### E1.1 — What your sensors see of an agent
 
 - **Risk** — Four products are bought, the estate is assumed covered, and the agent's whole working day falls between them.
 - **Control** — A coverage matrix computed per sensor and per agent action, with the uncovered actions named rather than counted.
@@ -62,9 +60,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E1.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e1-1-the-sensor-estate
-#         (Claude Code and Copilot: /e1-1-the-sensor-estate · Cursor: type / and
-#         search · Codex: $e1-1-the-sensor-estate). It ends with a readback. ---
+#         e1-1-what-your-sensors-see-of-an-agent
+#         (Claude Code and Copilot: /e1-1-what-your-sensors-see-of-an-agent · Cursor: type / and
+#         search · Codex: $e1-1-what-your-sensors-see-of-an-agent). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E1.1
@@ -72,7 +70,7 @@ python3 scripts/lesson.py E1.1
 
 ---
 
-### E1.2 — Drift monitoring — behaviour that changes without a code change
+### E1.2 — Behaviour drift
 
 - **Risk** — A detection that worked last month is silently degraded.
 - **Control** — Watch model updates, prompt changes, index refreshes, tool versions.
@@ -92,9 +90,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E1.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e1-2-drift-monitoring
-#         (Claude Code and Copilot: /e1-2-drift-monitoring · Cursor: type / and
-#         search · Codex: $e1-2-drift-monitoring). It ends with a readback. ---
+#         e1-2-behaviour-drift
+#         (Claude Code and Copilot: /e1-2-behaviour-drift · Cursor: type / and
+#         search · Codex: $e1-2-behaviour-drift). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E1.2
@@ -102,7 +100,7 @@ python3 scripts/lesson.py E1.2
 
 ---
 
-### E1.3 — Bonus — finding the agents, and keeping what they emit
+### E1.3 — Bonus: finding the agents
 
 - **Risk** — Prompts, traces, tool calls and approvals never reach the SIEM.
 - **Control** — Onboard agent telemetry deliberately; decide retention.
@@ -120,9 +118,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons E1.3
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         e1-3-bonus
-#         (Claude Code and Copilot: /e1-3-bonus · Cursor: type / and
-#         search · Codex: $e1-3-bonus). It ends with a readback. ---
+#         e1-3-finding-the-agents
+#         (Claude Code and Copilot: /e1-3-finding-the-agents · Cursor: type / and
+#         search · Codex: $e1-3-finding-the-agents). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py E1.3

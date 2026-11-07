@@ -3,8 +3,6 @@
 **Function F · AI Governance for Agentic Systems**  
 *Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
-**Course guide:** [F3 in the Function F course guide](https://cybercommons.ai/guide/function-f.html#ch-F3)
-
 **Job titles:** BISO, Deputy CISO, Head of Security Strategy, CISO
 
 **What changes:** Sequencing, org design, metrics and stop authority for an estate that will not stop at four agents. 8 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### F3.1 — Translating agentic risk upward
+### F3.1 — Explaining agent risk to leaders
 
 - **Risk** — Blast radius explained in engineering terms to a board that needs consequence.
 - **Control** — What can happen, how fast, who can stop it.
@@ -34,9 +32,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F3.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f3-1-translating-agentic-risk-upward
-#         (Claude Code and Copilot: /f3-1-translating-agentic-risk-upward · Cursor: type / and
-#         search · Codex: $f3-1-translating-agentic-risk-upward). It ends with a readback. ---
+#         f3-1-explaining-agent-risk-to-leaders
+#         (Claude Code and Copilot: /f3-1-explaining-agent-risk-to-leaders · Cursor: type / and
+#         search · Codex: $f3-1-explaining-agent-risk-to-leaders). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F3.1
@@ -44,7 +42,7 @@ python3 scripts/lesson.py F3.1
 
 ---
 
-### F3.2 — Governing autonomy rather than approving tools
+### F3.2 — Governing autonomy, not tools
 
 - **Risk** — A per-tool review queue becomes a bottleneck and then a bypass.
 - **Control** — A policy on delegated authority instead of tool-by-tool approval.
@@ -61,9 +59,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F3.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f3-2-governing-autonomy-rather-than-approving
-#         (Claude Code and Copilot: /f3-2-governing-autonomy-rather-than-approving · Cursor: type / and
-#         search · Codex: $f3-2-governing-autonomy-rather-than-approving). It ends with a readback. ---
+#         f3-2-governing-autonomy
+#         (Claude Code and Copilot: /f3-2-governing-autonomy · Cursor: type / and
+#         search · Codex: $f3-2-governing-autonomy). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F3.2
@@ -71,7 +69,7 @@ python3 scripts/lesson.py F3.2
 
 ---
 
-### F3.3 — Sequencing the programme
+### F3.3 — Ordering the programme
 
 - **Risk** — Starting with the workflow that is most visible rather than most winnable.
 - **Control** — Use the maturity model to order investment; choose your first hard "no".
@@ -88,9 +86,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F3.3
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f3-3-sequencing-the-programme
-#         (Claude Code and Copilot: /f3-3-sequencing-the-programme · Cursor: type / and
-#         search · Codex: $f3-3-sequencing-the-programme). It ends with a readback. ---
+#         f3-3-ordering-the-programme
+#         (Claude Code and Copilot: /f3-3-ordering-the-programme · Cursor: type / and
+#         search · Codex: $f3-3-ordering-the-programme). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F3.3
@@ -98,7 +96,7 @@ python3 scripts/lesson.py F3.3
 
 ---
 
-### F3.4 — Org design and ownership
+### F3.4 — Teams and ownership
 
 - **Risk** — Harness engineering with no home; research as a hobby.
 - **Control** — Identity owns the control plane; BUs own grants; security owns stop authority.
@@ -115,9 +113,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F3.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f3-4-org-design-and-ownership
-#         (Claude Code and Copilot: /f3-4-org-design-and-ownership · Cursor: type / and
-#         search · Codex: $f3-4-org-design-and-ownership). It ends with a readback. ---
+#         f3-4-teams-and-ownership
+#         (Claude Code and Copilot: /f3-4-teams-and-ownership · Cursor: type / and
+#         search · Codex: $f3-4-teams-and-ownership). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F3.4
@@ -125,7 +123,7 @@ python3 scripts/lesson.py F3.4
 
 ---
 
-### F3.5 — The metrics that matter at your level
+### F3.5 — Metrics for each level
 
 - **Risk** — Reporting activity instead of exposure.
 - **Control** — Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.
@@ -143,9 +141,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F3.5
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f3-5-the-metrics-that-matter-at-your-level
-#         (Claude Code and Copilot: /f3-5-the-metrics-that-matter-at-your-level · Cursor: type / and
-#         search · Codex: $f3-5-the-metrics-that-matter-at-your-level). It ends with a readback. ---
+#         f3-5-metrics-for-each-level
+#         (Claude Code and Copilot: /f3-5-metrics-for-each-level · Cursor: type / and
+#         search · Codex: $f3-5-metrics-for-each-level). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F3.5
@@ -153,7 +151,7 @@ python3 scripts/lesson.py F3.5
 
 ---
 
-### F3.6 — Saying no, and saying yes with conditions
+### F3.6 — Saying yes with conditions
 
 - **Risk** — Conditional approval that is aspirational rather than enforceable.
 - **Control** — Autonomy promotion as an earned event with named evidence.
@@ -170,9 +168,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F3.6
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f3-6-saying-no
-#         (Claude Code and Copilot: /f3-6-saying-no · Cursor: type / and
-#         search · Codex: $f3-6-saying-no). It ends with a readback. ---
+#         f3-6-saying-yes-with-conditions
+#         (Claude Code and Copilot: /f3-6-saying-yes-with-conditions · Cursor: type / and
+#         search · Codex: $f3-6-saying-yes-with-conditions). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F3.6
@@ -180,7 +178,7 @@ python3 scripts/lesson.py F3.6
 
 ---
 
-### F3.7 — Building the capability
+### F3.7 — Building the team's skills
 
 - **Risk** — Hiring for conceptual familiarity instead of practice.
 - **Control** — Interview questions that separate the two; internal transition paths.
@@ -197,9 +195,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F3.7
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f3-7-building-the-capability
-#         (Claude Code and Copilot: /f3-7-building-the-capability · Cursor: type / and
-#         search · Codex: $f3-7-building-the-capability). It ends with a readback. ---
+#         f3-7-building-the-teams-skills
+#         (Claude Code and Copilot: /f3-7-building-the-teams-skills · Cursor: type / and
+#         search · Codex: $f3-7-building-the-teams-skills). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F3.7

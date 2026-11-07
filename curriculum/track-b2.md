@@ -3,8 +3,6 @@
 **Function B · Securing AI Architectures**  
 *CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
-**Course guide:** [B2 in the Function B course guide](https://cybercommons.ai/guide/function-b.html#ch-B2)
-
 **Job titles:** IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer
 
 **What changes:** The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 8 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### B2.1 — Agent identity — user, workload, agent
+### B2.1 — Agent identity: user, workload, agent
 
 - **Risk** — A shared service account answers 'what ran' and destroys 'for whom' — so no later control can be conditioned on the caller.
 - **Control** — A distinct identity per workload, carrying the human principal alongside it, asserted on every call.
@@ -45,7 +43,7 @@ python3 scripts/lesson.py B2.1
 
 ---
 
-### B2.2 — Bootstrapping the first credential
+### B2.2 — The first credential
 
 - **Risk** — A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.
 - **Control** — Platform attestation exchanged for a short-lived, workload-bound credential.
@@ -63,9 +61,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B2.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b2-2-bootstrapping-the-first-credential
-#         (Claude Code and Copilot: /b2-2-bootstrapping-the-first-credential · Cursor: type / and
-#         search · Codex: $b2-2-bootstrapping-the-first-credential). It ends with a readback. ---
+#         b2-2-the-first-credential
+#         (Claude Code and Copilot: /b2-2-the-first-credential · Cursor: type / and
+#         search · Codex: $b2-2-the-first-credential). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B2.2
@@ -73,7 +71,7 @@ python3 scripts/lesson.py B2.2
 
 ---
 
-### B2.3 — Delegation that narrows, and survives audit
+### B2.3 — Delegation that narrows
 
 - **Risk** — Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked.
 - **Control** — Token exchange that intersects presented scope with the actor's ceiling, and records the chain.
@@ -101,7 +99,7 @@ python3 scripts/lesson.py B2.3
 
 ---
 
-### B2.4 — Just-in-time authority
+### B2.4 — Just-in-time access
 
 - **Risk** — Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives.
 - **Control** — Short-lived, purpose-bound grants issued per task and expiring with it.
@@ -119,9 +117,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B2.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b2-4-just-in-time-authority
-#         (Claude Code and Copilot: /b2-4-just-in-time-authority · Cursor: type / and
-#         search · Codex: $b2-4-just-in-time-authority). It ends with a readback. ---
+#         b2-4-just-in-time-access
+#         (Claude Code and Copilot: /b2-4-just-in-time-access · Cursor: type / and
+#         search · Codex: $b2-4-just-in-time-access). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B2.4
@@ -129,7 +127,7 @@ python3 scripts/lesson.py B2.4
 
 ---
 
-### B2.5 — The non-human identity lifecycle
+### B2.5 — Managing machine identities
 
 - **Risk** — Agents accumulate with no owner and no expiry, and an unregistered agent joins a topology as a peer.
 - **Control** — A registry with a named owner, an expiry, and admission bound to a registered identity.
@@ -147,9 +145,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B2.5
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b2-5-the-non-human-identity-lifecycle
-#         (Claude Code and Copilot: /b2-5-the-non-human-identity-lifecycle · Cursor: type / and
-#         search · Codex: $b2-5-the-non-human-identity-lifecycle). It ends with a readback. ---
+#         b2-5-managing-machine-identities
+#         (Claude Code and Copilot: /b2-5-managing-machine-identities · Cursor: type / and
+#         search · Codex: $b2-5-managing-machine-identities). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B2.5
@@ -157,7 +155,7 @@ python3 scripts/lesson.py B2.5
 
 ---
 
-### B2.6 — Ingress: marking untrusted content at the door
+### B2.6 — Marking untrusted content
 
 - **Risk** — Concatenation destroys the one fact that separates an operator instruction from an attacker's: where it came from.
 - **Control** — Provenance tagging at every ingress point, and a rule that only trusted origins may select a tool.
@@ -177,9 +175,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B2.6
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b2-6-ingress-marking-untrusted-content-at-the
-#         (Claude Code and Copilot: /b2-6-ingress-marking-untrusted-content-at-the · Cursor: type / and
-#         search · Codex: $b2-6-ingress-marking-untrusted-content-at-the). It ends with a readback. ---
+#         b2-6-marking-untrusted-content
+#         (Claude Code and Copilot: /b2-6-marking-untrusted-content · Cursor: type / and
+#         search · Codex: $b2-6-marking-untrusted-content). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B2.6
@@ -187,7 +185,7 @@ python3 scripts/lesson.py B2.6
 
 ---
 
-### B2.7 — Attribution: an audit trail that answers "who"
+### B2.7 — Audit logs that say who
 
 - **Risk** — Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.
 - **Control** — Per-hop attribution written to an append-only store outside the agent's reach.
@@ -205,9 +203,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B2.7
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b2-7-attribution-an-audit-trail-that-answers
-#         (Claude Code and Copilot: /b2-7-attribution-an-audit-trail-that-answers · Cursor: type / and
-#         search · Codex: $b2-7-attribution-an-audit-trail-that-answers). It ends with a readback. ---
+#         b2-7-audit-logs-that-say-who
+#         (Claude Code and Copilot: /b2-7-audit-logs-that-say-who · Cursor: type / and
+#         search · Codex: $b2-7-audit-logs-that-say-who). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B2.7
@@ -215,7 +213,7 @@ python3 scripts/lesson.py B2.7
 
 ---
 
-### B2.8 — An audit trail the workload cannot forge
+### B2.8 — Audit logs that cannot be forged
 
 - **Risk** — An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls.
 - **Control** — Out-of-band capture (C2.10), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
@@ -233,9 +231,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B2.8
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b2-8-an-audit-trail-the-workload-cannot-forge
-#         (Claude Code and Copilot: /b2-8-an-audit-trail-the-workload-cannot-forge · Cursor: type / and
-#         search · Codex: $b2-8-an-audit-trail-the-workload-cannot-forge). It ends with a readback. ---
+#         b2-8-audit-logs-that-cannot-be-forged
+#         (Claude Code and Copilot: /b2-8-audit-logs-that-cannot-be-forged · Cursor: type / and
+#         search · Codex: $b2-8-audit-logs-that-cannot-be-forged). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B2.8

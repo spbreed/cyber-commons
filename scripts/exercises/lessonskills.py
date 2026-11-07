@@ -51,11 +51,15 @@ RUNTIME_LESSONS: frozenset[str] = frozenset({"A0.0"})
 def slug(title: str) -> str:
     """The lesson's short name: its title before the first dash.
 
-    Titles are "Name — what it covers", and the part after the dash is a
-    sentence, not a name. A few have a comma instead ("The audit trail, and the
+    Titles are "Name — what it covers" or "Name: what it covers", and the part
+    after the dash or colon is a sentence, not a name. A few have a comma instead ("The audit trail, and the
     four questions it has to answer"), which cuts the same way.
     """
-    head = re.split(r"\s+[—–-]\s+|,\s+", title, maxsplit=1)[0]
+    # A colon cuts too ("The agent loop: plan, act, check"), except after a
+    # label that is not a name: "Start here: …" and "Bonus: …" keep the rest,
+    # or four functions would each have a skill called `start-here`.
+    title = re.sub(r"^(Start here|Bonus):\s+", "", title)
+    head = re.split(r"\s+[—–-]\s+|,\s+|:\s+", title, maxsplit=1)[0]
     # Apostrophes go before anything else: "agent's" is one word, and turning
     # the apostrophe into a hyphen made "agent-s" in a name.
     head = re.sub(r"['\u2019]", "", head.lower())
@@ -72,7 +76,7 @@ def slug(title: str) -> str:
 
 
 def skill_name(sid: str, title: str) -> str:
-    """`A1.1` + "The loop — …" -> `a1-1-the-loop`.
+    """`A1.1` + "The agent loop: plan, act, check" -> `a1-1-the-agent-loop`.
 
     Lowercase and hyphenated because the agentskills.io format requires the
     directory name to match the frontmatter name, and every agent loads it

@@ -330,6 +330,11 @@ ol.steps{list-style:none;margin:0;padding:0}
 .cell .out.err{border-color:#f0c4c4;background:#fff7f7;color:#7f1d1d}
 .cell .out:empty::before{content:"Output appears here when you press Run.";color:var(--text-faint);font-style:italic}
 .cell .mine{font-size:13.5px;color:var(--text-faint);margin:8px 2px 0}
+.lab-hud{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:#047857;background:#f1fbf7;
+  border:1px solid #bfe6d6;border-radius:999px;padding:2px 10px}
+.lab-hud:empty{display:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0d1b26;color:#fff;
+  padding:9px 18px;border-radius:999px;font-weight:600;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 /* the lesson, folded */
 .lesson{padding:18px 22px 22px;border-top:1px solid var(--line-soft);background:#fcfdfe}
 .lesson h3{font-size:18px;margin:0 0 2px}
@@ -481,7 +486,8 @@ function setup(sec){
     sec.querySelector(".prev").disabled = cur === 0;
     sec.querySelector(".next").disabled = cur === steps.length - 1;
   }
-  function mark(i, ok){ rows[i].classList.toggle("done", ok); rows[i].classList.toggle("fail", !ok); }
+  function mark(i, ok){ rows[i].classList.toggle("done", ok); rows[i].classList.toggle("fail", !ok);
+    if (ok) progress(sec.id, i, steps.length); }
   // Steps share one Python session, so step 3 may use a name step 1 made.
   // Running step 3 first raised NameError, which read as broken code; any
   // earlier step not yet run in this session is run first, in order.
@@ -525,6 +531,32 @@ function setup(sec){
   show(0);
 }
 
+// Progress, for the home page's quest. Kept in this browser only; every
+// access is guarded because storage can be blocked, and then nothing here
+// changes how the lab itself works.
+var KEY = "cc.v1", CHAPTERS = %(chapters)s;
+function load(){ try { return Object.assign({xp:0, steps:{}, done:[], badges:[], quiz:{}},
+  JSON.parse(localStorage.getItem(KEY) || "{}")); } catch(e) { return null; } }
+function store(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e) {} }
+function toast(t){ var d = document.createElement("div"); d.className = "toast"; d.textContent = t;
+  document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 1600); }
+function badge(st, b, name){ if (st.badges.indexOf(b) < 0) { st.badges.push(b); toast("Badge: " + name); } }
+function progress(sid, i, n){
+  var st = load(); if (!st) return;
+  var got = st.steps[sid] = st.steps[sid] || [];
+  if (got.indexOf(i) >= 0) return;
+  got.push(i); st.xp += 10; toast("+10 XP");
+  badge(st, "first", "First run");
+  if (got.length === n && st.done.indexOf(sid) < 0) { st.done.push(sid); st.xp += 20; toast("Lab " + sid + " complete · +20 XP"); }
+  Object.keys(CHAPTERS).forEach(function(c){
+    if (CHAPTERS[c].every(function(x){ return st.done.indexOf(x) >= 0; })) badge(st, c, "Chapter " + c + " cleared"); });
+  store(st); hud();
+}
+function hud(){ var st = load(), el = document.querySelector(".lab-hud"); if (!st || !el) return;
+  el.textContent = st.xp + " XP · " + st.done.length + " of " + %(total)d + " labs"; }
+document.addEventListener("click", function(e){
+  if (e.target.closest && e.target.closest(".ide .copy")) { var st = load(); if (st) { badge(st, "local", "Took it local"); store(st); } } });
+
 function copyable(){
   document.querySelectorAll(".blk").forEach(function(b){
     var btn = document.createElement("button"); btn.className = "copy"; btn.type = "button"; btn.textContent = "Copy";
@@ -546,6 +578,7 @@ function route(){
 document.querySelectorAll("section.lab").forEach(setup);
 copyable();
 route();
+hud();
 })();
 """
 
@@ -654,8 +687,8 @@ def section(track: dict, s: dict, tid: str) -> str:
             f'<button type="button" data-m="run" aria-pressed="true">In your browser</button>'
             f'<button type="button" data-m="ide" aria-pressed="false">In your IDE</button></span></div>'
             f'<h2>{E(s["title"])}</h2><p>{E(lab["goal"])}</p>'
-            f'<div class="links"><a href="#lesson">The lesson behind this lab ↓</a>'
-            f'<a href="../guide/function-a.html#ch-{E(track["id"])}">Course guide →</a></div></div>')
+            f'<div class="links"><a href="#lesson">For detailed learning ↓</a>'
+            '</div></div>')
     bar = ('<div class="bar"><button type="button" class="reset" title="Start this lesson again">↺ Reset</button>'
            '<button type="button" class="prev" aria-label="Previous step">‹</button>'
            '<button type="button" class="play">▶ Play</button>'
@@ -685,8 +718,8 @@ def lesson_html(sid: str) -> str:
     folds = "".join(f'<details class="lfold"><summary>{E(h)}</summary>'
                     f'<div class="lbody">{body}</div></details>'
                     for h, body in BS.lab_sections(entry))
-    return (f'<div class="lesson" id="lesson"><h3>The lesson behind this lab</h3>'
-            f'<p>Open any part to read it.</p>{folds}</div>')
+    return (f'<div class="lesson" id="lesson"><h3>For detailed learning</h3>'
+            f'<p>The ideas behind the steps above. Open any part to read it.</p>{folds}</div>')
 
 
 def side(current: str | None) -> str:
@@ -702,8 +735,7 @@ def side(current: str | None) -> str:
     out.append('</nav><div class="foot">Every step runs real Python in your '
                'browser, against CyberTravels as it stood at the end of that '
                'lesson. Nothing is installed on your computer.<br><br>'
-               '<a href="../lessons/index.html" style="padding:0">All lessons</a> · '
-               '<a href="../guide/function-a.html" style="padding:0">Course guide</a></div></aside>')
+               '<a href="../lessons/index.html" style="padding:0">All lessons</a></div></aside>')
     return "".join(out)
 
 
@@ -766,9 +798,12 @@ def lesson_page(b: dict, i: int) -> str:
     nav = '<div class="lab-pn">' + (
         f'<a href="{prev["id"]}.html">← {prev["id"]}</a>' if prev else '<span></span>') + (
         f'<a href="{nxt["id"]}.html">{nxt["id"]} →</a>' if nxt else '<span></span>') + '</div>'
-    main = (f'<div class="lab-intro slim">{STATUS}{nav}</div>'
+    main = (f'<div class="lab-intro slim">{STATUS}<span class="lab-hud" aria-live="polite"></span>{nav}</div>'
             f'{section(t, s, b["lessons"][s["id"]])}{nav}')
-    js = JS % {"pyodide": json.dumps(PYODIDE), "pyjwt": json.dumps(PYJWT)}
+    js = JS % {"pyodide": json.dumps(PYODIDE), "pyjwt": json.dumps(PYJWT),
+               "chapters": json.dumps({tr["id"]: [x["id"] for x in tr["sessions"]]
+                                       for tr in FN["tracks"]}),
+               "total": len(seq)}
     return shell(f"{s['id']} hands-on — {s['title']} | Cyber Commons",
                  f"{s['id']}, hands on: {LAB[s['id']]['goal']}", s["id"], main, js)
 

@@ -3,8 +3,6 @@
 **Function A · Getting Started — Building Agentic AI**  
 *Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Each of the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — is a component built here. Everything the other five functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
-**Course guide:** [A0 in the Function A course guide](https://cybercommons.ai/guide/function-a.html#ch-A0)
-
 **Job titles:** Anyone, in any of the five roles. This chapter assumes no security background. It does assume you can install software on the machine in front of you.
 
 **What changes:** Two lessons. The first is the whole front door on one page: what the commons is and who it is for, the developer AI tools compared on context window and real cost, the clone, and the model endpoint every later lesson depends on, proven with one run — then how a lesson page is built, which function to open first, what Day 0/1/2 mean, the open-source-first rule, and the four frameworks. The second is the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — drawn on one page and placed in CyberTravels. 2 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### A0.0 — Set up your computer — what this is, who it is for, and the model every lesson runs on
+### A0.0 — Set up your computer
 
 - **Lab** — Set your computer up from nothing, run one skill and read back which model answered, then find your role's row and the lesson it starts at.
 - **Tools** — `ollama`, `git`, `python3`
@@ -43,7 +41,7 @@ python3 scripts/lesson.py A0.0
 
 ---
 
-### A0.1 — Nine words for an agent — harness to multi-agent, and where each is built
+### A0.1 — 9 agent concepts you need to know
 
 - **Lab** — Find all nine in the finished CyberTravels tree (checkpoint A2.5) — a file for each — and count how many you placed.
 - **Tools** — `MCP`, `A2A`, `Agent Skills`
@@ -59,9 +57,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A0.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a0-1-nine-words-for-an-agent
-#         (Claude Code and Copilot: /a0-1-nine-words-for-an-agent · Cursor: type / and
-#         search · Codex: $a0-1-nine-words-for-an-agent). It ends with a readback. ---
+#         a0-1-9-agent-concepts-you-need-to-know
+#         (Claude Code and Copilot: /a0-1-9-agent-concepts-you-need-to-know · Cursor: type / and
+#         search · Codex: $a0-1-9-agent-concepts-you-need-to-know). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A0.1

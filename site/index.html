@@ -136,6 +136,113 @@
   .video .cap a{color:var(--accent);text-decoration:none}
   .video .cap code{font-size:11px;color:var(--text-dim)}
 
+
+  /* ---- 00 · learn by doing: the explainer ---- */
+  .mg{margin:28px 0 0;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0d1b26}
+  .mg-frame{position:relative;aspect-ratio:16/8;overflow:hidden;
+    background:radial-gradient(120% 90% at 20% 10%,#16384a 0,#0d1b26 60%)}
+  .mg-scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;padding:24px;opacity:0;transform:scale(.97);transition:opacity .5s,transform .5s}
+  .mg-frame[data-scene="0"] .s0,.mg-frame[data-scene="1"] .s1,.mg-frame[data-scene="2"] .s2,
+  .mg-frame[data-scene="3"] .s3{opacity:1;transform:none}
+  .mg .cap{margin:0;color:#e6f3f8;font-size:clamp(16px,2.2vw,22px);font-weight:600}
+  .mg .cap b{display:inline-flex;width:28px;height:28px;border-radius:50%;background:var(--accent);
+    color:#fff;align-items:center;justify-content:center;font-size:15px;margin-right:8px}
+  .win{width:min(640px,92%);background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.35);position:relative}
+  .win.ide{background:#0a141c;border:1px solid #23394a}
+  .chrome{display:flex;gap:6px;align-items:center;padding:8px 12px;background:#eef3f7;border-bottom:1px solid #d9e3ea}
+  .win.ide .chrome{background:#13232f;border-color:#23394a}
+  .chrome i{width:9px;height:9px;border-radius:50%;background:#c9d6df}
+  .chrome span{margin-left:10px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:#475a6b}
+  .win.ide .chrome span{color:#8fb3c6}
+  .pick{padding:12px 16px;display:grid;gap:6px;font-size:15px;color:#34495a}
+  .pick div{padding:6px 10px;border-radius:7px;border:1px solid #e6eef4}
+  .s0 .pick .hit{animation:hit 2.4s .6s both}
+  @keyframes hit{0%{background:#fff}40%,100%{background:#cdeaf2;border-color:#0e7490;color:#0d1b26;font-weight:600}}
+  .lanes4{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;font-weight:700;font-size:13px;
+    color:#0d1b26;padding:10px 8px 6px;border-bottom:2px solid #d3e0e9}
+  .arr{height:2px;background:#0e7490;margin:14px 0 0;transform-origin:left;transform:scaleX(0)}
+  .arr.a1{margin-left:37.5%;width:25%}.arr.a2{margin-left:62.5%;width:25%}
+  .s1 .arr.a1{animation:draw .6s 1.4s forwards}.s1 .arr.a2{animation:draw .6s 2.1s forwards}
+  @keyframes draw{to{transform:scaleX(1)}}
+  .playbtn{position:absolute;right:10px;top:4px;background:#0e7490;color:#fff;font-weight:600;font-size:13px;
+    padding:4px 12px;border-radius:7px;animation:press 1s .5s both}
+  @keyframes press{40%{transform:scale(.88)}100%{transform:none}}
+  .mg pre{margin:12px;padding:10px 12px;border-radius:8px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;
+    line-height:1.7;white-space:pre-wrap;min-height:64px}
+  .mg pre.out{background:#f6f9fb;color:#0d1b26;border:1px solid #e6eef4}
+  .mg pre.term{background:transparent;color:#d7e6ee}
+  .mg pre span{display:block;opacity:0;white-space:pre}
+  .s1 .t1{animation:type .4s 2.8s forwards}.s1 .t2{animation:type .4s 3.3s forwards}
+  .s2 .t1{animation:type .4s .6s forwards}.s2 .t2{animation:type .4s 1.7s forwards}.s2 .t3{animation:type .4s 2.6s forwards}
+  .s3 .t1{animation:type .4s .5s forwards}.s3 .t2{animation:type .4s 1s forwards}.s3 .t3{animation:type .4s 1.8s forwards}
+  .mg .ok{color:#6ee7b7;font-weight:600}
+  @keyframes type{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+  .xpop{position:absolute;right:14px;bottom:14px;background:#a7f3d0;color:#064e3b;font-weight:700;font-size:13px;
+    padding:5px 12px;border-radius:999px;opacity:0;animation:pop .5s 2.4s forwards}
+  @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.8)}to{opacity:1;transform:none}}
+  .mg-ctl{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#0f2230;border-top:1px solid #1d3646}
+  .mg-ctl button{font:inherit;cursor:pointer}
+  .mg-pp{background:transparent;border:1px solid #2d4a5c;color:#cfe3ec;border-radius:7px;padding:2px 10px}
+  .mg-dots{display:flex;gap:6px}
+  .mg-dots button{width:26px;height:6px;border-radius:3px;border:0;background:#2d4a5c;padding:0}
+  .mg-dots button[aria-current=true]{background:#22d3ee}
+  .mg-try{margin-left:auto;color:#a5f3fc;text-decoration:none;font-weight:600}
+  /* No script, or reduced motion: the four scenes as a still strip. */
+  html:not(.js) .mg-frame,.mg-frame.still{aspect-ratio:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;padding:8px}
+  html:not(.js) .mg-scene,.mg-frame.still .mg-scene{position:static;opacity:1;transform:none}
+  html:not(.js) .mg pre span,.mg-frame.still pre span,.mg-frame.still .xpop{opacity:1;animation:none}
+  .mg-frame.still .arr{transform:none;animation:none}
+  html:not(.js) .mg-ctl{display:none}
+  @media (max-width:640px){.mg-frame{aspect-ratio:4/5}.mg .cap{font-size:16px}}
+
+  /* ---- the quest ---- */
+  .qh{font-size:22px;margin:40px 0 12px}
+  .quest .hud{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:14px 18px;border:1px solid var(--line);
+    border-radius:14px;background:linear-gradient(90deg,#f0fbfe,#fff);background-color:#f0fbfe}
+  .hud .lvl span,.hud .xpl span{display:block;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--text-faint)}
+  .hud .lvl b{font-size:20px}
+  .hud .xp{flex:1;min-width:220px}
+  .hud .xpl{display:flex;gap:10px;align-items:baseline}
+  .hud .xpl b{font-size:20px}.hud .xpl em{font-style:normal;color:var(--text-faint);font-size:14px;margin-left:auto}
+  .hud .bar{height:10px;border-radius:5px;background:#e3edf3;overflow:hidden;margin-top:6px}
+  .hud .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#0891b2,#0e7490);transition:width .8s}
+  .hud .go{background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:9px 16px;border-radius:9px}
+  .qmap{margin-top:14px;display:grid;gap:10px}
+  .qrow{display:grid;grid-template-columns:170px 1fr;gap:12px;align-items:center}
+  .qch{font-size:14.5px;color:var(--text-dim)}.qch b{color:var(--text);font-family:"IBM Plex Mono",monospace}
+  .qnodes{display:flex;flex-wrap:wrap;gap:8px}
+  .qn{position:relative;display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border:1px solid var(--line);
+    border-radius:999px;background:#fff;text-decoration:none;color:var(--text-dim);font-size:14px;transition:transform .15s,border-color .15s}
+  .qn:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .qn b{width:40px;height:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;background:#eef3f7;color:var(--text-dim)}
+  .qn span{max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .qn.done{border-color:#6fb59a;background:#f1fbf7}.qn.done b{background:#047857;color:#fff}
+  .qn.next{border-color:var(--accent);box-shadow:0 0 0 3px #cdeaf2}
+  .qcols{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:18px;margin-top:22px}
+  .quiz,.badges{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff}
+  .quiz h3,.badges h3{font-size:19px;margin:0 0 4px}
+  .quiz>p,.badges .note{margin:0 0 10px;color:var(--text-faint);font-size:14.5px}
+  .qq{border-top:1px solid var(--line-soft);padding:10px 0}
+  .qt{margin:0 0 8px;color:var(--text)}
+  .qo{display:flex;flex-wrap:wrap;gap:6px}
+  .qo button{font:inherit;font-size:14.5px;text-align:left;border:1px solid var(--line);background:#f6f9fb;
+    color:var(--text-dim);border-radius:9px;padding:6px 12px;cursor:pointer}
+  .qo button:hover{border-color:var(--accent)}
+  .qo button.right{background:#d1fae5;border-color:#047857;color:#064e3b}
+  .qo button.wrong{background:#fdecec;border-color:#b91c1c;color:#7f1d1d}
+  .qa{margin-top:6px;font-size:14.5px;color:var(--text-dim)}.qa summary{cursor:pointer;color:var(--accent)}
+  .badges ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .badges li{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;color:var(--text-faint);font-size:13px;line-height:1.35}
+  .badges li i{font-style:normal;color:#c3ced8;font-size:18px;margin-right:6px}
+  .badges li b{color:var(--text-dim);font-size:14.5px}.badges li span{display:block}
+  .badges li.got{border:1px solid #6fb59a;background:#f1fbf7}.badges li.got i{color:#047857}
+  .badges li.got b{color:var(--text)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0d1b26;color:#fff;
+    padding:10px 18px;border-radius:999px;font-weight:600;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  @media (max-width:760px){.qrow{grid-template-columns:1fr}.qcols{grid-template-columns:1fr}.badges ul{grid-template-columns:1fr}}
   .btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
   .btn{font-family:"IBM Plex Mono";font-size:14px;text-decoration:none;padding:15px 26px;
     border-radius:10px;display:inline-block;
@@ -291,6 +398,51 @@
 
   </div>
 </div>
+
+<!-- ================= 0 · LEARN BY DOING ================= -->
+<section class="sec" id="play">
+  <div class="wrap">
+    <span class="eyebrow">00 / Learn by doing</span>
+    <h2>Run it in your browser. Then run it on your own machine.</h2>
+    <p class="say">Every Function A lesson is a lab. Press <b>Play</b> and real Python runs in this browser, step by step, against the real CyberTravels code. Then copy the same steps into your own IDE and run them there. <b>Watching is not the lesson. Running it is.</b></p>
+
+    <!-- The explainer. Four scenes on a loop, driven by a class the script
+         below sets. Without the script, or with reduced motion asked for, the
+         four scenes sit side by side as a still strip and say the same thing. -->
+    <figure class="mg rv" aria-label="How a lab works: pick a lab, run it in your browser, take it to your IDE, run it on your machine.">
+      <div class="mg-frame" data-scene="0">
+        <div class="mg-scene s0">
+          <div class="win"><div class="chrome"><i></i><i></i><i></i><span>cybercommons.ai/lab</span></div>
+            <div class="pick"><div>A0.0 Set up your computer</div><div>A1.1 The agent loop</div><div class="hit">A1.4 One token per action</div><div>A1.5 Memory</div></div></div>
+          <p class="cap"><b>1</b> Pick a lab</p></div>
+        <div class="mg-scene s1">
+          <div class="win"><div class="chrome"><i></i><i></i><i></i><span>cybercommons.ai/lab/A1.4</span></div>
+            <div class="lanes4"><span>Person</span><span>Agent</span><span>Token exchange</span><span>Payments</span></div>
+            <div class="arr a1"></div><div class="arr a2"></div>
+            <div class="playbtn">▶ Play</div>
+            <pre class="out"><span class="t1">dana  -&gt; REFUSED: role 'traveller' may not delegate</span><span class="t2">priya -&gt; minted</span></pre></div>
+          <p class="cap"><b>2</b> Press Play. It runs in your browser</p></div>
+        <div class="mg-scene s2">
+          <div class="win ide"><div class="chrome"><i></i><i></i><i></i><span>your IDE · terminal</span></div>
+            <pre class="term"><span class="t1">$ python3 scripts/install_skills.py --all --lessons A1.4</span><span class="t2">$ claude</span><span class="t3">&gt; /a1-4-one-token-per-action</span></pre></div>
+          <p class="cap"><b>3</b> Copy it into your IDE</p></div>
+        <div class="mg-scene s3">
+          <div class="win ide"><div class="chrome"><i></i><i></i><i></i><span>your machine</span></div>
+            <pre class="term"><span class="t1">dana  -&gt; REFUSED</span><span class="t2">priya -&gt; minted</span><span class="t3 ok">✓ ran on your machine</span></pre>
+            <div class="xpop">+30 XP · Took it local</div></div>
+          <p class="cap"><b>4</b> Run it yourself. That is the lesson</p></div>
+      </div>
+      <div class="mg-ctl"><button type="button" class="mg-pp" aria-label="Pause">❚❚</button>
+        <span class="mg-dots"><button type="button" data-s="0" aria-label="Scene 1"></button><button type="button" data-s="1" aria-label="Scene 2"></button><button type="button" data-s="2" aria-label="Scene 3"></button><button type="button" data-s="3" aria-label="Scene 4"></button></span>
+        <a class="mg-try" href="lab/A1.4.html">Try A1.4 now ▶</a></div>
+    </figure>
+
+    <h3 class="qh">Your quest: Function A, sixteen labs</h3>
+<!-- QUEST:BEGIN — generated by scripts/build_site.py, do not hand-edit -->
+<div class="quest" id="quest"><div class="hud"><div class="lvl"><span>Level</span><b data-hud="level">Visitor</b></div><div class="xp"><div class="xpl"><span>XP</span><b data-hud="xp">0</b><em data-hud="labs">0 of 16 labs</em></div><div class="bar"><i data-hud="bar"></i></div></div><a class="go" data-hud="next" href="lab/A0.0.html">Start the first lab ▶</a></div><div class="qmap"><div class="qrow"><div class="qch"><b>A0</b> Set Up</div><div class="qnodes"><a class="qn" href="lab/A0.0.html" data-l="A0.0" title="Set up your computer"><b>A0.0</b><span>Set up your computer</span></a><a class="qn" href="lab/A0.1.html" data-l="A0.1" title="9 agent concepts you need to know"><b>A0.1</b><span>9 agent concepts you need to know</span></a></div></div><div class="qrow"><div class="qch"><b>A1</b> Build the Agent</div><div class="qnodes"><a class="qn" href="lab/A1.0.html" data-l="A1.0" title="What an agent is, and what you will build"><b>A1.0</b><span>What an agent is, and what you will build</span></a><a class="qn" href="lab/A1.1.html" data-l="A1.1" title="The agent loop: plan, act, check"><b>A1.1</b><span>The agent loop: plan, act, check</span></a><a class="qn" href="lab/A1.2.html" data-l="A1.2" title="Tools over MCP"><b>A1.2</b><span>Tools over MCP</span></a><a class="qn" href="lab/A1.3.html" data-l="A1.3" title="Identity: people, agents and tokens"><b>A1.3</b><span>Identity: people, agents and tokens</span></a><a class="qn" href="lab/A1.4.html" data-l="A1.4" title="One token per action"><b>A1.4</b><span>One token per action</span></a><a class="qn" href="lab/A1.5.html" data-l="A1.5" title="Memory, and where it came from"><b>A1.5</b><span>Memory, and where it came from</span></a><a class="qn" href="lab/A1.6.html" data-l="A1.6" title="Messages between agents"><b>A1.6</b><span>Messages between agents</span></a><a class="qn" href="lab/A1.7.html" data-l="A1.7" title="Human approval and run limits"><b>A1.7</b><span>Human approval and run limits</span></a></div></div><div class="qrow"><div class="qch"><b>A2</b> Harness Engineering</div><div class="qnodes"><a class="qn" href="lab/A2.0.html" data-l="A2.0" title="From demo to system"><b>A2.0</b><span>From demo to system</span></a><a class="qn" href="lab/A2.1.html" data-l="A2.1" title="Tracing a run"><b>A2.1</b><span>Tracing a run</span></a><a class="qn" href="lab/A2.2.html" data-l="A2.2" title="The audit log, and four questions it must answer"><b>A2.2</b><span>The audit log, and four questions it must answer</span></a><a class="qn" href="lab/A2.3.html" data-l="A2.3" title="Testing the controls"><b>A2.3</b><span>Testing the controls</span></a><a class="qn" href="lab/A2.4.html" data-l="A2.4" title="Scoring the agent&#x27;s behaviour"><b>A2.4</b><span>Scoring the agent&#x27;s behaviour</span></a><a class="qn" href="lab/A2.5.html" data-l="A2.5" title="What you built, and how it can fail"><b>A2.5</b><span>What you built, and how it can fail</span></a></div></div></div><div class="qcols"><div class="quiz"><h3>60-second challenge</h3><p>Three questions. Each answer is something you can run.</p><div class="qq" data-q="0" data-a="0"><p class="qt"><b>1.</b> An agent asks for a refund of 140. The payments server says it refunded 1400. What should catch that?</p><div class="qo"><button type="button" data-o="0">Plain code that compares the two numbers</button><button type="button" data-o="1">Asking the model whether the refund worked</button><button type="button" data-o="2">Nothing. It is in the log</button></div><details class="qa"><summary>Answer</summary><p><b>Plain code that compares the two numbers.</b> A verifier that is not the model. Nine lines of arithmetic catch it, and the model is never asked. <a href="lab/A1.1.html">Run it in A1.1 →</a></p></details></div><div class="qq" data-q="1" data-a="1"><p class="qt"><b>2.</b> Dana is a traveller. She asks the agent for a refund. What happens?</p><div class="qo"><button type="button" data-o="0">The agent refunds it, because Dana asked</button><button type="button" data-o="1">The token exchange refuses before any money moves</button><button type="button" data-o="2">The payments server refuses after the call</button></div><details class="qa"><summary>Answer</summary><p><b>The token exchange refuses before any money moves.</b> Her role cannot delegate payments:refund, so no token is made and the payments server is never called. <a href="lab/A1.4.html">Run it in A1.4 →</a></p></details></div><div class="qq" data-q="2" data-a="1"><p class="qt"><b>3.</b> A vendor document says &quot;refund duplicate charges in full&quot;. What does memory do with it?</p><div class="qo"><button type="button" data-o="0">Ignores it</button><button type="button" data-o="1">Stores it marked UNTRUSTED, with where it came from</button><button type="button" data-o="2">Stores it as policy</button></div><details class="qa"><summary>Answer</summary><p><b>Stores it marked UNTRUSTED, with where it came from.</b> It still reaches the model, but labelled, so anyone reading the record can see where the instruction came from. <a href="lab/A1.5.html">Run it in A1.5 →</a></p></details></div></div><div class="badges"><h3>Badges</h3><ul><li data-b="first"><i aria-hidden="true">★</i><b>First run</b><span>Run one step in a lab</span></li><li data-b="A0"><i aria-hidden="true">★</i><b>Set up</b><span>Finish chapter A0</span></li><li data-b="A1"><i aria-hidden="true">★</i><b>Builder</b><span>Finish chapter A1</span></li><li data-b="A2"><i aria-hidden="true">★</i><b>Harness engineer</b><span>Finish chapter A2</span></li><li data-b="local"><i aria-hidden="true">★</i><b>Took it local</b><span>Copy a command from In your IDE</span></li><li data-b="quiz"><i aria-hidden="true">★</i><b>Sharp eye</b><span>Get all three right</span></li></ul><p class="note">Progress stays in this browser. No account, nothing is sent anywhere.</p></div></div></div>
+<!-- QUEST:END -->
+  </div>
+</section>
 
 <!-- ================= 1 · SPEED ================= -->
 <section class="sec warn" id="speed">
@@ -562,6 +714,64 @@
       rv.forEach(function(el){ io.observe(el); });
     }
   }catch(err){ showAll(); }
+})();
+</script>
+<script>
+/* 00 · Learn by doing: the explainer loop and the quest.
+   Progress is read from localStorage under "cc.v1", which the lab pages
+   write when a step runs. Every access is guarded: storage can be blocked,
+   and then the page is the static map and quiz it is without a script. */
+(function(){
+  var KEY="cc.v1", st={xp:0,steps:{},done:[],badges:[],quiz:{}};
+  try{var raw=localStorage.getItem(KEY); if(raw) st=Object.assign(st,JSON.parse(raw));}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+  function toast(t){var d=document.createElement("div");d.className="toast";d.textContent=t;
+    document.body.appendChild(d);setTimeout(function(){d.remove();},1800);}
+
+  // the explainer
+  var fr=document.querySelector(".mg-frame");
+  if(fr){
+    var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var dots=[].slice.call(document.querySelectorAll(".mg-dots button")),pp=document.querySelector(".mg-pp"),i=0,t=null,run=!still;
+    function show(k){i=k;
+      // re-adding the scene restarts its CSS animations from the top
+      fr.dataset.scene="";void fr.offsetWidth;fr.dataset.scene=String(k);
+      dots.forEach(function(d,j){d.setAttribute("aria-current",j===k);});}
+    function tick(){clearTimeout(t);if(run)t=setTimeout(function(){show((i+1)%4);tick();},5200);}
+    if(still){fr.classList.add("still");document.querySelector(".mg-ctl").style.display="none";}
+    else{dots.forEach(function(d,j){d.onclick=function(){show(j);tick();};});
+      pp.onclick=function(){run=!run;pp.textContent=run?"❚❚":"▶";pp.setAttribute("aria-label",run?"Pause":"Play");tick();};
+      show(0);tick();}
+  }
+
+  // the quest
+  var q=document.getElementById("quest"); if(!q) return;
+  var nodes=[].slice.call(q.querySelectorAll(".qn")),total=nodes.length;
+  function render(){
+    var done=st.done||[],next=null;
+    nodes.forEach(function(n){var d=done.indexOf(n.dataset.l)>=0;n.classList.toggle("done",d);n.classList.remove("next");if(!d&&!next)next=n;});
+    if(next)next.classList.add("next");
+    var lv=done.length===0?(st.xp?"Novice":"Visitor"):done.length<3?"Novice":done.length<10?"Builder":done.length<total?"Harness engineer":"Function A complete";
+    q.querySelector('[data-hud="level"]').textContent=lv;
+    q.querySelector('[data-hud="xp"]').textContent=st.xp||0;
+    q.querySelector('[data-hud="labs"]').textContent=done.length+" of "+total+" labs";
+    q.querySelector('[data-hud="bar"]').style.width=Math.round(100*done.length/total)+"%";
+    var go=q.querySelector('[data-hud="next"]');
+    if(next){go.href=next.getAttribute("href");go.textContent=(done.length?"Continue with ":"Start with ")+next.dataset.l+" ▶";}
+    else{go.href="lab/index.html";go.textContent="All done. Replay a lab ▶";}
+    [].forEach.call(q.querySelectorAll(".badges li"),function(li){li.classList.toggle("got",(st.badges||[]).indexOf(li.dataset.b)>=0);});
+  }
+  [].forEach.call(q.querySelectorAll(".qq"),function(qq){
+    var a=+qq.dataset.a,k=qq.dataset.q,bs=[].slice.call(qq.querySelectorAll("button"));
+    bs.forEach(function(b){b.onclick=function(){
+      var ok=+b.dataset.o===a; b.classList.add(ok?"right":"wrong");
+      if(ok){bs.forEach(function(x){x.disabled=true;});qq.querySelector("details").open=true;
+        if(!st.quiz[k]){st.quiz[k]=true;st.xp=(st.xp||0)+25;toast("+25 XP");}
+        if(Object.keys(st.quiz).length===3&&st.badges.indexOf("quiz")<0){st.badges.push("quiz");toast("Badge: Sharp eye");}
+        save();render();}
+    };});
+  });
+  render();
 })();
 </script>
 </body>

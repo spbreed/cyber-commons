@@ -1634,70 +1634,32 @@ def consistency(ses: dict) -> list[str]:
 
 
 def chapter_link_problems(want: dict) -> list[str]:
-    """Every chapter's guide is linked where it begins, and every link lands.
+    """The guides are reached from the home page, and from nowhere a lesson is.
 
-    The anchor (`ch-<id>`) is owned here, in `chapter_cards`, but the links to
-    it are written by two other scripts: `build_site.py` for the first lesson
-    of each chapter and the lessons index, and `build_curriculum.py` for the
-    chapter docs. Rename the anchor in one place and the other two would carry
-    on emitting links to nothing, with every page still building green — so
-    this reads what those scripts actually produced and resolves each link
-    against the guide that this script just generated.
-
-    It also counts. Sixteen chapters means sixteen first-lesson banners, sixteen
-    index headings and sixteen chapter docs; a chapter that lost its link would
-    otherwise have nothing to fail.
+    Every chapter used to open with a link to its place in the guide — the
+    first lesson page, the lessons index heading, the chapter doc — and readers
+    took it as the next step instead of the lesson in front of them. The guides
+    are now linked from the home page only, so this refuses a lesson page, a
+    lab page, the lessons index or a chapter doc that links into one. It still
+    checks every chapter has its `ch-<id>` anchor in its guide, because the home
+    page and the guides' own curriculum cards rely on it.
     """
     bad = []
     pages = {f.name: t for f, t in want.items() if f.parent == GUIDE}
-    chapters = [(fid, cid) for fid, fn in functions().items()
-                for cid, _, _ in fn["chapters"]]
-
-    def lands(href: str) -> bool:
-        m = re.search(r"guide/(function-[a-f]\.html)#(ch-[A-F]\d)", href)
-        return bool(m) and f'id="{m.group(2)}"' in pages.get(m.group(1), "")
-
-    banners = {}
-    for f in sorted((ROOT / "site" / "lessons").glob("*.html")):
-        m = re.search(r'class="chapguide".*?href="([^"]+)"', f.read_text(), re.S)
-        if m:
-            banners[f.stem] = m.group(1)
-    # Function A's lessons are read on their lab pages, and each opens with a
-    # link to its chapter in the guide. The first lesson of each A chapter is
-    # where that chapter begins, so that is the one counted.
     for fid, fn in functions().items():
-        if fid != AUTHORED:
-            continue
-        for cid, _, ids in fn["chapters"]:
-            lab = ROOT / "site" / "lab" / f"{ids[0]}.html"
-            m = re.search(r'href="(\.\./guide/function-a\.html#ch-[A-F]\d)"',
-                          lab.read_text() if lab.is_file() else "")
-            if m:
-                banners[ids[0]] = m.group(1)
-    if len(banners) != len(chapters):
-        bad.append(f"{len(banners)} lesson pages open with a chapter-guide "
-                   f"link and there are {len(chapters)} chapters")
-    for sid, href in banners.items():
-        if not lands(href):
-            bad.append(f"{sid}: its chapter-guide link goes nowhere ({href})")
-
-    idx = (ROOT / "site" / "lessons" / "index.html").read_text()
-    heads = re.findall(r'class="chaphead".*?href="([^"]+)"', idx, re.S)
-    if len(heads) != len(chapters):
-        bad.append(f"the lessons index has {len(heads)} chapter-guide links "
-                   f"and there are {len(chapters)} chapters")
-    bad += [f"lessons index: chapter-guide link goes nowhere ({h})"
-            for h in heads if not lands(h)]
-
-    for fid, cid in chapters:
-        doc = ROOT / "curriculum" / f"track-{cid.lower()}.md"
-        m = re.search(r"\*\*Course guide:\*\* \[[^\]]+\]\(([^)]+)\)",
-                      doc.read_text() if doc.is_file() else "")
-        if not m:
-            bad.append(f"curriculum/{doc.name} has no link to its course guide")
-        elif not lands(m.group(1)):
-            bad.append(f"curriculum/{doc.name}: course-guide link goes "
-                       f"nowhere ({m.group(1)})")
+        for cid, _, _ in fn["chapters"]:
+            if f'id="ch-{cid}"' not in pages.get(f"function-{fid.lower()}.html", ""):
+                bad.append(f"chapter {cid} has no ch-{cid} anchor in its guide")
+    into = re.compile(r'href="[^"]*guide/(?:function-[a-f]|index)[^"]*\.html')
+    for d in ("lessons", "lab"):
+        for f in sorted((ROOT / "site" / d).glob("*.html")):
+            if into.search(f.read_text()):
+                bad.append(f"site/{d}/{f.name} links to a course guide; the "
+                           f"guides are linked from the home page only")
+    for f in sorted((ROOT / "curriculum").glob("track-*.md")):
+        if "cybercommons.ai/guide/" in f.read_text():
+            bad.append(f"curriculum/{f.name} links to a course guide; the "
+                       f"guides are linked from the home page only")
     return bad
 
 

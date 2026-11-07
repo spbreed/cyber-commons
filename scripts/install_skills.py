@@ -30,7 +30,7 @@ script checks before it writes.
     python3 scripts/install_skills.py --tool claude --uninstall
 
 **Two stores.** `skills/<area>/<name>/` holds the audit skills, the procedures.
-`lesson-skills/<name>/` holds one skill per lesson, named `a1-1-the-loop`, which
+`lesson-skills/<name>/` holds one skill per lesson, named `a1-1-the-agent-loop`, which
 is what a learner picks in their agent to do a lesson. Both are linked, never
 copied. Without `--lessons` this links the audits, as it always has; with it,
 only the lesson skills unless `--audits` is added:

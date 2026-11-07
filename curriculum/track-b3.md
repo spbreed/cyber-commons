@@ -3,8 +3,6 @@
 **Function B · Securing AI Architectures**  
 *CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
-**Course guide:** [B3 in the Function B course guide](https://cybercommons.ai/guide/function-b.html#ch-B3)
-
 **Job titles:** Platform Security Engineer, Cloud Security Architect, SRE
 
 **What changes:** What holds when identity has already been defeated — and how the controls collapse into one enforcement point once you run more than a handful of agents. 10 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### B3.1 — Default-deny on the tool call
+### B3.1 — Deny tool calls by default
 
 - **Risk** — Allow-by-default authorization is defeated by any argument the model can be persuaded to produce.
 - **Control** — Policy evaluated per call on (identity, tool, arguments, resource), denying unless a rule permits.
@@ -35,9 +33,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-1-default-deny-on-the-tool-call
-#         (Claude Code and Copilot: /b3-1-default-deny-on-the-tool-call · Cursor: type / and
-#         search · Codex: $b3-1-default-deny-on-the-tool-call). It ends with a readback. ---
+#         b3-1-deny-tool-calls-by-default
+#         (Claude Code and Copilot: /b3-1-deny-tool-calls-by-default · Cursor: type / and
+#         search · Codex: $b3-1-deny-tool-calls-by-default). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.1
@@ -45,7 +43,7 @@ python3 scripts/lesson.py B3.1
 
 ---
 
-### B3.2 — Sandboxed execution
+### B3.2 — Sandboxed code execution
 
 - **Risk** — Model-authored code inherits the runtime's reach, including any credential mounted into the environment.
 - **Control** — Execution in an isolate with no ambient credentials, a bounded filesystem and no default network.
@@ -63,9 +61,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-2-sandboxed-execution
-#         (Claude Code and Copilot: /b3-2-sandboxed-execution · Cursor: type / and
-#         search · Codex: $b3-2-sandboxed-execution). It ends with a readback. ---
+#         b3-2-sandboxed-code-execution
+#         (Claude Code and Copilot: /b3-2-sandboxed-code-execution · Cursor: type / and
+#         search · Codex: $b3-2-sandboxed-code-execution). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.2
@@ -129,7 +127,7 @@ python3 scripts/lesson.py B3.4
 
 ---
 
-### B3.5 — Validating what comes back
+### B3.5 — Checking tool results
 
 - **Risk** — An unverified claim becomes a shared premise, and a peer message is trusted more than a document it is no safer than.
 - **Control** — Schema validation plus an independent verifier before any claim propagates.
@@ -147,9 +145,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.5
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-5-validating-what-comes-back
-#         (Claude Code and Copilot: /b3-5-validating-what-comes-back · Cursor: type / and
-#         search · Codex: $b3-5-validating-what-comes-back). It ends with a readback. ---
+#         b3-5-checking-tool-results
+#         (Claude Code and Copilot: /b3-5-checking-tool-results · Cursor: type / and
+#         search · Codex: $b3-5-checking-tool-results). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.5
@@ -157,7 +155,7 @@ python3 scripts/lesson.py B3.5
 
 ---
 
-### B3.6 — Human approval that survives volume
+### B3.6 — Human approval at volume
 
 - **Risk** — An approval queue at volume approves everything, and the risk register still records it as a control.
 - **Control** — Approval reserved for irreversible actions only, with machine-generated content labelled as such.
@@ -174,9 +172,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.6
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-6-human-approval-that-survives-volume
-#         (Claude Code and Copilot: /b3-6-human-approval-that-survives-volume · Cursor: type / and
-#         search · Codex: $b3-6-human-approval-that-survives-volume). It ends with a readback. ---
+#         b3-6-human-approval-at-volume
+#         (Claude Code and Copilot: /b3-6-human-approval-at-volume · Cursor: type / and
+#         search · Codex: $b3-6-human-approval-at-volume). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.6
@@ -184,7 +182,7 @@ python3 scripts/lesson.py B3.6
 
 ---
 
-### B3.7 — The agent gateway — one choke point when you scale
+### B3.7 — The agent gateway
 
 - **Risk** — Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code.
 - **Control** — A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.
@@ -212,7 +210,7 @@ python3 scripts/lesson.py B3.7
 
 ---
 
-### B3.8 — Shared infrastructure between agent runs
+### B3.8 — Shared infrastructure between runs
 
 - **Risk** — Any shared mutable surface is a channel. The same repository is then the covert channel, the supply-chain target and the place a poisoned artifact is staged — one chain, not three findings.
 - **Control** — Per-run namespaces bound to the run's workload identity (C2.1), an immutable write-once cache (C2.2), signing and provenance verified at consumption (C5.1, C5.2), admin plane off the workload path (C5.3), and scoring infrastructure the agent cannot reach (C10.4).
@@ -230,9 +228,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.8
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-8-shared-infrastructure-between-agent-runs
-#         (Claude Code and Copilot: /b3-8-shared-infrastructure-between-agent-runs · Cursor: type / and
-#         search · Codex: $b3-8-shared-infrastructure-between-agent-runs). It ends with a readback. ---
+#         b3-8-shared-infrastructure-between-runs
+#         (Claude Code and Copilot: /b3-8-shared-infrastructure-between-runs · Cursor: type / and
+#         search · Codex: $b3-8-shared-infrastructure-between-runs). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.8
@@ -240,7 +238,7 @@ python3 scripts/lesson.py B3.8
 
 ---
 
-### B3.9 — Turning a control off without turning the system into an experiment
+### B3.9 — Turning a control off safely
 
 - **Risk** — Classifiers off, no compensating cap, and tens of thousands of agents launched under that configuration. Each decision was defensible; the combination was never evaluated.
 - **Control** — An exemption gate the platform enforces (C6.1), caps that tighten as coverage drops (C6.2), quotas on population and lifetime (C8.2), and an exemption register reviewed at fleet-launch approval (C6.4).
@@ -258,9 +256,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.9
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-9-turning-a-control-off-without-turning
-#         (Claude Code and Copilot: /b3-9-turning-a-control-off-without-turning · Cursor: type / and
-#         search · Codex: $b3-9-turning-a-control-off-without-turning). It ends with a readback. ---
+#         b3-9-turning-a-control-off-safely
+#         (Claude Code and Copilot: /b3-9-turning-a-control-off-safely · Cursor: type / and
+#         search · Codex: $b3-9-turning-a-control-off-safely). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.9
@@ -268,7 +266,7 @@ python3 scripts/lesson.py B3.9
 
 ---
 
-### B3.10 — The agent's escalation path
+### B3.10 — Letting the agent raise a flag
 
 - **Risk** — An agent that finds a live breach, reasons about telling someone, and has no tool for it, does nothing. Of roughly 1,200 agents that saw one, none reported it.
 - **Control** — A report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2).
@@ -288,9 +286,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.10
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-10-the-agents-escalation-path
-#         (Claude Code and Copilot: /b3-10-the-agents-escalation-path · Cursor: type / and
-#         search · Codex: $b3-10-the-agents-escalation-path). It ends with a readback. ---
+#         b3-10-letting-the-agent-raise-a-flag
+#         (Claude Code and Copilot: /b3-10-letting-the-agent-raise-a-flag · Cursor: type / and
+#         search · Codex: $b3-10-letting-the-agent-raise-a-flag). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.10
@@ -298,7 +296,7 @@ python3 scripts/lesson.py B3.10
 
 ---
 
-### B3.11 — Securing the developers' coding agents
+### B3.11 — Securing developers' coding agents
 
 - **Risk** — The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.
 - **Control** — The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.
@@ -318,9 +316,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B3.11
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b3-11-securing-the-developers-coding-agents
-#         (Claude Code and Copilot: /b3-11-securing-the-developers-coding-agents · Cursor: type / and
-#         search · Codex: $b3-11-securing-the-developers-coding-agents). It ends with a readback. ---
+#         b3-11-securing-developers-coding-agents
+#         (Claude Code and Copilot: /b3-11-securing-developers-coding-agents · Cursor: type / and
+#         search · Codex: $b3-11-securing-developers-coding-agents). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B3.11

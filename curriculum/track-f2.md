@@ -3,8 +3,6 @@
 **Function F · AI Governance for Agentic Systems**  
 *Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
-**Course guide:** [F2 in the Function F course guide](https://cybercommons.ai/guide/function-f.html#ch-F2)
-
 **Job titles:** Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead
 
 **What changes:** What a travel company holding passports, payment and health data owes, to whom, and how to evidence it once rather than per regulator. 9 lessons.
@@ -45,7 +43,7 @@ python3 scripts/lesson.py F2.1
 
 ---
 
-### F2.2 — Horizontal AI regulation
+### F2.2 — AI laws that apply across sectors
 
 - **Risk** — "We only deployed it, we didn't build it" — sometimes true, often not.
 - **Control** — Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.
@@ -62,9 +60,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F2.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f2-2-horizontal-ai-regulation
-#         (Claude Code and Copilot: /f2-2-horizontal-ai-regulation · Cursor: type / and
-#         search · Codex: $f2-2-horizontal-ai-regulation). It ends with a readback. ---
+#         f2-2-ai-laws-that-apply-across-sectors
+#         (Claude Code and Copilot: /f2-2-ai-laws-that-apply-across-sectors · Cursor: type / and
+#         search · Codex: $f2-2-ai-laws-that-apply-across-sectors). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F2.2
@@ -72,7 +70,7 @@ python3 scripts/lesson.py F2.2
 
 ---
 
-### F2.3 — Voluntary frameworks as your spine
+### F2.3 — Voluntary frameworks
 
 - **Risk** — Regime-specific mappings with nothing to hang off.
 - **Control** — AI RMF / management-system standards as the structure; regulator mappings as overlays.
@@ -90,9 +88,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F2.3
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f2-3-voluntary-frameworks-as-your-spine
-#         (Claude Code and Copilot: /f2-3-voluntary-frameworks-as-your-spine · Cursor: type / and
-#         search · Codex: $f2-3-voluntary-frameworks-as-your-spine). It ends with a readback. ---
+#         f2-3-voluntary-frameworks
+#         (Claude Code and Copilot: /f2-3-voluntary-frameworks · Cursor: type / and
+#         search · Codex: $f2-3-voluntary-frameworks). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F2.3
@@ -100,7 +98,7 @@ python3 scripts/lesson.py F2.3
 
 ---
 
-### F2.4 — Sector overlays
+### F2.4 — Sector rules
 
 - **Risk** — An agent is already a "model" under model-risk rules you already comply with.
 - **Control** — Find the regime you're already in before inventing a new one.
@@ -117,9 +115,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F2.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f2-4-sector-overlays
-#         (Claude Code and Copilot: /f2-4-sector-overlays · Cursor: type / and
-#         search · Codex: $f2-4-sector-overlays). It ends with a readback. ---
+#         f2-4-sector-rules
+#         (Claude Code and Copilot: /f2-4-sector-rules · Cursor: type / and
+#         search · Codex: $f2-4-sector-rules). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F2.4
@@ -155,7 +153,7 @@ python3 scripts/lesson.py F2.5
 
 ---
 
-### F2.6 — Incident and disclosure obligations
+### F2.6 — Incident reporting duties
 
 - **Risk** — Materiality assessed for an autonomous actor with a human-actor playbook.
 - **Control** — Coordinate with E2 in hour one.
@@ -172,9 +170,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F2.6
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f2-6-incident-and-disclosure-obligations
-#         (Claude Code and Copilot: /f2-6-incident-and-disclosure-obligations · Cursor: type / and
-#         search · Codex: $f2-6-incident-and-disclosure-obligations). It ends with a readback. ---
+#         f2-6-incident-reporting-duties
+#         (Claude Code and Copilot: /f2-6-incident-reporting-duties · Cursor: type / and
+#         search · Codex: $f2-6-incident-reporting-duties). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F2.6
@@ -182,7 +180,7 @@ python3 scripts/lesson.py F2.6
 
 ---
 
-### F2.7 — Documentation that survives supervision
+### F2.7 — Documentation for supervisors
 
 - **Risk** — "Explainability" for a system with no deterministic reasoning.
 - **Control** — System documentation, data lineage, eval records, oversight evidence, decision logs.
@@ -200,9 +198,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F2.7
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f2-7-documentation-that-survives-supervision
-#         (Claude Code and Copilot: /f2-7-documentation-that-survives-supervision · Cursor: type / and
-#         search · Codex: $f2-7-documentation-that-survives-supervision). It ends with a readback. ---
+#         f2-7-documentation-for-supervisors
+#         (Claude Code and Copilot: /f2-7-documentation-for-supervisors · Cursor: type / and
+#         search · Codex: $f2-7-documentation-for-supervisors). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F2.7
@@ -210,7 +208,7 @@ python3 scripts/lesson.py F2.7
 
 ---
 
-### F2.8 — Auditability of autonomous action
+### F2.8 — Auditing autonomous actions
 
 - **Risk** — No trail showing under whose authority the agent acted.
 - **Control** — The delegation chain *is* the audit trail.
@@ -228,9 +226,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F2.8
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f2-8-auditability-of-autonomous-action
-#         (Claude Code and Copilot: /f2-8-auditability-of-autonomous-action · Cursor: type / and
-#         search · Codex: $f2-8-auditability-of-autonomous-action). It ends with a readback. ---
+#         f2-8-auditing-autonomous-actions
+#         (Claude Code and Copilot: /f2-8-auditing-autonomous-actions · Cursor: type / and
+#         search · Codex: $f2-8-auditing-autonomous-actions). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F2.8
@@ -238,7 +236,7 @@ python3 scripts/lesson.py F2.8
 
 ---
 
-### F2.9 — Regulator and auditor conversations
+### F2.9 — Talking to regulators and auditors
 
 - **Risk** — Overclaiming control, or triggering a moratorium.
 - **Control** — Explain bounded autonomy with evidence, and anticipate the real questions.
@@ -255,9 +253,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F2.9
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f2-9-regulator-and-auditor-conversations
-#         (Claude Code and Copilot: /f2-9-regulator-and-auditor-conversations · Cursor: type / and
-#         search · Codex: $f2-9-regulator-and-auditor-conversations). It ends with a readback. ---
+#         f2-9-talking-to-regulators-and-auditors
+#         (Claude Code and Copilot: /f2-9-talking-to-regulators-and-auditors · Cursor: type / and
+#         search · Codex: $f2-9-talking-to-regulators-and-auditors). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F2.9

@@ -3,8 +3,6 @@
 **Function A · Getting Started — Building Agentic AI**  
 *Build the system first. A working agentic platform — the loop, MCP tools, identity and delegation, memory, agent-to-agent messaging, a human gate, spans and an audit trail — and the harness that makes it operable. Each of the nine words for an agent — harness, memory and state, RAG, MCP, skills, guardrails, evals, A2A and multi-agent — is a component built here. Everything the other five functions attack, defend, detect and govern is built here, by you, before any of it is called a risk.*
 
-**Course guide:** [A1 in the Function A course guide](https://cybercommons.ai/guide/function-a.html#ch-A1)
-
 **Job titles:** Anyone who will work on or around agentic systems: engineers, AppSec, red teamers, SOC and GRC. It assumes you can read a Python function and have finished A0.0's setup. It assumes no security background at all.
 
 **What changes:** Eight lessons that build one system end to end: the reasoning loop and its verifier, two MCP resource servers, workload identity, per-action delegation, scoped memory, signed agent-to-agent messages, and the human gate with the budget beside it. At the end you are running CyberTravels on your own machine. 8 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### A1.0 — What an agent is, and what you are about to build
+### A1.0 — What an agent is, and what you will build
 
 - **Lab** — Map the architecture you are about to build, and mark where trust changes.
 - **Tools** — `MCP`, `FastAPI`
@@ -43,7 +41,7 @@ python3 scripts/lesson.py A1.0
 
 ---
 
-### A1.1 — The loop — model, tools, and the step that turns text into an action
+### A1.1 — The agent loop: plan, act, check
 
 - **Risk** — A loop with no verifier accepts whatever the model says it did, and a demo that 'works' has never been checked.
 - **Control** — Plan, act, verify — with the verifier independent of the thing it checks.
@@ -61,9 +59,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A1.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a1-1-the-loop
-#         (Claude Code and Copilot: /a1-1-the-loop · Cursor: type / and
-#         search · Codex: $a1-1-the-loop). It ends with a readback. ---
+#         a1-1-the-agent-loop
+#         (Claude Code and Copilot: /a1-1-the-agent-loop · Cursor: type / and
+#         search · Codex: $a1-1-the-agent-loop). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A1.1
@@ -71,7 +69,7 @@ python3 scripts/lesson.py A1.1
 
 ---
 
-### A1.2 — Tools over MCP — a resource server, and why it is a separate process
+### A1.2 — Tools over MCP
 
 - **Risk** — Tools called in-process share the agent's authority by default, and there is no place left to put a check.
 - **Control** — A resource server per trust domain, each with its own audience.
@@ -99,7 +97,7 @@ python3 scripts/lesson.py A1.2
 
 ---
 
-### A1.3 — Identity — the human, the workload, and the call
+### A1.3 — Identity: people, agents and tokens
 
 - **Risk** — A shared service-account key makes every action look identical in the log, and no investigation can name who caused one.
 - **Control** — A workload identity per agent, and a session token for the human that grants nothing downstream.
@@ -127,7 +125,7 @@ python3 scripts/lesson.py A1.3
 
 ---
 
-### A1.4 — Delegation — one token per action
+### A1.4 — One token per action
 
 - **Risk** — An agent holding a long-lived token with every scope is one prompt away from using all of them.
 - **Control** — Per-action exchange, least privilege keyed to the human's role, enforced at the resource server.
@@ -145,9 +143,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A1.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a1-4-delegation
-#         (Claude Code and Copilot: /a1-4-delegation · Cursor: type / and
-#         search · Codex: $a1-4-delegation). It ends with a readback. ---
+#         a1-4-one-token-per-action
+#         (Claude Code and Copilot: /a1-4-one-token-per-action · Cursor: type / and
+#         search · Codex: $a1-4-one-token-per-action). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A1.4
@@ -155,7 +153,7 @@ python3 scripts/lesson.py A1.4
 
 ---
 
-### A1.5 — Memory — what it remembers, and where that came from
+### A1.5 — Memory, and where it came from
 
 - **Risk** — Text an agent read becomes a fact an agent learned, and one vendor sentence outlives the request that fetched it.
 - **Control** — Origin travels with content; recall never crosses an owner boundary; delete and export both exist.
@@ -183,7 +181,7 @@ python3 scripts/lesson.py A1.5
 
 ---
 
-### A1.6 — Agent to agent — handing work over without laundering authority
+### A1.6 — Messages between agents
 
 - **Risk** — A peer's message read as a colleague's instruction turns one injected document into four compromised agents.
 - **Control** — Signed envelopes, the human carried through every hop, and a ceiling on hops.
@@ -201,9 +199,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A1.6
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a1-6-agent-to-agent
-#         (Claude Code and Copilot: /a1-6-agent-to-agent · Cursor: type / and
-#         search · Codex: $a1-6-agent-to-agent). It ends with a readback. ---
+#         a1-6-messages-between-agents
+#         (Claude Code and Copilot: /a1-6-messages-between-agents · Cursor: type / and
+#         search · Codex: $a1-6-messages-between-agents). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A1.6
@@ -211,7 +209,7 @@ python3 scripts/lesson.py A1.6
 
 ---
 
-### A1.7 — The human gate, and the budget that stops the loop
+### A1.7 — Human approval and run limits
 
 - **Risk** — An unbounded loop against an impossible task spends until somebody notices, and a gate nobody can approve fast enough is a gate that gets removed.
 - **Control** — High-risk actions gated on a named human; budgets that bind and are recorded when they bind.
@@ -229,9 +227,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons A1.7
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         a1-7-the-human-gate
-#         (Claude Code and Copilot: /a1-7-the-human-gate · Cursor: type / and
-#         search · Codex: $a1-7-the-human-gate). It ends with a readback. ---
+#         a1-7-human-approval-and-run-limits
+#         (Claude Code and Copilot: /a1-7-human-approval-and-run-limits · Cursor: type / and
+#         search · Codex: $a1-7-human-approval-and-run-limits). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py A1.7

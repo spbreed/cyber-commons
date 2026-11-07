@@ -3,8 +3,6 @@
 **Function B · Securing AI Architectures**  
 *CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
-**Course guide:** [B1 in the Function B course guide](https://cybercommons.ai/guide/function-b.html#ch-B1)
-
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
 **What changes:** CyberTravels as built, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and closed by a register. 18 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### B1.0 — Start here — what securing an AI architecture means
+### B1.0 — Start here: securing an AI system
 
 - **Lab** — Place the six functions of the commons on one diagram and find where your own work sits.
 
@@ -32,9 +30,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B1.0
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b1-0-start-here
-#         (Claude Code and Copilot: /b1-0-start-here · Cursor: type / and
-#         search · Codex: $b1-0-start-here). It ends with a readback. ---
+#         b1-0-securing-an-ai-system
+#         (Claude Code and Copilot: /b1-0-securing-an-ai-system · Cursor: type / and
+#         search · Codex: $b1-0-securing-an-ai-system). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B1.0
@@ -42,7 +40,7 @@ python3 scripts/lesson.py B1.0
 
 ---
 
-### B1.1 — The reference architecture for agentic AI
+### B1.1 — A reference architecture for AI agents
 
 - **Risk** — Without a shared picture, 'secure the agent' has no referent and every later risk lands nowhere in particular.
 - **Control** — One component map and five topologies, named once and reused by every lesson that follows.
@@ -59,9 +57,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B1.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b1-1-the-reference-architecture-for-agentic
-#         (Claude Code and Copilot: /b1-1-the-reference-architecture-for-agentic · Cursor: type / and
-#         search · Codex: $b1-1-the-reference-architecture-for-agentic). It ends with a readback. ---
+#         b1-1-a-reference-architecture-for-ai-agents
+#         (Claude Code and Copilot: /b1-1-a-reference-architecture-for-ai-agents · Cursor: type / and
+#         search · Codex: $b1-1-a-reference-architecture-for-ai-agents). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B1.1
@@ -275,7 +273,7 @@ python3 scripts/lesson.py B1.8
 
 ---
 
-### B1.9 — Injection through content the agent was asked to read
+### B1.9 — Injection through content the agent reads
 
 - **Risk** — The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself.
 - **Control** — Instruction/data provenance: content the pipeline read may never drive a state-changing tool.
@@ -295,9 +293,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B1.9
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b1-9-injection-through-content-the-agent-was
-#         (Claude Code and Copilot: /b1-9-injection-through-content-the-agent-was · Cursor: type / and
-#         search · Codex: $b1-9-injection-through-content-the-agent-was). It ends with a readback. ---
+#         b1-9-injection-through-content-the-agent
+#         (Claude Code and Copilot: /b1-9-injection-through-content-the-agent · Cursor: type / and
+#         search · Codex: $b1-9-injection-through-content-the-agent). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B1.9
@@ -447,7 +445,7 @@ python3 scripts/lesson.py B1.14
 
 ---
 
-### B1.15 — Overwhelming the human in the loop
+### B1.15 — Too many approvals for one person
 
 - **Risk** — The approval gate is recorded as a control and operates as a click. At volume it approves everything, including the one request that mattered.
 - **Control** — Approval reserved for irreversible actions, with everything else bounded by policy (B3.6).
@@ -464,9 +462,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B1.15
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b1-15-overwhelming-the-human-in-the-loop
-#         (Claude Code and Copilot: /b1-15-overwhelming-the-human-in-the-loop · Cursor: type / and
-#         search · Codex: $b1-15-overwhelming-the-human-in-the-loop). It ends with a readback. ---
+#         b1-15-too-many-approvals-for-one-person
+#         (Claude Code and Copilot: /b1-15-too-many-approvals-for-one-person · Cursor: type / and
+#         search · Codex: $b1-15-too-many-approvals-for-one-person). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B1.15
@@ -504,7 +502,7 @@ python3 scripts/lesson.py B1.16
 
 ---
 
-### B1.17 — Attacks that target the humans
+### B1.17 — Attacks on the people around the agent
 
 - **Risk** — The delegation chain is used as a privilege-laundering path, and the agent's output becomes an unusually persuasive channel into a human decision.
 - **Control** — Ceiling-bound delegation (B2.3), attribution per hop (B2.7) and marking machine-generated output as such (B3.6).
@@ -521,9 +519,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B1.17
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b1-17-attacks-that-target-the-humans
-#         (Claude Code and Copilot: /b1-17-attacks-that-target-the-humans · Cursor: type / and
-#         search · Codex: $b1-17-attacks-that-target-the-humans). It ends with a readback. ---
+#         b1-17-attacks-on-the-people-around-the-agent
+#         (Claude Code and Copilot: /b1-17-attacks-on-the-people-around-the-agent · Cursor: type / and
+#         search · Codex: $b1-17-attacks-on-the-people-around-the-agent). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B1.17
@@ -558,7 +556,7 @@ python3 scripts/lesson.py B1.18
 
 ---
 
-### B1.19 — The control index — every control CyberTravels needs, not only the new ones
+### B1.19 — Every control CyberTravels needs
 
 - **Risk** — A team that has just shipped agents writes an agentic control list. Every row is right, and it reports coverage against the wrong denominator — saying nothing about the older, more reachable controls an attacker will actually start from.
 - **Control** — One index carrying both eras, a three-valued status measured against what runs rather than what is documented, an owner per row, and coverage reported per era rather than blended.
@@ -575,9 +573,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons B1.19
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         b1-19-the-control-index
-#         (Claude Code and Copilot: /b1-19-the-control-index · Cursor: type / and
-#         search · Codex: $b1-19-the-control-index). It ends with a readback. ---
+#         b1-19-every-control-cybertravels-needs
+#         (Claude Code and Copilot: /b1-19-every-control-cybertravels-needs · Cursor: type / and
+#         search · Codex: $b1-19-every-control-cybertravels-needs). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py B1.19

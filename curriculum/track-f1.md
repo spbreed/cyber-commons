@@ -3,8 +3,6 @@
 **Function F · AI Governance for Agentic Systems**  
 *Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
-**Course guide:** [F1 in the Function F course guide](https://cybercommons.ai/guide/function-f.html#ch-F1)
-
 **Job titles:** GRC Analyst, Risk Manager, Control Owner, Third-Party Risk Analyst, Internal Audit liaison
 
 **What changes:** The register of every agent CyberTravels runs, risk-tiered by autonomy, data and blast radius, mapped to controls, with evidence that can be re-checked. 13 lessons.
@@ -17,7 +15,7 @@
 
 ---
 
-### F1.0 — Start here — what AI governance means
+### F1.0 — Start here: AI governance
 
 - **Risk** — A trustworthy-AI statement with no owner per property, so every property is somebody else's job.
 - **Control** — One register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked.
@@ -34,9 +32,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.0
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-0-start-here
-#         (Claude Code and Copilot: /f1-0-start-here · Cursor: type / and
-#         search · Codex: $f1-0-start-here). It ends with a readback. ---
+#         f1-0-ai-governance
+#         (Claude Code and Copilot: /f1-0-ai-governance · Cursor: type / and
+#         search · Codex: $f1-0-ai-governance). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.0
@@ -44,7 +42,7 @@ python3 scripts/lesson.py F1.0
 
 ---
 
-### F1.1 — From framework control to key control indicator
+### F1.1 — From control to measurable indicator
 
 - **Risk** — An annual review certifies nothing about a system that changed the week after it.
 - **Control** — Continuous assurance; control effectiveness redefined for probabilistic systems.
@@ -62,9 +60,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.1
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-1-from-framework-control-to-key-control
-#         (Claude Code and Copilot: /f1-1-from-framework-control-to-key-control · Cursor: type / and
-#         search · Codex: $f1-1-from-framework-control-to-key-control). It ends with a readback. ---
+#         f1-1-from-control-to-measurable-indicator
+#         (Claude Code and Copilot: /f1-1-from-control-to-measurable-indicator · Cursor: type / and
+#         search · Codex: $f1-1-from-control-to-measurable-indicator). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.1
@@ -72,7 +70,7 @@ python3 scripts/lesson.py F1.1
 
 ---
 
-### F1.2 — Building the AI and agent inventory
+### F1.2 — The AI and agent inventory
 
 - **Risk** — Shadow AI and shadow agents — the inventory is the control most orgs still lack.
 - **Control** — Discovery, registration, ownership, risk tiering.
@@ -90,9 +88,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.2
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-2-building-the-ai-and-agent-inventory
-#         (Claude Code and Copilot: /f1-2-building-the-ai-and-agent-inventory · Cursor: type / and
-#         search · Codex: $f1-2-building-the-ai-and-agent-inventory). It ends with a readback. ---
+#         f1-2-the-ai-and-agent-inventory
+#         (Claude Code and Copilot: /f1-2-the-ai-and-agent-inventory · Cursor: type / and
+#         search · Codex: $f1-2-the-ai-and-agent-inventory). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.2
@@ -100,7 +98,7 @@ python3 scripts/lesson.py F1.2
 
 ---
 
-### F1.3 — Risk tiering agentic use cases
+### F1.3 — Risk tiers for agent use
 
 - **Risk** — Tiering by model name instead of by what the thing can do.
 - **Control** — Autonomy level × action class × data sensitivity.
@@ -117,9 +115,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.3
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-3-risk-tiering-agentic-use-cases
-#         (Claude Code and Copilot: /f1-3-risk-tiering-agentic-use-cases · Cursor: type / and
-#         search · Codex: $f1-3-risk-tiering-agentic-use-cases). It ends with a readback. ---
+#         f1-3-risk-tiers-for-agent-use
+#         (Claude Code and Copilot: /f1-3-risk-tiers-for-agent-use · Cursor: type / and
+#         search · Codex: $f1-3-risk-tiers-for-agent-use). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.3
@@ -127,7 +125,7 @@ python3 scripts/lesson.py F1.3
 
 ---
 
-### F1.4 — Control mapping for agents
+### F1.4 — Mapping controls to agents
 
 - **Risk** — Inventing new controls where an existing one applied to a new principal type.
 - **Control** — Map identity, secrets, sandbox, eval and telemetry onto the existing library.
@@ -145,9 +143,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.4
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-4-control-mapping-for-agents
-#         (Claude Code and Copilot: /f1-4-control-mapping-for-agents · Cursor: type / and
-#         search · Codex: $f1-4-control-mapping-for-agents). It ends with a readback. ---
+#         f1-4-mapping-controls-to-agents
+#         (Claude Code and Copilot: /f1-4-mapping-controls-to-agents · Cursor: type / and
+#         search · Codex: $f1-4-mapping-controls-to-agents). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.4
@@ -155,7 +153,7 @@ python3 scripts/lesson.py F1.4
 
 ---
 
-### F1.5 — Evaluation output as audit evidence
+### F1.5 — Eval results as audit evidence
 
 - **Risk** — Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.
 - **Control** — Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
@@ -173,9 +171,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.5
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-5-evaluation-output-as-audit-evidence
-#         (Claude Code and Copilot: /f1-5-evaluation-output-as-audit-evidence · Cursor: type / and
-#         search · Codex: $f1-5-evaluation-output-as-audit-evidence). It ends with a readback. ---
+#         f1-5-eval-results-as-audit-evidence
+#         (Claude Code and Copilot: /f1-5-eval-results-as-audit-evidence · Cursor: type / and
+#         search · Codex: $f1-5-eval-results-as-audit-evidence). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.5
@@ -213,7 +211,7 @@ python3 scripts/lesson.py F1.6
 
 ---
 
-### F1.7 — Continuous control verification
+### F1.7 — Checking controls continuously
 
 - **Risk** — Automating judgment instead of evidence collection.
 - **Control** — Agent-assisted evidence collection, drift detection, exception tracking.
@@ -233,9 +231,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.7
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-7-continuous-control-verification
-#         (Claude Code and Copilot: /f1-7-continuous-control-verification · Cursor: type / and
-#         search · Codex: $f1-7-continuous-control-verification). It ends with a readback. ---
+#         f1-7-checking-controls-continuously
+#         (Claude Code and Copilot: /f1-7-checking-controls-continuously · Cursor: type / and
+#         search · Codex: $f1-7-checking-controls-continuously). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.7
@@ -243,7 +241,7 @@ python3 scripts/lesson.py F1.7
 
 ---
 
-### F1.8 — Third-party and model supply chain risk
+### F1.8 — Third-party and model risk
 
 - **Risk** — Vendor AI features enabled by default; sub-processor chains you never mapped.
 - **Control** — Questions that actually discriminate between vendors.
@@ -261,9 +259,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.8
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-8-third-party-and-model-supply-chain-risk
-#         (Claude Code and Copilot: /f1-8-third-party-and-model-supply-chain-risk · Cursor: type / and
-#         search · Codex: $f1-8-third-party-and-model-supply-chain-risk). It ends with a readback. ---
+#         f1-8-third-party-and-model-risk
+#         (Claude Code and Copilot: /f1-8-third-party-and-model-risk · Cursor: type / and
+#         search · Codex: $f1-8-third-party-and-model-risk). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.8
@@ -271,7 +269,7 @@ python3 scripts/lesson.py F1.8
 
 ---
 
-### F1.9 — Model and agent lifecycle governance
+### F1.9 — Agent lifecycle governance
 
 - **Risk** — Re-indexing treated as maintenance, not change.
 - **Control** — Retraining, fine-tuning and re-indexing as change-management events.
@@ -288,9 +286,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.9
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-9-model-and-agent-lifecycle-governance
-#         (Claude Code and Copilot: /f1-9-model-and-agent-lifecycle-governance · Cursor: type / and
-#         search · Codex: $f1-9-model-and-agent-lifecycle-governance). It ends with a readback. ---
+#         f1-9-agent-lifecycle-governance
+#         (Claude Code and Copilot: /f1-9-agent-lifecycle-governance · Cursor: type / and
+#         search · Codex: $f1-9-agent-lifecycle-governance). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.9
@@ -298,7 +296,7 @@ python3 scripts/lesson.py F1.9
 
 ---
 
-### F1.10 — The stakeholder map — who owns what
+### F1.10 — Who owns what
 
 - **Risk** — Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one.
 - **Control** — A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.
@@ -316,9 +314,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.10
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-10-the-stakeholder-map
-#         (Claude Code and Copilot: /f1-10-the-stakeholder-map · Cursor: type / and
-#         search · Codex: $f1-10-the-stakeholder-map). It ends with a readback. ---
+#         f1-10-who-owns-what
+#         (Claude Code and Copilot: /f1-10-who-owns-what · Cursor: type / and
+#         search · Codex: $f1-10-who-owns-what). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.10
@@ -326,7 +324,7 @@ python3 scripts/lesson.py F1.10
 
 ---
 
-### F1.11 — Model risk management for AI systems
+### F1.11 — Model risk management
 
 - **Risk** — The classical model-risk playbook silently breaks once the model can act: conceptual soundness was validated, and then the agent was granted write access nobody validated.
 - **Control** — Extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems, and name where it still holds.
@@ -344,9 +342,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.11
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-11-model-risk-management-for-ai-systems
-#         (Claude Code and Copilot: /f1-11-model-risk-management-for-ai-systems · Cursor: type / and
-#         search · Codex: $f1-11-model-risk-management-for-ai-systems). It ends with a readback. ---
+#         f1-11-model-risk-management
+#         (Claude Code and Copilot: /f1-11-model-risk-management · Cursor: type / and
+#         search · Codex: $f1-11-model-risk-management). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.11
@@ -354,7 +352,7 @@ python3 scripts/lesson.py F1.11
 
 ---
 
-### F1.12 — Working the seams
+### F1.12 — Gaps between teams
 
 - **Risk** — The handoffs fail, not the functions: privacy assessment into control design, legal position into system prompt, MRM validation into security evidence.
 - **Control** — Joint runbooks for the seams — one artefact, many consumers, one owner.
@@ -372,9 +370,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.12
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-12-working-the-seams
-#         (Claude Code and Copilot: /f1-12-working-the-seams · Cursor: type / and
-#         search · Codex: $f1-12-working-the-seams). It ends with a readback. ---
+#         f1-12-gaps-between-teams
+#         (Claude Code and Copilot: /f1-12-gaps-between-teams · Cursor: type / and
+#         search · Codex: $f1-12-gaps-between-teams). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.12
@@ -382,7 +380,7 @@ python3 scripts/lesson.py F1.12
 
 ---
 
-### F1.13 — Measuring the controls on CyberTravels — gaps and mitigations
+### F1.13 — Measuring CyberTravels' controls
 
 - **Risk** — Controls are asserted in a register and never measured, so the first evidence that one was missing is the incident.
 - **Control** — Key control indicators computed from source on every change, each gap carrying a named mitigation.
@@ -399,9 +397,9 @@ git clone --branch master https://github.com/spbreed/cyber-commons.git && cd cyb
 python3 scripts/install_skills.py --all --lessons F1.13
 
 # --- 3 · in your agent, open this folder and pick the skill:
-#         f1-13-measuring-the-controls-on-cybertravels
-#         (Claude Code and Copilot: /f1-13-measuring-the-controls-on-cybertravels · Cursor: type / and
-#         search · Codex: $f1-13-measuring-the-controls-on-cybertravels). It ends with a readback. ---
+#         f1-13-measuring-cybertravels-controls
+#         (Claude Code and Copilot: /f1-13-measuring-cybertravels-controls · Cursor: type / and
+#         search · Codex: $f1-13-measuring-cybertravels-controls). It ends with a readback. ---
 
 # --- or, with no agent, run the same lesson yourself ---
 python3 scripts/lesson.py F1.13
