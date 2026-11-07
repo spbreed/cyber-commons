@@ -45,7 +45,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from exercises.lab_a import LAB                      # noqa: E402
+from exercises import labs as LABS                    # noqa: E402
 from exercises import lessonskills as LS              # noqa: E402
 from exercises import repo as R                       # noqa: E402
 
@@ -53,7 +53,9 @@ OUT = ROOT / "site" / "lab"
 PAGE = OUT / "index.html"
 BUNDLE = OUT / "cybertravels.json"
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text(encoding="utf8"))
-FN = next(f for f in CUR["functions"] if f["id"] == "A")
+# The functions taught as labs, in curriculum order, and every lab in them.
+FNS = [f for f in CUR["functions"] if f["id"] in LABS.MODULES]
+LAB = LABS.load()
 # Pinned: a version months old, so a CDN change cannot move the page under us.
 PYODIDE = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/"
 # `ssl` and `sqlite3` are standard library that Pyodide ships separately:
@@ -68,7 +70,7 @@ E = html.escape
 
 
 def lessons() -> list[tuple[dict, dict]]:
-    return [(t, s) for t in FN["tracks"] for s in t["sessions"]]
+    return [(t, s) for f in FNS for t in f["tracks"] for s in t["sessions"]]
 
 
 # --------------------------------------------------------------------------- #
@@ -120,7 +122,8 @@ def shape_problems() -> list[str]:
     want = [s["id"] for _t, s in lessons()]
     bad = []
     if sorted(LAB) != sorted(want):
-        bad.append(f"lab lessons {sorted(set(LAB) ^ set(want))} do not match Function A")
+        bad.append(f"lab lessons {sorted(set(LAB) ^ set(want))} do not match the "
+                   f"functions in exercises/labs.py")
     for sid, lab in LAB.items():
         actors = lab["actors"]
         if not 2 <= len(actors) <= 4:
@@ -143,7 +146,7 @@ def shape_problems() -> list[str]:
 
 RUNNER = r"""
 import contextlib, io, json, sys, traceback
-from exercises.lab_a import LAB
+LAB = __import__("exercises." + sys.argv[2], fromlist=["LAB"]).LAB
 ns, out = {"__name__": "__lab__"}, []
 for st in LAB[sys.argv[1]]["steps"]:
     if "code" not in st:
@@ -177,8 +180,9 @@ def run_problems() -> list[str]:
         lab_dir = Path(tmp) / "exercises"
         lab_dir.mkdir()
         (lab_dir / "__init__.py").write_text("")
-        (lab_dir / "lab_a.py").write_text(
-            (ROOT / "scripts" / "exercises" / "lab_a.py").read_text(encoding="utf8"))
+        for name in LABS.MODULES.values():
+            (lab_dir / f"{name}.py").write_text(
+                (ROOT / "scripts" / "exercises" / f"{name}.py").read_text(encoding="utf8"))
         for sid, lab in LAB.items():
             root = checkpoint(sid, Path(tmp) / "cp" / sid)
             env = {k: v for k, v in os.environ.items()
@@ -187,7 +191,7 @@ def run_problems() -> list[str]:
             r = subprocess.run([sys.executable, "-c",
                                 "import sys; sys.path[:0] = __import__('os')"
                                 ".environ['PYTHONPATH'].split(__import__('os').pathsep);"
-                                + RUNNER, sid],
+                                + RUNNER, sid, LABS.module_of(sid)],
                                cwd=root, env=env, capture_output=True, text=True)
             if r.returncode:
                 bad.append(f"{sid}: runner failed\n{r.stderr[-600:]}")
@@ -212,6 +216,10 @@ body{background:#fbfcfd}
 .lab-side .fn a{font-size:inherit;color:inherit;display:inline;padding:0;background:none}
 .lab-side .fn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-faint);margin:2px 8px 10px}
+.lab-side .fnh{margin:18px 8px 2px;padding-top:12px;border-top:1px solid var(--line-soft);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--defend)}
+.lab-side .fnh:first-child{border-top:0;padding-top:0;margin-top:4px}
+.lab-fn{font-size:24px;margin:34px 0 0}
 .lab-side .ch{margin:14px 0 4px;padding:0 8px;font-weight:700;font-size:15px;color:var(--text)}
 .lab-side .ch small{display:block;font-weight:500;color:var(--text-faint);font-size:12.5px;line-height:1.35}
 .lab-side a{display:flex;gap:10px;align-items:baseline;padding:6px 10px;border-radius:8px;
@@ -326,7 +334,7 @@ ol.steps{list-style:none;margin:0;padding:0}
 .cell .acts button.run{background:var(--defend);border-color:var(--defend);color:#fff;font-weight:600}
 .cell .acts button.run:hover{background:#0b5f74}
 .cell .acts .note{font-size:13px;color:var(--text-faint)}
-.cell .out{margin-top:10px;background:#fff;color:var(--text);border:1px solid var(--line);min-height:2.6em}
+.cell .out{white-space:pre-wrap;word-break:break-word;margin-top:10px;background:#fff;color:var(--text);border:1px solid var(--line);min-height:2.6em}
 .cell .out.err{border-color:#f0c4c4;background:#fff7f7;color:#7f1d1d}
 .cell .out:empty::before{content:"Output appears here when you press Run.";color:var(--text-faint);font-style:italic}
 .cell .mine{font-size:13.5px;color:var(--text-faint);margin:8px 2px 0}
@@ -573,6 +581,10 @@ function copyable(){
 
 function route(){
   document.querySelectorAll("section.lab").forEach(function(x){ x.classList.add("on"); });
+  // With 55 lessons the sidebar is longer than the screen; a B3 lesson opened
+  // with its own entry scrolled out of sight. Scroll the sidebar, not the page.
+  var cur = document.querySelector('.lab-side a[aria-current="page"]'), side = document.querySelector(".lab-side");
+  if (cur && side && side.scrollHeight > side.clientHeight) side.scrollTop = cur.offsetTop - side.clientHeight / 3;
 }
 
 document.querySelectorAll("section.lab").forEach(setup);
@@ -724,8 +736,12 @@ def lesson_html(sid: str) -> str:
 
 def side(current: str | None) -> str:
     out = ['<aside class="lab-side"><div class="fn"><a href="index.html" '
-           'style="padding:0;display:inline">Function A · hands-on</a></div><nav>']
-    for t in FN["tracks"]:
+           'style="padding:0;display:inline">Hands-on labs</a></div><nav>']
+    for t in (t for f in FNS for t in f["tracks"]):
+        if t is next(f for f in FNS if t in f["tracks"])["tracks"][0]:
+            fn = next(f for f in FNS if t in f["tracks"])
+            out.append(f'<div class="fnh">Function {E(fn["id"])} · '
+                       f'{E(fn["title"].split(" — ")[0])}</div>')
         out.append(f'<div class="ch">{E(t["id"])} <small>{E(t["title"].split(" — ")[0])}</small></div>')
         for s in t["sessions"]:
             short = s["title"].split(" — ")[0]
@@ -748,7 +764,7 @@ def shell(title: str, desc: str, current: str | None, main: str, script: str) ->
     head = BS.HEAD.format(title=E(title), desc=E(desc))
     return (head.replace("</head>", f"<style>{CSS}</style>"
                          "<script>document.documentElement.classList.add('js')</script></head>")
-            + "<!-- Generated by scripts/build_lab.py from scripts/exercises/lab_a.py. Do not edit. -->"
+            + "<!-- Generated by scripts/build_lab.py from scripts/exercises/lab_*.py. Do not edit. -->"
             + BS.NAV.replace('href="index.html">All lessons', 'href="../lessons/index.html">All lessons')
             + f'<div class="lab-shell">{side(current)}<main class="lab-main">{main}</main></div>'
             + (f"<script>{script}</script>" if script else "") + "</body></html>\n")
@@ -763,31 +779,40 @@ def index_page() -> str:
     """
     n_code = sum(1 for l in LAB.values() for st in l["steps"] if "code" in st)
     cards = []
-    for t in FN["tracks"]:
-        cards.append(f'<h2 class="lab-ch"><span class="tag">{E(t["id"])}</span> '
-                     f'{E(t["title"].split(" — ")[0])}</h2><div class="lab-cards">')
-        for s in t["sessions"]:
-            lab = LAB[s["id"]]
-            n = len(lab["steps"])
-            runs = sum(1 for st in lab["steps"] if "code" in st)
-            cards.append(f'<a class="lab-card" href="{s["id"]}.html"><b>{s["id"]}</b>'
-                         f'<h3>{E(s["title"].split(" — ")[0])}</h3><p>{E(lab["goal"])}</p>'
-                         f'<span>{n} steps · {runs} run in your browser</span></a>')
-        cards.append("</div>")
-    main = (f'<div class="lab-intro"><span class="tag">FUNCTION A · LAB</span>'
-            f'<h1>Build an agent, one step at a time, in your browser</h1>'
+    for fn in FNS:
+        cards.append(f'<h2 class="lab-fn">Function {E(fn["id"])} · {E(fn["title"])}</h2>')
+        for t in fn["tracks"]:
+            cards.append(_chapter_cards(t))
+    main = _intro(n_code) + "".join(cards)
+    redirect = ('function go(){var h=decodeURIComponent(location.hash.slice(1));'
+                'if(/^[A-F]\\d\\.\\d+$/.test(h))location.replace(h+".html");}'
+                'go();window.addEventListener("hashchange",go);')
+    return shell("Hands-on labs — Cyber Commons",
+                 "Every lab step runs real Python in your browser.",
+                 None, main, redirect)
+
+
+def _chapter_cards(t: dict) -> str:
+    cards = [f'<h2 class="lab-ch"><span class="tag">{E(t["id"])}</span> '
+             f'{E(t["title"].split(" — ")[0])}</h2><div class="lab-cards">']
+    for s in t["sessions"]:
+        lab = LAB[s["id"]]
+        runs = sum(1 for st in lab["steps"] if "code" in st)
+        cards.append(f'<a class="lab-card" href="{s["id"]}.html"><b>{s["id"]}</b>'
+                     f'<h3>{E(s["title"])}</h3><p>{E(lab["goal"])}</p>'
+                     f'<span>{len(lab["steps"])} steps · {runs} run in your browser</span></a>')
+    return "".join(cards) + "</div>"
+
+
+def _intro(n_code: str) -> str:
+    return (f'<div class="lab-intro"><span class="tag">HANDS-ON LABS</span>'
+            f'<h1>Learn by running it, in your browser</h1>'
             f'<p>Pick a lesson. Press <b>Play</b> to run its steps in order, or '
             f'<b>Run</b> one step at a time. Every one of the {n_code} Python '
             f'steps is real code from CyberTravels, and you can change it. '
             f'To do the same on your computer, open <b>In your IDE</b> on any lesson.</p>'
             f'<p style="margin-top:12px"><a class="lab-go" href="A0.0.html">Start at A0.0 →</a></p>'
-            f'</div>{"".join(cards)}')
-    redirect = ('function go(){var h=decodeURIComponent(location.hash.slice(1));'
-                'if(/^A\\d\\.\\d+$/.test(h))location.replace(h+".html");}'
-                'go();window.addEventListener("hashchange",go);')
-    return shell("Function A lab — Cyber Commons",
-                 "Function A, hands on: every step runs real Python in your browser.",
-                 None, main, redirect)
+            f'</div>')
 
 
 def lesson_page(b: dict, i: int) -> str:
@@ -802,7 +827,7 @@ def lesson_page(b: dict, i: int) -> str:
             f'{section(t, s, b["lessons"][s["id"]])}{nav}')
     js = JS % {"pyodide": json.dumps(PYODIDE), "pyjwt": json.dumps(PYJWT),
                "chapters": json.dumps({tr["id"]: [x["id"] for x in tr["sessions"]]
-                                       for tr in FN["tracks"]}),
+                                       for f in FNS for tr in f["tracks"]}),
                "total": len(seq)}
     return shell(f"{s['id']} hands-on — {s['title']} | Cyber Commons",
                  f"{s['id']}, hands on: {LAB[s['id']]['goal']}", s["id"], main, js)

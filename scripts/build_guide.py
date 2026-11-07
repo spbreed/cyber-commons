@@ -363,7 +363,8 @@ def lhref(sid: str) -> str:
     addresses only forward there, and a guide that linked through a redirect
     would make every click a two-step one.
     """
-    return f"../lab/{sid}.html" if sid.startswith("A") else f"../lessons/{sid}.html"
+    from exercises.labs import has_lab
+    return f"../lab/{sid}.html" if has_lab(sid) else f"../lessons/{sid}.html"
 
 
 def lesson_link(sid: str, ses: dict, short: bool = False) -> str:

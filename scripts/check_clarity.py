@@ -67,7 +67,8 @@ CODE = re.compile(r"<pre.*?</pre>|<code.*?</code>", re.S)
 def prose(sid: str) -> str:
     # Function A is read on its lab page; its old lesson address is a
     # redirect, and reading that would pass sixteen lessons on no words.
-    where = ROOT / "site" / "lab" if sid.startswith("A") else PAGES
+    from exercises.labs import has_lab
+    where = ROOT / "site" / "lab" if has_lab(sid) else PAGES
     page = (where / f"{sid}.html").read_text()
     body = page.split("<body>", 1)[-1]
     # Code and recorded output are not prose: a weekday in test data is a date,

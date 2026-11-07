@@ -79,6 +79,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 PAGES = ROOT / "site" / "lessons"
 
+from exercises.labs import has_lab
 from exercises import EXERCISES  # noqa: E402
 from exercises.anchors import ANCHORS  # noqa: E402
 from exercises.cybertravels import GROUNDING  # noqa: E402
@@ -285,7 +286,7 @@ def main() -> int:
         # build_site.py. The rule is unchanged — the framework has to come
         # before anything that runs — only where it is enforced moved.
         page_f = PAGES / f"{sid}.html"
-        if fn == "A":
+        if has_lab(sid):
             # Function A is read on its hands-on lab page, where the steps run
             # in the browser and the lesson's own parts are folded beneath them
             # (build_lab.py, from build_site.lab_sections). Its contract there:

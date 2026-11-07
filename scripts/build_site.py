@@ -287,6 +287,7 @@ def exercise_link(sid: str) -> tuple[str, str]:
 # prose and one copy of the procedure, and neither lives on this page.
 sys.path.insert(0, str(ROOT / "scripts"))
 from exercises import EXERCISES                       # noqa: E402
+from exercises.labs import has_lab                     # noqa: E402
 from exercises.about import ABOUT                     # noqa: E402
 from exercises.anchors import ANCHORS                 # noqa: E402
 from exercises.cybertravels import GROUNDING          # noqa: E402
@@ -565,9 +566,9 @@ def lab_sections(entry: dict) -> list[tuple[str, str]]:
 
 
 def lab_href(sid: str, depth: int = 1) -> str:
-    """Where a reader reads lesson `sid`: its lab page for Function A."""
+    """Where a reader reads lesson `sid`: its lab page, where it has one."""
     pre = "../" * depth
-    if sid.startswith("A"):
+    if has_lab(sid):
         return f"{pre}lab/{sid}.html"
     return f"{pre}lessons/{sid}.html"
 
@@ -891,14 +892,6 @@ def lesson_page(entry, prev, nxt) -> str:
     badges.append(f'<span class="badge t">{html.escape(entry["track_id"])}</span>')
     parts.append('<div class="badges">' + "".join(badges) + '</div>')
     parts.append(framework_chips(sid, entry["track_id"]))
-    if entry["fn_id"] == "A":
-        # Function A read as a lot of text before anything ran. Each of its
-        # lessons now has a hands-on version where every step runs in the
-        # browser, built by scripts/build_lab.py; this is the door to it.
-        parts.append(
-            '<p class="chapguide trylab"><b>Try it first, in your browser.</b> '
-            f'<a href="../lab/{html.escape(sid)}.html">Run {html.escape(sid)} '
-            'step by step, hands on →</a></p>')
     parts.append('</div>')
 
     parts.append(video_block(sid, f"{sid} — {s['title']}"))
@@ -981,7 +974,9 @@ def lesson_page(entry, prev, nxt) -> str:
     # Function A's lessons live on their lab pages. Lesson prose cross-links by
     # bare file name ("A0.0 sets this up", the pager), and those would go
     # through a redirect; one rewrite here covers every way a link is written.
-    return re.sub(r'href="(A\d\.\d+)\.html', r'href="../lab/\1.html', "".join(parts))
+    return re.sub(r'href="([A-F]\d\.\d+)\.html',
+                  lambda m: f'href="../lab/{m.group(1)}.html' if has_lab(m.group(1))
+                  else m.group(0), "".join(parts))
 
 
 def index_page(seq) -> str:
@@ -1011,12 +1006,12 @@ def index_page(seq) -> str:
                 f'{html.escape(e["track_id"])}</span> '
                 f'{html.escape(e["track"])} '
                 + (f'<a href="../lab/{e["s"]["id"]}.html">Hands-on lab →</a>'
-                   if e["fn_id"] == "A" else "") + '</h3>')
+                   if has_lab(e["s"]["id"]) else "") + '</h3>')
         sid = e["s"]["id"]
         mark = "▶" if sid in VIDEOS else "·"
         # Function A rows open the hands-on page; the long lesson is one
         # click on from there ("Read the full lesson").
-        row = f"../lab/{sid}.html" if e["fn_id"] == "A" else f"{sid}.html"
+        row = f"../lab/{sid}.html" if has_lab(sid) else f"{sid}.html"
         parts.append(f'<p style="margin:6px 0"><a href="{row}" style="text-decoration:none">'
                      f'<span class="sid">{mark} {html.escape(sid)}</span> '
                      f'<span style="color:var(--text)">{html.escape(e["s"]["title"])}</span></a></p>')
@@ -1080,9 +1075,10 @@ def quest_block() -> str:
     the lab pages write it when a step runs. Without JavaScript this is a plain
     list of links and a quiz with its answers folded, so nothing is hidden.
     """
-    fn = next(f for f in CUR["functions"] if f["id"] == "A")
+    from exercises.labs import MODULES
+    fns = [f for f in CUR["functions"] if f["id"] in MODULES]
     rows = []
-    for t in fn["tracks"]:
+    for t in (t for f in fns for t in f["tracks"]):
         nodes = "".join(
             f'<a class="qn" href="lab/{s["id"]}.html" data-l="{s["id"]}" '
             f'title="{html.escape(s["title"])}"><b>{s["id"]}</b>'
@@ -1099,18 +1095,19 @@ def quest_block() -> str:
                   f'<details class="qa"><summary>Answer</summary><p><b>'
                   f'{html.escape(opts[right])}.</b> {html.escape(why)} '
                   f'<a href="lab/{sid}.html">Run it in {sid} →</a></p></details></div>')
-    badges = [("first", "First run", "Run one step in a lab"),
-              ("A0", "Set up", "Finish chapter A0"),
-              ("A1", "Builder", "Finish chapter A1"),
-              ("A2", "Harness engineer", "Finish chapter A2"),
-              ("local", "Took it local", "Copy a command from In your IDE"),
-              ("quiz", "Sharp eye", "Get all three right")]
+    names = {"A0": "Set up", "A1": "Builder", "A2": "Harness engineer",
+             "B1": "Risk spotter", "B2": "Identity keeper", "B3": "Runtime guard"}
+    badges = ([("first", "First run", "Run one step in a lab")]
+              + [(t["id"], names.get(t["id"], t["id"]), f"Finish chapter {t['id']}")
+                 for f in fns for t in f["tracks"]]
+              + [("local", "Took it local", "Copy a command from In your IDE"),
+                 ("quiz", "Sharp eye", "Get all three right")])
     bd = "".join(f'<li data-b="{k}"><i aria-hidden="true">★</i><b>{html.escape(n)}</b>'
                  f'<span>{html.escape(d)}</span></li>' for k, n, d in badges)
     return (f'<div class="quest" id="quest">'
             f'<div class="hud"><div class="lvl"><span>Level</span><b data-hud="level">Visitor</b></div>'
             f'<div class="xp"><div class="xpl"><span>XP</span><b data-hud="xp">0</b>'
-            f'<em data-hud="labs">0 of {sum(len(t["sessions"]) for t in fn["tracks"])} labs</em></div>'
+            f'<em data-hud="labs">0 of {sum(len(t["sessions"]) for f in fns for t in f["tracks"])} labs</em></div>'
             f'<div class="bar"><i data-hud="bar"></i></div></div>'
             f'<a class="go" data-hud="next" href="lab/A0.0.html">Start the first lab ▶</a></div>'
             f'<div class="qmap">{"".join(rows)}</div>'
@@ -1253,7 +1250,9 @@ def curriculum_block() -> str:
         who = FUNCTION_DAYS[fn["id"]]["who_short"]
         # Function A starts in the hands-on lab: a reader with no background
         # landed on a long page of text, which is what the lab exists to fix.
-        href = "lab/index.html" if fn["id"] == "A" else f"lessons/{first}.html"
+        href = f"lab/{first}.html" if has_lab(first) else f"lessons/{first}.html"
+        if fn["id"] == "A":
+            href = "lab/index.html"
         out.append(f'<a class="trk" href="{href}">'
                    f'<div class="k">{i:02d}</div>'
                    f'<h3>{name}</h3><p>{blurb}</p>'
@@ -1321,7 +1320,7 @@ def main() -> int:
         return 1
 
     OUT.mkdir(parents=True, exist_ok=True)
-    pages = {f"{e['s']['id']}.html": (lesson_redirect(e["s"]["id"]) if e["fn_id"] == "A"
+    pages = {f"{e['s']['id']}.html": (lesson_redirect(e["s"]["id"]) if has_lab(e["s"]["id"])
                                       else lesson_page(e, seq[i - 1] if i else None,
                                                        seq[i + 1] if i + 1 < len(seq) else None))
              for i, e in enumerate(seq)}

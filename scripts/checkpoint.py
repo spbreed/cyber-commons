@@ -300,6 +300,9 @@ def check(order: list[str]) -> list[str]:
             problems.append(f"{rel}: the final checkpoint is not the committed "
                             f"tree:\n      " + "\n      ".join(d))
 
+    # Functions taught as labs (scripts/exercises/labs.py) read on the lab page.
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from exercises.labs import MODULES as LAB_FUNCTIONS
     # 5 — the built page carries the checkpoint, and carries its own
     asked = re.compile(r"checkpoint\.py --at (\S+)")
     pages = ROOT / "site" / "lessons"
@@ -307,7 +310,7 @@ def check(order: list[str]) -> list[str]:
         for sid in order:
             # Function A's lessons are read on their lab pages; the old lesson
             # address is a redirect with nothing on it to check.
-            page = (ROOT / "site" / "lab" if sid.startswith("A") else pages) / f"{sid}.html"
+            page = (ROOT / "site" / "lab" if sid[:1] in LAB_FUNCTIONS else pages) / f"{sid}.html"
             if not page.is_file():
                 continue
             found = set(asked.findall(page.read_text()))

@@ -61,6 +61,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 OUT = ROOT / "LIGHTBOARD.md"
 
+from exercises.labs import has_lab
 from exercises import EXERCISES                              # noqa: E402
 from exercises.cybertravels import GROUNDING                 # noqa: E402
 from exercises.days import DAYS, FUNCTION_DAYS, FUNCTION_INTRO  # noqa: E402
@@ -451,7 +452,7 @@ def script(item: dict) -> str:
     out.append(f"Chapter {item['tr']['id']} · lesson {item['i'] + 1} of "
                f"{item['n']} · {'runs a skill' if runs else 'reading lesson'} "
                f"· {words} words, about {words / WPM:.1f} min spoken · "
-               f"[page]({SITE}/{'lab' if sid.startswith('A') else 'lessons'}/{sid}.html)")
+               f"[page]({SITE}/{'lab' if has_lab(sid) else 'lessons'}/{sid}.html)")
     out.append("")
 
     head = None

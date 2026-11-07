@@ -1,0 +1,540 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.0 hands-on — Start here: securing an AI system | Cyber Commons</title><meta name="description" content="B1.0, hands on: See what CyberTravels can do, and which of Function B&#x27;s controls it has so far."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"><style>
+body{background:#fbfcfd}
+.lab-shell{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:calc(100vh - 64px)}
+.lab-side{border-right:1px solid var(--line-soft);background:#f6f8fa;padding:18px 14px 28px;
+  position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto}
+.lab-side .fn a{font-size:inherit;color:inherit;display:inline;padding:0;background:none}
+.lab-side .fn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-faint);margin:2px 8px 10px}
+.lab-side .fnh{margin:18px 8px 2px;padding-top:12px;border-top:1px solid var(--line-soft);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--defend)}
+.lab-side .fnh:first-child{border-top:0;padding-top:0;margin-top:4px}
+.lab-fn{font-size:24px;margin:34px 0 0}
+.lab-side .ch{margin:14px 0 4px;padding:0 8px;font-weight:700;font-size:15px;color:var(--text)}
+.lab-side .ch small{display:block;font-weight:500;color:var(--text-faint);font-size:12.5px;line-height:1.35}
+.lab-side a{display:flex;gap:10px;align-items:baseline;padding:6px 10px;border-radius:8px;
+  color:var(--text-dim);text-decoration:none;font-size:15px;line-height:1.3}
+.lab-side a b{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:500;color:var(--text-faint);min-width:34px}
+.lab-side a:hover{background:#eef3f7;color:var(--text)}
+.lab-side a[aria-current=page]{background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(13,27,38,.08),0 0 0 1px var(--line-soft)}
+.lab-side a[aria-current=page] b{color:var(--defend)}
+.lab-side .foot{margin-top:22px;padding:12px 10px 0;border-top:1px solid var(--line-soft);font-size:13.5px;line-height:1.5;color:var(--text-faint)}
+.lab-main{padding:22px 28px 60px;min-width:0}
+.lab-intro{max-width:880px;margin:0 0 18px}
+.lab-intro h1{font-size:30px;margin:6px 0 6px}
+.lab-intro p{margin:0;color:var(--text-dim);font-size:16.5px}
+.lab-intro.slim{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.lab-intro.slim .py{margin-top:0}
+.lab-pn{display:flex;justify-content:space-between;gap:12px;margin-left:auto;font-size:15px}
+.lab-main>.lab-pn{margin:0 0 10px;max-width:none}
+.lab-pn a{text-decoration:none;font-weight:600}
+.lab-go{display:inline-block;background:var(--defend);color:#fff !important;text-decoration:none;font-weight:600;
+  padding:8px 18px;border-radius:9px}
+.lab-ch{display:flex;gap:10px;align-items:center;font-size:21px;margin:26px 0 10px}
+.lab-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.lab-card{display:block;border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px 16px;
+  text-decoration:none;color:var(--text);transition:box-shadow .15s,border-color .15s}
+.lab-card:hover{border-color:var(--defend);box-shadow:0 4px 14px rgba(13,27,38,.08)}
+.lab-card b{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--defend)}
+.lab-card h3{font-size:18px;margin:2px 0 4px}
+.lab-card p{margin:0 0 8px;font-size:15px;color:var(--text-dim);line-height:1.45}
+.lab-card span{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text-faint)}
+.lab-intro .py{display:inline-flex;gap:8px;align-items:center;margin-top:10px;font-family:"IBM Plex Mono",monospace;
+  font-size:12px;color:var(--text-faint)}
+.lab-intro .py i{width:8px;height:8px;border-radius:50%;background:#c3ced8;display:inline-block}
+.lab-intro .py[data-state=ready] i{background:#059669}
+.lab-intro .py[data-state=loading] i{background:#0891b2;animation:pulse 1s infinite}
+.lab-intro .py[data-state=failed] i{background:#b91c1c}
+@keyframes pulse{50%{opacity:.35}}
+section.lab{border:1px solid var(--line);border-radius:14px;background:#fff;margin:0 0 26px;overflow:hidden}
+.lab-head{padding:18px 22px 14px;border-bottom:1px solid var(--line-soft)}
+.lab-head .tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.06em;
+  padding:3px 8px;border-radius:6px;background:var(--defend-soft);color:#0b5566}
+.tag.dim{background:#eef2f5;color:var(--text-dim);font-weight:500}
+.lab-head h2{font-size:24px;margin:8px 0 4px}
+.lab-head p{margin:0;color:var(--text-dim);font-size:16px;max-width:820px}
+.lab-head .links{margin-top:8px;font-size:14px;display:flex;gap:16px;flex-wrap:wrap}
+.lab-head .links a{text-decoration:none}
+.modes{display:inline-flex;border:1px solid var(--line);border-radius:9px;padding:2px;background:#f6f8fa;margin-left:auto}
+.modes button{font:inherit;font-size:13.5px;border:0;background:transparent;padding:4px 12px;border-radius:7px;color:var(--text-faint);cursor:pointer}
+.modes button[aria-pressed=true]{background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(13,27,38,.1)}
+/* the sequence: lanes and numbered arrows */
+.seq{padding:16px 22px 6px;border-bottom:1px solid var(--line-soft);background:#fcfdfe}
+.lanes,.srow{display:grid;grid-template-columns:30px repeat(var(--n),minmax(0,1fr))}
+.lanes div{text-align:center;font-weight:700;font-size:14.5px;color:var(--text);padding:0 4px 8px;
+  border-bottom:2px solid var(--line)}
+.lanes div.adv{color:#a16207;border-color:#f3ddb6}
+.srow{position:relative;width:100%;border:0;background:transparent;padding:0;font:inherit;cursor:pointer;
+  min-height:40px;text-align:left;color:inherit}
+.srow .n{grid-column:1;align-self:center;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:#eef2f5;color:var(--text-faint)}
+.srow .lane{grid-row:1;border-left:1px dashed #d6e1ea;margin-left:50%}
+.srow .ar{position:absolute;top:50%;height:2px;background:#9fb3c3;transform:translateY(-1px)}
+.srow .ar::after{content:"";position:absolute;top:-4px;border:5px solid transparent}
+.srow .ar.r::after{right:-2px;border-left-color:#9fb3c3}
+.srow .ar.l::after{left:-2px;border-right-color:#9fb3c3}
+.srow .ar.self{height:16px;background:transparent;border:2px solid #9fb3c3;border-left:0;border-radius:0 9px 9px 0;transform:translateY(-8px)}
+.srow .ar.self::after{display:none}
+.srow .lb{position:absolute;top:50%;transform:translateY(-118%);font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;color:var(--text-faint);white-space:nowrap;padding:0 4px;background:#fcfdfe}
+.srow:hover .n{background:#dfe8ef}
+.srow.done .n{background:#d7efe6;color:#047857}
+.srow.done .ar{background:#6fb59a}.srow.done .ar.r::after{border-left-color:#6fb59a}.srow.done .ar.l::after{border-right-color:#6fb59a}
+.srow.done .ar.self{background:transparent;border-color:#6fb59a}
+.srow.cur .n{background:var(--defend);color:#fff}
+.srow.cur .ar{background:var(--defend)}.srow.cur .ar.r::after{border-left-color:var(--defend)}.srow.cur .ar.l::after{border-right-color:var(--defend)}
+.srow.cur .ar.self{background:transparent;border-color:var(--defend)}
+.srow.cur .lb{color:var(--defend);font-weight:600}
+.srow.fail .n{background:#b91c1c;color:#fff}
+/* the play bar */
+.bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--line-soft);background:#fff}
+.bar button{font:inherit;font-size:14px;border:1px solid transparent;background:transparent;color:var(--text-dim);
+  border-radius:8px;padding:5px 10px;cursor:pointer;line-height:1.2}
+.bar button:hover{background:#eef3f7}
+.bar button:disabled{opacity:.4;cursor:default;background:transparent}
+.bar .play{background:var(--defend);color:#fff;font-weight:600;padding:6px 16px}
+.bar .play:hover{background:#0b5f74}
+.bar .sp{display:flex;gap:2px;align-items:center;margin-left:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--text-faint)}
+.bar .sp button{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 7px}
+.bar .sp button[aria-pressed=true]{background:#eef2f5;color:var(--text)}
+.bar .count{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--text-faint)}
+/* a step */
+ol.steps{list-style:none;margin:0;padding:0}
+.step{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);border-bottom:1px solid var(--line-soft)}
+.step:last-child{border-bottom:0}
+.step .say{padding:18px 22px}
+.step .say .k{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text-faint);letter-spacing:.05em}
+.step .say h3{font-size:19px;margin:4px 0 8px}
+.step .say ul{margin:0;padding-left:18px;color:var(--text-dim);font-size:16px}
+.step .say li{margin:3px 0}
+.step .cell{padding:16px 18px;background:#f7f9fb;border-left:1px solid var(--line-soft);min-width:0}
+.cell .lbl{display:flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px}
+.cell .lbl .sp{flex:1}
+.cell pre,.cell textarea{display:block;width:100%;margin:0;font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.55;
+  background:#0d1b26;color:#e6f0f6;border:0;border-radius:9px;padding:12px 14px;overflow:auto;white-space:pre;tab-size:4}
+.cell textarea{resize:vertical;min-height:4em;outline:none}
+.cell textarea:focus{box-shadow:0 0 0 2px var(--defend-lt)}
+.cell .cmd pre{background:#122433}
+.cell .acts{display:flex;gap:8px;align-items:center;margin:8px 0 0;flex-wrap:wrap}
+.cell .acts button{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;color:var(--text-dim);
+  border-radius:8px;padding:4px 12px;cursor:pointer}
+.cell .acts button.run{background:var(--defend);border-color:var(--defend);color:#fff;font-weight:600}
+.cell .acts button.run:hover{background:#0b5f74}
+.cell .acts .note{font-size:13px;color:var(--text-faint)}
+.cell .out{white-space:pre-wrap;word-break:break-word;margin-top:10px;background:#fff;color:var(--text);border:1px solid var(--line);min-height:2.6em}
+.cell .out.err{border-color:#f0c4c4;background:#fff7f7;color:#7f1d1d}
+.cell .out:empty::before{content:"Output appears here when you press Run.";color:var(--text-faint);font-style:italic}
+.cell .mine{font-size:13.5px;color:var(--text-faint);margin:8px 2px 0}
+.lab-hud{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:#047857;background:#f1fbf7;
+  border:1px solid #bfe6d6;border-radius:999px;padding:2px 10px}
+.lab-hud:empty{display:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0d1b26;color:#fff;
+  padding:9px 18px;border-radius:999px;font-weight:600;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+/* the lesson, folded */
+.lesson{padding:18px 22px 22px;border-top:1px solid var(--line-soft);background:#fcfdfe}
+.lesson h3{font-size:18px;margin:0 0 2px}
+.lesson>p{margin:0 0 10px;font-size:14.5px;color:var(--text-faint)}
+.lfold{border:1px solid var(--line-soft);border-radius:10px;background:#fff;margin:6px 0}
+.lfold summary{cursor:pointer;padding:9px 14px;font-weight:600;font-size:16px;color:var(--text)}
+.lfold[open] summary{border-bottom:1px solid var(--line-soft)}
+.lbody{padding:6px 16px 12px;font-size:15.5px;color:var(--text-dim);max-width:900px}
+.lbody pre{overflow:auto}
+.lbody table{border-collapse:collapse;width:100%;font-size:14.5px;margin:8px 0}
+.lbody th,.lbody td{border:1px solid var(--line-soft);padding:5px 8px;text-align:left;vertical-align:top}
+.lbody h2,.lbody h3{font-size:17px;margin:14px 0 6px}
+/* the IDE route */
+.ide{padding:18px 22px 22px}
+.ide h3{font-size:18px;margin:16px 0 6px}
+.ide h3:first-child{margin-top:0}
+.ide p{margin:0 0 8px;color:var(--text-dim);font-size:15.5px;max-width:820px}
+.ide pre{font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.55;background:#0d1b26;color:#e6f0f6;
+  border-radius:9px;padding:12px 14px;overflow:auto;margin:0}
+.ide details{margin-top:8px;border:1px solid var(--line-soft);border-radius:9px;background:#fbfcfd}
+.ide summary{cursor:pointer;padding:8px 12px;font-weight:600;color:var(--text-dim)}
+.ide details pre{border-radius:0 0 9px 9px;max-height:420px}
+.blk{position:relative}
+.blk .copy{position:absolute;top:8px;right:8px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  border:1px solid rgba(255,255,255,.25);background:rgba(13,27,38,.6);color:#e6f0f6;border-radius:6px;padding:3px 8px;cursor:pointer}
+.blk .copy:hover{background:rgba(13,27,38,.9)}
+.blk pre{padding-right:76px}
+/* with JavaScript: one lesson, one step, one mode at a time */
+html.js section.lab:not(.on){display:none}
+html.js .step:not(.on){display:none}
+html.js section.lab[data-mode=run] .ide,html.js section.lab[data-mode=ide] .run-pane{display:none}
+html:not(.js) .bar,html:not(.js) .modes,html:not(.js) .acts .run{display:none}
+@media (max-width:900px){
+  .lab-shell{grid-template-columns:1fr}
+  .lab-side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line-soft);padding:12px}
+  .lab-side nav{display:flex;flex-wrap:wrap;gap:4px}
+  .lab-side .ch{width:100%;margin:8px 0 2px}
+  .lab-side .ch small,.lab-side .foot{display:none}
+  .lab-side a{padding:4px 8px;font-size:14px}
+  .lab-side a span{display:none}
+  .lab-main{padding:16px 12px 40px}
+  .step{grid-template-columns:1fr}
+  .step .cell{border-left:0;border-top:1px solid var(--line-soft)}
+  .seq{padding:12px 10px 4px}
+  .lanes div{font-size:12.5px}
+  .srow .lb{font-size:10.5px}
+  .bar .sp{margin-left:0}
+}
+</style><script>document.documentElement.classList.add('js')</script></head><body><!-- Generated by scripts/build_lab.py from scripts/exercises/lab_*.py. Do not edit. --><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="../lessons/index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="lab-shell"><aside class="lab-side"><div class="fn"><a href="index.html" style="padding:0;display:inline">Hands-on labs</a></div><nav><div class="fnh">Function A · Getting Started</div><div class="ch">A0 <small>Set Up</small></div><a href="A0.0.html"><b>A0.0</b><span>Set up your computer</span></a><a href="A0.1.html"><b>A0.1</b><span>9 agent concepts you need to know</span></a><div class="ch">A1 <small>Build the Agent</small></div><a href="A1.0.html"><b>A1.0</b><span>What an agent is, and what you will build</span></a><a href="A1.1.html"><b>A1.1</b><span>The agent loop: plan, act, check</span></a><a href="A1.2.html"><b>A1.2</b><span>Tools over MCP</span></a><a href="A1.3.html"><b>A1.3</b><span>Identity: people, agents and tokens</span></a><a href="A1.4.html"><b>A1.4</b><span>One token per action</span></a><a href="A1.5.html"><b>A1.5</b><span>Memory, and where it came from</span></a><a href="A1.6.html"><b>A1.6</b><span>Messages between agents</span></a><a href="A1.7.html"><b>A1.7</b><span>Human approval and run limits</span></a><div class="ch">A2 <small>Harness Engineering</small></div><a href="A2.0.html"><b>A2.0</b><span>From demo to system</span></a><a href="A2.1.html"><b>A2.1</b><span>Tracing a run</span></a><a href="A2.2.html"><b>A2.2</b><span>The audit log, and four questions it must answer</span></a><a href="A2.3.html"><b>A2.3</b><span>Testing the controls</span></a><a href="A2.4.html"><b>A2.4</b><span>Scoring the agent&#x27;s behaviour</span></a><a href="A2.5.html"><b>A2.5</b><span>What you built, and how it can fail</span></a><div class="fnh">Function B · Securing AI Architectures</div><div class="ch">B1 <small>CyberTravels&#x27; Architecture, and Every Risk It Carries</small></div><a href="B1.0.html" aria-current="page"><b>B1.0</b><span>Start here: securing an AI system</span></a><a href="B1.1.html"><b>B1.1</b><span>A reference architecture for AI agents</span></a><a href="B1.2.html"><b>B1.2</b><span>Prompt injection</span></a><a href="B1.3.html"><b>B1.3</b><span>Indirect prompt injection</span></a><a href="B1.4.html"><b>B1.4</b><span>Memory poisoning</span></a><a href="B1.5.html"><b>B1.5</b><span>Tool misuse</span></a><a href="B1.6.html"><b>B1.6</b><span>Privilege compromise</span></a><a href="B1.7.html"><b>B1.7</b><span>Identity spoofing and impersonation</span></a><a href="B1.8.html"><b>B1.8</b><span>Malicious code execution</span></a><a href="B1.9.html"><b>B1.9</b><span>Injection through content the agent reads</span></a><a href="B1.10.html"><b>B1.10</b><span>Agent communication poisoning</span></a><a href="B1.11.html"><b>B1.11</b><span>Rogue agents in a multi-agent system</span></a><a href="B1.12.html"><b>B1.12</b><span>Cascading hallucination</span></a><a href="B1.13.html"><b>B1.13</b><span>Resource overload</span></a><a href="B1.14.html"><b>B1.14</b><span>Repudiation and untraceability</span></a><a href="B1.15.html"><b>B1.15</b><span>Too many approvals for one person</span></a><a href="B1.16.html"><b>B1.16</b><span>Misaligned and deceptive behaviour</span></a><a href="B1.17.html"><b>B1.17</b><span>Attacks on the people around the agent</span></a><a href="B1.18.html"><b>B1.18</b><span>The CyberTravels risk register</span></a><a href="B1.19.html"><b>B1.19</b><span>Every control CyberTravels needs</span></a><div class="ch">B2 <small>Securing the Architecture</small></div><a href="B2.1.html"><b>B2.1</b><span>Agent identity: user, workload, agent</span></a><a href="B2.2.html"><b>B2.2</b><span>The first credential</span></a><a href="B2.3.html"><b>B2.3</b><span>Delegation that narrows</span></a><a href="B2.4.html"><b>B2.4</b><span>Just-in-time access</span></a><a href="B2.5.html"><b>B2.5</b><span>Managing machine identities</span></a><a href="B2.6.html"><b>B2.6</b><span>Marking untrusted content</span></a><a href="B2.7.html"><b>B2.7</b><span>Audit logs that say who</span></a><a href="B2.8.html"><b>B2.8</b><span>Audit logs that cannot be forged</span></a><div class="ch">B3 <small>Securing the Architecture</small></div><a href="B3.1.html"><b>B3.1</b><span>Deny tool calls by default</span></a><a href="B3.2.html"><b>B3.2</b><span>Sandboxed code execution</span></a><a href="B3.3.html"><b>B3.3</b><span>Egress control</span></a><a href="B3.4.html"><b>B3.4</b><span>Budgets and stop conditions</span></a><a href="B3.5.html"><b>B3.5</b><span>Checking tool results</span></a><a href="B3.6.html"><b>B3.6</b><span>Human approval at volume</span></a><a href="B3.7.html"><b>B3.7</b><span>The agent gateway</span></a><a href="B3.8.html"><b>B3.8</b><span>Shared infrastructure between runs</span></a><a href="B3.9.html"><b>B3.9</b><span>Turning a control off safely</span></a><a href="B3.10.html"><b>B3.10</b><span>Letting the agent raise a flag</span></a><a href="B3.11.html"><b>B3.11</b><span>Securing developers&#x27; coding agents</span></a></nav><div class="foot">Every step runs real Python in your browser, against CyberTravels as it stood at the end of that lesson. Nothing is installed on your computer.<br><br><a href="../lessons/index.html" style="padding:0">All lessons</a></div></aside><main class="lab-main"><div class="lab-intro slim"><div class="py" data-state="idle"><i></i><span>Python starts the first time you press Run or Play.</span></div><span class="lab-hud" aria-live="polite"></span><div class="lab-pn"><a href="A2.5.html">← A2.5</a><a href="B1.1.html">B1.1 →</a></div></div><section class="lab" id="B1.0" data-tree="99da3fe91f" data-mode="run" aria-label="B1.0 Start here: securing an AI system"><div class="lab-head"><div class="tags"><span class="tag">B1.0</span><span class="tag dim">B1 · CyberTravels&#x27; Architecture, and Every Risk It Carries</span><span class="modes" role="group" aria-label="Where to run it"><button type="button" data-m="run" aria-pressed="true">In your browser</button><button type="button" data-m="ide" aria-pressed="false">In your IDE</button></span></div><h2>Start here: securing an AI system</h2><p>See what CyberTravels can do, and which of Function B&#x27;s controls it has so far.</p><div class="links"><a href="#lesson">For detailed learning ↓</a></div></div><div class="run-pane"><div class="seq" style="--n:4"><div class="lanes" style="--n:4"><span></span><div class="">Traveller</div><div class="">Agent</div><div class="">Tools</div><div class="">Controls</div></div><button type="button" class="srow" data-i="0" aria-label="Step 1: What the agent can do"><span class="n">1</span><span class="lane" style="grid-column:2"></span><span class="lane" style="grid-column:3"></span><span class="lane" style="grid-column:4"></span><span class="lane" style="grid-column:5"></span><span class="ar r" style="left:calc(30px + (100% - 30px) * 0.3750);width:calc((100% - 30px) * 0.2500)"></span><span class="lb" style="left:calc(30px + (100% - 30px) * 0.3750)">7 tools</span></button><button type="button" class="srow" data-i="1" aria-label="Step 2: Which controls exist yet"><span class="n">2</span><span class="lane" style="grid-column:2"></span><span class="lane" style="grid-column:3"></span><span class="lane" style="grid-column:4"></span><span class="lane" style="grid-column:5"></span><span class="ar r" style="left:calc(30px + (100% - 30px) * 0.3750);width:calc((100% - 30px) * 0.5000)"></span><span class="lb" style="left:calc(30px + (100% - 30px) * 0.3750)">look</span></button></div><div class="bar"><button type="button" class="reset" title="Start this lesson again">↺ Reset</button><button type="button" class="prev" aria-label="Previous step">‹</button><button type="button" class="play">▶ Play</button><button type="button" class="next" aria-label="Next step">›</button><span class="sp">speed<button type="button" data-s="0.5" aria-pressed="false">0.5×</button><button type="button" data-s="1" aria-pressed="true">1×</button><button type="button" data-s="2" aria-pressed="false">2×</button><button type="button" data-s="3" aria-pressed="false">3×</button></span><span class="count"></span></div><ol class="steps"><li class="step" data-i="0"><div class="say"><div class="k">STEP 1 OF 2</div><h3>What the agent can do</h3><ul><li>This is the system you built in Function A.</li><li>Count what it can do, and how much of that is hard to undo.</li></ul></div><div class="cell"><div class="lbl">Python <span class="sp"></span>edit it, then run</div><div class="blk"><textarea spellcheck="false" rows="4" aria-label="Python for step 1">from cybertravels import config
+risky = [t for t, r in config.TOOL_POLICY.items() if r[&quot;high_risk&quot;]]
+print(len(config.TOOL_POLICY), &quot;tools,&quot;, len(risky), &quot;of them hard to undo:&quot;, risky)
+</textarea></div><div class="acts"><button type="button" class="run">▶ Run</button><span class="note"></span></div><pre class="out" aria-live="polite"></pre></div></li><li class="step" data-i="1"><div class="say"><div class="k">STEP 2 OF 2</div><h3>Which controls exist yet</h3><ul><li>Function B adds one control per lesson.</li><li>Right now, none of them is there. Each line says which lesson builds it.</li></ul></div><div class="cell"><div class="lbl">Python <span class="sp"></span>edit it, then run</div><div class="blk"><textarea spellcheck="false" rows="7" aria-label="Python for step 2">import importlib.util
+def present(name):
+    return importlib.util.find_spec(&quot;cybertravels.&quot; + name) is not None
+for name, lesson in [(&quot;provenance&quot;, &quot;B2.6&quot;), (&quot;registry&quot;, &quot;B2.1&quot;), (&quot;policy&quot;, &quot;B3.1&quot;),
+                     (&quot;sandbox&quot;, &quot;B3.2&quot;), (&quot;egress&quot;, &quot;B3.3&quot;), (&quot;gateway&quot;, &quot;B3.7&quot;)]:
+    print(f&quot;{name:11}&quot;, &quot;present&quot; if present(name) else &quot;not yet, built in &quot; + lesson)
+</textarea></div><div class="acts"><button type="button" class="run">▶ Run</button><span class="note"></span></div><pre class="out" aria-live="polite"></pre></div></li></ol></div><div class="ide"><h3>1 · Link this lesson's skill into your AI tool</h3><p>Claude Code, Codex, Cursor, Gemini, Copilot and others. It links the skill; it does not copy it, so a fix reaches you on your next pull.</p><div class="blk "><pre>python3 scripts/install_skills.py --all --lessons B1.0
+</pre></div><h3>2 · Ask your agent to do the lesson</h3><p>Type <code>/b1-0-securing-an-ai-system</code>, or just ask it to “do B1.0”. It gets the code as it stood at the end of B1.0, runs it, and tells you what happened.</p><h3>3 · No agent? Run the same thing from a terminal</h3><div class="blk "><pre>python3 scripts/lesson.py B1.0
+</pre></div><h3>4 · Run this page's steps on your computer</h3><p>The same Python as the steps above. Get the code as it stood at the end of B1.0, save the steps as <code>lab.py</code> in that folder, and run it.</p><div class="blk "><pre>python3 scripts/checkpoint.py --at B1.0 --out work/B1.0/cybertravels
+cd work/B1.0
+python3 lab.py
+</pre></div><details><summary>lab.py, every step of B1.0</summary><div class="blk "><pre># step 1: What the agent can do
+from cybertravels import config
+risky = [t for t, r in config.TOOL_POLICY.items() if r[&quot;high_risk&quot;]]
+print(len(config.TOOL_POLICY), &quot;tools,&quot;, len(risky), &quot;of them hard to undo:&quot;, risky)
+
+# step 2: Which controls exist yet
+import importlib.util
+def present(name):
+    return importlib.util.find_spec(&quot;cybertravels.&quot; + name) is not None
+for name, lesson in [(&quot;provenance&quot;, &quot;B2.6&quot;), (&quot;registry&quot;, &quot;B2.1&quot;), (&quot;policy&quot;, &quot;B3.1&quot;),
+                     (&quot;sandbox&quot;, &quot;B3.2&quot;), (&quot;egress&quot;, &quot;B3.3&quot;), (&quot;gateway&quot;, &quot;B3.7&quot;)]:
+    print(f&quot;{name:11}&quot;, &quot;present&quot; if present(name) else &quot;not yet, built in &quot; + lesson)
+
+</pre></div></details><h3>5 · Copy the skill itself</h3><p>The lesson skill is a folder with one <code>SKILL.md</code>. Paste it into your tool's skills folder as <code>b1-0-securing-an-ai-system/SKILL.md</code> if you would rather not link it.</p><details><summary>lesson-skills/b1-0-securing-an-ai-system/SKILL.md</summary><div class="blk "><pre>---
+name: b1-0-securing-an-ai-system
+description: &gt;-
+  B1.0 — Start here: securing an AI system. Do this lesson: explains the idea in plain words, gets the CyberTravels code as it stood at the end of B1.0, runs it, and reports what happened. Use when working through lesson B1.0 or when asked to do B1.0.
+license: Apache-2.0
+allowed-tools: Read, Glob, Bash
+metadata:
+  commons-lesson: B1.0
+  commons-audit: none
+  commons-generated: scripts/build_lesson_skills.py
+---
+
+&lt;!-- Generated by scripts/build_lesson_skills.py from the lesson&#x27;s sources.
+     Edit scripts/exercises/ or site/data/curriculum.json, not this file. --&gt;
+
+# B1.0 — Start here: securing an AI system
+
+Two teams argue for an hour about whether an agent is safe, and discover at the end that one of them meant the model and the other meant the loop calling the tools. Neither was wrong. They were describing different components of a system nobody had drawn.
+
+## When to use this
+
+The learner wants to do lesson **B1.0**: they typed `/b1-0-securing-an-ai-system`, picked it from
+their agent&#x27;s skill list, or asked to &quot;do B1.0&quot;. One skill is one lesson, and
+the learner never has to type a command themselves: you run them.
+
+## Before you start
+
+1. **Be in the repository.** `scripts/lesson.py` must exist in the current
+   folder. If it does not, ask the learner to open the `cyber-commons` folder
+   they cloned in their agent and start again.
+2. **Find the Python command.** Try `python3 --version`. On Windows that name is
+   often a Microsoft Store shortcut that prints &quot;Python was not found&quot; or exits
+   with 49; if so use `python`, then `py -3`. Call the one that works `PY`
+   below, and use it for every command.
+
+## Procedure
+
+1. **Teach it first.** Read `references/lesson.md`, next to this file, and
+   explain the idea to the learner in plain words *before* running anything.
+   The idea comes before the code. Assume they have never written code unless
+   they have told you otherwise; define a term the first time you use it.
+2. **Run the lesson.** From the repository root:
+   `PY scripts/lesson.py B1.0`. It gets the CyberTravels code as it stood at
+   the end of B1.0 into `work/cybertravels`, shows what this lesson added,
+   runs the tests that exist at this point, and runs the audit
+   (none — this is a reading lesson). It ends with a READBACK.
+3. This lesson has no audit to run; the harness says so in its readback. Read the concept together instead.
+4. **Say what happened.** Read the READBACK to the learner in your own words,
+   under its headings: **What I did**, **What changed**, **The number**,
+   **Read this next**. Use only what it printed. If it says a step was skipped
+   or refused, say that plainly and pass on the fix it gave; a skipped step is
+   not a pass.
+5. **Ask the &quot;Your turn&quot; questions and stop.** The readback carries a heading
+   called **Your turn — nobody can fill this in for you**. Put those questions
+   to the learner, one at a time, and **wait for their answer**. Do not answer
+   them, do not suggest an answer, and do not continue past them. If the learner
+   asks you to answer, say that the question is the exercise and offer to
+   discuss their attempt instead. There is nothing to check and nothing to
+   score: what matters is that they formed an answer, not that it matched one.
+6. **Give them the exercise.** Draw your own CyberTravels before the next lesson — the agents you run, the MCP servers and APIs they reach, and which of them can move money or ship code. B1.1 gives you the standard names for the boxes; comparing your drawing to it is the fastest way to find the component you forgot you had.
+7. **Point at the next lesson**, from the readback&#x27;s last heading.
+
+## The readback
+
+`scripts/lesson.py` always ends with the same headings, so a learner learns
+where to look. Every line under the first four is derived from something the
+harness ran; it never prints a number it did not measure, and where a lesson has
+no number it says what to count instead.
+
+**The fifth heading is different and it is the reason it exists.** Everything
+else here can be done by an agent reading the lesson and running the skill,
+which means a learner can finish a lesson having said nothing — students
+testing this reported exactly that. **Your turn** is prompts, never answers.
+An agent that answers them has removed the only part of the lesson that
+required the learner, and has not finished the lesson faster — it has skipped
+it.
+
+## Failure modes
+
+- **`python3` prints &quot;Python was not found&quot;.** The Windows Store shortcut. Use
+  `python` or `py -3`.
+- **Exit 2, &quot;no model configured&quot;.** Expected on a fresh machine. It is not a
+  broken repository; the readback names the fix.
+- **A refusal in about two seconds.** A quota or rate-limit rejection, not a
+  failure of the lesson. Stop; do not record a result from it.
+- **The run says `stopped` and that your edits are safe.** Not a failure. The
+  learner did the previous lesson&#x27;s challenge and the harness declined to
+  overwrite it. Offer the two choices it printed — `--out` for a fresh folder
+  that keeps the work, `--force` to discard it — and let the learner pick. Do
+  not pick for them, and do not pass `--force` on your own initiative.
+- **A test is reported skipped.** Say so. `PyJWT` missing is the usual reason,
+  and `pip install PyJWT` fixes it.
+</pre></div></details></div><div class="lesson" id="lesson"><h3>For detailed learning</h3><p>The ideas behind the steps above. Open any part to read it.</p><details class="lfold"><summary>Why it matters</summary><div class="lbody"><p>Two teams argue for an hour about whether an agent is safe, and discover at the end that one of them meant the model and the other meant the loop calling the tools. Neither was wrong. They were describing different components of a system nobody had drawn.</p><p><b>At CyberTravels.</b> CyberTravels is the system. Everything after this lesson names one of its boxes.</p></div></details><details class="lfold"><summary>The idea</summary><div class="lbody"><pre class="dia">   THE AGENT AS YOUR INSTRUMENT           THE AGENT AS WHAT YOU PROTECT
+
+        you ---&gt; agent ---&gt; the                the ---&gt; agent &lt;--- attacker
+                            business
+
+   the same system, two directions of concern - and Function B works at
+   the architecture layer, where both of them land on one component map:
+
+        [ chapter 1 ]        [ chapter 2 ]        [ chapter 3 ]
+        the picture   --&gt;    securing it:   --&gt;   securing it:
+        and its risks        identity and         runtime and
+                             ingress              the gateway
+
+   everything downstream (B, C, D, E) names a component from chapter 1</pre><h3>First, what CyberTravels is — and why it is in every lesson you will read</h3>
+<p><strong>CyberTravels is a company that does not exist, and it is the most important thing in this commons.</strong> It is a corporate travel business: it books flights and hotels for other companies&#x27; staff, takes payments, issues refunds, and keeps customer profiles. Ordinary. Then it shipped an agentic platform, and became the one system this entire curriculum is taught on.</p>
+<p>Every lesson in all six functions is grounded in it. Not <em>illustrated with</em> — <strong>grounded in</strong>. When Function B names a component, it is a CyberTravels component. When Function D attacks something, it attacks CyberTravels. When Function E writes a detection, it writes it against CyberTravels&#x27; telemetry, and when Function F counts a control, it counts CyberTravels&#x27; controls.</p>
+<p>That is a deliberate cost. Any given lesson could find a sharper example of its own idea somewhere else, and several would. What you get instead is <strong>accumulation</strong>: the refund limit an attacker walks past in B1.2 is the same refund limit a detection watches for in Function E and a report counts in Function F. By the fourth function you are not learning a fourth example — you are watching a system you already understand fail in a new way.</p>
+<p>The alternative is what most security material does: a fresh example per topic, so the reader holds a hundred unrelated systems and never builds a model of any of them. One system, followed all the way through, is worth more than a hundred sharp illustrations.</p>
+<p><strong>Where it comes from.</strong> The narrative, the six risk families and the twelve-row register are adapted from <em>Agentic AI is rising fast — but the attack surface is exploding</em> (May 2025). The architecture below, the mapping onto lessons, the controls and all of the code are this commons&#x27;.</p>
+<p>So: meet the company.</p>
+<p>---</p>
+<p>Meet <strong>CyberTravels</strong>. It sells corporate travel, and last quarter it shipped an agentic platform that plans and manages a whole trip through a conversation. Alex is the product engineer who built it.</p>
+<p>CyberTravels is four agents, not one:</p>
+<ul><li>a <strong>Workflow Agent</strong> that books flights and hotels, takes payments and issues refunds, through an MCP server with tool orchestration;</li><li>a <strong>RAG Travel Advisor</strong> that recommends itineraries from curated templates indexed in a vector store;</li><li>a <strong>Coding Agent</strong> that writes code, patches libraries, tests features in lower environments and generates unit tests;</li><li>a <strong>File System Agent</strong> that reads vendor and customer PDFs and images with OCR and an LLM, then updates backend APIs and validates invoices.</li></ul>
+<p>Most of them reach their tools through MCP servers — one internal, one from a third party. Some call APIs directly, with no MCP in the path at all. They send each other messages. And when Alex runs CyberTravels locally to debug it, it reads his laptop&#x27;s filesystem over standard I/O.</p>
+<p>Every one of those sentences is a design decision, and every one of them is also an attack surface. <strong>That is the whole subject of this commons, and CyberTravels is the one system it is taught on.</strong> You will attack CyberTravels in Function D, build the pipeline that reviews its code in Function C, detect it misbehaving in Function E, and govern it in Function F. It starts here, because none of the rest is possible until the system is drawn.</p>
+<h3>Zero trust, when the thing you cannot trust is the agent</h3>
+<p>Zero trust has a one-line definition that survives contact with agents: <strong>no implicit trust from position in the network, and every request authenticated, authorised and logged at the point it is served.</strong> Applied to a user on a laptop, that means the VPN is not a permission. Applied to CyberTravels, it means four harder things.</p>
+<ul><li><strong>The identity is a workload, not a person.</strong> The Workflow Agent needs its own attested identity, not a shared service account, or you cannot say which agent acted and cannot revoke one without breaking all of them.</li><li><strong>The authority is per call, not per session.</strong> An agent that holds <code>booking.*</code> for an hour is one injected instruction away from a refund. The grant has to be <code>booking.create</code>, issued for this task, expiring with it.</li><li><strong>Instructions are data until something proves otherwise.</strong> A model reads its operator&#x27;s prompt, the user&#x27;s message and a retrieved document as the same kind of token. Provenance at ingress is what makes the third one unable to select a tool.</li><li><strong>The decision is adjudicated outside the agent.</strong> A model asked to enforce its own policy is being asked to be both the subject and the guard. The enforcement point is the gateway in front of the tool call.</li></ul>
+<p>Stated in the negative, which is how you audit it: <strong>the system prompt is not a control, the network boundary is not a control, and &quot;the model was told not to&quot; is not a control.</strong> Each of those has to be replaced by something that holds when the model does the wrong thing, because sooner or later it will.</p>
+<h3>How this function is organised: risks, then controls</h3>
+<p>Function B is built out of two kinds of lesson, and the split is deliberate.</p>
+<p>A <strong>risk lesson</strong> shows a failure happening, before anything tries to stop it. It names the component of CyberTravels it attacks and produces the evidence — so the control that follows is answering something you have already watched go wrong, rather than a hazard somebody asserted.</p>
+<p>A <strong>control lesson</strong> builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for. A control whose limits you cannot state is one you will over-trust.</p>
+<ul><li><strong>Chapter B1 — the architecture, and every risk it carries.</strong> The component map, then one lesson per risk, each grounded in the OWASP Agentic AI threat taxonomy. It introduces no control at all, on purpose. It ends with two indexes: the twelve-row AI risk register in B1.18, and in <strong>B1.19 the full control index</strong> — every control CyberTravels needs, the agentic ones and the ordinary ones it still has to get right, with the lesson that owns each.</li><li><strong>Chapter B2 — securing it: identity and ingress.</strong> Who is calling, on whose behalf, and what came in from outside. These two close more of CyberTravels&#x27; risks than anything else, which is why they come first.</li><li><strong>Chapter B3 — securing it: runtime and the gateway.</strong> What holds after identity has been defeated, and how the controls collapse into one enforcement point once CyberTravels runs more than four agents.</li></ul>
+<p>One warning about the shape of this function, and it is the reason B1.19 exists. The agentic risks are the new ones, not the only ones. CyberTravels still has to scan its dependencies, segregate production from everything else, encrypt at rest and in transit, manage credentials and keys, validate input and log what happened. An agent platform built on an estate that has not done those is not an agentic security problem; it is an ordinary one wearing a new hat.</p>
+<blockquote>The CyberTravels narrative, the six risk families and the twelve-row register used throughout this commons are adapted from <em>Agentic AI is rising fast — but the attack surface is exploding</em> (May 2025). The mapping onto lessons, the controls and all of the code are this commons&#x27;.</blockquote></div></details><details class="lfold"><summary>The full walkthrough</summary><div class="lbody"><h2>2 · CyberTravels, as built</h2><div style="display:flex;gap:6px;align-items:stretch;flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:6px 0 2px"><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#4a6172;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(125,147,163,.4);margin-bottom:3px">ingress</div><div style="border:1px solid rgba(185,28,28,.55);border-left:3px solid #b91c1c;border-radius:8px;background:rgba(185,28,28,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#129465;</span> traveller</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">chat and email — free text, unauthenticated until it is not</div><div style="font-size:10px;color:#b91c1c;margin-top:5px;font-weight:600;letter-spacing:.02em">UNTRUSTED INPUT</div></div></div><div style="align-self:center;color:rgba(125,147,163,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#4a6172;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(125,147,163,.4);margin-bottom:3px">orchestrator</div><div style="border:1px solid rgba(180,83,9,.55);border-left:3px solid #b45309;border-radius:8px;background:rgba(180,83,9,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#9992;&#65039;</span> CyberTravels</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">routes a request to whichever agent can serve it, and holds the conversation</div></div></div><div style="align-self:center;color:rgba(125,147,163,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#4a6172;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(125,147,163,.4);margin-bottom:3px">four agents</div><div style="border:1px solid rgba(14,116,144,.55);border-left:3px solid #0e7490;border-radius:8px;background:rgba(14,116,144,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128188;</span> Workflow Agent</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">flights, hotels, payments — and refunds</div><div style="font-size:10px;color:#0e7490;margin-top:5px;font-weight:600;letter-spacing:.02em">MOVES MONEY</div></div><div style="border:1px solid rgba(14,116,144,.55);border-left:3px solid #0e7490;border-radius:8px;background:rgba(14,116,144,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128506;&#65039;</span> RAG Advisor</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">itineraries from templates indexed in a vector store</div></div><div style="border:1px solid rgba(14,116,144,.55);border-left:3px solid #0e7490;border-radius:8px;background:rgba(14,116,144,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128187;</span> Coding Agent</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">writes code, patches libraries, opens pull requests</div><div style="font-size:10px;color:#0e7490;margin-top:5px;font-weight:600;letter-spacing:.02em">WRITES TO PROD REPO</div></div><div style="border:1px solid rgba(14,116,144,.55);border-left:3px solid #0e7490;border-radius:8px;background:rgba(14,116,144,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128196;</span> File System Agent</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">OCR on vendor PDFs, then updates backend APIs</div></div></div><div style="align-self:center;color:rgba(125,147,163,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#4a6172;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(125,147,163,.4);margin-bottom:3px">tool paths</div><div style="border:1px solid rgba(185,28,28,.55);border-left:3px solid #b91c1c;border-radius:8px;background:rgba(185,28,28,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128268;</span> MCP server</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">third-party — CyberTravels does not operate it and cannot read its code</div><div style="font-size:10px;color:#b91c1c;margin-top:5px;font-weight:600;letter-spacing:.02em">SUPPLY CHAIN</div></div><div style="border:1px solid rgba(4,120,87,.55);border-left:3px solid #047857;border-radius:8px;background:rgba(4,120,87,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128274;</span> MCP server</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">internal — tool orchestration for the Workflow Agent</div></div><div style="border:1px solid rgba(185,28,28,.55);border-left:3px solid #b91c1c;border-radius:8px;background:rgba(185,28,28,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#9889;</span> direct APIs</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">no MCP in the path at all, so no policy point either</div><div style="font-size:10px;color:#b91c1c;margin-top:5px;font-weight:600;letter-spacing:.02em">BYPASSES THE GATEWAY</div></div><div style="border:1px solid rgba(185,28,28,.55);border-left:3px solid #b91c1c;border-radius:8px;background:rgba(185,28,28,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128421;&#65039;</span> local std I/O</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">Alex&#x27;s laptop, whenever he debugs locally</div><div style="font-size:10px;color:#b91c1c;margin-top:5px;font-weight:600;letter-spacing:.02em">READS HIS FILESYSTEM</div></div></div><div style="align-self:center;color:rgba(125,147,163,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#4a6172;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(125,147,163,.4);margin-bottom:3px">downstream</div><div style="border:1px solid rgba(180,83,9,.55);border-left:3px solid #b45309;border-radius:8px;background:rgba(180,83,9,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128179;</span> payments</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">charge, and refund</div><div style="font-size:10px;color:#b45309;margin-top:5px;font-weight:600;letter-spacing:.02em">R1</div></div><div style="border:1px solid rgba(180,83,9,.55);border-left:3px solid #b45309;border-radius:8px;background:rgba(180,83,9,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#9992;&#65039;</span> flights and hotels</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">search, hold, ticket, book</div></div><div style="border:1px solid rgba(180,83,9,.55);border-left:3px solid #b45309;border-radius:8px;background:rgba(180,83,9,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128100;</span> CRM and loyalty</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">customer profiles, PII, points balances</div><div style="font-size:10px;color:#b45309;margin-top:5px;font-weight:600;letter-spacing:.02em">R4</div></div><div style="border:1px solid rgba(180,83,9,.55);border-left:3px solid #b45309;border-radius:8px;background:rgba(180,83,9,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#129513;</span> git + CI/CD</div><div style="font-size:11px;color:#4a6172;margin-top:2px;line-height:1.35">the production repository</div><div style="font-size:10px;color:#b45309;margin-top:5px;font-weight:600;letter-spacing:.02em">R7</div></div></div></div><div style="font-size:11px;color:#4a6172;margin-top:8px">Agents also message <b>each other</b> — the Workflow Agent asks the RAG Advisor for a recommendation, the Coding Agent asks the File System Agent to read a spec — and those hops appear in none of the columns above, which is exactly why R9 exists.</div><div style="font-size:12px;color:#4a6172;margin-top:8px;line-height:1.5">Four agents, two MCP servers, direct API calls that skip MCP entirely, agent-to-agent messaging, and a local std-I/O path on a developer laptop. Every risk in this chapter names one of these cards; every control in the next two stands on one of the arrows between them.</div><h2>3 · Zero trust, applied to this picture</h2><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the rule</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it means for CyberTravels</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">where it is built</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>Identity is per workload</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Each of the four agents gets its own attested identity. A shared service account means you cannot say which agent acted, and cannot revoke one without breaking all four.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B2.1 &middot; B2.2 &middot; B2.5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>Authority is per call</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><code>booking.create</code> issued for this task and expiring with it, never <code>booking.*</code> held for the session. This is what stops an injected instruction reaching the refund endpoint.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B2.3 &middot; B2.4</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>Instructions are data until proven otherwise</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">The operator prompt, the traveller's message and a retrieved document arrive as the same kind of token. Provenance at ingress is what stops the third one selecting a tool.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B2.6 &middot; B3.1</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>The decision is adjudicated outside the agent</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A model asked to enforce its own policy is both subject and guard. Default-deny sits at the gateway in front of the tool call, with the sandbox and egress control behind it.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B3.1 &middot; B3.2 &middot; B3.3</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Stated in the negative, which is how you audit it: the system prompt is not a control, the network boundary is not a control, and ‘the model was told not to’ is not a control.</div><h2>4 · The four agents, and what each one can reach</h2><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">agent</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it does</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it can reach</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Workflow Agent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">executes business workflows — flights, hotels, payments, refunds — through an MCP server with tool orchestration</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">flights · hotels · <b>payments and refunds</b> · CRM</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">RAG Travel Advisor</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">recommends itineraries from curated travel templates indexed in a vector store, sorted by destination and package</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the vector store — and whatever else was ingested into it</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Coding Agent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">writes code, patches libraries, tests features in lower environments and generates unit tests</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the repository, and the CI runner that builds it</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">File System Agent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">parses vendor and customer PDFs and images with OCR plus an LLM, then updates backend APIs and validates invoice data</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">uploaded files, backend APIs, and Alex's laptop when run locally</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Read the third column as a permission set rather than a feature list. Two of these four can move money or ship code.</div><h2>5 · Where the six functions sit</h2>
+<p>Function A built the system. The five after it take that same system and ask a different question of it.</p><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">function</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the question it asks of CyberTravels</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it produces</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">how is it built, and what did I just ship</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a running agentic platform on your own machine</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">what can go wrong here, and what closes it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">an architecture and its controls</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">C</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">how do we review its code, at its speed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a pipeline, and a harness that scores it</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">can we break it before somebody else does</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">findings you generated yourself</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">E</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">would we see it happening, and could we stop it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">detections, runbooks and a root cause</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">F</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">who signed off, and can they still evidence it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">indicators an auditor can re-compute</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Nobody takes all six. Everyone builds in A, then takes the chapters for the chair they sit in, then one adjacent chapter.</div><h2>6 · What the other four borrow from this one</h2>
+<p>Not a claim about tidiness. It is why the map has to come first: every later function names a component of CyberTravels from it.</p><svg viewBox="0 0 700 200" width="100%" style="max-width:700px;height:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7d93a3"/></marker></defs><rect x="240" y="10" width="220" height="48" rx="5" fill="none" stroke="#b45309" stroke-width="1.4"/><text x="350.0" y="31.0" text-anchor="middle" fill="#b45309">chapter 1</text><text x="350.0" y="47.0" text-anchor="middle" fill="#4a6172" font-size="10.5">CyberTravels&#x27; component map</text><rect x="6" y="124" width="158" height="66" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="85.0" y="154.0" text-anchor="middle" fill="currentColor">Function C</text><text x="85.0" y="170.0" text-anchor="middle" fill="#4a6172" font-size="10.5">reviews CyberTravels&#x27; code</text><rect x="180" y="124" width="158" height="66" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="259.0" y="154.0" text-anchor="middle" fill="currentColor">Function D</text><text x="259.0" y="170.0" text-anchor="middle" fill="#4a6172" font-size="10.5">attacks these components</text><rect x="354" y="124" width="158" height="66" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="433.0" y="154.0" text-anchor="middle" fill="currentColor">Function E</text><text x="433.0" y="170.0" text-anchor="middle" fill="#4a6172" font-size="10.5">watches them at run time</text><rect x="528" y="124" width="166" height="66" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="611.0" y="154.0" text-anchor="middle" fill="currentColor">Function F</text><text x="611.0" y="170.0" text-anchor="middle" fill="#4a6172" font-size="10.5">governs and evidences them</text><line x1="320" y1="58" x2="96" y2="120" stroke="#7d93a3" stroke-width="1.4" marker-end="url(#a)"/><line x1="335" y1="58" x2="250" y2="120" stroke="#7d93a3" stroke-width="1.4" marker-end="url(#a)"/><line x1="365" y1="58" x2="424" y2="120" stroke="#7d93a3" stroke-width="1.4" marker-end="url(#a)"/><line x1="380" y1="58" x2="600" y2="120" stroke="#7d93a3" stroke-width="1.4" marker-end="url(#a)"/></svg><div style="font-size:12px;color:#4a6172;margin-top:2px">Chapter B1 introduces no control at all, on purpose: you cannot choose a control for a risk you cannot yet name.</div><h2>7 · Function B, in order</h2><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">chapter</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it covers</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">kind of lesson</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the architecture, every risk it carries, and the two indexes that close it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">risk</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">securing it — identity and ingress</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">control</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">securing it — runtime and the gateway</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">control</td></tr></tbody></table><div style="font-size:12px;color:#4a6172;margin-top:6px">Chapter B1 is the picture the other two stand on, and it ends on the index: B1.18 for the twelve agentic risks, B1.19 for every control CyberTravels needs including the ones that predate it.</div></div></details><details class="lfold"><summary>Day 0, 1 and 2</summary><div class="lbody"><p><b>Day 0, why.</b> &quot;Secure the agent&quot; has no referent until the system is drawn, so every control argument is really an argument about the picture.</p><p><b>Day 1, how.</b> Read the three chapters in order: the architecture and its risks, then identity and ingress, then runtime and the gateway.</p><p><b>Day 2, measure.</b> Nothing yet, honestly. This chapter produces the component map every later count in the commons is taken against.</p><table><thead><tr><th>Measure this</th><th>denominator or target</th></tr></thead><tbody><tr><td>nothing is computed here</td><td>the chapter produces the component map every later count is taken against</td></tr></tbody></table></div></details><details class="lfold"><summary>Your turn</summary><div class="lbody"><p>Draw your own CyberTravels before the next lesson — the agents you run, the MCP servers and APIs they reach, and which of them can move money or ship code. B1.1 gives you the standard names for the boxes; comparing your drawing to it is the fastest way to find the component you forgot you had.</p></div></details></div></section><div class="lab-pn"><a href="A2.5.html">← A2.5</a><a href="B1.1.html">B1.1 →</a></div></main></div><script>
+(function(){
+var PY = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/", BUNDLE = "cybertravels.json";
+var pyodide = null, booting = null, data = null, nsFor = {}, mounted = {};
+var status = document.querySelector(".lab-intro .py");
+function say(state, text){ if(!status) return; status.dataset.state = state; status.querySelector("span").textContent = text; }
+
+function boot(){
+  if (booting) return booting;
+  say("loading", "Starting Python in your browser (about 12 MB, only the first time)...");
+  booting = new Promise(function(res, rej){
+    var s = document.createElement("script"); s.src = PY + "pyodide.js";
+    s.onload = res; s.onerror = function(){ rej(new Error("could not load Pyodide from " + PY)); };
+    document.head.appendChild(s);
+  }).then(function(){ return loadPyodide({indexURL: PY}); })
+    .then(function(p){ pyodide = p; return p.loadPackage(["sqlite3", "ssl", "micropip"]); })
+    .then(function(){ return pyodide.runPythonAsync("import micropip\nawait micropip.install(" + JSON.stringify("https://files.pythonhosted.org/packages/79/84/0fdf9b18ba31d69877bd39c9cd6052b47f3761e9910c15de788e519f079f/PyJWT-2.9.0-py3-none-any.whl") + ")"); })
+    .then(function(){ return fetch(BUNDLE).then(function(r){ if(!r.ok) throw new Error("bundle " + r.status); return r.json(); }); })
+    .then(function(b){
+      data = b;
+      pyodide.runPython([
+        "import contextlib, io, sys, traceback",
+        "def _lab_run(src, ns):",
+        "    buf = io.StringIO()",
+        "    try:",
+        "        with contextlib.redirect_stdout(buf):",
+        "            exec(compile(src, '<step>', 'exec'), ns)",
+        "        return [buf.getvalue(), '']",
+        "    except BaseException:",
+        "        return [buf.getvalue(), traceback.format_exc(limit=-2)]",
+        "def _lab_use(root):",
+        "    for m in [m for m in sys.modules if m == 'cybertravels' or m.startswith('cybertravels.')]:",
+        "        del sys.modules[m]",
+        "    sys.path[:] = [p for p in sys.path if not p.startswith('/lab/')]",
+        "    sys.path.insert(0, root)"
+      ].join("\n"));
+      say("ready", "Python is running in your browser. Nothing is installed on your computer.");
+    })
+    .catch(function(e){ var m = String(e.message || e).trim().split("\n").pop();
+      say("failed", "Python could not start in this browser (" + m + "). Nothing ran. Use In your IDE to run it on your computer.");
+      booting = null; throw new Error(m); });
+  return booting;
+}
+
+function mount(tid){
+  var root = "/lab/" + tid;
+  if (!mounted[tid]) {
+    var tree = data.trees[tid];
+    Object.keys(tree).forEach(function(path){
+      var full = root + "/" + path, dir = full.slice(0, full.lastIndexOf("/"));
+      pyodide.FS.mkdirTree(dir);
+      pyodide.FS.writeFile(full, data.files[tree[path]]);
+    });
+    mounted[tid] = true;
+  }
+  return root;
+}
+
+function fresh(sec){
+  // A clean namespace and a clean database: the same state a reader gets by
+  // starting Python again in a fresh checkpoint.
+  var root = mount(sec.dataset.tree);
+  pyodide.globals.get("_lab_use")(root);
+  try { pyodide.FS.rmdir; pyodide.runPython("import shutil, os\nshutil.rmtree('" + root + "/cybertravels/data', ignore_errors=True)"); } catch(e) {}
+  var ns = pyodide.globals.get("dict")();
+  ns.set("__name__", "__lab__");
+  nsFor[sec.id] = ns;
+  return ns;
+}
+
+function runStep(sec, li){
+  var out = li.querySelector(".out"), ta = li.querySelector("textarea");
+  if (!ta) return Promise.resolve(true);
+  out.classList.remove("err"); out.textContent = "Running...";
+  return boot().then(function(){
+    if (sec.dataset.active !== "1") { fresh(sec); sec.dataset.active = "1";
+      document.querySelectorAll("section.lab").forEach(function(o){ if(o!==sec) o.dataset.active = ""; }); }
+    var ns = nsFor[sec.id] || fresh(sec);
+    var t0 = performance.now();
+    var r = pyodide.globals.get("_lab_run")(ta.value, ns).toJs();
+    var ms = Math.round(performance.now() - t0);
+    out.textContent = (r[0] || "") + (r[1] || "");
+    if (!r[0] && !r[1]) out.textContent = "(ran, printed nothing)";
+    out.classList.toggle("err", !!r[1]);
+    li.querySelector(".note").textContent = r[1] ? "it raised an error" : "ran in " + ms + " ms, in your browser";
+    return !r[1];
+  }).catch(function(e){ out.classList.add("err"); out.textContent = "Python is not running, so nothing ran. " + e.message; return false; });
+}
+
+function setup(sec){
+  var steps = [].slice.call(sec.querySelectorAll(".step")), rows = [].slice.call(sec.querySelectorAll(".srow"));
+  var cur = 0, playing = false, speed = 1, timer = null;
+  var count = sec.querySelector(".count"), play = sec.querySelector(".play");
+  function show(i){
+    cur = Math.max(0, Math.min(steps.length - 1, i));
+    steps.forEach(function(s, k){ s.classList.toggle("on", k === cur); });
+    rows.forEach(function(r, k){ r.classList.toggle("cur", k === cur); r.setAttribute("aria-current", k === cur); });
+    count.textContent = "Step " + (cur + 1) + " / " + steps.length;
+    sec.querySelector(".prev").disabled = cur === 0;
+    sec.querySelector(".next").disabled = cur === steps.length - 1;
+  }
+  function mark(i, ok){ rows[i].classList.toggle("done", ok); rows[i].classList.toggle("fail", !ok);
+    if (ok) progress(sec.id, i, steps.length); }
+  // Steps share one Python session, so step 3 may use a name step 1 made.
+  // Running step 3 first raised NameError, which read as broken code; any
+  // earlier step not yet run in this session is run first, in order.
+  function exec(i){
+    var chain = Promise.resolve(true);
+    for (var k = 0; k < i; k++) (function(k){
+      chain = chain.then(function(ok){ if (!ok || rows[k].classList.contains("done")) return ok;
+        return runStep(sec, steps[k]).then(function(r){ mark(k, r); return r; }); });
+    })(k);
+    return chain.then(function(ok){ if (!ok) return false;
+      return runStep(sec, steps[i]).then(function(r){ mark(i, r); return r; }); });
+  }
+  function stop(){ playing = false; clearTimeout(timer); play.textContent = "▶ Play"; }
+  function loop(){
+    if (!playing) return;
+    exec(cur).then(function(ok){
+      if (!playing) return;
+      if (!ok || cur === steps.length - 1) { stop(); return; }
+      timer = setTimeout(function(){ show(cur + 1); loop(); }, 1600 / speed);
+    });
+  }
+  play.onclick = function(){ if (playing) { stop(); return; } playing = true; play.textContent = "❚❚ Pause";
+    if (rows[cur].classList.contains("done") && cur < steps.length - 1) show(cur + 1); loop(); };
+  sec.querySelector(".next").onclick = function(){ stop(); show(cur + 1); exec(cur); };
+  sec.querySelector(".prev").onclick = function(){ stop(); show(cur - 1); };
+  sec.querySelector(".reset").onclick = function(){ stop(); sec.dataset.active = ""; delete nsFor[sec.id];
+    rows.forEach(function(r){ r.classList.remove("done", "fail"); });
+    sec.querySelectorAll("textarea").forEach(function(t){ t.value = t.defaultValue; });
+    sec.querySelectorAll(".out").forEach(function(o){ o.textContent = ""; o.classList.remove("err"); });
+    sec.querySelectorAll(".note").forEach(function(o){ o.textContent = ""; });
+    show(0); };
+  sec.querySelectorAll(".sp button").forEach(function(b){ b.onclick = function(){ speed = +b.dataset.s;
+    sec.querySelectorAll(".sp button").forEach(function(o){ o.setAttribute("aria-pressed", o === b); }); }; });
+  rows.forEach(function(r, k){ r.onclick = function(){ stop(); show(k); }; });
+  steps.forEach(function(li, k){ var b = li.querySelector(".acts .run");
+    if (b) b.onclick = function(){ stop(); show(k); exec(k); };
+    var ta = li.querySelector("textarea");
+    if (ta) ta.addEventListener("keydown", function(e){ if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); exec(k); } }); });
+  sec.querySelectorAll(".modes button").forEach(function(b){ b.onclick = function(){ sec.dataset.mode = b.dataset.m;
+    sec.querySelectorAll(".modes button").forEach(function(o){ o.setAttribute("aria-pressed", o === b); }); }; });
+  show(0);
+}
+
+// Progress, for the home page's quest. Kept in this browser only; every
+// access is guarded because storage can be blocked, and then nothing here
+// changes how the lab itself works.
+var KEY = "cc.v1", CHAPTERS = {"A0": ["A0.0", "A0.1"], "A1": ["A1.0", "A1.1", "A1.2", "A1.3", "A1.4", "A1.5", "A1.6", "A1.7"], "A2": ["A2.0", "A2.1", "A2.2", "A2.3", "A2.4", "A2.5"], "B1": ["B1.0", "B1.1", "B1.2", "B1.3", "B1.4", "B1.5", "B1.6", "B1.7", "B1.8", "B1.9", "B1.10", "B1.11", "B1.12", "B1.13", "B1.14", "B1.15", "B1.16", "B1.17", "B1.18", "B1.19"], "B2": ["B2.1", "B2.2", "B2.3", "B2.4", "B2.5", "B2.6", "B2.7", "B2.8"], "B3": ["B3.1", "B3.2", "B3.3", "B3.4", "B3.5", "B3.6", "B3.7", "B3.8", "B3.9", "B3.10", "B3.11"]};
+function load(){ try { return Object.assign({xp:0, steps:{}, done:[], badges:[], quiz:{}},
+  JSON.parse(localStorage.getItem(KEY) || "{}")); } catch(e) { return null; } }
+function store(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e) {} }
+function toast(t){ var d = document.createElement("div"); d.className = "toast"; d.textContent = t;
+  document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 1600); }
+function badge(st, b, name){ if (st.badges.indexOf(b) < 0) { st.badges.push(b); toast("Badge: " + name); } }
+function progress(sid, i, n){
+  var st = load(); if (!st) return;
+  var got = st.steps[sid] = st.steps[sid] || [];
+  if (got.indexOf(i) >= 0) return;
+  got.push(i); st.xp += 10; toast("+10 XP");
+  badge(st, "first", "First run");
+  if (got.length === n && st.done.indexOf(sid) < 0) { st.done.push(sid); st.xp += 20; toast("Lab " + sid + " complete · +20 XP"); }
+  Object.keys(CHAPTERS).forEach(function(c){
+    if (CHAPTERS[c].every(function(x){ return st.done.indexOf(x) >= 0; })) badge(st, c, "Chapter " + c + " cleared"); });
+  store(st); hud();
+}
+function hud(){ var st = load(), el = document.querySelector(".lab-hud"); if (!st || !el) return;
+  el.textContent = st.xp + " XP · " + st.done.length + " of " + 55 + " labs"; }
+document.addEventListener("click", function(e){
+  if (e.target.closest && e.target.closest(".ide .copy")) { var st = load(); if (st) { badge(st, "local", "Took it local"); store(st); } } });
+
+function copyable(){
+  document.querySelectorAll(".blk").forEach(function(b){
+    var btn = document.createElement("button"); btn.className = "copy"; btn.type = "button"; btn.textContent = "Copy";
+    btn.onclick = function(){ var t = b.querySelector("pre,textarea"); var v = t.value !== undefined ? t.value : t.textContent;
+      (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function(){ btn.textContent = "Copied"; },
+        function(){ btn.textContent = "Select and copy"; }); setTimeout(function(){ btn.textContent = "Copy"; }, 1600); };
+    // In a code cell the button sits beside Run: over the editor it covered
+    // the end of the first line, which is the line a reader edits first.
+    var acts = b.parentNode.querySelector(".acts");
+    if (b.querySelector("textarea") && acts) { btn.className = "copy-code"; acts.insertBefore(btn, acts.querySelector(".note")); }
+    else b.appendChild(btn);
+  });
+}
+
+function route(){
+  document.querySelectorAll("section.lab").forEach(function(x){ x.classList.add("on"); });
+  // With 55 lessons the sidebar is longer than the screen; a B3 lesson opened
+  // with its own entry scrolled out of sight. Scroll the sidebar, not the page.
+  var cur = document.querySelector('.lab-side a[aria-current="page"]'), side = document.querySelector(".lab-side");
+  if (cur && side && side.scrollHeight > side.clientHeight) side.scrollTop = cur.offsetTop - side.clientHeight / 3;
+}
+
+document.querySelectorAll("section.lab").forEach(setup);
+copyable();
+route();
+hud();
+})();
+</script></body></html>

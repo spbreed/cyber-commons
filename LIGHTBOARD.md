@@ -1577,7 +1577,7 @@ Next up: B1.0, Start here: securing an AI system.
 
 ### B1.0 · Start here: securing an AI system
 
-Chapter B1 · lesson 1 of 20 · reading lesson · 433 words, about 3.1 min spoken · [page](https://cybercommons.ai/lessons/B1.0.html)
+Chapter B1 · lesson 1 of 20 · reading lesson · 433 words, about 3.1 min spoken · [page](https://cybercommons.ai/lab/B1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -1635,7 +1635,7 @@ Next up: B1.1, A reference architecture for AI agents.
 
 ### B1.1 · A reference architecture for AI agents
 
-Chapter B1 · lesson 2 of 20 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B1.1.html)
+Chapter B1 · lesson 2 of 20 · runs a skill · 275 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/B1.1.html)
 
 **① Open**
 
@@ -1687,7 +1687,7 @@ Next up: B1.2, Prompt injection.
 
 ### B1.2 · Prompt injection
 
-Chapter B1 · lesson 3 of 20 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B1.2.html)
+Chapter B1 · lesson 3 of 20 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/B1.2.html)
 
 **① Open**
 
@@ -1739,7 +1739,7 @@ Next up: B1.3, Indirect prompt injection.
 
 ### B1.3 · Indirect prompt injection
 
-Chapter B1 · lesson 4 of 20 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B1.3.html)
+Chapter B1 · lesson 4 of 20 · runs a skill · 267 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/B1.3.html)
 
 **① Open**
 
@@ -1791,7 +1791,7 @@ Next up: B1.4, Memory poisoning.
 
 ### B1.4 · Memory poisoning
 
-Chapter B1 · lesson 5 of 20 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.4.html)
+Chapter B1 · lesson 5 of 20 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B1.4.html)
 
 **① Open**
 
@@ -1843,7 +1843,7 @@ Next up: B1.5, Tool misuse.
 
 ### B1.5 · Tool misuse
 
-Chapter B1 · lesson 6 of 20 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.5.html)
+Chapter B1 · lesson 6 of 20 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B1.5.html)
 
 **① Open**
 
@@ -1895,7 +1895,7 @@ Next up: B1.6, Privilege compromise.
 
 ### B1.6 · Privilege compromise
 
-Chapter B1 · lesson 7 of 20 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.6.html)
+Chapter B1 · lesson 7 of 20 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B1.6.html)
 
 **① Open**
 
@@ -1947,7 +1947,7 @@ Next up: B1.7, Identity spoofing and impersonation.
 
 ### B1.7 · Identity spoofing and impersonation
 
-Chapter B1 · lesson 8 of 20 · runs a skill · 227 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.7.html)
+Chapter B1 · lesson 8 of 20 · runs a skill · 227 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B1.7.html)
 
 **① Open**
 
@@ -1999,7 +1999,7 @@ Next up: B1.8, Malicious code execution.
 
 ### B1.8 · Malicious code execution
 
-Chapter B1 · lesson 9 of 20 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.8.html)
+Chapter B1 · lesson 9 of 20 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B1.8.html)
 
 **① Open**
 
@@ -2051,7 +2051,7 @@ Next up: B1.9, Injection through content the agent reads.
 
 ### B1.9 · Injection through content the agent reads
 
-Chapter B1 · lesson 10 of 20 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.9.html)
+Chapter B1 · lesson 10 of 20 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B1.9.html)
 
 **① Open**
 
@@ -2103,7 +2103,7 @@ Next up: B1.10, Agent communication poisoning.
 
 ### B1.10 · Agent communication poisoning
 
-Chapter B1 · lesson 11 of 20 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.10.html)
+Chapter B1 · lesson 11 of 20 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B1.10.html)
 
 **① Open**
 
@@ -2155,7 +2155,7 @@ Next up: B1.11, Rogue agents in a multi-agent system.
 
 ### B1.11 · Rogue agents in a multi-agent system
 
-Chapter B1 · lesson 12 of 20 · runs a skill · 223 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.11.html)
+Chapter B1 · lesson 12 of 20 · runs a skill · 223 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B1.11.html)
 
 **① Open**
 
@@ -2207,7 +2207,7 @@ Next up: B1.12, Cascading hallucination.
 
 ### B1.12 · Cascading hallucination
 
-Chapter B1 · lesson 13 of 20 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.12.html)
+Chapter B1 · lesson 13 of 20 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B1.12.html)
 
 **① Open**
 
@@ -2259,7 +2259,7 @@ Next up: B1.13, Resource overload.
 
 ### B1.13 · Resource overload
 
-Chapter B1 · lesson 14 of 20 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.13.html)
+Chapter B1 · lesson 14 of 20 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B1.13.html)
 
 **① Open**
 
@@ -2311,7 +2311,7 @@ Next up: B1.14, Repudiation and untraceability.
 
 ### B1.14 · Repudiation and untraceability
 
-Chapter B1 · lesson 15 of 20 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.14.html)
+Chapter B1 · lesson 15 of 20 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B1.14.html)
 
 **① Open**
 
@@ -2363,7 +2363,7 @@ Next up: B1.15, Too many approvals for one person.
 
 ### B1.15 · Too many approvals for one person
 
-Chapter B1 · lesson 16 of 20 · runs a skill · 224 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B1.15.html)
+Chapter B1 · lesson 16 of 20 · runs a skill · 224 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B1.15.html)
 
 **① Open**
 
@@ -2415,7 +2415,7 @@ Next up: B1.16, Misaligned and deceptive behaviour.
 
 ### B1.16 · Misaligned and deceptive behaviour
 
-Chapter B1 · lesson 17 of 20 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.16.html)
+Chapter B1 · lesson 17 of 20 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B1.16.html)
 
 **① Open**
 
@@ -2467,7 +2467,7 @@ Next up: B1.17, Attacks on the people around the agent.
 
 ### B1.17 · Attacks on the people around the agent
 
-Chapter B1 · lesson 18 of 20 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B1.17.html)
+Chapter B1 · lesson 18 of 20 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B1.17.html)
 
 **① Open**
 
@@ -2519,7 +2519,7 @@ Next up: B1.18, The CyberTravels risk register.
 
 ### B1.18 · The CyberTravels risk register
 
-Chapter B1 · lesson 19 of 20 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B1.18.html)
+Chapter B1 · lesson 19 of 20 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/B1.18.html)
 
 **① Open**
 
@@ -2571,7 +2571,7 @@ Next up: B1.19, Every control CyberTravels needs.
 
 ### B1.19 · Every control CyberTravels needs
 
-Chapter B1 · lesson 20 of 20 · runs a skill · 451 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/B1.19.html)
+Chapter B1 · lesson 20 of 20 · runs a skill · 451 words, about 3.2 min spoken · [page](https://cybercommons.ai/lab/B1.19.html)
 
 **① Open**
 
@@ -2631,7 +2631,7 @@ Next up: B2.1, Agent identity: user, workload, agent.
 
 ### B2.1 · Agent identity: user, workload, agent
 
-Chapter B2 · lesson 1 of 8 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B2.1.html)
+Chapter B2 · lesson 1 of 8 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/B2.1.html)
 
 **① Open**
 
@@ -2683,7 +2683,7 @@ Next up: B2.2, The first credential.
 
 ### B2.2 · The first credential
 
-Chapter B2 · lesson 2 of 8 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B2.2.html)
+Chapter B2 · lesson 2 of 8 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B2.2.html)
 
 **① Open**
 
@@ -2735,7 +2735,7 @@ Next up: B2.3, Delegation that narrows.
 
 ### B2.3 · Delegation that narrows
 
-Chapter B2 · lesson 3 of 8 · runs a skill · 278 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B2.3.html)
+Chapter B2 · lesson 3 of 8 · runs a skill · 278 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/B2.3.html)
 
 **① Open**
 
@@ -2787,7 +2787,7 @@ Next up: B2.4, Just-in-time access.
 
 ### B2.4 · Just-in-time access
 
-Chapter B2 · lesson 4 of 8 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/B2.4.html)
+Chapter B2 · lesson 4 of 8 · runs a skill · 228 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/B2.4.html)
 
 **① Open**
 
@@ -2839,7 +2839,7 @@ Next up: B2.5, Managing machine identities.
 
 ### B2.5 · Managing machine identities
 
-Chapter B2 · lesson 5 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B2.5.html)
+Chapter B2 · lesson 5 of 8 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B2.5.html)
 
 **① Open**
 
@@ -2891,7 +2891,7 @@ Next up: B2.6, Marking untrusted content.
 
 ### B2.6 · Marking untrusted content
 
-Chapter B2 · lesson 6 of 8 · runs a skill · 242 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B2.6.html)
+Chapter B2 · lesson 6 of 8 · runs a skill · 242 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B2.6.html)
 
 **① Open**
 
@@ -2943,7 +2943,7 @@ Next up: B2.7, Audit logs that say who.
 
 ### B2.7 · Audit logs that say who
 
-Chapter B2 · lesson 7 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B2.7.html)
+Chapter B2 · lesson 7 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B2.7.html)
 
 **① Open**
 
@@ -2995,7 +2995,7 @@ Next up: B2.8, Audit logs that cannot be forged.
 
 ### B2.8 · Audit logs that cannot be forged
 
-Chapter B2 · lesson 8 of 8 · runs a skill · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/B2.8.html)
+Chapter B2 · lesson 8 of 8 · runs a skill · 396 words, about 2.8 min spoken · [page](https://cybercommons.ai/lab/B2.8.html)
 
 **① Open**
 
@@ -3055,7 +3055,7 @@ Next up: B3.1, Deny tool calls by default.
 
 ### B3.1 · Deny tool calls by default
 
-Chapter B3 · lesson 1 of 11 · runs a skill · 282 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/B3.1.html)
+Chapter B3 · lesson 1 of 11 · runs a skill · 282 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/B3.1.html)
 
 **① Open**
 
@@ -3107,7 +3107,7 @@ Next up: B3.2, Sandboxed code execution.
 
 ### B3.2 · Sandboxed code execution
 
-Chapter B3 · lesson 2 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B3.2.html)
+Chapter B3 · lesson 2 of 11 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/B3.2.html)
 
 **① Open**
 
@@ -3159,7 +3159,7 @@ Next up: B3.3, Egress control.
 
 ### B3.3 · Egress control
 
-Chapter B3 · lesson 3 of 11 · runs a skill · 242 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B3.3.html)
+Chapter B3 · lesson 3 of 11 · runs a skill · 242 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B3.3.html)
 
 **① Open**
 
@@ -3211,7 +3211,7 @@ Next up: B3.4, Budgets and stop conditions.
 
 ### B3.4 · Budgets and stop conditions
 
-Chapter B3 · lesson 4 of 11 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B3.4.html)
+Chapter B3 · lesson 4 of 11 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B3.4.html)
 
 **① Open**
 
@@ -3263,7 +3263,7 @@ Next up: B3.5, Checking tool results.
 
 ### B3.5 · Checking tool results
 
-Chapter B3 · lesson 5 of 11 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B3.5.html)
+Chapter B3 · lesson 5 of 11 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B3.5.html)
 
 **① Open**
 
@@ -3315,7 +3315,7 @@ Next up: B3.6, Human approval at volume.
 
 ### B3.6 · Human approval at volume
 
-Chapter B3 · lesson 6 of 11 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B3.6.html)
+Chapter B3 · lesson 6 of 11 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/B3.6.html)
 
 **① Open**
 
@@ -3367,7 +3367,7 @@ Next up: B3.7, The agent gateway.
 
 ### B3.7 · The agent gateway
 
-Chapter B3 · lesson 7 of 11 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/B3.7.html)
+Chapter B3 · lesson 7 of 11 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/B3.7.html)
 
 **① Open**
 
@@ -3419,7 +3419,7 @@ Next up: B3.8, Shared infrastructure between runs.
 
 ### B3.8 · Shared infrastructure between runs
 
-Chapter B3 · lesson 8 of 11 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/B3.8.html)
+Chapter B3 · lesson 8 of 11 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/B3.8.html)
 
 **① Open**
 
@@ -3471,7 +3471,7 @@ Next up: B3.9, Turning a control off safely.
 
 ### B3.9 · Turning a control off safely
 
-Chapter B3 · lesson 9 of 11 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B3.9.html)
+Chapter B3 · lesson 9 of 11 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/B3.9.html)
 
 **① Open**
 
@@ -3523,7 +3523,7 @@ Next up: B3.10, Letting the agent raise a flag.
 
 ### B3.10 · Letting the agent raise a flag
 
-Chapter B3 · lesson 10 of 11 · runs a skill · 261 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/B3.10.html)
+Chapter B3 · lesson 10 of 11 · runs a skill · 261 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/B3.10.html)
 
 **① Open**
 
@@ -3575,7 +3575,7 @@ Next up: B3.11, Securing developers' coding agents.
 
 ### B3.11 · Securing developers' coding agents
 
-Chapter B3 · lesson 11 of 11 · runs a skill · 376 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/B3.11.html)
+Chapter B3 · lesson 11 of 11 · runs a skill · 376 words, about 2.7 min spoken · [page](https://cybercommons.ai/lab/B3.11.html)
 
 **① Open**
 
