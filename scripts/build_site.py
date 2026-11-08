@@ -1109,8 +1109,8 @@ def quest_block() -> str:
     # old two scenes took thirteen seconds to say less.
     stations = [("web", "Browser", "browser", "run A1.4 in this tab", "refused"),
                 ("ide", "IDE", "ide", "lesson.py A1.4", "tests pass"),
-                ("dev", "Dev", "dev", "smoke_test.py", "all pass"),
-                ("prod", "Prod", "prod", "ship the same control", "live")]
+                ("dev", "Dev", "dev", "your CI runs the same tests", "you check"),
+                ("prod", "Prod", "prod", "you ship the control", "your call")]
     st = "".join(f'<li class="st st{k}"><span class="ic ic-{c}" aria-hidden="true"></span>'
                  f'<b>{n}</b></li>' for k, (c, n, _, _, _) in enumerate(stations))
     con = "".join(f'<span class="c{k}"><em>{w}</em><u>{cmd}</u><i>&#10003; {res}</i></span>'
@@ -1126,7 +1126,7 @@ def quest_block() -> str:
         '<div class="eng" aria-hidden="true"><span>SE</span><small>security engineer</small></div>'
         '<div class="fill" aria-hidden="true"></div></div>'
         f'<pre class="con">{con}</pre>'
-        '<p class="cap">Prove it in your browser, run it in your IDE, ship it. '
+        '<p class="cap">Prove it here and in your IDE. Dev and production are yours: this site deploys nothing. '
         '<a href="lab/A1.4.html">Try A1.4 ▶</a><a href="lab/A0.0.html">Set up ▶</a></p></div>'
         # 3 — progress
         f'<div class="mg-scene s1"><div class="card hud"><div class="hrow">'
