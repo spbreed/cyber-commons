@@ -195,6 +195,33 @@ def sessions():
                 yield s, fn["id"], tr["id"], i == len(tr["sessions"]) - 1
 
 
+def check_anchor(sid, fn, page, problems, seen_anchors):
+    # Shared by lesson pages and lab pages: a lab page that dropped the
+    # anchor once passed because this ran only after the lab branch returned.
+    # 4 — every lesson in D and E says where it sits on its function's spine
+    if fn in ANCHOR_ORIGIN and sid not in ANCHOR_EXEMPT:
+        anchor = (ANCHORS.get(sid) or "").strip()
+        if not anchor:
+            problems.append(f"{sid}: no anchor to {ANCHOR_ORIGIN[fn]} — "
+                            f"every Function {fn} lesson states which part "
+                            f"of that spine it moves; add one to "
+                            f"scripts/exercises/anchors.py")
+        else:
+            seen_anchors.add(sid)
+            # Match the anchor as the page renders it, not as it is
+            # written. This used to html.escape the raw source and find
+            # it — which only worked because the anchor was being emitted
+            # as raw markdown, `**Anchor -> E1.0.**` and all, on fifty
+            # pages. When build_site started rendering it properly this
+            # check failed on every one of them, so it was asserting the
+            # bug rather than the behaviour.
+            from build_site import inline_md
+            if inline_md(anchor.splitlines()[0]) not in page:
+                problems.append(f"{sid}: anchor defined but not rendered — "
+                                f"rebuild the site")
+
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -311,6 +338,7 @@ def main() -> int:
                                         f"\"{head}\" section")
             if last and track not in BRIDGES:
                 problems.append(f"{sid}: last lesson of {track} with no chapter bridge")
+            check_anchor(sid, fn, page, problems, seen_anchors)
             continue
         if not page_f.is_file():
             problems.append(f"{sid}: lesson page not built — run build_site.py")
@@ -367,27 +395,7 @@ def main() -> int:
         if last and track not in BRIDGES:
             problems.append(f"{sid}: last lesson of {track} with no chapter bridge")
 
-        # 4 — every lesson in D and E says where it sits on its function's spine
-        if fn in ANCHOR_ORIGIN and sid not in ANCHOR_EXEMPT:
-            anchor = (ANCHORS.get(sid) or "").strip()
-            if not anchor:
-                problems.append(f"{sid}: no anchor to {ANCHOR_ORIGIN[fn]} — "
-                                f"every Function {fn} lesson states which part "
-                                f"of that spine it moves; add one to "
-                                f"scripts/exercises/anchors.py")
-            else:
-                seen_anchors.add(sid)
-                # Match the anchor as the page renders it, not as it is
-                # written. This used to html.escape the raw source and find
-                # it — which only worked because the anchor was being emitted
-                # as raw markdown, `**Anchor -> E1.0.**` and all, on fifty
-                # pages. When build_site started rendering it properly this
-                # check failed on every one of them, so it was asserting the
-                # bug rather than the behaviour.
-                from build_site import inline_md
-                if inline_md(anchor.splitlines()[0]) not in page:
-                    problems.append(f"{sid}: anchor defined but not rendered — "
-                                    f"rebuild the site")
+        check_anchor(sid, fn, page, problems, seen_anchors)
 
         # 7 — realistic demos (reported, not enforced)
         #

@@ -1,0 +1,511 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>F3.1 hands-on — Explaining agent risk to leaders | Cyber Commons</title><meta name="description" content="F3.1, hands on: Turn an engineering risk into a sentence for the board."><link rel="icon" href="../assets/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/png" href="../assets/favicon.png" sizes="256x256"><link rel="apple-touch-icon" href="../assets/apple-touch-icon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"><style>
+body{background:#fbfcfd}
+.lab-shell{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:calc(100vh - 64px)}
+.lab-side{border-right:1px solid var(--line-soft);background:#f6f8fa;padding:18px 14px 28px;
+  position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto}
+.lab-side .fn a{font-size:inherit;color:inherit;display:inline;padding:0;background:none}
+.lab-side .fn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-faint);margin:2px 8px 10px}
+.lab-side .fnh{margin:18px 8px 2px;padding-top:12px;border-top:1px solid var(--line-soft);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--defend)}
+.lab-side .fnh:first-child{border-top:0;padding-top:0;margin-top:4px}
+.lab-fn{font-size:24px;margin:34px 0 0}
+.lab-side .ch{margin:14px 0 4px;padding:0 8px;font-weight:700;font-size:15px;color:var(--text)}
+.lab-side .ch small{display:block;font-weight:500;color:var(--text-faint);font-size:12.5px;line-height:1.35}
+.lab-side a{display:flex;gap:10px;align-items:baseline;padding:6px 10px;border-radius:8px;
+  color:var(--text-dim);text-decoration:none;font-size:15px;line-height:1.3}
+.lab-side a b{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:500;color:var(--text-faint);min-width:34px}
+.lab-side a:hover{background:#eef3f7;color:var(--text)}
+.lab-side a[aria-current=page]{background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(13,27,38,.08),0 0 0 1px var(--line-soft)}
+.lab-side a[aria-current=page] b{color:var(--defend)}
+.lab-side .foot{margin-top:22px;padding:12px 10px 0;border-top:1px solid var(--line-soft);font-size:13.5px;line-height:1.5;color:var(--text-faint)}
+.lab-main{padding:22px 28px 60px;min-width:0}
+.lab-intro{max-width:880px;margin:0 0 18px}
+.lab-intro h1{font-size:30px;margin:6px 0 6px}
+.lab-intro p{margin:0;color:var(--text-dim);font-size:16.5px}
+.lab-intro.slim{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.lab-intro.slim .py{margin-top:0}
+.lab-pn{display:flex;justify-content:space-between;gap:12px;margin-left:auto;font-size:15px}
+.lab-main>.lab-pn{margin:0 0 10px;max-width:none}
+.lab-pn a{text-decoration:none;font-weight:600}
+.lab-go{display:inline-block;background:var(--defend);color:#fff !important;text-decoration:none;font-weight:600;
+  padding:8px 18px;border-radius:9px}
+.lab-ch{display:flex;gap:10px;align-items:center;font-size:21px;margin:26px 0 10px}
+.lab-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.lab-card{display:block;border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px 16px;
+  text-decoration:none;color:var(--text);transition:box-shadow .15s,border-color .15s}
+.lab-card:hover{border-color:var(--defend);box-shadow:0 4px 14px rgba(13,27,38,.08)}
+.lab-card b{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--defend)}
+.lab-card h3{font-size:18px;margin:2px 0 4px}
+.lab-card p{margin:0 0 8px;font-size:15px;color:var(--text-dim);line-height:1.45}
+.lab-card span{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text-faint)}
+.lab-intro .py{display:inline-flex;gap:8px;align-items:center;margin-top:10px;font-family:"IBM Plex Mono",monospace;
+  font-size:12px;color:var(--text-faint)}
+.lab-intro .py i{width:8px;height:8px;border-radius:50%;background:#c3ced8;display:inline-block}
+.lab-intro .py[data-state=ready] i{background:#059669}
+.lab-intro .py[data-state=loading] i{background:#0891b2;animation:pulse 1s infinite}
+.lab-intro .py[data-state=failed] i{background:#b91c1c}
+@keyframes pulse{50%{opacity:.35}}
+section.lab{border:1px solid var(--line);border-radius:14px;background:#fff;margin:0 0 26px;overflow:hidden}
+.lab-head{padding:18px 22px 14px;border-bottom:1px solid var(--line-soft)}
+.lab-head .tags{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.06em;
+  padding:3px 8px;border-radius:6px;background:var(--defend-soft);color:#0b5566}
+.tag.dim{background:#eef2f5;color:var(--text-dim);font-weight:500}
+.lab-head h2{font-size:24px;margin:8px 0 4px}
+.lab-head p{margin:0;color:var(--text-dim);font-size:16px;max-width:820px}
+.lab-head .links{margin-top:8px;font-size:14px;display:flex;gap:16px;flex-wrap:wrap}
+.lab-head .links a{text-decoration:none}
+.modes{display:inline-flex;border:1px solid var(--line);border-radius:9px;padding:2px;background:#f6f8fa;margin-left:auto}
+.modes button{font:inherit;font-size:13.5px;border:0;background:transparent;padding:4px 12px;border-radius:7px;color:var(--text-faint);cursor:pointer}
+.modes button[aria-pressed=true]{background:#fff;color:var(--text);box-shadow:0 1px 2px rgba(13,27,38,.1)}
+/* the sequence: lanes and numbered arrows */
+.seq{padding:16px 22px 6px;border-bottom:1px solid var(--line-soft);background:#fcfdfe}
+.lanes,.srow{display:grid;grid-template-columns:30px repeat(var(--n),minmax(0,1fr))}
+.lanes div{text-align:center;font-weight:700;font-size:14.5px;color:var(--text);padding:0 4px 8px;
+  border-bottom:2px solid var(--line)}
+.lanes div.adv{color:#a16207;border-color:#f3ddb6}
+.srow{position:relative;width:100%;border:0;background:transparent;padding:0;font:inherit;cursor:pointer;
+  min-height:40px;text-align:left;color:inherit}
+.srow .n{grid-column:1;align-self:center;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:#eef2f5;color:var(--text-faint)}
+.srow .lane{grid-row:1;border-left:1px dashed #d6e1ea;margin-left:50%}
+.srow .ar{position:absolute;top:50%;height:2px;background:#9fb3c3;transform:translateY(-1px)}
+.srow .ar::after{content:"";position:absolute;top:-4px;border:5px solid transparent}
+.srow .ar.r::after{right:-2px;border-left-color:#9fb3c3}
+.srow .ar.l::after{left:-2px;border-right-color:#9fb3c3}
+.srow .ar.self{height:16px;background:transparent;border:2px solid #9fb3c3;border-left:0;border-radius:0 9px 9px 0;transform:translateY(-8px)}
+.srow .ar.self::after{display:none}
+.srow .lb{position:absolute;top:50%;transform:translateY(-118%);font-family:"IBM Plex Mono",monospace;
+  font-size:11.5px;color:var(--text-faint);white-space:nowrap;padding:0 4px;background:#fcfdfe}
+.srow:hover .n{background:#dfe8ef}
+.srow.done .n{background:#d7efe6;color:#047857}
+.srow.done .ar{background:#6fb59a}.srow.done .ar.r::after{border-left-color:#6fb59a}.srow.done .ar.l::after{border-right-color:#6fb59a}
+.srow.done .ar.self{background:transparent;border-color:#6fb59a}
+.srow.cur .n{background:var(--defend);color:#fff}
+.srow.cur .ar{background:var(--defend)}.srow.cur .ar.r::after{border-left-color:var(--defend)}.srow.cur .ar.l::after{border-right-color:var(--defend)}
+.srow.cur .ar.self{background:transparent;border-color:var(--defend)}
+.srow.cur .lb{color:var(--defend);font-weight:600}
+.srow.fail .n{background:#b91c1c;color:#fff}
+/* the play bar */
+.bar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 18px;border-bottom:1px solid var(--line-soft);background:#fff}
+.bar button{font:inherit;font-size:14px;border:1px solid transparent;background:transparent;color:var(--text-dim);
+  border-radius:8px;padding:5px 10px;cursor:pointer;line-height:1.2}
+.bar button:hover{background:#eef3f7}
+.bar button:disabled{opacity:.4;cursor:default;background:transparent}
+.bar .play{background:var(--defend);color:#fff;font-weight:600;padding:6px 16px}
+.bar .play:hover{background:#0b5f74}
+.bar .sp{display:flex;gap:2px;align-items:center;margin-left:8px;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--text-faint)}
+.bar .sp button{font-family:"IBM Plex Mono",monospace;font-size:12px;padding:3px 7px}
+.bar .sp button[aria-pressed=true]{background:#eef2f5;color:var(--text)}
+.bar .count{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--text-faint)}
+/* a step */
+ol.steps{list-style:none;margin:0;padding:0}
+.step{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);border-bottom:1px solid var(--line-soft)}
+.step:last-child{border-bottom:0}
+.step .say{padding:18px 22px}
+.step .say .k{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text-faint);letter-spacing:.05em}
+.step .say h3{font-size:19px;margin:4px 0 8px}
+.step .say ul{margin:0;padding-left:18px;color:var(--text-dim);font-size:16px}
+.step .say li{margin:3px 0}
+.step .cell{padding:16px 18px;background:#f7f9fb;border-left:1px solid var(--line-soft);min-width:0}
+.cell .lbl{display:flex;align-items:center;gap:8px;font-family:"IBM Plex Mono",monospace;font-size:11px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px}
+.cell .lbl .sp{flex:1}
+.cell pre,.cell textarea{display:block;width:100%;margin:0;font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.55;
+  background:#0d1b26;color:#e6f0f6;border:0;border-radius:9px;padding:12px 14px;overflow:auto;white-space:pre;tab-size:4}
+.cell textarea{resize:vertical;min-height:4em;outline:none}
+.cell textarea:focus{box-shadow:0 0 0 2px var(--defend-lt)}
+.cell .cmd pre{background:#122433}
+.cell .acts{display:flex;gap:8px;align-items:center;margin:8px 0 0;flex-wrap:wrap}
+.cell .acts button{font:inherit;font-size:13.5px;border:1px solid var(--line);background:#fff;color:var(--text-dim);
+  border-radius:8px;padding:4px 12px;cursor:pointer}
+.cell .acts button.run{background:var(--defend);border-color:var(--defend);color:#fff;font-weight:600}
+.cell .acts button.run:hover{background:#0b5f74}
+.cell .acts .note{font-size:13px;color:var(--text-faint)}
+.cell .out{white-space:pre-wrap;word-break:break-word;margin-top:10px;background:#fff;color:var(--text);border:1px solid var(--line);min-height:2.6em}
+.cell .out.err{border-color:#f0c4c4;background:#fff7f7;color:#7f1d1d}
+.cell .out:empty::before{content:"Output appears here when you press Run.";color:var(--text-faint);font-style:italic}
+.cell .mine{font-size:13.5px;color:var(--text-faint);margin:8px 2px 0}
+.lab-hud{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:#047857;background:#f1fbf7;
+  border:1px solid #bfe6d6;border-radius:999px;padding:2px 10px}
+.lab-hud:empty{display:none}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0d1b26;color:#fff;
+  padding:9px 18px;border-radius:999px;font-weight:600;z-index:90;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+/* the lesson, folded */
+.lesson{padding:18px 22px 22px;border-top:1px solid var(--line-soft);background:#fcfdfe}
+.lesson h3{font-size:18px;margin:0 0 2px}
+.lesson>p{margin:0 0 10px;font-size:14.5px;color:var(--text-faint)}
+.lfold{border:1px solid var(--line-soft);border-radius:10px;background:#fff;margin:6px 0}
+.lbody h4{font-size:18px;margin:18px 0 6px;padding-top:12px;border-top:1px solid var(--line-soft);color:var(--text)}
+.lbody h4:first-child{border-top:0;padding-top:0;margin-top:8px}
+.lbody h5{font-size:16px;margin:12px 0 4px;color:var(--text)}
+.lbody h6{font-size:15px;margin:10px 0 4px;color:var(--text-dim)}
+.lfold summary{cursor:pointer;padding:9px 14px;font-weight:600;font-size:16px;color:var(--text)}
+.lfold[open] summary{border-bottom:1px solid var(--line-soft)}
+.lbody{padding:6px 16px 12px;font-size:15.5px;color:var(--text-dim);max-width:900px}
+.lbody pre{overflow:auto}
+.lbody table{border-collapse:collapse;width:100%;font-size:14.5px;margin:8px 0}
+.lbody th,.lbody td{border:1px solid var(--line-soft);padding:5px 8px;text-align:left;vertical-align:top}
+.lbody h2,.lbody h3{font-size:17px;margin:14px 0 6px}
+/* the IDE route */
+.ide{padding:18px 22px 22px}
+.ide h3{font-size:18px;margin:16px 0 6px}
+.ide h3:first-child{margin-top:0}
+.ide p{margin:0 0 8px;color:var(--text-dim);font-size:15.5px;max-width:820px}
+.ide pre{font-family:"IBM Plex Mono",monospace;font-size:13px;line-height:1.55;background:#0d1b26;color:#e6f0f6;
+  border-radius:9px;padding:12px 14px;overflow:auto;margin:0}
+.ide details{margin-top:8px;border:1px solid var(--line-soft);border-radius:9px;background:#fbfcfd}
+.ide summary{cursor:pointer;padding:8px 12px;font-weight:600;color:var(--text-dim)}
+.ide details pre{border-radius:0 0 9px 9px;max-height:420px}
+.blk{position:relative}
+.blk .copy{position:absolute;top:8px;right:8px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  border:1px solid rgba(255,255,255,.25);background:rgba(13,27,38,.6);color:#e6f0f6;border-radius:6px;padding:3px 8px;cursor:pointer}
+.blk .copy:hover{background:rgba(13,27,38,.9)}
+.blk pre{padding-right:76px}
+/* with JavaScript: one lesson, one step, one mode at a time */
+html.js section.lab:not(.on){display:none}
+html.js .step:not(.on){display:none}
+html.js section.lab[data-mode=run] .ide,html.js section.lab[data-mode=ide] .run-pane{display:none}
+html:not(.js) .bar,html:not(.js) .modes,html:not(.js) .acts .run{display:none}
+@media (max-width:900px){
+  .lab-shell{grid-template-columns:1fr}
+  .lab-side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line-soft);padding:12px}
+  .lab-side nav{display:flex;flex-wrap:wrap;gap:4px}
+  .lab-side .ch{width:100%;margin:8px 0 2px}
+  .lab-side .ch small,.lab-side .foot{display:none}
+  .lab-side a{padding:4px 8px;font-size:14px}
+  .lab-side a span{display:none}
+  .lab-main{padding:16px 12px 40px}
+  .step{grid-template-columns:1fr}
+  .step .cell{border-left:0;border-top:1px solid var(--line-soft)}
+  .seq{padding:12px 10px 4px}
+  .lanes div{font-size:12.5px}
+  .srow .lb{font-size:10.5px}
+  .bar .sp{margin-left:0}
+}
+</style><script>document.documentElement.classList.add('js')</script></head><body><!-- Generated by scripts/build_lab.py from scripts/exercises/lab_*.py. Do not edit. --><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="../lessons/index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="lab-shell"><aside class="lab-side"><div class="fn"><a href="index.html" style="padding:0;display:inline">Hands-on labs</a></div><nav><div class="fnh">Function A · Getting Started</div><div class="ch">A0 <small>Set Up</small></div><a href="A0.0.html"><b>A0.0</b><span>Set up your computer</span></a><a href="A0.1.html"><b>A0.1</b><span>9 agent concepts you need to know</span></a><div class="ch">A1 <small>Build the Agent</small></div><a href="A1.0.html"><b>A1.0</b><span>What an agent is, and what you will build</span></a><a href="A1.1.html"><b>A1.1</b><span>The agent loop: plan, act, check</span></a><a href="A1.2.html"><b>A1.2</b><span>Tools over MCP</span></a><a href="A1.3.html"><b>A1.3</b><span>Identity: people, agents and tokens</span></a><a href="A1.4.html"><b>A1.4</b><span>One token per action</span></a><a href="A1.5.html"><b>A1.5</b><span>Memory, and where it came from</span></a><a href="A1.6.html"><b>A1.6</b><span>Messages between agents</span></a><a href="A1.7.html"><b>A1.7</b><span>Human approval and run limits</span></a><div class="ch">A2 <small>Harness Engineering</small></div><a href="A2.0.html"><b>A2.0</b><span>From demo to system</span></a><a href="A2.1.html"><b>A2.1</b><span>Tracing a run</span></a><a href="A2.2.html"><b>A2.2</b><span>The audit log, and four questions it must answer</span></a><a href="A2.3.html"><b>A2.3</b><span>Testing the controls</span></a><a href="A2.4.html"><b>A2.4</b><span>Scoring the agent&#x27;s behaviour</span></a><a href="A2.5.html"><b>A2.5</b><span>What you built, and how it can fail</span></a><div class="fnh">Function B · Securing AI Architectures</div><div class="ch">B1 <small>CyberTravels&#x27; Architecture, and Every Risk It Carries</small></div><a href="B1.0.html"><b>B1.0</b><span>Start here: securing an AI system</span></a><a href="B1.1.html"><b>B1.1</b><span>A reference architecture for AI agents</span></a><a href="B1.2.html"><b>B1.2</b><span>Prompt injection</span></a><a href="B1.3.html"><b>B1.3</b><span>Indirect prompt injection</span></a><a href="B1.4.html"><b>B1.4</b><span>Memory poisoning</span></a><a href="B1.5.html"><b>B1.5</b><span>Tool misuse</span></a><a href="B1.6.html"><b>B1.6</b><span>Privilege compromise</span></a><a href="B1.7.html"><b>B1.7</b><span>Identity spoofing and impersonation</span></a><a href="B1.8.html"><b>B1.8</b><span>Malicious code execution</span></a><a href="B1.9.html"><b>B1.9</b><span>Injection through content the agent reads</span></a><a href="B1.10.html"><b>B1.10</b><span>Agent communication poisoning</span></a><a href="B1.11.html"><b>B1.11</b><span>Rogue agents in a multi-agent system</span></a><a href="B1.12.html"><b>B1.12</b><span>Cascading hallucination</span></a><a href="B1.13.html"><b>B1.13</b><span>Resource overload</span></a><a href="B1.14.html"><b>B1.14</b><span>Repudiation and untraceability</span></a><a href="B1.15.html"><b>B1.15</b><span>Too many approvals for one person</span></a><a href="B1.16.html"><b>B1.16</b><span>Misaligned and deceptive behaviour</span></a><a href="B1.17.html"><b>B1.17</b><span>Attacks on the people around the agent</span></a><a href="B1.18.html"><b>B1.18</b><span>The CyberTravels risk register</span></a><a href="B1.19.html"><b>B1.19</b><span>Every control CyberTravels needs</span></a><div class="ch">B2 <small>Securing the Architecture</small></div><a href="B2.1.html"><b>B2.1</b><span>Agent identity: user, workload, agent</span></a><a href="B2.2.html"><b>B2.2</b><span>The first credential</span></a><a href="B2.3.html"><b>B2.3</b><span>Delegation that narrows</span></a><a href="B2.4.html"><b>B2.4</b><span>Just-in-time access</span></a><a href="B2.5.html"><b>B2.5</b><span>Managing machine identities</span></a><a href="B2.6.html"><b>B2.6</b><span>Marking untrusted content</span></a><a href="B2.7.html"><b>B2.7</b><span>Audit logs that say who</span></a><a href="B2.8.html"><b>B2.8</b><span>Audit logs that cannot be forged</span></a><div class="ch">B3 <small>Securing the Architecture</small></div><a href="B3.1.html"><b>B3.1</b><span>Deny tool calls by default</span></a><a href="B3.2.html"><b>B3.2</b><span>Sandboxed code execution</span></a><a href="B3.3.html"><b>B3.3</b><span>Egress control</span></a><a href="B3.4.html"><b>B3.4</b><span>Budgets and stop conditions</span></a><a href="B3.5.html"><b>B3.5</b><span>Checking tool results</span></a><a href="B3.6.html"><b>B3.6</b><span>Human approval at volume</span></a><a href="B3.7.html"><b>B3.7</b><span>The agent gateway</span></a><a href="B3.8.html"><b>B3.8</b><span>Shared infrastructure between runs</span></a><a href="B3.9.html"><b>B3.9</b><span>Turning a control off safely</span></a><a href="B3.10.html"><b>B3.10</b><span>Letting the agent raise a flag</span></a><a href="B3.11.html"><b>B3.11</b><span>Securing developers&#x27; coding agents</span></a><div class="fnh">Function C · Application Security with an AI SDLC</div><div class="ch">C2 <small>The AI SDLC</small></div><a href="C2.0.html"><b>C2.0</b><span>The AI SDLC: before and after deploy</span></a><a href="C2.1.html"><b>C2.1</b><span>Building a security harness</span></a><a href="C2.2.html"><b>C2.2</b><span>Threat modelling</span></a><a href="C2.3.html"><b>C2.3</b><span>SAST: rules, then a model</span></a><a href="C2.4.html"><b>C2.4</b><span>Removing duplicates and checking findings</span></a><a href="C2.5.html"><b>C2.5</b><span>Reachability and dead code</span></a><a href="C2.6.html"><b>C2.6</b><span>A safe copy to test in</span></a><a href="C2.7.html"><b>C2.7</b><span>Supply chain and dependencies</span></a><a href="C2.8.html"><b>C2.8</b><span>Dynamic testing (DAST)</span></a><a href="C2.9.html"><b>C2.9</b><span>Chaining exploits</span></a><a href="C2.10.html"><b>C2.10</b><span>Pentesting with agents</span></a><a href="C2.11.html"><b>C2.11</b><span>White-box pentest</span></a><a href="C2.12.html"><b>C2.12</b><span>Black-box pentest</span></a><a href="C2.13.html"><b>C2.13</b><span>Grey-box pentest</span></a><a href="C2.14.html"><b>C2.14</b><span>Bonus: safety controls for an attacking agent</span></a><a href="C2.15.html"><b>C2.15</b><span>Severity, triage and reports</span></a><a href="C2.16.html"><b>C2.16</b><span>Proving a fix before merge</span></a><a href="C2.17.html"><b>C2.17</b><span>Cutting false positives with context</span></a><a href="C2.18.html"><b>C2.18</b><span>Attesting agents and MCP servers</span></a><a href="C2.19.html"><b>C2.19</b><span>Bonus: Google Mantis in production</span></a><div class="fnh">Function D · Agentic Evaluation and Red Teaming</div><div class="ch">D1 <small>One Red-Team Lifecycle, End to End</small></div><a href="D1.0.html"><b>D1.0</b><span>Start here: red teaming AI agents</span></a><a href="D1.1.html"><b>D1.1</b><span>Supply-chain risk in what the agent loads</span></a><a href="D1.2.html"><b>D1.2</b><span>Attacking the ingestion path</span></a><a href="D1.3.html"><b>D1.3</b><span>Getting the model to misbehave at scale</span></a><a href="D1.4.html"><b>D1.4</b><span>Telemetry, and spotting the attacker</span></a><a href="D1.5.html"><b>D1.5</b><span>Many agents at once</span></a><a href="D1.6.html"><b>D1.6</b><span>Detection at high volume</span></a><a href="D1.7.html"><b>D1.7</b><span>Triage when many agents act</span></a><a href="D1.8.html"><b>D1.8</b><span>Deception, and where thresholds fail</span></a><a href="D1.9.html"><b>D1.9</b><span>Stopping agents at machine speed</span></a><a href="D1.10.html"><b>D1.10</b><span>Replaying an attack</span></a><a href="D1.11.html"><b>D1.11</b><span>Governance and compliance</span></a><div class="fnh">Function E · The Agentic SOC</div><div class="ch">E1 <small>Discover</small></div><a href="E1.0.html"><b>E1.0</b><span>Start here: a SOC with agents in it</span></a><a href="E1.1.html"><b>E1.1</b><span>What your sensors see of an agent</span></a><a href="E1.2.html"><b>E1.2</b><span>Behaviour drift</span></a><a href="E1.3.html"><b>E1.3</b><span>Bonus: finding the agents</span></a><div class="ch">E2 <small>Detect</small></div><a href="E2.1.html"><b>E2.1</b><span>Where agent logs land</span></a><a href="E2.2.html"><b>E2.2</b><span>Detections for agents, mapped to ATT&amp;CK and ATLAS</span></a><a href="E2.3.html"><b>E2.3</b><span>Detections for the agent platform</span></a><a href="E2.4.html"><b>E2.4</b><span>Writing detections with an agent</span></a><a href="E2.5.html"><b>E2.5</b><span>Rules from an incident</span></a><a href="E2.6.html"><b>E2.6</b><span>Honeypots and canaries</span></a><div class="ch">E3 <small>Understand</small></div><a href="E3.1.html"><b>E3.1</b><span>Running the triage loop</span></a><a href="E3.2.html"><b>E3.2</b><span>What the investigating agent may touch</span></a><a href="E3.3.html"><b>E3.3</b><span>Context for agent triage</span></a><a href="E3.4.html"><b>E3.4</b><span>When the attacker is an agent</span></a><a href="E3.5.html"><b>E3.5</b><span>Rebuilding the timeline</span></a><a href="E3.6.html"><b>E3.6</b><span>Investigations that change their plan</span></a><a href="E3.7.html"><b>E3.7</b><span>Scoping an agent incident</span></a><a href="E3.8.html"><b>E3.8</b><span>Spotting a swarm</span></a><a href="E3.9.html"><b>E3.9</b><span>Using threat intelligence</span></a><a href="E3.10.html"><b>E3.10</b><span>Hunting in agent logs</span></a><div class="ch">E4 <small>Respond</small></div><a href="E4.1.html"><b>E4.1</b><span>What can be fixed without asking</span></a><a href="E4.2.html"><b>E4.2</b><span>Runbook tiers</span></a><a href="E4.3.html"><b>E4.3</b><span>Containment at machine speed</span></a><a href="E4.4.html"><b>E4.4</b><span>Who can stop the fleet</span></a><a href="E4.5.html"><b>E4.5</b><span>The fleet kill switch</span></a><div class="ch">E5 <small>Recover and Root Cause</small></div><a href="E5.1.html"><b>E5.1</b><span>Replay and forensics</span></a><a href="E5.2.html"><b>E5.2</b><span>The root cause record</span></a><a href="E5.3.html"><b>E5.3</b><span>Where the fix belongs</span></a><a href="E5.4.html"><b>E5.4</b><span>Checking the fix worked</span></a><a href="E5.5.html"><b>E5.5</b><span>Proposing the policy change</span></a><a href="E5.6.html"><b>E5.6</b><span>The reporting deadline</span></a><div class="fnh">Function F · AI Governance for Agentic Systems</div><div class="ch">F1 <small>Building the Governance Framework</small></div><a href="F1.0.html"><b>F1.0</b><span>Start here: AI governance</span></a><a href="F1.1.html"><b>F1.1</b><span>From control to measurable indicator</span></a><a href="F1.2.html"><b>F1.2</b><span>The AI and agent inventory</span></a><a href="F1.3.html"><b>F1.3</b><span>Risk tiers for agent use</span></a><a href="F1.4.html"><b>F1.4</b><span>Mapping controls to agents</span></a><a href="F1.5.html"><b>F1.5</b><span>Eval results as audit evidence</span></a><a href="F1.6.html"><b>F1.6</b><span>Operating vs outcome guardrails</span></a><a href="F1.7.html"><b>F1.7</b><span>Checking controls continuously</span></a><a href="F1.8.html"><b>F1.8</b><span>Third-party and model risk</span></a><a href="F1.9.html"><b>F1.9</b><span>Agent lifecycle governance</span></a><a href="F1.10.html"><b>F1.10</b><span>Who owns what</span></a><a href="F1.11.html"><b>F1.11</b><span>Model risk management</span></a><a href="F1.12.html"><b>F1.12</b><span>Gaps between teams</span></a><a href="F1.13.html"><b>F1.13</b><span>Measuring CyberTravels&#x27; controls</span></a><div class="ch">F2 <small>Building the Governance Platform</small></div><a href="F2.1.html"><b>F2.1</b><span>The regulatory map</span></a><a href="F2.2.html"><b>F2.2</b><span>AI laws that apply across sectors</span></a><a href="F2.3.html"><b>F2.3</b><span>Voluntary frameworks</span></a><a href="F2.4.html"><b>F2.4</b><span>Sector rules</span></a><a href="F2.5.html"><b>F2.5</b><span>Privacy and data protection</span></a><a href="F2.6.html"><b>F2.6</b><span>Incident reporting duties</span></a><a href="F2.7.html"><b>F2.7</b><span>Documentation for supervisors</span></a><a href="F2.8.html"><b>F2.8</b><span>Auditing autonomous actions</span></a><a href="F2.9.html"><b>F2.9</b><span>Talking to regulators and auditors</span></a><div class="ch">F3 <small>Running the Programme</small></div><a href="F3.1.html" aria-current="page"><b>F3.1</b><span>Explaining agent risk to leaders</span></a><a href="F3.2.html"><b>F3.2</b><span>Governing autonomy, not tools</span></a><a href="F3.3.html"><b>F3.3</b><span>Ordering the programme</span></a><a href="F3.4.html"><b>F3.4</b><span>Teams and ownership</span></a><a href="F3.5.html"><b>F3.5</b><span>Metrics for each level</span></a><a href="F3.6.html"><b>F3.6</b><span>Saying yes with conditions</span></a><a href="F3.7.html"><b>F3.7</b><span>Building the team&#x27;s skills</span></a><a href="F3.8.html"><b>F3.8</b><span>Resilience over perfection</span></a></nav><div class="foot">Every step runs real Python in your browser, against CyberTravels as it stood at the end of that lesson. Nothing is installed on your computer.<br><br><a href="../lessons/index.html" style="padding:0">All lessons</a></div></aside><main class="lab-main"><div class="lab-intro slim"><div class="py" data-state="idle"><i></i><span>Python starts the first time you press Run or Play.</span></div><span class="lab-hud" aria-live="polite"></span><div class="lab-pn"><a href="F2.9.html">← F2.9</a><a href="F3.2.html">F3.2 →</a></div></div><section class="lab" id="F3.1" data-tree="2a0dc81d03" data-mode="run" aria-label="F3.1 Explaining agent risk to leaders"><div class="lab-head"><div class="tags"><span class="tag">F3.1</span><span class="tag dim">F3 · Running the Programme</span><span class="modes" role="group" aria-label="Where to run it"><button type="button" data-m="run" aria-pressed="true">In your browser</button><button type="button" data-m="ide" aria-pressed="false">In your IDE</button></span></div><h2>Explaining agent risk to leaders</h2><p>Turn an engineering risk into a sentence for the board.</p><div class="links"><a href="#lesson">Full walkthrough ↓</a></div></div><div class="run-pane"><div class="seq" style="--n:4"><div class="lanes" style="--n:4"><span></span><div class="">Engineer</div><div class="">Translation</div><div class="">Board</div><div class="">Number</div></div><button type="button" class="srow" data-i="0" aria-label="Step 1: From scope to money"><span class="n">1</span><span class="lane" style="grid-column:2"></span><span class="lane" style="grid-column:3"></span><span class="lane" style="grid-column:4"></span><span class="lane" style="grid-column:5"></span><span class="ar r" style="left:calc(30px + (100% - 30px) * 0.1250);width:calc((100% - 30px) * 0.2500)"></span><span class="lb" style="left:calc(30px + (100% - 30px) * 0.1250)">translate</span></button></div><div class="bar"><button type="button" class="reset" title="Start this lesson again">↺ Reset</button><button type="button" class="prev" aria-label="Previous step">‹</button><button type="button" class="play">▶ Play</button><button type="button" class="next" aria-label="Next step">›</button><span class="sp">speed<button type="button" data-s="0.5" aria-pressed="false">0.5×</button><button type="button" data-s="1" aria-pressed="true">1×</button><button type="button" data-s="2" aria-pressed="false">2×</button><button type="button" data-s="3" aria-pressed="false">3×</button></span><span class="count"></span></div><ol class="steps"><li class="step" data-i="0"><div class="say"><div class="k">STEP 1 OF 1</div><h3>From scope to money</h3><ul><li>12 refunds a run, 5,000 each, not reversible, caught in 5 minutes.</li><li>Change the numbers and read both sentences.</li></ul></div><div class="cell"><div class="lbl">Python <span class="sp"></span>edit it, then run</div><div class="blk"><textarea spellcheck="false" rows="5" aria-label="Python for step 1">from cybertravels.governance import programme as prog
+t = prog.translate(scope=&quot;payments:refund&quot;, max_calls=12, amount_per_call=5000, reversible=False, detected_in=5)
+print(&quot;engineering:&quot;, t[&quot;engineering_sentence&quot;])
+print(&quot;board:      &quot;, t[&quot;board_sentence&quot;])
+</textarea></div><div class="acts"><button type="button" class="run">▶ Run</button><span class="note"></span></div><pre class="out" aria-live="polite"></pre></div></li></ol></div><div class="ide"><h3>1 · Link this lesson's skill into your AI tool</h3><p>Claude Code, Codex, Cursor, Gemini, Copilot and others. It links the skill; it does not copy it, so a fix reaches you on your next pull.</p><div class="blk "><pre>python3 scripts/install_skills.py --all --lessons F3.1
+</pre></div><h3>2 · Ask your agent to do the lesson</h3><p>Type <code>/f3-1-explaining-agent-risk-to-leaders</code>, or just ask it to “do F3.1”. It gets the code as it stood at the end of F3.1, runs it, and tells you what happened.</p><h3>3 · No agent? Run the same thing from a terminal</h3><div class="blk "><pre>python3 scripts/lesson.py F3.1
+</pre></div><h3>4 · Run this page's steps on your computer</h3><p>The same Python as the steps above. Get the code as it stood at the end of F3.1, save the steps as <code>lab.py</code> in that folder, and run it.</p><div class="blk "><pre>python3 scripts/checkpoint.py --at F3.1 --out work/F3.1/cybertravels
+cd work/F3.1
+python3 lab.py
+</pre></div><details><summary>lab.py, every step of F3.1</summary><div class="blk "><pre># step 1: From scope to money
+from cybertravels.governance import programme as prog
+t = prog.translate(scope=&quot;payments:refund&quot;, max_calls=12, amount_per_call=5000, reversible=False, detected_in=5)
+print(&quot;engineering:&quot;, t[&quot;engineering_sentence&quot;])
+print(&quot;board:      &quot;, t[&quot;board_sentence&quot;])
+
+</pre></div></details><h3>5 · Copy the skill itself</h3><p>The lesson skill is a folder with one <code>SKILL.md</code>. Paste it into your tool's skills folder as <code>f3-1-explaining-agent-risk-to-leaders/SKILL.md</code> if you would rather not link it.</p><details><summary>lesson-skills/f3-1-explaining-agent-risk-to-leaders/SKILL.md</summary><div class="blk "><pre>---
+name: f3-1-explaining-agent-risk-to-leaders
+description: &gt;-
+  F3.1 — Explaining agent risk to leaders. Do this lesson: explains the idea in plain words, gets the CyberTravels code as it stood at the end of F3.1, runs it, and reports what happened. Use when working through lesson F3.1 or when asked to do F3.1.
+license: Apache-2.0
+allowed-tools: Read, Glob, Bash
+metadata:
+  commons-lesson: F3.1
+  commons-audit: programme/risk-translation-upward
+  commons-generated: scripts/build_lesson_skills.py
+---
+
+&lt;!-- Generated by scripts/build_lesson_skills.py from the lesson&#x27;s sources.
+     Edit scripts/exercises/ or site/data/curriculum.json, not this file. --&gt;
+
+# F3.1 — Explaining agent risk to leaders
+
+The board does not want the threat model. It wants to know the exposure, whether it is going up or down, and what decision is being asked of them — in that order, in language that survives being repeated by someone else.
+
+## When to use this
+
+The learner wants to do lesson **F3.1**: they typed `/f3-1-explaining-agent-risk-to-leaders`, picked it from
+their agent&#x27;s skill list, or asked to &quot;do F3.1&quot;. One skill is one lesson, and
+the learner never has to type a command themselves: you run them.
+
+## Before you start
+
+1. **Be in the repository.** `scripts/lesson.py` must exist in the current
+   folder. If it does not, ask the learner to open the `cyber-commons` folder
+   they cloned in their agent and start again.
+2. **Find the Python command.** Try `python3 --version`. On Windows that name is
+   often a Microsoft Store shortcut that prints &quot;Python was not found&quot; or exits
+   with 49; if so use `python`, then `py -3`. Call the one that works `PY`
+   below, and use it for every command.
+
+## Procedure
+
+1. **Teach it first.** Read `references/lesson.md`, next to this file, and
+   explain the idea to the learner in plain words *before* running anything.
+   The idea comes before the code. Assume they have never written code unless
+   they have told you otherwise; define a term the first time you use it.
+2. **Run the lesson.** From the repository root:
+   `PY scripts/lesson.py F3.1`. It gets the CyberTravels code as it stood at
+   the end of F3.1 into `work/cybertravels`, shows what this lesson added,
+   runs the tests that exist at this point, and runs the audit
+   (`skills/programme/risk-translation-upward`). It ends with a READBACK.
+3. **The audit.**
+   - The audit, `skills/programme/risk-translation-upward`, **asks you a question**. You are the model. The harness prints the audit&#x27;s task; answer it yourself, following the audit skill&#x27;s procedure, with one JSON object written to `work/answer.json`, then run `PY scripts/lesson.py F3.1 --answer work/answer.json`.
+   The readback printed *before* you answer is provisional; the one after `--answer` is the one to read to the learner. The harness checks your answer against the audit&#x27;s own output contract and says how many places it broke it. Never fill in a number you did not derive from the task. If you cannot answer, say so; a made-up answer has the right shape and passes the check.
+4. **Say what happened.** Read the READBACK to the learner in your own words,
+   under its headings: **What I did**, **What changed**, **The number**,
+   **Read this next**. Use only what it printed. If it says a step was skipped
+   or refused, say that plainly and pass on the fix it gave; a skipped step is
+   not a pass.
+5. **Ask the &quot;Your turn&quot; questions and stop.** The readback carries a heading
+   called **Your turn — nobody can fill this in for you**. Put those questions
+   to the learner, one at a time, and **wait for their answer**. Do not answer
+   them, do not suggest an answer, and do not continue past them. If the learner
+   asks you to answer, say that the question is the exercise and offer to
+   discuss their attempt instead. There is nothing to check and nothing to
+   score: what matters is that they formed an answer, not that it matched one.
+6. **Give them the exercise.** Write these four lines for your highest-tier system. If you cannot fill the likelihood line with a measurement, that is the first thing to fund — an assessment is not a number.
+7. **Point at the next lesson**, from the readback&#x27;s last heading.
+
+## The readback
+
+`scripts/lesson.py` always ends with the same headings, so a learner learns
+where to look. Every line under the first four is derived from something the
+harness ran; it never prints a number it did not measure, and where a lesson has
+no number it says what to count instead.
+
+**The fifth heading is different and it is the reason it exists.** Everything
+else here can be done by an agent reading the lesson and running the skill,
+which means a learner can finish a lesson having said nothing — students
+testing this reported exactly that. **Your turn** is prompts, never answers.
+An agent that answers them has removed the only part of the lesson that
+required the learner, and has not finished the lesson faster — it has skipped
+it.
+
+## Failure modes
+
+- **`python3` prints &quot;Python was not found&quot;.** The Windows Store shortcut. Use
+  `python` or `py -3`.
+- **Exit 2, &quot;no model configured&quot;.** Expected on a fresh machine. It is not a
+  broken repository; the readback names the fix.
+- **A refusal in about two seconds.** A quota or rate-limit rejection, not a
+  failure of the lesson. Stop; do not record a result from it.
+- **The run says `stopped` and that your edits are safe.** Not a failure. The
+  learner did the previous lesson&#x27;s challenge and the harness declined to
+  overwrite it. Offer the two choices it printed — `--out` for a fresh folder
+  that keeps the work, `--force` to discard it — and let the learner pick. Do
+  not pick for them, and do not pass `--force` on your own initiative.
+- **A test is reported skipped.** Say so. `PyJWT` missing is the usual reason,
+  and `pip install PyJWT` fixes it.
+</pre></div></details><p>It calls the audit skill <a href="https://github.com/spbreed/cyber-commons/tree/master/skills/programme/risk-translation-upward">programme/risk-translation-upward</a>, which needs a model. Your agent is one.</p></div><div class="lesson" id="lesson"><h3>For detailed learning</h3><p>The ideas behind the steps above.</p><details class="lfold"><summary>Full walkthrough</summary><div class="lbody"><h4>Why it matters</h4><p>The board does not want the threat model. It wants to know the exposure, whether it is going up or down, and what decision is being asked of them — in that order, in language that survives being repeated by someone else.</p><p><b>At CyberTravels.</b> <code>translate()</code> turns &quot;the agent holds payments:refund with a ceiling of twelve calls&quot; into &quot;one compromised run can move up to 60,000 before any human is involved, it is not recoverable, and we would know within five minutes&quot;. Same fact. The first sentence answers a question nobody asked.</p><h4>Risk and control</h4><p><b>Risk.</b> Blast radius explained in engineering terms to a board that needs consequence.</p><p><b>Control.</b> What can happen, how fast, who can stop it.</p><h4>The idea</h4><pre class="dia">   technical risk                board-usable exposure
+   +-------------------+         +--------------------------+
+   | prompt injection  |   --&gt;   | exposure: X, trend: down |
+   | in the RAG path   |         | decision asked: fund Y   |
+   +-------------------+         +--------------------------+
+
+   it has to survive being repeated by someone else, without you</pre><p>Translating agentic risk upward means dropping every mechanism and keeping three things: <strong>exposure, likelihood, and the decision being requested.</strong></p>
+<p>The failure mode is not using too much jargon. It is presenting <em>findings</em> when the audience needs a <em>decision</em>. A board cannot act on &quot;we found prompt injection in the review agent&quot;. It can act on &quot;a critical system can take N units of unreviewed action, we demonstrated it, and we are asking for X or for written acceptance&quot;.</p>
+<p>That last clause matters more than people expect. <strong>Accepting the risk in writing, with a named owner and a review date, is a legitimate outcome.</strong> Offering it makes the ask credible, because it shows you are presenting a decision rather than lobbying for a budget.</p><blockquote class="anchor"><strong>Anchor → F1.1.</strong> Translating risk upward is mostly choosing which three indicators a board sees. Pick them from the set that already exists, or the board gets a number invented for the slide and nobody can re-compute it.</blockquote><h4>Step by step</h4><h5>2 · Demo — compute the three numbers from what the tracks produced</h5><h5>3 · Where it breaks — the findings-shaped update</h5><h5>4 · The control — exposure, likelihood, assurance, decision</h5><h5>2 · The procedure, as a skill</h5>
+<p>The skill computes three numbers: exposure, containment ASR, and control coverage.</p>
+<p>Then it writes the same numbers up twice:</p>
+<ul><li><strong>The findings-shaped update</strong>, with a note on what is wrong with it.</li><li><strong>The position</strong>, which uses the identical numbers and attaches an ask.</li></ul>
+<p>Same evidence, two documents. Only one of them can be acted on.</p><h4>Day 0, 1 and 2</h4><p><b>Day 2, measure.</b> Three indicators the board sees, chosen from the set that already exists so anyone can re-compute them.</p><table><thead><tr><th>Measure this</th><th>denominator or target</th></tr></thead><tbody><tr><td>indicators the board sees</td><td>three, chosen from the set that already exists so anyone can re-compute them</td></tr></tbody></table><h4>Your turn</h4><p>Write these four lines for your highest-tier system. If you cannot fill the likelihood line with a measurement, that is the first thing to fund — an assessment is not a number.</p></div></details></div></section><div class="lab-pn"><a href="F2.9.html">← F2.9</a><a href="F3.2.html">F3.2 →</a></div><script type="application/json" id="tree">{"cybertravels/_stubs.py": "336cbbce9e267547", "cybertravels/a2a/__init__.py": "e3b0c44298fc1c14", "cybertravels/a2a/protocol.py": "fd536f5e4efdb6e1", "cybertravels/agents/__init__.py": "e3b0c44298fc1c14", "cybertravels/agents/coding_agent.py": "6e1ea6b6930897aa", "cybertravels/agents/file_agent.py": "d6c64bac641e1d9f", "cybertravels/agents/rag_advisor.py": "8a3d96bdb262cd7f", "cybertravels/agents/workflow_agent.py": "f14c5bb330f66fbe", "cybertravels/appsec/__init__.py": "94bbad19f13692ec", "cybertravels/appsec/attest.py": "841f02275287c71a", "cybertravels/appsec/findings.py": "3b0416c8f72061d9", "cybertravels/appsec/pentest.py": "2bc80157f03cc94a", "cybertravels/appsec/reach.py": "32a463982793f96d", "cybertravels/appsec/remediate.py": "c9cac572e88cd0f6", "cybertravels/appsec/replica.py": "4ca3f5c5f568b694", "cybertravels/appsec/sast.py": "78a04770670e2e18", "cybertravels/appsec/supplychain.py": "a7535d6752946f97", "cybertravels/appsec/threatmodel.py": "712c0c70a0b7cb91", "cybertravels/config.py": "c00eb40ef645b061", "cybertravels/db.py": "d9576e57bc64d7b6", "cybertravels/devagent.py": "3565640dadefad65", "cybertravels/egress.py": "a721f23a261063aa", "cybertravels/gateway.py": "530004167d3b9e94", "cybertravels/governance/__init__.py": "30bab1f80db9f8ad", "cybertravels/governance/evidence.py": "bb5521175dca7d26", "cybertravels/governance/programme.py": "8e32cb1acfb84de3", "cybertravels/governance/register.py": "0d8f59913af1736d", "cybertravels/governance/regulatory.py": "4a4e83b784ee4999", "cybertravels/governance/seams.py": "c76a441f73269fab", "cybertravels/identity.py": "8f162d6700410741", "cybertravels/ingress/__init__.py": "e3b0c44298fc1c14", "cybertravels/ingress/chat.py": "b848afba8a6766a2", "cybertravels/knowledge/__init__.py": "e3b0c44298fc1c14", "cybertravels/knowledge/retriever.py": "6cf72b33c5578368", "cybertravels/main.py": "e3a0adc19e4a4c00", "cybertravels/mcp/__init__.py": "e3b0c44298fc1c14", "cybertravels/mcp/internal_server.py": "1fb07f665856ac13", "cybertravels/mcp/vendor_server.py": "ecbd0ff7a44203a3", "cybertravels/memory.py": "494c67d729102707", "cybertravels/messaging/__init__.py": "e3b0c44298fc1c14", "cybertravels/messaging/bus.py": "0e8e7f82c5ae6840", "cybertravels/observability.py": "0bd956bb76db7afb", "cybertravels/orchestrator/__init__.py": "e3b0c44298fc1c14", "cybertravels/orchestrator/router.py": "d443ace1d63c0e01", "cybertravels/policy.py": "2f8ac24a3d617555", "cybertravels/provenance.py": "2b3b31994ba07458", "cybertravels/redteam/__init__.py": "83e6ed75cf6ae328", "cybertravels/redteam/actor.py": "60e1142367ad3f7c", "cybertravels/redteam/campaign.py": "eafceeafbf421e33", "cybertravels/redteam/containment.py": "5c39757a5937856e", "cybertravels/redteam/deception.py": "546b996fd1eefbbf", "cybertravels/redteam/elicitation.py": "aac1afdc7e02f5df", "cybertravels/redteam/forensics.py": "bc2f5659feebe885", "cybertravels/redteam/handoff.py": "057e7b74ad831c28", "cybertravels/redteam/ingestion.py": "583a1a8665c1fb44", "cybertravels/redteam/swarm.py": "56c0d5c6971c8c5c", "cybertravels/registry.py": "427d6f7ebfe0381a", "cybertravels/returns.py": "a888124659b76d35", "cybertravels/runtime.py": "e244b9986d47ce8c", "cybertravels/sandbox.py": "aeaa62566682d5f8", "cybertravels/soc/__init__.py": "83909aa133515b70", "cybertravels/soc/investigate.py": "852b4502b565bf46", "cybertravels/soc/lake.py": "5df411a1961b553f", "cybertravels/soc/recover.py": "d22ef65c54b4b121", "cybertravels/soc/respond.py": "bed3bbbdb821b5af", "cybertravels/soc/rules.py": "e6513d2ed800cb1b", "cybertravels/soc/sensors.py": "b63d426890ee4145", "cybertravels/tests/__init__.py": "e3b0c44298fc1c14", "cybertravels/tests/smoke_test.py": "68485ee2211b5ce9", "cybertravels/tools/__init__.py": "e3b0c44298fc1c14", "cybertravels/tools/bookings_api.py": "93e47406624058b3", "cybertravels/tools/payments_api.py": "f8208006c6892b84"}</script></main></div><script>
+(function(){
+var PY = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/";
+var pyodide = null, booting = null, data = null, nsFor = {}, mounted = {};
+var status = document.querySelector(".lab-intro .py");
+function say(state, text){ if(!status) return; status.dataset.state = state; status.querySelector("span").textContent = text; }
+
+function boot(){
+  if (booting) return booting;
+  say("loading", "Starting Python in your browser (about 12 MB, only the first time)...");
+  booting = new Promise(function(res, rej){
+    var s = document.createElement("script"); s.src = PY + "pyodide.js";
+    s.onload = res; s.onerror = function(){ rej(new Error("could not load Pyodide from " + PY)); };
+    document.head.appendChild(s);
+  }).then(function(){ return loadPyodide({indexURL: PY}); })
+    .then(function(p){ pyodide = p; return p.loadPackage(["sqlite3", "ssl", "micropip"]); })
+    .then(function(){ return pyodide.runPythonAsync("import micropip\nawait micropip.install(" + JSON.stringify("https://files.pythonhosted.org/packages/79/84/0fdf9b18ba31d69877bd39c9cd6052b47f3761e9910c15de788e519f079f/PyJWT-2.9.0-py3-none-any.whl") + ")"); })
+    .then(function(){
+      var tree = JSON.parse(document.getElementById("tree").textContent), paths = Object.keys(tree);
+      return Promise.all(paths.map(function(p){ return fetch("py/" + tree[p] + ".py").then(function(r){
+        if (!r.ok) throw new Error("source file " + r.status); return r.text(); }); }))
+        .then(function(texts){ data = {tree: {}}; paths.forEach(function(p, i){ data.tree[p] = texts[i]; }); });
+    })
+    .then(function(){
+      pyodide.runPython([
+        "import contextlib, io, sys, traceback",
+        "def _lab_run(src, ns):",
+        "    buf = io.StringIO()",
+        "    try:",
+        "        with contextlib.redirect_stdout(buf):",
+        "            exec(compile(src, '<step>', 'exec'), ns)",
+        "        return [buf.getvalue(), '']",
+        "    except BaseException:",
+        "        return [buf.getvalue(), traceback.format_exc(limit=-2)]",
+        "def _lab_use(root):",
+        "    for m in [m for m in sys.modules if m == 'cybertravels' or m.startswith('cybertravels.')]:",
+        "        del sys.modules[m]",
+        "    sys.path[:] = [p for p in sys.path if not p.startswith('/lab/')]",
+        "    sys.path.insert(0, root)"
+      ].join("\n"));
+      say("ready", "Python is running in your browser. Nothing is installed on your computer.");
+    })
+    .catch(function(e){ var m = String(e.message || e).trim().split("\n").pop();
+      say("failed", "Python could not start in this browser (" + m + "). Nothing ran. Use In your IDE to run it on your computer.");
+      booting = null; throw new Error(m); });
+  return booting;
+}
+
+function mount(tid){
+  var root = "/lab/" + tid;
+  if (!mounted[tid]) {
+    Object.keys(data.tree).forEach(function(path){
+      var full = root + "/" + path, dir = full.slice(0, full.lastIndexOf("/"));
+      pyodide.FS.mkdirTree(dir);
+      pyodide.FS.writeFile(full, data.tree[path]);
+    });
+    mounted[tid] = true;
+  }
+  return root;
+}
+
+function fresh(sec){
+  // A clean namespace and a clean database: the same state a reader gets by
+  // starting Python again in a fresh checkpoint.
+  var root = mount(sec.dataset.tree);
+  pyodide.globals.get("_lab_use")(root);
+  try { pyodide.FS.rmdir; pyodide.runPython("import shutil, os\nshutil.rmtree('" + root + "/cybertravels/data', ignore_errors=True)"); } catch(e) {}
+  var ns = pyodide.globals.get("dict")();
+  ns.set("__name__", "__lab__");
+  nsFor[sec.id] = ns;
+  return ns;
+}
+
+function runStep(sec, li){
+  var out = li.querySelector(".out"), ta = li.querySelector("textarea");
+  if (!ta) return Promise.resolve(true);
+  out.classList.remove("err"); out.textContent = "Running...";
+  return boot().then(function(){
+    if (sec.dataset.active !== "1") { fresh(sec); sec.dataset.active = "1";
+      document.querySelectorAll("section.lab").forEach(function(o){ if(o!==sec) o.dataset.active = ""; }); }
+    var ns = nsFor[sec.id] || fresh(sec);
+    var t0 = performance.now();
+    var r = pyodide.globals.get("_lab_run")(ta.value, ns).toJs();
+    var ms = Math.round(performance.now() - t0);
+    out.textContent = (r[0] || "") + (r[1] || "");
+    if (!r[0] && !r[1]) out.textContent = "(ran, printed nothing)";
+    out.classList.toggle("err", !!r[1]);
+    li.querySelector(".note").textContent = r[1] ? "it raised an error" : "ran in " + ms + " ms, in your browser";
+    return !r[1];
+  }).catch(function(e){ out.classList.add("err"); out.textContent = "Python is not running, so nothing ran. " + e.message; return false; });
+}
+
+function setup(sec){
+  var steps = [].slice.call(sec.querySelectorAll(".step")), rows = [].slice.call(sec.querySelectorAll(".srow"));
+  var cur = 0, playing = false, speed = 1, timer = null;
+  var count = sec.querySelector(".count"), play = sec.querySelector(".play");
+  function show(i){
+    cur = Math.max(0, Math.min(steps.length - 1, i));
+    steps.forEach(function(s, k){ s.classList.toggle("on", k === cur); });
+    rows.forEach(function(r, k){ r.classList.toggle("cur", k === cur); r.setAttribute("aria-current", k === cur); });
+    count.textContent = "Step " + (cur + 1) + " / " + steps.length;
+    sec.querySelector(".prev").disabled = cur === 0;
+    sec.querySelector(".next").disabled = cur === steps.length - 1;
+  }
+  function mark(i, ok){ rows[i].classList.toggle("done", ok); rows[i].classList.toggle("fail", !ok);
+    if (ok) progress(sec.id, i, steps.length); }
+  // Steps share one Python session, so step 3 may use a name step 1 made.
+  // Running step 3 first raised NameError, which read as broken code; any
+  // earlier step not yet run in this session is run first, in order.
+  function exec(i){
+    var chain = Promise.resolve(true);
+    for (var k = 0; k < i; k++) (function(k){
+      chain = chain.then(function(ok){ if (!ok || rows[k].classList.contains("done")) return ok;
+        return runStep(sec, steps[k]).then(function(r){ mark(k, r); return r; }); });
+    })(k);
+    return chain.then(function(ok){ if (!ok) return false;
+      return runStep(sec, steps[i]).then(function(r){ mark(i, r); return r; }); });
+  }
+  function stop(){ playing = false; clearTimeout(timer); play.textContent = "▶ Play"; }
+  function loop(){
+    if (!playing) return;
+    exec(cur).then(function(ok){
+      if (!playing) return;
+      if (!ok || cur === steps.length - 1) { stop(); return; }
+      timer = setTimeout(function(){ show(cur + 1); loop(); }, 1600 / speed);
+    });
+  }
+  play.onclick = function(){ if (playing) { stop(); return; } playing = true; play.textContent = "❚❚ Pause";
+    if (rows[cur].classList.contains("done") && cur < steps.length - 1) show(cur + 1); loop(); };
+  sec.querySelector(".next").onclick = function(){ stop(); show(cur + 1); exec(cur); };
+  sec.querySelector(".prev").onclick = function(){ stop(); show(cur - 1); };
+  sec.querySelector(".reset").onclick = function(){ stop(); sec.dataset.active = ""; delete nsFor[sec.id];
+    rows.forEach(function(r){ r.classList.remove("done", "fail"); });
+    sec.querySelectorAll("textarea").forEach(function(t){ t.value = t.defaultValue; });
+    sec.querySelectorAll(".out").forEach(function(o){ o.textContent = ""; o.classList.remove("err"); });
+    sec.querySelectorAll(".note").forEach(function(o){ o.textContent = ""; });
+    show(0); };
+  sec.querySelectorAll(".sp button").forEach(function(b){ b.onclick = function(){ speed = +b.dataset.s;
+    sec.querySelectorAll(".sp button").forEach(function(o){ o.setAttribute("aria-pressed", o === b); }); }; });
+  rows.forEach(function(r, k){ r.onclick = function(){ stop(); show(k); }; });
+  steps.forEach(function(li, k){ var b = li.querySelector(".acts .run");
+    if (b) b.onclick = function(){ stop(); show(k); exec(k); };
+    var ta = li.querySelector("textarea");
+    if (ta) ta.addEventListener("keydown", function(e){ if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); exec(k); } }); });
+  sec.querySelectorAll(".modes button").forEach(function(b){ b.onclick = function(){ sec.dataset.mode = b.dataset.m;
+    sec.querySelectorAll(".modes button").forEach(function(o){ o.setAttribute("aria-pressed", o === b); }); }; });
+  show(0);
+}
+
+// Progress, for the home page's quest. Kept in this browser only; every
+// access is guarded because storage can be blocked, and then nothing here
+// changes how the lab itself works.
+var KEY = "cc.v1", CHAPTERS = {"A0": ["A0.0", "A0.1"], "A1": ["A1.0", "A1.1", "A1.2", "A1.3", "A1.4", "A1.5", "A1.6", "A1.7"], "A2": ["A2.0", "A2.1", "A2.2", "A2.3", "A2.4", "A2.5"], "B1": ["B1.0", "B1.1", "B1.2", "B1.3", "B1.4", "B1.5", "B1.6", "B1.7", "B1.8", "B1.9", "B1.10", "B1.11", "B1.12", "B1.13", "B1.14", "B1.15", "B1.16", "B1.17", "B1.18", "B1.19"], "B2": ["B2.1", "B2.2", "B2.3", "B2.4", "B2.5", "B2.6", "B2.7", "B2.8"], "B3": ["B3.1", "B3.2", "B3.3", "B3.4", "B3.5", "B3.6", "B3.7", "B3.8", "B3.9", "B3.10", "B3.11"], "C2": ["C2.0", "C2.1", "C2.2", "C2.3", "C2.4", "C2.5", "C2.6", "C2.7", "C2.8", "C2.9", "C2.10", "C2.11", "C2.12", "C2.13", "C2.14", "C2.15", "C2.16", "C2.17", "C2.18", "C2.19"], "D1": ["D1.0", "D1.1", "D1.2", "D1.3", "D1.4", "D1.5", "D1.6", "D1.7", "D1.8", "D1.9", "D1.10", "D1.11"], "E1": ["E1.0", "E1.1", "E1.2", "E1.3"], "E2": ["E2.1", "E2.2", "E2.3", "E2.4", "E2.5", "E2.6"], "E3": ["E3.1", "E3.2", "E3.3", "E3.4", "E3.5", "E3.6", "E3.7", "E3.8", "E3.9", "E3.10"], "E4": ["E4.1", "E4.2", "E4.3", "E4.4", "E4.5"], "E5": ["E5.1", "E5.2", "E5.3", "E5.4", "E5.5", "E5.6"], "F1": ["F1.0", "F1.1", "F1.2", "F1.3", "F1.4", "F1.5", "F1.6", "F1.7", "F1.8", "F1.9", "F1.10", "F1.11", "F1.12", "F1.13"], "F2": ["F2.1", "F2.2", "F2.3", "F2.4", "F2.5", "F2.6", "F2.7", "F2.8", "F2.9"], "F3": ["F3.1", "F3.2", "F3.3", "F3.4", "F3.5", "F3.6", "F3.7", "F3.8"]};
+function load(){ try { return Object.assign({xp:0, steps:{}, done:[], badges:[], quiz:{}},
+  JSON.parse(localStorage.getItem(KEY) || "{}")); } catch(e) { return null; } }
+function store(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e) {} }
+function toast(t){ var d = document.createElement("div"); d.className = "toast"; d.textContent = t;
+  document.body.appendChild(d); setTimeout(function(){ d.remove(); }, 1600); }
+function badge(st, b, name){ if (st.badges.indexOf(b) < 0) { st.badges.push(b); toast("Badge: " + name); } }
+function progress(sid, i, n){
+  var st = load(); if (!st) return;
+  var got = st.steps[sid] = st.steps[sid] || [];
+  if (got.indexOf(i) >= 0) return;
+  got.push(i);
+  badge(st, "first", "First run");
+  if (got.length === n && st.done.indexOf(sid) < 0) { st.done.push(sid); toast("Lab " + sid + " complete"); }
+  Object.keys(CHAPTERS).forEach(function(c){
+    if (CHAPTERS[c].every(function(x){ return st.done.indexOf(x) >= 0; })) badge(st, c, "Chapter " + c + " cleared"); });
+  store(st); hud();
+}
+function hud(){ var st = load(), el = document.querySelector(".lab-hud"); if (!st || !el) return;
+  el.textContent = st.done.length + " of " + 149 + " labs done"; }
+document.addEventListener("click", function(e){
+  if (e.target.closest && e.target.closest(".ide .copy")) { var st = load(); if (st) { badge(st, "local", "Took it local"); store(st); } } });
+
+function copyable(){
+  document.querySelectorAll(".blk").forEach(function(b){
+    var btn = document.createElement("button"); btn.className = "copy"; btn.type = "button"; btn.textContent = "Copy";
+    btn.onclick = function(){ var t = b.querySelector("pre,textarea"); var v = t.value !== undefined ? t.value : t.textContent;
+      (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function(){ btn.textContent = "Copied"; },
+        function(){ btn.textContent = "Select and copy"; }); setTimeout(function(){ btn.textContent = "Copy"; }, 1600); };
+    // In a code cell the button sits beside Run: over the editor it covered
+    // the end of the first line, which is the line a reader edits first.
+    var acts = b.parentNode.querySelector(".acts");
+    if (b.querySelector("textarea") && acts) { btn.className = "copy-code"; acts.insertBefore(btn, acts.querySelector(".note")); }
+    else b.appendChild(btn);
+  });
+}
+
+function route(){
+  document.querySelectorAll("section.lab").forEach(function(x){ x.classList.add("on"); });
+  // With 55 lessons the sidebar is longer than the screen; a B3 lesson opened
+  // with its own entry scrolled out of sight. Scroll the sidebar, not the page.
+  var cur = document.querySelector('.lab-side a[aria-current="page"]'), side = document.querySelector(".lab-side");
+  if (cur && side && side.scrollHeight > side.clientHeight) side.scrollTop = cur.offsetTop - side.clientHeight / 3;
+}
+
+document.querySelectorAll("section.lab").forEach(setup);
+copyable();
+route();
+hud();
+})();
+</script></body></html>

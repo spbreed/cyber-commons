@@ -3646,7 +3646,7 @@ Next up: C2.0, The AI SDLC: before and after deploy.
 
 ### C2.0 · The AI SDLC: before and after deploy
 
-Chapter C2 · lesson 1 of 20 · runs a skill · 444 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/C2.0.html)
+Chapter C2 · lesson 1 of 20 · runs a skill · 444 words, about 3.2 min spoken · [page](https://cybercommons.ai/lab/C2.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -3710,7 +3710,7 @@ Next up: C2.1, Building a security harness.
 
 ### C2.1 · Building a security harness
 
-Chapter C2 · lesson 2 of 20 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.1.html)
+Chapter C2 · lesson 2 of 20 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/C2.1.html)
 
 **① Open**
 
@@ -3762,7 +3762,7 @@ Next up: C2.2, Threat modelling.
 
 ### C2.2 · Threat modelling
 
-Chapter C2 · lesson 3 of 20 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.2.html)
+Chapter C2 · lesson 3 of 20 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/C2.2.html)
 
 **① Open**
 
@@ -3814,7 +3814,7 @@ Next up: C2.3, SAST: rules, then a model.
 
 ### C2.3 · SAST: rules, then a model
 
-Chapter C2 · lesson 4 of 20 · runs a skill · 297 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/C2.3.html)
+Chapter C2 · lesson 4 of 20 · runs a skill · 297 words, about 2.1 min spoken · [page](https://cybercommons.ai/lab/C2.3.html)
 
 **① Open**
 
@@ -3866,7 +3866,7 @@ Next up: C2.4, Removing duplicates and checking findings.
 
 ### C2.4 · Removing duplicates and checking findings
 
-Chapter C2 · lesson 5 of 20 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C2.4.html)
+Chapter C2 · lesson 5 of 20 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/C2.4.html)
 
 **① Open**
 
@@ -3918,7 +3918,7 @@ Next up: C2.5, Reachability and dead code.
 
 ### C2.5 · Reachability and dead code
 
-Chapter C2 · lesson 6 of 20 · runs a skill · 301 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/C2.5.html)
+Chapter C2 · lesson 6 of 20 · runs a skill · 301 words, about 2.1 min spoken · [page](https://cybercommons.ai/lab/C2.5.html)
 
 **① Open**
 
@@ -3970,7 +3970,7 @@ Next up: C2.6, A safe copy to test in.
 
 ### C2.6 · A safe copy to test in
 
-Chapter C2 · lesson 7 of 20 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C2.6.html)
+Chapter C2 · lesson 7 of 20 · runs a skill · 248 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/C2.6.html)
 
 **① Open**
 
@@ -4022,7 +4022,7 @@ Next up: C2.7, Supply chain and dependencies.
 
 ### C2.7 · Supply chain and dependencies
 
-Chapter C2 · lesson 8 of 20 · runs a skill · 288 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/C2.7.html)
+Chapter C2 · lesson 8 of 20 · runs a skill · 288 words, about 2.1 min spoken · [page](https://cybercommons.ai/lab/C2.7.html)
 
 **① Open**
 
@@ -4074,7 +4074,7 @@ Next up: C2.8, Dynamic testing (DAST).
 
 ### C2.8 · Dynamic testing (DAST)
 
-Chapter C2 · lesson 9 of 20 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.8.html)
+Chapter C2 · lesson 9 of 20 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/C2.8.html)
 
 **① Open**
 
@@ -4126,7 +4126,7 @@ Next up: C2.9, Chaining exploits.
 
 ### C2.9 · Chaining exploits
 
-Chapter C2 · lesson 10 of 20 · runs a skill · 276 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C2.9.html)
+Chapter C2 · lesson 10 of 20 · runs a skill · 276 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/C2.9.html)
 
 **① Open**
 
@@ -4178,7 +4178,7 @@ Next up: C2.10, Pentesting with agents.
 
 ### C2.10 · Pentesting with agents
 
-Chapter C2 · lesson 11 of 20 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.10.html)
+Chapter C2 · lesson 11 of 20 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/C2.10.html)
 
 **① Open**
 
@@ -4230,7 +4230,7 @@ Next up: C2.11, White-box pentest.
 
 ### C2.11 · White-box pentest
 
-Chapter C2 · lesson 12 of 20 · runs a skill · 273 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/C2.11.html)
+Chapter C2 · lesson 12 of 20 · runs a skill · 273 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/C2.11.html)
 
 **① Open**
 
@@ -4282,7 +4282,7 @@ Next up: C2.12, Black-box pentest.
 
 ### C2.12 · Black-box pentest
 
-Chapter C2 · lesson 13 of 20 · runs a skill · 278 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C2.12.html)
+Chapter C2 · lesson 13 of 20 · runs a skill · 278 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/C2.12.html)
 
 **① Open**
 
@@ -4334,7 +4334,7 @@ Next up: C2.13, Grey-box pentest.
 
 ### C2.13 · Grey-box pentest
 
-Chapter C2 · lesson 14 of 20 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C2.13.html)
+Chapter C2 · lesson 14 of 20 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/C2.13.html)
 
 **① Open**
 
@@ -4386,7 +4386,7 @@ Next up: C2.14, Bonus: safety controls for an attacking agent.
 
 ### C2.14 · Bonus: safety controls for an attacking agent
 
-Chapter C2 · lesson 15 of 20 · runs a skill · 284 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C2.14.html)
+Chapter C2 · lesson 15 of 20 · runs a skill · 284 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/C2.14.html)
 
 **① Open**
 
@@ -4438,7 +4438,7 @@ Next up: C2.15, Severity, triage and reports.
 
 ### C2.15 · Severity, triage and reports
 
-Chapter C2 · lesson 16 of 20 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C2.15.html)
+Chapter C2 · lesson 16 of 20 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/C2.15.html)
 
 **① Open**
 
@@ -4490,7 +4490,7 @@ Next up: C2.16, Proving a fix before merge.
 
 ### C2.16 · Proving a fix before merge
 
-Chapter C2 · lesson 17 of 20 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/C2.16.html)
+Chapter C2 · lesson 17 of 20 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/C2.16.html)
 
 **① Open**
 
@@ -4542,7 +4542,7 @@ Next up: C2.17, Cutting false positives with context.
 
 ### C2.17 · Cutting false positives with context
 
-Chapter C2 · lesson 18 of 20 · runs a skill · 276 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/C2.17.html)
+Chapter C2 · lesson 18 of 20 · runs a skill · 276 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/C2.17.html)
 
 **① Open**
 
@@ -4594,7 +4594,7 @@ Next up: C2.18, Attesting agents and MCP servers.
 
 ### C2.18 · Attesting agents and MCP servers
 
-Chapter C2 · lesson 19 of 20 · runs a skill · 303 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/C2.18.html)
+Chapter C2 · lesson 19 of 20 · runs a skill · 303 words, about 2.2 min spoken · [page](https://cybercommons.ai/lab/C2.18.html)
 
 **① Open**
 
@@ -4646,7 +4646,7 @@ Next up: C2.19, Bonus: Google Mantis in production.
 
 ### C2.19 · Bonus: Google Mantis in production
 
-Chapter C2 · lesson 20 of 20 · runs a skill · 368 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/C2.19.html)
+Chapter C2 · lesson 20 of 20 · runs a skill · 368 words, about 2.6 min spoken · [page](https://cybercommons.ai/lab/C2.19.html)
 
 **① Open**
 
@@ -4717,7 +4717,7 @@ Next up: D1.0, Start here: red teaming AI agents.
 
 ### D1.0 · Start here: red teaming AI agents
 
-Chapter D1 · lesson 1 of 12 · runs a skill · 445 words, about 3.2 min spoken · [page](https://cybercommons.ai/lessons/D1.0.html)
+Chapter D1 · lesson 1 of 12 · runs a skill · 445 words, about 3.2 min spoken · [page](https://cybercommons.ai/lab/D1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -4781,7 +4781,7 @@ Next up: D1.1, Supply-chain risk in what the agent loads.
 
 ### D1.1 · Supply-chain risk in what the agent loads
 
-Chapter D1 · lesson 2 of 12 · runs a skill · 270 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D1.1.html)
+Chapter D1 · lesson 2 of 12 · runs a skill · 270 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/D1.1.html)
 
 **① Open**
 
@@ -4833,7 +4833,7 @@ Next up: D1.2, Attacking the ingestion path.
 
 ### D1.2 · Attacking the ingestion path
 
-Chapter D1 · lesson 3 of 12 · runs a skill · 285 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.2.html)
+Chapter D1 · lesson 3 of 12 · runs a skill · 285 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/D1.2.html)
 
 **① Open**
 
@@ -4885,7 +4885,7 @@ Next up: D1.3, Getting the model to misbehave at scale.
 
 ### D1.3 · Getting the model to misbehave at scale
 
-Chapter D1 · lesson 4 of 12 · runs a skill · 265 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D1.3.html)
+Chapter D1 · lesson 4 of 12 · runs a skill · 265 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/D1.3.html)
 
 **① Open**
 
@@ -4937,7 +4937,7 @@ Next up: D1.4, Telemetry, and spotting the attacker.
 
 ### D1.4 · Telemetry, and spotting the attacker
 
-Chapter D1 · lesson 5 of 12 · runs a skill · 287 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.4.html)
+Chapter D1 · lesson 5 of 12 · runs a skill · 287 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/D1.4.html)
 
 **① Open**
 
@@ -4989,7 +4989,7 @@ Next up: D1.5, Many agents at once.
 
 ### D1.5 · Many agents at once
 
-Chapter D1 · lesson 6 of 12 · runs a skill · 257 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D1.5.html)
+Chapter D1 · lesson 6 of 12 · runs a skill · 257 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/D1.5.html)
 
 **① Open**
 
@@ -5041,7 +5041,7 @@ Next up: D1.6, Detection at high volume.
 
 ### D1.6 · Detection at high volume
 
-Chapter D1 · lesson 7 of 12 · runs a skill · 277 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.6.html)
+Chapter D1 · lesson 7 of 12 · runs a skill · 277 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/D1.6.html)
 
 **① Open**
 
@@ -5093,7 +5093,7 @@ Next up: D1.7, Triage when many agents act.
 
 ### D1.7 · Triage when many agents act
 
-Chapter D1 · lesson 8 of 12 · runs a skill · 257 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/D1.7.html)
+Chapter D1 · lesson 8 of 12 · runs a skill · 257 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/D1.7.html)
 
 **① Open**
 
@@ -5145,7 +5145,7 @@ Next up: D1.8, Deception, and where thresholds fail.
 
 ### D1.8 · Deception, and where thresholds fail
 
-Chapter D1 · lesson 9 of 12 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D1.8.html)
+Chapter D1 · lesson 9 of 12 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/D1.8.html)
 
 **① Open**
 
@@ -5197,7 +5197,7 @@ Next up: D1.9, Stopping agents at machine speed.
 
 ### D1.9 · Stopping agents at machine speed
 
-Chapter D1 · lesson 10 of 12 · runs a skill · 274 words, about 2.0 min spoken · [page](https://cybercommons.ai/lessons/D1.9.html)
+Chapter D1 · lesson 10 of 12 · runs a skill · 274 words, about 2.0 min spoken · [page](https://cybercommons.ai/lab/D1.9.html)
 
 **① Open**
 
@@ -5249,7 +5249,7 @@ Next up: D1.10, Replaying an attack.
 
 ### D1.10 · Replaying an attack
 
-Chapter D1 · lesson 11 of 12 · runs a skill · 273 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/D1.10.html)
+Chapter D1 · lesson 11 of 12 · runs a skill · 273 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/D1.10.html)
 
 **① Open**
 
@@ -5301,7 +5301,7 @@ Next up: D1.11, Governance and compliance.
 
 ### D1.11 · Governance and compliance
 
-Chapter D1 · lesson 12 of 12 · runs a skill · 407 words, about 2.9 min spoken · [page](https://cybercommons.ai/lessons/D1.11.html)
+Chapter D1 · lesson 12 of 12 · runs a skill · 407 words, about 2.9 min spoken · [page](https://cybercommons.ai/lab/D1.11.html)
 
 **① Open**
 
@@ -5372,7 +5372,7 @@ Next up: E1.0, Start here: a SOC with agents in it.
 
 ### E1.0 · Start here: a SOC with agents in it
 
-Chapter E1 · lesson 1 of 4 · runs a skill · 388 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/E1.0.html)
+Chapter E1 · lesson 1 of 4 · runs a skill · 388 words, about 2.8 min spoken · [page](https://cybercommons.ai/lab/E1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -5436,7 +5436,7 @@ Next up: E1.1, What your sensors see of an agent.
 
 ### E1.1 · What your sensors see of an agent
 
-Chapter E1 · lesson 2 of 4 · runs a skill · 290 words, about 2.1 min spoken · [page](https://cybercommons.ai/lessons/E1.1.html)
+Chapter E1 · lesson 2 of 4 · runs a skill · 290 words, about 2.1 min spoken · [page](https://cybercommons.ai/lab/E1.1.html)
 
 **① Open**
 
@@ -5488,7 +5488,7 @@ Next up: E1.2, Behaviour drift.
 
 ### E1.2 · Behaviour drift
 
-Chapter E1 · lesson 3 of 4 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E1.2.html)
+Chapter E1 · lesson 3 of 4 · runs a skill · 271 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/E1.2.html)
 
 **① Open**
 
@@ -5540,7 +5540,7 @@ Next up: E1.3, Bonus: finding the agents.
 
 ### E1.3 · Bonus: finding the agents
 
-Chapter E1 · lesson 4 of 4 · runs a skill · 420 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/E1.3.html)
+Chapter E1 · lesson 4 of 4 · runs a skill · 420 words, about 3.0 min spoken · [page](https://cybercommons.ai/lab/E1.3.html)
 
 **① Open**
 
@@ -5600,7 +5600,7 @@ Next up: E2.1, Where agent logs land.
 
 ### E2.1 · Where agent logs land
 
-Chapter E2 · lesson 1 of 6 · runs a skill · 331 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/E2.1.html)
+Chapter E2 · lesson 1 of 6 · runs a skill · 331 words, about 2.4 min spoken · [page](https://cybercommons.ai/lab/E2.1.html)
 
 **① Open**
 
@@ -5652,7 +5652,7 @@ Next up: E2.2, Detections for agents, mapped to ATT and CK and ATLAS.
 
 ### E2.2 · Detections for agents, mapped to ATT&CK and ATLAS
 
-Chapter E2 · lesson 2 of 6 · runs a skill · 309 words, about 2.2 min spoken · [page](https://cybercommons.ai/lessons/E2.2.html)
+Chapter E2 · lesson 2 of 6 · runs a skill · 309 words, about 2.2 min spoken · [page](https://cybercommons.ai/lab/E2.2.html)
 
 **① Open**
 
@@ -5704,7 +5704,7 @@ Next up: E2.3, Detections for the agent platform.
 
 ### E2.3 · Detections for the agent platform
 
-Chapter E2 · lesson 3 of 6 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E2.3.html)
+Chapter E2 · lesson 3 of 6 · runs a skill · 264 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/E2.3.html)
 
 **① Open**
 
@@ -5756,7 +5756,7 @@ Next up: E2.4, Writing detections with an agent.
 
 ### E2.4 · Writing detections with an agent
 
-Chapter E2 · lesson 4 of 6 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E2.4.html)
+Chapter E2 · lesson 4 of 6 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/E2.4.html)
 
 **① Open**
 
@@ -5808,7 +5808,7 @@ Next up: E2.5, Rules from an incident.
 
 ### E2.5 · Rules from an incident
 
-Chapter E2 · lesson 5 of 6 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E2.5.html)
+Chapter E2 · lesson 5 of 6 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/E2.5.html)
 
 **① Open**
 
@@ -5860,7 +5860,7 @@ Next up: E2.6, Honeypots and canaries.
 
 ### E2.6 · Honeypots and canaries
 
-Chapter E2 · lesson 6 of 6 · runs a skill · 333 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/E2.6.html)
+Chapter E2 · lesson 6 of 6 · runs a skill · 333 words, about 2.4 min spoken · [page](https://cybercommons.ai/lab/E2.6.html)
 
 **① Open**
 
@@ -5920,7 +5920,7 @@ Next up: E3.1, Running the triage loop.
 
 ### E3.1 · Running the triage loop
 
-Chapter E3 · lesson 1 of 10 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E3.1.html)
+Chapter E3 · lesson 1 of 10 · runs a skill · 268 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/E3.1.html)
 
 **① Open**
 
@@ -5972,7 +5972,7 @@ Next up: E3.2, What the investigating agent may touch.
 
 ### E3.2 · What the investigating agent may touch
 
-Chapter E3 · lesson 2 of 10 · runs a skill · 242 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.2.html)
+Chapter E3 · lesson 2 of 10 · runs a skill · 242 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/E3.2.html)
 
 **① Open**
 
@@ -6024,7 +6024,7 @@ Next up: E3.3, Context for agent triage.
 
 ### E3.3 · Context for agent triage
 
-Chapter E3 · lesson 3 of 10 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.3.html)
+Chapter E3 · lesson 3 of 10 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/E3.3.html)
 
 **① Open**
 
@@ -6076,7 +6076,7 @@ Next up: E3.4, When the attacker is an agent.
 
 ### E3.4 · When the attacker is an agent
 
-Chapter E3 · lesson 4 of 10 · runs a skill · 259 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E3.4.html)
+Chapter E3 · lesson 4 of 10 · runs a skill · 259 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/E3.4.html)
 
 **① Open**
 
@@ -6128,7 +6128,7 @@ Next up: E3.5, Rebuilding the timeline.
 
 ### E3.5 · Rebuilding the timeline
 
-Chapter E3 · lesson 5 of 10 · runs a skill · 265 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E3.5.html)
+Chapter E3 · lesson 5 of 10 · runs a skill · 265 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/E3.5.html)
 
 **① Open**
 
@@ -6180,7 +6180,7 @@ Next up: E3.6, Investigations that change their plan.
 
 ### E3.6 · Investigations that change their plan
 
-Chapter E3 · lesson 6 of 10 · runs a skill · 222 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.6.html)
+Chapter E3 · lesson 6 of 10 · runs a skill · 222 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/E3.6.html)
 
 **① Open**
 
@@ -6232,7 +6232,7 @@ Next up: E3.7, Scoping an agent incident.
 
 ### E3.7 · Scoping an agent incident
 
-Chapter E3 · lesson 7 of 10 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.7.html)
+Chapter E3 · lesson 7 of 10 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/E3.7.html)
 
 **① Open**
 
@@ -6284,7 +6284,7 @@ Next up: E3.8, Spotting a swarm.
 
 ### E3.8 · Spotting a swarm
 
-Chapter E3 · lesson 8 of 10 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E3.8.html)
+Chapter E3 · lesson 8 of 10 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/E3.8.html)
 
 **① Open**
 
@@ -6336,7 +6336,7 @@ Next up: E3.9, Using threat intelligence.
 
 ### E3.9 · Using threat intelligence
 
-Chapter E3 · lesson 9 of 10 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/E3.9.html)
+Chapter E3 · lesson 9 of 10 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/E3.9.html)
 
 **① Open**
 
@@ -6388,7 +6388,7 @@ Next up: E3.10, Hunting in agent logs.
 
 ### E3.10 · Hunting in agent logs
 
-Chapter E3 · lesson 10 of 10 · runs a skill · 388 words, about 2.8 min spoken · [page](https://cybercommons.ai/lessons/E3.10.html)
+Chapter E3 · lesson 10 of 10 · runs a skill · 388 words, about 2.8 min spoken · [page](https://cybercommons.ai/lab/E3.10.html)
 
 **① Open**
 
@@ -6448,7 +6448,7 @@ Next up: E4.1, What can be fixed without asking.
 
 ### E4.1 · What can be fixed without asking
 
-Chapter E4 · lesson 1 of 5 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E4.1.html)
+Chapter E4 · lesson 1 of 5 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/E4.1.html)
 
 **① Open**
 
@@ -6500,7 +6500,7 @@ Next up: E4.2, Runbook tiers.
 
 ### E4.2 · Runbook tiers
 
-Chapter E4 · lesson 2 of 5 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E4.2.html)
+Chapter E4 · lesson 2 of 5 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/E4.2.html)
 
 **① Open**
 
@@ -6552,7 +6552,7 @@ Next up: E4.3, Containment at machine speed.
 
 ### E4.3 · Containment at machine speed
 
-Chapter E4 · lesson 3 of 5 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E4.3.html)
+Chapter E4 · lesson 3 of 5 · runs a skill · 233 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/E4.3.html)
 
 **① Open**
 
@@ -6604,7 +6604,7 @@ Next up: E4.4, Who can stop the fleet.
 
 ### E4.4 · Who can stop the fleet
 
-Chapter E4 · lesson 4 of 5 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E4.4.html)
+Chapter E4 · lesson 4 of 5 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/E4.4.html)
 
 **① Open**
 
@@ -6656,7 +6656,7 @@ Next up: E4.5, The fleet kill switch.
 
 ### E4.5 · The fleet kill switch
 
-Chapter E4 · lesson 5 of 5 · runs a skill · 383 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/E4.5.html)
+Chapter E4 · lesson 5 of 5 · runs a skill · 383 words, about 2.7 min spoken · [page](https://cybercommons.ai/lab/E4.5.html)
 
 **① Open**
 
@@ -6716,7 +6716,7 @@ Next up: E5.1, Replay and forensics.
 
 ### E5.1 · Replay and forensics
 
-Chapter E5 · lesson 1 of 6 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E5.1.html)
+Chapter E5 · lesson 1 of 6 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/E5.1.html)
 
 **① Open**
 
@@ -6768,7 +6768,7 @@ Next up: E5.2, The root cause record.
 
 ### E5.2 · The root cause record
 
-Chapter E5 · lesson 2 of 6 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E5.2.html)
+Chapter E5 · lesson 2 of 6 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/E5.2.html)
 
 **① Open**
 
@@ -6820,7 +6820,7 @@ Next up: E5.3, Where the fix belongs.
 
 ### E5.3 · Where the fix belongs
 
-Chapter E5 · lesson 3 of 6 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/E5.3.html)
+Chapter E5 · lesson 3 of 6 · runs a skill · 262 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/E5.3.html)
 
 **① Open**
 
@@ -6872,7 +6872,7 @@ Next up: E5.4, Checking the fix worked.
 
 ### E5.4 · Checking the fix worked
 
-Chapter E5 · lesson 4 of 6 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/E5.4.html)
+Chapter E5 · lesson 4 of 6 · runs a skill · 240 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/E5.4.html)
 
 **① Open**
 
@@ -6924,7 +6924,7 @@ Next up: E5.5, Proposing the policy change.
 
 ### E5.5 · Proposing the policy change
 
-Chapter E5 · lesson 5 of 6 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/E5.5.html)
+Chapter E5 · lesson 5 of 6 · runs a skill · 256 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/E5.5.html)
 
 **① Open**
 
@@ -6976,7 +6976,7 @@ Next up: E5.6, The reporting deadline.
 
 ### E5.6 · The reporting deadline
 
-Chapter E5 · lesson 6 of 6 · runs a skill · 368 words, about 2.6 min spoken · [page](https://cybercommons.ai/lessons/E5.6.html)
+Chapter E5 · lesson 6 of 6 · runs a skill · 368 words, about 2.6 min spoken · [page](https://cybercommons.ai/lab/E5.6.html)
 
 **① Open**
 
@@ -7047,7 +7047,7 @@ Next up: F1.0, Start here: AI governance.
 
 ### F1.0 · Start here: AI governance
 
-Chapter F1 · lesson 1 of 14 · runs a skill · 415 words, about 3.0 min spoken · [page](https://cybercommons.ai/lessons/F1.0.html)
+Chapter F1 · lesson 1 of 14 · runs a skill · 415 words, about 3.0 min spoken · [page](https://cybercommons.ai/lab/F1.0.html)
 
 **⓪ Ground rules — only on this lesson**
 
@@ -7111,7 +7111,7 @@ Next up: F1.1, From control to measurable indicator.
 
 ### F1.1 · From control to measurable indicator
 
-Chapter F1 · lesson 2 of 14 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.1.html)
+Chapter F1 · lesson 2 of 14 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F1.1.html)
 
 **① Open**
 
@@ -7163,7 +7163,7 @@ Next up: F1.2, The AI and agent inventory.
 
 ### F1.2 · The AI and agent inventory
 
-Chapter F1 · lesson 3 of 14 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F1.2.html)
+Chapter F1 · lesson 3 of 14 · runs a skill · 238 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F1.2.html)
 
 **① Open**
 
@@ -7215,7 +7215,7 @@ Next up: F1.3, Risk tiers for agent use.
 
 ### F1.3 · Risk tiers for agent use
 
-Chapter F1 · lesson 4 of 14 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.3.html)
+Chapter F1 · lesson 4 of 14 · runs a skill · 255 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F1.3.html)
 
 **① Open**
 
@@ -7267,7 +7267,7 @@ Next up: F1.4, Mapping controls to agents.
 
 ### F1.4 · Mapping controls to agents
 
-Chapter F1 · lesson 5 of 14 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.4.html)
+Chapter F1 · lesson 5 of 14 · runs a skill · 250 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F1.4.html)
 
 **① Open**
 
@@ -7319,7 +7319,7 @@ Next up: F1.5, Eval results as audit evidence.
 
 ### F1.5 · Eval results as audit evidence
 
-Chapter F1 · lesson 6 of 14 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.5.html)
+Chapter F1 · lesson 6 of 14 · runs a skill · 249 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F1.5.html)
 
 **① Open**
 
@@ -7371,7 +7371,7 @@ Next up: F1.6, Operating vs outcome guardrails.
 
 ### F1.6 · Operating vs outcome guardrails
 
-Chapter F1 · lesson 7 of 14 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.6.html)
+Chapter F1 · lesson 7 of 14 · runs a skill · 246 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F1.6.html)
 
 **① Open**
 
@@ -7423,7 +7423,7 @@ Next up: F1.7, Checking controls continuously.
 
 ### F1.7 · Checking controls continuously
 
-Chapter F1 · lesson 8 of 14 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.7.html)
+Chapter F1 · lesson 8 of 14 · runs a skill · 245 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F1.7.html)
 
 **① Open**
 
@@ -7475,7 +7475,7 @@ Next up: F1.8, Third-party and model risk.
 
 ### F1.8 · Third-party and model risk
 
-Chapter F1 · lesson 9 of 14 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F1.8.html)
+Chapter F1 · lesson 9 of 14 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F1.8.html)
 
 **① Open**
 
@@ -7527,7 +7527,7 @@ Next up: F1.9, Agent lifecycle governance.
 
 ### F1.9 · Agent lifecycle governance
 
-Chapter F1 · lesson 10 of 14 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F1.9.html)
+Chapter F1 · lesson 10 of 14 · runs a skill · 244 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F1.9.html)
 
 **① Open**
 
@@ -7579,7 +7579,7 @@ Next up: F1.10, Who owns what.
 
 ### F1.10 · Who owns what
 
-Chapter F1 · lesson 11 of 14 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F1.10.html)
+Chapter F1 · lesson 11 of 14 · runs a skill · 253 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F1.10.html)
 
 **① Open**
 
@@ -7631,7 +7631,7 @@ Next up: F1.11, Model risk management.
 
 ### F1.11 · Model risk management
 
-Chapter F1 · lesson 12 of 14 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F1.11.html)
+Chapter F1 · lesson 12 of 14 · runs a skill · 234 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F1.11.html)
 
 **① Open**
 
@@ -7683,7 +7683,7 @@ Next up: F1.12, Gaps between teams.
 
 ### F1.12 · Gaps between teams
 
-Chapter F1 · lesson 13 of 14 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/F1.12.html)
+Chapter F1 · lesson 13 of 14 · runs a skill · 231 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/F1.12.html)
 
 **① Open**
 
@@ -7735,7 +7735,7 @@ Next up: F1.13, Measuring CyberTravels' controls.
 
 ### F1.13 · Measuring CyberTravels' controls
 
-Chapter F1 · lesson 14 of 14 · runs a skill · 374 words, about 2.7 min spoken · [page](https://cybercommons.ai/lessons/F1.13.html)
+Chapter F1 · lesson 14 of 14 · runs a skill · 374 words, about 2.7 min spoken · [page](https://cybercommons.ai/lab/F1.13.html)
 
 **① Open**
 
@@ -7795,7 +7795,7 @@ Next up: F2.1, The regulatory map.
 
 ### F2.1 · The regulatory map
 
-Chapter F2 · lesson 1 of 9 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.1.html)
+Chapter F2 · lesson 1 of 9 · runs a skill · 243 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F2.1.html)
 
 **① Open**
 
@@ -7847,7 +7847,7 @@ Next up: F2.2, AI laws that apply across sectors.
 
 ### F2.2 · AI laws that apply across sectors
 
-Chapter F2 · lesson 2 of 9 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.2.html)
+Chapter F2 · lesson 2 of 9 · runs a skill · 237 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F2.2.html)
 
 **① Open**
 
@@ -7899,7 +7899,7 @@ Next up: F2.3, Voluntary frameworks.
 
 ### F2.3 · Voluntary frameworks
 
-Chapter F2 · lesson 3 of 9 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.3.html)
+Chapter F2 · lesson 3 of 9 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F2.3.html)
 
 **① Open**
 
@@ -7951,7 +7951,7 @@ Next up: F2.4, Sector rules.
 
 ### F2.4 · Sector rules
 
-Chapter F2 · lesson 4 of 9 · runs a skill · 225 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/F2.4.html)
+Chapter F2 · lesson 4 of 9 · runs a skill · 225 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/F2.4.html)
 
 **① Open**
 
@@ -8003,7 +8003,7 @@ Next up: F2.5, Privacy and data protection.
 
 ### F2.5 · Privacy and data protection
 
-Chapter F2 · lesson 5 of 9 · runs a skill · 263 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/F2.5.html)
+Chapter F2 · lesson 5 of 9 · runs a skill · 263 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/F2.5.html)
 
 **① Open**
 
@@ -8055,7 +8055,7 @@ Next up: F2.6, Incident reporting duties.
 
 ### F2.6 · Incident reporting duties
 
-Chapter F2 · lesson 6 of 9 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.6.html)
+Chapter F2 · lesson 6 of 9 · runs a skill · 232 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F2.6.html)
 
 **① Open**
 
@@ -8107,7 +8107,7 @@ Next up: F2.7, Documentation for supervisors.
 
 ### F2.7 · Documentation for supervisors
 
-Chapter F2 · lesson 7 of 9 · runs a skill · 224 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/F2.7.html)
+Chapter F2 · lesson 7 of 9 · runs a skill · 224 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/F2.7.html)
 
 **① Open**
 
@@ -8159,7 +8159,7 @@ Next up: F2.8, Auditing autonomous actions.
 
 ### F2.8 · Auditing autonomous actions
 
-Chapter F2 · lesson 8 of 9 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F2.8.html)
+Chapter F2 · lesson 8 of 9 · runs a skill · 239 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F2.8.html)
 
 **① Open**
 
@@ -8211,7 +8211,7 @@ Next up: F2.9, Talking to regulators and auditors.
 
 ### F2.9 · Talking to regulators and auditors
 
-Chapter F2 · lesson 9 of 9 · runs a skill · 351 words, about 2.5 min spoken · [page](https://cybercommons.ai/lessons/F2.9.html)
+Chapter F2 · lesson 9 of 9 · runs a skill · 351 words, about 2.5 min spoken · [page](https://cybercommons.ai/lab/F2.9.html)
 
 **① Open**
 
@@ -8271,7 +8271,7 @@ Next up: F3.1, Explaining agent risk to leaders.
 
 ### F3.1 · Explaining agent risk to leaders
 
-Chapter F3 · lesson 1 of 8 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lessons/F3.1.html)
+Chapter F3 · lesson 1 of 8 · runs a skill · 260 words, about 1.9 min spoken · [page](https://cybercommons.ai/lab/F3.1.html)
 
 **① Open**
 
@@ -8323,7 +8323,7 @@ Next up: F3.2, Governing autonomy, not tools.
 
 ### F3.2 · Governing autonomy, not tools
 
-Chapter F3 · lesson 2 of 8 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F3.2.html)
+Chapter F3 · lesson 2 of 8 · runs a skill · 251 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F3.2.html)
 
 **① Open**
 
@@ -8375,7 +8375,7 @@ Next up: F3.3, Ordering the programme.
 
 ### F3.3 · Ordering the programme
 
-Chapter F3 · lesson 3 of 8 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lessons/F3.3.html)
+Chapter F3 · lesson 3 of 8 · runs a skill · 226 words, about 1.6 min spoken · [page](https://cybercommons.ai/lab/F3.3.html)
 
 **① Open**
 
@@ -8427,7 +8427,7 @@ Next up: F3.4, Teams and ownership.
 
 ### F3.4 · Teams and ownership
 
-Chapter F3 · lesson 4 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F3.4.html)
+Chapter F3 · lesson 4 of 8 · runs a skill · 236 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F3.4.html)
 
 **① Open**
 
@@ -8479,7 +8479,7 @@ Next up: F3.5, Metrics for each level.
 
 ### F3.5 · Metrics for each level
 
-Chapter F3 · lesson 5 of 8 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lessons/F3.5.html)
+Chapter F3 · lesson 5 of 8 · runs a skill · 235 words, about 1.7 min spoken · [page](https://cybercommons.ai/lab/F3.5.html)
 
 **① Open**
 
@@ -8531,7 +8531,7 @@ Next up: F3.6, Saying yes with conditions.
 
 ### F3.6 · Saying yes with conditions
 
-Chapter F3 · lesson 6 of 8 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F3.6.html)
+Chapter F3 · lesson 6 of 8 · runs a skill · 252 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F3.6.html)
 
 **① Open**
 
@@ -8583,7 +8583,7 @@ Next up: F3.7, Building the team's skills.
 
 ### F3.7 · Building the team's skills
 
-Chapter F3 · lesson 7 of 8 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lessons/F3.7.html)
+Chapter F3 · lesson 7 of 8 · runs a skill · 247 words, about 1.8 min spoken · [page](https://cybercommons.ai/lab/F3.7.html)
 
 **① Open**
 
@@ -8635,7 +8635,7 @@ Next up: F3.8, Resilience over perfection.
 
 ### F3.8 · Resilience over perfection
 
-Chapter F3 · lesson 8 of 8 · runs a skill · 340 words, about 2.4 min spoken · [page](https://cybercommons.ai/lessons/F3.8.html)
+Chapter F3 · lesson 8 of 8 · runs a skill · 340 words, about 2.4 min spoken · [page](https://cybercommons.ai/lab/F3.8.html)
 
 **① Open**
 

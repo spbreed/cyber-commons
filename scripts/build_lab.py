@@ -51,7 +51,12 @@ from exercises import repo as R                       # noqa: E402
 
 OUT = ROOT / "site" / "lab"
 PAGE = OUT / "index.html"
-BUNDLE = OUT / "cybertravels.json"
+# Each source file once, named by its hash. One bundle of every lesson's tree
+# was 10 MB once all six functions were labs, and every page downloaded all of
+# it to run one lesson; now a page fetches only its own tree, about 350 KB, and
+# files shared between lessons are cached by the browser after the first.
+PYDIR = OUT / "py"
+OLD_BUNDLE = OUT / "cybertravels.json"
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text(encoding="utf8"))
 # The functions taught as labs, in curriculum order, and every lab in them.
 FNS = [f for f in CUR["functions"] if f["id"] in LABS.MODULES]
@@ -399,7 +404,7 @@ html:not(.js) .bar,html:not(.js) .modes,html:not(.js) .acts .run{display:none}
 
 JS = r"""
 (function(){
-var PY = %(pyodide)s, BUNDLE = "cybertravels.json";
+var PY = %(pyodide)s;
 var pyodide = null, booting = null, data = null, nsFor = {}, mounted = {};
 var status = document.querySelector(".lab-intro .py");
 function say(state, text){ if(!status) return; status.dataset.state = state; status.querySelector("span").textContent = text; }
@@ -414,9 +419,13 @@ function boot(){
   }).then(function(){ return loadPyodide({indexURL: PY}); })
     .then(function(p){ pyodide = p; return p.loadPackage(["sqlite3", "ssl", "micropip"]); })
     .then(function(){ return pyodide.runPythonAsync("import micropip\nawait micropip.install(" + JSON.stringify(%(pyjwt)s) + ")"); })
-    .then(function(){ return fetch(BUNDLE).then(function(r){ if(!r.ok) throw new Error("bundle " + r.status); return r.json(); }); })
-    .then(function(b){
-      data = b;
+    .then(function(){
+      var tree = JSON.parse(document.getElementById("tree").textContent), paths = Object.keys(tree);
+      return Promise.all(paths.map(function(p){ return fetch("py/" + tree[p] + ".py").then(function(r){
+        if (!r.ok) throw new Error("source file " + r.status); return r.text(); }); }))
+        .then(function(texts){ data = {tree: {}}; paths.forEach(function(p, i){ data.tree[p] = texts[i]; }); });
+    })
+    .then(function(){
       pyodide.runPython([
         "import contextlib, io, sys, traceback",
         "def _lab_run(src, ns):",
@@ -444,11 +453,10 @@ function boot(){
 function mount(tid){
   var root = "/lab/" + tid;
   if (!mounted[tid]) {
-    var tree = data.trees[tid];
-    Object.keys(tree).forEach(function(path){
+    Object.keys(data.tree).forEach(function(path){
       var full = root + "/" + path, dir = full.slice(0, full.lastIndexOf("/"));
       pyodide.FS.mkdirTree(dir);
-      pyodide.FS.writeFile(full, data.files[tree[path]]);
+      pyodide.FS.writeFile(full, data.tree[path]);
     });
     mounted[tid] = true;
   }
@@ -875,7 +883,9 @@ def lesson_page(b: dict, i: int) -> str:
         f'<a href="{prev["id"]}.html">← {prev["id"]}</a>' if prev else '<span></span>') + (
         f'<a href="{nxt["id"]}.html">{nxt["id"]} →</a>' if nxt else '<span></span>') + '</div>'
     main = (f'<div class="lab-intro slim">{STATUS}<span class="lab-hud" aria-live="polite"></span>{nav}</div>'
-            f'{section(t, s, b["lessons"][s["id"]])}{nav}')
+            f'{section(t, s, b["lessons"][s["id"]])}{nav}'
+            f'<script type="application/json" id="tree">'
+            f'{json.dumps(b["trees"][b["lessons"][s["id"]]], sort_keys=True)}</script>')
     js = JS % {"pyodide": json.dumps(PYODIDE), "pyjwt": json.dumps(PYJWT),
                "chapters": json.dumps({tr["id"]: [x["id"] for x in tr["sessions"]]
                                        for f in FNS for tr in f["tracks"]}),
@@ -886,8 +896,9 @@ def lesson_page(b: dict, i: int) -> str:
 
 def render() -> dict[Path, str]:
     b = bundle()
-    out = {BUNDLE: json.dumps(b, indent=0, sort_keys=True, ensure_ascii=False) + "\n",
-           PAGE: index_page()}
+    out = {PAGE: index_page()}
+    for h, src in b["files"].items():
+        out[PYDIR / f"{h}.py"] = src
     for i, (_t, s) in enumerate(lessons()):
         out[OUT / f"{s['id']}.html"] = lesson_page(b, i)
     return out
@@ -907,7 +918,8 @@ def main() -> int:
         stale = [p.relative_to(ROOT).as_posix() for p, t in out.items()
                  if not p.exists() or p.read_text(encoding="utf8") != t]
         stale += [f"{p.relative_to(ROOT).as_posix()} (no lesson owns it)"
-                  for p in OUT.glob("*.html") if p not in out]
+                  for p in [*OUT.glob("*.html"), *PYDIR.glob("*.py"), OLD_BUNDLE]
+                  if p.exists() and p not in out]
         drift = run_problems()
         for p in stale:
             print(f"stale: {p} — run python3 scripts/build_lab.py")
@@ -919,14 +931,15 @@ def main() -> int:
         print(f"ok: the lab is current, and all {n} Python steps in "
               f"{len(LAB)} lessons print what they say, each at its own checkpoint")
         return 0
-    OUT.mkdir(parents=True, exist_ok=True)
-    for p in OUT.glob("*.html"):
-        if p not in out:
-            p.unlink()          # a page for a lesson that is gone would still load
+    PYDIR.mkdir(parents=True, exist_ok=True)
+    for p in [*OUT.glob("*.html"), *PYDIR.glob("*.py"), OLD_BUNDLE]:
+        if p.exists() and p not in out:
+            p.unlink()          # a page or file nothing references would still load
     for p, t in out.items():
         p.write_text(t, encoding="utf8")
-    print(f"wrote {len(out) - 1} pages under {OUT.relative_to(ROOT)} and {BUNDLE.relative_to(ROOT)} "
-          f"({len(json.loads(out[BUNDLE])['trees'])} distinct trees for {len(LAB)} lessons)")
+    pages = sum(1 for p in out if p.suffix == ".html")
+    print(f"wrote {pages} pages under {OUT.relative_to(ROOT)} and {len(out) - pages} "
+          f"source files under {PYDIR.relative_to(ROOT)} for {len(LAB)} lessons")
     return 0
 
 

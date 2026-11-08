@@ -94,7 +94,7 @@ happened, and calls the audit skill rather than repeating it (§3).
 | | `LIGHTBOARD.md` |
 | | `lesson-skills/*` — the skill a learner picks to do a lesson, from `build_lesson_skills.py` |
 | `scripts/exercises/guide_a.py` — the teaching notes for Function A | `site/guide/function-a.html` (the brochure) and `site/guide/function-a-run-sheet.html` (the run sheet, for teachers), from `build_guide.py` |
-| `scripts/exercises/lab_a.py` and `scripts/exercises/lab_b.py` — the hands-on steps for Functions A and B: lanes, arrows, plain lines, the Python each step runs and what it prints. `scripts/exercises/labs.py` lists which functions are taught as labs, and every script asks it | `site/lab/` — an index and one page per lesson (`A1.4.html`), plus `cybertravels.json` (each lesson's checkpoint, files stored once), from `build_lab.py` |
+| `scripts/exercises/lab_a.py` … `scripts/exercises/lab_f.py` — the hands-on steps for every function, one module each: lanes, arrows, plain lines, the Python each step runs and what it prints. `scripts/exercises/labs.py` lists which functions are taught as labs, and every script asks it | `site/lab/` — an index and one page per lesson (`A1.4.html`), plus `py/<hash>.py` (every checkpoint's files, each stored once by hash; a page embeds its own tree and fetches only those), from `build_lab.py` |
 | `scripts/exercises/guides.py` — the chapter notes for B–F, plus the intro and overview video narrative | `site/guide/function-{b…f}.html`, `site/guide/index.html`, the redirect at `site/teach/`, and the INTRO and OVERVIEW scripts in LIGHTBOARD.md |
 
 `site/index.html` is **hand-written except between its markers** —
@@ -169,7 +169,7 @@ python3 scripts/build_guide.py         # lessons+app    -> site/guide/ (8 pages)
 python3 scripts/build_lab.py           # lab_a.py + checkpoints -> site/lab/
 ```
 
-`site/lab/` is **Functions A and B, hands on**: one page per lesson, lessons down the left, the
+`site/lab/` is **every lesson, hands on**: one page per lesson, lessons down the left, the
 parties in a lesson as lanes with each step an arrow between two of them, and a
 play bar (reset, back, play, step, speed). Every step is real Python run by
 Pyodide in the reader's browser, against CyberTravels **as it stood at the end

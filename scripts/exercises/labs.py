@@ -11,7 +11,7 @@ from __future__ import annotations
 import importlib
 
 # function id -> the module under scripts/exercises/ holding its steps
-MODULES = {"A": "lab_a", "B": "lab_b"}
+MODULES = {"A": "lab_a", "B": "lab_b", "C": "lab_c", "D": "lab_d", "E": "lab_e", "F": "lab_f"}
 
 
 def has_lab(sid: str) -> bool:

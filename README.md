@@ -155,7 +155,7 @@ failures happen in the seams.
 | in the SOC — detection, IR, threat hunting | **E1**→**E5** — discover, detect, understand, respond, recover |
 | in GRC, risk, audit, or you carry the regulator | **F1**→**F3** — risk and control, regulatory, running the programme |
 
-**New to all of it? Start hands on.** [Functions A and B, in your browser](https://cybercommons.ai/lab/index.html): every lesson as a few steps you play or run one at a time. Each step is real Python, run in the browser against CyberTravels as it stood at the end of that lesson, and you can edit it. Nothing to install. Each lesson also shows how to run the same steps, and its skill, in your own IDE.
+**New to all of it? Start hands on.** [Every lesson, in your browser](https://cybercommons.ai/lab/index.html): every lesson as a few steps you play or run one at a time. Each step is real Python, run in the browser against CyberTravels as it stood at the end of that lesson, and you can edit it. Nothing to install. Each lesson also shows how to run the same steps, and its skill, in your own IDE.
 
 **Doing a function, or running it for other people?** There is a
 [course guide for each of the six](https://cybercommons.ai/guide/index.html).

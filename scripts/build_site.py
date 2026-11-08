@@ -1084,7 +1084,11 @@ def quest_block() -> str:
     tracks = [t for f in fns for t in f["tracks"]]
     total = sum(len(t["sessions"]) for t in tracks)
     names = {"A0": "Set up", "A1": "Builder", "A2": "Harness engineer",
-             "B1": "Risk spotter", "B2": "Identity keeper", "B3": "Runtime guard"}
+             "B1": "Risk spotter", "B2": "Identity keeper", "B3": "Runtime guard",
+             "C2": "Pipeline builder", "D1": "Red teamer", "E1": "Sensor mapper",
+             "E2": "Detector", "E3": "Investigator", "E4": "Responder",
+             "E5": "Recoverer", "F1": "Control owner", "F2": "Regulation mapper",
+             "F3": "Programme lead"}
     badges = ([("first", "First run")]
               + [(t["id"], names.get(t["id"], t["id"])) for t in tracks]
               + [("local", "Took it local"), ("quiz", "Sharp eye")])
