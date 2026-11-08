@@ -1102,34 +1102,34 @@ def quest_block() -> str:
                   f'<details class="qa"><summary>Answer</summary><p><b>'
                   f'{html.escape(opts[right])}.</b> {html.escape(why)} '
                   f'<a href="lab/{sid}.html">Run it in {sid} →</a></p></details></div>')
-    tabs = ["Run in your browser", "Run on your machine", "Your progress",
-            "60-second challenge"]
+    tabs = ["Browser to production", "Your progress", "60-second challenge"]
+    # One story, told fast: a security engineer proves a control in the
+    # browser, takes the same steps to their IDE, runs the tests, and ships it
+    # through dev to production. Four stations a second and a half apart; the
+    # old two scenes took thirteen seconds to say less.
+    stations = [("web", "Browser", "browser", "run A1.4 in this tab", "refused"),
+                ("ide", "IDE", "ide", "lesson.py A1.4", "tests pass"),
+                ("dev", "Dev", "dev", "smoke_test.py", "all pass"),
+                ("prod", "Prod", "prod", "ship the same control", "live")]
+    st = "".join(f'<li class="st st{k}"><span class="ic ic-{c}" aria-hidden="true"></span>'
+                 f'<b>{n}</b></li>' for k, (c, n, _, _, _) in enumerate(stations))
+    con = "".join(f'<span class="c{k}"><em>{w}</em><u>{cmd}</u><i>&#10003; {res}</i></span>'
+                  for k, (_, _, w, cmd, res) in enumerate(stations))
     return (
         f'<figure class="mg" id="quest" aria-label="How the labs work">'
         f'<div class="mg-tabs" role="tablist">'
         + "".join(f'<button type="button" role="tab" data-s="{k}"><b>{k + 1}</b>{t}</button>'
                   for k, t in enumerate(tabs))
         + '</div><div class="mg-frame" data-scene="0">'
-        # 1 — the browser
-        '<div class="mg-scene s0"><div class="win"><div class="chrome"><i></i><i></i><i></i>'
-        '<span>cybercommons.ai/lab/A1.4</span><em class="playbtn">▶ Play</em></div>'
-        '<div class="lanes4"><span>Person</span><span>Agent</span><span>Token exchange</span>'
-        '<span>Payments</span></div><div class="arr a1"></div><div class="arr a2"></div>'
-        '<pre class="out"><span class="t1">dana  -&gt; REFUSED: role \'traveller\' may not delegate</span>'
-        '<span class="t2">priya -&gt; minted</span></pre></div>'
-        '<p class="cap">Real Python, running in this tab. Change it and run it again. '
-        '<a href="lab/A1.4.html">Try A1.4 ▶</a></p></div>'
-        # 2 — the reader's own machine
-        '<div class="mg-scene s1"><div class="win ide"><div class="chrome"><i></i><i></i><i></i>'
-        '<span>your terminal</span></div><pre class="term">'
-        '<span class="t1">$ python3 scripts/install_skills.py --all --lessons A1.4</span>'
-        '<span class="t2">$ claude   &gt; /a1-4-one-token-per-action</span>'
-        '<span class="t3">dana  -&gt; REFUSED</span><span class="t4">priya -&gt; minted</span>'
-        '<span class="t5 ok">✓ ran on your machine</span></pre></div>'
-        '<p class="cap">The same steps on your machine, or as a skill in the AI tool you use. '
-        '<a href="lab/A0.0.html">Set up ▶</a></p></div>'
+        # 1 — the journey
+        f'<div class="mg-scene s0"><div class="trip"><ol class="rail">{st}</ol>'
+        '<div class="eng" aria-hidden="true"><span>SE</span><small>security engineer</small></div>'
+        '<div class="fill" aria-hidden="true"></div></div>'
+        f'<pre class="con">{con}</pre>'
+        '<p class="cap">Prove it in your browser, run it in your IDE, ship it. '
+        '<a href="lab/A1.4.html">Try A1.4 ▶</a><a href="lab/A0.0.html">Set up ▶</a></p></div>'
         # 3 — progress
-        f'<div class="mg-scene s2"><div class="card hud"><div class="hrow">'
+        f'<div class="mg-scene s1"><div class="card hud"><div class="hrow">'
         f'<div><span class="k">Level</span><b data-hud="level">Visitor</b></div>'
         f'<div class="grow"><span class="k">Progress</span><div class="bar"><i data-hud="bar"></i></div>'
         f'<em data-hud="labs">0 of {total} labs</em></div>'
@@ -1137,7 +1137,7 @@ def quest_block() -> str:
         f'<ul class="bdg">' + "".join(f'<li data-b="{k}">★ {html.escape(n)}</li>' for k, n in badges)
         + '</ul><p class="note">Kept in this browser only. No account, nothing sent.</p></div></div>'
         # 4 — the challenge
-        f'<div class="mg-scene s3"><div class="card quiz">{"".join(qs)}'
+        f'<div class="mg-scene s2"><div class="card quiz">{"".join(qs)}'
         f'<button type="button" class="qnext">Next question →</button></div></div>'
         '</div></figure>')
 

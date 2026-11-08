@@ -218,6 +218,17 @@ body{background:#fbfcfd}
 .lab-shell{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:calc(100vh - 64px)}
 .lab-side{border-right:1px solid var(--line-soft);background:#f6f8fa;padding:18px 14px 28px;
   position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto}
+.lab-menu>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;
+  padding:6px 8px 10px;font-weight:700;font-size:15px;color:var(--text);user-select:none}
+.lab-menu>summary::-webkit-details-marker{display:none}
+.lab-menu .mi{display:inline-flex;flex-direction:column;gap:3px;padding:7px 6px;border-radius:7px;
+  border:1px solid var(--line-soft);background:#fff}
+.lab-menu .mi i{display:block;width:14px;height:2px;background:var(--defend);border-radius:2px}
+.lab-menu .mc{display:none}
+.lab-menu>summary:hover .mi{border-color:var(--defend)}
+.lab-shell:has(.lab-menu:not([open])){grid-template-columns:56px minmax(0,1fr)}
+.lab-shell:has(.lab-menu:not([open])) .lab-side{padding:14px 6px;overflow:hidden}
+.lab-menu:not([open]) .ml{display:none}
 .lab-side .fn a{font-size:inherit;color:inherit;display:inline;padding:0;background:none}
 .lab-side .fn{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-faint);margin:2px 8px 10px}
@@ -386,12 +397,21 @@ html.js section.lab[data-mode=run] .ide,html.js section.lab[data-mode=ide] .run-
 html:not(.js) .bar,html:not(.js) .modes,html:not(.js) .acts .run{display:none}
 @media (max-width:900px){
   .lab-shell{grid-template-columns:1fr}
-  .lab-side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line-soft);padding:12px}
-  .lab-side nav{display:flex;flex-wrap:wrap;gap:4px}
-  .lab-side .ch{width:100%;margin:8px 0 2px}
-  .lab-side .ch small,.lab-side .foot{display:none}
-  .lab-side a{padding:4px 8px;font-size:14px}
-  .lab-side a span{display:none}
+  .lab-shell:has(.lab-menu:not([open])){grid-template-columns:1fr}
+  .lab-side,.lab-shell:has(.lab-menu:not([open])) .lab-side{position:sticky;top:0;z-index:5;height:auto;
+    border-right:0;border-bottom:1px solid var(--line-soft);padding:8px 12px;overflow:visible}
+  .lab-menu>summary{padding:4px 0;font-size:15px}
+  .lab-menu .ml{display:none}
+  .lab-menu .mc{display:block;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+  .lab-menu .mc b{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--defend);margin-right:6px}
+  .lab-menu .mc::after{content:"▾";float:right;color:var(--text-faint);margin-left:8px}
+  .lab-menu[open] .mc::after{content:"▴"}
+  .lab-menu[open]>summary~*{max-height:65vh}
+  .lab-menu[open] nav{overflow:auto;max-height:62vh;margin-top:6px;padding-bottom:8px}
+  .lab-side .fn,.lab-side .foot,.lab-side .ch small{display:none}
+  .lab-side .fnh{font-size:10.5px;margin:12px 4px 2px}
+  .lab-side .ch{margin:8px 4px 2px;font-size:14px}
+  .lab-side a{padding:7px 8px;font-size:15px}
   .lab-main{padding:16px 12px 40px}
   .step{grid-template-columns:1fr}
   .step .cell{border-left:0;border-top:1px solid var(--line-soft)}
@@ -794,7 +814,19 @@ def _dedupe(body: str, seen: set[str]) -> str:
     return re.sub(r"<p\b[^>]*>.*?</p>|<li\b[^>]*>.*?</li>", keep, body, flags=re.S)
 
 def side(current: str | None) -> str:
-    out = ['<aside class="lab-side"><div class="fn"><a href="index.html" '
+    # A <details>, so the menu folds with no script at all: on a wide screen
+    # it collapses to a strip to give the lab the width, and on a phone it
+    # starts folded, because 149 ids above the lesson pushed the lesson itself
+    # below the first screen.
+    here = next((s for f in FNS for t in f["tracks"] for s in t["sessions"]
+                 if s["id"] == current), None)
+    label = (f'<b>{E(here["id"])}</b> {E(here["title"].split(" — ")[0])}'
+             if here else "All labs")
+    out = ['<aside class="lab-side"><details class="lab-menu" open>'
+           '<summary title="Show or hide the lessons"><span class="mi" aria-hidden="true">'
+           '<i></i><i></i><i></i></span><span class="ml">Lessons</span>'
+           f'<span class="mc">{label}</span></summary>'
+           '<div class="fn"><a href="index.html" '
            'style="padding:0;display:inline">Hands-on labs</a></div><nav>']
     for t in (t for f in FNS for t in f["tracks"]):
         if t is next(f for f in FNS if t in f["tracks"])["tracks"][0]:
@@ -810,7 +842,15 @@ def side(current: str | None) -> str:
     out.append('</nav><div class="foot">Every step runs real Python in your '
                'browser, against CyberTravels as it stood at the end of that '
                'lesson. Nothing is installed on your computer.<br><br>'
-               '<a href="../lessons/index.html" style="padding:0">All lessons</a></div></aside>')
+               '<a href="../lessons/index.html" style="padding:0">All lessons</a></div></details></aside>'
+               # Inline and right after the menu, so it is already folded when
+               # first painted; guarded, because blocked storage must change nothing.
+               '<script>(function(){var d=document.querySelector(".lab-menu"),'
+               'm=matchMedia("(max-width:900px)"),k="cc.labmenu";'
+               'try{if(m.matches||localStorage.getItem(k)==="closed")d.open=false}catch(e){if(m.matches)d.open=false}'
+               'd.addEventListener("toggle",function(){var c=d.querySelector("a[aria-current]"),n=d.querySelector("nav");'
+               'if(d.open&&c&&n&&m.matches)n.scrollTop=c.offsetTop-n.offsetTop-80;if(m.matches)return;'
+               'try{localStorage.setItem(k,d.open?"open":"closed")}catch(e){}})})()</script>')
     return "".join(out)
 
 
